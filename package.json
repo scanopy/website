@@ -11,7 +11,6 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"dependencies": {
-		"@netvisor/ui": "^0.1.0",
 		"lucide-svelte": "^0.526.0"
 	},
 	"devDependencies": {

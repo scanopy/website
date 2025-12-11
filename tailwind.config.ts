@@ -1,11 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-		// Only scan compiled Svelte components from @netvisor/ui
-		'./node_modules/@netvisor/ui/dist/**/*.svelte'
-	],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
 			colors: {

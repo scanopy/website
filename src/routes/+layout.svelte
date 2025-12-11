@@ -1,9 +1,16 @@
 <script lang="ts">
 	import '../app.css';
-	import { GithubStars, NewsletterSignup } from '@netvisor/ui';
+	import { GithubStars, NewsletterSignup } from '$lib/components';
 	import { Github, MessageCircle } from 'lucide-svelte';
 	import { PUBLIC_PLUNK_API_KEY } from '$env/static/public';
 	import { onMount } from 'svelte';
+	import type { Snippet } from 'svelte';
+
+	interface Props {
+		children: Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	let healthStatus = $state<'loading' | 'healthy' | 'unhealthy'>('loading');
 
@@ -46,7 +53,7 @@
 
 	<!-- Main content -->
 	<main class="flex-1">
-		<slot />
+		{@render children()}
 	</main>
 
 	<!-- Footer -->

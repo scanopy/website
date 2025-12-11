@@ -1,0 +1,68 @@
+[
+  {
+    "id": "share_views",
+    "name": "Share Views",
+    "description": "Share live network diagrams with others",
+    "category": "Features",
+    "icon": null,
+    "color": null,
+    "metadata": {
+      "is_coming_soon": false
+    }
+  },
+  {
+    "id": "onboarding_call",
+    "name": "Onboarding Call",
+    "description": "30 minute onboarding call to ensure you're getting the most out of NetVisor",
+    "category": "Support & Licensing",
+    "icon": null,
+    "color": null,
+    "metadata": {
+      "is_coming_soon": false
+    }
+  },
+  {
+    "id": "commercial_license",
+    "name": "Commercial License",
+    "description": "Use NetVisor under a commercial license",
+    "category": "Support & Licensing",
+    "icon": null,
+    "color": null,
+    "metadata": {
+      "is_coming_soon": false
+    }
+  },
+  {
+    "id": "audit_logs",
+    "name": "Audit Logs",
+    "description": "Comprehensive logs of all access and data modification actions performed in NetVisor",
+    "category": "Features",
+    "icon": null,
+    "color": null,
+    "metadata": {
+      "is_coming_soon": true
+    }
+  },
+  {
+    "id": "api_access",
+    "name": "API Access",
+    "description": "Access NetVisor APIs programmatically to bring your data into other applications",
+    "category": "Features",
+    "icon": null,
+    "color": null,
+    "metadata": {
+      "is_coming_soon": true
+    }
+  },
+  {
+    "id": "remove_created_with",
+    "name": "Remove Watermark",
+    "description": "Remove 'Created using netvisor.io' in bottom right corner of visualization",
+    "category": "Features",
+    "icon": null,
+    "color": null,
+    "metadata": {
+      "is_coming_soon": false
+    }
+  }
+]

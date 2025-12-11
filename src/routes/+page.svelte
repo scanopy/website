@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GithubStars } from '@netvisor/ui';
+	import { GithubStars } from '$lib/components';
 	import { Network, Eye, Zap, Shield, Box, FileCode, Quote, Users, ClipboardCheck, Briefcase } from 'lucide-svelte';
 
 	const features = [

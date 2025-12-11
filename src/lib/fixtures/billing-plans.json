@@ -1,0 +1,210 @@
+[
+  {
+    "id": "Starter",
+    "name": "Starter",
+    "description": "Automatically create living documentation of your network",
+    "category": null,
+    "icon": "ThumbsUp",
+    "color": "blue",
+    "metadata": {
+      "base_cents": 1499,
+      "features": {
+        "api_access": false,
+        "audit_logs": false,
+        "commercial_license": false,
+        "onboarding_call": false,
+        "remove_created_with": false,
+        "share_views": false
+      },
+      "included_networks": 1,
+      "included_seats": 1,
+      "is_commercial": false,
+      "network_cents": null,
+      "rate": "Month",
+      "seat_cents": null,
+      "trial_days": 0
+    }
+  },
+  {
+    "id": "Pro",
+    "name": "Pro",
+    "description": "Visualize multiple networks and share network diagrams",
+    "category": null,
+    "icon": "Zap",
+    "color": "yellow",
+    "metadata": {
+      "base_cents": 2499,
+      "features": {
+        "api_access": false,
+        "audit_logs": false,
+        "commercial_license": false,
+        "onboarding_call": false,
+        "remove_created_with": false,
+        "share_views": true
+      },
+      "included_networks": 3,
+      "included_seats": 1,
+      "is_commercial": false,
+      "network_cents": null,
+      "rate": "Month",
+      "seat_cents": null,
+      "trial_days": 7
+    }
+  },
+  {
+    "id": "Team",
+    "name": "Team",
+    "description": "Collaborate on infrastructure documentation with your team",
+    "category": null,
+    "icon": "Users",
+    "color": "orange",
+    "metadata": {
+      "base_cents": 7999,
+      "features": {
+        "api_access": false,
+        "audit_logs": false,
+        "commercial_license": true,
+        "onboarding_call": true,
+        "remove_created_with": true,
+        "share_views": true
+      },
+      "included_networks": 5,
+      "included_seats": 5,
+      "is_commercial": true,
+      "network_cents": 800,
+      "rate": "Month",
+      "seat_cents": 1000,
+      "trial_days": 7
+    }
+  },
+  {
+    "id": "Business",
+    "name": "Business",
+    "description": "Manage multi-site and multi-customer documentation with advanced features",
+    "category": null,
+    "icon": "Briefcase",
+    "color": "brown",
+    "metadata": {
+      "base_cents": 14999,
+      "features": {
+        "api_access": true,
+        "audit_logs": true,
+        "commercial_license": true,
+        "onboarding_call": true,
+        "remove_created_with": true,
+        "share_views": true
+      },
+      "included_networks": 25,
+      "included_seats": 10,
+      "is_commercial": true,
+      "network_cents": 500,
+      "rate": "Month",
+      "seat_cents": 800,
+      "trial_days": 14
+    }
+  },
+  {
+    "id": "Starter",
+    "name": "Starter",
+    "description": "Automatically create living documentation of your network",
+    "category": null,
+    "icon": "ThumbsUp",
+    "color": "blue",
+    "metadata": {
+      "base_cents": 14400,
+      "features": {
+        "api_access": false,
+        "audit_logs": false,
+        "commercial_license": false,
+        "onboarding_call": false,
+        "remove_created_with": false,
+        "share_views": false
+      },
+      "included_networks": 1,
+      "included_seats": 1,
+      "is_commercial": false,
+      "network_cents": null,
+      "rate": "Year",
+      "seat_cents": null,
+      "trial_days": 0
+    }
+  },
+  {
+    "id": "Pro",
+    "name": "Pro",
+    "description": "Visualize multiple networks and share network diagrams",
+    "category": null,
+    "icon": "Zap",
+    "color": "yellow",
+    "metadata": {
+      "base_cents": 24000,
+      "features": {
+        "api_access": false,
+        "audit_logs": false,
+        "commercial_license": false,
+        "onboarding_call": false,
+        "remove_created_with": false,
+        "share_views": true
+      },
+      "included_networks": 3,
+      "included_seats": 1,
+      "is_commercial": false,
+      "network_cents": null,
+      "rate": "Year",
+      "seat_cents": null,
+      "trial_days": 7
+    }
+  },
+  {
+    "id": "Team",
+    "name": "Team",
+    "description": "Collaborate on infrastructure documentation with your team",
+    "category": null,
+    "icon": "Users",
+    "color": "orange",
+    "metadata": {
+      "base_cents": 76800,
+      "features": {
+        "api_access": false,
+        "audit_logs": false,
+        "commercial_license": true,
+        "onboarding_call": true,
+        "remove_created_with": true,
+        "share_views": true
+      },
+      "included_networks": 5,
+      "included_seats": 5,
+      "is_commercial": true,
+      "network_cents": 7700,
+      "rate": "Year",
+      "seat_cents": 9600,
+      "trial_days": 7
+    }
+  },
+  {
+    "id": "Business",
+    "name": "Business",
+    "description": "Manage multi-site and multi-customer documentation with advanced features",
+    "category": null,
+    "icon": "Briefcase",
+    "color": "brown",
+    "metadata": {
+      "base_cents": 144000,
+      "features": {
+        "api_access": true,
+        "audit_logs": true,
+        "commercial_license": true,
+        "onboarding_call": true,
+        "remove_created_with": true,
+        "share_views": true
+      },
+      "included_networks": 25,
+      "included_seats": 10,
+      "is_commercial": true,
+      "network_cents": 4800,
+      "rate": "Year",
+      "seat_cents": 7700,
+      "trial_days": 14
+    }
+  }
+]
