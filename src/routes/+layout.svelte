@@ -24,9 +24,9 @@
 	});
 </script>
 
-<div class="min-h-screen flex flex-col">
+<div class="flex min-h-screen flex-col">
 	<!-- Header -->
-	<header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
+	<header class="sticky top-0 z-50 border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm">
 		<div class="container mx-auto px-4 py-4">
 			<nav class="flex items-center justify-between">
 				<a href="/" class="flex items-center gap-2">
@@ -35,12 +35,12 @@
 				</a>
 
 				<div class="flex items-center gap-6">
-					<a href="/pricing" class="text-gray-400 hover:text-white transition-colors">Pricing</a>
+					<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">Pricing</a>
 					<a
 						href="https://docs.netvisor.io"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-gray-400 hover:text-white transition-colors"
+						class="text-gray-400 transition-colors hover:text-white"
 					>
 						Docs
 					</a>
@@ -74,41 +74,73 @@
 
 				<!-- Product -->
 				<div>
-					<h4 class="font-semibold text-white mb-4">Product</h4>
+					<h4 class="mb-4 font-semibold text-white">Product</h4>
 					<ul class="space-y-2">
-						<li><a href="/services" class="text-gray-400 hover:text-white text-sm">Supported Services</a></li>
-						<li><a href="/pricing" class="text-gray-400 hover:text-white text-sm">Pricing</a></li>
-						<li><a href="https://docs.netvisor.io" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white text-sm">Documentation</a></li>
+						<li>
+							<a href="/services" class="text-sm text-gray-400 hover:text-white"
+								>Supported Services</a
+							>
+						</li>
+						<li><a href="/pricing" class="text-sm text-gray-400 hover:text-white">Pricing</a></li>
+						<li>
+							<a
+								href="https://docs.netvisor.io"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-sm text-gray-400 hover:text-white">Documentation</a
+							>
+						</li>
 					</ul>
 				</div>
 
 				<!-- Resources -->
 				<div>
-					<h4 class="font-semibold text-white mb-4">Resources</h4>
+					<h4 class="mb-4 font-semibold text-white">Resources</h4>
 					<ul class="space-y-2">
 						<li>
-							<a href="https://github.com/netvisor-io/netvisor" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white text-sm flex items-center gap-2">
+							<a
+								href="https://github.com/netvisor-io/netvisor"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+							>
 								<Github class="h-4 w-4" />
 								GitHub
 							</a>
 						</li>
 						<li>
-							<a href="https://discord.gg/b7ffQr8AcZ" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white text-sm flex items-center gap-2">
+							<a
+								href="https://discord.gg/b7ffQr8AcZ"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+							>
 								<MessageCircle class="h-4 w-4" />
 								Discord
 							</a>
 						</li>
 						<li>
-							<a href="https://app.netvisor.io/api/health" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white text-sm flex items-center gap-2">
+							<a
+								href="https://app.netvisor.io/api/health"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+							>
 								<span class="relative flex h-3 w-3">
 									{#if healthStatus === 'loading'}
-										<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gray-400 opacity-75"></span>
+										<span
+											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gray-400 opacity-75"
+										></span>
 										<span class="relative inline-flex h-3 w-3 rounded-full bg-gray-500"></span>
 									{:else if healthStatus === 'healthy'}
-										<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+										<span
+											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"
+										></span>
 										<span class="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
 									{:else}
-										<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+										<span
+											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"
+										></span>
 										<span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
 									{/if}
 								</span>
@@ -120,12 +152,18 @@
 
 				<!-- Newsletter -->
 				<div>
-					<h4 class="font-semibold text-white mb-4">Stay Updated</h4>
-					<NewsletterSignup apiKey={PUBLIC_PLUNK_API_KEY} eventName="website-newsletter" compact={true} />
+					<h4 class="mb-4 font-semibold text-white">Stay Updated</h4>
+					<NewsletterSignup
+						apiKey={PUBLIC_PLUNK_API_KEY}
+						eventName="website-newsletter"
+						compact={true}
+					/>
 				</div>
 			</div>
 
-			<div class="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+			<div
+				class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-800 pt-8 md:flex-row"
+			>
 				<p class="text-sm text-gray-500">
 					© {new Date().getFullYear()} NetVisor
 				</p>

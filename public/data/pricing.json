@@ -1,68 +1,68 @@
 {
-  "billing_plans": [
-    {
-      "category": null,
-      "color": "blue",
-      "description": "Automatically create living documentation of your network",
-      "icon": "ThumbsUp",
-      "id": "Starter",
-      "metadata": {
-        "features": {
-          "api_access": false,
-          "audit_logs": false,
-          "commercial_license": false,
-          "dedicated_support_channel": false,
-          "onboarding_call": false,
-          "remove_powered_by": false,
-          "share_views": false
-        },
-        "is_commercial": false
-      },
-      "name": "Starter"
-    },
-    {
-      "category": null,
-      "color": "yellow",
-      "description": "Visualize multiple networks and share network diagrams",
-      "icon": "Zap",
-      "id": "Pro",
-      "metadata": {
-        "features": {
-          "api_access": false,
-          "audit_logs": false,
-          "commercial_license": false,
-          "dedicated_support_channel": false,
-          "onboarding_call": false,
-          "remove_powered_by": false,
-          "share_views": true
-        },
-        "is_commercial": false
-      },
-      "name": "Pro"
-    }
-  ],
-  "features": [
-    {
-      "category": "Features",
-      "color": null,
-      "description": "Share live network diagrams with others",
-      "icon": null,
-      "id": "share_views",
-      "metadata": {
-        "is_coming_soon": false
-      },
-      "name": "Share Views"
-    },
-    {
-      "category": "Support & Licensing",
-      "color": null,
-      "description": "30 minute onboarding call to ensure you're getting the most out of NetVisor",
-      "icon": null,
-      "id": "onboarding_call",
-      "metadata": {
-        "is_coming_soon": false
-      },
-      "name": "Onboarding Call"
-    }
-  ]
+	"billing_plans": [
+		{
+			"category": null,
+			"color": "blue",
+			"description": "Automatically create living documentation of your network",
+			"icon": "ThumbsUp",
+			"id": "Starter",
+			"metadata": {
+				"features": {
+					"api_access": false,
+					"audit_logs": false,
+					"commercial_license": false,
+					"dedicated_support_channel": false,
+					"onboarding_call": false,
+					"remove_powered_by": false,
+					"share_views": false
+				},
+				"is_commercial": false
+			},
+			"name": "Starter"
+		},
+		{
+			"category": null,
+			"color": "yellow",
+			"description": "Visualize multiple networks and share network diagrams",
+			"icon": "Zap",
+			"id": "Pro",
+			"metadata": {
+				"features": {
+					"api_access": false,
+					"audit_logs": false,
+					"commercial_license": false,
+					"dedicated_support_channel": false,
+					"onboarding_call": false,
+					"remove_powered_by": false,
+					"share_views": true
+				},
+				"is_commercial": false
+			},
+			"name": "Pro"
+		}
+	],
+	"features": [
+		{
+			"category": "Features",
+			"color": null,
+			"description": "Share live network diagrams with others",
+			"icon": null,
+			"id": "share_views",
+			"metadata": {
+				"is_coming_soon": false
+			},
+			"name": "Share Views"
+		},
+		{
+			"category": "Support & Licensing",
+			"color": null,
+			"description": "30 minute onboarding call to ensure you're getting the most out of NetVisor",
+			"icon": null,
+			"id": "onboarding_call",
+			"metadata": {
+				"is_coming_soon": false
+			},
+			"name": "Onboarding Call"
+		}
+	]
 }

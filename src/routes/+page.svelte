@@ -1,6 +1,17 @@
 <script lang="ts">
 	import { GithubStars } from '$lib/components';
-	import { Network, Eye, Zap, Shield, Box, FileCode, Quote, Users, ClipboardCheck, Briefcase } from 'lucide-svelte';
+	import {
+		Network,
+		Eye,
+		Zap,
+		Shield,
+		Box,
+		FileCode,
+		Quote,
+		Users,
+		ClipboardCheck,
+		Briefcase
+	} from 'lucide-svelte';
 
 	const features = [
 		{
@@ -39,7 +50,7 @@
 		{
 			icon: Users,
 			title: 'Onboard employees faster',
-			description: 'Visual infrastructure documentation that\'s always up-to-date.'
+			description: "Visual infrastructure documentation that's always up-to-date."
 		},
 		{
 			icon: ClipboardCheck,
@@ -55,31 +66,35 @@
 
 	const testimonials = [
 		{
-			quote: "It really helped me catch a couple things that were suboptimal, and be like 'why is that there', and tidy a couple things up.",
-			author: "u/reinhart_menken"
+			quote:
+				"It really helped me catch a couple things that were suboptimal, and be like 'why is that there', and tidy a couple things up.",
+			author: 'u/reinhart_menken'
 		},
 		{
 			quote: "This is sick. I just tried it out on my network and discovery's doing its thing.",
-			author: "u/discoshanktank"
+			author: 'u/discoshanktank'
 		},
 		{
 			quote: "You're literally doing the thing I've dreamed of for ages.",
-			author: "u/blitz9826"
+			author: 'u/blitz9826'
 		},
 		{
 			quote: "So many features, wasn't expecting a lot more than a simple scanner and a UI.",
-			author: "u/Medium_Chemist_4032"
+			author: 'u/Medium_Chemist_4032'
 		}
 	];
 </script>
 
 <svelte:head>
 	<title>NetVisor - Automatic Network Documentation</title>
-	<meta name="description" content="Automatically discover and visually document network infrastructure. Open source network discovery and documentation tool." />
+	<meta
+		name="description"
+		content="Automatically discover and visually document network infrastructure. Open source network discovery and documentation tool."
+	/>
 </svelte:head>
 
 <!-- Hero Section -->
-<section class="relative overflow-hidden min-h-[600px] lg:min-h-[700px] flex items-center">
+<section class="relative flex min-h-[600px] items-center overflow-hidden lg:min-h-[700px]">
 	<!-- Background image -->
 	<div
 		class="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -88,27 +103,30 @@
 	<!-- Dark overlay -->
 	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>
 
-	<div class="container mx-auto px-4 relative z-10">
-		<div class="max-w-4xl mx-auto text-center">
+	<div class="container relative z-10 mx-auto px-4">
+		<div class="mx-auto max-w-4xl text-center">
 			<!-- Badge -->
-			<div class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-				<span class="text-gray-300 text-sm font-medium">Open Source</span>
+			<div
+				class="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm"
+			>
+				<span class="text-sm font-medium text-gray-300">Open Source</span>
 				<GithubStars usePublicApi={true} />
 			</div>
 
 			<!-- Headline -->
-			<h1 class="text-4xl lg:text-6xl font-bold text-rose-400 mb-6 leading-tight">
+			<h1 class="mb-6 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
 				Automatically discover and visually document network infrastructure
 			</h1>
 
 			<!-- Subheadline -->
-			<p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-				Join thousands of networking professionals using NetVisor to effortlessly create and maintain infrastructure documentation
+			<p class="mx-auto mb-10 max-w-2xl text-xl text-gray-300">
+				Join thousands of networking professionals using NetVisor to effortlessly create and
+				maintain infrastructure documentation
 			</p>
 
 			<!-- CTAs -->
-			<div class="flex flex-col sm:flex-row gap-4 justify-center">
-				<a href="https://app.netvisor.io" class="btn-primary text-lg px-8 py-3">
+			<div class="flex flex-col justify-center gap-4 sm:flex-row">
+				<a href="https://app.netvisor.io" class="btn-primary px-8 py-3 text-lg">
 					Launch NetVisor
 				</a>
 			</div>
@@ -117,13 +135,13 @@
 </section>
 
 <!-- Features Section -->
-<section class="py-20 border-t border-gray-800">
+<section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
-		<div class="text-center mb-16">
-			<h2 class="text-3xl lg:text-4xl font-bold mb-4 text-rose-400">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Everything you need for network documentation
 			</h2>
-			<p class="text-gray-400 text-lg max-w-2xl mx-auto">
+			<p class="mx-auto max-w-2xl text-lg text-gray-400">
 				Creating network infrastructure documentation has never been this easy
 			</p>
 		</div>
@@ -131,11 +149,11 @@
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each features as feature (feature.title)}
 				<div class="card card-static p-6">
-					<div class="w-12 h-12 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4">
-						<feature.icon class="w-6 h-6 text-sky-400" />
+					<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-sky-500/10">
+						<feature.icon class="h-6 w-6 text-sky-400" />
 					</div>
-					<h3 class="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-					<p class="text-gray-400 text-sm">{feature.description}</p>
+					<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
+					<p class="text-sm text-gray-400">{feature.description}</p>
 				</div>
 			{/each}
 		</div>
@@ -143,10 +161,10 @@
 </section>
 
 <!-- Use Cases Section -->
-<section class="py-20 border-t border-gray-800">
+<section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
-		<div class="text-center mb-16">
-			<h2 class="text-3xl lg:text-4xl font-bold mb-4 text-rose-400">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Built for teams of all sizes
 			</h2>
 		</div>
@@ -154,10 +172,12 @@
 		<div class="grid gap-8 md:grid-cols-3">
 			{#each useCases as useCase (useCase.title)}
 				<div class="text-center">
-					<div class="w-14 h-14 rounded-full bg-sky-500/10 flex items-center justify-center mb-4 mx-auto">
-						<useCase.icon class="w-7 h-7 text-sky-400" />
+					<div
+						class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-sky-500/10"
+					>
+						<useCase.icon class="h-7 w-7 text-sky-400" />
 					</div>
-					<h3 class="text-xl font-semibold text-white mb-2">{useCase.title}</h3>
+					<h3 class="mb-2 text-xl font-semibold text-white">{useCase.title}</h3>
 					<p class="text-gray-400">{useCase.description}</p>
 				</div>
 			{/each}
@@ -166,25 +186,23 @@
 </section>
 
 <!-- Community Section -->
-<section class="py-20 border-t border-gray-800 bg-gray-900/50">
+<section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
-		<div class="text-center mb-16">
-			<h2 class="text-3xl lg:text-4xl font-bold mb-4 text-rose-400">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				What the community is saying
 			</h2>
-			<p class="text-gray-400 text-lg max-w-2xl mx-auto">
-				Real feedback from Reddit.
-			</p>
+			<p class="mx-auto max-w-2xl text-lg text-gray-400">Real feedback from Reddit.</p>
 		</div>
 
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-			{#each testimonials as testimonial}
-				<div class="card card-static p-5 relative">
-					<Quote class="w-6 h-6 text-sky-500/20 absolute top-3 right-3" />
-					<p class="text-gray-300 mb-4 text-sm italic">
+			{#each testimonials as testimonial (testimonial.author)}
+				<div class="card card-static relative p-5">
+					<Quote class="absolute right-3 top-3 h-6 w-6 text-sky-500/20" />
+					<p class="mb-4 text-sm italic text-gray-300">
 						"{testimonial.quote}"
 					</p>
-					<p class="text-gray-400 text-sm font-medium">{testimonial.author}</p>
+					<p class="text-sm font-medium text-gray-400">{testimonial.author}</p>
 				</div>
 			{/each}
 		</div>
@@ -192,22 +210,20 @@
 </section>
 
 <!-- CTA Section -->
-<section class="py-20 border-t border-gray-800">
+<section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
-		<div class="max-w-3xl mx-auto text-center">
-			<h2 class="text-3xl lg:text-4xl font-bold mb-4 text-rose-400">
+		<div class="mx-auto max-w-3xl text-center">
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Ready to document your network infrastructure?
 			</h2>
-			<p class="text-gray-400 text-lg mb-8">
+			<p class="mb-8 text-lg text-gray-400">
 				Get started with a <span class="text-rose-400">free trial</span> in minutes.
 			</p>
-			<div class="flex flex-col sm:flex-row gap-4 justify-center">
-				<a href="https://app.netvisor.io" class="btn-primary text-lg px-8 py-3">
+			<div class="flex flex-col justify-center gap-4 sm:flex-row">
+				<a href="https://app.netvisor.io" class="btn-primary px-8 py-3 text-lg">
 					Launch NetVisor
 				</a>
-				<a href="/pricing" class="btn-secondary text-lg px-8 py-3">
-					View Pricing
-				</a>
+				<a href="/pricing" class="btn-secondary px-8 py-3 text-lg"> View Pricing </a>
 			</div>
 		</div>
 	</div>

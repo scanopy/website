@@ -163,8 +163,7 @@ export function createColorHelper(colorName: string | null): ColorStyle {
 }
 
 export function createIconComponent(iconName: string | null): IconComponent {
-	if (!iconName || iconName == null)
-		return LucideIcons.HelpCircle as unknown as IconComponent;
+	if (!iconName || iconName == null) return LucideIcons.HelpCircle as unknown as IconComponent;
 
 	const componentName = iconName
 		.split('-')

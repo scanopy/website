@@ -1,23 +1,23 @@
 [
-  {
-    "category": "NetVisor",
-    "description": "NetVisor Daemon API for network scanning",
-    "discovery_pattern": "Endpoint response body from <ip>:60073/api/health contains netvisor",
-    "logo_url": "/logos/netvisor-logo.png",
-    "name": "NetVisor Daemon API"
-  },
-  {
-    "category": "NetVisor",
-    "description": "NetVisor Server API for network management",
-    "discovery_pattern": "Endpoint response body from <ip>:60072/api/health contains netvisor",
-    "logo_url": "/logos/netvisor-logo.png",
-    "name": "NetVisor Server API"
-  },
-  {
-    "category": "Media",
-    "description": "User invitation and management system for Jellyfin, Plex, Emby etc",
-    "discovery_pattern": "Endpoint response body from <ip>:5690/static/manifest.json contains Wizarr",
-    "logo_url": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/wizarr.svg",
-    "name": "Wizarr"
-  }
+	{
+		"category": "NetVisor",
+		"description": "NetVisor Daemon API for network scanning",
+		"discovery_pattern": "Endpoint response body from <ip>:60073/api/health contains netvisor",
+		"logo_url": "/logos/netvisor-logo.png",
+		"name": "NetVisor Daemon API"
+	},
+	{
+		"category": "NetVisor",
+		"description": "NetVisor Server API for network management",
+		"discovery_pattern": "Endpoint response body from <ip>:60072/api/health contains netvisor",
+		"logo_url": "/logos/netvisor-logo.png",
+		"name": "NetVisor Server API"
+	},
+	{
+		"category": "Media",
+		"description": "User invitation and management system for Jellyfin, Plex, Emby etc",
+		"discovery_pattern": "Endpoint response body from <ip>:5690/static/manifest.json contains Wizarr",
+		"logo_url": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/wizarr.svg",
+		"name": "Wizarr"
+	}
 ]

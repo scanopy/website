@@ -2,7 +2,7 @@
 	import { Search, ChevronDown, ChevronRight } from 'lucide-svelte';
 	import type { ServiceDefinition } from '$lib/types';
 	import { createColorHelper } from '$lib/utils/styling';
-	import { SvelteSet } from 'svelte/reactivity';
+	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
 
 	interface Props {
 		services: ServiceDefinition[];
@@ -14,7 +14,7 @@
 
 	let searchQuery = $state('');
 	let selectedCategory = $state<string | null>(null);
-	let expandedServices = $state<SvelteSet<string>>(new SvelteSet());
+	let expandedServices = new SvelteSet<string>();
 
 	let categories = $derived(() => {
 		const cats = [...new SvelteSet(services.map((s) => s.category))];
@@ -42,7 +42,7 @@
 	});
 
 	let groupedServices = $derived(() => {
-		const groups = new Map<string, ServiceDefinition[]>();
+		const groups = new SvelteMap<string, ServiceDefinition[]>();
 
 		for (const service of filteredServices()) {
 			const cat = service.category;
