@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { dev } from '$app/environment';
 	import { GithubStars, NewsletterSignup } from '$lib/components';
 	import { Github, MessageCircle, Menu, X } from 'lucide-svelte';
 	import { PUBLIC_PLUNK_API_KEY } from '$env/static/public';
@@ -32,6 +33,12 @@
 		mobileMenuOpen = false;
 	}
 </script>
+
+<svelte:head>
+	{#if !dev}
+		<script src="https://app.rybbit.io/api/script.js" data-site-id="d62db73b8794" defer></script>
+	{/if}
+</svelte:head>
 
 <div class="flex min-h-screen flex-col">
 	<!-- Header -->
@@ -181,32 +188,39 @@
 							</a>
 						</li>
 						<li>
-							<a
-								href="https://app.netvisor.io/api/health"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-							>
-								<span class="relative flex h-3 w-3">
-									{#if healthStatus === 'loading'}
-										<span
-											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gray-400 opacity-75"
-										></span>
-										<span class="relative inline-flex h-3 w-3 rounded-full bg-gray-500"></span>
-									{:else if healthStatus === 'healthy'}
+							{#if healthStatus === 'healthy'}
+								<a
+									href="https://app.netvisor.io"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+								>
+									<span class="relative flex h-3 w-3">
 										<span
 											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"
 										></span>
 										<span class="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
-									{:else}
-										<span
-											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"
-										></span>
-										<span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
-									{/if}
+									</span>
+									Status
+								</a>
+							{:else}
+								<span class="flex items-center gap-2 text-sm text-gray-400">
+									<span class="relative flex h-3 w-3">
+										{#if healthStatus === 'loading'}
+											<span
+												class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gray-400 opacity-75"
+											></span>
+											<span class="relative inline-flex h-3 w-3 rounded-full bg-gray-500"></span>
+										{:else}
+											<span
+												class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"
+											></span>
+											<span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+										{/if}
+									</span>
+									Status
 								</span>
-								Status
-							</a>
+							{/if}
 						</li>
 					</ul>
 				</div>
