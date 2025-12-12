@@ -10,6 +10,7 @@
 	import Tag from './Tag.svelte';
 	import ToggleGroup from './ToggleGroup.svelte';
 	import { SvelteMap } from 'svelte/reactivity';
+	import { onMount } from 'svelte';
 	import type { BillingPlan, BillingPlanMetadata, FeatureMetadata } from '$lib/types';
 	import type { ColorStyle, IconComponent } from '$lib/utils/styling';
 
@@ -81,6 +82,25 @@
 
 	type BillingPeriod = 'monthly' | 'yearly';
 	let billingPeriod = $state<BillingPeriod>('monthly');
+
+	// Sticky header visibility
+	let mainHeaderRef = $state<HTMLElement | null>(null);
+	let showStickyHeader = $state(false);
+
+	onMount(() => {
+		if (!mainHeaderRef) return;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				showStickyHeader = !entry.isIntersecting;
+			},
+			{ threshold: 0, rootMargin: '-80px 0px 0px 0px' }
+		);
+
+		observer.observe(mainHeaderRef);
+
+		return () => observer.disconnect();
+	});
 
 	// ============================================================================
 	// Constants
@@ -292,12 +312,38 @@
 	</div>
 
 	<!-- Pricing Table -->
-	<div>
-		<div class="card overflow-hidden rounded-b-none border-b-0 p-0">
+	<div class="relative">
+		<!-- Sticky Header (appears when main header scrolls out of view) -->
+		{#if showStickyHeader}
+			<div class="card sticky top-[73px] z-30 overflow-hidden rounded-none border-b-0 p-0">
+				<div class="flex border-b border-gray-700">
+					<div class="border-r border-gray-700 p-3" style="width: {columnWidth}"></div>
+					{#each filteredPlans as plan (plan.type)}
+						{@const IconComponent = billingPlanHelpers.getIconComponent(plan.type)}
+						{@const colorHelper = billingPlanHelpers.getColorHelper(plan.type)}
+						<div
+							class="flex items-center justify-center gap-2 border-r border-gray-700 p-3 last:border-r-0"
+							style="width: {columnWidth}"
+						>
+							<IconComponent class="{colorHelper.icon} h-5 w-5" />
+							<span class="text-primary font-semibold">
+								{billingPlanHelpers.getName(plan.type)}
+							</span>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
+
+		<div
+			class="card overflow-hidden {showStickyHeader
+				? 'rounded-none'
+				: 'rounded-b-none'} border-b-0 p-0"
+		>
 			<table class="w-full table-fixed">
 				<!-- Header Row: Plan Names and Prices -->
-				<thead class="sticky top-0 z-10">
-					<tr class="border-b border-gray-700">
+				<thead class="z-10">
+					<tr class="border-b border-gray-700" bind:this={mainHeaderRef}>
 						<th class="border-r border-gray-700 p-4" style="width: {columnWidth}"></th>
 
 						{#each filteredPlans as plan (plan.type)}

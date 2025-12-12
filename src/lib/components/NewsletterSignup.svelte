@@ -53,10 +53,7 @@
 				body: JSON.stringify({
 					event: eventName,
 					email: email.trim(),
-					subscribed: true,
-					metadata: {
-						signup_source: 'website'
-					}
+					subscribed: true
 				})
 			});
 

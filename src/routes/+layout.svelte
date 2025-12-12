@@ -157,7 +157,7 @@
 					<h4 class="mb-4 font-semibold text-white">Stay Updated</h4>
 					<NewsletterSignup
 						apiKey={PUBLIC_PLUNK_API_KEY}
-						eventName="website-newsletter"
+						eventName="website_newsletter"
 						compact={true}
 					/>
 				</div>
