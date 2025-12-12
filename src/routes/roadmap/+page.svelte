@@ -82,7 +82,7 @@
 		<div class="mt-16 text-center">
 			<p class="mb-4 text-gray-400">Have a feature request?</p>
 			<a
-				href="https://github.com/netvisor-io/netvisor/issues/new?template=feature-request.md"
+				href="https://github.com/netvisor-io/netvisor/issues/new?template=feature_request.md"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="btn-secondary"
