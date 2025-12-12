@@ -1,11 +1,12 @@
 <script lang="ts">
 	import '../app.css';
-	import { dev } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 	import { GithubStars, NewsletterSignup } from '$lib/components';
 	import { Github, MessageCircle, Menu, X } from 'lucide-svelte';
 	import { PUBLIC_PLUNK_API_KEY } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
+	import posthog from 'posthog-js';
 
 	interface Props {
 		children: Snippet;
@@ -16,24 +17,23 @@
 	let healthStatus = $state<'loading' | 'healthy' | 'unhealthy'>('loading');
 	let mobileMenuOpen = $state(false);
 
-	import posthog from 'posthog-js'
-	import { browser } from '$app/environment';
+		export const loadPh = async () => {
+	if (browser) {
+		posthog.init(
+		'phc_9atkOQdO4ttxZwrpMRU42KazQcah6yQaU8aX9ts6SrK',
+		{
+			api_host: 'https://ph.netvisor.io',
+			ui_host: 'https://us.posthog.com',
+			defaults: '2025-11-30',
+			secure_cookie: true,
+			cookieless_mode: 'always',
+			person_profiles: 'always', // or 'always' to create profiles for anonymous users as well
+		}
+		)
+	}
 
-	// export const load = async () => {
-	// if (browser) {
-	// 	posthog.init(
-	// 	'phc_9atkOQdO4ttxZwrpMRU42KazQcah6yQaU8aX9ts6SrK',
-	// 	{
-	// 		api_host: 'https://ph.netvisor.io',
-	// 		ui_host: 'https://us.posthog.com',
-	// 		defaults: '2025-11-30',
-	// 		person_profiles: 'always', // or 'always' to create profiles for anonymous users as well
-	// 	}
-	// 	)
-	// }
-
-	// return
-	// };
+	return
+	};
 
 	onMount(async () => {
 		try {
@@ -43,6 +43,7 @@
 		} catch {
 			healthStatus = 'unhealthy';
 		}
+		loadPh();
 	});
 
 	function toggleMobileMenu() {
