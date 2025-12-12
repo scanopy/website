@@ -18,8 +18,33 @@
 	// Filter to only coming soon features
 	const comingSoonFeatures = features.filter((f) => f.metadata.is_coming_soon);
 
+	const manualFeatures: FeatureFixture[] = [
+		{
+			id: "hardware-inventory",
+			name: "Hardware Inventory",
+			description: "Track host-level hardware specs including CPU, memory, storage.",
+			category: "Discovery",
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: "physical-infrastructure",
+			name: "Physical Infrastructure Mapping",
+			description: "Visualize racks, chassis, and cabling. Map logical topology discoveries to their physical locations.",
+			category: "Visualization",
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		}
+	];
+
 	// Group by category
-	const groupedFeatures = comingSoonFeatures.reduce(
+	const groupedFeatures = comingSoonFeatures.concat(manualFeatures).reduce(
 		(acc, feature) => {
 			const category = feature.category;
 			if (!acc[category]) {
