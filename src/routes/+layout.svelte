@@ -24,7 +24,8 @@
 		posthog.init(
 		'phc_9atkOQdO4ttxZwrpMRU42KazQcah6yQaU8aX9ts6SrK',
 		{
-			api_host: 'https://us.i.posthog.com',
+			api_host: 'https://ph.netvisor.io',
+			ui_host: 'https://us.posthog.com',
 			defaults: '2025-11-30',
 			person_profiles: 'always', // or 'always' to create profiles for anonymous users as well
 		}
