@@ -56,7 +56,7 @@
 		{
 			"category": "Support & Licensing",
 			"color": null,
-			"description": "30 minute onboarding call to ensure you're getting the most out of NetVisor",
+			"description": "30 minute onboarding call to ensure you're getting the most out of Scanopy",
 			"icon": null,
 			"id": "onboarding_call",
 			"metadata": {

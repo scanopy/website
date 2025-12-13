@@ -21,7 +21,7 @@
 	export const loadPh = async () => {
 		if (browser) {
 			posthog.init('phc_9atkOQdO4ttxZwrpMRU42KazQcah6yQaU8aX9ts6SrK', {
-				api_host: 'https://ph.netvisor.io',
+				api_host: 'https://ph.scanopy.net',
 				ui_host: 'https://us.posthog.com',
 				defaults: '2025-11-30',
 				secure_cookie: true,
@@ -35,7 +35,7 @@
 
 	onMount(async () => {
 		try {
-			const res = await fetch('https://app.netvisor.io/api/health');
+			const res = await fetch('https://app.scanopy.net/api/health');
 			healthStatus = res.ok ? 'healthy' : 'unhealthy';
 			// await load()
 		} catch {
@@ -65,8 +65,8 @@
 		<div class="container mx-auto px-4 py-4">
 			<nav class="flex items-center justify-between">
 				<a href="/" class="flex items-center gap-2">
-					<img src="/netvisor-logo.png" alt="NetVisor" class="h-8 w-8" />
-					<span class="text-xl font-bold text-white">NetVisor</span>
+					<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
+					<span class="text-xl font-bold text-white">Scanopy</span>
 				</a>
 
 				<!-- Desktop navigation -->
@@ -74,14 +74,14 @@
 					<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">Pricing</a>
 					<a href="/roadmap" class="text-gray-400 transition-colors hover:text-white">Roadmap</a>
 					<a
-						href="https://github.com/netvisor-io/netvisor/tree/main/docs"
+						href="https://github.com/scanopy/scanopy/tree/main/docs"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
 					>
 						Docs
 					</a>
-					<a href="https://app.netvisor.io" class="btn-primary">Get Started</a>
+					<a href="https://app.scanopy.net" class="btn-primary">Get Started</a>
 				</div>
 
 				<!-- Mobile menu button -->
@@ -117,7 +117,7 @@
 						Roadmap
 					</a>
 					<a
-						href="https://github.com/netvisor-io/netvisor/tree/main/docs"
+						href="https://github.com/scanopy/scanopy/tree/main/docs"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
@@ -126,7 +126,7 @@
 						Docs
 					</a>
 					<a
-						href="https://app.netvisor.io"
+						href="https://app.scanopy.net"
 						class="btn-primary text-center"
 						onclick={closeMobileMenu}
 					>
@@ -149,8 +149,8 @@
 				<!-- Brand -->
 				<div class="space-y-4">
 					<div class="flex items-center gap-2">
-						<img src="/netvisor-logo.png" alt="NetVisor" class="h-8 w-8" />
-						<span class="text-xl font-bold text-white">NetVisor</span>
+						<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
+						<span class="text-xl font-bold text-white">Scanopy</span>
 					</div>
 					<p class="text-sm text-gray-400">
 						Automatically discover and visually document network infrastructure.
@@ -171,7 +171,7 @@
 						<li><a href="/roadmap" class="text-sm text-gray-400 hover:text-white">Roadmap</a></li>
 						<li>
 							<a
-								href="https://github.com/netvisor-io/netvisor/blob/main/docs/"
+								href="https://github.com/scanopy/scanopy/blob/main/docs/"
 								target="_blank"
 								rel="noopener noreferrer"
 								class="text-sm text-gray-400 hover:text-white">Documentation</a
@@ -186,7 +186,7 @@
 					<ul class="space-y-2">
 						<li>
 							<a
-								href="https://github.com/netvisor-io/netvisor"
+								href="https://github.com/scanopy/scanopy"
 								target="_blank"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
@@ -209,7 +209,7 @@
 						<li>
 							{#if healthStatus === 'healthy'}
 								<a
-									href="https://app.netvisor.io"
+									href="https://app.scanopy.net"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
@@ -259,7 +259,7 @@
 				class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-800 pt-8 md:flex-row"
 			>
 				<p class="text-sm text-gray-500">
-					© {new Date().getFullYear()} NetVisor
+					© {new Date().getFullYear()} Scanopy
 				</p>
 				<div class="flex gap-6">
 					<a href="/privacy" class="text-sm text-gray-500 hover:text-gray-400">Privacy</a>

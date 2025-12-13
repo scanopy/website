@@ -73,10 +73,10 @@
 </script>
 
 <svelte:head>
-	<title>Roadmap - NetVisor</title>
+	<title>Roadmap - Scanopy</title>
 	<meta
 		name="description"
-		content="See what's coming next to NetVisor. Our product roadmap shows upcoming features and improvements."
+		content="See what's coming next to Scanopy. Our product roadmap shows upcoming features and improvements."
 	/>
 </svelte:head>
 
@@ -88,7 +88,7 @@
 			</div>
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Roadmap</h1>
 			<p class="mx-auto max-w-2xl text-xl text-gray-400">
-				See what's coming next to NetVisor. These features are currently in development. Some
+				See what's coming next to Scanopy. These features are currently in development. Some
 				features will not be available for all plans.
 			</p>
 		</div>
@@ -120,7 +120,7 @@
 		<div class="mt-16 text-center">
 			<p class="mb-4 text-gray-400">Have a feature request?</p>
 			<a
-				href="https://github.com/netvisor-io/netvisor/issues/new?template=feature_request.md"
+				href="https://github.com/scanopy/scanopy/issues/new?template=feature_request.md"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="btn-secondary"

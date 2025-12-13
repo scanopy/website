@@ -10,7 +10,7 @@
 
 	let {
 		class: className = '',
-		repoUrl = 'https://github.com/netvisor-io/netvisor',
+		repoUrl = 'https://github.com/scanopy/scanopy',
 		usePublicApi: _ = true // eslint-disable-line @typescript-eslint/no-unused-vars
 	}: Props = $props();
 
@@ -18,7 +18,7 @@
 	let loading = $state(true);
 	let error = $state(false);
 
-	const cacheKey = 'netvisor-github-stars';
+	const cacheKey = 'scanopy-github-stars';
 	const cacheTtlMs = 3600000; // 1 hour
 
 	interface CachedValue {

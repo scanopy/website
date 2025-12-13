@@ -1,8 +1,8 @@
 <svelte:head>
-	<title>Privacy Policy - NetVisor</title>
+	<title>Privacy Policy - Scanopy</title>
 	<meta
 		name="description"
-		content="NetVisor Privacy Policy - How we collect, use, and protect your personal information."
+		content="Scanopy Privacy Policy - How we collect, use, and protect your personal information."
 	/>
 </svelte:head>
 
@@ -15,7 +15,7 @@
 			<section>
 				<h2 class="mb-4 text-2xl font-semibold text-rose-400">1. Introduction</h2>
 				<p class="mb-4 text-gray-300">
-					This Privacy Policy describes how NetVisor ("we," "us," or "our") collects, uses, and
+					This Privacy Policy describes how Scanopy ("we," "us," or "our") collects, uses, and
 					discloses your personal information when you use our software as a service (the
 					"Service").
 				</p>
@@ -49,19 +49,19 @@
 					</li>
 					<li>
 						<strong class="text-white">Company:</strong> when this policy mentions "Company," "we," "us,"
-						or "our," it refers to NetVisor.
+						or "our," it refers to Scanopy.
 					</li>
 					<li>
-						<strong class="text-white">Country:</strong> where NetVisor or the owners/founders of NetVisor
+						<strong class="text-white">Country:</strong> where Scanopy or the owners/founders of Scanopy
 						are based, in this case United States.
 					</li>
 					<li>
 						<strong class="text-white">Customer:</strong> refers to the company, organization, or person
-						that signs up to use the NetVisor Service.
+						that signs up to use the Scanopy Service.
 					</li>
 					<li>
 						<strong class="text-white">Device:</strong> any internet-connected device such as a phone,
-						tablet, computer, or any other device that can be used to visit NetVisor and use the services.
+						tablet, computer, or any other device that can be used to visit Scanopy and use the services.
 					</li>
 					<li>
 						<strong class="text-white">Personal Data:</strong> any information that directly, indirectly,
@@ -69,7 +69,7 @@
 					</li>
 					<li>
 						<strong class="text-white">Service:</strong> refers to the software as a service provided
-						by NetVisor as described in the relative terms and on this platform.
+						by Scanopy as described in the relative terms and on this platform.
 					</li>
 					<li>
 						<strong class="text-white">Third-party service:</strong> refers to advertisers, contest sponsors,
@@ -77,10 +77,10 @@
 						or services we think may interest you.
 					</li>
 					<li>
-						<strong class="text-white">Website:</strong> NetVisor's site, which can be accessed via https://netvisor.io.
+						<strong class="text-white">Website:</strong> Scanopy's site, which can be accessed via https://scanopy.net.
 					</li>
 					<li>
-						<strong class="text-white">You:</strong> a person or entity that is registered with NetVisor
+						<strong class="text-white">You:</strong> a person or entity that is registered with Scanopy
 						to use the Services.
 					</li>
 				</ul>
@@ -155,7 +155,7 @@
 
 			<section>
 				<h2 class="mb-4 text-2xl font-semibold text-rose-400">4. How We Use Your Information</h2>
-				<p class="mb-4 text-gray-300">NetVisor uses the collected data for various purposes:</p>
+				<p class="mb-4 text-gray-300">Scanopy uses the collected data for various purposes:</p>
 				<ul class="list-inside list-disc space-y-1 text-gray-300">
 					<li>To provide and maintain our Service</li>
 					<li>To notify you about changes to our Service</li>
@@ -183,14 +183,14 @@
 					5. Retention of Your Personal Data
 				</h2>
 				<p class="mb-4 text-gray-300">
-					NetVisor will retain your Personal Data only for as long as is necessary for the purposes
+					Scanopy will retain your Personal Data only for as long as is necessary for the purposes
 					set out in this Privacy Policy. We will retain and use your Personal Data to the extent
 					necessary to comply with our legal obligations (for example, if we are required to retain
 					your data to comply with applicable laws), resolve disputes, and enforce our legal
 					agreements and policies.
 				</p>
 				<p class="mb-4 text-gray-300">
-					NetVisor will also retain Usage Data for internal analysis purposes. Usage Data is
+					Scanopy will also retain Usage Data for internal analysis purposes. Usage Data is
 					generally retained for a shorter period of time, except when this data is used to
 					strengthen the security or to improve the functionality of our Service, or we are legally
 					obligated to retain this data for longer time periods.
@@ -223,7 +223,7 @@
 					represents your agreement to that transfer.
 				</p>
 				<p class="text-gray-300">
-					NetVisor will take all steps reasonably necessary to ensure that your data is treated
+					Scanopy will take all steps reasonably necessary to ensure that your data is treated
 					securely and in accordance with this Privacy Policy and no transfer of your Personal Data
 					will take place to an organization or a country unless there are adequate controls in
 					place including the security of your data and other personal information.
@@ -237,26 +237,26 @@
 
 				<h3 class="mb-3 text-xl font-semibold text-white">Business Transactions</h3>
 				<p class="mb-4 text-gray-300">
-					If NetVisor is involved in a merger, acquisition or asset sale, your Personal Data may be
+					If Scanopy is involved in a merger, acquisition or asset sale, your Personal Data may be
 					transferred. We will provide notice before your Personal Data is transferred and becomes
 					subject to a different Privacy Policy.
 				</p>
 
 				<h3 class="mb-3 text-xl font-semibold text-white">Disclosure for Law Enforcement</h3>
 				<p class="mb-4 text-gray-300">
-					Under certain circumstances, NetVisor may be required to disclose your Personal Data if
+					Under certain circumstances, Scanopy may be required to disclose your Personal Data if
 					required to do so by law or in response to valid requests by public authorities (e.g. a
 					court or a government agency).
 				</p>
 
 				<h3 class="mb-3 text-xl font-semibold text-white">Legal Requirements</h3>
 				<p class="mb-2 text-gray-300">
-					NetVisor may disclose your Personal Data in the good faith belief that such action is
+					Scanopy may disclose your Personal Data in the good faith belief that such action is
 					necessary to:
 				</p>
 				<ul class="list-inside list-disc space-y-1 text-gray-300">
 					<li>Comply with a legal obligation</li>
-					<li>Protect and defend the rights or property of NetVisor</li>
+					<li>Protect and defend the rights or property of Scanopy</li>
 					<li>Prevent or investigate possible wrongdoing in connection with the Service</li>
 					<li>Protect the personal safety of users of the Service or the public</li>
 					<li>Protect against legal liability</li>
@@ -395,8 +395,8 @@
 				</p>
 				<p class="text-gray-300">
 					To exercise your California data protection rights, please send your request(s) by email: <a
-						href="mailto:legal@netvisor.io"
-						class="text-sky-400 hover:text-sky-300">legal@netvisor.io</a
+						href="mailto:legal@scanopy.net"
+						class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
 					>
 				</p>
 			</section>
@@ -451,14 +451,14 @@
 				</p>
 				<ul class="list-inside list-disc space-y-1 text-gray-300">
 					<li>
-						By email: <a href="mailto:legal@netvisor.io" class="text-sky-400 hover:text-sky-300"
-							>legal@netvisor.io</a
+						By email: <a href="mailto:legal@scanopy.net" class="text-sky-400 hover:text-sky-300"
+							>legal@scanopy.net</a
 						>
 					</li>
 					<li>
 						By visiting this page on our website: <a
 							href="/privacy"
-							class="text-sky-400 hover:text-sky-300">https://netvisor.io/privacy</a
+							class="text-sky-400 hover:text-sky-300">https://scanopy.net/privacy</a
 						>
 					</li>
 				</ul>

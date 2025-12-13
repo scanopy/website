@@ -86,7 +86,7 @@
 </script>
 
 <svelte:head>
-	<title>NetVisor - Automatic Network Documentation</title>
+	<title>Scanopy - Automatic Network Documentation</title>
 	<meta
 		name="description"
 		content="Automatically discover and visually document network infrastructure. Open source network discovery and documentation tool."
@@ -120,14 +120,14 @@
 
 			<!-- Subheadline -->
 			<p class="mx-auto mb-10 max-w-2xl text-xl text-gray-300">
-				Join thousands of networking professionals using NetVisor to effortlessly create and
+				Join thousands of networking professionals using Scanopy to effortlessly create and
 				maintain infrastructure documentation
 			</p>
 
 			<!-- CTAs -->
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a href="https://app.netvisor.io" class="btn-primary px-8 py-3 text-lg">
-					Launch NetVisor
+				<a href="https://app.scanopy.net" class="btn-primary px-8 py-3 text-lg">
+					Launch Scanopy
 				</a>
 			</div>
 		</div>
@@ -220,8 +220,8 @@
 				Get started with a <span class="text-rose-400">free trial</span> in minutes.
 			</p>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a href="https://app.netvisor.io" class="btn-primary px-8 py-3 text-lg">
-					Launch NetVisor
+				<a href="https://app.scanopy.net" class="btn-primary px-8 py-3 text-lg">
+					Launch Scanopy
 				</a>
 				<a href="/pricing" class="btn-secondary px-8 py-3 text-lg"> View Pricing </a>
 			</div>

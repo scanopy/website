@@ -1,17 +1,17 @@
 [
 	{
-		"category": "NetVisor",
-		"description": "NetVisor Daemon API for network scanning",
-		"discovery_pattern": "Endpoint response body from <ip>:60073/api/health contains netvisor",
-		"logo_url": "/logos/netvisor-logo.png",
-		"name": "NetVisor Daemon API"
+		"category": "Scanopy",
+		"description": "Scanopy Daemon API for network scanning",
+		"discovery_pattern": "Endpoint response body from <ip>:60073/api/health contains Scanopy",
+		"logo_url": "/logos/scanopy-logo.png",
+		"name": "Scanopy Daemon API"
 	},
 	{
-		"category": "NetVisor",
-		"description": "NetVisor Server API for network management",
-		"discovery_pattern": "Endpoint response body from <ip>:60072/api/health contains netvisor",
-		"logo_url": "/logos/netvisor-logo.png",
-		"name": "NetVisor Server API"
+		"category": "Scanopy",
+		"description": "Scanopy Server API for network management",
+		"discovery_pattern": "Endpoint response body from <ip>:60072/api/health contains Scanopy",
+		"logo_url": "/logos/scanopy-logo.png",
+		"name": "Scanopy Server API"
 	},
 	{
 		"category": "Media",

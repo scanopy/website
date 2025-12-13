@@ -3,8 +3,8 @@
 	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
 
-	const COOKIE_NAME = 'netvisor_gdpr';
-	const COOKIE_DOMAIN = dev ? '' : '.netvisor.io';
+	const COOKIE_NAME = 'scanopy_gdpr';
+	const COOKIE_DOMAIN = dev ? '' : '.scanopy.net';
 	const COOKIE_DAYS = 365;
 
 	interface CookiePreferences {

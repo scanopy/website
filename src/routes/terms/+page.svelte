@@ -2,8 +2,8 @@
 </script>
 
 <svelte:head>
-	<title>Terms of Service - NetVisor</title>
-	<meta name="description" content="NetVisor Terms of Service" />
+	<title>Terms of Service - Scanopy</title>
+	<meta name="description" content="Scanopy Terms of Service" />
 </svelte:head>
 
 <div class="container mx-auto max-w-4xl px-4 py-16">
@@ -13,10 +13,10 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">1. Introduction</h2>
 			<p class="text-gray-300">
-				These Terms of Service ("Terms") govern your access to and use of the NetVisor software
+				These Terms of Service ("Terms") govern your access to and use of the Scanopy software
 				service, including any associated websites, networks, applications, and other services
-				provided by NetVisor (collectively, the "Service"). These Terms constitute a legally binding
-				agreement between you and NetVisor ("we," "us," or "our"). By accessing or using our
+				provided by Scanopy (collectively, the "Service"). These Terms constitute a legally binding
+				agreement between you and Scanopy ("we," "us," or "our"). By accessing or using our
 				Service, you acknowledge that you have read, understood, and agree to be bound by these
 				Terms.
 			</p>
@@ -84,7 +84,7 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">6. Service Description</h2>
 			<p class="text-gray-300">
-				The NetVisor Service is a network discovery and documentation platform that allows users to
+				The Scanopy Service is a network discovery and documentation platform that allows users to
 				automatically discover and visually document network infrastructure. The specific features
 				and functionality available to you will depend on the Subscription plan you select.
 			</p>
@@ -255,16 +255,16 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">15. Intellectual Property</h2>
 			<p class="text-gray-300">
-				All content provided by NetVisor, including but not limited to the Service, website, text,
+				All content provided by Scanopy, including but not limited to the Service, website, text,
 				graphics, logos, icons, images, audio clips, digital downloads, data compilations, and
-				software, is the property of NetVisor or its content suppliers and is protected by
+				software, is the property of Scanopy or its content suppliers and is protected by
 				international copyright, trademark, and other intellectual property laws. The compilation of
-				all content on the Service is the exclusive property of NetVisor and is protected by
+				all content on the Service is the exclusive property of Scanopy and is protected by
 				international copyright laws.
 			</p>
 			<p class="mt-4 text-gray-300">
 				Our trademarks and trade dress may not be used in connection with any product or service
-				without the prior written consent of NetVisor.
+				without the prior written consent of Scanopy.
 			</p>
 			<p class="mb-4 mt-4 text-gray-300">
 				We grant you a limited, non-exclusive, non-transferable, revocable license to use the
@@ -320,7 +320,7 @@
 				TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SERVICE IS PROVIDED "AS IS" AND "AS
 				AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT
 				LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE,
-				AND NON-INFRINGEMENT. NETVISOR DOES NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED,
+				AND NON-INFRINGEMENT. SCANOPY DOES NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED,
 				ERROR-FREE, OR SECURE, OR THAT ANY DEFECTS WILL BE CORRECTED, OR THAT YOUR USE OF THE
 				SERVICE WILL MEET YOUR REQUIREMENTS OR EXPECTATIONS.
 			</p>
@@ -329,7 +329,7 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">19. Limitation of Liability</h2>
 			<p class="uppercase text-gray-300">
-				TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL NETVISOR BE LIABLE FOR
+				TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL SCANOPY BE LIABLE FOR
 				ANY SPECIAL, INCIDENTAL, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER. SOME STATES DO NOT
 				ALLOW THE EXCLUSION OR LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE ABOVE
 				LIMITATION MAY NOT APPLY TO YOU.
@@ -339,13 +339,13 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">20. Indemnification</h2>
 			<p class="text-gray-300">
-				You agree to indemnify, defend, and hold harmless NetVisor, its officers, directors,
+				You agree to indemnify, defend, and hold harmless Scanopy, its officers, directors,
 				employees, agents, and affiliates from and against any and all claims, liabilities, damages,
 				losses, costs, expenses, or fees (including reasonable attorneys' fees) that such parties
 				may incur as a result of or arising from your violation of these Terms, your User Data, or
-				your use of the Service. NetVisor reserves the right to assume the exclusive defense and
+				your use of the Service. Scanopy reserves the right to assume the exclusive defense and
 				control of any matter otherwise subject to indemnification by you, in which event you will
-				cooperate with NetVisor in asserting any available defenses.
+				cooperate with Scanopy in asserting any available defenses.
 			</p>
 		</section>
 
@@ -371,8 +371,8 @@
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">23. Entire Agreement</h2>
 			<p class="text-gray-300">
 				These Terms, including our Privacy Policy and any other agreements referenced herein,
-				constitute the entire agreement between you and NetVisor regarding your use of our Service
-				and supersede any prior agreements between you and NetVisor relating to your use of our
+				constitute the entire agreement between you and Scanopy regarding your use of our Service
+				and supersede any prior agreements between you and Scanopy relating to your use of our
 				Service.
 			</p>
 		</section>
@@ -380,7 +380,7 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">24. Waiver and Severability</h2>
 			<p class="text-gray-300">
-				The failure of NetVisor to enforce any right or provision of these Terms will not be deemed
+				The failure of Scanopy to enforce any right or provision of these Terms will not be deemed
 				a waiver of such right or provision. If any provision of these Terms is found to be invalid
 				or unenforceable, the remaining provisions will remain in full force and effect.
 			</p>
@@ -390,8 +390,8 @@
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">25. Assignment</h2>
 			<p class="text-gray-300">
 				These Terms, and any rights and licenses granted hereunder, may not be transferred or
-				assigned by you without the prior written consent of NetVisor, but may be assigned by
-				NetVisor without restriction.
+				assigned by you without the prior written consent of Scanopy, but may be assigned by
+				Scanopy without restriction.
 			</p>
 		</section>
 
@@ -451,7 +451,7 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">30. Force Majeure</h2>
 			<p class="text-gray-300">
-				NetVisor shall not be liable for any delay or failure to perform resulting from causes
+				Scanopy shall not be liable for any delay or failure to perform resulting from causes
 				outside its reasonable control, including but not limited to acts of God, war, terrorism,
 				riots, embargoes, acts of civil or military authorities, fire, floods, accidents, pandemics,
 				epidemics, or disease.
@@ -469,8 +469,8 @@
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">32. Contact Information</h2>
 			<p class="text-gray-300">
 				If you have any questions about these Terms, please contact us at <a
-					href="mailto:legal@netvisor.io"
-					class="text-sky-400 hover:text-sky-300">legal@netvisor.io</a
+					href="mailto:legal@scanopy.net"
+					class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
 				>.
 			</p>
 		</section>
@@ -578,8 +578,8 @@
 					</ul>
 					<p class="mb-4 text-gray-300">
 						To exercise these rights, please contact us at <a
-							href="mailto:legal@netvisor.io"
-							class="text-sky-400 hover:text-sky-300">legal@netvisor.io</a
+							href="mailto:legal@scanopy.net"
+							class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
 						>. We will respond to your request within 30 days.
 					</p>
 
@@ -674,7 +674,7 @@
 					</h4>
 					<p class="mb-4 text-gray-300">
 						Under the CCPA, California residents have the right to opt-out of the sale of their
-						personal information. NetVisor does not sell personal information as defined by the
+						personal information. Scanopy does not sell personal information as defined by the
 						CCPA.
 					</p>
 				</div>
@@ -714,8 +714,8 @@
 					</ul>
 					<p class="mb-4 text-gray-300">
 						To exercise these rights, please contact us at <a
-							href="mailto:legal@netvisor.io"
-							class="text-sky-400 hover:text-sky-300">legal@netvisor.io</a
+							href="mailto:legal@scanopy.net"
+							class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
 						>. We will respond to your request within 30 days, unless an extension is warranted.
 					</p>
 
@@ -1045,8 +1045,8 @@
 					<p class="mb-4 text-gray-300">
 						If you experience any difficulty accessing any part of our Services, or if you require
 						assistance or have suggestions for improving accessibility, please contact us at <a
-							href="mailto:legal@netvisor.io"
-							class="text-sky-400 hover:text-sky-300">legal@netvisor.io</a
+							href="mailto:legal@scanopy.net"
+							class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
 						>. We welcome your feedback and are committed to continually improving the accessibility
 						of our Services.
 					</p>
@@ -1134,10 +1134,10 @@
 					<h4 class="mb-2 text-lg font-semibold text-white">Our Intellectual Property</h4>
 					<p class="mb-4 text-gray-300">
 						The Service and its original content (excluding Content provided by users), features,
-						and functionality are and will remain the exclusive property of NetVisor and its
+						and functionality are and will remain the exclusive property of Scanopy and its
 						licensors. The Service is protected by copyright, trademark, and other laws of both the
 						United States and foreign countries. Our trademarks and trade dress may not be used in
-						connection with any product or service without the prior written consent of NetVisor.
+						connection with any product or service without the prior written consent of Scanopy.
 					</p>
 
 					<h4 class="mb-2 text-lg font-semibold text-white">Your License to Use Our Content</h4>

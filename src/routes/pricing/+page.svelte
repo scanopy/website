@@ -142,13 +142,13 @@
 
 	function handlePlanSelect(plan: BillingPlan) {
 		// Redirect to the app's checkout flow
-		window.location.href = `https://app.netvisor.io/billing?plan=${plan.type}`;
+		window.location.href = `https://app.scanopy.net/billing?plan=${plan.type}`;
 	}
 </script>
 
 <svelte:head>
-	<title>Pricing - NetVisor</title>
-	<meta name="description" content="NetVisor pricing plans for personal and commerical users" />
+	<title>Pricing - Scanopy</title>
+	<meta name="description" content="Scanopy pricing plans for personal and commerical users" />
 </svelte:head>
 
 <section class="py-10 pb-24 lg:pb-10">

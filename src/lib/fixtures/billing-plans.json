@@ -314,14 +314,14 @@
 	{
 		"id": "Enterprise",
 		"name": "Enterprise",
-		"description": "Fully managed NetVisor with dedicated support and custom deployment",
+		"description": "Fully managed Scanopy with dedicated support and custom deployment",
 		"category": null,
 		"icon": "Building",
 		"color": "teal",
 		"metadata": {
 			"base_cents": 0,
 			"custom_checkout_cta": "Contact Us",
-			"custom_checkout_link": "mailto:enterprise@netvisor.io",
+			"custom_checkout_link": "mailto:enterprise@scanopy.net",
 			"custom_price": "Custom",
 			"features": {
 				"audit_logs": true,
@@ -353,14 +353,14 @@
 	{
 		"id": "Community",
 		"name": "Community",
-		"description": "Community plan for individuals self-hosting NetVisor - full control over configuration and integrations",
+		"description": "Community plan for individuals self-hosting Scanopy - full control over configuration and integrations",
 		"category": null,
 		"icon": "Heart",
 		"color": "pink",
 		"metadata": {
 			"base_cents": 0,
 			"custom_checkout_cta": "View on GitHub",
-			"custom_checkout_link": "https://github.com/netvisor-io/netvisor",
+			"custom_checkout_link": "https://github.com/scanopy/scanopy",
 			"custom_price": "Free",
 			"features": {
 				"audit_logs": false,
@@ -399,7 +399,7 @@
 		"metadata": {
 			"base_cents": 0,
 			"custom_checkout_cta": "Contact Us",
-			"custom_checkout_link": "mailto:licensing@netvisor.io",
+			"custom_checkout_link": "mailto:licensing@scanopy.net",
 			"custom_price": "Custom",
 			"features": {
 				"audit_logs": true,
@@ -431,14 +431,14 @@
 	{
 		"id": "Enterprise",
 		"name": "Enterprise",
-		"description": "Fully managed NetVisor with dedicated support and custom deployment",
+		"description": "Fully managed Scanopy with dedicated support and custom deployment",
 		"category": null,
 		"icon": "Building",
 		"color": "teal",
 		"metadata": {
 			"base_cents": 0,
 			"custom_checkout_cta": "Contact Us",
-			"custom_checkout_link": "mailto:enterprise@netvisor.io",
+			"custom_checkout_link": "mailto:enterprise@scanopy.net",
 			"custom_price": "Custom",
 			"features": {
 				"audit_logs": true,
@@ -470,14 +470,14 @@
 	{
 		"id": "Community",
 		"name": "Community",
-		"description": "Community plan for individuals self-hosting NetVisor - full control over configuration and integrations",
+		"description": "Community plan for individuals self-hosting Scanopy - full control over configuration and integrations",
 		"category": null,
 		"icon": "Heart",
 		"color": "pink",
 		"metadata": {
 			"base_cents": 0,
 			"custom_checkout_cta": "View on GitHub",
-			"custom_checkout_link": "https://github.com/netvisor-io/netvisor",
+			"custom_checkout_link": "https://github.com/scanopy/scanopy",
 			"custom_price": "Free",
 			"features": {
 				"audit_logs": false,
@@ -516,7 +516,7 @@
 		"metadata": {
 			"base_cents": 0,
 			"custom_checkout_cta": "Contact Us",
-			"custom_checkout_link": "mailto:licensing@netvisor.io",
+			"custom_checkout_link": "mailto:licensing@scanopy.net",
 			"custom_price": "Custom",
 			"features": {
 				"audit_logs": true,
