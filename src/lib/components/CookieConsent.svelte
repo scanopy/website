@@ -1,189 +1,203 @@
 <script lang="ts">
-	import '@beyonk/gdpr-cookie-consent-banner/banner.css';
 	import posthog from 'posthog-js';
 	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
-	import type { Component } from 'svelte';
 
-	let GdprBanner: Component<any> | null = $state(null);
+	const COOKIE_NAME = 'netvisor_gdpr';
+	const COOKIE_DOMAIN = dev ? '' : '.netvisor.io';
 
-	onMount(async () => {
-		const module = await import('@beyonk/gdpr-cookie-consent-banner');
-		GdprBanner = module.default;
+	type ConsentState = 'pending' | 'accepted' | 'rejected';
+
+	let consentState: ConsentState = $state('pending');
+	let showBanner = $state(false);
+	let mounted = $state(false);
+
+	onMount(() => {
+		mounted = true;
+		const existing = getCookie(COOKIE_NAME);
+		if (existing === 'accepted') {
+			consentState = 'accepted';
+			showBanner = false;
+			if (posthog.__loaded) posthog.opt_in_capturing();
+		} else if (existing === 'rejected') {
+			consentState = 'rejected';
+			showBanner = false;
+			if (posthog.__loaded) posthog.opt_out_capturing();
+		} else {
+			showBanner = true;
+		}
 	});
 
-	function handleAnalytics(event: CustomEvent<{ agreed: boolean }>) {
-          if (posthog.__loaded) {
-              if (event.detail.agreed) {
-                  posthog.opt_in_capturing();
-              } else {
-                  posthog.opt_out_capturing();
-              }
-          }
-      }
+	function getCookie(name: string): string | null {
+		const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+		return match ? match[2] : null;
+	}
+
+	function setCookie(name: string, value: string, days: number) {
+		const expires = new Date(Date.now() + days * 864e5).toUTCString();
+		const domain = COOKIE_DOMAIN ? `; domain=${COOKIE_DOMAIN}` : '';
+		document.cookie = `${name}=${value}; expires=${expires}; path=/${domain}; SameSite=Lax`;
+	}
+
+	function accept() {
+		consentState = 'accepted';
+		showBanner = false;
+		setCookie(COOKIE_NAME, 'accepted', 365);
+		if (posthog.__loaded) posthog.opt_in_capturing();
+	}
+
+	function reject() {
+		consentState = 'rejected';
+		showBanner = false;
+		setCookie(COOKIE_NAME, 'rejected', 365);
+		if (posthog.__loaded) posthog.opt_out_capturing();
+	}
+
+	function openSettings() {
+		showBanner = true;
+	}
 </script>
 
-{#if GdprBanner}
-<GdprBanner
-	cookieName="netvisor_gdpr"
-	heading="Cookie Settings"
-	description='We use cookies to offer a better browsing experience and analyze site traffic. Please review our <a href="/privacy">privacy policy page</a>. By clicking accept, you consent to our privacy policy & use of cookies.'
-	on:analytics={handleAnalytics}
-    cookieConfig={dev ? {} : { domain: '.netvisor.io' }}
-	canRejectCookies={true}
-	rejectLabel="Reject"
-	on:all={handleAnalytics}
-    acceptAllLabel="Accept All"
-    acceptSelectedLabel="Accept"
-	choices={{
-		necessary: {
-			label: 'Necessary cookies',
-			description: "Used for basic functionality. Can't be turned off.",
-			value: true
-		},
-		tracking: false,
-		analytics: {
-			label: 'Analytics cookies',
-			description: 'Used for analyitcs tools that track user behavior.',
-			value: true
-		},
-		marketing: false
-	}}
-/>
+{#if mounted}
+	{#if showBanner}
+		<div class="banner">
+			<div class="content">
+				<h3 class="title">Cookie Settings</h3>
+				<p class="description">
+					We use cookies to offer a better browsing experience and analyze site traffic.
+					Please review our <a href="/privacy">privacy policy</a>.
+					By clicking accept, you consent to our privacy policy & use of cookies.
+				</p>
+				<div class="buttons">
+					<button class="btn btn-secondary" onclick={reject}>Reject</button>
+					<button class="btn btn-primary" onclick={accept}>Accept</button>
+				</div>
+			</div>
+		</div>
+	{:else}
+		<button class="toggle" onclick={openSettings} aria-label="Cookie settings">
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<circle cx="12" cy="12" r="10"/>
+				<circle cx="8" cy="9" r="1.5" fill="currentColor"/>
+				<circle cx="15" cy="8" r="1.5" fill="currentColor"/>
+				<circle cx="10" cy="14" r="1.5" fill="currentColor"/>
+				<circle cx="16" cy="13" r="1.5" fill="currentColor"/>
+				<circle cx="13" cy="17" r="1" fill="currentColor"/>
+			</svg>
+		</button>
+	{/if}
 {/if}
 
 <style>
-	/* Banner wrapper - bottom bar */
-	:global(.cookieConsentWrapper) {
+	.banner {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		background: #1f2937;
 		border-top: 1px solid #374151;
 		padding: 1.5rem;
+		z-index: 9999;
 	}
 
-	/* Floating toggle button */
-	:global(.cookieConsentToggle) {
-		background: #1f2937;
-		border: 1px solid #374151;
+	.content {
+		max-width: 1200px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	@media (min-width: 768px) {
+		.content {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+		}
+	}
+
+	.title {
+		color: white;
+		font-size: 1.125rem;
+		font-weight: 600;
+		margin: 0;
+	}
+
+	.description {
 		color: #9ca3af;
-		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+		font-size: 0.875rem;
+		margin: 0;
+		flex: 1;
 	}
 
-	:global(.cookieConsentToggle:hover) {
-		background: #374151;
-		color: white;
+	.description a {
+		color: #60a5fa;
+		text-decoration: underline;
 	}
 
-	/* Main buttons */
-	:global(.cookieConsent__Button) {
-		background: #1d4ed8;
-		color: white;
-		border: 1px solid #2563eb;
-		border-radius: 0.375rem;
+	.description a:hover {
+		color: #93c5fd;
+	}
+
+	.buttons {
+		display: flex;
+		gap: 0.75rem;
+		flex-shrink: 0;
+	}
+
+	.btn {
 		padding: 0.5rem 1rem;
+		border-radius: 0.375rem;
 		font-weight: 500;
+		font-size: 0.875rem;
+		cursor: pointer;
 		transition: background-color 150ms, border-color 150ms;
 	}
 
-	:global(.cookieConsent__Button:hover) {
+	.btn-primary {
+		background: #1d4ed8;
+		color: white;
+		border: 1px solid #2563eb;
+	}
+
+	.btn-primary:hover {
 		background: #2563eb;
 		border-color: #3b82f6;
-		opacity: 1;
 	}
 
-	/* Secondary/settings button style */
-	:global(.cookieConsent__Button:first-of-type) {
+	.btn-secondary {
 		background: transparent;
-		border: 1px solid #374151;
 		color: #9ca3af;
+		border: 1px solid #374151;
 	}
 
-	:global(.cookieConsent__Button:first-of-type:hover) {
+	.btn-secondary:hover {
 		background: #1f2937;
 		border-color: #4b5563;
 		color: #e5e7eb;
 	}
 
-	/* Settings modal overlay */
-	:global(.cookieConsentOperations) {
-		background: rgba(0, 0, 0, 0.7);
-		backdrop-filter: blur(4px);
-	}
-
-	/* Settings modal content */
-	:global(.cookieConsentOperations__List) {
-		background: #111827;
-		color: white;
+	.toggle {
+		position: fixed;
+		bottom: 1rem;
+		left: 1rem;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		background: #1f2937;
 		border: 1px solid #374151;
-		border-radius: 0.5rem;
-		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+		color: #9ca3af;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+		z-index: 9999;
+		transition: background-color 150ms, color 150ms;
 	}
 
-	/* Reduce padding since checkbox is smaller */
-	:global(.cookieConsentOperations__Item) {
-		padding-left: 36px;
-	}
-
-	/* Checkbox box */
-	:global(.cookieConsentOperations__Item label::before) {
-		width: 1rem;
-		height: 1rem;
-		border-radius: 0.25rem;
+	.toggle:hover {
 		background: #374151;
-		border: 1px solid #4b5563;
-		left: -36px;
-		top: 50%;
-		transform: translateY(-50%);
-	}
-
-	/* Hide the default toggle thumb entirely */
-	:global(.cookieConsentOperations__Item label::after) {
-		display: none;
-	}
-
-	/* Checkbox checked state - blue background with checkmark */
-	:global(.cookieConsentOperations__Item input:checked + label::before) {
-		background: #2563eb url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e") center/80% no-repeat;
-		border-color: #2563eb;
-	}
-
-	/* Disabled item - grayed out appearance */
-	:global(.cookieConsentOperations__Item.disabled) {
-		color: #6b7280;
-		cursor: not-allowed;
-	}
-
-	:global(.cookieConsentOperations__Item.disabled label::before) {
-		background: #4b5563 url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e") center/80% no-repeat;
-		border-color: #4b5563;
-		opacity: 0.6;
-	}
-
-	/* Close button in modal */
-	:global(.cookieConsent__Button--Close) {
-		background: #1d4ed8;
 		color: white;
-		border: 1px solid #2563eb;
-		border-radius: 0.375rem;
-	}
-
-	:global(.cookieConsent__Button--Close:hover) {
-		background: #2563eb;
-		border-color: #3b82f6;
-	}
-
-	/* Description text */
-	:global(.cookieConsent__Description) {
-		color: #9ca3af;
-	}
-
-	/* Title text */
-	:global(.cookieConsent__Title) {
-		color: white;
-	}
-
-	/* Item description in modal */
-	:global(.cookieConsentOperations__Item span) {
-		color: #9ca3af;
-		font-size: 0.875rem;
 	}
 </style>

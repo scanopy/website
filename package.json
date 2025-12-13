@@ -13,7 +13,6 @@
 		"lint": "prettier --check . && eslint ."
 	},
 	"dependencies": {
-		"@beyonk/gdpr-cookie-consent-banner": "^16.0.2",
 		"lucide-svelte": "^0.526.0",
 		"posthog-js": "^1.306.0"
 	},
