@@ -92,6 +92,9 @@
 </script>
 
 {#if mounted}
+	{#if showBanner && !showSettings}
+		<div class="spacer"></div>
+	{/if}
 	{#if showBanner}
 		<div class="overlay" class:visible={showSettings}></div>
 		<div class="banner" class:settings-open={showSettings}>
@@ -174,6 +177,16 @@
 {/if}
 
 <style>
+	.spacer {
+		height: 100px;
+	}
+
+	@media (min-width: 768px) {
+		.spacer {
+			height: 72px;
+		}
+	}
+
 	.overlay {
 		position: fixed;
 		inset: 0;
