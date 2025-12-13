@@ -2,7 +2,7 @@
 	import '@beyonk/gdpr-cookie-consent-banner/banner.css';
 	import GdprBanner from '@beyonk/gdpr-cookie-consent-banner';
 	import posthog from 'posthog-js';
-	import { dev } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 
 	function handleAnalytics(event: CustomEvent<{ agreed: boolean }>) {
           if (posthog.__loaded) {
@@ -15,6 +15,7 @@
       }
 </script>
 
+{#if browser}
 <GdprBanner
 	cookieName="netvisor_gdpr"
 	heading="Cookie Settings"
@@ -41,6 +42,7 @@
 		marketing: false
 	}}
 />
+{/if}
 
 <style>
 	/* Banner wrapper - bottom bar */
