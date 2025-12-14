@@ -10,7 +10,7 @@
 
 	let {
 		class: className = '',
-		repoUrl = 'https://github.com/netvisor-io/netvisor',
+		repoUrl = 'https://github.com/scanopy/scanopy',
 	}: Props = $props();
 
 	let stars = writable<number>();
@@ -104,7 +104,7 @@
 
 {#if !loading && !error && $stars != null && $stars != undefined}
 	<a
-		href="https://github.com/netvisor-io/netvisor"
+		href="https://github.com/scanopy/scanopy"
 		target="_blank"
 		rel="noopener noreferrer"
 		class="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm text-gray-300 shadow-lg backdrop-blur-sm transition-all hover:border-gray-600 hover:bg-gray-700/80 {className}"

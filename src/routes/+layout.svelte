@@ -81,6 +81,7 @@
 					>
 						Docs
 					</a>
+					<a href="/login" class="text-gray-400 transition-colors hover:text-white">Login</a>
 					<a href="https://app.scanopy.net" class="btn-primary">Get Started</a>
 				</div>
 
@@ -125,6 +126,7 @@
 					>
 						Docs
 					</a>
+					<a href="/login" class="text-gray-400 transition-colors hover:text-white">Login</a>
 					<a
 						href="https://app.scanopy.net"
 						class="btn-primary text-center"
