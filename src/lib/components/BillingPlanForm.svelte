@@ -257,10 +257,7 @@
 	<!-- Header with GitHub Stars and Toggles -->
 	<div class="flex flex-wrap items-stretch justify-center gap-3 px-4 lg:gap-6 lg:px-10">
 		{#if showGithubStars}
-			<div class="card inline-flex items-center gap-2 px-4 shadow-xl backdrop-blur-sm">
-				<span class="text-secondary text-sm">Open source on GitHub</span>
-				<GithubStars />
-			</div>
+			<GithubStars />
 		{/if}
 
 		<ToggleGroup

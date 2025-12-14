@@ -155,7 +155,7 @@
 					<p class="text-sm text-gray-400">
 						Automatically discover and visually document network infrastructure.
 					</p>
-					<GithubStars usePublicApi={true} />
+					<GithubStars />
 				</div>
 
 				<!-- Product -->

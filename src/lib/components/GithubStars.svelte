@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { Star } from 'lucide-svelte';
+	import { Github, Star } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		class?: string;
 		repoUrl?: string;
-		usePublicApi?: boolean; // Always uses public API, kept for compatibility
 	}
 
 	let {
 		class: className = '',
-		repoUrl = 'https://github.com/scanopy/scanopy',
-		usePublicApi: _ = true // eslint-disable-line @typescript-eslint/no-unused-vars
+		repoUrl = 'https://github.com/netvisor-io/netvisor',
 	}: Props = $props();
 
-	let stars = $state<number | undefined>(undefined);
+	let stars = writable<number>();
 	let loading = $state(true);
 	let error = $state(false);
 
@@ -69,7 +68,7 @@
 		try {
 			const cached = getCachedStars();
 			if (cached !== null) {
-				stars = cached;
+				stars.set(cached);
 				error = false;
 				loading = false;
 				return;
@@ -77,7 +76,7 @@
 
 			const count = await fetchFromPublicApi();
 			if (count !== null) {
-				stars = count;
+				stars.set(count);
 				setCachedStars(count);
 				error = false;
 			} else {
@@ -103,21 +102,27 @@
 	}
 </script>
 
-{#if !loading && !error && stars != null && stars != undefined}
+{#if !loading && !error && $stars != null && $stars != undefined}
 	<a
-		href={repoUrl}
+		href="https://github.com/netvisor-io/netvisor"
 		target="_blank"
 		rel="noopener noreferrer"
-		class="inline-flex items-center gap-1.5 rounded-md border border-gray-600 bg-gray-700/50 px-3 py-1.5 text-sm font-medium text-gray-300 transition-colors hover:border-gray-500 hover:bg-gray-700 {className}"
+		class="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm text-gray-300 shadow-lg backdrop-blur-sm transition-all hover:border-gray-600 hover:bg-gray-700/80 {className}"
 	>
-		<Star class="h-4 w-4 fill-yellow-400 text-yellow-400" />
-		<span>{formatStars(stars)}</span>
+		<Github class="h-4 w-4" />
+		<span class="flex items-center gap-1">
+			<Star class="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+			<span>{formatStars($stars)}</span>
+		</span>
 	</a>
 {:else if loading}
 	<div
-		class="inline-flex items-center gap-1.5 rounded-md border border-gray-600 bg-gray-700/50 px-3 py-1.5 text-sm {className}"
+		class="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm text-gray-400 shadow-lg backdrop-blur-sm {className}"
 	>
-		<Star class="h-4 w-4 text-gray-500" />
-		<span class="text-gray-500">...</span>
+		<Github class="h-4 w-4" />
+		<span class="flex items-center gap-1">
+			<Star class="h-3.5 w-3.5" />
+			<span>...</span>
+		</span>
 	</div>
 {/if}

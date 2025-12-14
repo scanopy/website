@@ -106,11 +106,8 @@
 	<div class="container relative z-10 mx-auto px-4">
 		<div class="mx-auto max-w-4xl text-center">
 			<!-- Badge -->
-			<div
-				class="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm"
-			>
-				<span class="text-sm font-medium text-gray-300">Open Source</span>
-				<GithubStars usePublicApi={true} />
+			<div class="pb-4">
+				<GithubStars  />
 			</div>
 
 			<!-- Headline -->
