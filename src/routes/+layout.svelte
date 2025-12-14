@@ -3,7 +3,7 @@
 	import { browser, dev } from '$app/environment';
 	import { GithubStars, NewsletterSignup } from '$lib/components';
 	import { Github, MessageCircle, Menu, X } from 'lucide-svelte';
-	import { PUBLIC_PLUNK_API_KEY } from '$env/static/public';
+	import { PUBLIC_PLUNK_API_KEY, PUBLIC_POSTHOG_KEY } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import posthog from 'posthog-js';
@@ -20,7 +20,7 @@
 
 	export const loadPh = async () => {
 		if (browser) {
-			posthog.init('phc_9atkOQdO4ttxZwrpMRU42KazQcah6yQaU8aX9ts6SrK', {
+			posthog.init(PUBLIC_POSTHOG_KEY, {
 				api_host: 'https://ph.scanopy.net',
 				ui_host: 'https://us.posthog.com',
 				defaults: '2025-11-30',
