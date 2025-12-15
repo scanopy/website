@@ -44,7 +44,7 @@
 		errorMessage = '';
 
 		try {
-			const response = await fetch('https://api.useplunk.com/v1/track', {
+			const response = await fetch('https://next-api.useplunk.com/v1/track', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
