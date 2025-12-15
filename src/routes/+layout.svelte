@@ -2,7 +2,8 @@
 	import '../app.css';
 	import { browser, dev } from '$app/environment';
 	import { GithubStars, NewsletterSignup } from '$lib/components';
-	import { Github, MessageCircle, Menu, X } from 'lucide-svelte';
+	import { Menu, X } from 'lucide-svelte';
+	import Icon from '@iconify/svelte';
 	import { PUBLIC_PLUNK_API_KEY, PUBLIC_POSTHOG_KEY } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
@@ -82,7 +83,7 @@
 						Docs
 					</a>
 					<a href="/login" class="text-gray-400 transition-colors hover:text-white">Login</a>
-					<a href="https://app.scanopy.net" class="btn-primary">Get Started</a>
+					<a href="https://app.scanopy.net" class="btn-primary">Start Free Trial</a>
 				</div>
 
 				<!-- Mobile menu button -->
@@ -132,7 +133,7 @@
 						class="btn-primary text-center"
 						onclick={closeMobileMenu}
 					>
-						Get Started
+						Start Free Trial
 					</a>
 				</div>
 			{/if}
@@ -155,7 +156,7 @@
 						<span class="text-xl font-bold text-white">Scanopy</span>
 					</div>
 					<p class="text-sm text-gray-400">
-						Automatically discover and visually document network infrastructure.
+						Network discovery and documentation on autopilot.
 					</p>
 					<GithubStars />
 				</div>
@@ -193,7 +194,7 @@
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
 							>
-								<Github class="h-4 w-4" />
+								<Icon icon="simple-icons:github" class="h-4 w-4" />
 								GitHub
 							</a>
 						</li>
@@ -204,8 +205,30 @@
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
 							>
-								<MessageCircle class="h-4 w-4" />
+								<Icon icon="simple-icons:discord" class="h-4 w-4" />
 								Discord
+							</a>
+						</li>
+						<li>
+							<a
+								href="https://reddit.com/r/scanopy"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+							>
+								<Icon icon="simple-icons:reddit" class="h-4 w-4" />
+								Reddit
+							</a>
+						</li>
+						<li>
+							<a
+								href="https://x.com/getscanopy"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+							>
+								<Icon icon="simple-icons:x" class="h-4 w-4" />
+								X
 							</a>
 						</li>
 						<li>

@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { fly } from 'svelte/transition';
 	import { GithubStars } from '$lib/components';
 	import {
 		Network,
 		Eye,
-		Zap,
+		GitBranch,
 		Shield,
 		Box,
 		FileCode,
@@ -13,55 +15,67 @@
 		Briefcase
 	} from 'lucide-svelte';
 
+	const diagramTools = ['Visio', 'Lucidchart', 'Draw.io', 'PowerPoint', 'Miro', 'Gliffy'];
+	let currentTool = $state(diagramTools[0]);
+
+	onMount(() => {
+		let index = 0;
+		const interval = setInterval(() => {
+			index = (index + 1) % diagramTools.length;
+			currentTool = diagramTools[index];
+		}, 2500);
+		return () => clearInterval(interval);
+	});
+
 	const features = [
 		{
 			icon: Network,
-			title: 'Auto-Discovery',
-			description: 'Automatically discover devices, services, and connections across your network.'
+			title: 'Never miss a device',
+			description: 'Scans any network and discovers every host, service, and subnet automatically.'
 		},
 		{
-			icon: Eye,
-			title: 'Visual Documentation',
-			description: 'Generate interactive network topology maps that update in real-time.'
-		},
-		{
-			icon: Zap,
-			title: 'Real-Time Updates',
-			description: 'Track changes as they happen with continuous network monitoring.'
+			icon: GitBranch,
+			title: 'Versioning without the commits',
+			description: 'Create branches, lock versions, and compare network state over time.'
 		},
 		{
 			icon: Shield,
-			title: 'Security Insights',
-			description: 'Identify exposed services and potential security concerns.'
+			title: "Know what's exposed",
+			description: 'See which services are reachable and flag misconfigurations before they become incidents.'
 		},
 		{
 			icon: Box,
-			title: 'Service Detection',
-			description: 'Recognize 200+ services including Docker, databases, and more.'
+			title: 'Auto-detects 200+ services',
+			description: 'Identifies <a href="/services" class="text-sky-400 hover:underline">200+ services</a> including Docker, PostgreSQL, nginx, Prometheus, and Active Directory.'
 		},
 		{
 			icon: FileCode,
-			title: 'Export & Sharing',
-			description: 'Export documentation or share live views with stakeholders and customers.'
+			title: 'Share with anyone',
+			description: 'Export diagrams, send live view links, or create embeds (coming soon).'
+		},
+		{
+			icon: Eye,
+			title: 'Diagrams that never go stale',
+			description: 'Live topology diagrams that update as each network changes.'
 		}
 	];
 
 	const useCases = [
 		{
 			icon: Users,
-			title: 'Onboard employees faster',
-			description: "Visual infrastructure documentation that's always up-to-date."
+			title: 'Onboard faster',
+			description: 'New hires and new clients see the whole picture on day one — no digging through outdated wikis.'
+		},
+		{
+			icon: Briefcase,
+			title: 'Impress your customers',
+			description: 'Turn documentation into a live client portal — zero manual updates.'
 		},
 		{
 			icon: ClipboardCheck,
 			title: 'Streamline audits & compliance',
-			description: 'Easy-to-understand network artifacts for auditors.'
+			description: 'Hand auditors a live network map instead of stale spreadsheets.'
 		},
-		{
-			icon: Briefcase,
-			title: 'Deliver to your customers',
-			description: 'Professional documentation as part of your service offering.'
-		}
 	];
 
 	const testimonials = [
@@ -89,7 +103,7 @@
 	<title>Scanopy - Automatic Network Documentation</title>
 	<meta
 		name="description"
-		content="Automatically discover and visually document network infrastructure. Open source network discovery and documentation tool."
+		content="Automatic network diagrams that stay up to date. Open source."
 	/>
 </svelte:head>
 
@@ -112,19 +126,20 @@
 
 			<!-- Headline -->
 			<h1 class="mb-6 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
-				Automatically discover and visually document network infrastructure
+				Clean network diagrams.<br />One-time setup, zero upkeep
+				<!-- No setup. No maintenance. Just clean network docs. -->
+				 <!-- Clean network documentation without the overhead -->
 			</h1>
 
 			<!-- Subheadline -->
 			<p class="mx-auto mb-10 max-w-2xl text-xl text-gray-300">
-				Join thousands of networking professionals using Scanopy to effortlessly create and
-				maintain infrastructure documentation
+				From one site to hundreds — scan any network<br />and get live, auto-updating documentation in minutes
 			</p>
 
 			<!-- CTAs -->
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a href="https://app.scanopy.net" class="btn-primary px-8 py-3 text-lg">
-					Launch Scanopy
+					Start Free Trial
 				</a>
 			</div>
 		</div>
@@ -136,11 +151,8 @@
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-				Everything you need for network documentation
+				Scan once. Stay documented forever.
 			</h2>
-			<p class="mx-auto max-w-2xl text-lg text-gray-400">
-				Creating network infrastructure documentation has never been this easy
-			</p>
 		</div>
 
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -150,7 +162,7 @@
 						<feature.icon class="h-6 w-6 text-sky-400" />
 					</div>
 					<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
-					<p class="text-sm text-gray-400">{feature.description}</p>
+					<p class="text-sm text-gray-400">{@html feature.description}</p>
 				</div>
 			{/each}
 		</div>
@@ -162,7 +174,19 @@
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-				Built for teams of all sizes
+				Less
+				<span class="relative inline-block h-[1.15em] overflow-hidden align-baseline" style="top: 0.15em;">
+					{#key currentTool}
+						<span
+							class="absolute bottom-0 left-0"
+							in:fly={{ y: 24, duration: 250, delay: 150 }}
+							out:fly={{ y: -24, duration: 250 }}
+						>
+							{currentTool}
+						</span>
+					{/key}
+					<span class="invisible">{currentTool}</span>
+				</span> wrangling, more clarity
 			</h2>
 		</div>
 
@@ -187,9 +211,8 @@
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-				What the community is saying
+				Feedback from r/selfhosted and r/homelab
 			</h2>
-			<p class="mx-auto max-w-2xl text-lg text-gray-400">Real feedback from Reddit.</p>
 		</div>
 
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -210,17 +233,14 @@
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mx-auto max-w-3xl text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-				Ready to document your network infrastructure?
+			<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl">
+				Your network diagram is minutes away
 			</h2>
-			<p class="mb-8 text-lg text-gray-400">
-				Get started with a <span class="text-rose-400">free trial</span> in minutes.
-			</p>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a href="https://app.scanopy.net" class="btn-primary px-8 py-3 text-lg">
-					Launch Scanopy
+					Start Free Trial
 				</a>
-				<a href="/pricing" class="btn-secondary px-8 py-3 text-lg"> View Pricing </a>
+				<a href="/pricing" class="btn-secondary px-8 py-3 text-lg"> Compare Plans </a>
 			</div>
 		</div>
 	</div>

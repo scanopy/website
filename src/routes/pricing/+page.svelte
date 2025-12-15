@@ -154,8 +154,7 @@
 <section class="py-10 pb-24 lg:pb-10">
 	<div class="container mx-auto px-2">
 		<div class="mb-12 text-center">
-			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Simple, Transparent Pricing</h1>
-			<p class="mx-auto max-w-2xl text-xl text-gray-400">All plans include core features.</p>
+			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Simple pricing. Unlimited scans.</h1>
 		</div>
 
 		<BillingPlanForm
