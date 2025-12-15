@@ -82,8 +82,8 @@
 					>
 						Docs
 					</a>
-					<a href="/login" class="text-gray-400 transition-colors hover:text-white">Login</a>
-					<a href="https://app.scanopy.net" class="btn-primary">Start Free Trial</a>
+					<a href="https://app.scanopy.net/login" class="text-gray-400 transition-colors hover:text-white">Login</a>
+					<a href="https://app.scanopy.net/onboarding" class="btn-primary">Start Free Trial</a>
 				</div>
 
 				<!-- Mobile menu button -->
@@ -127,9 +127,9 @@
 					>
 						Docs
 					</a>
-					<a href="/login" class="text-gray-400 transition-colors hover:text-white">Login</a>
+					<a href="https://app.scanopy.net/login" class="text-gray-400 transition-colors hover:text-white">Login</a>
 					<a
-						href="https://app.scanopy.net"
+						href="https://app.scanopy.net/onboarding"
 						class="btn-primary text-center"
 						onclick={closeMobileMenu}
 					>
