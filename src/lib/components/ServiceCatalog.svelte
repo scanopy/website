@@ -3,6 +3,7 @@
 	import type { ServiceDefinition } from '$lib/types';
 	import { createColorHelper } from '$lib/utils/styling';
 	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
+	import { analytics } from '$lib/analytics';
 
 	interface Props {
 		services: ServiceDefinition[];
@@ -19,6 +20,25 @@
 	let categories = $derived(() => {
 		const cats = [...new SvelteSet(services.map((s) => s.category))];
 		return cats.sort((a, b) => a.localeCompare(b));
+	});
+
+	// Debounced search tracking
+	let searchTimeout: ReturnType<typeof setTimeout> | null = null;
+	$effect(() => {
+		const query = searchQuery.trim();
+		if (query.length >= 2) {
+			if (searchTimeout) clearTimeout(searchTimeout);
+			searchTimeout = setTimeout(() => {
+				analytics.servicesSearched({
+					query,
+					results_count: filteredServices().length,
+					category_filter: selectedCategory
+				});
+			}, 500);
+		}
+		return () => {
+			if (searchTimeout) clearTimeout(searchTimeout);
+		};
 	});
 
 	let filteredServices = $derived(() => {

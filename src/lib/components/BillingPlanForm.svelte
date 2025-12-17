@@ -10,6 +10,7 @@
 	import { SvelteMap } from 'svelte/reactivity';
 	import type { BillingPlan, BillingPlanMetadata, FeatureMetadata } from '$lib/types';
 	import type { ColorStyle, IconComponent } from '$lib/utils/styling';
+	import { analytics } from '$lib/analytics';
 
 	interface MetadataHelpers<T> {
 		getMetadata: (id: string | null) => T;
@@ -263,13 +264,19 @@
 		<ToggleGroup
 			options={planTypeOptions}
 			selected={planFilter}
-			onchange={(value) => (planFilter = value as PlanFilter)}
+			onchange={(value) => {
+				planFilter = value as PlanFilter;
+				analytics.pricingPlanFiltered({ filter: value });
+			}}
 		/>
 
 		<ToggleGroup
 			options={billingPeriodOptions}
 			selected={billingPeriod}
-			onchange={(value) => (billingPeriod = value as BillingPeriod)}
+			onchange={(value) => {
+				billingPeriod = value as BillingPeriod;
+				analytics.pricingPeriodToggled({ period: value });
+			}}
 		/>
 	</div>
 
@@ -447,7 +454,19 @@
 					<div class="grid-cell plan-cell">
 						<div class="flex flex-col gap-4">
 							{#if hosting === 'Cloud'}
-								<button type="button" onclick={() => onPlanSelect(plan)} class="px-2 w-full btn-primary whitespace-nowrap text-xs lg:text-sm">
+								<button
+									type="button"
+									onclick={() => {
+										analytics.pricingPlanSelected({
+											plan: plan.type,
+											period: billingPeriod,
+											price_cents: plan.base_cents,
+											is_trial: trial
+										});
+										onPlanSelect(plan);
+									}}
+									class="px-2 w-full btn-primary whitespace-nowrap text-xs lg:text-sm"
+								>
 									{trial ? 'Start Free Trial' : 'Get Started'}
 								</button>
 								{#if commercial}

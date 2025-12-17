@@ -2,6 +2,7 @@
 	import { Rocket } from 'lucide-svelte';
 	import type { FeatureMetadata } from '$lib/types';
 	import featuresData from '$lib/fixtures/features.json';
+	import { analytics } from '$lib/analytics';
 
 	interface FeatureFixture {
 		id: string;
@@ -106,10 +107,14 @@
 						</h2>
 						<div class="space-y-4">
 							{#each groupedFeatures[category] as feature (feature.id)}
-								<div class="card p-6">
+								<button
+									type="button"
+									class="card p-6 w-full text-left cursor-pointer hover:border-sky-500/50 transition-colors"
+									onclick={() => analytics.roadmapItemClicked({ feature_id: feature.id, feature_name: feature.name, category })}
+								>
 									<h3 class="mb-2 text-lg font-semibold text-white">{feature.name}</h3>
 									<p class="text-gray-400">{feature.description}</p>
-								</div>
+								</button>
 							{/each}
 						</div>
 					</div>
@@ -124,6 +129,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 				class="btn-secondary"
+				onclick={() => analytics.featureRequestClicked()}
 			>
 				Request a Feature
 			</a>

@@ -14,6 +14,7 @@
 		ClipboardCheck,
 		Briefcase
 	} from 'lucide-svelte';
+	import { analytics } from '$lib/analytics';
 
 	const diagramTools = ['Visio', 'Lucidchart', 'Draw.io', 'PowerPoint', 'Miro', 'Gliffy'];
 	let currentTool = $state(diagramTools[0]);
@@ -138,7 +139,11 @@
 
 			<!-- CTAs -->
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a href="https://app.scanopy.net" class="btn-primary px-8 py-3 text-lg">
+				<a
+					href="https://app.scanopy.net"
+					class="btn-primary px-8 py-3 text-lg"
+					onclick={() => analytics.ctaClicked({ location: 'hero', destination: 'app', text: 'Start Free Trial' })}
+				>
 					Start Free Trial
 				</a>
 			</div>
@@ -237,10 +242,20 @@
 				Your network diagram is minutes away
 			</h2>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a href="https://app.scanopy.net" class="btn-primary px-8 py-3 text-lg">
+				<a
+					href="https://app.scanopy.net"
+					class="btn-primary px-8 py-3 text-lg"
+					onclick={() => analytics.ctaClicked({ location: 'bottom_cta', destination: 'app', text: 'Start Free Trial' })}
+				>
 					Start Free Trial
 				</a>
-				<a href="/pricing" class="btn-secondary px-8 py-3 text-lg"> Compare Plans </a>
+				<a
+					href="/pricing"
+					class="btn-secondary px-8 py-3 text-lg"
+					onclick={() => analytics.ctaClicked({ location: 'bottom_cta', destination: 'pricing', text: 'Compare Plans' })}
+				>
+					Compare Plans
+				</a>
 			</div>
 		</div>
 	</div>

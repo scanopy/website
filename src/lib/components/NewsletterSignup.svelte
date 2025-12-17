@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Mail, CheckCircle, AlertCircle } from 'lucide-svelte';
+	import { analytics } from '$lib/analytics';
 
 	interface Props {
 		apiKey: string;
@@ -60,6 +61,7 @@
 			if (response.ok) {
 				status = 'success';
 				email = '';
+				analytics.newsletterSubmitted({ success: true });
 			} else {
 				throw new Error('Failed to subscribe');
 			}
@@ -67,6 +69,7 @@
 			console.error('Newsletter signup error:', err);
 			status = 'error';
 			errorMessage = 'Something went wrong. Please try again.';
+			analytics.newsletterSubmitted({ success: false, error: errorMessage });
 		} finally {
 			loading = false;
 		}

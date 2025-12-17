@@ -7,6 +7,8 @@
 		FeatureMetadata
 	} from '$lib/types';
 	import type { ColorStyle, IconComponent } from '$lib/utils/styling';
+	import { onMount } from 'svelte';
+	import { analytics } from '$lib/analytics';
 
 	/**
 	 * Interface for metadata helpers - matches what BillingPlanForm expects.
@@ -137,8 +139,12 @@
 	const featureHelpers = createMetadataHelpers<FeatureFixture, FeatureMetadata>(featureFixtures);
 
 	// ============================================================================
-	// Callbacks
+	// Lifecycle & Callbacks
 	// ============================================================================
+
+	onMount(() => {
+		analytics.pricingViewed({ referrer: document.referrer || undefined });
+	});
 
 	function handlePlanSelect(plan: BillingPlan) {
 		// Redirect to the app's checkout flow
