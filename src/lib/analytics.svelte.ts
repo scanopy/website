@@ -11,14 +11,6 @@ function capture(event: string, properties?: Record<string, unknown>) {
 	}
 }
 
-function getCtaFeatureFlag(): string | undefined {
-	if (browser && posthog) {
-		const variant = posthog.getFeatureFlag('website-main-cta');
-		return typeof variant === 'string' ? variant : undefined;
-	}
-	return undefined;
-}
-
 /**
  * Feature flag state for CTA text experiment
  */
@@ -51,11 +43,13 @@ export const analytics = {
 		destination: string;
 		text: string;
 	}) => {
-		const variant = getCtaFeatureFlag();
-		capture('cta_clicked', {
-			...props,
-			'$feature/website-main-cta': variant
-		});
+		if (browser && posthog) {
+			// Call getFeatureFlag to trigger the exposure event ($feature_flag_called)
+			const variant = posthog.getFeatureFlag('website-main-cta');
+
+			// Capture with send_feature_flags to ensure proper attribution
+			posthog.capture('cta_clicked', props, { send_feature_flags: true });
+		}
 	},
 
 	/**
