@@ -8,7 +8,7 @@
 	} from '$lib/types';
 	import type { ColorStyle, IconComponent } from '$lib/utils/styling';
 	import { onMount } from 'svelte';
-	import { analytics } from '$lib/analytics';
+	import { analytics } from '$lib/analytics.svelte';
 
 	/**
 	 * Interface for metadata helpers - matches what BillingPlanForm expects.

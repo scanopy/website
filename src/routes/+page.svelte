@@ -14,7 +14,7 @@
 		ClipboardCheck,
 		Briefcase
 	} from 'lucide-svelte';
-	import { analytics } from '$lib/analytics';
+	import { analytics, featureFlags } from '$lib/analytics.svelte';
 
 	const diagramTools = ['Visio', 'Lucidchart', 'Draw.io', 'PowerPoint', 'Miro', 'Gliffy'];
 	let currentTool = $state(diagramTools[0]);
@@ -140,13 +140,13 @@
 			<!-- CTAs -->
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
-					href="https://app.scanopy.net"
+					href="https://app.scanopy.net/onboarding"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
-					onclick={() => analytics.ctaClicked({ location: 'hero', destination: 'app', text: 'Start Free Trial' })}
+					onclick={() => analytics.ctaClicked({ location: 'hero', destination: 'app_onboarding', text: featureFlags.mainCtaText })}
 				>
-					Start Free Trial
+					{featureFlags.mainCtaText}
 				</a>
 			</div>
 		</div>
@@ -245,13 +245,13 @@
 			</h2>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
-					href="https://app.scanopy.net"
+					href="https://app.scanopy.net/onboarding"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
-					onclick={() => analytics.ctaClicked({ location: 'bottom_cta', destination: 'app', text: 'Start Free Trial' })}
+					onclick={() => analytics.ctaClicked({ location: 'bottom_cta', destination: 'app_onboarding', text: featureFlags.mainCtaText })}
 				>
-					Start Free Trial
+					{featureFlags.mainCtaText}
 				</a>
 				<a
 					href="/pricing"

@@ -3,7 +3,7 @@
 	import type { ServiceDefinition } from '$lib/types';
 	import { createColorHelper } from '$lib/utils/styling';
 	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
-	import { analytics } from '$lib/analytics';
+	import { analytics } from '$lib/analytics.svelte';
 
 	interface Props {
 		services: ServiceDefinition[];

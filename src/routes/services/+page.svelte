@@ -2,7 +2,7 @@
 	import { ServiceCatalog } from '$lib/components';
 	import type { ServiceDefinition } from '$lib/types';
 	import servicesData from '$lib/fixtures/services.json';
-	import { analytics } from '$lib/analytics';
+	import { analytics } from '$lib/analytics.svelte';
 
 	const services: ServiceDefinition[] = servicesData;
 </script>

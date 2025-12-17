@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Mail, CheckCircle, AlertCircle } from 'lucide-svelte';
-	import { analytics } from '$lib/analytics';
+	import { analytics } from '$lib/analytics.svelte';
 
 	interface Props {
 		apiKey: string;

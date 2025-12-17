@@ -2,7 +2,7 @@
 	import { Rocket } from 'lucide-svelte';
 	import type { FeatureMetadata } from '$lib/types';
 	import featuresData from '$lib/fixtures/features.json';
-	import { analytics } from '$lib/analytics';
+	import { analytics } from '$lib/analytics.svelte';
 
 	interface FeatureFixture {
 		id: string;

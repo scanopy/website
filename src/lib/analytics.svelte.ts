@@ -11,6 +11,29 @@ function capture(event: string, properties?: Record<string, unknown>) {
 	}
 }
 
+/**
+ * Feature flag state for CTA text experiment
+ */
+export const featureFlags = $state({
+	mainCtaText: 'Start Free Trial' // default/control
+});
+
+export function initFeatureFlags() {
+	if (browser && posthog) {
+		posthog.onFeatureFlags(() => {
+			const variant = posthog.getFeatureFlag('website-main-cta');
+			if (variant === 'launch') {
+				featureFlags.mainCtaText = 'Launch Scanopy';
+			} else if (variant === 'get-started') {
+				featureFlags.mainCtaText = 'Get Started';
+			} else {
+				// control or fallback
+				featureFlags.mainCtaText = 'Start Free Trial';
+			}
+		});
+	}
+}
+
 export const analytics = {
 	/**
 	 * Track CTA button clicks that lead users toward conversion

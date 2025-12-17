@@ -10,7 +10,7 @@
 	import { SvelteMap } from 'svelte/reactivity';
 	import type { BillingPlan, BillingPlanMetadata, FeatureMetadata } from '$lib/types';
 	import type { ColorStyle, IconComponent } from '$lib/utils/styling';
-	import { analytics } from '$lib/analytics';
+	import { analytics } from '$lib/analytics.svelte';
 
 	interface MetadataHelpers<T> {
 		getMetadata: (id: string | null) => T;

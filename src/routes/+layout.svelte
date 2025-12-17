@@ -9,7 +9,7 @@
 	import type { Snippet } from 'svelte';
 	import posthog from 'posthog-js';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
-	import { analytics } from '$lib/analytics';
+	import { analytics, featureFlags, initFeatureFlags } from '$lib/analytics.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -30,6 +30,7 @@
 				opt_out_capturing_by_default: true,
 				person_profiles: 'always'
 			});
+			initFeatureFlags();
 		}
 
 		return;
@@ -98,9 +99,9 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary"
-						onclick={() => analytics.ctaClicked({ location: 'navbar', destination: 'app_onboarding', text: 'Start Free Trial' })}
+						onclick={() => analytics.ctaClicked({ location: 'navbar', destination: 'app_onboarding', text: featureFlags.mainCtaText })}
 					>
-						Start Free Trial
+						{featureFlags.mainCtaText}
 					</a>
 				</div>
 
@@ -159,9 +160,9 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary text-center"
-						onclick={() => { analytics.ctaClicked({ location: 'navbar_mobile', destination: 'app_onboarding', text: 'Start Free Trial' }); closeMobileMenu(); }}
+						onclick={() => { analytics.ctaClicked({ location: 'navbar_mobile', destination: 'app_onboarding', text: featureFlags.mainCtaText }); closeMobileMenu(); }}
 					>
-						Start Free Trial
+						{featureFlags.mainCtaText}
 					</a>
 				</div>
 			{/if}
