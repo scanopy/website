@@ -9,7 +9,7 @@
 	import type { Snippet } from 'svelte';
 	import posthog from 'posthog-js';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
-	import { analytics, featureFlags, initFeatureFlags } from '$lib/analytics.svelte';
+	import { analytics, featureFlags, initFeatureFlags, evaluateCtaFlag } from '$lib/analytics.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -45,6 +45,11 @@
 			healthStatus = 'unhealthy';
 		}
 		loadPh();
+	});
+
+	// Evaluate feature flag on mount to trigger exposure event (PostHog best practice)
+	$effect(() => {
+		evaluateCtaFlag();
 	});
 
 	function toggleMobileMenu() {

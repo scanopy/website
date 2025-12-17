@@ -20,23 +20,35 @@ export const featureFlags = $state({
 
 export function initFeatureFlags() {
 	if (browser && posthog) {
+		// Wait for feature flags to be loaded, then evaluate
 		posthog.onFeatureFlags(() => {
-			const variant = posthog.getFeatureFlag('website-main-cta');
-			if (variant === 'launch') {
-				featureFlags.mainCtaText = 'Launch Scanopy';
-			} else if (variant === 'get-started') {
-				featureFlags.mainCtaText = 'Get Started';
-			} else {
-				// control or fallback
-				featureFlags.mainCtaText = 'Start Free Trial';
-			}
+			evaluateCtaFlag();
 		});
+	}
+}
+
+/**
+ * Evaluate the CTA feature flag and update the text.
+ * This triggers the $feature_flag_called exposure event.
+ */
+export function evaluateCtaFlag() {
+	if (browser && posthog) {
+		const variant = posthog.getFeatureFlag('website-main-cta');
+		if (variant === 'launch') {
+			featureFlags.mainCtaText = 'Launch Scanopy';
+		} else if (variant === 'get-started') {
+			featureFlags.mainCtaText = 'Get Started';
+		} else {
+			// control or fallback
+			featureFlags.mainCtaText = 'Start Free Trial';
+		}
 	}
 }
 
 export const analytics = {
 	/**
-	 * Track CTA button clicks that lead users toward conversion
+	 * Track CTA button clicks that lead users toward conversion.
+	 * Note: Exposure event is triggered on page load in initFeatureFlags(), not here.
 	 */
 	ctaClicked: (props: {
 		location: string;
@@ -44,10 +56,6 @@ export const analytics = {
 		text: string;
 	}) => {
 		if (browser && posthog) {
-			// Call getFeatureFlag to trigger the exposure event ($feature_flag_called)
-			const variant = posthog.getFeatureFlag('website-main-cta');
-
-			// Capture with send_feature_flags to ensure proper attribution
 			posthog.capture('cta_clicked', props, { send_feature_flags: true });
 		}
 	},
