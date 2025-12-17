@@ -1,19 +1,20 @@
 <script lang="ts">
 	import '../app.css';
-	import { browser, dev } from '$app/environment';
+	import { dev } from '$app/environment';
 	import { GithubStars, NewsletterSignup } from '$lib/components';
 	import { Menu, X } from 'lucide-svelte';
 	import Icon from '@iconify/svelte';
-	import { PUBLIC_PLUNK_API_KEY, PUBLIC_POSTHOG_KEY } from '$env/static/public';
+	import { PUBLIC_PLUNK_API_KEY } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
-	import posthog from 'posthog-js';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
 	import {
 		analytics,
 		featureFlags,
-		initFeatureFlags,
-		evaluateCtaFlag
+		evaluateCtaFlag,
+
+		loadPh
+
 	} from '$lib/analytics.svelte';
 
 	interface Props {
@@ -24,22 +25,6 @@
 
 	let healthStatus = $state<'loading' | 'healthy' | 'unhealthy'>('loading');
 	let mobileMenuOpen = $state(false);
-
-	const loadPh = async () => {
-		if (browser && !dev) {
-			posthog.init(PUBLIC_POSTHOG_KEY, {
-				api_host: 'https://ph.scanopy.net',
-				ui_host: 'https://us.posthog.com',
-				defaults: '2025-11-30',
-				secure_cookie: true,
-				opt_out_capturing_by_default: true,
-				person_profiles: 'always'
-			});
-			initFeatureFlags();
-		}
-
-		return;
-	};
 
 	onMount(async () => {
 		try {

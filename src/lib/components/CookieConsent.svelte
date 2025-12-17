@@ -2,6 +2,7 @@
 	import posthog from 'posthog-js';
 	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
+	import { evaluateFeatureFlags } from '$lib/analytics.svelte';
 
 	const COOKIE_NAME = 'scanopy_gdpr';
 	const COOKIE_DOMAIN = dev ? '' : '.scanopy.net';
@@ -53,7 +54,10 @@
 	function applyPreferences() {
 		if (posthog.__loaded) {
 			if (preferences.analytics) {
+				// Switch to cookie-based persistence
+    			posthog.set_config({ persistence: 'localStorage+cookie' });
 				posthog.opt_in_capturing();
+				evaluateFeatureFlags();
 			} else {
 				posthog.opt_out_capturing();
 			}
