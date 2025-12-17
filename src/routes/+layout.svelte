@@ -86,6 +86,8 @@
 					</a>
 					<a
 						href="https://app.scanopy.net/login"
+						target="_blank"
+						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
 						onclick={() => analytics.ctaClicked({ location: 'navbar', destination: 'app_login', text: 'Login' })}
 					>
@@ -93,6 +95,8 @@
 					</a>
 					<a
 						href="https://app.scanopy.net/onboarding"
+						target="_blank"
+						rel="noopener noreferrer"
 						class="btn-primary"
 						onclick={() => analytics.ctaClicked({ location: 'navbar', destination: 'app_onboarding', text: 'Start Free Trial' })}
 					>
@@ -143,6 +147,8 @@
 					</a>
 					<a
 						href="https://app.scanopy.net/login"
+						target="_blank"
+						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
 						onclick={() => { analytics.ctaClicked({ location: 'navbar_mobile', destination: 'app_login', text: 'Login' }); closeMobileMenu(); }}
 					>
@@ -150,6 +156,8 @@
 					</a>
 					<a
 						href="https://app.scanopy.net/onboarding"
+						target="_blank"
+						rel="noopener noreferrer"
 						class="btn-primary text-center"
 						onclick={() => { analytics.ctaClicked({ location: 'navbar_mobile', destination: 'app_onboarding', text: 'Start Free Trial' }); closeMobileMenu(); }}
 					>

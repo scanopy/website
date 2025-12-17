@@ -141,6 +141,8 @@
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
 					href="https://app.scanopy.net"
+					target="_blank"
+					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
 					onclick={() => analytics.ctaClicked({ location: 'hero', destination: 'app', text: 'Start Free Trial' })}
 				>
@@ -244,6 +246,8 @@
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
 					href="https://app.scanopy.net"
+					target="_blank"
+					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
 					onclick={() => analytics.ctaClicked({ location: 'bottom_cta', destination: 'app', text: 'Start Free Trial' })}
 				>
