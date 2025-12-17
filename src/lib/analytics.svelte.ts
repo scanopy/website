@@ -1,5 +1,23 @@
 import posthog from 'posthog-js';
-import { browser } from '$app/environment';
+import { browser, dev } from '$app/environment';
+import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
+
+export async function loadPh () {
+	if (browser && !dev) {
+		posthog.init(PUBLIC_POSTHOG_KEY, {
+			api_host: 'https://ph.scanopy.net',
+			ui_host: 'https://us.posthog.com',
+			defaults: '2025-11-30',
+			secure_cookie: true,
+			persistence: 'memory',
+			opt_out_capturing_by_default: true,
+			person_profiles: 'identified_only'
+		});
+		initFeatureFlags();
+	}
+
+	return;
+};
 
 /**
  * PostHog tracking utility for consistent event naming and properties.
@@ -22,9 +40,13 @@ export function initFeatureFlags() {
 	if (browser && posthog) {
 		// Wait for feature flags to be loaded, then evaluate
 		posthog.onFeatureFlags(() => {
-			evaluateCtaFlag();
+			evaluateFeatureFlags();
 		});
 	}
+}
+
+export function evaluateFeatureFlags() {
+	evaluateCtaFlag()
 }
 
 /**
