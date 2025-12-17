@@ -8,10 +8,7 @@
 		repoUrl?: string;
 	}
 
-	let {
-		class: className = '',
-		repoUrl = 'https://github.com/scanopy/scanopy',
-	}: Props = $props();
+	let { class: className = '', repoUrl = 'https://github.com/scanopy/scanopy' }: Props = $props();
 
 	let stars = writable<number>();
 	let loading = $state(true);

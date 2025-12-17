@@ -109,8 +109,13 @@
 							{#each groupedFeatures[category] as feature (feature.id)}
 								<button
 									type="button"
-									class="card p-6 w-full text-left cursor-pointer hover:border-sky-500/50 transition-colors"
-									onclick={() => analytics.roadmapItemClicked({ feature_id: feature.id, feature_name: feature.name, category })}
+									class="card w-full cursor-pointer p-6 text-left transition-colors hover:border-sky-500/50"
+									onclick={() =>
+										analytics.roadmapItemClicked({
+											feature_id: feature.id,
+											feature_name: feature.name,
+											category
+										})}
 								>
 									<h3 class="mb-2 text-lg font-semibold text-white">{feature.name}</h3>
 									<p class="text-gray-400">{feature.description}</p>

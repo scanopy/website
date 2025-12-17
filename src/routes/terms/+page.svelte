@@ -16,9 +16,8 @@
 				These Terms of Service ("Terms") govern your access to and use of the Scanopy software
 				service, including any associated websites, networks, applications, and other services
 				provided by Scanopy (collectively, the "Service"). These Terms constitute a legally binding
-				agreement between you and Scanopy ("we," "us," or "our"). By accessing or using our
-				Service, you acknowledge that you have read, understood, and agree to be bound by these
-				Terms.
+				agreement between you and Scanopy ("we," "us," or "our"). By accessing or using our Service,
+				you acknowledge that you have read, understood, and agree to be bound by these Terms.
 			</p>
 		</section>
 
@@ -380,9 +379,9 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">24. Waiver and Severability</h2>
 			<p class="text-gray-300">
-				The failure of Scanopy to enforce any right or provision of these Terms will not be deemed
-				a waiver of such right or provision. If any provision of these Terms is found to be invalid
-				or unenforceable, the remaining provisions will remain in full force and effect.
+				The failure of Scanopy to enforce any right or provision of these Terms will not be deemed a
+				waiver of such right or provision. If any provision of these Terms is found to be invalid or
+				unenforceable, the remaining provisions will remain in full force and effect.
 			</p>
 		</section>
 
@@ -390,8 +389,8 @@
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">25. Assignment</h2>
 			<p class="text-gray-300">
 				These Terms, and any rights and licenses granted hereunder, may not be transferred or
-				assigned by you without the prior written consent of Scanopy, but may be assigned by
-				Scanopy without restriction.
+				assigned by you without the prior written consent of Scanopy, but may be assigned by Scanopy
+				without restriction.
 			</p>
 		</section>
 
@@ -674,8 +673,7 @@
 					</h4>
 					<p class="mb-4 text-gray-300">
 						Under the CCPA, California residents have the right to opt-out of the sale of their
-						personal information. Scanopy does not sell personal information as defined by the
-						CCPA.
+						personal information. Scanopy does not sell personal information as defined by the CCPA.
 					</p>
 				</div>
 

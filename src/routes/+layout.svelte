@@ -9,7 +9,12 @@
 	import type { Snippet } from 'svelte';
 	import posthog from 'posthog-js';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
-	import { analytics, featureFlags, initFeatureFlags, evaluateCtaFlag } from '$lib/analytics.svelte';
+	import {
+		analytics,
+		featureFlags,
+		initFeatureFlags,
+		evaluateCtaFlag
+	} from '$lib/analytics.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -20,7 +25,7 @@
 	let healthStatus = $state<'loading' | 'healthy' | 'unhealthy'>('loading');
 	let mobileMenuOpen = $state(false);
 
-	export const loadPh = async () => {
+	const loadPh = async () => {
 		if (browser && !dev) {
 			posthog.init(PUBLIC_POSTHOG_KEY, {
 				api_host: 'https://ph.scanopy.net',
@@ -86,7 +91,12 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() => analytics.externalLinkClicked({ destination: 'docs', location: 'navbar', url: 'https://github.com/scanopy/scanopy/tree/main/docs' })}
+						onclick={() =>
+							analytics.externalLinkClicked({
+								destination: 'docs',
+								location: 'navbar',
+								url: 'https://github.com/scanopy/scanopy/tree/main/docs'
+							})}
 					>
 						Docs
 					</a>
@@ -95,7 +105,8 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() => analytics.ctaClicked({ location: 'navbar', destination: 'app_login', text: 'Login' })}
+						onclick={() =>
+							analytics.ctaClicked({ location: 'navbar', destination: 'app_login', text: 'Login' })}
 					>
 						Login
 					</a>
@@ -104,7 +115,12 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary"
-						onclick={() => analytics.ctaClicked({ location: 'navbar', destination: 'app_onboarding', text: featureFlags.mainCtaText })}
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'navbar',
+								destination: 'app_onboarding',
+								text: featureFlags.mainCtaText
+							})}
 					>
 						{featureFlags.mainCtaText}
 					</a>
@@ -147,7 +163,14 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() => { analytics.externalLinkClicked({ destination: 'docs', location: 'navbar_mobile', url: 'https://github.com/scanopy/scanopy/tree/main/docs' }); closeMobileMenu(); }}
+						onclick={() => {
+							analytics.externalLinkClicked({
+								destination: 'docs',
+								location: 'navbar_mobile',
+								url: 'https://github.com/scanopy/scanopy/tree/main/docs'
+							});
+							closeMobileMenu();
+						}}
 					>
 						Docs
 					</a>
@@ -156,7 +179,14 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() => { analytics.ctaClicked({ location: 'navbar_mobile', destination: 'app_login', text: 'Login' }); closeMobileMenu(); }}
+						onclick={() => {
+							analytics.ctaClicked({
+								location: 'navbar_mobile',
+								destination: 'app_login',
+								text: 'Login'
+							});
+							closeMobileMenu();
+						}}
 					>
 						Login
 					</a>
@@ -165,7 +195,14 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary text-center"
-						onclick={() => { analytics.ctaClicked({ location: 'navbar_mobile', destination: 'app_onboarding', text: featureFlags.mainCtaText }); closeMobileMenu(); }}
+						onclick={() => {
+							analytics.ctaClicked({
+								location: 'navbar_mobile',
+								destination: 'app_onboarding',
+								text: featureFlags.mainCtaText
+							});
+							closeMobileMenu();
+						}}
 					>
 						{featureFlags.mainCtaText}
 					</a>
@@ -189,9 +226,7 @@
 						<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
 						<span class="text-xl font-bold text-white">Scanopy</span>
 					</div>
-					<p class="text-sm text-gray-400">
-						Network discovery and documentation on autopilot.
-					</p>
+					<p class="text-sm text-gray-400">Network discovery and documentation on autopilot.</p>
 					<GithubStars />
 				</div>
 
@@ -227,7 +262,12 @@
 								target="_blank"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-								onclick={() => analytics.externalLinkClicked({ destination: 'github', location: 'footer', url: 'https://github.com/scanopy/scanopy' })}
+								onclick={() =>
+									analytics.externalLinkClicked({
+										destination: 'github',
+										location: 'footer',
+										url: 'https://github.com/scanopy/scanopy'
+									})}
 							>
 								<Icon icon="simple-icons:github" class="h-4 w-4" />
 								GitHub
@@ -239,7 +279,12 @@
 								target="_blank"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-								onclick={() => analytics.externalLinkClicked({ destination: 'discord', location: 'footer', url: 'https://discord.gg/b7ffQr8AcZ' })}
+								onclick={() =>
+									analytics.externalLinkClicked({
+										destination: 'discord',
+										location: 'footer',
+										url: 'https://discord.gg/b7ffQr8AcZ'
+									})}
 							>
 								<Icon icon="simple-icons:discord" class="h-4 w-4" />
 								Discord
@@ -251,7 +296,12 @@
 								target="_blank"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-								onclick={() => analytics.externalLinkClicked({ destination: 'reddit', location: 'footer', url: 'https://reddit.com/r/scanopy' })}
+								onclick={() =>
+									analytics.externalLinkClicked({
+										destination: 'reddit',
+										location: 'footer',
+										url: 'https://reddit.com/r/scanopy'
+									})}
 							>
 								<Icon icon="simple-icons:reddit" class="h-4 w-4" />
 								Reddit
@@ -263,7 +313,12 @@
 								target="_blank"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-								onclick={() => analytics.externalLinkClicked({ destination: 'twitter', location: 'footer', url: 'https://x.com/getscanopy' })}
+								onclick={() =>
+									analytics.externalLinkClicked({
+										destination: 'twitter',
+										location: 'footer',
+										url: 'https://x.com/getscanopy'
+									})}
 							>
 								<Icon icon="simple-icons:x" class="h-4 w-4" />
 								X
@@ -333,4 +388,4 @@
 	</footer>
 </div>
 
-<CookieConsent/>
+<CookieConsent />

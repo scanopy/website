@@ -188,7 +188,8 @@
 	}
 
 	function formatNetworkAddonPricing(plan: BillingPlan): string {
-		if (plan.network_cents) return `+$${plan.network_cents / 100} / network / ${plan.rate.toLowerCase()}`;
+		if (plan.network_cents)
+			return `+$${plan.network_cents / 100} / network / ${plan.rate.toLowerCase()}`;
 		return '';
 	}
 
@@ -198,7 +199,9 @@
 
 	function getFeatureValue(planType: string, featureKey: string): boolean | string | number | null {
 		const metadata = billingPlanHelpers.getMetadata(planType);
-		const features = metadata?.features as Record<string, boolean | string | number | null> | undefined;
+		const features = metadata?.features as
+			| Record<string, boolean | string | number | null>
+			| undefined;
 		return features?.[featureKey] ?? null;
 	}
 
@@ -238,10 +241,14 @@
 
 	function getHostingColor(hosting: string): string {
 		switch (hosting) {
-			case 'Cloud': return 'sky';
-			case 'Managed': return 'purple';
-			case 'Self-Hosted': return 'green';
-			default: return 'gray';
+			case 'Cloud':
+				return 'sky';
+			case 'Managed':
+				return 'purple';
+			case 'Self-Hosted':
+				return 'green';
+			default:
+				return 'gray';
 		}
 	}
 
@@ -283,7 +290,10 @@
 	<!-- Pricing Grid -->
 	<div class="pricing-wrapper card p-0">
 		<!-- Sticky Header -->
-		<div class="sticky-header card card-static rounded-b-none border-0 p-0" bind:this={headerScrollRef}>
+		<div
+			class="sticky-header card card-static rounded-b-none border-0 p-0"
+			bind:this={headerScrollRef}
+		>
 			<div class="grid-row header-row" style="grid-template-columns: {gridColumns}">
 				<div class="grid-cell label-cell"></div>
 				{#each filteredPlans as plan (plan.type)}
@@ -294,7 +304,9 @@
 							{#if planFilter != 'all'}
 								<IconComponent class="{colorHelper.icon} h-4 w-4 lg:h-8 lg:w-8" />
 							{/if}
-							<span class="text-primary text-sm font-semibold lg:text-lg">{billingPlanHelpers.getName(plan.type)}</span>
+							<span class="text-primary text-sm font-semibold lg:text-lg"
+								>{billingPlanHelpers.getName(plan.type)}</span
+							>
 						</div>
 					</div>
 				{/each}
@@ -305,12 +317,13 @@
 		<div class="content-scroll rounded-none border-y-0 p-0" bind:this={contentScrollRef}>
 			<!-- Price Row -->
 			<div class="grid-row" style="grid-template-columns: {gridColumns}">
-				<div class="grid-cell label-cell">
-				</div>
+				<div class="grid-cell label-cell"></div>
 				{#each filteredPlans as plan (plan.type)}
 					<div class="grid-cell plan-cell text-center">
 						<div class="flex min-w-0 flex-col items-center space-y-1">
-							<div class="min-w-0 text-primary text-sm font-bold lg:text-2xl">{formatBasePricing(plan)}</div>
+							<div class="text-primary min-w-0 text-sm font-bold lg:text-2xl">
+								{formatBasePricing(plan)}
+							</div>
 							{#if plan.trial_days > 0 && !hasCustomPrice(plan)}
 								<div class="text-xs font-medium text-success">{plan.trial_days}-day free trial</div>
 							{/if}
@@ -344,7 +357,9 @@
 				{#each filteredPlans as plan (plan.type)}
 					<div class="grid-cell plan-cell text-center">
 						<div class="flex flex-col">
-							<span class="text-secondary text-xs lg:text-base">{plan.included_seats === null ? 'Unlimited' : plan.included_seats}</span>
+							<span class="text-secondary text-xs lg:text-base"
+								>{plan.included_seats === null ? 'Unlimited' : plan.included_seats}</span
+							>
 							{#if plan.seat_cents}
 								<span class="text-tertiary text-xs">{formatSeatAddonPricing(plan)}</span>
 							{/if}
@@ -361,7 +376,9 @@
 				{#each filteredPlans as plan (plan.type)}
 					<div class="grid-cell plan-cell text-center">
 						<div class="flex flex-col">
-							<span class="text-secondary text-xs lg:text-base">{plan.included_networks === null ? 'Unlimited' : plan.included_networks}</span>
+							<span class="text-secondary text-xs lg:text-base"
+								>{plan.included_networks === null ? 'Unlimited' : plan.included_networks}</span
+							>
 							{#if plan.network_cents}
 								<span class="text-tertiary text-xs">{formatNetworkAddonPricing(plan)}</span>
 							{/if}
@@ -400,8 +417,14 @@
 							onclick={() => toggleCategory(category)}
 							aria-expanded={!collapsedCategories[category]}
 						>
-							<span class="text-xs font-semibold uppercase tracking-wide lg:text-sm">{category}</span>
-							<ChevronDown class="h-4 w-4 flex-shrink-0 transition-transform {collapsedCategories[category] ? '-rotate-90' : ''}" />
+							<span class="text-xs font-semibold uppercase tracking-wide lg:text-sm"
+								>{category}</span
+							>
+							<ChevronDown
+								class="h-4 w-4 flex-shrink-0 transition-transform {collapsedCategories[category]
+									? '-rotate-90'
+									: ''}"
+							/>
 						</button>
 					</div>
 
@@ -412,9 +435,13 @@
 								{@const comingSoon = isComingSoon(featureKey)}
 								<div class="grid-row" style="grid-template-columns: {gridColumns}">
 									<div class="grid-cell label-cell">
-										<div class="text-xs font-medium lg:text-sm">{featureHelpers.getName(featureKey)}</div>
+										<div class="text-xs font-medium lg:text-sm">
+											{featureHelpers.getName(featureKey)}
+										</div>
 										{#if featureDescription}
-											<div class="feature-description text-tertiary mt-1 leading-tight">{featureDescription}</div>
+											<div class="feature-description text-tertiary mt-1 leading-tight">
+												{featureDescription}
+											</div>
 										{/if}
 									</div>
 									{#each filteredPlans as plan (plan.type)}
@@ -444,7 +471,10 @@
 		</div>
 
 		<!-- Sticky Footer -->
-		<div class="sticky-footer card card-static border-0 rounded-t-none p-0" bind:this={footerScrollRef}>
+		<div
+			class="sticky-footer card card-static rounded-t-none border-0 p-0"
+			bind:this={footerScrollRef}
+		>
 			<div class="grid-row footer-row" style="grid-template-columns: {gridColumns}">
 				<div class="grid-cell label-cell"></div>
 				{#each filteredPlans as plan (plan.type)}
@@ -465,25 +495,47 @@
 										});
 										onPlanSelect(plan);
 									}}
-									class="px-2 w-full btn-primary whitespace-nowrap text-xs lg:text-sm"
+									class="btn-primary w-full whitespace-nowrap px-2 text-xs lg:text-sm"
 								>
 									{trial ? 'Start Free Trial' : 'Get Started'}
 								</button>
 								{#if commercial}
 									{@const subject = encodeURIComponent(`Scanopy ${plan.type} Plan Inquiry`)}
-									{@const body = encodeURIComponent(`Hi,\n\nI'm interested in the ${plan.type} plan.`)}
-									<a href="mailto:maya@scanopy.net?subject={subject}&body={body}" class="btn-secondary w-full inline-block whitespace-nowrap text-center text-xs lg:text-sm">Contact Us</a>
+									{@const body = encodeURIComponent(
+										`Hi,\n\nI'm interested in the ${plan.type} plan.`
+									)}
+									<a
+										href="mailto:maya@scanopy.net?subject={subject}&body={body}"
+										class="btn-secondary inline-block w-full whitespace-nowrap text-center text-xs lg:text-sm"
+										>Contact Us</a
+									>
 								{/if}
 							{:else if hosting === 'Self-Hosted'}
 								{#if commercial}
 									{@const subject = encodeURIComponent(`Scanopy ${plan.type} Plan Inquiry`)}
-									{@const body = encodeURIComponent(`Hi,\n\nI'm interested in the ${plan.type} plan.`)}
-									<a href="mailto:maya@scanopy.net?subject={subject}&body={body}" class="btn-primary w-full inline-block whitespace-nowrap text-center text-xs lg:text-sm">Contact Us</a>
+									{@const body = encodeURIComponent(
+										`Hi,\n\nI'm interested in the ${plan.type} plan.`
+									)}
+									<a
+										href="mailto:maya@scanopy.net?subject={subject}&body={body}"
+										class="btn-primary inline-block w-full whitespace-nowrap text-center text-xs lg:text-sm"
+										>Contact Us</a
+									>
 								{:else}
-									<a href="https://github.com/scanopy/scanopy" target="_blank" rel="noopener noreferrer" class="btn-secondary w-full inline-block whitespace-nowrap text-center text-xs lg:text-sm">View on GitHub</a>
+									<a
+										href="https://github.com/scanopy/scanopy"
+										target="_blank"
+										rel="noopener noreferrer"
+										class="btn-secondary inline-block w-full whitespace-nowrap text-center text-xs lg:text-sm"
+										>View on GitHub</a
+									>
 								{/if}
 							{:else if commercial}
-								<a href="mailto:maya@scanopy.net" class="btn-primary inline-block whitespace-nowrap w-full text-center text-xs lg:text-sm">Contact Us</a>
+								<a
+									href="mailto:maya@scanopy.net"
+									class="btn-primary inline-block w-full whitespace-nowrap text-center text-xs lg:text-sm"
+									>Contact Us</a
+								>
 							{/if}
 						</div>
 					</div>

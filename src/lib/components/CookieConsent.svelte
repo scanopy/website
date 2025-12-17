@@ -103,15 +103,25 @@
 					<div class="settings-header">
 						<h3 class="title">Cookie Preferences</h3>
 						<button class="close-btn" onclick={closeSettings} aria-label="Close">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="20"
+								height="20"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
 								<line x1="18" y1="6" x2="6" y2="18"></line>
 								<line x1="6" y1="6" x2="18" y2="18"></line>
 							</svg>
 						</button>
 					</div>
 					<p class="settings-description">
-						Manage your cookie preferences below. You can enable or disable different types of cookies.
-						See our <a href="/privacy">privacy policy</a> for more details.
+						Manage your cookie preferences below. You can enable or disable different types of
+						cookies. See our <a href="/privacy">privacy policy</a> for more details.
 					</p>
 
 					<div class="cookie-options">
@@ -124,7 +134,9 @@
 								</label>
 								<span class="always-on">Always on</span>
 							</div>
-							<p class="option-description">Essential cookies required for the website to function. These cannot be disabled.</p>
+							<p class="option-description">
+								Essential cookies required for the website to function. These cannot be disabled.
+							</p>
 						</div>
 
 						<div class="cookie-option">
@@ -135,7 +147,10 @@
 									<span class="option-title">Analytics</span>
 								</label>
 							</div>
-							<p class="option-description">Help us understand how visitors interact with our website by collecting anonymous usage data.</p>
+							<p class="option-description">
+								Help us understand how visitors interact with our website by collecting anonymous
+								usage data.
+							</p>
 						</div>
 					</div>
 
@@ -150,8 +165,9 @@
 					<div class="text-content">
 						<h3 class="title">Cookie Settings</h3>
 						<p class="description">
-							We use cookies to improve your experience and analyze site traffic.
-							See our <a href="/privacy">privacy policy</a> for details.
+							We use cookies to improve your experience and analyze site traffic. See our <a
+								href="/privacy">privacy policy</a
+							> for details.
 						</p>
 					</div>
 					<div class="buttons">
@@ -164,13 +180,23 @@
 		</div>
 	{:else if hasConsented}
 		<button class="toggle" onclick={openSettings} aria-label="Cookie settings">
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<circle cx="12" cy="12" r="10"/>
-				<circle cx="8" cy="9" r="1.5" fill="currentColor"/>
-				<circle cx="15" cy="8" r="1.5" fill="currentColor"/>
-				<circle cx="10" cy="14" r="1.5" fill="currentColor"/>
-				<circle cx="16" cy="13" r="1.5" fill="currentColor"/>
-				<circle cx="13" cy="17" r="1" fill="currentColor"/>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<circle cx="12" cy="12" r="10" />
+				<circle cx="8" cy="9" r="1.5" fill="currentColor" />
+				<circle cx="15" cy="8" r="1.5" fill="currentColor" />
+				<circle cx="10" cy="14" r="1.5" fill="currentColor" />
+				<circle cx="16" cy="13" r="1.5" fill="currentColor" />
+				<circle cx="13" cy="17" r="1" fill="currentColor" />
 			</svg>
 		</button>
 	{/if}
@@ -283,7 +309,10 @@
 		font-weight: 500;
 		font-size: 0.875rem;
 		cursor: pointer;
-		transition: background-color 150ms, border-color 150ms, color 150ms;
+		transition:
+			background-color 150ms,
+			border-color 150ms,
+			color 150ms;
 	}
 
 	.btn-primary {
@@ -400,7 +429,9 @@
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		transition: background 150ms, border-color 150ms;
+		transition:
+			background 150ms,
+			border-color 150ms;
 	}
 
 	.checkbox.disabled {
@@ -472,7 +503,9 @@
 		justify-content: center;
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 		z-index: 9999;
-		transition: background-color 150ms, color 150ms;
+		transition:
+			background-color 150ms,
+			color 150ms;
 	}
 
 	.toggle:hover {

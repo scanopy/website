@@ -48,16 +48,10 @@ export function evaluateCtaFlag() {
 export const analytics = {
 	/**
 	 * Track CTA button clicks that lead users toward conversion.
-	 * Note: Exposure event is triggered on page load in initFeatureFlags(), not here.
+	 * Note: Exposure event is triggered on page load via $effect, not here.
 	 */
-	ctaClicked: (props: {
-		location: string;
-		destination: string;
-		text: string;
-	}) => {
-		if (browser && posthog) {
-			posthog.capture('cta_clicked', props, { send_feature_flags: true });
-		}
+	ctaClicked: (props: { location: string; destination: string; text: string }) => {
+		capture('cta_clicked', props);
 	},
 
 	/**
@@ -96,21 +90,14 @@ export const analytics = {
 	/**
 	 * Track clicks on external links (community, docs, etc.)
 	 */
-	externalLinkClicked: (props: {
-		destination: string;
-		location: string;
-		url: string;
-	}) => {
+	externalLinkClicked: (props: { destination: string; location: string; url: string }) => {
 		capture('external_link_clicked', props);
 	},
 
 	/**
 	 * Track newsletter form submissions
 	 */
-	newsletterSubmitted: (props: {
-		success: boolean;
-		error?: string;
-	}) => {
+	newsletterSubmitted: (props: { success: boolean; error?: string }) => {
 		capture('newsletter_submitted', props);
 	},
 
@@ -142,11 +129,7 @@ export const analytics = {
 	/**
 	 * Track interest in roadmap items (clicks to expand/view details)
 	 */
-	roadmapItemClicked: (props: {
-		feature_id: string;
-		feature_name: string;
-		category: string;
-	}) => {
+	roadmapItemClicked: (props: { feature_id: string; feature_name: string; category: string }) => {
 		capture('roadmap_item_clicked', props);
 	}
 };

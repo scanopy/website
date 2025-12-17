@@ -42,12 +42,14 @@
 		{
 			icon: Shield,
 			title: "Know what's exposed",
-			description: 'See which services are reachable and flag misconfigurations before they become incidents.'
+			description:
+				'See which services are reachable and flag misconfigurations before they become incidents.'
 		},
 		{
 			icon: Box,
 			title: 'Auto-detects 200+ services',
-			description: 'Identifies <a href="/services" class="text-sky-400 hover:underline">200+ services</a> including Docker, PostgreSQL, nginx, Prometheus, and Active Directory.'
+			description:
+				'Identifies <a href="/services" class="text-sky-400 hover:underline">200+ services</a> including Docker, PostgreSQL, nginx, Prometheus, and Active Directory.'
 		},
 		{
 			icon: FileCode,
@@ -65,7 +67,8 @@
 		{
 			icon: Users,
 			title: 'Onboard faster',
-			description: 'New hires and new clients see the whole picture on day one — no digging through outdated wikis.'
+			description:
+				'New hires and new clients see the whole picture on day one — no digging through outdated wikis.'
 		},
 		{
 			icon: Briefcase,
@@ -76,7 +79,7 @@
 			icon: ClipboardCheck,
 			title: 'Streamline audits & compliance',
 			description: 'Hand auditors a live network map instead of stale spreadsheets.'
-		},
+		}
 	];
 
 	const testimonials = [
@@ -122,19 +125,20 @@
 		<div class="mx-auto max-w-4xl text-center">
 			<!-- Badge -->
 			<div class="pb-4">
-				<GithubStars  />
+				<GithubStars />
 			</div>
 
 			<!-- Headline -->
 			<h1 class="mb-6 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
 				Clean network diagrams.<br />One-time setup, zero upkeep
 				<!-- No setup. No maintenance. Just clean network docs. -->
-				 <!-- Clean network documentation without the overhead -->
+				<!-- Clean network documentation without the overhead -->
 			</h1>
 
 			<!-- Subheadline -->
 			<p class="mx-auto mb-10 max-w-2xl text-xl text-gray-300">
-				From one site to hundreds — scan any network<br />and get live, auto-updating documentation in minutes
+				From one site to hundreds — scan any network<br />and get live, auto-updating documentation
+				in minutes
 			</p>
 
 			<!-- CTAs -->
@@ -144,7 +148,12 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
-					onclick={() => analytics.ctaClicked({ location: 'hero', destination: 'app_onboarding', text: featureFlags.mainCtaText })}
+					onclick={() =>
+						analytics.ctaClicked({
+							location: 'hero',
+							destination: 'app_onboarding',
+							text: featureFlags.mainCtaText
+						})}
 				>
 					{featureFlags.mainCtaText}
 				</a>
@@ -182,7 +191,10 @@
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Less
-				<span class="relative inline-block h-[1.15em] overflow-hidden align-baseline" style="top: 0.15em;">
+				<span
+					class="relative inline-block h-[1.15em] overflow-hidden align-baseline"
+					style="top: 0.15em;"
+				>
 					{#key currentTool}
 						<span
 							class="absolute bottom-0 left-0"
@@ -249,14 +261,24 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
-					onclick={() => analytics.ctaClicked({ location: 'bottom_cta', destination: 'app_onboarding', text: featureFlags.mainCtaText })}
+					onclick={() =>
+						analytics.ctaClicked({
+							location: 'bottom_cta',
+							destination: 'app_onboarding',
+							text: featureFlags.mainCtaText
+						})}
 				>
 					{featureFlags.mainCtaText}
 				</a>
 				<a
 					href="/pricing"
 					class="btn-secondary px-8 py-3 text-lg"
-					onclick={() => analytics.ctaClicked({ location: 'bottom_cta', destination: 'pricing', text: 'Compare Plans' })}
+					onclick={() =>
+						analytics.ctaClicked({
+							location: 'bottom_cta',
+							destination: 'pricing',
+							text: 'Compare Plans'
+						})}
 				>
 					Compare Plans
 				</a>

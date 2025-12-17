@@ -148,7 +148,11 @@
 
 	function handlePlanSelect(plan: BillingPlan) {
 		// Open the app's checkout flow in a new tab
-		window.open(`https://app.scanopy.net/billing?plan=${plan.type}`, '_blank', 'noopener,noreferrer');
+		window.open(
+			`https://app.scanopy.net/billing?plan=${plan.type}`,
+			'_blank',
+			'noopener,noreferrer'
+		);
 	}
 </script>
 
@@ -160,7 +164,9 @@
 <section class="py-10 pb-24 lg:pb-10">
 	<div class="container mx-auto px-2">
 		<div class="mb-12 text-center">
-			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Simple pricing. Unlimited scans.</h1>
+			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">
+				Simple pricing. Unlimited scans.
+			</h1>
 		</div>
 
 		<BillingPlanForm
