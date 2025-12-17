@@ -11,6 +11,14 @@ function capture(event: string, properties?: Record<string, unknown>) {
 	}
 }
 
+function getCtaFeatureFlag(): string | undefined {
+	if (browser && posthog) {
+		const variant = posthog.getFeatureFlag('website-main-cta');
+		return typeof variant === 'string' ? variant : undefined;
+	}
+	return undefined;
+}
+
 /**
  * Feature flag state for CTA text experiment
  */
@@ -43,7 +51,11 @@ export const analytics = {
 		destination: string;
 		text: string;
 	}) => {
-		capture('cta_clicked', props);
+		const variant = getCtaFeatureFlag();
+		capture('cta_clicked', {
+			...props,
+			'$feature/website-main-cta': variant
+		});
 	},
 
 	/**
