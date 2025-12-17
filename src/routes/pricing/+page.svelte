@@ -147,8 +147,8 @@
 	});
 
 	function handlePlanSelect(plan: BillingPlan) {
-		// Redirect to the app's checkout flow
-		window.location.href = `https://app.scanopy.net/billing?plan=${plan.type}`;
+		// Open the app's checkout flow in a new tab
+		window.open(`https://app.scanopy.net/billing?plan=${plan.type}`, '_blank', 'noopener,noreferrer');
 	}
 </script>
 
