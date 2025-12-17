@@ -21,7 +21,7 @@
 	let mobileMenuOpen = $state(false);
 
 	export const loadPh = async () => {
-		if (browser) {
+		if (browser && !dev) {
 			posthog.init(PUBLIC_POSTHOG_KEY, {
 				api_host: 'https://ph.scanopy.net',
 				ui_host: 'https://us.posthog.com',
