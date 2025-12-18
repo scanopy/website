@@ -73,4 +73,3 @@ For best results, deploy a daemon on each network segment. See [Multi-VLAN Deplo
 
 - **Discord**: [discord.gg/b7ffQr8AcZ](https://discord.gg/b7ffQr8AcZ)
 - **GitHub Issues**: [github.com/scanopy/scanopy/issues](https://github.com/scanopy/scanopy/issues)
-- **Email**: support@scanopy.net

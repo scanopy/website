@@ -41,15 +41,26 @@
 	--sl-color-bg-sidebar: #151821;
 }
 
-/* Light mode - adjusted for better contrast */
+/* Force dark mode even if user has light system preference */
 :root[data-theme='light'] {
-	--sl-color-accent-low: #e0f2fe;
+	--sl-color-accent-low: #0c4a6e;
 	--sl-color-accent: #0284c7;
-	--sl-color-accent-high: #0c4a6e;
-	--sl-color-bg: #f8fafc;
-	--sl-color-bg-nav: #f1f5f9;
-	--sl-color-bg-sidebar: #f1f5f9;
-	--sl-color-text-accent: #e11d48; /* rose-600 for light mode */
+	--sl-color-accent-high: #bae6fd;
+	--sl-color-bg: #1a1d29;
+	--sl-color-bg-nav: #151821;
+	--sl-color-bg-sidebar: #151821;
+	--sl-color-text-accent: #fb7185;
+	--sl-color-bg-inline-code: rgba(31, 41, 55, 0.7);
+	--sl-color-hairline: rgba(55, 65, 81, 0.5);
+	--sl-color-hairline-light: rgba(55, 65, 81, 0.3);
+	--sl-color-white: #f8fafc;
+	--sl-color-gray-1: #e2e8f0;
+	--sl-color-gray-2: #cbd5e1;
+	--sl-color-gray-3: #94a3b8;
+	--sl-color-gray-4: #64748b;
+	--sl-color-gray-5: #475569;
+	--sl-color-gray-6: #1f2937;
+	--sl-color-black: #111827;
 }
 
 /* Card-like styling for content area */
@@ -58,7 +69,7 @@
 }
 
 /* Style code blocks to match main site cards */
-:root[data-theme='dark'] .expressive-code {
+.expressive-code {
 	--ec-frm-edBg: rgba(31, 41, 55, 0.7);
 	--ec-frm-termBg: rgba(31, 41, 55, 0.7);
 	border: 1px solid rgba(55, 65, 81, 0.5);
@@ -156,7 +167,7 @@ starlight-theme-select {
    TABLE STYLES
    ============================================ */
 
-:root[data-theme='dark'] table {
+table {
 	--sl-color-table-border: rgba(55, 65, 81, 0.5);
 }
 
