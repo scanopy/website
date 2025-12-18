@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { dev } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 	import { GithubStars, NewsletterSignup } from '$lib/components';
 	import { Menu, X } from 'lucide-svelte';
 	import Icon from '@iconify/svelte';
@@ -12,9 +12,7 @@
 		analytics,
 		featureFlags,
 		evaluateCtaFlag,
-
 		loadPh
-
 	} from '$lib/analytics.svelte';
 
 	interface Props {
@@ -34,7 +32,10 @@
 		} catch {
 			healthStatus = 'unhealthy';
 		}
-		loadPh();
+
+		if (browser) {
+			loadPh();
+		}
 	});
 
 	// Evaluate feature flag on mount to trigger exposure event (PostHog best practice)

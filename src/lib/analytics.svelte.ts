@@ -3,20 +3,17 @@ import { browser, dev } from '$app/environment';
 import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 
 export async function loadPh () {
-	if (browser && !dev) {
-		posthog.init(PUBLIC_POSTHOG_KEY, {
-			api_host: 'https://ph.scanopy.net',
-			ui_host: 'https://us.posthog.com',
-			defaults: '2025-11-30',
-			secure_cookie: true,
-			persistence: 'memory',
-			opt_out_capturing_by_default: true,
-			person_profiles: 'identified_only'
-		});
-		initFeatureFlags();
-	}
-
-	return;
+	posthog.init(PUBLIC_POSTHOG_KEY, {
+		api_host: 'https://ph.scanopy.net',
+		ui_host: 'https://us.posthog.com',
+		defaults: '2025-11-30',
+		debug: true,
+		secure_cookie: true,
+		persistence: 'memory',
+		opt_out_capturing_by_default: true,
+		// person_profiles: 'identified_only'
+	});
+	initFeatureFlags();
 };
 
 /**
@@ -37,16 +34,12 @@ export const featureFlags = $state({
 });
 
 export function initFeatureFlags() {
-	if (browser && posthog) {
+	if (browser && posthog && !posthog.has_opted_out_capturing()) {
 		// Wait for feature flags to be loaded, then evaluate
 		posthog.onFeatureFlags(() => {
-			evaluateFeatureFlags();
+			evaluateCtaFlag()
 		});
 	}
-}
-
-export function evaluateFeatureFlags() {
-	evaluateCtaFlag()
 }
 
 /**
@@ -56,12 +49,12 @@ export function evaluateFeatureFlags() {
 export function evaluateCtaFlag() {
 	if (browser && posthog) {
 		const variant = posthog.getFeatureFlag('website-main-cta');
+		
 		if (variant === 'launch') {
 			featureFlags.mainCtaText = 'Launch Scanopy';
 		} else if (variant === 'get-started') {
 			featureFlags.mainCtaText = 'Get Started';
 		} else {
-			// control or fallback
 			featureFlags.mainCtaText = 'Start Free Trial';
 		}
 	}
