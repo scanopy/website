@@ -14,6 +14,15 @@ const config = {
 		}),
 		paths: {
 			base: ''
+		},
+		prerender: {
+			handleHttpError: ({ path, message }) => {
+				// Ignore /docs links - handled by separate Astro site
+				if (path.startsWith('/docs')) {
+					return;
+				}
+				throw new Error(message);
+			}
 		}
 	}
 };

@@ -64,7 +64,7 @@
 		<div class="container mx-auto px-4 py-4">
 			<nav class="flex items-center justify-between">
 				<a href="/" class="flex items-center gap-2">
-					<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
+					<img src="./scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
 					<span class="text-xl font-bold text-white">Scanopy</span>
 				</a>
 
@@ -73,16 +73,8 @@
 					<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">Pricing</a>
 					<a href="/roadmap" class="text-gray-400 transition-colors hover:text-white">Roadmap</a>
 					<a
-						href="https://github.com/scanopy/scanopy/tree/main/docs"
-						target="_blank"
-						rel="noopener noreferrer"
+						href="/docs"
 						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() =>
-							analytics.externalLinkClicked({
-								destination: 'docs',
-								location: 'navbar',
-								url: 'https://github.com/scanopy/scanopy/tree/main/docs'
-							})}
 					>
 						Docs
 					</a>
@@ -145,18 +137,9 @@
 						Roadmap
 					</a>
 					<a
-						href="https://github.com/scanopy/scanopy/tree/main/docs"
-						target="_blank"
-						rel="noopener noreferrer"
+						href="/docs"
 						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() => {
-							analytics.externalLinkClicked({
-								destination: 'docs',
-								location: 'navbar_mobile',
-								url: 'https://github.com/scanopy/scanopy/tree/main/docs'
-							});
-							closeMobileMenu();
-						}}
+						onclick={closeMobileMenu}
 					>
 						Docs
 					</a>
@@ -209,7 +192,7 @@
 				<!-- Brand -->
 				<div class="space-y-4">
 					<div class="flex items-center gap-2">
-						<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
+						<img src="./scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
 						<span class="text-xl font-bold text-white">Scanopy</span>
 					</div>
 					<p class="text-sm text-gray-400">Network discovery and documentation on autopilot.</p>
@@ -228,12 +211,7 @@
 						<li><a href="/pricing" class="text-sm text-gray-400 hover:text-white">Pricing</a></li>
 						<li><a href="/roadmap" class="text-sm text-gray-400 hover:text-white">Roadmap</a></li>
 						<li>
-							<a
-								href="https://github.com/scanopy/scanopy/blob/main/docs/"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="text-sm text-gray-400 hover:text-white">Documentation</a
-							>
+							<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
 						</li>
 					</ul>
 				</div>

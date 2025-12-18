@@ -1,5 +1,5 @@
 import posthog from 'posthog-js';
-import { browser, dev } from '$app/environment';
+import { browser } from '$app/environment';
 import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 
 export async function loadPh () {
