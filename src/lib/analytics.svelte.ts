@@ -7,11 +7,9 @@ export async function loadPh () {
 		api_host: 'https://ph.scanopy.net',
 		ui_host: 'https://us.posthog.com',
 		defaults: '2025-11-30',
-		debug: true,
 		secure_cookie: true,
 		persistence: 'memory',
 		opt_out_capturing_by_default: true,
-		// person_profiles: 'identified_only'
 	});
 	initFeatureFlags();
 };
