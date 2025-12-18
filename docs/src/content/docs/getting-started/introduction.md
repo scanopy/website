@@ -10,7 +10,7 @@ Scanopy is a network discovery and visualization tool that automatically discove
 - **Network Discovery** — Automatically find hosts and services on your network
 - **Service Detection** — Identify 200+ services including databases, web servers, and home automation
 - **Topology Visualization** — Interactive network maps with filtering and grouping
-- **Multi-VLAN Support** — Deploy daemons across network segments
+- **Distributed Scanning** — Deploy daemons across multiple networks
 - **Docker Integration** — Discover containers via Docker socket
 
 ## Cloud vs Self-Hosted

@@ -1,4 +1,7 @@
-.PHONY: format lint check dev build preview
+.PHONY: format lint check dev dev-all build preview
+
+dev-all:
+	@trap 'kill 0' EXIT; npm run dev & npm run dev:docs
 
 format:
 	npm run format

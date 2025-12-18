@@ -1,0 +1,8 @@
+{
+  "links": [
+    { "label": "Pricing", "href": "/pricing" },
+    { "label": "Roadmap", "href": "/roadmap" },
+    { "label": "Docs", "href": "/docs" },
+    { "label": "Login", "href": "https://app.scanopy.net/login", "external": true }
+  ]
+}

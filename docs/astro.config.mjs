@@ -16,6 +16,10 @@ export default defineConfig({
 			favicon: '/favicon.png',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/scanopy/scanopy' }],
 			customCss: ['./src/styles/custom.css'],
+			components: {
+				SiteTitle: './src/components/SiteTitle.astro',
+				Header: './src/components/Header.astro',
+			},
 			sidebar: [
 				{
 					label: 'Getting Started',
