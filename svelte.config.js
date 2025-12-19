@@ -21,6 +21,10 @@ const config = {
 				if (path.startsWith('/docs')) {
 					return;
 				}
+				// Ignore missing gallery images - these are placeholders for community submissions
+				if (path.startsWith('/gallery/')) {
+					return;
+				}
 				throw new Error(message);
 			}
 		}

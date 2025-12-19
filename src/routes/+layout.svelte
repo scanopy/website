@@ -188,7 +188,7 @@
 	<!-- Footer -->
 	<footer class="border-t border-gray-800 bg-gray-900/30">
 		<div class="container mx-auto px-4 py-12">
-			<div class="grid gap-8 md:grid-cols-4">
+			<div class="grid gap-8 md:grid-cols-5">
 				<!-- Brand -->
 				<div class="space-y-4">
 					<div class="flex items-center gap-2">
@@ -216,25 +216,13 @@
 					</ul>
 				</div>
 
-				<!-- Resources -->
+				<!-- Community -->
 				<div>
-					<h4 class="mb-4 font-semibold text-white">Resources</h4>
+					<h4 class="mb-4 font-semibold text-white">Community</h4>
 					<ul class="space-y-2">
 						<li>
-							<a
-								href="https://github.com/scanopy/scanopy"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-								onclick={() =>
-									analytics.externalLinkClicked({
-										destination: 'github',
-										location: 'footer',
-										url: 'https://github.com/scanopy/scanopy'
-									})}
-							>
-								<Icon icon="simple-icons:github" class="h-4 w-4" />
-								GitHub
+							<a href="/showcase" class="text-sm text-gray-400 hover:text-white">
+								Showcase
 							</a>
 						</li>
 						<li>
@@ -286,6 +274,30 @@
 							>
 								<Icon icon="simple-icons:x" class="h-4 w-4" />
 								X
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Resources -->
+				<div>
+					<h4 class="mb-4 font-semibold text-white">Resources</h4>
+					<ul class="space-y-2">
+						<li>
+							<a
+								href="https://github.com/scanopy/scanopy"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+								onclick={() =>
+									analytics.externalLinkClicked({
+										destination: 'github',
+										location: 'footer',
+										url: 'https://github.com/scanopy/scanopy'
+									})}
+							>
+								<Icon icon="simple-icons:github" class="h-4 w-4" />
+								GitHub
 							</a>
 						</li>
 						<li>

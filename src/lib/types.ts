@@ -62,3 +62,19 @@ export interface ServiceDefinition {
 	color: string;
 	logo_needs_white_background?: boolean;
 }
+
+export interface GalleryAuthor {
+	name: string;
+	url?: string;
+}
+
+export interface GalleryItem {
+	id: string;
+	title: string;
+	description: string;
+	image: string;
+	author: GalleryAuthor;
+	tags: string[];
+	services_count?: number;
+	featured?: boolean;
+}

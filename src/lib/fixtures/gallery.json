@@ -1,0 +1,14 @@
+[
+  {
+    "id": "maya",
+    "title": "Maya's Homelab",
+    "description": "Home automation, ad blocking, a VPN, plus dev environment for Scanopy!",
+    "image": "/gallery/maya.png",
+    "author": {
+      "name": "Maya",
+      "url": "https://github.com/scanopy/scanopy"
+    },
+    "tags": [],
+    "featured": true
+  }
+]
