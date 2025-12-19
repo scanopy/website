@@ -32,9 +32,8 @@
 			<p class="mb-6 text-gray-400">
 				Share your network topology with the community. We'd love to feature your setup!
 			</p>
-			<!-- TODO: Replace with submission form URL -->
 			<a
-				href="https://placeholder.example/submit"
+				href="https://tally.so/r/lbqLAv"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="btn-primary inline-flex items-center gap-2"
