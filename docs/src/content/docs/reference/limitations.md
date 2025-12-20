@@ -20,7 +20,7 @@ Scanopy currently supports IPv4 only.
 
 ### Large Subnets
 
-Trying to scan a /8? That's 16 million IPs. Scanopy automatically skips subnets larger than /10 to prevent accidental mega-scans.
+Trying to scan a /8? That's 16 million IPs. Scanopy automatically skips subnets larger than /10 to prevent accidental mega-scans. Still, a /10 will probably take a couple of days to fully scan.
 
 If you need to scan a large network, break it into smaller subnets and scan them individually.
 
