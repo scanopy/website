@@ -8,7 +8,28 @@
       "name": "Maya",
       "url": "https://github.com/scanopy/scanopy"
     },
-    "tags": [],
+    "tags": [
+      "homelab",
+      "docker",
+      "proxmox"
+    ],
+    "featured": true
+  },
+  {
+    "id": "tay",
+    "title": "Tay März's Homelab",
+    "description": "A Chaotic Mess with 2 Homelab Servers, 3 Docker Nodes and many more things",
+    "image": "/gallery/tay.png",
+    "author": {
+      "name": "Tay März",
+      "url": "https://taymaerz.de"
+    },
+    "tags": [
+      "homelab",
+      "monitoring",
+      "docker",
+      "proxmox"
+    ],
     "featured": true
   }
 ]
