@@ -41,6 +41,24 @@ These relationships appear in the topology and host details, showing your virtua
 
 Scanopy automatically detects 200+ services. See [Service Detection](/docs/reference/service-detection/) for how detection works, confidence levels, and what to do when a service isn't found.
 
+### Hiding Hosts
+
+Mark hosts as hidden to flag them for exclusion from the topology. Hidden hosts remain in the database with all their services, interfaces, and discovery history intact.
+
+To toggle visibility:
+
+1. Go to **Manage > Hosts**
+2. Click the **Hide** button (eye icon) on the host card
+
+The button turns blue when a host is hidden. Use the **Hidden** column filter to find hidden hosts.
+
+**When to use:**
+- Flag decommissioned devices that shouldn't appear in diagrams
+- Mark infrastructure hosts that clutter the visualization (PDUs, UPS units, management interfaces)
+- Identify test or development hosts to exclude from production views
+
+After hiding a host, rebuild the topology for changes to take effect.
+
 ## Subnets
 
 Subnets represent network segments. Scanopy automatically detects subnets during discovery, but you can also create them manually. Assign a type (LAN, WiFi, DMZ, etc.) to label your subnets for filtering and organization.

@@ -15,8 +15,8 @@ Organizations are automatically created during registration and cannot be manual
 |------|--------|
 | **Owner** | Everything, including organization settings and inviting Admins |
 | **Admin** | Everything Members can do, plus invite/remove Members, manage tags |
-| **Member** | Create/edit networks, hosts, services; run discoveries; manage daemons; invite Visualizers |
-| **Visualizer** | View topology diagrams only |
+| **Member** | Create/edit entities; run discoveries; manage daemons; invite Visualizers |
+| **Viewer** | View entities only |
 
 Invite users via **Manage > Users** — generate an invite link and share it.
 
