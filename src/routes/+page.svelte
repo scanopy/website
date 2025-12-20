@@ -109,6 +109,7 @@
 		name="description"
 		content="Automatic network diagrams that stay up to date. Open source."
 	/>
+	<link rel="canonical" href="https://scanopy.net/" />
 </svelte:head>
 
 <!-- Hero Section -->

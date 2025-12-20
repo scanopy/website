@@ -4,6 +4,7 @@
 		name="description"
 		content="Scanopy Privacy Policy - How we collect, use, and protect your personal information."
 	/>
+	<link rel="canonical" href="https://scanopy.net/privacy" />
 </svelte:head>
 
 <section class="py-20">

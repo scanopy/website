@@ -13,6 +13,7 @@
 		name="description"
 		content="Scanopy can automatically detect 200+ services including Docker, databases, media servers, and more."
 	/>
+	<link rel="canonical" href="https://scanopy.net/services" />
 </svelte:head>
 
 <section class="py-20">

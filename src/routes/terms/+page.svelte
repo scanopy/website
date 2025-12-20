@@ -3,7 +3,8 @@
 
 <svelte:head>
 	<title>Terms of Service - Scanopy</title>
-	<meta name="description" content="Scanopy Terms of Service" />
+	<meta name="description" content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software." />
+	<link rel="canonical" href="https://scanopy.net/terms" />
 </svelte:head>
 
 <div class="container mx-auto max-w-4xl px-4 py-16">

@@ -13,6 +13,7 @@
 		name="description"
 		content="See what the Scanopy community is building. Explore topology diagrams from homelabs, businesses, and creative network setups."
 	/>
+	<link rel="canonical" href="https://scanopy.net/showcase" />
 </svelte:head>
 
 <section class="py-20">
