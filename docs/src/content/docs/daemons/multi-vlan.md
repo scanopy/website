@@ -34,7 +34,7 @@ Scanopy uses daemons to discover hosts and services. For isolated VLANs, you'll 
 ### You Need Multiple Daemons When:
 
 - VLANs are isolated by firewall rules
-- You need accurate MAC address collection (requires Layer 2 access)
+- You need accurate MAC address collection (requires [Layer 2 access](/docs/reference/limitations/#layer-2-vs-layer-3))
 - Different networks have different security requirements
 
 ## Deployment Strategies

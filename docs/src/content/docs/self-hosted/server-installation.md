@@ -51,10 +51,9 @@ Check that services are running:
 docker compose ps
 ```
 
-You should see:
-- `scanopy-server` - Running on port 60072
-- `scanopy-postgres` - PostgreSQL database
-- `scanopy-daemon` - Integrated daemon
+All three services should show as running: `scanopy-server`, `scanopy-postgres`, and `scanopy-daemon`.
+
+If any service fails to start, check its logs with `docker compose logs <service-name>` and [open an issue](https://github.com/scanopy/scanopy/issues) with the output.
 
 ### 5. Access the UI
 

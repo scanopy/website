@@ -94,6 +94,8 @@ newgrp docker
 
 Log out and back in for changes to take effect.
 
+If you're using a Docker socket proxy and getting permission errors, see [Docker Socket Proxy troubleshooting](/docs/daemons/docker-proxy/#troubleshooting).
+
 ### Daemon Stops When Terminal Closes
 
 **Symptoms**: Daemon runs in foreground and stops when SSH session ends

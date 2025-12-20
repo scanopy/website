@@ -175,3 +175,15 @@ rm -rf ~/Library/Application\ Support/com.scanopy.daemon/  # macOS
 1. Stop the daemon process
 2. Delete the executable
 3. Remove configuration from `%APPDATA%\scanopy\daemon\`
+
+### What Happens to Your Data
+
+Uninstalling a daemon does **not** delete discovered data. All hosts, services, subnets, and topology data remain on the server until you explicitly delete them.
+
+The daemon record will still appear in **Manage > Daemons** until you delete it there.
+
+### Can I Migrate a Daemon?
+
+No. Daemons discover host-specific data (network interfaces, Docker containers, local services) that's tied to the machine they run on. Moving a daemon's identity to a different host would result in inaccurate visualizations.
+
+If you're replacing a host, create a new daemon on the new machine and delete the old one.

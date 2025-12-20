@@ -43,23 +43,7 @@ Scanopy automatically detects 200+ services. See [Service Detection](/docs/refer
 
 ## Subnets
 
-Subnets represent network segments. Scanopy automatically detects subnets during discovery, but you can also create them manually.
-
-### Subnet Types
-
-Scanopy categorizes subnets by their purpose:
-
-| Type | Description |
-|------|-------------|
-| **LAN** | Standard local area network |
-| **WiFi** | Wireless networks |
-| **IoT** | IoT device networks |
-| **Guest** | Guest/visitor networks |
-| **Gateway** | Gateway interfaces |
-| **VPN Tunnel** | VPN connections |
-| **DMZ** | Demilitarized zones |
-| **Management** | Management/IPMI networks |
-| **Docker Bridge** | Docker container networks |
+Subnets represent network segments. Scanopy automatically detects subnets during discovery, but you can also create them manually. Assign a type (LAN, WiFi, DMZ, etc.) to label your subnets for filtering and organization.
 
 ### Organizational Subnets
 
@@ -77,55 +61,24 @@ Two special subnet types use CIDR `0.0.0.0/0` and serve as organizational contai
 
 ## Groups
 
-Groups create logical connections between services for topology visualization. They don't affect how Scanopy discovers or scans — they're purely organizational.
-
-### Group Types
-
-**Hub and Spoke**
-- Central service connected to multiple others
-- Use for: databases with multiple clients, API gateways, shared infrastructure
+Groups create logical connections between services for topology visualization. They don't affect how Scanopy discovers or scans — they're purely for showing relationships that network topology alone doesn't capture.
 
 ```
-         ┌─────────┐
-         │ Web App │
-         └────┬────┘
-              │
-┌─────────┐   │   ┌─────────┐
-│ Workers ├───┼───┤Database │ (Hub)
-└─────────┘   │   └─────────┘
-              │
-         ┌────┴────┐
-         │  Admin  │
-         └─────────┘
+Hub and Spoke                      Path
+
+     ┌─────────┐
+     │ Web App │
+     └────┬────┘
+          │
+┌───────┐ │ ┌────────┐
+│Workers├─┼─┤Database│       User → Proxy → App → Database
+└───────┘ │ └────────┘
+          │
+     ┌────┴────┐
+     │  Admin  │
+     └─────────┘
 ```
 
-**Path**
-- Linear flow through services
-- Use for: request flows, data pipelines, network paths
+Use **Hub and Spoke** when multiple services connect to a central one (database clients, API consumers). Use **Path** for linear flows (request routing, data pipelines, backup chains).
 
-```
-User → Cloudflare → Traefik → App → Database
-```
-
-### Use Cases
-
-**Document a web application stack:**
-```
-Type: Hub and Spoke
-Hub: PostgreSQL database
-Spokes: Web server, background workers, admin panel
-```
-
-**Show reverse proxy routing:**
-```
-Type: Path
-Path: Internet → Cloudflare → Traefik → Application
-```
-
-**Visualize backup flow:**
-```
-Type: Path
-Path: Production DB → Backup Agent → NAS → Offsite
-```
-
-Manage hosts via **Manage > Hosts**, subnets via **Manage > Subnets**, and groups via **Manage > Groups**.
+Manage groups via **Manage > Groups**.
