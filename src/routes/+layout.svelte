@@ -56,6 +56,22 @@
 	{#if !dev}
 		<script src="https://app.rybbit.io/api/script.js" data-site-id="d62db73b8794" defer></script>
 	{/if}
+	{@html `<script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	"name": "Scanopy",
+	"url": "https://scanopy.net",
+	"logo": "https://scanopy.net/scanopy-logo.png",
+	"description": "Automatic network discovery and documentation. Clean network diagrams with one-time setup and zero upkeep.",
+	"sameAs": [
+		"https://github.com/scanopy/scanopy",
+		"https://x.com/getscanopy",
+		"https://discord.gg/b7ffQr8AcZ",
+		"https://reddit.com/r/scanopy"
+	]
+}
+</script>`}
 </svelte:head>
 
 <div class="flex min-h-screen flex-col">
