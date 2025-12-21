@@ -5,25 +5,37 @@ on:
     types: [closed]
     paths:
       - 'src/lib/changelog/*.md'
+  workflow_dispatch:
+    inputs:
+      changelog_file:
+        description: 'Changelog filename (e.g., v0.12.5.md)'
+        required: true
+        type: string
 
 jobs:
   publish:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Extract changelog content
         id: changelog
         run: |
-          # Find the changed changelog file
-          CHANGELOG_FILE=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} \
-            | grep 'src/lib/changelog/' | head -1)
+          # Find the changelog file
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            CHANGELOG_FILE="src/lib/changelog/${{ inputs.changelog_file }}"
+          else
+            CHANGELOG_FILE=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} \
+              | grep 'src/lib/changelog/' | head -1)
+          fi
 
-          if [ -z "$CHANGELOG_FILE" ]; then
-            echo "No changelog file found"
+          if [ -z "$CHANGELOG_FILE" ] || [ ! -f "$CHANGELOG_FILE" ]; then
+            echo "Changelog file not found: $CHANGELOG_FILE"
             exit 1
           fi
 
