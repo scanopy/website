@@ -19,6 +19,7 @@
 	"dependencies": {
 		"@iconify/svelte": "^5.1.0",
 		"lucide-svelte": "^0.526.0",
+		"marked": "^17.0.1",
 		"posthog-js": "^1.306.0"
 	},
 	"devDependencies": {

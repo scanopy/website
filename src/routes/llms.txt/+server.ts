@@ -105,6 +105,7 @@ Full pricing details: https://scanopy.net/pricing
 - Website: https://scanopy.net
 - Documentation: https://scanopy.net/docs
 - Pricing: https://scanopy.net/pricing
+- Changelog: https://scanopy.net/changelog
 - GitHub: https://github.com/scanopy/scanopy
 - Discord: https://discord.gg/b7ffQr8AcZ
 

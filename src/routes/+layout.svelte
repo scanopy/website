@@ -226,6 +226,7 @@
 						</li>
 						<li><a href="/pricing" class="text-sm text-gray-400 hover:text-white">Pricing</a></li>
 						<li><a href="/roadmap" class="text-sm text-gray-400 hover:text-white">Roadmap</a></li>
+						<li><a href="/changelog" class="text-sm text-gray-400 hover:text-white">Changelog</a></li>
 						<li>
 							<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
 						</li>
