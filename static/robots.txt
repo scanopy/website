@@ -2,3 +2,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://scanopy.net/sitemap.xml
+
+# AI/LLM agent information
+# See https://llmstxt.org for specification
+LLMsTxt: https://scanopy.net/llms.txt
