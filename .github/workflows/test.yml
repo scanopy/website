@@ -1,0 +1,23 @@
+name: Test Twitter Post
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Tweet message'
+        required: true
+        default: 'Test post'
+        type: string
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to Twitter/X
+        uses: noweh/post-tweet-v2-action@v1.0
+        with:
+          message: ${{ inputs.message }}
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
