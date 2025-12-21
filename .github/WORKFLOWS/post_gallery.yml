@@ -1,4 +1,4 @@
-name: Post Gallery Entry
+name: Post Gallery
 
 on:
   schedule:

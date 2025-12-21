@@ -1,4 +1,4 @@
-name: Publish Changelog
+name: Publish Change Log
 
 on:
   pull_request:
