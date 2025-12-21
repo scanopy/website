@@ -102,7 +102,7 @@ jobs:
         uses: noweh/post-tweet-v2-action@v1.0
         with:
           message: |
-            Scanopy v${{ steps.changelog.outputs.version }}: ${{ steps.changelog.outputs.title }}
+            Scanopy v${{ steps.changelog.outputs.version }}
 
             ${{ steps.changelog.outputs.social_post }}
 
@@ -116,13 +116,11 @@ jobs:
         uses: myConsciousness/bluesky-post@v5
         with:
           text: |
-            Scanopy v${{ steps.changelog.outputs.version }}: ${{ steps.changelog.outputs.title }}
+            Scanopy v${{ steps.changelog.outputs.version }}
 
             ${{ steps.changelog.outputs.social_post }}
 
             https://scanopy.net/changelog?utm_source=bluesky&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }}
-
-            #Scanopy #NetworkDiscovery #OpenSource #SelfHosted #NetworkVisualization #NetworkDocumentation #NetworkMapper
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
 
