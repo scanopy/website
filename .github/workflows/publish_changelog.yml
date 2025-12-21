@@ -107,8 +107,6 @@ jobs:
             ${{ steps.changelog.outputs.social_post }}
 
             https://scanopy.net/changelog?utm_source=twitter&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }}
-
-            #Scanopy #NetworkDiscovery #OpenSource #SelfHosted #NetworkVisualization #NetworkDocumentation #NetworkMapper
           consumer-key: ${{ secrets.TWITTER_CONSUMER_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
           access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
