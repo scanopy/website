@@ -110,7 +110,7 @@
 				type="text"
 				placeholder="Search services..."
 				bind:value={searchQuery}
-				class="w-full rounded-lg border border-gray-700 bg-gray-800/50 py-2 pl-10 pr-4 text-sm text-white placeholder-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+				class="w-full rounded-lg border border-gray-700 bg-gray-800/50 py-2 pl-10 pr-4 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 			/>
 		</div>
 
@@ -145,7 +145,7 @@
 			{filteredServices().length} service{filteredServices().length !== 1 ? 's' : ''} found
 		</span>
 		{#if searchQuery || selectedCategory}
-			<button type="button" onclick={clearFilters} class="text-sky-400 hover:text-sky-300">
+			<button type="button" onclick={clearFilters} class="text-blue-400 hover:text-blue-300">
 				Clear filters
 			</button>
 		{/if}
@@ -228,7 +228,7 @@
 	{#if filteredServices().length === 0}
 		<div class="py-12 text-center">
 			<p class="text-gray-400">No services found matching your search.</p>
-			<button type="button" onclick={clearFilters} class="mt-2 text-sky-400 hover:text-sky-300">
+			<button type="button" onclick={clearFilters} class="mt-2 text-blue-400 hover:text-blue-300">
 				Clear filters
 			</button>
 		</div>

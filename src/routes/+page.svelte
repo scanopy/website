@@ -170,8 +170,8 @@
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each features as feature (feature.title)}
 				<div class="card card-static p-6">
-					<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-sky-500/10">
-						<feature.icon class="h-6 w-6 text-sky-400" />
+					<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
+						<feature.icon class="h-6 w-6 text-blue-400" />
 					</div>
 					<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
 					<p class="text-sm text-gray-400">{@html feature.description}</p>
@@ -209,9 +209,9 @@
 			{#each useCases as useCase (useCase.title)}
 				<div class="text-center">
 					<div
-						class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-sky-500/10"
+						class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10"
 					>
-						<useCase.icon class="h-7 w-7 text-sky-400" />
+						<useCase.icon class="h-7 w-7 text-blue-400" />
 					</div>
 					<h3 class="mb-2 text-xl font-semibold text-white">{useCase.title}</h3>
 					<p class="text-gray-400">{useCase.description}</p>
@@ -233,7 +233,7 @@
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
 			{#each testimonials as testimonial (testimonial.author)}
 				<div class="card card-static relative p-5">
-					<Quote class="absolute right-3 top-3 h-6 w-6 text-sky-500/20" />
+					<Quote class="absolute right-3 top-3 h-6 w-6 text-blue-500/20" />
 					<p class="mb-4 text-sm italic text-gray-300">
 						"{testimonial.quote}"
 					</p>

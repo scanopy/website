@@ -23,7 +23,7 @@
 	{
 		"id": "service_detection",
 		"title": "Auto-detects 200+ services",
-		"description": "Identifies <a href=\"/services\" class=\"text-sky-400 hover:underline\">200+ services</a> including Docker, PostgreSQL, nginx, Prometheus, and Active Directory.",
+		"description": "Identifies <a href=\"/services\" class=\"text-blue-400 hover:underline\">200+ services</a> including Docker, PostgreSQL, nginx, Prometheus, and Active Directory.",
 		"icon": "Box",
 		"schemaLabel": "200+ service detection"
 	},

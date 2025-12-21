@@ -86,7 +86,7 @@
 	<div class="container mx-auto px-4">
 		<div class="mb-12 text-center">
 			<div class="mb-4 flex justify-center">
-				<Rocket class="h-12 w-12 text-sky-400" />
+				<Rocket class="h-12 w-12 text-blue-400" />
 			</div>
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Roadmap</h1>
 			<p class="mx-auto max-w-2xl text-xl text-gray-400">
@@ -110,7 +110,7 @@
 							{#each groupedFeatures[category] as feature (feature.id)}
 								<button
 									type="button"
-									class="card w-full cursor-pointer p-6 text-left transition-colors hover:border-sky-500/50"
+									class="card w-full cursor-pointer p-6 text-left transition-colors hover:border-blue-500/50"
 									onclick={() =>
 										analytics.roadmapItemClicked({
 											feature_id: feature.id,

@@ -5,8 +5,8 @@
 /* Shared component styles from main site */
 @layer components {
 	.btn-primary {
-		@apply bg-sky-700 hover:bg-sky-600;
-		@apply border border-sky-600 hover:border-sky-500;
+		@apply bg-blue-700 hover:bg-blue-600;
+		@apply border border-blue-600 hover:border-blue-500;
 		@apply rounded-md px-4 py-2 font-medium text-white;
 		@apply transition-colors duration-150;
 		@apply inline-flex items-center justify-center gap-2;
@@ -21,9 +21,9 @@
 
 :root {
 	/* Primary accent - blue for buttons/CTAs */
-	--sl-color-accent-low: #0c4a6e;
-	--sl-color-accent: #0284c7;
-	--sl-color-accent-high: #bae6fd;
+	--sl-color-accent-low: #1e3a8a;
+	--sl-color-accent: #3b82f6;
+	--sl-color-accent-high: #bfdbfe;
 
 	/* Rose accent for interactive elements */
 	--sl-color-text-accent: #fb7185; /* rose-400 */
@@ -62,9 +62,9 @@
 
 /* Force dark mode even if user has light system preference */
 :root[data-theme='light'] {
-	--sl-color-accent-low: #0c4a6e;
-	--sl-color-accent: #0284c7;
-	--sl-color-accent-high: #bae6fd;
+	--sl-color-accent-low: #1e3a8a;
+	--sl-color-accent: #3b82f6;
+	--sl-color-accent-high: #bfdbfe;
 	--sl-color-bg: #1a1d29;
 	--sl-color-bg-nav: #151821;
 	--sl-color-bg-sidebar: #151821;
@@ -87,13 +87,6 @@
 	background: transparent;
 }
 
-/* Style code blocks to match main site cards */
-.expressive-code {
-	--ec-frm-edBg: rgba(31, 41, 55, 0.7);
-	--ec-frm-termBg: rgba(31, 41, 55, 0.7);
-	border: 1px solid rgba(55, 65, 81, 0.5);
-	border-radius: 0.75rem;
-}
 
 /* ============================================
    SIDEBAR STYLES

@@ -39,7 +39,7 @@
 	<div class="container mx-auto max-w-3xl px-4">
 		<div class="mb-12 text-center">
 			<div class="mb-4 flex justify-center">
-				<History class="h-12 w-12 text-sky-400" />
+				<History class="h-12 w-12 text-blue-400" />
 			</div>
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Changelog</h1>
 			<p class="text-xl text-gray-400">New updates and improvements to Scanopy.</p>
@@ -59,13 +59,13 @@
 						<article class="relative md:pl-10">
 							<!-- Timeline dot -->
 							<div
-								class="absolute left-0 top-2 hidden h-4 w-4 rounded-full border-2 border-sky-500 bg-gray-900 md:block"
+								class="absolute left-0 top-2 hidden h-4 w-4 rounded-full border-2 border-blue-500 bg-gray-900 md:block"
 							></div>
 
 							<header class="mb-4">
 								<div class="flex flex-wrap items-center gap-3">
 									<span
-										class="rounded-full bg-sky-500/10 px-3 py-1 text-sm font-semibold text-sky-400"
+										class="rounded-full bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-400"
 									>
 										v{entry.version}
 									</span>
@@ -116,11 +116,11 @@
 	}
 
 	:global(.prose a) {
-		color: rgb(56 189 248);
+		color: rgb(96 165 250);
 	}
 
 	:global(.prose a:hover) {
-		color: rgb(125 211 252);
+		color: rgb(147 197 253);
 	}
 
 	:global(.prose code) {

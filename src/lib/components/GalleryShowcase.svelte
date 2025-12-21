@@ -149,7 +149,7 @@
 									href={lightboxItem.author.url}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="flex items-center gap-1 hover:text-sky-400"
+									class="flex items-center gap-1 hover:text-blue-400"
 								>
 									{lightboxItem.author.name}
 									<ExternalLink class="h-3 w-3" />
@@ -189,7 +189,7 @@
 				type="button"
 				onclick={() => (selectedTag = null)}
 				class="rounded-full px-3 py-1 text-xs font-medium transition-colors {selectedTag === null
-					? 'bg-sky-600 text-white'
+					? 'bg-blue-600 text-white'
 					: 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
 			>
 				All ({items.length})
@@ -199,7 +199,7 @@
 					type="button"
 					onclick={() => (selectedTag = selectedTag === tag ? null : tag)}
 					class="rounded-full px-3 py-1 text-xs font-medium transition-colors {selectedTag === tag
-						? 'bg-sky-600 text-white'
+						? 'bg-blue-600 text-white'
 						: 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
 				>
 					{tag}
@@ -214,7 +214,7 @@
 			{filteredItems().length} diagram{filteredItems().length !== 1 ? 's' : ''}
 		</span>
 		{#if selectedTag}
-			<button type="button" onclick={clearFilter} class="text-sky-400 hover:text-sky-300">
+			<button type="button" onclick={clearFilter} class="text-blue-400 hover:text-blue-300">
 				Clear filter
 			</button>
 		{/if}
@@ -278,7 +278,7 @@
 											href={item.author.url}
 											target="_blank"
 											rel="noopener noreferrer"
-											class="flex items-center gap-1 text-gray-400 hover:text-sky-400"
+											class="flex items-center gap-1 text-gray-400 hover:text-blue-400"
 										>
 											{item.author.name}
 											<ExternalLink class="h-3 w-3" />
@@ -363,7 +363,7 @@
 											href={item.author.url}
 											target="_blank"
 											rel="noopener noreferrer"
-											class="flex items-center gap-1 hover:text-sky-400"
+											class="flex items-center gap-1 hover:text-blue-400"
 										>
 											{item.author.name}
 											<ExternalLink class="h-3 w-3" />
@@ -391,7 +391,7 @@
 		<div class="py-12 text-center">
 			<Image class="mx-auto h-12 w-12 text-gray-600" />
 			<p class="mt-4 text-gray-400">No diagrams found matching this filter.</p>
-			<button type="button" onclick={clearFilter} class="mt-2 text-sky-400 hover:text-sky-300">
+			<button type="button" onclick={clearFilter} class="mt-2 text-blue-400 hover:text-blue-300">
 				Clear filter
 			</button>
 		</div>

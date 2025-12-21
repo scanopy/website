@@ -239,7 +239,7 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">13. Data Security and Privacy</h2>
 			<p class="text-gray-300">
-				Our <a href="/privacy" class="text-sky-400 hover:text-sky-300">Privacy Policy</a> describes our
+				Our <a href="/privacy" class="text-blue-400 hover:text-blue-300">Privacy Policy</a> describes our
 				practices regarding the information we collect from you. California residents have additional
 				rights as set forth in our Privacy Policy.
 			</p>
@@ -473,7 +473,7 @@
 			<p class="text-gray-300">
 				If you have any questions about these Terms, please contact us at <a
 					href="mailto:legal@scanopy.net"
-					class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
+					class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
 				>.
 			</p>
 		</section>
@@ -582,7 +582,7 @@
 					<p class="mb-4 text-gray-300">
 						To exercise these rights, please contact us at <a
 							href="mailto:legal@scanopy.net"
-							class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
+							class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
 						>. We will respond to your request within 30 days.
 					</p>
 
@@ -666,7 +666,7 @@
 							href="https://discord.gg/b7ffQr8AcZ"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="text-sky-400 hover:text-sky-300">Discord</a
+							class="text-blue-400 hover:text-blue-300">Discord</a
 						> or through the methods described in our Privacy Policy. You may make a request up to twice
 						within a 12-month period. We will respond to your request within 45 days, with a possible
 						extension of up to 45 additional days when reasonably necessary.
@@ -717,7 +717,7 @@
 					<p class="mb-4 text-gray-300">
 						To exercise these rights, please contact us at <a
 							href="mailto:legal@scanopy.net"
-							class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
+							class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
 						>. We will respond to your request within 30 days, unless an extension is warranted.
 					</p>
 
@@ -940,7 +940,7 @@
 						We offer various subscription plans with different features, limitations, and pricing.
 						The specific details of available plans are described on our <a
 							href="/pricing"
-							class="text-sky-400 hover:text-sky-300">pricing page</a
+							class="text-blue-400 hover:text-blue-300">pricing page</a
 						>. Subscriptions may be offered on a monthly, quarterly, annual, or other recurring
 						basis as specified during signup.
 					</p>
@@ -1048,7 +1048,7 @@
 						If you experience any difficulty accessing any part of our Services, or if you require
 						assistance or have suggestions for improving accessibility, please contact us at <a
 							href="mailto:legal@scanopy.net"
-							class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
+							class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
 						>. We welcome your feedback and are committed to continually improving the accessibility
 						of our Services.
 					</p>

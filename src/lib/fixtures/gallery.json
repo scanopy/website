@@ -21,7 +21,8 @@
 			"url": "https://taymaerz.de"
 		},
 		"tags": ["homelab", "monitoring", "docker", "proxmox"],
-		"featured": true
+		"featured": true,
+		"social": true
 	},
 	{
 		"id": "1dony1",
@@ -33,6 +34,7 @@
 			"url": ""
 		},
 		"tags": ["multi-vlan", "homelab", "networking", "proxmox"],
-		"featured": true
+		"featured": true,
+		"social": true
 	}
 ]

@@ -28,6 +28,13 @@ export default defineConfig({
 			},
 			favicon: '/favicon.png',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/scanopy/scanopy' }],
+			expressiveCode: {
+				themes: ['github-dark'],
+				styleOverrides: {
+					borderColor: 'rgba(55, 65, 81, 0.5)',
+					borderRadius: '0.75rem',
+				},
+			},
 			customCss: ['./src/styles/custom.css'],
 			components: {
 				SiteTitle: './src/components/SiteTitle.astro',

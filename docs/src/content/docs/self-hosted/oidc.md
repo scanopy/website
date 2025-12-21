@@ -7,10 +7,19 @@ Scanopy supports OpenID Connect (OIDC) for enterprise authentication with provid
 
 ## Quick Start
 
+**Option A: TOML File (recommended for complex setups)**
+
 1. Copy `oidc.toml.example` to `oidc.toml`
 2. Configure your provider settings (see examples below)
 3. Mount the file in docker-compose
 4. Restart the server
+
+**Option B: Environment Variable**
+
+1. Set `SCANOPY_OIDC_PROVIDERS` with your provider config as JSON
+2. Restart the server
+
+See [Environment Variable Configuration](#environment-variable-configuration) for details.
 
 ## Configuration File Format
 
@@ -25,6 +34,49 @@ client_secret = "your-client-secret"
 ```
 
 You can configure multiple providers by adding multiple `[[oidc_providers]]` sections.
+
+## Environment Variable Configuration
+
+Instead of using a TOML file, you can configure OIDC providers using the `SCANOPY_OIDC_PROVIDERS` environment variable with a JSON array:
+
+```bash
+SCANOPY_OIDC_PROVIDERS='[{"name":"Authentik","slug":"authentik","issuer_url":"https://auth.example.com/application/o/scanopy","client_id":"your-client-id","client_secret":"your-client-secret"}]'
+```
+
+For multiple providers:
+
+```bash
+SCANOPY_OIDC_PROVIDERS='[{"name":"Authentik","slug":"authentik","issuer_url":"https://auth.example.com/application/o/scanopy","client_id":"id1","client_secret":"secret1"},{"name":"Keycloak","slug":"keycloak","issuer_url":"https://keycloak.example.com/realms/main","client_id":"id2","client_secret":"secret2"}]'
+```
+
+Each provider object supports these fields:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Display name shown in UI |
+| `slug` | Yes | URL-safe identifier (lowercase, no spaces) |
+| `issuer_url` | Yes | OIDC provider's issuer URL |
+| `client_id` | Yes | OAuth2 client ID |
+| `client_secret` | Yes | OAuth2 client secret |
+| `logo` | No | Logo URL for UI display |
+
+### Docker Compose with Environment Variables
+
+```yaml
+services:
+  scanopy-server:
+    image: ghcr.io/scanopy/scanopy/server:latest
+    environment:
+      SCANOPY_PUBLIC_URL: https://scanopy.example.com
+      SCANOPY_OIDC_PROVIDERS: '[{"name":"Authentik","slug":"authentik","issuer_url":"https://auth.example.com/application/o/scanopy","client_id":"${OIDC_CLIENT_ID}","client_secret":"${OIDC_CLIENT_SECRET}"}]'
+```
+
+This method is useful when:
+- You want to keep all configuration in environment variables
+- You're using container orchestration that injects secrets via env vars
+- You prefer not to mount additional config files
+
+**Note**: Environment variables take precedence over the TOML file if both are configured.
 
 ## Callback URL Format
 
@@ -274,14 +326,15 @@ Common mistakes:
 
 **Causes**:
 
-1. oidc.toml file not mounted in Docker
+1. oidc.toml file not mounted in Docker (if using file-based config)
 2. oidc.toml has syntax errors
-3. Server not restarted after adding config
+3. `SCANOPY_OIDC_PROVIDERS` has invalid JSON (if using env var config)
+4. Server not restarted after adding config
 
 **Solution**:
 
-1. Verify the volume mount exists in docker-compose.yml
-2. Validate TOML syntax (use a TOML validator)
+1. If using TOML file: Verify the volume mount exists in docker-compose.yml and validate TOML syntax
+2. If using env var: Validate JSON syntax — use `echo $SCANOPY_OIDC_PROVIDERS | jq .` to check
 3. Restart with `docker compose restart scanopy-server`
 4. Check server logs: `docker logs scanopy-server`
 

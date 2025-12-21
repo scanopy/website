@@ -288,7 +288,7 @@
 							href="https://stripe.com/us/privacy"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="text-sky-400 hover:text-sky-300">Privacy Policy</a
+							class="text-blue-400 hover:text-blue-300">Privacy Policy</a
 						>
 					</li>
 				</ul>
@@ -304,7 +304,7 @@
 							href="https://aws.amazon.com/privacy/"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="text-sky-400 hover:text-sky-300">Privacy Policy</a
+							class="text-blue-400 hover:text-blue-300">Privacy Policy</a
 						>
 					</li>
 				</ul>
@@ -397,7 +397,7 @@
 				<p class="text-gray-300">
 					To exercise your California data protection rights, please send your request(s) by email: <a
 						href="mailto:legal@scanopy.net"
-						class="text-sky-400 hover:text-sky-300">legal@scanopy.net</a
+						class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
 					>
 				</p>
 			</section>
@@ -452,14 +452,14 @@
 				</p>
 				<ul class="list-inside list-disc space-y-1 text-gray-300">
 					<li>
-						By email: <a href="mailto:legal@scanopy.net" class="text-sky-400 hover:text-sky-300"
+						By email: <a href="mailto:legal@scanopy.net" class="text-blue-400 hover:text-blue-300"
 							>legal@scanopy.net</a
 						>
 					</li>
 					<li>
 						By visiting this page on our website: <a
 							href="/privacy"
-							class="text-sky-400 hover:text-sky-300">https://scanopy.net/privacy</a
+							class="text-blue-400 hover:text-blue-300">https://scanopy.net/privacy</a
 						>
 					</li>
 				</ul>
