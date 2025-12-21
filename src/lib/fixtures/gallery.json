@@ -1,52 +1,38 @@
 [
-  {
-    "id": "maya",
-    "title": "Maya's Homelab",
-    "description": "Home automation, ad blocking, a VPN, plus dev environment for Scanopy!",
-    "image": "/gallery/maya.png",
-    "author": {
-      "name": "Maya",
-      "url": "https://github.com/scanopy/scanopy"
-    },
-    "tags": [
-      "homelab",
-      "docker",
-      "proxmox"
-    ],
-    "featured": false
-  },
-  {
-    "id": "tay",
-    "title": "Tay März's Homelab",
-    "description": "A Chaotic Mess with 2 Homelab Servers, 3 Docker Nodes and many more things",
-    "image": "/gallery/tay.png",
-    "author": {
-      "name": "Tay März",
-      "url": "https://taymaerz.de"
-    },
-    "tags": [
-      "homelab",
-      "monitoring",
-      "docker",
-      "proxmox"
-    ],
-    "featured": true
-  },
-  {
-    "id": "1dony1",
-    "title": "NewBe HomeLab",
-    "description": "",
-    "image": "/gallery/1dony1.png",
-    "author": {
-      "name": "1dony1",
-      "url": ""
-    },
-    "tags": [
-      "multi-vlan",
-      "homelab",
-      "networking",
-      "proxmox"
-    ],
-    "featured": true
-  }
+	{
+		"id": "maya",
+		"title": "Maya's Homelab",
+		"description": "Home automation, ad blocking, a VPN, plus dev environment for Scanopy!",
+		"image": "/gallery/maya.png",
+		"author": {
+			"name": "Maya",
+			"url": "https://github.com/scanopy/scanopy"
+		},
+		"tags": ["homelab", "docker", "proxmox"],
+		"featured": false
+	},
+	{
+		"id": "tay",
+		"title": "Tay März's Homelab",
+		"description": "A Chaotic Mess with 2 Homelab Servers, 3 Docker Nodes and many more things",
+		"image": "/gallery/tay.png",
+		"author": {
+			"name": "Tay März",
+			"url": "https://taymaerz.de"
+		},
+		"tags": ["homelab", "monitoring", "docker", "proxmox"],
+		"featured": true
+	},
+	{
+		"id": "1dony1",
+		"title": "NewBe HomeLab",
+		"description": "",
+		"image": "/gallery/1dony1.png",
+		"author": {
+			"name": "1dony1",
+			"url": ""
+		},
+		"tags": ["multi-vlan", "homelab", "networking", "proxmox"],
+		"featured": true
+	}
 ]

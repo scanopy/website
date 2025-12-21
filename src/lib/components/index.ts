@@ -1,4 +1,5 @@
 export { default as BillingPlanForm } from './BillingPlanForm.svelte';
+export { default as Footer } from './Footer.svelte';
 export { default as GalleryShowcase } from './GalleryShowcase.svelte';
 export { default as GithubStars } from './GithubStars.svelte';
 export { default as NewsletterSignup } from './NewsletterSignup.svelte';

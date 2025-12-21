@@ -8,10 +8,12 @@ This guide covers installing the Scanopy server on your own infrastructure.
 ## Requirements
 
 **Docker Installation (Recommended)**
+
 - Docker Engine 20.10 or later
 - Docker Compose V2
 
 **Building from Source**
+
 - Rust 1.90 or later
 - Node.js 20 or later
 - PostgreSQL 17
@@ -31,6 +33,7 @@ curl -O https://raw.githubusercontent.com/scanopy/scanopy/refs/heads/main/docker
 ### 2. Review Configuration
 
 The default `docker-compose.yml` includes:
+
 - Scanopy server on port 60072
 - PostgreSQL database
 - Integrated daemon for immediate network scanning

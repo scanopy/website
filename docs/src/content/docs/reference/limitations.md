@@ -12,10 +12,12 @@ Scanopy is designed for discovering and visualizing local network infrastructure
 Scanopy currently supports IPv4 only.
 
 **Planned**:
+
 - Collecting and displaying IPv6 addresses during discovery
 - Manual entry of IPv6 addresses when editing hosts
 
 **Not planned**:
+
 - Full IPv6 subnet scanning (a /64 contains 18 quintillion addresses)
 
 ### Large Subnets
@@ -27,10 +29,12 @@ If you need to scan a large network, break it into smaller subnets and scan them
 ### Layer 2 vs Layer 3
 
 For subnets the daemon is directly connected to:
+
 - MAC addresses are collected via ARP
 - All responsive hosts are discovered
 
 For remote subnets (routed through a gateway):
+
 - No MAC addresses (ARP doesn't cross routers)
 - Only hosts with open ports are discovered
 - Some hosts may not respond to remote probes
@@ -69,5 +73,6 @@ Windows requires [Npcap](https://npcap.com/#download) for ARP-based host discove
 ## Requesting Features
 
 If a limitation affects your use case:
+
 - [Open an issue](https://github.com/scanopy/scanopy/issues/new) describing your scenario
 - Join the [Discord community](https://discord.gg/b7ffQr8AcZ) to discuss

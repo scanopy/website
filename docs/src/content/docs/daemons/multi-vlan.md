@@ -67,11 +67,11 @@ Central daemon for routable networks, dedicated daemons for isolated segments.
 
 ### Step 1: Plan Your Deployment
 
-| VLAN | Subnet | Purpose | Daemon Location |
-|------|--------|---------|-----------------|
-| 1 | 192.168.1.0/24 | Production | Server host |
-| 10 | 192.168.10.0/24 | IoT | IoT management VM |
-| 20 | 192.168.20.0/24 | Guest | Guest network AP |
+| VLAN | Subnet          | Purpose    | Daemon Location   |
+| ---- | --------------- | ---------- | ----------------- |
+| 1    | 192.168.1.0/24  | Production | Server host       |
+| 10   | 192.168.10.0/24 | IoT        | IoT management VM |
+| 20   | 192.168.20.0/24 | Guest      | Guest network AP  |
 
 ### Step 2: Create Daemon in Scanopy UI
 
@@ -113,17 +113,17 @@ For consolidating hosts that appear on multiple VLANs, see [Consolidating Duplic
 
 Daemon initiates all connections. Minimal firewall changes needed.
 
-| Source | Destination | Port | Protocol | Purpose |
-|--------|-------------|------|----------|---------|
-| Daemon | Server | 60072 | TCP | API communication |
-| Daemon | Local subnet | * | TCP | Network scanning |
+| Source | Destination  | Port  | Protocol | Purpose           |
+| ------ | ------------ | ----- | -------- | ----------------- |
+| Daemon | Server       | 60072 | TCP      | API communication |
+| Daemon | Local subnet | \*    | TCP      | Network scanning  |
 
 ### Firewall Rules for Push Mode
 
 Server initiates scan requests. Daemon must be reachable.
 
-| Source | Destination | Port | Protocol | Purpose |
-|--------|-------------|------|----------|---------|
-| Server | Daemon | 60073 | TCP | Push scan requests |
-| Daemon | Server | 60072 | TCP | Report results |
-| Daemon | Local subnet | * | TCP | Network scanning |
+| Source | Destination  | Port  | Protocol | Purpose            |
+| ------ | ------------ | ----- | -------- | ------------------ |
+| Server | Daemon       | 60073 | TCP      | Push scan requests |
+| Daemon | Server       | 60072 | TCP      | Report results     |
+| Daemon | Local subnet | \*    | TCP      | Network scanning   |

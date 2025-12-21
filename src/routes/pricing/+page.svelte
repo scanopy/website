@@ -9,6 +9,7 @@
 	import type { ColorStyle, IconComponent } from '$lib/utils/styling';
 	import { onMount } from 'svelte';
 	import { analytics } from '$lib/analytics.svelte';
+	import { getProductSchema, getFAQSchema } from '$lib/schemas';
 
 	/**
 	 * Interface for metadata helpers - matches what BillingPlanForm expects.
@@ -155,50 +156,20 @@
 		);
 	}
 
-	// Generate Product schema from billing plans fixture (monthly plans only, deduplicated)
-	const monthlyPlans = billingPlanFixtures.filter((p) => p.metadata.rate === 'Month');
-	const seenPlanIds = new Set<string>();
-	const uniqueMonthlyPlans = monthlyPlans.filter((p) => {
-		if (seenPlanIds.has(p.id)) return false;
-		seenPlanIds.add(p.id);
-		return true;
-	});
-
-	const productSchema = {
-		'@context': 'https://schema.org',
-		'@type': 'Product',
-		name: 'Scanopy',
-		description:
-			'Automatic network discovery and documentation software. Create live, auto-updating network diagrams.',
-		brand: {
-			'@type': 'Brand',
-			name: 'Scanopy'
-		},
-		offers: uniqueMonthlyPlans.map((plan) => {
-			const price =
-				plan.metadata.custom_price === 'Free'
-					? '0'
-					: plan.metadata.custom_price
-						? undefined
-						: (plan.metadata.base_cents / 100).toFixed(2);
-
-			return {
-				'@type': 'Offer',
-				name: plan.name,
-				description: plan.description,
-				...(price && { price, priceCurrency: 'USD' }),
-				...(price && price !== '0' && { priceValidUntil: '2026-12-31' }),
-				availability: 'https://schema.org/InStock'
-			};
-		})
-	};
+	// Get schemas from unified schema utilities
+	const productSchema = getProductSchema();
+	const faqSchema = getFAQSchema();
 </script>
 
 <svelte:head>
 	<title>Pricing - Scanopy</title>
-	<meta name="description" content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments." />
+	<meta
+		name="description"
+		content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments."
+	/>
 	<link rel="canonical" href="https://scanopy.net/pricing" />
 	{@html `<script type="application/ld+json">${JSON.stringify(productSchema)}</script>`}
+	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
 </svelte:head>
 
 <section class="py-10 pb-24 lg:pb-10">

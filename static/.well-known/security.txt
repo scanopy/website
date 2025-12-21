@@ -1,0 +1,9 @@
+# Scanopy Security Policy
+# https://securitytxt.org/
+
+Contact: mailto:security@scanopy.net
+Contact: https://github.com/scanopy/scanopy/security/advisories/new
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://scanopy.net/.well-known/security.txt
+Policy: https://github.com/scanopy/scanopy/security/policy

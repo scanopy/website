@@ -1,0 +1,130 @@
+name: Post Gallery Entry
+
+on:
+  schedule:
+    # Run daily at 10:00 AM UTC (adjustable)
+    - cron: '0 10 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  post-gallery:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find and post gallery entry
+        id: gallery
+        run: |
+          GALLERY_FILE="src/lib/fixtures/gallery.json"
+          POSTED_FILE=".github/gallery-posted.json"
+
+          # Get list of already posted IDs
+          POSTED_IDS=$(jq -r '.posted[].id' "$POSTED_FILE" 2>/dev/null || echo "")
+
+          # Find first unposted gallery entry that has social explicitly enabled (social == true)
+          ENTRY=$(jq -c --argjson posted "$(jq '.posted | map(.id)' "$POSTED_FILE" 2>/dev/null || echo '[]')" \
+            '[.[] | select(.social == true) | select(.id as $id | $posted | index($id) | not)] | first' "$GALLERY_FILE")
+
+          if [ "$ENTRY" = "null" ] || [ -z "$ENTRY" ]; then
+            echo "All gallery entries have been posted!"
+            echo "has_entry=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "has_entry=true" >> $GITHUB_OUTPUT
+
+          # Extract fields
+          ID=$(echo "$ENTRY" | jq -r '.id')
+          TITLE=$(echo "$ENTRY" | jq -r '.title')
+          DESCRIPTION=$(echo "$ENTRY" | jq -r '.description')
+          AUTHOR_NAME=$(echo "$ENTRY" | jq -r '.author.name')
+          AUTHOR_URL=$(echo "$ENTRY" | jq -r '.author.url')
+          TAGS=$(echo "$ENTRY" | jq -r '.tags | map("#" + .) | join(" ")')
+          IMAGE=$(echo "$ENTRY" | jq -r '.image')
+          FEATURED=$(echo "$ENTRY" | jq -r '.featured')
+
+          echo "id=$ID" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT
+          echo "author_name=$AUTHOR_NAME" >> $GITHUB_OUTPUT
+          echo "author_url=$AUTHOR_URL" >> $GITHUB_OUTPUT
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+          echo "image=https://scanopy.net$IMAGE" >> $GITHUB_OUTPUT
+          echo "featured=$FEATURED" >> $GITHUB_OUTPUT
+
+          echo "Processing gallery entry: $TITLE by $AUTHOR_NAME"
+
+          # Update posted tracking file
+          jq --arg id "$ID" --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '.posted += [{"id": $id, "posted_at": $date}]' "$POSTED_FILE" > tmp.json
+          mv tmp.json "$POSTED_FILE"
+
+      - name: Post to Twitter/X
+        if: steps.gallery.outputs.has_entry == 'true'
+        uses: noweh/post-tweet-v2-action@v1.0
+        with:
+          message: |
+            Community Showcase: ${{ steps.gallery.outputs.title }}
+
+            ${{ steps.gallery.outputs.description }}
+
+            Submitted by ${{ steps.gallery.outputs.author_name }}
+
+            Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery
+
+            ${{ steps.gallery.outputs.tags }} #Scanopy #NetworkDiagram #Homelab
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+
+      - name: Post to Bluesky
+        if: steps.gallery.outputs.has_entry == 'true'
+        uses: myConsciousness/bluesky-post@v5
+        with:
+          text: |
+            Community Showcase: ${{ steps.gallery.outputs.title }}
+
+            ${{ steps.gallery.outputs.description }}
+
+            Submitted by ${{ steps.gallery.outputs.author_name }}
+
+            Check out more at https://scanopy.net/showcase?utm_source=bluesky&utm_medium=social&utm_campaign=gallery
+
+            ${{ steps.gallery.outputs.tags }} #Scanopy #NetworkDiagram #Homelab
+          identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
+          password: ${{ secrets.BLUESKY_PASSWORD }}
+
+      # - name: Post to Reddit
+      #   if: steps.gallery.outputs.has_entry == 'true'
+      #   uses: bluwy/release-for-reddit-action@v2
+      #   with:
+      #     username: ${{ secrets.REDDIT_USERNAME }}
+      #     password: ${{ secrets.REDDIT_PASSWORD }}
+      #     app-id: ${{ secrets.REDDIT_APP_ID }}
+      #     app-secret: ${{ secrets.REDDIT_APP_SECRET }}
+      #     subreddit: scanopy
+      #     title: "Community Showcase: ${{ steps.gallery.outputs.title }}"
+      #     text: |
+      #       ${{ steps.gallery.outputs.description }}
+      #
+      #       Submitted by ${{ steps.gallery.outputs.author_name }}
+      #
+      #       ---
+      #
+      #       [View in showcase](https://scanopy.net/showcase?utm_source=reddit&utm_medium=social&utm_campaign=gallery)
+      #
+      #       Submit your own network diagram: https://scanopy.net/showcase
+
+      - name: Commit tracking update
+        if: steps.gallery.outputs.has_entry == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: mark gallery entry '${{ steps.gallery.outputs.id }}' as posted"
+          file_pattern: .github/gallery-posted.json

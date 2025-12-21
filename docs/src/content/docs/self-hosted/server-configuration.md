@@ -23,20 +23,20 @@ environment:
 
 ## Parameter Reference
 
-| Parameter | CLI Flag | Environment Variable | Default | Description |
-|-----------|----------|---------------------|---------|-------------|
-| **Server Public URL** | `--public-url` | `SCANOPY_PUBLIC_URL` | `http://localhost:60072` | Public URL for webhooks, email links, etc |
-| **Server Port** | `--server-port` | `SCANOPY_SERVER_PORT` | `60072` | Port for server to listen on |
-| **Database URL** | `--database-url` | `SCANOPY_DATABASE_URL` | *Required* | PostgreSQL connection string |
-| **Log Level** | `--log-level` | `SCANOPY_LOG_LEVEL` | `info` | Logging verbosity: `trace`, `debug`, `info`, `warn`, `error` |
-| **Secure Cookies** | `--use-secure-session-cookies` | `SCANOPY_USE_SECURE_SESSION_COOKIES` | `false` | Enable HTTPS-only cookies |
-| **Integrated Daemon URL** | `--integrated-daemon-url` | `SCANOPY_INTEGRATED_DAEMON_URL` | `http://172.17.0.1:60073` | URL to reach daemon in default docker compose |
-| **Disable Registration** | `--disable-registration` | `SCANOPY_DISABLE_REGISTRATION` | `false` | Disable new user registration |
-| **SMTP Username** | `--smtp-username` | `SCANOPY_SMTP_USERNAME` | - | SMTP username for email features |
-| **SMTP Password** | `--smtp-password` | `SCANOPY_SMTP_PASSWORD` | - | SMTP password for email authentication |
-| **SMTP Relay** | `--smtp-relay` | `SCANOPY_SMTP_RELAY` | - | SMTP server address (e.g., `smtp.gmail.com`) |
-| **SMTP Email** | `--smtp-email` | `SCANOPY_SMTP_EMAIL` | - | Sender email address for outgoing emails |
-| **Client IP Source** | `--client-ip-source` | `SCANOPY_CLIENT_IP_SOURCE` | - | Source of IP address from request headers for reverse proxy setups |
+| Parameter                 | CLI Flag                       | Environment Variable                 | Default                   | Description                                                        |
+| ------------------------- | ------------------------------ | ------------------------------------ | ------------------------- | ------------------------------------------------------------------ |
+| **Server Public URL**     | `--public-url`                 | `SCANOPY_PUBLIC_URL`                 | `http://localhost:60072`  | Public URL for webhooks, email links, etc                          |
+| **Server Port**           | `--server-port`                | `SCANOPY_SERVER_PORT`                | `60072`                   | Port for server to listen on                                       |
+| **Database URL**          | `--database-url`               | `SCANOPY_DATABASE_URL`               | _Required_                | PostgreSQL connection string                                       |
+| **Log Level**             | `--log-level`                  | `SCANOPY_LOG_LEVEL`                  | `info`                    | Logging verbosity: `trace`, `debug`, `info`, `warn`, `error`       |
+| **Secure Cookies**        | `--use-secure-session-cookies` | `SCANOPY_USE_SECURE_SESSION_COOKIES` | `false`                   | Enable HTTPS-only cookies                                          |
+| **Integrated Daemon URL** | `--integrated-daemon-url`      | `SCANOPY_INTEGRATED_DAEMON_URL`      | `http://172.17.0.1:60073` | URL to reach daemon in default docker compose                      |
+| **Disable Registration**  | `--disable-registration`       | `SCANOPY_DISABLE_REGISTRATION`       | `false`                   | Disable new user registration                                      |
+| **SMTP Username**         | `--smtp-username`              | `SCANOPY_SMTP_USERNAME`              | -                         | SMTP username for email features                                   |
+| **SMTP Password**         | `--smtp-password`              | `SCANOPY_SMTP_PASSWORD`              | -                         | SMTP password for email authentication                             |
+| **SMTP Relay**            | `--smtp-relay`                 | `SCANOPY_SMTP_RELAY`                 | -                         | SMTP server address (e.g., `smtp.gmail.com`)                       |
+| **SMTP Email**            | `--smtp-email`                 | `SCANOPY_SMTP_EMAIL`                 | -                         | Sender email address for outgoing emails                           |
+| **Client IP Source**      | `--client-ip-source`           | `SCANOPY_CLIENT_IP_SOURCE`           | -                         | Source of IP address from request headers for reverse proxy setups |
 
 ## Integrated Daemon URL
 

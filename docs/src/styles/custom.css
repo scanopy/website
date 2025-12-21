@@ -1,3 +1,22 @@
+/* Tailwind for shared components */
+@tailwind components;
+@tailwind utilities;
+
+/* Shared component styles from main site */
+@layer components {
+	.btn-primary {
+		@apply bg-sky-700 hover:bg-sky-600;
+		@apply border border-sky-600 hover:border-sky-500;
+		@apply rounded-md px-4 py-2 font-medium text-white;
+		@apply transition-colors duration-150;
+		@apply inline-flex items-center justify-center gap-2;
+	}
+
+	.container {
+		@apply mx-auto max-w-7xl px-4;
+	}
+}
+
 /* Scanopy brand colors for Starlight - matches main website */
 
 :root {
@@ -85,8 +104,8 @@ nav.sidebar {
 }
 
 /* Selected/current page in sidebar */
-nav.sidebar a[aria-current="page"],
-nav.sidebar a[aria-current="page"]:hover {
+nav.sidebar a[aria-current='page'],
+nav.sidebar a[aria-current='page']:hover {
 	color: #fb7185 !important; /* rose-400 */
 	background: rgba(251, 113, 133, 0.1);
 	border-color: #fb7185;

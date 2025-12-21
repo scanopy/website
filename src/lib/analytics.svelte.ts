@@ -1,18 +1,23 @@
 import posthog from 'posthog-js';
 import { browser } from '$app/environment';
-import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 
-export async function loadPh () {
+const PUBLIC_POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY || '';
+
+export async function loadPh() {
+	if (!PUBLIC_POSTHOG_KEY) {
+		console.warn('PostHog key not configured');
+		return;
+	}
 	posthog.init(PUBLIC_POSTHOG_KEY, {
 		api_host: 'https://ph.scanopy.net',
 		ui_host: 'https://us.posthog.com',
 		defaults: '2025-11-30',
 		secure_cookie: true,
 		persistence: 'memory',
-		opt_out_capturing_by_default: true,
+		opt_out_capturing_by_default: true
 	});
 	initFeatureFlags();
-};
+}
 
 /**
  * PostHog tracking utility for consistent event naming and properties.
@@ -35,7 +40,7 @@ export function initFeatureFlags() {
 	if (browser && posthog && !posthog.has_opted_out_capturing()) {
 		// Wait for feature flags to be loaded, then evaluate
 		posthog.onFeatureFlags(() => {
-			evaluateCtaFlag()
+			evaluateCtaFlag();
 		});
 	}
 }
@@ -47,7 +52,7 @@ export function initFeatureFlags() {
 export function evaluateCtaFlag() {
 	if (browser && posthog) {
 		const variant = posthog.getFeatureFlag('website-main-cta');
-		
+
 		if (variant === 'launch') {
 			featureFlags.mainCtaText = 'Launch Scanopy';
 		} else if (variant === 'get-started') {

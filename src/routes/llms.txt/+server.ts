@@ -37,9 +37,14 @@ export function GET() {
 
 	// Generate pricing lines
 	const pricingLines = uniquePlans.map((plan) => {
-		const price = plan.metadata.custom_price || `$${(plan.metadata.base_cents / 100).toFixed(2)}/month`;
-		const networks = plan.metadata.included_networks ? `${plan.metadata.included_networks} network${plan.metadata.included_networks > 1 ? 's' : ''}` : 'unlimited networks';
-		const seats = plan.metadata.included_seats ? `${plan.metadata.included_seats} seat${plan.metadata.included_seats > 1 ? 's' : ''}` : '';
+		const price =
+			plan.metadata.custom_price || `$${(plan.metadata.base_cents / 100).toFixed(2)}/month`;
+		const networks = plan.metadata.included_networks
+			? `${plan.metadata.included_networks} network${plan.metadata.included_networks > 1 ? 's' : ''}`
+			: 'unlimited networks';
+		const seats = plan.metadata.included_seats
+			? `${plan.metadata.included_seats} seat${plan.metadata.included_seats > 1 ? 's' : ''}`
+			: '';
 		const hosting = plan.metadata.hosting.toLowerCase();
 
 		const details = [networks, seats, hosting].filter(Boolean).join(', ');
@@ -47,10 +52,13 @@ export function GET() {
 	});
 
 	// Get service categories and counts
-	const categoryCount = services.reduce((acc, s) => {
-		acc[s.category] = (acc[s.category] || 0) + 1;
-		return acc;
-	}, {} as Record<string, number>);
+	const categoryCount = services.reduce(
+		(acc, s) => {
+			acc[s.category] = (acc[s.category] || 0) + 1;
+			return acc;
+		},
+		{} as Record<string, number>
+	);
 
 	const topCategories = Object.entries(categoryCount)
 		.sort((a, b) => b[1] - a[1])
@@ -108,6 +116,7 @@ Full pricing details: https://scanopy.net/pricing
 - Changelog: https://scanopy.net/changelog
 - GitHub: https://github.com/scanopy/scanopy
 - Discord: https://discord.gg/b7ffQr8AcZ
+- Bluesky: https://bsky.app/profile/scanopy.net
 
 ## Getting Started
 

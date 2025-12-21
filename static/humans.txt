@@ -1,0 +1,21 @@
+/* TEAM */
+Product: Scanopy
+Site: https://scanopy.net
+Twitter: @getscanopy
+Bluesky: @scanopy.net
+Reddit: r/scanopy
+Location: NYC
+
+/* THANKS */
+To our community of homelabbers, sysadmins, and network enthusiasts.
+
+/* SITE */
+Standards: HTML5, CSS3, ES6+
+Framework: SvelteKit
+Styling: Tailwind CSS
+Hosting: Cloudflare
+Analytics: PostHog, Rybbit
+
+/* COMPONENTS */
+Icons: Lucide, Iconify
+Newsletter: Plunk

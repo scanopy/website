@@ -182,6 +182,46 @@ client_id = "your-client-id"
 client_secret = "your-client-secret"
 ```
 
+### Authelia
+
+```yaml
+identity_providers:
+  oidc:
+    clients:
+      - client_id: 'scanopy'
+        client_name: 'Scanopy'
+        client_secret: { { secret "/run/secrets/authelia_scanopy_oidc" | msquote } }
+        public: false
+        authorization_policy: 'two_factor'
+        require_pkce: false
+        pkce_challenge_method: ''
+        redirect_uris:
+          - 'https://scanopy.YOURDOMAIN/api/auth/oidc/authelia/callback'
+        scopes:
+          - 'openid'
+          - 'email'
+          - 'profile'
+        response_types:
+          - 'code'
+        grant_types:
+          - 'authorization_code'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_basic'
+        consent_mode: 'auto'
+        pre_configured_consent_duration: '1M'
+```
+
+```toml
+[[oidc_providers]]
+name = "Authelia"
+slug = "authelia"
+logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/authelia.svg"
+issuer_url = "https://auth.YOURDOMAIN"
+client_id = "scanopy"
+client_secret = "YOURSUPERSECRET"
+```
+
 ## Linking OIDC to Existing Accounts
 
 If OIDC is enabled, users can link it to their existing email/password account:
@@ -208,6 +248,7 @@ Failed to generate auth URL: Validation error: unexpected issuer URI
 **Solution**: Try both with and without trailing slash in `issuer_url`. The value must exactly match what your provider returns in its `.well-known/openid-configuration`.
 
 To check what your provider expects:
+
 ```bash
 curl https://your-provider/.well-known/openid-configuration | jq .issuer
 ```
@@ -217,11 +258,13 @@ curl https://your-provider/.well-known/openid-configuration | jq .issuer
 **Cause**: The callback URL in your provider doesn't match what Scanopy sends.
 
 **Solution**: Ensure the redirect URI in your provider exactly matches:
+
 ```
 http://your-scanopy:60072/api/auth/oidc/{slug}/callback
 ```
 
 Common mistakes:
+
 - Wrong protocol (http vs https)
 - Wrong port
 - Wrong slug (must match oidc.toml)
@@ -230,11 +273,13 @@ Common mistakes:
 ### OIDC button not appearing in UI
 
 **Causes**:
+
 1. oidc.toml file not mounted in Docker
 2. oidc.toml has syntax errors
 3. Server not restarted after adding config
 
 **Solution**:
+
 1. Verify the volume mount exists in docker-compose.yml
 2. Validate TOML syntax (use a TOML validator)
 3. Restart with `docker compose restart scanopy-server`
@@ -245,10 +290,11 @@ Common mistakes:
 **Cause**: Scanopy server can't reach your OIDC provider.
 
 **Solutions**:
+
 1. Ensure the provider URL is reachable from the server container
 2. If provider is internal, ensure Docker can resolve the hostname
 3. Add provider to Docker's extra_hosts if needed:
    ```yaml
    extra_hosts:
-     - "auth.internal:192.168.1.100"
+     - 'auth.internal:192.168.1.100'
    ```

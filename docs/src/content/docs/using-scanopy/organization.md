@@ -11,12 +11,12 @@ Organizations are automatically created during registration and cannot be manual
 
 ### Roles
 
-| Role | Can Do |
-|------|--------|
-| **Owner** | Everything, including organization settings and inviting Admins |
-| **Admin** | Everything Members can do, plus invite/remove Members, manage tags |
+| Role       | Can Do                                                                    |
+| ---------- | ------------------------------------------------------------------------- |
+| **Owner**  | Everything, including organization settings and inviting Admins           |
+| **Admin**  | Everything Members can do, plus invite/remove Members, manage tags        |
 | **Member** | Create/edit entities; run discoveries; manage daemons; invite Visualizers |
-| **Viewer** | View entities only |
+| **Viewer** | View entities only                                                        |
 
 Invite users via **Manage > Users** — generate an invite link and share it.
 
@@ -25,6 +25,7 @@ Invite users via **Manage > Users** — generate an invite link and share it.
 Networks are the primary organizational unit. Each network represents a distinct environment with its own hosts, services, and topology.
 
 **Common patterns:**
+
 - Separate networks for production vs. development
 - One network per physical location
 - Distinct networks for different security zones
@@ -48,6 +49,7 @@ Tags provide organization-wide labels for categorizing and filtering entities. A
 ### Tag Scope
 
 Tags are defined at the **organization level**:
+
 - The same tag can be applied across all networks
 - Tag definitions are shared by all users
 - Deleting a tag removes it from all entities
@@ -55,6 +57,7 @@ Tags are defined at the **organization level**:
 ### Example Tag Schemes
 
 **By environment and criticality:**
+
 ```
 production + critical    → Core infrastructure
 production + standard    → Supporting services
@@ -62,6 +65,7 @@ staging + low-priority   → Test environments
 ```
 
 **By team ownership:**
+
 ```
 platform-team     → Infrastructure, databases, networking
 frontend-team     → Web servers, CDN, static assets
@@ -69,6 +73,7 @@ data-team         → Analytics, ETL, data warehouses
 ```
 
 **For compliance audits:**
+
 ```
 pci-scope         → Systems handling payment data
 hipaa             → Healthcare data systems

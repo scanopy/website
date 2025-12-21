@@ -12,6 +12,7 @@ Technical overview of Scanopy's system design, components, and data flows.
 **Purpose**: Central hub for data storage, API, and web UI serving
 
 **Responsibilities**:
+
 - Store network discovery data in PostgreSQL
 - Serve REST API for daemons and UI
 - Generate topology visualizations
@@ -21,6 +22,7 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Provide real-time updates via Server-Sent Events
 
 **Implementation**:
+
 - Language: Rust
 - Framework: Axum (async web framework)
 - Database: PostgreSQL 17 with sqlx
@@ -34,6 +36,7 @@ Technical overview of Scanopy's system design, components, and data flows.
 **Purpose**: Distributed discovery agent that scans networks and reports findings
 
 **Responsibilities**:
+
 - Scan IPv4 addresses on configured subnets
 - Detect open TCP ports
 - Identify services via pattern matching
@@ -43,6 +46,7 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Execute scheduled discovery tasks
 
 **Implementation**:
+
 - Language: Rust
 - Network scanning: Custom async TCP scanner with tokio
 - Docker API: bollard crate for Docker socket communication
@@ -56,6 +60,7 @@ Technical overview of Scanopy's system design, components, and data flows.
 **Purpose**: Web-based interface for viewing and managing network data
 
 **Responsibilities**:
+
 - Display interactive topology diagrams
 - Provide CRUD interfaces for all entities
 - Monitor discovery sessions in real-time
@@ -64,6 +69,7 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Export topology visualizations
 
 **Implementation**:
+
 - Framework: Svelte 5 + SvelteKit
 - State management: Svelte stores with derived reactivity
 - Visualization: @xyflow/svelte for topology rendering

@@ -75,10 +75,14 @@
 <!-- Lightbox Modal -->
 {#if lightboxItem}
 	<div
-		class="fixed inset-0 z-50 bg-black/90 {isZoomed ? 'overflow-auto' : 'flex items-center justify-center'}"
+		class="fixed inset-0 z-50 bg-black/90 {isZoomed
+			? 'overflow-auto'
+			: 'flex items-center justify-center'}"
 		onclick={isZoomed ? undefined : closeLightbox}
+		onkeydown={(e) => e.key === 'Escape' && closeLightbox()}
 		role="dialog"
 		aria-modal="true"
+		tabindex="-1"
 	>
 		<!-- Controls -->
 		<div class="fixed right-4 top-4 z-10 flex gap-2">
@@ -109,26 +113,29 @@
 		{#if isZoomed && !isMobile}
 			<!-- Zoomed: full size, scrollable -->
 			<div class="min-h-full min-w-full p-4">
-				<img
-					src={lightboxItem.image}
-					alt={lightboxItem.title}
-					class="cursor-zoom-out"
-					onclick={toggleZoom}
-				/>
+				<button type="button" onclick={toggleZoom} class="cursor-zoom-out">
+					<img src={lightboxItem.image} alt={lightboxItem.title} />
+				</button>
 			</div>
 		{:else}
 			<!-- Fit to screen with space for details -->
 			<div class="flex h-full flex-col items-center justify-center gap-4 p-4">
-				<img
-					src={lightboxItem.image}
-					alt={lightboxItem.title}
-					class="max-h-[calc(100vh-120px)] max-w-[90vw] object-contain {isMobile ? '' : 'cursor-zoom-in'}"
+				<button
+					type="button"
+					class="max-h-[calc(100vh-120px)] max-w-[90vw] {isMobile ? '' : 'cursor-zoom-in'}"
 					onclick={(e) => {
 						e.stopPropagation();
 						if (!isMobile) toggleZoom();
 					}}
-				/>
+				>
+					<img
+						src={lightboxItem.image}
+						alt={lightboxItem.title}
+						class="max-h-[calc(100vh-120px)] max-w-[90vw] object-contain"
+					/>
+				</button>
 
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<!-- Details island -->
 				<div
 					class="flex w-full max-w-2xl items-center justify-between gap-4 rounded-lg border border-gray-700 bg-gray-900/95 px-4 py-2 backdrop-blur-sm"

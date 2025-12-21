@@ -9,13 +9,13 @@ The topology view generates an interactive diagram of your network structure, sh
 
 The topology indicator shows whether your visualization is current with the underlying data.
 
-| State | Meaning |
-|-------|---------|
-| **Up to Date** | All data is current. No action needed. |
-| **Stale** | New entities added since last rebuild. Click **Rebuild** to include them. |
-| **Conflict** | Entities have been deleted. Click **Rebuild** to review removals before applying. |
-| **Locked** | Layout is frozen. Toggle with **Lock/Unlock** to preserve positioning. |
-| **Auto Rebuild** | Rebuilds automatically after changes. Convenient, but resets manual positioning. |
+| State            | Meaning                                                                           |
+| ---------------- | --------------------------------------------------------------------------------- |
+| **Up to Date**   | All data is current. No action needed.                                            |
+| **Stale**        | New entities added since last rebuild. Click **Rebuild** to include them.         |
+| **Conflict**     | Entities have been deleted. Click **Rebuild** to review removals before applying. |
+| **Locked**       | Layout is frozen. Toggle with **Lock/Unlock** to preserve positioning.            |
+| **Auto Rebuild** | Rebuilds automatically after changes. Convenient, but resets manual positioning.  |
 
 **Note**: Rebuilding resets node positions and subnet sizes. Edge handle positions are preserved when possible.
 

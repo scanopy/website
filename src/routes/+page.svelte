@@ -14,7 +14,9 @@
 		ClipboardCheck,
 		Briefcase
 	} from 'lucide-svelte';
+	import type { Component } from 'svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
+	import { getSoftwareApplicationSchema, getProductFeatures } from '$lib/schemas';
 
 	const diagramTools = ['Visio', 'Lucidchart', 'Draw.io', 'PowerPoint', 'Miro', 'Gliffy'];
 	let currentTool = $state(diagramTools[0]);
@@ -28,40 +30,26 @@
 		return () => clearInterval(interval);
 	});
 
-	const features = [
-		{
-			icon: Network,
-			title: 'Never miss a device',
-			description: 'Scans any network and discovers every host, service, and subnet automatically.'
-		},
-		{
-			icon: GitBranch,
-			title: 'Versioning without the commits',
-			description: 'Create branches, lock versions, and compare network state over time.'
-		},
-		{
-			icon: Shield,
-			title: "Know what's exposed",
-			description:
-				'See which services are reachable and flag misconfigurations before they become incidents.'
-		},
-		{
-			icon: Box,
-			title: 'Auto-detects 200+ services',
-			description:
-				'Identifies <a href="/services" class="text-sky-400 hover:underline">200+ services</a> including Docker, PostgreSQL, nginx, Prometheus, and Active Directory.'
-		},
-		{
-			icon: FileCode,
-			title: 'Share with anyone',
-			description: 'Export diagrams, send live view links, or create embeds (coming soon).'
-		},
-		{
-			icon: Eye,
-			title: 'Diagrams that never go stale',
-			description: 'Live topology diagrams that update as each network changes.'
-		}
-	];
+	// Icon mapping from fixture string names to Svelte components
+	const iconMap: Record<string, Component> = {
+		Network,
+		Eye,
+		GitBranch,
+		Shield,
+		Box,
+		FileCode
+	};
+
+	// Load features from fixture and map icons
+	const productFeatures = getProductFeatures();
+	const features = productFeatures.map((f) => ({
+		icon: iconMap[f.icon] || Box,
+		title: f.title,
+		description: f.description
+	}));
+
+	// Generate schema from fixtures
+	const softwareApplicationSchema = getSoftwareApplicationSchema();
 
 	const useCases = [
 		{
@@ -110,6 +98,13 @@
 		content="Automatic network diagrams that stay up to date. Open source."
 	/>
 	<link rel="canonical" href="https://scanopy.net/" />
+	<link
+		rel="alternate"
+		type="application/rss+xml"
+		title="Scanopy Changelog"
+		href="https://scanopy.net/feed.xml"
+	/>
+	{@html `<script type="application/ld+json">${JSON.stringify(softwareApplicationSchema)}</script>`}
 </svelte:head>
 
 <!-- Hero Section -->

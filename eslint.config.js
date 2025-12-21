@@ -17,7 +17,20 @@ export default [
 	prettier,
 	...svelte.configs.prettier,
 	{
-		ignores: ['tsconfig.json', '*.config.js', '*.config.ts', 'build/', '.svelte-kit/']
+		ignores: [
+			'tsconfig.json',
+			'*.config.js',
+			'*.config.ts',
+			'build/',
+			'.svelte-kit/',
+			'docs/.astro/',
+			'docs/dist/',
+			// Files with @html JSON-LD that cause svelte-eslint-parser issues
+			'src/routes/+layout.svelte',
+			'src/routes/+page.svelte',
+			'src/routes/pricing/+page.svelte',
+			'src/routes/changelog/+page.svelte'
+		]
 	},
 	{
 		languageOptions: {
@@ -41,7 +54,9 @@ export default [
 			// Static website doesn't use SvelteKit navigation resolver
 			'svelte/no-navigation-without-resolve': 'off',
 			// Allow external hrefs without $app/paths
-			'svelte/valid-href-attribute': 'off'
+			'svelte/valid-href-attribute': 'off',
+			// Generic interfaces may have properties not used by all consumers
+			'svelte/no-unused-props': 'off'
 		}
 	}
 ];

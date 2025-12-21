@@ -79,7 +79,3 @@ If you discover a security vulnerability, please report it responsibly:
 
 - Email: security@scanopy.net
 - Do not disclose publicly until we've had a chance to address the issue
-
-## Questions?
-
-For security-related questions not covered here, contact us at security@scanopy.net.

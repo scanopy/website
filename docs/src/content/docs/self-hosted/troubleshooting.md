@@ -17,7 +17,7 @@ For daemon-related issues, see [Daemon Troubleshooting](/docs/daemons/troublesho
 
 ```yaml
 ports:
-  - "8080:60072"  # Change 60072 to any available port
+  - '8080:60072' # Change 60072 to any available port
 ```
 
 ### Browser Shows "SSL Protocol Error"
@@ -25,6 +25,7 @@ ports:
 **Symptoms**: Browser displays "ERR_SSL_PROTOCOL_ERROR" when accessing Scanopy
 
 **Cause**: Using `https://` instead of `http://`. Scanopy doesn't handle TLS directly.
+
 ```
 http://your-server:60072
 ```
@@ -63,6 +64,7 @@ docker exec scanopy-daemon curl http://scanopy-server:60072/api/health
 **Solutions**:
 
 1. **Verify bridge network**: Check your Docker bridge IP
+
    ```bash
    docker network inspect bridge | grep Gateway
    ```
@@ -78,6 +80,7 @@ docker exec scanopy-daemon curl http://scanopy-server:60072/api/health
 Scanopy stores all data in PostgreSQL. To backup:
 
 **Docker setup**:
+
 ```bash
 # Backup
 docker exec scanopy-db pg_dump -U postgres scanopy > scanopy_backup.sql
@@ -93,6 +96,7 @@ docker exec -i scanopy-db psql -U postgres scanopy < scanopy_backup.sql
 If SMTP is configured, use the "Forgot Password" link on the login page.
 
 If SMTP is not configured:
+
 1. Generate a new password hash using bcrypt
 2. Update the `users` table with the new hash
 3. Or, ask another Owner to delete and re-invite you

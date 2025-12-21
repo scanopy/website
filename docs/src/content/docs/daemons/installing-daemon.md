@@ -10,7 +10,8 @@ Daemons are lightweight agents that perform network discovery. Deploy daemons on
 **Linux**: Docker with host networking OR standalone binary<br>
 **macOS**: Standalone binary only — Docker Desktop doesn't allow access to host interfaces<br>
 **Windows**: Standalone binary only — Docker Desktop doesn't allow access to host interfaces
-  - **Additional Windows Requirement**: Install [Npcap](https://npcap.com/#download) to enable ARP-based host discovery. Without Npcap, the daemon will use port scanning as a fallback (slower, less reliable for detecting hosts without open ports).
+
+- **Additional Windows Requirement**: Install [Npcap](https://npcap.com/#download) to enable ARP-based host discovery. Without Npcap, the daemon will use port scanning as a fallback (slower, less reliable for detecting hosts without open ports).
 
 ## Creating a Daemon
 
@@ -38,7 +39,7 @@ services:
       - SCANOPY_DAEMON_API_KEY=your-api-key
       - SCANOPY_MODE=pull
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro  # Optional: for Docker discovery
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Optional: for Docker discovery
     restart: unless-stopped
 ```
 
@@ -120,6 +121,7 @@ sudo journalctl -u scanopy-daemon -f
 ![Daemons tab](/docs/images/daemons_tab.png)
 
 **Viewing daemons**:
+
 - Navigate to **Manage > Daemons**
 - See all daemons and their capabilities
 - Check last seen timestamps
@@ -141,22 +143,30 @@ To update daemon capabilities (docker socket integration and interfaced subnets)
 Each daemon reports its capabilities:
 
 **Docker Socket Access**
+
 - **True**: Can discover Docker containers
 - **False**: Cannot access Docker socket
 
 **Interfaced Subnets**
+
 - Lists which subnets the daemon has network interfaces with
 - The daemon will scan these subnets by default during network discovery
 
 ## Uninstalling
 
+**Removing config manually**
+
+If you need to reset a daemon without fully uninstalling, you can do so by removing the config file. On starting the daemon, look for a log line that starts with `Loaded daemon runtime state from...` followed by the path to the config file. If you remove the file at this path, the daemon will re-create a new config the next time it starts up.
+
 **Docker:**
+
 ```bash
 docker stop scanopy-daemon
 docker rm scanopy-daemon
 ```
 
 **Linux/macOS binary:**
+
 ```bash
 # Stop systemd service (if installed)
 sudo systemctl stop scanopy-daemon
@@ -172,6 +182,7 @@ rm -rf ~/Library/Application\ Support/com.scanopy.daemon/  # macOS
 ```
 
 **Windows:**
+
 1. Stop the daemon process
 2. Delete the executable
 3. Remove configuration from `%APPDATA%\scanopy\daemon\`

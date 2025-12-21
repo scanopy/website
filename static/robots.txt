@@ -3,6 +3,6 @@ Allow: /
 
 Sitemap: https://scanopy.net/sitemap.xml
 
-# AI/LLM agent information
-# See https://llmstxt.org for specification
-LLMsTxt: https://scanopy.net/llms.txt
+# RSS Feed
+# Subscribe for release updates
+RSS: https://scanopy.net/feed.xml

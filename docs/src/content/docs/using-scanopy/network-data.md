@@ -53,6 +53,7 @@ To toggle visibility:
 The button turns blue when a host is hidden. Use the **Hidden** column filter to find hidden hosts.
 
 **When to use:**
+
 - Flag decommissioned devices that shouldn't appear in diagrams
 - Mark infrastructure hosts that clutter the visualization (PDUs, UPS units, management interfaces)
 - Identify test or development hosts to exclude from production views
@@ -68,11 +69,13 @@ Subnets represent network segments. Scanopy automatically detects subnets during
 Two special subnet types use CIDR `0.0.0.0/0` and serve as organizational containers rather than real network segments:
 
 **Internet** — For public/external services:
+
 - Public DNS servers (1.1.1.1, 8.8.8.8)
 - Cloud services your network connects to
 - External APIs
 
 **Remote** — For hosts not on your local network:
+
 - Mobile devices connecting via VPN
 - Remote office machines
 - Friend's servers you want to track

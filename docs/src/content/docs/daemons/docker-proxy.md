@@ -17,6 +17,7 @@ volumes:
 ```
 
 **Use when:**
+
 - Daemon runs on same host as Docker
 - You trust the daemon with full Docker API access
 - Simplest setup
@@ -31,6 +32,7 @@ environment:
 ```
 
 **Use when:**
+
 - You want to restrict Docker API operations
 - Daemon runs in a more restricted security context
 - Compliance requires limiting Docker access
@@ -46,11 +48,11 @@ services:
   docker-proxy:
     image: tecnativa/docker-socket-proxy
     environment:
-      - CONTAINERS=1      # Required: list and inspect containers
-      - NETWORKS=1        # Required: list networks for subnet discovery
-      - EXEC=1            # Required: exec into containers for endpoint probing
-      - POST=1            # Required: create exec instances
-      - INFO=1            # Optional: system info
+      - CONTAINERS=1 # Required: list and inspect containers
+      - NETWORKS=1 # Required: list networks for subnet discovery
+      - EXEC=1 # Required: exec into containers for endpoint probing
+      - POST=1 # Required: create exec instances
+      - INFO=1 # Optional: system info
       - BUILD=0
       - COMMIT=0
       - CONFIGS=0
@@ -69,7 +71,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-      - "2375:2375"
+      - '2375:2375'
 ```
 
 ### wollomatic socket-proxy
@@ -84,7 +86,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-      - "2375:2375"
+      - '2375:2375'
 ```
 
 Note: wollomatic's proxy uses allowlists. Refer to their documentation for configuring the required endpoints.
@@ -100,6 +102,7 @@ environment:
 ```
 
 Or via CLI:
+
 ```bash
 scanopy-daemon --docker-proxy http://docker-proxy:2375 ...
 ```
@@ -119,6 +122,7 @@ volumes:
 ```
 
 Or via CLI:
+
 ```bash
 scanopy-daemon \
   --docker-proxy https://docker-proxy:2376 \
@@ -132,14 +136,14 @@ scanopy-daemon \
 
 Scanopy daemon uses the following Docker API endpoints:
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/containers/json` | GET | List running containers |
-| `/containers/{id}/json` | GET | Get container details (ports, networks, config) |
-| `/networks` | GET | List Docker networks for subnet discovery |
-| `/exec/{id}/json` | GET | Check exec instance status |
-| `/containers/{id}/exec` | POST | Create exec instance for endpoint probing |
-| `/exec/{id}/start` | POST | Start exec to probe HTTP endpoints inside containers |
+| Endpoint                | Method | Purpose                                              |
+| ----------------------- | ------ | ---------------------------------------------------- |
+| `/containers/json`      | GET    | List running containers                              |
+| `/containers/{id}/json` | GET    | Get container details (ports, networks, config)      |
+| `/networks`             | GET    | List Docker networks for subnet discovery            |
+| `/exec/{id}/json`       | GET    | Check exec instance status                           |
+| `/containers/{id}/exec` | POST   | Create exec instance for endpoint probing            |
+| `/exec/{id}/start`      | POST   | Start exec to probe HTTP endpoints inside containers |
 
 **Why exec?** Scanopy uses `exec` to probe HTTP endpoints from inside containers that don't expose ports to the host. Without exec access, containers are still discovered but service detection may be less accurate.
 
@@ -154,6 +158,7 @@ Scanopy daemon uses the following Docker API endpoints:
 ### "Permission denied" from proxy
 
 Proxy is blocking required endpoints. For Tecnativa, ensure:
+
 - `CONTAINERS=1`
 - `NETWORKS=1`
 - `EXEC=1` (for endpoint probing)

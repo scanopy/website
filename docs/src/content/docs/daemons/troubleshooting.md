@@ -34,12 +34,14 @@ curl https://your-server-url/api/health
 **Solution**: Reduce concurrent scans in daemon configuration:
 
 **Docker:**
+
 ```yaml
 environment:
-  - SCANOPY_CONCURRENT_SCANS=10  # Reduce from default
+  - SCANOPY_CONCURRENT_SCANS=10 # Reduce from default
 ```
 
 **Binary:**
+
 ```bash
 scanopy-daemon --concurrent-scans 10 ...
 ```
@@ -55,12 +57,14 @@ See [Daemon Configuration](/docs/daemons/daemon-configuration/#concurrent-scans)
 **Solutions**:
 
 1. **Reduce concurrent scans** (easiest):
+
    ```yaml
    environment:
      - SCANOPY_CONCURRENT_SCANS=10
    ```
 
 2. **Increase system file descriptor limit**:
+
    ```bash
    # Check current limit
    ulimit -n

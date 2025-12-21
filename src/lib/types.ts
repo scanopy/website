@@ -77,4 +77,6 @@ export interface GalleryItem {
 	tags: string[];
 	services_count?: number;
 	featured?: boolean;
+	/** If false, skip this item in social media posting workflow. Defaults to false. */
+	social?: boolean;
 }

@@ -12,12 +12,14 @@ Not currently. See [Limitations](/docs/reference/limitations/) for details on wh
 ### What's the difference between Cloud and Self-Hosted?
 
 **Scanopy Cloud**:
+
 - Managed server infrastructure
 - Quick setup — just deploy daemons
 - Automatic updates
 - Subscription pricing
 
 **Self-Hosted**:
+
 - Run everything on your infrastructure
 - Full data control
 - One-time purchase or free (Community Edition)
@@ -28,6 +30,7 @@ Both versions use the same daemon software and have the same features for networ
 ### How do I contribute?
 
 We welcome contributions! See [contributing.md](https://github.com/scanopy/scanopy/blob/main/CONTRIBUTING.md) for:
+
 - Adding service definitions (great first contribution!)
 - Reporting bugs
 - Requesting features
@@ -58,10 +61,10 @@ For best results, deploy a daemon on each network segment. See [Multi-VLAN Deplo
 
 ### What ports does Scanopy use?
 
-| Component | Port | Purpose |
-|-----------|------|---------|
-| Server | 60072 | Web UI and API |
-| Daemon | 60073 | Push mode communication |
+| Component | Port  | Purpose                 |
+| --------- | ----- | ----------------------- |
+| Server    | 60072 | Web UI and API          |
+| Daemon    | 60073 | Push mode communication |
 
 ### Does the daemon need inbound firewall rules?
 

@@ -42,9 +42,7 @@
 				<History class="h-12 w-12 text-sky-400" />
 			</div>
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Changelog</h1>
-			<p class="text-xl text-gray-400">
-				New updates and improvements to Scanopy.
-			</p>
+			<p class="text-xl text-gray-400">New updates and improvements to Scanopy.</p>
 		</div>
 
 		{#if data.entries.length === 0}

@@ -39,16 +39,17 @@ Daemon reports its own capabilities to the server.
 
 ## Run Types
 
-| Type | Behavior |
-|------|----------|
+| Type          | Behavior                                               |
+| ------------- | ------------------------------------------------------ |
 | **Scheduled** | Runs automatically on a cron schedule (default: daily) |
-| **AdHoc** | Manual execution only, for testing or one-time scans |
+| **AdHoc**     | Manual execution only, for testing or one-time scans   |
 
 ## Discovery Duration
 
 **Benchmark**: A /24 subnet (256 IPs) takes **5-10 minutes** to scan.
 
 Factors affecting speed:
+
 - Subnet size (a /16 is 65,536 IPs — avoid scanning these via Network Scan)
 - Concurrent scans setting (default: 15, configurable per daemon)
 - Network latency and host responsiveness
@@ -61,8 +62,8 @@ When a host is discovered, Scanopy determines its name using this priority:
 
 1. **Reverse DNS** — hostname from PTR record, if available
 2. **Best Service** or **IP** — configurable fallback per discovery:
-   - *Best Service*: Uses the first named service found on the host
-   - *IP*: Uses the host's IP address
+   - _Best Service_: Uses the first named service found on the host
+   - _IP_: Uses the host's IP address
 3. **Remaining fallback** — whichever option wasn't selected in step 2
 
 Configure naming strategy in the discovery type settings.

@@ -31,19 +31,20 @@ Detection happens in phases:
 
 Each service has a **detection pattern** that specifies what to look for. Patterns can include:
 
-| Check | What It Does |
-|-------|--------------|
-| **Port** | Is a specific port open? |
-| **Endpoint** | Does the HTTP response body contain a string? |
-| **Header** | Does an HTTP header contain a value? |
+| Check          | What It Does                                      |
+| -------------- | ------------------------------------------------- |
+| **Port**       | Is a specific port open?                          |
+| **Endpoint**   | Does the HTTP response body contain a string?     |
+| **Header**     | Does an HTTP header contain a value?              |
 | **MAC Vendor** | Does the device's MAC address belong to a vendor? |
-| **Gateway** | Is this IP in the daemon's routing table? |
+| **Gateway**    | Is this IP in the daemon's routing table?         |
 
 Patterns can be combined with **AllOf** (all must match) or **AnyOf** (any can match).
 
 ### Example: Pi-hole
 
 Pi-hole's pattern requires:
+
 - DNS port open (53/tcp OR 53/udp) **AND**
 - HTTP response from `/admin` contains "pi-hole"
 
@@ -52,6 +53,7 @@ Both conditions must be true for Pi-hole to be detected.
 ### Example: Plex
 
 Plex's pattern accepts either:
+
 - HTTP response from port 32400 `/web/index.html` contains "Plex" **OR**
 - HTTP response has `X-Plex-Protocol` header
 
@@ -61,22 +63,23 @@ Either condition is sufficient.
 
 Each detected service has a confidence level indicating match strength.
 
-| Level | Meaning |
-|-------|---------|
+| Level       | Meaning                                              |
+| ----------- | ---------------------------------------------------- |
 | **Certain** | System services only (Scanopy Daemon, Docker Daemon) |
-| **High** | Strong match — endpoint content or header matched |
-| **Medium** | Moderate match — MAC vendor or unique port |
-| **Low** | Weak match — common port, could be multiple services |
-| **N/A** | Generic service — definitional match (port 53 = DNS) |
+| **High**    | Strong match — endpoint content or header matched    |
+| **Medium**  | Moderate match — MAC vendor or unique port           |
+| **Low**     | Weak match — common port, could be multiple services |
+| **N/A**     | Generic service — definitional match (port 53 = DNS) |
 
 ### Generic Services
 
 Some services are **generic** — they're defined by their port alone:
+
 - Port 53 → DNS Server
 - Port 5432 → PostgreSQL
 - Port 22 → SSH
 
-These show "N/A" confidence because there's no uncertainty. Port 53 *is* DNS by definition. If you're running a specific DNS server (Pi-hole, AdGuard), it will be detected separately with its own pattern.
+These show "N/A" confidence because there's no uncertainty. Port 53 _is_ DNS by definition. If you're running a specific DNS server (Pi-hole, AdGuard), it will be detected separately with its own pattern.
 
 ## Improving Detection
 
@@ -95,6 +98,7 @@ If a service isn't detected:
    [Missing service request](https://github.com/scanopy/scanopy/issues/new?template=missing-service-detection.md)
 
 When requesting, include:
+
 - Service name and what it does
 - Default port(s)
 - Any unique HTTP endpoints or headers

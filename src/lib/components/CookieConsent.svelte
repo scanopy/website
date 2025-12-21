@@ -1,17 +1,17 @@
 <script lang="ts">
-	import posthog from 'posthog-js';
-	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
-	import { evaluateCtaFlag, initFeatureFlags } from '$lib/analytics.svelte';
+	import { type CookiePreferences, getGdprPreferences, saveGdprPreferences } from '$lib/cookies';
+	import { optInAnalytics, optOutAnalytics, isPostHogLoaded, getPostHog } from '$lib/posthog';
 
-	const COOKIE_NAME = 'scanopy_gdpr';
-	const COOKIE_DOMAIN = dev ? '' : '.scanopy.net';
-	const COOKIE_DAYS = 365;
-
-	interface CookiePreferences {
-		necessary: boolean;
-		analytics: boolean;
+	/**
+	 * Optional callback when analytics preferences change.
+	 * Used by main site for feature flags, ignored by docs.
+	 */
+	interface Props {
+		onAnalyticsChange?: (enabled: boolean) => void;
 	}
+
+	let { onAnalyticsChange }: Props = $props();
 
 	let preferences: CookiePreferences = $state({
 		necessary: true,
@@ -25,50 +25,30 @@
 
 	onMount(() => {
 		mounted = true;
-		const saved = getCookie(COOKIE_NAME);
+		const saved = getGdprPreferences();
 		if (saved) {
-			try {
-				const parsed = JSON.parse(saved) as CookiePreferences;
-				preferences = { ...preferences, ...parsed };
-				hasConsented = true;
-				applyPreferences();
-			} catch {
-				showBanner = true;
-			}
+			preferences = { ...preferences, ...saved };
+			hasConsented = true;
+			applyPreferences();
 		} else {
 			showBanner = true;
 		}
 	});
 
-	function getCookie(name: string): string | null {
-		const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-		return match ? decodeURIComponent(match[2]) : null;
-	}
-
-	function setCookie(name: string, value: string, days: number) {
-		const expires = new Date(Date.now() + days * 864e5).toUTCString();
-		const domain = COOKIE_DOMAIN ? `; domain=${COOKIE_DOMAIN}` : '';
-		document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/${domain}; SameSite=Lax`;
-	}
-
-	async function applyPreferences() {
-		if (posthog.__loaded) {
+	function applyPreferences() {
+		if (isPostHogLoaded()) {
 			if (preferences.analytics) {
-				// Switch to cookie-based persistence
-    			posthog.set_config({ persistence: 'localStorage+cookie' });
-				posthog.opt_in_capturing();
-
-				initFeatureFlags();
-
-				posthog.reloadFeatureFlags();
+				optInAnalytics();
+				getPostHog().reloadFeatureFlags();
 			} else {
-				posthog.opt_out_capturing();
+				optOutAnalytics();
 			}
 		}
+		onAnalyticsChange?.(preferences.analytics);
 	}
 
 	function savePreferences() {
-		setCookie(COOKIE_NAME, JSON.stringify(preferences), COOKIE_DAYS);
+		saveGdprPreferences(preferences);
 		hasConsented = true;
 		showBanner = false;
 		showSettings = false;
