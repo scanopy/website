@@ -60,16 +60,30 @@ jobs:
 
           echo "Processing gallery entry: $TITLE by $AUTHOR_NAME"
 
-          # Update posted tracking file
-          jq --arg id "$ID" --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+      - name: Download gallery image
+        if: steps.gallery.outputs.has_entry == 'true'
+        run: |
+          curl -L -o gallery-image.png "${{ steps.gallery.outputs.image }}"
+          echo "Downloaded image from ${{ steps.gallery.outputs.image }}"
+
+      - name: Update posted tracking file
+        if: steps.gallery.outputs.has_entry == 'true'
+        run: |
+          POSTED_FILE=".github/gallery-posted.json"
+          jq --arg id "${{ steps.gallery.outputs.id }}" --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             '.posted += [{"id": $id, "posted_at": $date}]' "$POSTED_FILE" > tmp.json
           mv tmp.json "$POSTED_FILE"
 
       - name: Post to Twitter/X
         if: steps.gallery.outputs.has_entry == 'true'
-        uses: noweh/post-tweet-v2-action@v1.0
+        uses: snow-actions/tweet@v1.4.0
+        env:
+          CONSUMER_API_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+          CONSUMER_API_SECRET_KEY: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
         with:
-          message: |
+          status: |
             Community Showcase: ${{ steps.gallery.outputs.title }}
 
             ${{ steps.gallery.outputs.description }}
@@ -79,10 +93,7 @@ jobs:
             Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery
 
             ${{ steps.gallery.outputs.tags }} #Scanopy #NetworkDiagram #Homelab
-          consumer-key: ${{ secrets.TWITTER_CONSUMER_KEY }}
-          consumer-secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
-          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          media_paths: gallery-image.png
 
       - name: Post to Bluesky
         if: steps.gallery.outputs.has_entry == 'true'
@@ -98,6 +109,8 @@ jobs:
             Check out more at https://scanopy.net/showcase?utm_source=bluesky&utm_medium=social&utm_campaign=gallery
 
             ${{ steps.gallery.outputs.tags }} #Scanopy #NetworkDiagram #Homelab
+          media: gallery-image.png
+          media-alt: "Network diagram: ${{ steps.gallery.outputs.title }} by ${{ steps.gallery.outputs.author_name }}"
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
 
