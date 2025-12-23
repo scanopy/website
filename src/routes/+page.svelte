@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import { GithubStars } from '$lib/components';
+	import { GithubStars, FeaturedIn } from '$lib/components';
+	import type { PressMention } from '$lib/types';
+	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import {
 		Network,
 		Eye,
@@ -89,6 +91,8 @@
 			author: 'u/Medium_Chemist_4032'
 		}
 	];
+
+	const pressMentions = pressMentionsData as PressMention[];
 </script>
 
 <svelte:head>
@@ -243,6 +247,9 @@
 		</div>
 	</div>
 </section>
+
+<!-- Featured In Section -->
+<FeaturedIn mentions={pressMentions} />
 
 <!-- CTA Section -->
 <section class="border-t border-gray-800 py-20">

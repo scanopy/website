@@ -80,3 +80,11 @@ export interface GalleryItem {
 	/** If false, skip this item in social media posting workflow. Defaults to false. */
 	social?: boolean;
 }
+
+export interface PressMention {
+	id: string;
+	name: string;
+	quote?: string;
+	url: string;
+	logo: string;
+}

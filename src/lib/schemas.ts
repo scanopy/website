@@ -60,9 +60,15 @@ function generateOffers() {
 			'@type': 'Offer',
 			name: plan.name,
 			description: plan.description,
-			...(price && { price, priceCurrency: 'USD' }),
-			...(price && price !== '0' && { priceValidUntil: '2026-12-31' }),
-			availability: 'https://schema.org/InStock'
+			price: price ?? '0',
+			priceCurrency: 'USD',
+			priceValidUntil: '2025-12-31',
+			availability: 'https://schema.org/InStock',
+			url: 'https://scanopy.net/pricing',
+			seller: {
+				'@type': 'Organization',
+				name: 'Scanopy'
+			}
 		};
 	});
 }
@@ -112,6 +118,7 @@ export function getProductSchema() {
 		name: 'Scanopy',
 		description:
 			'Automatic network discovery and documentation software. Create live, auto-updating network diagrams.',
+		image: 'https://scanopy.net/scanopy-logo.png',
 		brand: {
 			'@type': 'Brand',
 			name: 'Scanopy'

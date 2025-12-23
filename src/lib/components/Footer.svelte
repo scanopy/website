@@ -90,12 +90,6 @@
 				<h4 class="mb-4 font-semibold text-white">Resources</h4>
 				<ul class="space-y-2">
 					<li>
-						<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
-					</li>
-					<li>
-						<a href="/showcase" class="text-sm text-gray-400 hover:text-white">Showcase</a>
-					</li>
-					<li>
 						<a
 							href="https://github.com/scanopy/scanopy"
 							target="_blank"
@@ -106,6 +100,12 @@
 							<Icon icon="simple-icons:github" class="h-4 w-4" />
 							GitHub
 						</a>
+					</li>
+					<li>
+						<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
+					</li>
+					<li>
+						<a href="/showcase" class="text-sm text-gray-400 hover:text-white">Showcase</a>
 					</li>
 				</ul>
 			</div>

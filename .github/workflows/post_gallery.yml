@@ -74,26 +74,67 @@ jobs:
             '.posted += [{"id": $id, "posted_at": $date}]' "$POSTED_FILE" > tmp.json
           mv tmp.json "$POSTED_FILE"
 
-      - name: Post to Twitter/X
+      - name: Setup Node.js
         if: steps.gallery.outputs.has_entry == 'true'
-        uses: snow-actions/tweet@v1.4.0
-        env:
-          CONSUMER_API_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
-          CONSUMER_API_SECRET_KEY: ${{ secrets.TWITTER_CONSUMER_SECRET }}
-          ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-          ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+        uses: actions/setup-node@v4
         with:
-          status: |
-            Community Showcase: ${{ steps.gallery.outputs.title }}
+          node-version: '20'
 
-            ${{ steps.gallery.outputs.description }}
+      - name: Post to Twitter/X with media
+        if: steps.gallery.outputs.has_entry == 'true'
+        env:
+          TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+          TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          TWEET_TITLE: ${{ steps.gallery.outputs.title }}
+          TWEET_DESCRIPTION: ${{ steps.gallery.outputs.description }}
+          TWEET_AUTHOR: ${{ steps.gallery.outputs.author_name }}
+          TWEET_TAGS: ${{ steps.gallery.outputs.tags }}
+        run: |
+          npm install twitter-api-v2
+          node << 'SCRIPT'
+          const { TwitterApi } = require('twitter-api-v2');
 
-            Submitted by ${{ steps.gallery.outputs.author_name }}
+          const client = new TwitterApi({
+            appKey: process.env.TWITTER_CONSUMER_KEY,
+            appSecret: process.env.TWITTER_CONSUMER_SECRET,
+            accessToken: process.env.TWITTER_ACCESS_TOKEN,
+            accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+          });
 
-            Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery
+          async function postTweet() {
+            try {
+              // Upload media using v1.1 API (available on free tier)
+              const mediaId = await client.v1.uploadMedia('./gallery-image.png');
+              console.log('Media uploaded, ID:', mediaId);
 
-            ${{ steps.gallery.outputs.tags }} #Scanopy #NetworkDiagram #Homelab
-          media_paths: gallery-image.png
+              // Compose tweet text
+              const text = `Community Showcase: ${process.env.TWEET_TITLE}
+
+          ${process.env.TWEET_DESCRIPTION}
+
+          Submitted by ${process.env.TWEET_AUTHOR}
+
+          Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery
+
+          ${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`;
+
+              // Post tweet using v2 API with media
+              const tweet = await client.v2.tweet({
+                text: text,
+                media: { media_ids: [mediaId] }
+              });
+
+              console.log('Tweet posted successfully:', tweet.data.id);
+            } catch (error) {
+              console.error('Error posting tweet:', error);
+              process.exit(1);
+            }
+          }
+
+          postTweet();
+          SCRIPT
 
       - name: Post to Bluesky
         if: steps.gallery.outputs.has_entry == 'true'

@@ -30,7 +30,7 @@
 	{
 		"id": "sharing",
 		"title": "Share with anyone",
-		"description": "Export diagrams, send live view links, or create embeds (coming soon).",
+		"description": "Export diagrams, send live view links, or create embeds.",
 		"icon": "FileCode",
 		"schemaLabel": "Diagram sharing and export"
 	},

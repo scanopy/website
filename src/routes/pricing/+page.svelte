@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { BillingPlanForm } from '$lib/components';
+	import { BillingPlanForm, FeaturedIn } from '$lib/components';
+	import type { PressMention } from '$lib/types';
+	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import type {
 		BillingPlan,
 		BillingPlanType,
@@ -159,6 +161,8 @@
 	// Get schemas from unified schema utilities
 	const productSchema = getProductSchema();
 	const faqSchema = getFAQSchema();
+
+	const pressMentions = pressMentionsData as PressMention[];
 </script>
 
 <svelte:head>
@@ -189,3 +193,5 @@
 		/>
 	</div>
 </section>
+
+<FeaturedIn mentions={pressMentions} />
