@@ -1,0 +1,11 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Scanopy API",
+    "description": "Coming Soon!",
+    "license": {
+      "name": "Dual License - AGPL3.0, Commercial Licensing Available"
+    },
+    "version": "0.12.5"
+  }
+}

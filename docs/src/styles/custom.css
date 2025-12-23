@@ -209,3 +209,46 @@ table {
 ::-webkit-scrollbar-thumb:hover {
 	background-color: #4b5563;
 }
+
+/* ============================================
+   OPENAPI DOCS STYLES
+   ============================================ */
+
+/* Add dividers between property rows */
+.key.not-content {
+	padding: 0.75rem 0;
+	border-bottom: 1px solid rgba(55, 65, 81, 0.4);
+}
+
+.key.not-content:last-child {
+	border-bottom: none;
+}
+
+/* Better spacing for nested objects */
+details details {
+	margin-top: 0.5rem;
+	padding: 0.5rem 0 0.5rem 1rem;
+	background: rgba(17, 24, 39, 0.3);
+	border-radius: 0.375rem;
+}
+
+/* Make property names stand out more */
+.key .name strong {
+	color: var(--sl-color-white);
+}
+
+/* Subtle background for nested object containers */
+details[open] > summary + * {
+	margin-top: 0.5rem;
+}
+
+/* Better visual hierarchy for type badges */
+.key .description .type {
+	font-size: 0.9em;
+}
+
+/* Override starlight-openapi plugin's code block background to use theme colors */
+div.expressive-code .frame pre {
+	background-color: var(--ec-frm-edBg) !important;
+}
+

@@ -9,6 +9,12 @@ const POSTHOG_HOST = 'https://ph.scanopy.net';
 
 {head.map(({ tag: Tag, attrs, content }) => <Tag {...attrs} set:html={content} />)}
 
+<!-- Force dark mode regardless of system preference -->
+<script is:inline>
+	document.documentElement.setAttribute('data-theme', 'dark');
+	localStorage.setItem('starlight-theme', 'dark');
+</script>
+
 <!-- PostHog Analytics - initialized via shared utility -->
 <script>
 	import { initPostHog, capturePageview } from '$lib/posthog';

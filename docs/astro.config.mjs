@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi';
 import svelte from '@astrojs/svelte';
 import tailwind from '@astrojs/tailwind';
 import path from 'path';
@@ -21,6 +22,15 @@ export default defineConfig({
 		svelte(),
 		tailwind({ applyBaseStyles: false }),
 		starlight({
+			plugins: [
+				starlightOpenAPI([
+					{
+						base: 'api',
+						label: 'API Reference',
+						schema: '../src/lib/fixtures/openapi.json',
+					},
+				]),
+			],
 			title: 'Scanopy Docs',
 			logo: {
 				src: '../static/scanopy-logo.png',
@@ -29,7 +39,8 @@ export default defineConfig({
 			favicon: '/favicon.png',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/scanopy/scanopy' }],
 			expressiveCode: {
-				themes: ['github-dark'],
+				themes: ['tokyo-night'],
+				useDarkModeMediaQuery: false,
 				styleOverrides: {
 					borderColor: 'rgba(55, 65, 81, 0.5)',
 					borderRadius: '0.75rem',
@@ -87,7 +98,8 @@ export default defineConfig({
 						{ label: 'Security', slug: 'reference/security' },
 						{ label: 'FAQ', slug: 'reference/faq' }
 					]
-				}
+				},
+				...openAPISidebarGroups
 			]
 		})
 	]
