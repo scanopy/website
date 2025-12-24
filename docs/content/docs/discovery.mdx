@@ -78,9 +78,11 @@ When a daemon discovers a host, Scanopy checks if it already exists before creat
 - A host is rediscovered across multiple scan sessions
 - Docker and Network discovery both find the same machine
 
+Host deduplication is only applied to hosts on the same [Network](/organization/#networks). If two hosts on different Networks meet the criteria below, they will not be deduplicated.
+
 ### Interface Matching
 
-Scanopy identifies duplicate hosts by comparing network interfaces. Two interfaces are considered the same if **any** of these conditions are true:
+Scanopy primarily identifies duplicate hosts by comparing network interfaces. Two interfaces are considered the same if **any** of these conditions are true:
 
 | Condition | When it applies |
 | --------- | --------------- |
@@ -89,9 +91,28 @@ Scanopy identifies duplicate hosts by comparing network interfaces. Two interfac
 
 MAC addresses are available when the daemon is directly connected to the subnet being scanned (via ARP) or from Docker container network configuration. See [Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3) for details on when MAC addresses are collected.
 
+### Docker Host Matching
+
+Docker discovery is local-only — it discovers containers on the daemon's own host, not remote machines. All discovered services are assigned to that host.
+
+This has two implications:
+
+- **No cross-host deduplication**: Since Docker discovery only sees one host, there's nothing to deduplicate
+- **Docker proxies don't change this**: Even when using a [Docker Socket Proxy](/docker-proxy/) pointing to a remote host, services are still assigned to the daemon's host
+
+For accurate Docker discovery, run the daemon on the same machine as Docker.
+
 ### Upsert Behavior
 
 When a duplicate is found, Scanopy merges the new discovery data into the existing host rather than creating a duplicate:
+
+**Entities merged**
+
+Ports, interfaces, and services discovered on the duplicate will be reconciled against the existing host and deduplicated.
+
+- **Ports**: Must have same number and protocol to be considered a duplicate
+- **Interfaces**: As described above, must have same IP + subnet OR same MAC address to be considered a duplicate
+- **Services**: Follow complex deduplication logic that depends on the type of service detected. Refer to `backend/src/server/services/impl/base.rs -> impl PartialEq` if you are curious.
 
 **Fields merged (only if not already set):**
 
