@@ -7,7 +7,7 @@
 		"postinstall": "npm install --prefix docs",
 		"dev": "vite dev",
 		"dev:docs": "npm run dev --prefix docs",
-		"build": "vite build && npm run build --prefix docs && cp -r docs/dist build/docs",
+		"build": "vite build && npm run build --prefix docs && cp -r docs/out/docs build/docs && cp -r docs/out/_next build/docs/_next && cp -r docs/out/images build/docs/images",
 		"build:site": "vite build",
 		"build:docs": "npm run build --prefix docs",
 		"preview": "vite preview",

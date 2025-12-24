@@ -1,0 +1,99 @@
+---
+title: Installing a Daemon
+description: How to install and deploy Scanopy daemons on your networks.
+---
+
+Daemons are lightweight agents that perform network discovery. Deploy daemons on each network segment you want to scan.
+
+## Requirements
+
+- **Linux**: Docker with host networking OR standalone binary
+- **macOS**: Standalone binary only — Docker Desktop doesn't allow access to host interfaces
+- **Windows**: Standalone binary only — Docker Desktop doesn't allow access to host interfaces
+  - **Additional Windows Requirement**: Install [Npcap](https://npcap.com/#download) to enable ARP-based host discovery. Without  Npcap, the daemon will use port scanning as a fallback (slower, less reliable for detecting hosts without open ports).
+
+## Creating a Daemon
+
+1. Navigate to **Manage > Daemons** in the Scanopy UI
+2. Click **"Create Daemon"**
+3. Select the target network
+4. Select daemon mode:
+   - **Pull** (recommended): Daemon polls server for work — no inbound firewall rules needed
+   - **Push**: Server initiates scans — daemon must be reachable from server
+5. Click **"Generate Key"** to create an API key
+6. Copy either the Docker Compose or binary installation command
+
+## Managing Daemons
+
+**Updating daemon properties**:
+
+You can update all daemon properties after creation; however, you'll need to restart the daemon for property updates to take effect.
+
+Name, Mode, and URL will be propagated to the server if changed. All other properties are local to the daemon and not stored on the server.
+
+To update daemon capabilities (docker socket integration and interfaced subnets), you'll need to run a SelfReport discovery to report the new capabilities to the server.
+
+**Deleting a daemon**: Click the delete icon. You'll also need to uninstall the daemon from the host it's running on.
+
+**Important**: Deleting a daemon does NOT delete discovered data. Hosts, services, and topology remain until explicitly deleted.
+
+## Daemon Capabilities
+
+Each daemon reports its capabilities:
+
+**Docker Socket Access**
+
+- **True**: Can discover Docker containers
+- **False**: Cannot access Docker socket
+
+**Interfaced Subnets**
+
+- Lists which subnets the daemon has network interfaces with
+- The daemon will scan these subnets by default during network discovery
+
+## Uninstalling
+
+**Removing config manually**
+
+If you need to reset a daemon without fully uninstalling, you can do so by removing the config file. On starting the daemon, look for a log line that starts with `Loaded daemon runtime state from...` followed by the path to the config file. If you remove the file at this path, the daemon will re-create a new config the next time it starts up.
+
+**Docker:**
+
+```bash
+docker stop scanopy-daemon
+docker rm scanopy-daemon
+```
+
+**Linux/macOS binary:**
+
+```bash
+# Stop systemd service (if installed)
+sudo systemctl stop scanopy-daemon
+sudo systemctl disable scanopy-daemon
+sudo rm /etc/systemd/system/scanopy-daemon.service
+
+# Remove binary
+sudo rm /usr/local/bin/scanopy-daemon
+
+# Remove configuration
+rm -rf ~/.config/scanopy/  # Linux
+rm -rf ~/Library/Application\ Support/com.scanopy.daemon/  # macOS
+```
+
+**Windows:**
+
+1. Stop the daemon process
+2. Delete the executable
+3. Remove configuration from `%APPDATA%\scanopy\daemon\`
+
+### What Happens to Your Data
+
+Uninstalling a daemon does **not** delete discovered data. All hosts, services, subnets, and topology data remain on the server until you explicitly delete them.
+
+The daemon record will still appear in **Manage > Daemons** until you delete it there.
+
+### Can I Migrate a Daemon?
+
+No. Daemons discover host-specific data (network interfaces, Docker containers, local services) that's tied to the machine they run on. Moving a daemon's identity to a different host would result in inaccurate visualizations.
+
+If you're replacing a host, create a new daemon on the new machine and delete the old one.
