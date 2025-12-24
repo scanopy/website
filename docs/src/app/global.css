@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@import 'fumadocs-openapi/css/preset.css';
+
+/* Scanopy dark theme - matches main website */
+:root {
+  /* Force dark mode */
+  color-scheme: dark;
+
+  /* Background colors - dark navy theme */
+  --color-fd-background: #1a1d29;
+  --color-fd-muted: #151821;
+  --color-fd-card: #1f2937;
+
+  /* Text colors */
+  --color-fd-foreground: #f8fafc;
+  --color-fd-muted-foreground: #94a3b8;
+
+  /* Primary accent - blue */
+  --color-fd-primary: #3b82f6;
+  --color-fd-primary-foreground: #ffffff;
+
+  /* Secondary/accent - rose for interactive elements */
+  --color-fd-accent: rgba(251, 113, 133, 0.1);
+  --color-fd-accent-foreground: #fb7185;
+
+  /* Border colors */
+  --color-fd-border: rgba(55, 65, 81, 0.5);
+
+  /* Ring/focus color */
+  --color-fd-ring: #3b82f6;
+}
+
+/* Hide theme toggle - dark only */
+[data-theme-toggle] {
+  display: none !important;
+}
+
+/* Sidebar selected item - rose accent */
+nav[aria-label="Docs"] a[aria-current="page"] {
+  color: #fb7185 !important;
+  background: rgba(251, 113, 133, 0.1);
+}
+
+/* Link hover - rose accent */
+.prose a:hover {
+  color: #fb7185;
+}
+
+/* Scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #374151 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #374151;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #4b5563;
+}
