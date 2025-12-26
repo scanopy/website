@@ -45,10 +45,130 @@
 		},
 		{
 			id: 'topology-versioning',
-			name: 'Topology Versioning & Lineage',
+			name: 'Network Versioning & Lineage',
 			description:
 				'Track how your network evolves over time. Compare snapshots, visualize changes, and explore topology history.',
 			category: 'Visualization',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'api-access',
+			name: 'API Access',
+			description:
+				'Programmatic access to Scanopy data and functionality. Enable third-party integrations and custom workflows.',
+			category: 'Developer',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'plugin-system',
+			name: 'Plugin/Extension System',
+			description:
+				'Extend Scanopy with custom plugins. Add new integrations and functionality.',
+			category: 'Developer',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'snmp-discovery',
+			name: 'SNMP Discovery',
+			description:
+				'Discover network devices and infrastructure via SNMP. Gain visibility into switches, routers, and other network equipment.',
+			category: 'Discovery',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'proxmox-integration',
+			name: 'Proxmox Integration',
+			description:
+				'Discover and map Proxmox VE environments. Track VMs, containers, and cluster topology.',
+			category: 'Discovery',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'kubernetes-integration',
+			name: 'Kubernetes Integration',
+			description:
+				'Discover and visualize Kubernetes clusters. Map pods, services, deployments, and their relationships.',
+			category: 'Discovery',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'aws-integration',
+			name: 'AWS Integration',
+			description:
+				'Discover and map AWS infrastructure. Track EC2 instances, VPCs, and cloud resources.',
+			category: 'Discovery',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'gcp-integration',
+			name: 'GCP Integration',
+			description:
+				'Discover and map Google Cloud Platform infrastructure. Track Compute Engine instances, VPCs, and cloud resources.',
+			category: 'Discovery',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'azure-integration',
+			name: 'Azure Integration',
+			description:
+				'Discover and map Microsoft Azure infrastructure. Track virtual machines, VNets, and cloud resources.',
+			category: 'Discovery',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'netbox-integration',
+			name: 'NetBox Integration',
+			description:
+				'Sync discovered infrastructure with NetBox. Auto-populate devices, IPs, and connections in your IPAM/DCIM system.',
+			category: 'Integrations',
+			icon: null,
+			color: null,
+			metadata: {
+				is_coming_soon: true
+			}
+		},
+		{
+			id: 'unifi-integration',
+			name: 'Unifi API Support',
+			description:
+				'Discover and map Unifi network infrastructure. Integrate with Unifi controllers for enhanced visibility.',
+			category: 'Discovery',
 			icon: null,
 			color: null,
 			metadata: {
