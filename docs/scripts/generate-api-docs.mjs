@@ -252,6 +252,54 @@ function addMethodToTitles(apiDir) {
   console.log('Added method prefixes to API page titles');
 }
 
+// Generate index.mdx files for each API tag folder with tag descriptions
+function generateIndexPages(spec, apiDir) {
+  // Build a map of tag name -> description from the spec
+  const tagDescriptions = {};
+  if (spec.tags) {
+    for (const tag of spec.tags) {
+      tagDescriptions[tag.name] = tag.description || '';
+    }
+  }
+
+  // Get all folders in the API directory
+  const folders = readdirSync(apiDir, { withFileTypes: true })
+    .filter(d => d.isDirectory())
+    .map(d => d.name);
+
+  for (const folder of folders) {
+    const folderPath = resolve(apiDir, folder);
+    const description = tagDescriptions[folder];
+
+    // Skip folders without a description
+    if (!description) {
+      console.log(`Skipped index.mdx for ${folder} (no description)`);
+      continue;
+    }
+
+    // Convert folder_name to Title Case
+    const acronyms = ['api', 'id', 'oidc', 'url', 'uri'];
+    const title = folder
+      .split('_')
+      .map(word => {
+        if (acronyms.includes(word.toLowerCase())) {
+          return word.toUpperCase();
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
+
+    const indexContent = `---
+title: Overview
+description: ${description}
+---
+`;
+
+    writeFileSync(resolve(folderPath, 'index.mdx'), indexContent);
+    console.log(`Generated index.mdx for ${folder}`);
+  }
+}
+
 // Generate meta.json files for each API tag folder
 function generateMetaFiles(spec, apiDir) {
   // Method sort order
@@ -265,9 +313,12 @@ function generateMetaFiles(spec, apiDir) {
   for (const folder of folders) {
     const folderPath = resolve(apiDir, folder);
 
-    // Get all .mdx files with their methods for sorting
+    // Check if index.mdx exists
+    const hasIndex = existsSync(resolve(folderPath, 'index.mdx'));
+
+    // Get all .mdx files with their methods for sorting (exclude index)
     const files = readdirSync(folderPath)
-      .filter(f => f.endsWith('.mdx'))
+      .filter(f => f.endsWith('.mdx') && f !== 'index.mdx')
       .map(f => {
         const name = f.replace('.mdx', '');
         const content = readFileSync(resolve(folderPath, f), 'utf-8');
@@ -298,7 +349,7 @@ function generateMetaFiles(spec, apiDir) {
 
     const meta = {
       title,
-      pages: files,
+      pages: hasIndex ? ['index', ...files] : files,
     };
 
     writeFileSync(
@@ -330,6 +381,10 @@ async function main() {
 
   // Add method prefixes to page titles
   addMethodToTitles(apiDir);
+
+  // Generate index pages with tag descriptions
+  generateIndexPages(spec, apiDir);
+  console.log('Index pages generated successfully');
 
   // Generate meta.json files for each tag folder
   generateMetaFiles(spec, apiDir);

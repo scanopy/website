@@ -3,7 +3,7 @@ title: Multi-VLAN Deployment
 description: Deploying Scanopy daemons across multiple VLANs and network segments.
 ---
 
-Scanopy uses daemons to discover hosts and services. For isolated VLANs, you'll need additional daemons deployed on each network segment.
+Scanopy uses daemons to discover hosts and services. For best results with isolated VLANs, you'll need additional daemons deployed on each network segment.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -22,6 +22,8 @@ Scanopy uses daemons to discover hosts and services. For isolated VLANs, you'll 
 └───────────────┘ └───────────────┘ └───────────────┘
 ```
 
+Refer to [Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3) for details on what the daemon will be able to discover on a given VLAN based on whether or not it has an interface with the VLAN.
+
 ## When You Need Multiple Daemons
 
 ### One Daemon is Enough When:
@@ -30,12 +32,14 @@ Scanopy uses daemons to discover hosts and services. For isolated VLANs, you'll 
 - You have a management host with routes to all VLANs
 - Your firewall allows the daemon to reach all subnets
 - You don't need MAC addresses from isolated networks
+- You are ok with the daemon not discovering all hosts on any non-interfaced VLAN it scans
 
 ### You Need Multiple Daemons When:
 
 - VLANs are isolated by firewall rules
 - You need accurate MAC address collection (requires [Layer 2 access](/limitations/#layer-2-vs-layer-3))
 - Different networks have different security requirements
+- You want the daemon to discover all hosts on VLANs that it scans
 
 ## Deployment Strategies
 
@@ -73,37 +77,18 @@ Central daemon for routable networks, dedicated daemons for isolated segments.
 | 10   | 192.168.10.0/24 | IoT        | IoT management VM |
 | 20   | 192.168.20.0/24 | Guest      | Guest network AP  |
 
-### Step 2: Create Daemon in Scanopy UI
-
-1. Navigate to **Manage > Daemons**
-2. Click **"Create Daemon"**
-3. Select the target network
-4. Choose daemon mode:
-   - **Pull**: Daemon polls for work (daemon only needs outbound access to server)
-   - **Push**: Server initiates scans (daemon must be reachable from server)
-5. Click **"Generate Key"**
-6. Copy the installation command
-
-### Step 3: Deploy Daemon
+### Step 2: Create Daemon in Scanopy UI and Deploy Daemon
 
 Follow the installation instructions in [Installing a Daemon](/installing-daemon/).
 
 For Docker container discovery on the daemon host, see [Docker Socket Proxy](/docker-proxy/).
 
-### Step 4: Configure Discovery
+### Step 3: Observer Discovery Results
 
-1. Navigate to **Discover > Scheduled**
-2. Click **"Create Discovery"**
-3. Select the daemon you deployed
-4. Choose **Network Scan**
-5. Select subnets to scan
-6. Set schedule or run manually
+The Daemon will automatically begin discovery after it successfully registers with the server. Simply let it do its thing and watch the results come in.
 
-### Step 5: Verify
-
-1. Run a manual discovery from **Discover > Sessions**
-2. Check **Manage > Hosts** for discovered devices
-3. Verify **Topology** shows hosts from all VLANs
+1. Check **Manage > Hosts** for discovered devices
+2. Verify **Topology** shows hosts from all VLANs
 
 For consolidating hosts that appear on multiple VLANs, see [Consolidating Duplicate Hosts](/network-data/#consolidating-duplicate-hosts).
 

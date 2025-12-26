@@ -29,6 +29,7 @@
     "faq",
     "---API Reference---",
     "api/api_keys",
+    "api/auth",
     "api/bindings",
     "api/daemons",
     "api/discoveries",
@@ -40,8 +41,10 @@
     "api/organizations",
     "api/ports",
     "api/services",
+    "api/shares",
     "api/subnets",
     "api/tags",
+    "api/topology",
     "api/users"
   ]
 }

@@ -71,3 +71,9 @@ nav[aria-label="Docs"] a[aria-current="page"] {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #4b5563;
 }
+
+/* Hide required/optional indicators in response body schemas */
+#response-body ~ * .font-medium.font-mono.text-fd-primary > .text-red-400,
+#response-body ~ * .font-medium.font-mono.text-fd-primary > .text-fd-muted-foreground {
+  display: none;
+}

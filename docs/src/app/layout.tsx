@@ -16,7 +16,7 @@ export const metadata = {
   },
   description: 'Documentation for Scanopy - Network discovery and visualization',
   icons: {
-    icon: '/scanopy-logo.png',
+    icon: '/docs/scanopy-logo.png',
   },
 };
 
@@ -25,6 +25,12 @@ export default function Layout({ children }: LayoutProps<'/'>) {
     <html lang="en" className={`${inter.className} dark`} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <RootProvider
+          search={{
+            options: {
+              type: 'static',
+              api: '/docs/api/search',
+            },
+          }}
           theme={{
             defaultTheme: 'dark',
             forcedTheme: 'dark',

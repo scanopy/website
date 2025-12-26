@@ -16,13 +16,9 @@ export function baseOptions(): BaseLayoutProps {
           <span className="font-bold">Scanopy</span>
         </>
       ),
-      url: '/',
+      url: 'https://scanopy.net',
     },
     links: [
-      {
-        text: 'Pricing',
-        url: '/pricing',
-      },
       {
         text: 'Demo',
         url: 'https://demo.scanopy.net',
