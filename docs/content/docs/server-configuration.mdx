@@ -28,6 +28,7 @@ environment:
 | **Server Public URL**     | `--public-url`                 | `SCANOPY_PUBLIC_URL`                 | `http://localhost:60072`  | Public URL for webhooks, email links, etc                          |
 | **Server Port**           | `--server-port`                | `SCANOPY_SERVER_PORT`                | `60072`                   | Port for server to listen on                                       |
 | **Database URL**          | `--database-url`               | `SCANOPY_DATABASE_URL`               | _Required_                | PostgreSQL connection string                                       |
+| **Web External Path **    | N/A                            | `SCANOPY_WEB_EXTERNAL_PATH`          | `/app/static`             | Location from which to serve server static files
 | **Log Level**             | `--log-level`                  | `SCANOPY_LOG_LEVEL`                  | `info`                    | Logging verbosity: `trace`, `debug`, `info`, `warn`, `error`       |
 | **Secure Cookies**        | `--use-secure-session-cookies` | `SCANOPY_USE_SECURE_SESSION_COOKIES` | `false`                   | Enable HTTPS-only cookies                                          |
 | **Integrated Daemon URL** | `--integrated-daemon-url`      | `SCANOPY_INTEGRATED_DAEMON_URL`      | `http://172.17.0.1:60073` | URL to reach daemon in default docker compose                      |
