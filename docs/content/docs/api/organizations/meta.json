@@ -1,0 +1,8 @@
+{
+  "title": "Organizations",
+  "pages": [
+    "index",
+    "get_organization",
+    "update_org_name"
+  ]
+}

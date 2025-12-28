@@ -1,0 +1,10 @@
+{
+  "title": "Topology",
+  "pages": [
+    "get_topology_by_id",
+    "lock",
+    "unlock",
+    "update_topology",
+    "delete_topology"
+  ]
+}

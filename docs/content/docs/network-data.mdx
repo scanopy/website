@@ -18,6 +18,11 @@ When a device appears on multiple VLANs or through different discovery methods, 
 
 The primary host gains all interfaces, services, and properties from the merged hosts. Use this to unify a server that has interfaces on multiple VLANs into a single logical host.
 
+#### Restrictions
+
+- Cannot consolidate a host with itself.
+- Cannot consolidate a host that has a daemon - consolidate into it instead.
+
 ### Unclaimed Open Ports
 
 Ports discovered without a matching service definition are assigned to an "Unclaimed Open Ports" placeholder. To reassign them:

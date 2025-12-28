@@ -1,0 +1,13 @@
+{
+  "title": "Shares",
+  "pages": [
+    "index",
+    "get_public_share_metadata",
+    "get_share_by_id",
+    "list_shares",
+    "bulk_delete_shares",
+    "create_share",
+    "update_share",
+    "delete_share"
+  ]
+}

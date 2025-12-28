@@ -90,6 +90,14 @@
 </section>
 
 <style>
+	:global(.prose h2) {
+		margin-top: 1.5rem;
+		margin-bottom: 0.5rem;
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: rgb(251 113 133);
+	}
+
 	:global(.prose h3) {
 		margin-top: 1.5rem;
 		margin-bottom: 0.5rem;

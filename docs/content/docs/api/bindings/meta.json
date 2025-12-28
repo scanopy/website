@@ -1,0 +1,11 @@
+{
+  "title": "Bindings",
+  "pages": [
+    "get_binding_by_id",
+    "list_bindings",
+    "bulk_delete_bindings",
+    "create_binding",
+    "update_binding",
+    "delete_binding"
+  ]
+}

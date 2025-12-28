@@ -1,0 +1,9 @@
+{
+  "title": "Daemons",
+  "pages": [
+    "get_daemon_by_id",
+    "list_daemons",
+    "bulk_delete_daemons",
+    "delete_daemon"
+  ]
+}
