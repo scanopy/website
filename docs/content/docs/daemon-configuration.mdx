@@ -50,24 +50,7 @@ The config file stores runtime state (daemon ID, host ID) alongside your setting
 
 ## Parameter Reference
 
-| Parameter                   | CLI Flag                    | Environment Variable              | Config File Key           | Default                  | Description                                                                        |
-| --------------------------- | --------------------------- | --------------------------------- | ------------------------- | ------------------------ | ---------------------------------------------------------------------------------- |
-| **Server URL**              | `--server-url`              | `SCANOPY_SERVER_URL`              | `server_url`              | `http://127.0.0.1:60072` | URL where the daemon can reach the server                                          |
-| **API Key**                 | `--daemon-api-key`          | `SCANOPY_DAEMON_API_KEY`          | `api_key`                 | _Required_               | Authentication key for daemon (generated via UI)                                   |
-| **Mode**                    | `--mode`                    | `SCANOPY_MODE`                    | `mode`                    | Push                     | Pull: daemon polls server. Push: server initiates scans (daemon must be reachable) |
-| **Network ID**              | `--network-id`              | `SCANOPY_NETWORK_ID`              | `network_id`              | _Auto-assigned_          | UUID of the network to scan                                                        |
-| **Daemon URL**              | `--daemon-url`              | `SCANOPY_DAEMON_URL`              | `daemon_url`              | detected IP + port       | Public URL where server can reach daemon (Push mode only)                          |
-| **Daemon Port**             | `--daemon-port` or `-p`     | `SCANOPY_DAEMON_PORT`             | `port`                    | `60073`                  | Port for daemon to listen on                                                       |
-| **Bind Address**            | `--bind-address`            | `SCANOPY_BIND_ADDRESS`            | `bind_address`            | `0.0.0.0`                | IP address to bind daemon to                                                       |
-| **Daemon Name**             | `--name`                    | `SCANOPY_NAME`                    | `name`                    | `scanopy-daemon`         | Name for this daemon                                                               |
-| **Log Level**               | `--log-level`               | `SCANOPY_LOG_LEVEL`               | `log_level`               | `info`                   | Logging verbosity                                                                  |
-| **Heartbeat Interval**      | `--heartbeat-interval`      | `SCANOPY_HEARTBEAT_INTERVAL`      | `heartbeat_interval`      | `30`                     | Seconds between heartbeats/work requests                                           |
-| **Concurrent Scans**        | `--concurrent-scans`        | `SCANOPY_CONCURRENT_SCANS`        | `concurrent_scans`        | _Auto_                   | Maximum parallel host scans                                                        |
-| **Allow Self-Signed Certs** | `--allow-self-signed-certs` | `SCANOPY_ALLOW_SELF_SIGNED_CERTS` | `allow_self_signed_certs` | _None_                   | Allow self-signed certs for daemon → server connections                            |
-| **Docker Proxy**            | `--docker-proxy`            | `SCANOPY_DOCKER_PROXY`            | `docker_proxy`            | _None_                   | Optional proxy for Docker API                                                      |
-| **Docker SSL Cert**         | `--docker-proxy-ssl-cert`   | `SCANOPY_DOCKER_PROXY_SSL_CERT`   | `docker_proxy_ssl_cert`   | _None_                   | Path to SSL certificate for Docker proxy                                           |
-| **Docker SSL Key**          | `--docker-proxy-ssl-key`    | `SCANOPY_DOCKER_PROXY_SSL_KEY`    | `docker_proxy_ssl_key`    | _None_                   | Path to SSL private key for Docker proxy                                           |
-| **Docker SSL Chain**        | `--docker-proxy-ssl-chain`  | `SCANOPY_DOCKER_PROXY_SSL_CHAIN`  | `docker_proxy_ssl_chain`  | _None_                   | Path to SSL chain for Docker proxy                                                 |
+<DaemonConfigTable />
 
 ## Concurrent Scans
 

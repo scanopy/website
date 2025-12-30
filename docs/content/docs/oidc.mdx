@@ -16,7 +16,7 @@ Scanopy supports OpenID Connect (OIDC) for enterprise authentication with provid
 
 **Option B: Environment Variable**
 
-1. Set `SCANOPY_OIDC_PROVIDERS` with your provider config as JSON
+1. Set `SCANOPY_OIDC_PROVIDERS` with your provider config (see format below)
 2. Restart the server
 
 See [Environment Variable Configuration](#environment-variable-configuration) for details.
@@ -33,21 +33,19 @@ client_id = "your-client-id"
 client_secret = "your-client-secret"
 ```
 
-You can configure multiple providers by adding multiple `[[oidc_providers]]` sections.
+You can configure multiple providers by adding multiple [[oidc_providers]] sections.
 
 ## Environment Variable Configuration
 
-Instead of using a TOML file, you can configure OIDC providers using the `SCANOPY_OIDC_PROVIDERS` environment variable with a JSON array:
+Instead of using a TOML file, you can configure OIDC providers using the SCANOPY_OIDC_PROVIDERS environment variable. The format uses TOML-like syntax (not JSON):
 
-```bash
-SCANOPY_OIDC_PROVIDERS='[{"name":"Authentik","slug":"authentik","issuer_url":"https://auth.example.com/application/o/scanopy","client_id":"your-client-id","client_secret":"your-client-secret"}]'
-```
+```SCANOPY_OIDC_PROVIDERS='[{name="Authentik", slug="authentik", issuer_url="https://auth.example.com/application/o/scanopy", client_id="your-client-id", client_secret="your-client-secret"}]'```
 
 For multiple providers:
 
-```bash
-SCANOPY_OIDC_PROVIDERS='[{"name":"Authentik","slug":"authentik","issuer_url":"https://auth.example.com/application/o/scanopy","client_id":"id1","client_secret":"secret1"},{"name":"Keycloak","slug":"keycloak","issuer_url":"https://keycloak.example.com/realms/main","client_id":"id2","client_secret":"secret2"}]'
-```
+```SCANOPY_OIDC_PROVIDERS='[{name="Authentik", slug="authentik", issuer_url="https://auth.example.com/application/o/scanopy", client_id="id1", client_secret="secret1"}, {name="Keycloak", slug="keycloak", issuer_url="https://keycloak.example.com/realms/main", client_id="id2", client_secret="secret2"}]'```
+
+**Note**: Use key="value" syntax (with =), not JSON's "key":"value" syntax.
 
 Each provider object supports these fields:
 
@@ -68,7 +66,7 @@ services:
     image: ghcr.io/scanopy/scanopy/server:latest
     environment:
       SCANOPY_PUBLIC_URL: https://scanopy.example.com
-      SCANOPY_OIDC_PROVIDERS: '[{"name":"Authentik","slug":"authentik","issuer_url":"https://auth.example.com/application/o/scanopy","client_id":"${OIDC_CLIENT_ID}","client_secret":"${OIDC_CLIENT_SECRET}"}]'
+      SCANOPY_OIDC_PROVIDERS: '[{name="Authentik", slug="authentik", issuer_url="https://auth.example.com/application/o/scanopy", client_id="your-client-id", client_secret="your-client-secret"}]'
 ```
 
 This method is useful when:
