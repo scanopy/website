@@ -1,0 +1,66 @@
+---
+title: Scanopy API
+---
+
+Network topology discovery and visualization API.
+
+## Authentication
+
+Two authentication methods are supported:
+
+| Method | Header | Use Case |
+|--------|--------|----------|
+| User API key | `Authorization: Bearer scp_u_...` | Programmatic access, integrations |
+| Session cookie | `Cookie: session_id=...` | Web UI (via `/api/auth/login`) |
+
+User API keys require your organization to have API access enabled. Create keys at **Platform > API Keys**.
+
+## Rate Limiting
+
+Limit: 300 requests/minute
+
+Burst: 150
+
+Response headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
+
+When rate limited, you'll receive HTTP `429 Too Many Requests` with a `Retry-After` header.
+
+## Response Format
+
+All responses use a standard envelope:
+
+```json
+{
+"success": true,
+"data": { ... },
+"meta": {
+"api_version": 1,
+"server_version": "0.12.10"
+}
+}
+```
+
+Error responses include an `error` field instead of `data`:
+
+```json
+{
+"success": false,
+"error": "Resource not found",
+"meta": { ... }
+}
+```
+
+**Common status codes:** `400` validation error, `401` unauthorized, `403` forbidden, `404` not found, `409` conflict, `429` rate limited.
+
+## Versioning
+
+The API version is an integer (`api_version: 1`) incremented only on breaking changes. API is versioned independently from the application. Endpoints are prefixed with `/api/v1/`. Check `GET /api/version` for current versions.
+
+## Multi-Tenancy
+
+Resources are scoped to your **organization** and **network(s)**:
+
+- You can only access entities within your organization
+- Network-level entities (hosts, services, etc.) are filtered to networks you have access to
+- Use `?network_id=<UUID>` to filter list endpoints to a specific network
+- API keys can be scoped to a subset of your accessible networks

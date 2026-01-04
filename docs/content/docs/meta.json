@@ -28,9 +28,9 @@
     "security",
     "faq",
     "---API Reference---",
-    "api/api_keys",
-    "api/auth",
+    "api/index",
     "api/bindings",
+    "api/daemon_api_keys",
     "api/daemons",
     "api/discoveries",
     "api/groups",
@@ -43,8 +43,10 @@
     "api/services",
     "api/shares",
     "api/subnets",
+    "api/system",
     "api/tags",
     "api/topology",
+    "api/user_api_keys",
     "api/users"
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "title": "Users",
+  "pages": [
+    "index",
+    "get_all_users",
+    "bulk_delete_users"
+  ]
+}

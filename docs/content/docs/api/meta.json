@@ -1,0 +1,24 @@
+{
+  "pages": [
+    "index",
+    "bindings",
+    "daemon_api_keys",
+    "daemons",
+    "discoveries",
+    "groups",
+    "hosts",
+    "interfaces",
+    "invites",
+    "networks",
+    "organizations",
+    "ports",
+    "services",
+    "shares",
+    "subnets",
+    "system",
+    "tags",
+    "topology",
+    "user_api_keys",
+    "users"
+  ]
+}

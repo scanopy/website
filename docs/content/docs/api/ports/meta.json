@@ -1,0 +1,12 @@
+{
+  "title": "Ports",
+  "pages": [
+    "index",
+    "get_port_by_id",
+    "list_ports",
+    "bulk_delete_ports",
+    "create_port",
+    "update_port",
+    "delete_port"
+  ]
+}

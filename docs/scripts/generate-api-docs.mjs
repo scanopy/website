@@ -289,10 +289,14 @@ function generateIndexPages(spec, apiDir) {
       })
       .join(' ');
 
+    // Strip leading whitespace from each line (OpenAPI descriptions are often indented)
+    const bodyContent = description.replace(/^[ \t]+/gm, '').trim();
+
     const indexContent = `---
 title: Overview
-description: ${description}
 ---
+
+${bodyContent}
 `;
 
     writeFileSync(resolve(folderPath, 'index.mdx'), indexContent);
@@ -382,6 +386,9 @@ async function main() {
   // Add method prefixes to page titles
   addMethodToTitles(apiDir);
 
+  // Generate root API index page
+  generateRootApiIndex(spec, apiDir);
+
   // Generate index pages with tag descriptions
   generateIndexPages(spec, apiDir);
   console.log('Index pages generated successfully');
@@ -395,21 +402,56 @@ async function main() {
   console.log('Root meta.json updated with API folders');
 }
 
-// Update the root meta.json to include all API folders
+// Generate root API index page from OpenAPI info
+function generateRootApiIndex(spec, apiDir) {
+  const title = spec.info?.title || 'API Reference';
+  const description = spec.info?.description || '';
+
+  // Strip leading whitespace from each line
+  const bodyContent = description.replace(/^[ \t]+/gm, '').trim();
+
+  const indexContent = `---
+title: ${title}
+---
+
+${bodyContent}
+`;
+
+  writeFileSync(resolve(apiDir, 'index.mdx'), indexContent);
+  console.log('Generated root API index.mdx');
+
+  // Generate meta.json for api folder with index first, then all tag folders
+  const tagFolders = readdirSync(apiDir, { withFileTypes: true })
+    .filter(d => d.isDirectory())
+    .map(d => d.name)
+    .sort();
+
+  const meta = {
+    pages: ['index', ...tagFolders],
+  };
+
+  writeFileSync(resolve(apiDir, 'meta.json'), JSON.stringify(meta, null, 2));
+  console.log('Generated root API meta.json');
+}
+
+// Update the root meta.json to list API pages directly (avoids collapsible folder)
 function updateRootMeta(apiDir) {
   const rootMetaPath = './content/docs/meta.json';
   const rootMeta = JSON.parse(readFileSync(rootMetaPath, 'utf-8'));
 
-  // Get all API folders
-  const apiFolders = readdirSync(apiDir, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => `api/${d.name}`)
-    .sort();
+  // Get all API folders and prepend with api/
+  const apiPages = [
+    'api/index',
+    ...readdirSync(apiDir, { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => `api/${d.name}`)
+      .sort()
+  ];
 
   // Find the API Reference separator and replace everything after it
   const apiIndex = rootMeta.pages.indexOf('---API Reference---');
   if (apiIndex !== -1) {
-    rootMeta.pages = [...rootMeta.pages.slice(0, apiIndex + 1), ...apiFolders];
+    rootMeta.pages = [...rootMeta.pages.slice(0, apiIndex + 1), ...apiPages];
   }
 
   writeFileSync(rootMetaPath, JSON.stringify(rootMeta, null, 2) + '\n');

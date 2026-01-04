@@ -1,0 +1,13 @@
+{
+  "title": "Hosts",
+  "pages": [
+    "index",
+    "get_all_hosts",
+    "get_host_by_id",
+    "bulk_delete_hosts",
+    "create_host",
+    "consolidate_hosts",
+    "update_host",
+    "delete_host"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Invites",
+  "pages": [
+    "index",
+    "get_invite",
+    "get_invites",
+    "create_invite",
+    "revoke_invite"
+  ]
+}

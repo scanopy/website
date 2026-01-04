@@ -16,7 +16,11 @@ Scans IP addresses on configured subnets to find hosts and services.
 - Performs reverse DNS lookups
 - Collects MAC addresses (for directly connected subnets only)
 
-**Subnet selection**: You can scan subnets the daemon isn't directly connected to, but with [limitations](/limitations/#layer-2-vs-layer-3). For best results, deploy a daemon on each network segment (see [Multi-VLAN Deployment](/multi-vlan/)).
+**Key principle**: The daemon can scan any subnet it can route to. If the daemon's host can reach an IP address, the daemon can scan it.
+
+**Configuring subnets to scan**: Go to **Discover > Scheduled**, edit a Network Scan discovery, and add subnets to the scan list. You can add any subnet — including ones the daemon doesn't have a direct interface on.
+
+**Layer 2 vs Layer 3**: When the daemon has a network interface on the subnet being scanned, you get full Layer 2 access (MAC addresses via ARP, better host discovery). When scanning remote subnets, you're limited to Layer 3 — only hosts with open ports will be discovered. See [limitations](/limitations/#layer-2-vs-layer-3) for details.
 
 ### Docker
 

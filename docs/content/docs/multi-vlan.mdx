@@ -3,7 +3,12 @@ title: Multi-VLAN Deployment
 description: Deploying Scanopy daemons across multiple VLANs and network segments.
 ---
 
-Scanopy uses daemons to discover hosts and services. For best results with isolated VLANs, you'll need additional daemons deployed on each network segment.
+Scanopy daemons can scan any network they can route to. The key question is whether the daemon's host has a **network interface** on the subnet you want to scan:
+
+- **With interface** (Layer 2): Full discovery — MAC addresses, ARP-based host detection, finds hosts even without open ports
+- **Without interface** (Layer 3): Partial discovery — TCP scanning only, finds hosts with open ports
+
+For most setups, a single daemon with routing to all subnets works fine. You only need multiple daemons when VLANs are truly isolated or you need Layer 2 access for accurate MAC collection.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -22,50 +27,57 @@ Scanopy uses daemons to discover hosts and services. For best results with isola
 └───────────────┘ └───────────────┘ └───────────────┘
 ```
 
-Refer to [Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3) for details on what the daemon will be able to discover on a given VLAN based on whether or not it has an interface with the VLAN.
+Refer to [Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3) for details.
+
+## Scanning Additional Subnets
+
+To scan subnets the daemon doesn't auto-detect, go to **Discover > Scheduled**, edit the Network Scan, and add them manually.
+
+## VPN Networks
+
+Scanopy works with **WireGuard**, **Tailscale**, **Headscale**, **OpenVPN**, etc. If the daemon's host is connected to the VPN, it can scan that network.
+
+1. Connect the daemon's host to your VPN
+2. Run a [Self-Report discovery](/discovery/#self-report) to detect the new interface (or restart the daemon)
+3. If your Network Scan has no specific subnets configured, the VPN will be scanned automatically. If you've configured specific subnets, add the VPN subnet manually via **Discover > Scheduled**.
 
 ## When You Need Multiple Daemons
 
 ### One Daemon is Enough When:
 
-- All hosts are on the same subnet as the daemon
-- You have a management host with routes to all VLANs
-- Your firewall allows the daemon to reach all subnets
-- You don't need MAC addresses from isolated networks
-- You are ok with the daemon not discovering all hosts on any non-interfaced VLAN it scans
+- The daemon's host can route to all target subnets
+- You're okay with Layer 3 discovery for remote subnets
 
 ### You Need Multiple Daemons When:
 
-- VLANs are isolated by firewall rules
-- You need accurate MAC address collection (requires [Layer 2 access](/limitations/#layer-2-vs-layer-3))
-- Different networks have different security requirements
-- You want the daemon to discover all hosts on VLANs that it scans
+- Networks are isolated with no routing between them
+- You need Layer 2 access (MAC addresses, full host discovery) on multiple segments
 
 ## Deployment Strategies
 
-### Strategy 1: Daemon Per VLAN (Recommended)
-
-Deploy a lightweight daemon on each VLAN.
-
-**Pros:** Full Layer 2 access (MAC addresses, ARP), no inter-VLAN firewall rules needed, best discovery accuracy
-
-**Cons:** More daemons to manage, requires a host on each VLAN
-
-**Best for:** Production environments, security-conscious deployments
-
-### Strategy 2: Central Daemon with Routing
+### Strategy 1: Central Daemon with Routing
 
 Use a single daemon on a host that can route to all VLANs.
 
-**Pros:** Single daemon to manage
+**Pros:** Single daemon to manage, simple setup
 
-**Cons:** No MAC addresses for remote subnets, requires firewall rules, can't discover hosts without open ports
+**Cons:** Layer 3 only for remote subnets (no MAC addresses, requires open ports)
 
-**Best for:** Small networks, lab environments, quick setup
+**Best for:** Most networks, quick setup, home labs
 
-### Strategy 3: Hybrid Approach
+### Strategy 2: Daemon Per VLAN
 
-Central daemon for routable networks, dedicated daemons for isolated segments.
+Deploy a daemon on each VLAN for full Layer 2 access.
+
+**Pros:** MAC addresses, ARP-based discovery, finds hosts without open ports
+
+**Cons:** More daemons to manage, requires a host on each VLAN
+
+**Best for:** Production environments needing accurate MAC collection, isolated networks
+
+### Strategy 3: Hybrid
+
+Central daemon for routable networks, dedicated daemons only for isolated segments or where you need Layer 2.
 
 ## Step-by-Step Setup
 

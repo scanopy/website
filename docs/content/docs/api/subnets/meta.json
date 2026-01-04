@@ -1,0 +1,12 @@
+{
+  "title": "Subnets",
+  "pages": [
+    "index",
+    "get_subnet_by_id",
+    "list_subnets",
+    "bulk_delete_subnets",
+    "create_subnet",
+    "update_subnet",
+    "delete_subnet"
+  ]
+}

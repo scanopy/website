@@ -1,0 +1,12 @@
+{
+  "title": "Tags",
+  "pages": [
+    "index",
+    "get_tag_by_id",
+    "list_tags",
+    "bulk_delete_tags",
+    "create_tag",
+    "update_tag",
+    "delete_tag"
+  ]
+}

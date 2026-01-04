@@ -1,0 +1,7 @@
+{
+  "title": "System",
+  "pages": [
+    "index",
+    "get_version"
+  ]
+}
