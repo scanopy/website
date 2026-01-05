@@ -8,6 +8,9 @@ const withMDX = createMDX();
 
 /** @type {import('next').NextConfig} */
 const config = {
+  env: {
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.PUBLIC_POSTHOG_KEY,
+  },
   reactStrictMode: true,
   output: 'export',
   basePath: '/docs',
