@@ -128,7 +128,7 @@ However, many managed switches implement **Dynamic ARP Inspection (DAI)** to pre
 | Dell OS9/OS10 | 15 pps | Interface error-disabled | [Dell DAI Config](https://www.dell.com/support/manuals/en-us/dell-emc-os-9/s4048-on-9.14.2.4-config/configuring-dynamic-arp-inspection-limit) |
 | Juniper MX/SRX | ~150 kbps (~2500 pps) | Packets dropped | [Juniper ARP Policer](https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/concept/security-arp-policer-overview.html) |
 | Juniper EX | No default limit | N/A (unless configured) | [Lindsay Hill](https://lkhill.com/juniper-arp-policer/) |
-| Aruba, Ruckus, Extreme | Varies by model | Check switch docs | — |
+| Aruba, Ruckus, Extreme, Consumer Networking Equipment | Varies by model | Check switch docs | — |
 
 If your switch has DAI enabled and Scanopy sends ARP faster than the limit allows, excess packets are dropped and those hosts appear offline.
 
@@ -249,22 +249,8 @@ environment:
 | Situation | Recommended Settings |
 |-----------|---------------------|
 | Port disabled during scan (Cisco errdisable) | `arp_rate_pps=10`, check DAI config |
-| Missing ~10% of known hosts | `arp_retries=3` or `arp_retries=4` |
-| Missing most hosts | `arp_rate_pps=15` and `arp_retries=3` |
+| Missing hosts | `arp_retries=3` or `arp_retries=4` |
 | Scans are too slow | Increase `arp_rate_pps` if DAI allows, or trust the port |
-| Large subnets (/20+) | Lower rate + higher retries for reliability |
-
-#### Impact on Scan Time
-
-Lower ARP rates increase discovery time per round:
-
-| Rate | /24 (256 IPs) | /22 (1024 IPs) | /20 (4096 IPs) |
-|------|---------------|----------------|----------------|
-| 15 pps | ~17 sec | ~68 sec | ~4.5 min |
-| 50 pps | ~5 sec | ~20 sec | ~82 sec |
-| 100 pps | ~2.5 sec | ~10 sec | ~41 sec |
-
-*Multiply by (1 + arp_retries) for total ARP scan time. Retry rounds are faster since they only target non-responders.*
 
 See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
 
@@ -290,8 +276,9 @@ See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
 
 1. **Discovery errors**: Check **Discover > Sessions** for failures
 2. **Network filter**: Check topology options panel — wrong network may be selected
-3. **Service filters**: Category filters may be hiding everything
-4. **Reachability**: Verify daemon can actually reach the target network
+3. **Refresh mode**: Press "Rebuild" or change from manual to auto to get live updates
+4. **Service filters**: Category filters may be hiding everything
+5. **Reachability**: Verify daemon can actually reach the target network
 
 ## Getting Help
 
