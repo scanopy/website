@@ -24,6 +24,9 @@ export default [
 			'build/',
 			'.svelte-kit/',
 			'docs/.astro/',
+			'docs/.next/',
+			'docs/.source/',
+			'docs/out/',
 			'docs/dist/',
 			// Files with @html JSON-LD that cause svelte-eslint-parser issues
 			'src/routes/+layout.svelte',

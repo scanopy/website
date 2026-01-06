@@ -8,6 +8,9 @@ bun.lockb
 # Build/Generated
 .svelte-kit/
 docs/.astro/
+docs/.next/
+docs/.source/
+docs/out/
 docs/dist/
 
 # Miscellaneous
