@@ -149,5 +149,12 @@ export const analytics = {
 	 */
 	roadmapItemClicked: (props: { feature_id: string; feature_name: string; category: string }) => {
 		capture('roadmap_item_clicked', props);
+	},
+
+	/**
+	 * Track commercial plan inquiry form submissions
+	 */
+	planInquirySubmitted: (props: { planType: string; success: boolean }) => {
+		capture('plan_inquiry_submitted', props);
 	}
 };

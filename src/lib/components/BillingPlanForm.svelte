@@ -7,6 +7,7 @@
 	import GithubStars from './GithubStars.svelte';
 	import Tag from './Tag.svelte';
 	import ToggleGroup from './ToggleGroup.svelte';
+	import ContactModal from './ContactModal.svelte';
 	import { SvelteMap } from 'svelte/reactivity';
 	import type { BillingPlan, BillingPlanMetadata, FeatureMetadata } from '$lib/types';
 	import type { ColorStyle, IconComponent } from '$lib/utils/styling';
@@ -42,6 +43,11 @@
 		showHosting = true,
 		class: className = ''
 	}: Props = $props();
+
+	// Contact modal state
+	let showContactModal = $state(false);
+	let selectedPlanType = $state('');
+	let selectedPlanName = $state('');
 
 	let collapsedCategories = $state<Record<string, boolean>>({});
 
@@ -245,7 +251,7 @@
 				return 'sky';
 			case 'Managed':
 				return 'purple';
-			case 'Self-Hosted':
+			case 'SelfHosted':
 				return 'green';
 			default:
 				return 'gray';
@@ -258,6 +264,12 @@
 
 	function categoryHasVisibleFeatures(categoryFeatures: string[]): boolean {
 		return categoryFeatures.some((featureKey) => anyPlanHasFeature(featureKey));
+	}
+
+	function openContactModal(planType: string, planName: string) {
+		selectedPlanType = planType;
+		selectedPlanName = planName;
+		showContactModal = true;
 	}
 </script>
 
@@ -500,26 +512,22 @@
 									{trial ? 'Start Free Trial' : 'Get Started'}
 								</button>
 								{#if commercial}
-									{@const subject = encodeURIComponent(`Scanopy ${plan.type} Plan Inquiry`)}
-									{@const body = encodeURIComponent(
-										`Hi,\n\nI'm interested in the ${plan.type} plan.`
-									)}
-									<a
-										href="mailto:maya@scanopy.net?subject={subject}&body={body}"
-										class="btn-secondary inline-block w-full whitespace-nowrap text-center text-xs lg:text-sm"
-										>Contact Us</a
+									<button
+										type="button"
+										onclick={() =>
+											openContactModal(plan.type, billingPlanHelpers.getName(plan.type))}
+										class="btn-secondary w-full whitespace-nowrap text-xs lg:text-sm"
+										>Contact Us</button
 									>
 								{/if}
-							{:else if hosting === 'Self-Hosted'}
+							{:else if hosting === 'SelfHosted'}
 								{#if commercial}
-									{@const subject = encodeURIComponent(`Scanopy ${plan.type} Plan Inquiry`)}
-									{@const body = encodeURIComponent(
-										`Hi,\n\nI'm interested in the ${plan.type} plan.`
-									)}
-									<a
-										href="mailto:maya@scanopy.net?subject={subject}&body={body}"
-										class="btn-primary inline-block w-full whitespace-nowrap text-center text-xs lg:text-sm"
-										>Contact Us</a
+									<button
+										type="button"
+										onclick={() =>
+											openContactModal(plan.type, billingPlanHelpers.getName(plan.type))}
+										class="btn-primary w-full whitespace-nowrap text-xs lg:text-sm"
+										>Contact Us</button
 									>
 								{:else}
 									<a
@@ -531,10 +539,10 @@
 									>
 								{/if}
 							{:else if commercial}
-								<a
-									href="mailto:maya@scanopy.net"
-									class="btn-primary inline-block w-full whitespace-nowrap text-center text-xs lg:text-sm"
-									>Contact Us</a
+								<button
+									type="button"
+									onclick={() => openContactModal(plan.type, billingPlanHelpers.getName(plan.type))}
+									class="btn-primary w-full whitespace-nowrap text-xs lg:text-sm">Contact Us</button
 								>
 							{/if}
 						</div>
@@ -544,6 +552,13 @@
 		</div>
 	</div>
 </div>
+
+<ContactModal
+	open={showContactModal}
+	onClose={() => (showContactModal = false)}
+	planType={selectedPlanType}
+	planName={selectedPlanName}
+/>
 
 <style>
 	/* Sticky header - sticks below navbar */

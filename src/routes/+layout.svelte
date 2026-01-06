@@ -95,7 +95,12 @@
 				<div class="hidden items-center gap-6 md:flex">
 					<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">Pricing</a>
 					<a href="/docs" class="text-gray-400 transition-colors hover:text-white">Docs</a>
-					<a href="https://demo.scanopy.net" class="text-gray-400 transition-colors hover:text-white"> Demo </a>
+					<a
+						href="https://demo.scanopy.net"
+						class="text-gray-400 transition-colors hover:text-white"
+					>
+						Demo
+					</a>
 					<a
 						href="https://app.scanopy.net/login"
 						target="_blank"

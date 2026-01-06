@@ -158,7 +158,8 @@ export const COLOR_MAP: Record<string, ColorStyle> = {
 };
 
 export function createColorHelper(colorName: string | null): ColorStyle {
-	const color = colorName && COLOR_MAP[colorName] ? colorName : 'gray';
+	const normalizedName = colorName?.toLowerCase() ?? null;
+	const color = normalizedName && COLOR_MAP[normalizedName] ? normalizedName : 'gray';
 	return COLOR_MAP[color];
 }
 

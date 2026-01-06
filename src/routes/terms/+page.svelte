@@ -239,8 +239,8 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">13. Data Security and Privacy</h2>
 			<p class="text-gray-300">
-				Our <a href="/privacy" class="text-blue-400 hover:text-blue-300">Privacy Policy</a> describes our
-				practices regarding the information we collect from you. California residents have additional
+				Our <a href="/privacy" class="text-blue-400 hover:text-blue-300">Privacy Policy</a> describes
+				our practices regarding the information we collect from you. California residents have additional
 				rights as set forth in our Privacy Policy.
 			</p>
 		</section>

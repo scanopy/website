@@ -70,8 +70,7 @@
 		{
 			id: 'plugin-system',
 			name: 'Plugin/Extension System',
-			description:
-				'Extend Scanopy with custom plugins. Add new integrations and functionality.',
+			description: 'Extend Scanopy with custom plugins. Add new integrations and functionality.',
 			category: 'Developer',
 			icon: null,
 			color: null,
