@@ -108,6 +108,166 @@ If you're using a Docker socket proxy and getting permission errors, see [Docker
 
 ## Discovery Issues
 
+### Hosts Not Discovered / Missing IPs
+
+**Symptoms**: Discovery completes but some known hosts are missing from results. Manual `arping` to the missing IPs works fine.
+
+**Most likely cause**: Switch rate limiting is dropping ARP packets before they reach hosts or before responses return.
+
+#### Understanding ARP Scanning
+
+Scanopy uses broadcast ARP for fast host discovery. For each target IP, we send an ARP "who-has" request and wait for a reply. This is faster and more reliable than TCP/UDP probing because hosts cannot firewall ARP and still communicate on the network.
+
+However, many managed switches implement **Dynamic ARP Inspection (DAI)** to prevent ARP spoofing attacks. DAI rate-limits ARP packets on untrusted ports to a maximum number of packets per second (pps). When the limit is exceeded, the switch either drops excess packets silently or disables the port entirely.
+
+**Known default rate limits:**
+
+| Vendor | Default Limit | Exceeded Behavior | Documentation |
+|--------|--------------|-------------------|---------------|
+| Cisco Catalyst/Nexus | 15 pps | Port enters errdisable | [Cisco DAI Guide](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst4500/12-2/31sg/configuration/guide/conf/dynarp.html) |
+| Dell OS9/OS10 | 15 pps | Interface error-disabled | [Dell DAI Config](https://www.dell.com/support/manuals/en-us/dell-emc-os-9/s4048-on-9.14.2.4-config/configuring-dynamic-arp-inspection-limit) |
+| Juniper MX/SRX | ~150 kbps (~2500 pps) | Packets dropped | [Juniper ARP Policer](https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/concept/security-arp-policer-overview.html) |
+| Juniper EX | No default limit | N/A (unless configured) | [Lindsay Hill](https://lkhill.com/juniper-arp-policer/) |
+| Aruba, Ruckus, Extreme | Varies by model | Check switch docs | — |
+
+If your switch has DAI enabled and Scanopy sends ARP faster than the limit allows, excess packets are dropped and those hosts appear offline.
+
+#### How Retries Work
+
+Scanopy uses **targeted retries** rather than simple broadcast flooding:
+
+1. **Round 1**: Send ARP request to all target IPs at the configured rate
+2. **Wait**: Collect responses for 3 seconds
+3. **Round 2**: Send ARP requests **only to IPs that didn't respond**
+4. **Repeat**: Continue for the configured number of retry rounds
+5. **Final wait**: Extra collection period for late-arriving responses
+
+This approach minimizes total packets sent (only non-responders are retried) while giving slow or rate-limited hosts multiple chances to be discovered.
+
+**Example with `arp_retries=2` (default) scanning a /24:**
+
+| Round | Target IPs | Packets Sent | Cumulative |
+|-------|-----------|--------------|------------|
+| 1 | 256 (all) | 256 | 256 |
+| 2 | ~50 (no response) | ~50 | ~306 |
+| 3 | ~10 (still no response) | ~10 | ~316 |
+
+If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those hosts—often successfully since the burst is smaller.
+
+#### Diagnosis
+
+1. **Check if your switch has DAI enabled.** Consult your switch documentation for how to view DAI configuration and statistics. Look for rate limit violations or dropped ARP packets.
+
+2. **Check for port shutdown.** Some switches (notably Cisco) disable the port entirely when the rate limit is exceeded. If your scanner lost network connectivity during a scan, this is likely the cause.
+
+3. **Test with manual arping:**
+   ```bash
+   # If this finds the host but Scanopy doesn't, rate limiting is likely
+   arping -c 3 <missing-ip>
+   ```
+
+#### Solutions
+
+**Option 1: Reduce ARP scan rate**
+
+Lower `arp_rate_pps` to stay within your switch's DAI limit:
+
+```bash
+# CLI
+scanopy-daemon --arp-rate-pps 15
+
+# Environment variable
+export SCANOPY_ARP_RATE_PPS=15
+
+# Docker
+environment:
+  - SCANOPY_ARP_RATE_PPS=15
+```
+
+**Recommended values:**
+
+| Scenario | `arp_rate_pps` |
+|----------|----------------|
+| Cisco/Dell with DAI enabled | 10-15 |
+| Unknown managed switch | 30-50 |
+| DAI disabled or trusted port | 100-500 |
+
+**Option 2: Increase retries**
+
+If rate limiting causes occasional packet loss, more retries give hosts additional chances to respond:
+
+```bash
+# CLI
+scanopy-daemon --arp-retries 4   # 5 total rounds (default is 2 = 3 rounds)
+
+# Environment variable
+export SCANOPY_ARP_RETRIES=4
+```
+
+Higher retries help when:
+- Rate limiting drops some packets but not all
+- Hosts are slow to respond (busy or sleeping devices)
+- Network has high background traffic
+
+The tradeoff is longer scan time, but since retries only target non-responders, the overhead is usually small.
+
+**Option 3: Adjust your switch DAI configuration**
+
+If you control the switch, you can increase the rate limit on the scanner's port or mark it as trusted (no rate limit). Consult your switch documentation for the specific commands.
+
+**Option 4: Use Npcap for broadcast ARP (Windows only)**
+
+On Windows, Scanopy defaults to the SendARP API which scans hosts sequentially. For faster scanning, you can enable Npcap broadcast ARP:
+
+```bash
+# CLI
+scanopy-daemon --use-npcap-arp
+
+# Environment variable
+export SCANOPY_USE_NPCAP_ARP=true
+
+# Docker
+environment:
+  - SCANOPY_USE_NPCAP_ARP=true
+```
+
+**Requirements:**
+- [Npcap](https://npcap.com/) must be installed (free for personal use)
+- During Npcap installation, enable "WinPcap API-compatible Mode"
+
+**When to use Npcap:**
+- Scanning large subnets where sequential SendARP is too slow
+- You need the same broadcast ARP behavior as Linux/macOS
+
+**When to stick with SendARP (default):**
+- Npcap is not installed or cannot be installed
+- Scanning small networks where speed doesn't matter
+- You want zero additional dependencies
+
+#### Tuning for Your Network
+
+| Situation | Recommended Settings |
+|-----------|---------------------|
+| Port disabled during scan (Cisco errdisable) | `arp_rate_pps=10`, check DAI config |
+| Missing ~10% of known hosts | `arp_retries=3` or `arp_retries=4` |
+| Missing most hosts | `arp_rate_pps=15` and `arp_retries=3` |
+| Scans are too slow | Increase `arp_rate_pps` if DAI allows, or trust the port |
+| Large subnets (/20+) | Lower rate + higher retries for reliability |
+
+#### Impact on Scan Time
+
+Lower ARP rates increase discovery time per round:
+
+| Rate | /24 (256 IPs) | /22 (1024 IPs) | /20 (4096 IPs) |
+|------|---------------|----------------|----------------|
+| 15 pps | ~17 sec | ~68 sec | ~4.5 min |
+| 50 pps | ~5 sec | ~20 sec | ~82 sec |
+| 100 pps | ~2.5 sec | ~10 sec | ~41 sec |
+
+*Multiply by (1 + arp_retries) for total ARP scan time. Retry rounds are faster since they only target non-responders.*
+
+See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
+
 ### Discovery Takes Hours
 
 **Symptoms**: Network discovery takes 10+ hours to complete
