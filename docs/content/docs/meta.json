@@ -15,6 +15,7 @@
     "daemon-configuration",
     "multi-vlan",
     "docker-proxy",
+    "macvlan-setup",
     "daemon-troubleshooting",
     "---Self-Hosted---",
     "server-installation",

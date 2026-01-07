@@ -1,0 +1,136 @@
+---
+title: MACVLAN Networking
+description: Deploy the Scanopy daemon with Docker MACVLAN for network isolation.
+---
+
+MACVLAN lets you deploy the daemon as a separate device on your LAN with its own MAC and IP address, without using `--network=host`. This provides network isolation and avoids port conflicts.
+
+## When to Use MACVLAN
+
+| Use MACVLAN when... | Use host networking when... |
+|---------------------|----------------------------|
+| You need network isolation | Simpler setup is preferred |
+| You want the daemon as a separate LAN device | |
+
+**Platform support:** Linux only, same as Docker deployment for Daemon in general.
+
+## Prerequisites
+
+1. Linux host with Docker
+2. Physical network interface (e.g., `eth0`, `enp3s0`)
+3. Static IP range reserved outside your DHCP pool
+
+## Setup
+
+### 1. Find Your Network Interface
+
+```bash
+ip link show
+# Look for: eth0, enp3s0, eno1, etc.
+```
+
+### 2. Plan Your IP Range
+
+Reserve IPs that DHCP won't assign:
+
+| Setting | Example |
+|---------|---------|
+| Subnet | 192.168.1.0/24 |
+| Gateway | 192.168.1.1 |
+| DHCP range | 192.168.1.100–200 |
+| MACVLAN range | 192.168.1.224/27 (224–255) |
+
+### 3. Edit generated docker-compose.yml
+
+In the UI, create a new daemon; then, edit the docker compose as follows:
+
+**Add network service**
+
+```yaml
+networks:
+  scanopy_net:
+    driver: macvlan
+    driver_opts:
+      parent: eth0  # Your interface from step 1
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+```
+
+**Add to daemon service**
+
+```yaml
+networks:
+      scanopy_net:
+        ipv4_address: 192.168.1.225
+```
+
+_and_
+
+```yaml
+cap_add:
+      - NET_RAW
+```
+
+**Remove from daemon service**
+
+```yaml
+network_mode: host
+privileged: true
+```
+
+**Example**
+
+```yaml
+services:
+  daemon:
+    image: ghcr.io/scanopy/scanopy/daemon:latest
+    container_name: scanopy-daemon
+    restart: unless-stopped
+    cap_add:
+      - NET_RAW
+    networks:
+      scanopy_net:
+        ipv4_address: 192.168.1.225
+    environment:
+      - SCANOPY_SERVER_URL=https://your-server.example.com
+      - SCANOPY_NETWORK_ID=your-network-id
+      - SCANOPY_DAEMON_API_KEY=your-api-key
+    volumes:
+      - daemon-config:/root/.config/daemon
+
+networks:
+  scanopy_net:
+    driver: macvlan
+    driver_opts:
+      parent: eth0  # Your interface from step 1
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+
+volumes:
+  daemon-config:
+```
+
+### 4. Deploy
+
+```bash
+docker compose up -d
+```
+
+## Troubleshooting
+
+Enable debug logging to see interface detection details:
+
+```yaml
+environment:
+  - SCANOPY_LOG_LEVEL=debug
+```
+
+For other issues, see [Daemon Troubleshooting](/daemon-troubleshooting/).
+
+## Combining with Multi-VLAN
+
+MACVLAN works with the strategies in [Multi-VLAN Deployment](/multi-vlan/). Deploy one MACVLAN daemon per VLAN for full Layer 2 access on each segment.

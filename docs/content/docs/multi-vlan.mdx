@@ -33,6 +33,8 @@ Refer to [Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3) for details.
 
 To scan subnets the daemon doesn't auto-detect, go to **Discover > Scheduled**, edit the Network Scan, and add them manually.
 
+If the subnet you want to scan doesn't exist yet (ie - it hasn't been reported by a Daemon, either because the subnet isn't interfaced with any daemons or it isn't being detected for some other reason), go to **Subnets** and manually add it. You can then set it up to be scanned as described above.
+
 ## VPN Networks
 
 Scanopy works with **WireGuard**, **Tailscale**, **Headscale**, **OpenVPN**, etc. If the daemon's host is connected to the VPN, it can scan that network.
