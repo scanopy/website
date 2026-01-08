@@ -107,7 +107,9 @@ jobs:
             try {
               // Upload media using v1.1 API (available on free tier)
               const mediaId = await client.v1.uploadMedia('./gallery-image.png');
-              console.log('Media uploaded, ID:', mediaId);
+              // Ensure media ID is a string (handles both string and object return types)
+              const mediaIdStr = typeof mediaId === 'object' ? mediaId.media_id_string : String(mediaId);
+              console.log('Media uploaded, ID:', mediaIdStr, 'Type:', typeof mediaIdStr);
 
               // Compose tweet text
               const text = `Community Showcase: ${process.env.TWEET_TITLE}
@@ -120,10 +122,13 @@ jobs:
 
           ${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`;
 
-              // Post tweet using v1.1 API with media (same API version as upload)
-              const tweet = await client.v1.tweet(text, { media_ids: mediaId });
+              // Post tweet using v2 API with media (v1 tweet endpoint not available on free tier)
+              const tweet = await client.v2.tweet({
+                text: text,
+                media: { media_ids: [mediaIdStr] }
+              });
 
-              console.log('Tweet posted successfully:', tweet.id_str);
+              console.log('Tweet posted successfully:', tweet.data.id);
             } catch (error) {
               console.error('Error posting tweet:', error);
               process.exit(1);
