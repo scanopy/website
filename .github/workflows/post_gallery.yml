@@ -120,13 +120,10 @@ jobs:
 
           ${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`;
 
-              // Post tweet using v2 API with media
-              const tweet = await client.v2.tweet({
-                text: text,
-                media: { media_ids: [mediaId] }
-              });
+              // Post tweet using v1.1 API with media (same API version as upload)
+              const tweet = await client.v1.tweet(text, { media_ids: mediaId });
 
-              console.log('Tweet posted successfully:', tweet.data.id);
+              console.log('Tweet posted successfully:', tweet.id_str);
             } catch (error) {
               console.error('Error posting tweet:', error);
               process.exit(1);
