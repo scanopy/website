@@ -83,41 +83,36 @@ Technical overview of Scanopy's system design, components, and data flows.
 
 ### Discovery Flow (Pull Mode)
 
-```
-1. User triggers discovery (manual or scheduled)
-   │
-   ▼
-2. Server creates discovery session
-   │
-   ▼
-3. Daemon polls server for work, retrieves discovery session
-   │
-   ▼
-4. Daemon executes scan:
-   ├─ Network Scan: Scans IP range, detects ports/services
-   ├─ Docker Scan: Queries Docker socket for containers
-   └─ Self-Report: Reports own capabilities
-   │
-   ▼
-5. Daemon sends discovered entities to server (batched)
-   │
-   ▼
-6. Server processes and stores entities:
-   ├─ Creates/updates hosts
-   ├─ Creates/updates interfaces
-   ├─ Creates/updates services
-   ├─ Associates with subnets
-   └─ Logs discovery metadata
-   │
-   ▼
-7. Server broadcasts progress updates via SSE
-   │
-   ▼
-8. UI receives real-time updates and refreshes display
-   │
-   ▼
-9. Discovery completes, final status recorded
-```
+<Mermaid chart={`
+flowchart TD
+    step1["1. User triggers discovery<br/>(manual or scheduled)"]
+    step2["2. Server creates discovery session"]
+    step3["3. Daemon polls server for work,<br/>retrieves discovery session"]
+
+    step1 --> step2 --> step3
+
+    subgraph step4["4. Daemon executes scan"]
+        scan1["Network Scan:<br/>Scans IP range, detects ports/services"]
+        scan2["Docker Scan:<br/>Queries Docker socket for containers"]
+        scan3["Self-Report:<br/>Reports own capabilities"]
+    end
+
+    step3 --> step4
+    step4 --> step5["5. Daemon sends discovered<br/>entities to server (batched)"]
+
+    subgraph step6["6. Server processes and stores entities"]
+        proc1["Creates/updates hosts"]
+        proc2["Creates/updates interfaces"]
+        proc3["Creates/updates services"]
+        proc4["Associates with subnets"]
+        proc5["Logs discovery metadata"]
+    end
+
+    step5 --> step6
+    step6 --> step7["7. Server broadcasts progress<br/>updates via SSE"]
+    step7 --> step8["8. UI receives real-time updates<br/>and refreshes display"]
+    step8 --> step9["9. Discovery completes,<br/>final status recorded"]
+`} />
 
 ### Discovery Flow (Push Mode)
 
@@ -127,90 +122,85 @@ Same as Pull mode, except in step 3 the server initiates the connection to the d
 
 ### Network Scan
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                    Initialization                         │
-│  1. Determine target subnets                              │
-│  2. Calculate total IP count                              │
-│  3. Establish concurrent scan limit                       │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│                 Per-IP Scan (Parallel)                    │
-│  1. TCP port scan (common + custom ports)                │
-│  2. HTTP endpoint probing                                 │
-│  3. Collect responses and headers                         │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│                Service Pattern Matching                   │
-│  1. Match port numbers                                    │
-│  2. Match HTTP endpoints                                  │
-│  3. Check headers and content                             │
-│  4. Apply MAC vendor patterns                             │
-│  5. Assign confidence score                               │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│                   Host Assembly                           │
-│  1. Perform reverse DNS lookup                            │
-│  2. Determine hostname (DNS > service > IP)               │
-│  3. Group services by interface                           │
-│  4. Associate with subnet                                 │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│                 Report to Server                          │
-│  1. Send discovered host + interfaces + services          │
-│  2. Server stores in database                             │
-│  3. Server broadcasts update via SSE                      │
-└──────────────────────────────────────────────────────────┘
-```
+<Mermaid chart={`
+flowchart TD
+    subgraph init["Initialization"]
+        i1["1. Determine target subnets"]
+        i2["2. Calculate total IP count"]
+        i3["3. Establish concurrent scan limit"]
+    end
+
+    subgraph scan["Per-IP Scan (Parallel)"]
+        s1["1. TCP port scan (common + custom ports)"]
+        s2["2. HTTP endpoint probing"]
+        s3["3. Collect responses and headers"]
+    end
+
+    subgraph match["Service Pattern Matching"]
+        m1["1. Match port numbers"]
+        m2["2. Match HTTP endpoints"]
+        m3["3. Check headers and content"]
+        m4["4. Apply MAC vendor patterns"]
+        m5["5. Assign confidence score"]
+    end
+
+    subgraph assemble["Host Assembly"]
+        a1["1. Perform reverse DNS lookup"]
+        a2["2. Determine hostname (DNS > service > IP)"]
+        a3["3. Group services by interface"]
+        a4["4. Associate with subnet"]
+    end
+
+    subgraph report["Report to Server"]
+        r1["1. Send discovered host + interfaces + services"]
+        r2["2. Server stores in database"]
+        r3["3. Server broadcasts update via SSE"]
+    end
+
+    init --> scan --> match --> assemble --> report
+`} />
 
 ### Docker Discovery
 
-```
-┌──────────────────────────────────────────────────────────┐
-│               Connect to Docker Socket                    │
-│  - Verify socket accessibility                            │
-│  - Authenticate (if required)                             │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│              List Running Containers                      │
-│  - Get container IDs, names, labels                       │
-│  - Extract port mappings                                  │
-│  - Identify networks                                      │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│          Inspect Docker Networks                          │
-│  - Enumerate bridge networks                              │
-│  - Map containers to network subnets                      │
-│  - Extract gateway IPs                                    │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│            Match Services to Containers                   │
-│  - Use port mappings to identify services                 │
-│  - Check container labels for hints                       │
-│  - Apply same pattern matching as network scan            │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│         Create Container-Host Relationships               │
-│  - Link containers to Docker host                         │
-│  - Set virtualization metadata                            │
-│  - Create subnet for Docker bridge                        │
-└───────────────────┬──────────────────────────────────────┘
-                    ▼
-┌──────────────────────────────────────────────────────────┐
-│                 Report to Server                          │
-│  - Send containers as hosts                               │
-│  - Send Docker subnets                                    │
-│  - Link to host via virtualization field                  │
-└──────────────────────────────────────────────────────────┘
-```
+<Mermaid chart={`
+flowchart TD
+    subgraph connect["Connect to Docker Socket"]
+        c1["Verify socket accessibility"]
+        c2["Authenticate (if required)"]
+    end
+
+    subgraph list["List Running Containers"]
+        l1["Get container IDs, names, labels"]
+        l2["Extract port mappings"]
+        l3["Identify networks"]
+    end
+
+    subgraph inspect["Inspect Docker Networks"]
+        n1["Enumerate bridge networks"]
+        n2["Map containers to network subnets"]
+        n3["Extract gateway IPs"]
+    end
+
+    subgraph match["Match Services to Containers"]
+        m1["Use port mappings to identify services"]
+        m2["Check container labels for hints"]
+        m3["Apply same pattern matching as network scan"]
+    end
+
+    subgraph relationships["Create Container-Host Relationships"]
+        h1["Link containers to Docker host"]
+        h2["Set virtualization metadata"]
+        h3["Create subnet for Docker bridge"]
+    end
+
+    subgraph report["Report to Server"]
+        r1["Send containers as hosts"]
+        r2["Send Docker subnets"]
+        r3["Link to host via virtualization field"]
+    end
+
+    connect --> list --> inspect --> match --> relationships --> report
+`} />
 
 ---
 

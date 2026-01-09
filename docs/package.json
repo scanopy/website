@@ -18,10 +18,12 @@
     "fumadocs-ui": "16.3.2",
     "lucide-react": "^0.561.0",
     "marked": "^17.0.1",
+    "mermaid": "^11.12.2",
     "next": "16.0.10",
     "posthog-js": "^1.310.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-zoom-pan-pinch": "^3.7.0",
     "shiki": "^3.20.0"
   },
   "devDependencies": {

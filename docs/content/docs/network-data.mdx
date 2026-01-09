@@ -89,22 +89,25 @@ Two special subnet types use CIDR `0.0.0.0/0` and serve as organizational contai
 
 Groups create logical connections between services for topology visualization. They don't affect how Scanopy discovers or scans — they're purely for showing relationships that network topology alone doesn't capture.
 
-```
-Hub and Spoke                      Path
+**Hub and Spoke** — when multiple services connect to a central one (database clients, API consumers):
 
-     ┌─────────┐
-     │ Web App │
-     └────┬────┘
-          │
-┌───────┐ │ ┌────────┐
-│Workers├─┼─┤Database│       User → Proxy → App → Database
-└───────┘ │ └────────┘
-          │
-     ┌────┴────┐
-     │  Admin  │
-     └─────────┘
-```
+<Mermaid chart={`
+flowchart TD
+    webapp["Web App"]
+    workers["Workers"]
+    database["Database"]
+    admin["Admin"]
 
-Use **Hub and Spoke** when multiple services connect to a central one (database clients, API consumers). Use **Path** for linear flows (request routing, data pipelines, backup chains).
+    workers --> webapp
+    database --> webapp
+    admin --> webapp
+`} />
+
+**Path** — for linear flows (request routing, data pipelines, backup chains):
+
+<Mermaid chart={`
+flowchart LR
+    user["User"] --> proxy["Proxy"] --> app["App"] --> database["Database"]
+`} />
 
 Manage groups via **Manage > Groups**.

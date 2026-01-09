@@ -34,20 +34,26 @@ Self-hosted users need to install the Scanopy server before deploying daemons. S
 
 ## How Scanopy Works
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Scanopy Server                           │
-│              (Cloud or Self-Hosted)                         │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-        ┌─────────────────┼─────────────────┐
-        │                 │                 │
-        ▼                 ▼                 ▼
-┌───────────────┐ ┌───────────────┐ ┌───────────────┐
-│   Network 1   │ │   Network 2   │ │   Network 3   │
-│  [Daemon]     │ │  [Daemon]     │ │  [Daemon]     │
-└───────────────┘ └───────────────┘ └───────────────┘
-```
+<Mermaid chart={`
+flowchart TB
+    server["Scanopy Server<br/>(Cloud or Self-Hosted)"]
+
+    server --> net1
+    server --> net2
+    server --> net3
+
+    subgraph net1[" "]
+        d1["Network 1<br/>Daemon"]
+    end
+
+    subgraph net2[" "]
+        d2["Network 2<br/>Daemon"]
+    end
+
+    subgraph net3[" "]
+        d3["Network 3<br/>Daemon"]
+    end
+`} />
 
 1. **Daemons** run on your networks and perform discovery scans
 2. **Server** stores data and serves the web UI

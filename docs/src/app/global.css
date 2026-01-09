@@ -107,3 +107,197 @@ nav[aria-label="Docs"] a[aria-current="page"] {
 #response-body ~ * .font-medium.font-mono.text-fd-primary > .text-fd-muted-foreground {
   display: none;
 }
+
+/* Mermaid wrapper and controls */
+.mermaid-wrapper {
+  position: relative;
+  background: var(--color-fd-muted);
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-fd-border);
+  overflow: hidden;
+}
+
+.mermaid-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--color-fd-border);
+  background: var(--color-fd-card);
+}
+
+.mermaid-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 0.375rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-fd-muted-foreground);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mermaid-control-btn:hover {
+  background: var(--color-fd-muted);
+  color: var(--color-fd-foreground);
+  border-color: var(--color-fd-border);
+}
+
+.mermaid-control-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-fd-border);
+  margin: 0 0.25rem;
+}
+
+/* Transform wrapper from react-zoom-pan-pinch */
+.mermaid-transform-wrapper {
+  width: 100% !important;
+  height: 400px !important;
+  cursor: grab;
+}
+
+.mermaid-transform-wrapper:active {
+  cursor: grabbing;
+}
+
+.mermaid-transform-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-diagram-inner {
+  padding: 1rem;
+}
+
+.mermaid-diagram-inner svg {
+  max-width: none;
+  height: auto;
+}
+
+/* Fullscreen mode */
+.mermaid-wrapper:fullscreen,
+.mermaid-wrapper.mermaid-fullscreen {
+  background: var(--color-fd-background);
+  border-radius: 0;
+  border: none;
+}
+
+.mermaid-wrapper:fullscreen .mermaid-transform-wrapper,
+.mermaid-wrapper.mermaid-fullscreen .mermaid-transform-wrapper {
+  height: calc(100vh - 52px) !important;
+}
+
+.mermaid-wrapper:fullscreen .mermaid-controls,
+.mermaid-wrapper.mermaid-fullscreen .mermaid-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--color-fd-card);
+  border-bottom: 1px solid var(--color-fd-border);
+}
+
+/* Non-zoomable diagram styles */
+.mermaid-diagram {
+  overflow-x: auto;
+  padding: 1rem;
+  background: var(--color-fd-muted);
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-fd-border);
+}
+
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Override Mermaid's default text colors for better visibility */
+.mermaid-diagram .nodeLabel,
+.mermaid-diagram .edgeLabel,
+.mermaid-diagram .label,
+.mermaid-diagram-inner .nodeLabel,
+.mermaid-diagram-inner .edgeLabel,
+.mermaid-diagram-inner .label {
+  color: var(--color-fd-foreground) !important;
+  fill: var(--color-fd-foreground) !important;
+}
+
+/* Ensure flowchart nodes have proper styling */
+.mermaid-diagram .node rect,
+.mermaid-diagram .node circle,
+.mermaid-diagram .node ellipse,
+.mermaid-diagram .node polygon,
+.mermaid-diagram-inner .node rect,
+.mermaid-diagram-inner .node circle,
+.mermaid-diagram-inner .node ellipse,
+.mermaid-diagram-inner .node polygon {
+  stroke-width: 2px;
+}
+
+/* Style subgraph titles */
+.mermaid-diagram .cluster-label .nodeLabel,
+.mermaid-diagram-inner .cluster-label .nodeLabel {
+  color: var(--color-fd-muted-foreground) !important;
+  fill: var(--color-fd-muted-foreground) !important;
+}
+
+/* ER Diagram specific styles - fix alternating row colors */
+.mermaid-diagram .er.attributeBoxOdd,
+.mermaid-diagram .er.attributeBoxEven,
+.mermaid-diagram rect.er.attributeBoxOdd,
+.mermaid-diagram rect.er.attributeBoxEven,
+.mermaid-diagram-inner .er.attributeBoxOdd,
+.mermaid-diagram-inner .er.attributeBoxEven,
+.mermaid-diagram-inner rect.er.attributeBoxOdd,
+.mermaid-diagram-inner rect.er.attributeBoxEven {
+  fill: #1f2937 !important;
+  stroke: #374151 !important;
+}
+
+/* Override inline fills on ER diagram rects - targets the alternating rows */
+.mermaid-diagram g.entityTableCell rect,
+.mermaid-diagram-inner g.entityTableCell rect,
+.mermaid-diagram .entityBox + rect,
+.mermaid-diagram-inner .entityBox + rect,
+.mermaid-diagram rect[fill="#ffffff"],
+.mermaid-diagram rect[fill="#f2f2f2"],
+.mermaid-diagram-inner rect[fill="#ffffff"],
+.mermaid-diagram-inner rect[fill="#f2f2f2"] {
+  fill: #1f2937 !important;
+}
+
+/* ER Diagram entity box header */
+.mermaid-diagram .er.entityBox,
+.mermaid-diagram-inner .er.entityBox {
+  fill: #1f2937 !important;
+  stroke: #3b82f6 !important;
+}
+
+/* ER Diagram text colors */
+.mermaid-diagram .er.entityLabel,
+.mermaid-diagram .er.attributeKey,
+.mermaid-diagram .er.attributeValue,
+.mermaid-diagram-inner .er.entityLabel,
+.mermaid-diagram-inner .er.attributeKey,
+.mermaid-diagram-inner .er.attributeValue {
+  fill: #f8fafc !important;
+}
+
+/* ER Diagram relationship lines */
+.mermaid-diagram .er.relationshipLine,
+.mermaid-diagram-inner .er.relationshipLine {
+  stroke: #94a3b8 !important;
+}
+
+.mermaid-diagram .er.relationshipLabel,
+.mermaid-diagram-inner .er.relationshipLabel {
+  fill: #94a3b8 !important;
+}

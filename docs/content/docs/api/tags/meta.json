@@ -4,8 +4,11 @@
     "index",
     "get_tag_by_id",
     "list_tags",
+    "bulk_add_tag",
     "bulk_delete_tags",
+    "bulk_remove_tag",
     "create_tag",
+    "set_entity_tags",
     "update_tag",
     "delete_tag"
   ]

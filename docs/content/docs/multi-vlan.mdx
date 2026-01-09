@@ -10,22 +10,26 @@ Scanopy daemons can scan any network they can route to. The key question is whet
 
 For most setups, a single daemon with routing to all subnets works fine. You only need multiple daemons when VLANs are truly isolated or you need Layer 2 access for accurate MAC collection.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Scanopy Server                           │
-│                   (Cloud or Self-Hosted)                    │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-        ┌─────────────────┼─────────────────┐
-        │                 │                 │
-        ▼                 ▼                 ▼
-┌───────────────┐ ┌───────────────┐ ┌───────────────┐
-│ VLAN 1        │ │ VLAN 2        │ │ VLAN 3        │
-│ Production    │ │ IoT           │ │ Guest         │
-│ 192.168.1.0/24│ │ 192.168.2.0/24│ │ 192.168.3.0/24│
-│ [Daemon 1]    │ │ [Daemon 2]    │ │ [Daemon 3]    │
-└───────────────┘ └───────────────┘ └───────────────┘
-```
+<Mermaid chart={`
+flowchart TB
+    server["Scanopy Server<br/>(Cloud or Self-Hosted)"]
+
+    server --> vlan1
+    server --> vlan2
+    server --> vlan3
+
+    subgraph vlan1["VLAN 1 - Production"]
+        d1["192.168.1.0/24<br/>Daemon 1"]
+    end
+
+    subgraph vlan2["VLAN 2 - IoT"]
+        d2["192.168.2.0/24<br/>Daemon 2"]
+    end
+
+    subgraph vlan3["VLAN 3 - Guest"]
+        d3["192.168.3.0/24<br/>Daemon 3"]
+    end
+`} />
 
 Refer to [Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3) for details.
 
