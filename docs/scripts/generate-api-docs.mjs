@@ -367,8 +367,9 @@ function generateMetaFiles(spec, apiDir) {
 const { spec, processedPath } = preprocessSpec();
 console.log('Preprocessed OpenAPI spec (converted text/plain to application/json)');
 
+// Use relative path for OpenAPI config so it works in any environment (local, CI, etc.)
 const openapi = createOpenAPI({
-  input: [processedPath],
+  input: ['./openapi-processed.json'],
 });
 
 async function main() {

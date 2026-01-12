@@ -2,8 +2,8 @@
   "title": "Services",
   "pages": [
     "index",
+    "get_all_services",
     "get_service_by_id",
-    "list_services",
     "bulk_delete_services",
     "create_service",
     "update_service",
