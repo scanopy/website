@@ -48,22 +48,22 @@ scrape_configs:
 
 Add a prometheus.scrape component to your Alloy configuration:
 
-```conf
+```
 prometheus.scrape "scanopy" {
-targets = [{
-    __address__ = "scanopy.example.com:60072",
-}]
+    targets = [{
+        __address__ = "scanopy.example.com:60072",
+    }]
 
-forward_to      = [prometheus.remote_write.default.receiver]
-metrics_path    = "/api/metrics"
+    forward_to      = [prometheus.remote_write.default.receiver]
+    metrics_path    = "/api/metrics"
 
-authorization {
-    type        = "Bearer"
-    credentials = "your-secure-token-here"
-}
+    authorization {
+        type        = "Bearer"
+        credentials = "your-secure-token-here"
+    }
 
-http_headers = {
-    "X-Service-Name" = "prometheus",
-}
+    http_headers = {
+        "X-Service-Name" = "prometheus",
+    }
 }
 ```
