@@ -38,6 +38,8 @@ environment:
 | **SMTP Relay**            | `--smtp-relay`                 | `SCANOPY_SMTP_RELAY`                 | -                         | SMTP server address (e.g., `smtp.gmail.com`)                       |
 | **SMTP Email**            | `--smtp-email`                 | `SCANOPY_SMTP_EMAIL`                 | -                         | Sender email address for outgoing emails                           |
 | **Client IP Source**      | `--client-ip-source`           | `SCANOPY_CLIENT_IP_SOURCE`           | -                         | Source of IP address from request headers for reverse proxy setups |
+| **Metrics Token**         | `--metrics-token`              | `SCANOPY_METRICS_TOKEN`              | -                         | Bearer token for Prometheus metrics endpoint authentication        |
+| **Prometheus Allowed IPs**| N/A                            | `SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS` | -            | Comma-separated IPs/CIDRs allowed to access metrics endpoint       |
 
 ## Integrated Daemon URL
 
@@ -153,6 +155,10 @@ SCANOPY_SMTP_EMAIL=scanopy@yourdomain.com
 
 # Daemon
 SCANOPY_INTEGRATED_DAEMON_URL=http://172.17.0.1:60073
+
+# Metrics (optional - for Prometheus scraping)
+SCANOPY_METRICS_TOKEN=your-secure-metrics-token
+SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS=192.168.1.0/24
 ```
 
 **Reference in docker-compose.yml**:

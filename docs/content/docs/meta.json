@@ -21,6 +21,7 @@
     "server-installation",
     "server-configuration",
     "oidc",
+    "prometheus-setup",
     "server-troubleshooting",
     "---Reference---",
     "architecture",
