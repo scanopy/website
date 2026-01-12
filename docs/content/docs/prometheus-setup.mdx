@@ -67,6 +67,7 @@ scrape_configs:
 
 Add a prometheus.scrape component to your Alloy configuration:
 
+```conf
 prometheus.scrape "scanopy" {
 targets = [{
     __address__ = "scanopy.example.com:60072",
@@ -84,9 +85,11 @@ extra_headers = {
     "X-Service-Name" = "prometheus",
 }
 }
+```
 
 For HTTPS with a self-signed certificate:
 
+```conf
 prometheus.scrape "scanopy" {
 targets = [{
     __address__ = "scanopy.example.com:60072",
@@ -109,17 +112,4 @@ extra_headers = {
     "X-Service-Name" = "prometheus",
 }
 }
-
-Verify the connection
-
-Check that metrics are being scraped:
-
-Prometheus: Navigate to Status > Targets and confirm the scanopy target shows "UP".
-
-Grafana Alloy: Check the Alloy UI or logs for successful scrape messages.
-
-Test manually with curl:
-
-curl -H "Authorization: Bearer your-secure-token-here" \
-    -H "X-Service-Name: prometheus" \
-    https://scanopy.example.com:60072/api/metrics`
+```
