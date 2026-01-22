@@ -105,22 +105,25 @@ jobs:
 
           async function postTweet() {
             try {
-              // Upload media using v1.1 API (available on free tier)
-              const mediaId = await client.v1.uploadMedia('./gallery-image.png');
+              // Upload media using v1.1 API with tweet_image category for v2 compatibility
+              const mediaId = await client.v1.uploadMedia('./gallery-image.png', {
+                mimeType: 'image/png',
+                target: 'tweet'
+              });
               // Ensure media ID is a string (handles both string and object return types)
               const mediaIdStr = typeof mediaId === 'object' ? mediaId.media_id_string : String(mediaId);
               console.log('Media uploaded, ID:', mediaIdStr, 'Type:', typeof mediaIdStr);
 
-              // Compose tweet text
+              // Compose tweet text (no leading spaces - template literal preserves whitespace)
               const text = `Community Showcase: ${process.env.TWEET_TITLE}
 
-          ${process.env.TWEET_DESCRIPTION}
+${process.env.TWEET_DESCRIPTION}
 
-          Submitted by ${process.env.TWEET_AUTHOR}
+Submitted by ${process.env.TWEET_AUTHOR}
 
-          Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery
+Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery
 
-          ${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`;
+${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`;
 
               // Post tweet using v2 API with media (v1 tweet endpoint not available on free tier)
               const tweet = await client.v2.tweet({
