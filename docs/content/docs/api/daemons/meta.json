@@ -5,8 +5,8 @@
     "export_Daemons_csv",
     "get_daemon_by_id",
     "get_daemons",
-    "bulk_delete_daemons",
+    "bulk_delete_Daemons",
     "retry_daemon_connection",
-    "delete_daemon"
+    "delete_Daemon"
   ]
 }

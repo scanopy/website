@@ -4,13 +4,13 @@
     "index",
     "export_Discoveries_csv",
     "get_active_sessions",
-    "get_discovery_by_id",
-    "list_discoveries",
-    "bulk_delete_discoveries",
+    "get_Discovery_by_id",
+    "list_Discoveries",
+    "bulk_delete_Discoveries",
     "cancel_discovery",
     "create_discovery",
     "start_session",
     "update_discovery",
-    "delete_discovery"
+    "delete_Discovery"
   ]
 }

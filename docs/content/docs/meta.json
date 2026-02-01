@@ -48,7 +48,6 @@
     "api/shares",
     "api/snmp-credentials",
     "api/subnets",
-    "api/system",
     "api/tags",
     "api/topologies",
     "api/user-api-keys",

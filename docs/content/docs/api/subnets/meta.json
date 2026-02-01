@@ -3,11 +3,11 @@
   "pages": [
     "index",
     "export_Subnets_csv",
-    "get_subnet_by_id",
+    "get_Subnet_by_id",
     "list_subnets",
-    "bulk_delete_subnets",
+    "bulk_delete_Subnets",
     "create_subnet",
     "update_subnet",
-    "delete_subnet"
+    "delete_Subnet"
   ]
 }

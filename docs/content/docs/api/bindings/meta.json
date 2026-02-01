@@ -3,11 +3,11 @@
   "pages": [
     "index",
     "export_Bindings_csv",
-    "get_binding_by_id",
-    "list_bindings",
-    "bulk_delete_bindings",
+    "get_Binding_by_id",
+    "list_Bindings",
+    "bulk_delete_Bindings",
     "create_binding",
     "update_binding",
-    "delete_binding"
+    "delete_Binding"
   ]
 }

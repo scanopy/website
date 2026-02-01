@@ -3,8 +3,8 @@
   "pages": [
     "index",
     "export_Networks_csv",
-    "get_network_by_id",
-    "list_networks",
+    "get_Network_by_id",
+    "list_Networks",
     "bulk_delete_networks",
     "create_network",
     "update_network",

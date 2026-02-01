@@ -3,11 +3,11 @@
   "pages": [
     "index",
     "export_Ports_csv",
-    "get_port_by_id",
-    "list_ports",
-    "bulk_delete_ports",
+    "get_Port_by_id",
+    "list_Ports",
+    "bulk_delete_Ports",
     "create_port",
     "update_port",
-    "delete_port"
+    "delete_Port"
   ]
 }
