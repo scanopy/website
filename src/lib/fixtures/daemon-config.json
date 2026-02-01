@@ -1,3 +1,4 @@
+[success] [1m[32m[paraglide-js] [39m[22mCompilation complete (locale-modules)
 [
   {
     "id": "server_url",
@@ -45,8 +46,8 @@
     "cliFlag": "--mode",
     "envVar": "SCANOPY_MODE",
     "configFileKey": "mode",
-    "default": "Push",
-    "description": "Select whether the daemon will Pull work from the server or have work Pushed to it. If set to Push, you will need to ensure that network you are deploying the daemon on can be reached by the server by opening/forwarding the port to the daemon, and provide the Daemon URL where the server should try to reach the daemon. If set to Pull, no port opening/forwarding is needed",
+    "default": "daemon_poll",
+    "description": "DaemonPoll: Daemon connects to server; works behind NAT/firewall without opening ports. ServerPoll: Server connects to daemon, for deployments where daemon cannot make outbound connections - requires providing Daemon URL",
     "docsOnly": false
   },
   {
@@ -55,8 +56,8 @@
     "cliFlag": "--daemon-url",
     "envVar": "SCANOPY_DAEMON_URL",
     "configFileKey": "daemon_url",
-    "default": null,
-    "description": "Public URL where server can reach daemon in Push mode. Defaults to auto-detected IP + Daemon Port if not set",
+    "default": "_Required_",
+    "description": "Base URL where server can reach daemon (without port). Port is specified separately",
     "docsOnly": false
   },
   {
@@ -66,7 +67,7 @@
     "envVar": "SCANOPY_DAEMON_PORT",
     "configFileKey": "daemon_port",
     "default": "60073",
-    "description": "Port for daemon to listen on",
+    "description": "Port the daemon listens on. Combined with daemon URL for server to connect",
     "docsOnly": false
   },
   {
@@ -165,8 +166,28 @@
     "cliFlag": "--arp-retries",
     "envVar": "SCANOPY_ARP_RETRIES",
     "configFileKey": "arp_retries",
-    "default": null,
+    "default": "2",
     "description": "Number of ARP retry rounds for non-responding hosts (default: 2, meaning 3 total attempts)",
+    "docsOnly": false
+  },
+  {
+    "id": "scan_rate_pps",
+    "label": "Port Scan Packets per Second",
+    "cliFlag": "--scan-rate-pps",
+    "envVar": "SCANOPY_SCAN_RATE_PPS",
+    "configFileKey": "scan_rate_pps",
+    "default": "500",
+    "description": "Maximum port scan probes per second (default: 500, controls rate of TCP/UDP connection attempts to avoid overwhelming target hosts)",
+    "docsOnly": false
+  },
+  {
+    "id": "port_scan_batch_size",
+    "label": "Port Scan Batch Size",
+    "cliFlag": "--port-scan-batch-size",
+    "envVar": "SCANOPY_PORT_SCAN_BATCH_SIZE",
+    "configFileKey": "port_scan_batch_size",
+    "default": "200",
+    "description": "Number of ports scanned concurrently per host. Higher values scan faster but may overwhelm some hosts",
     "docsOnly": false
   },
   {
@@ -175,7 +196,7 @@
     "cliFlag": "--arp-rate-pps",
     "envVar": "SCANOPY_ARP_RATE_PPS",
     "configFileKey": "arp_rate_pps",
-    "default": null,
+    "default": "50",
     "description": "Maximum ARP packets per second (default: 50, go more conservative for networks with enterprise switches)",
     "docsOnly": false
   },
@@ -195,7 +216,7 @@
     "cliFlag": "--concurrent-scans",
     "envVar": "SCANOPY_CONCURRENT_SCANS",
     "configFileKey": "concurrent_scans",
-    "default": "Auto",
+    "default": "() => __vite_ssr_import_1__.common_auto()",
     "description": "Maximum parallel host scans",
     "docsOnly": false
   }
