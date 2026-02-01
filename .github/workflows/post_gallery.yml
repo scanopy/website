@@ -114,16 +114,18 @@ jobs:
               const mediaIdStr = typeof mediaId === 'object' ? mediaId.media_id_string : String(mediaId);
               console.log('Media uploaded, ID:', mediaIdStr, 'Type:', typeof mediaIdStr);
 
-              // Compose tweet text (no leading spaces - template literal preserves whitespace)
-              const text = `Community Showcase: ${process.env.TWEET_TITLE}
-
-${process.env.TWEET_DESCRIPTION}
-
-Submitted by ${process.env.TWEET_AUTHOR}
-
-Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery
-
-${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`;
+              // Compose tweet text
+              const text = [
+                `Community Showcase: ${process.env.TWEET_TITLE}`,
+                '',
+                process.env.TWEET_DESCRIPTION,
+                '',
+                `Submitted by ${process.env.TWEET_AUTHOR}`,
+                '',
+                'Check out more at https://scanopy.net/showcase?utm_source=twitter&utm_medium=social&utm_campaign=gallery',
+                '',
+                `${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`
+              ].join('\n');
 
               // Post tweet using v2 API with media (v1 tweet endpoint not available on free tier)
               const tweet = await client.v2.tweet({

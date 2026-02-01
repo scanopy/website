@@ -104,6 +104,31 @@ jobs:
 
           echo "Discord notification sent"
 
+      - name: Update GitHub Release Notes
+        env:
+          GH_TOKEN: ${{ secrets.UPDATE_SCANOPY_RELEASES_TOKEN }}
+        run: |
+          RELEASE_TAG="v${{ steps.changelog.outputs.version }}"
+
+          echo "Updating release notes for $RELEASE_TAG in scanopy/scanopy..."
+
+          # Check if release exists
+          if ! gh release view "$RELEASE_TAG" --repo scanopy/scanopy > /dev/null 2>&1; then
+            echo "::warning::Release $RELEASE_TAG not found in scanopy/scanopy. Skipping."
+            exit 0
+          fi
+
+          # Write body to temp file to handle multiline content safely
+          cat > /tmp/release-notes.md << 'RELEASE_BODY_EOF'
+          ${{ steps.changelog.outputs.body }}
+          RELEASE_BODY_EOF
+
+          gh release edit "$RELEASE_TAG" \
+            --repo scanopy/scanopy \
+            --notes-file /tmp/release-notes.md
+
+          echo "Successfully updated release notes for $RELEASE_TAG"
+
       - name: Post to Twitter/X
         uses: noweh/post-tweet-v2-action@v1.0
         with:
