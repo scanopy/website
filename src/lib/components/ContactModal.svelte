@@ -132,9 +132,10 @@
 		try {
 			const { firstname, lastname } = splitName(name);
 
-			const context: { pageUri: string; pageName: string; hutk?: string } = {
+			const context: { pageUri: string; pageName: string; hutk?: string; formName: string } = {
 				pageUri: window.location.href,
-				pageName: document.title
+				pageName: document.title,
+				formName: 'Lead Form'
 			};
 			const hutk = getCookie('hubspotutk');
 			if (hutk) {
@@ -150,10 +151,10 @@
 					lastname,
 					company: company.trim(),
 					numemployees: teamSize,
-					scanopy_urgency: urgency || undefined,
+					scanopy_inquiry_urgency_for_company: urgency || undefined,
 					network_count: networkCount || undefined,
 					message: useCase.trim() || undefined,
-					plan_type: planType,
+					scanopy_inquiry_plan_type_for_company: planType,
 					lifecyclestage: 'lead'
 				},
 				context
@@ -228,7 +229,7 @@
 					Tell us about your needs and we'll get back to you shortly.
 				</p>
 
-				<form onsubmit={handleSubmit} class="space-y-4">
+				<form onsubmit={handleSubmit} class="space-y-4" data-hs-do-not-collect="true">
 					<div>
 						<label for="contact-email" class="mb-1 block text-sm font-medium text-gray-300">
 							Email <span class="text-red-400">*</span>

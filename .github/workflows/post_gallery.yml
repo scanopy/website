@@ -105,14 +105,14 @@ jobs:
 
           async function postTweet() {
             try {
-              // Upload media using v1.1 API with tweet_image category for v2 compatibility
+              // Upload media using v1.1 API
               const mediaId = await client.v1.uploadMedia('./gallery-image.png', {
                 mimeType: 'image/png',
-                target: 'tweet'
               });
-              // Ensure media ID is a string (handles both string and object return types)
-              const mediaIdStr = typeof mediaId === 'object' ? mediaId.media_id_string : String(mediaId);
-              console.log('Media uploaded, ID:', mediaIdStr, 'Type:', typeof mediaIdStr);
+              console.log('Media uploaded, ID:', mediaId);
+
+              // Wait for media processing to complete
+              await new Promise(resolve => setTimeout(resolve, 5000));
 
               // Compose tweet text
               const text = [
@@ -127,10 +127,10 @@ jobs:
                 `${process.env.TWEET_TAGS} #Scanopy #NetworkDiagram #Homelab`
               ].join('\n');
 
-              // Post tweet using v2 API with media (v1 tweet endpoint not available on free tier)
+              // Post tweet using v2 API with media
               const tweet = await client.v2.tweet({
                 text: text,
-                media: { media_ids: [mediaIdStr] }
+                media: { media_ids: [mediaId] }
               });
 
               console.log('Tweet posted successfully:', tweet.data.id);

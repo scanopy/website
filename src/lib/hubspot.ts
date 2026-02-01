@@ -5,8 +5,8 @@ interface HubSpotFormData {
 	company?: string;
 	numemployees?: string;
 	message?: string;
-	plan_type?: string;
-	scanopy_urgency?: string;
+	scanopy_inquiry_plan_type_for_company?: string;
+	scanopy_inquiry_urgency_for_company?: string;
 	network_count?: string;
 	lifecyclestage?: 'subscriber' | 'lead';
 	[key: string]: string | undefined;
@@ -16,6 +16,7 @@ interface HubSpotContext {
 	pageUri: string;
 	pageName: string;
 	hutk?: string;
+	formName?: string;
 }
 
 export async function submitToHubSpot(
