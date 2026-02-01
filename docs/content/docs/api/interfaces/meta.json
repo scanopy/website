@@ -3,8 +3,8 @@
   "pages": [
     "index",
     "export_Interfaces_csv",
-    "get_Interface_by_id",
-    "list_Interfaces",
+    "get_interface_by_id",
+    "list_interfaces",
     "bulk_delete_interfaces",
     "create_interface",
     "update_interface",

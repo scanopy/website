@@ -4,10 +4,10 @@
     "index",
     "export_Groups_csv",
     "get_all_groups",
-    "get_Group_by_id",
-    "bulk_delete_Groups",
+    "get_group_by_id",
+    "bulk_delete_groups",
     "create_group",
     "update_group",
-    "delete_Group"
+    "delete_group"
   ]
 }

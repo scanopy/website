@@ -4,10 +4,10 @@
     "index",
     "export_Services_csv",
     "get_all_services",
-    "get_Service_by_id",
-    "bulk_delete_Services",
+    "get_service_by_id",
+    "bulk_delete_services",
     "create_service",
     "update_service",
-    "delete_Service"
+    "delete_service"
   ]
 }

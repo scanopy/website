@@ -17,6 +17,7 @@ export function CookieConsent() {
   const [preferences, setPreferences] = useState<CookiePreferences>({
     necessary: true,
     analytics: false,
+    marketing: false,
   });
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -55,7 +56,7 @@ export function CookieConsent() {
   }
 
   function acceptAll() {
-    const prefs = { necessary: true, analytics: true };
+    const prefs = { necessary: true, analytics: true, marketing: true };
     setPreferences(prefs);
     saveGdprPreferences(prefs);
     setHasConsented(true);
@@ -65,7 +66,7 @@ export function CookieConsent() {
   }
 
   function rejectAll() {
-    const prefs = { necessary: true, analytics: false };
+    const prefs = { necessary: true, analytics: false, marketing: false };
     setPreferences(prefs);
     saveGdprPreferences(prefs);
     setHasConsented(true);

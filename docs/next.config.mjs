@@ -18,6 +18,14 @@ const config = {
   images: {
     unoptimized: true,
   },
+  turbopack: {
+    rules: {
+      '*.mermaid': {
+        loaders: ['raw-loader'],
+        as: '*.js',
+      },
+    },
+  },
   webpack: (config) => {
     config.resolve.alias['$lib'] = path.resolve(__dirname, '../src/lib');
     return config;
