@@ -1,0 +1,14 @@
+{
+  "title": "Daemon API Keys",
+  "pages": [
+    "index",
+    "export_Daemon API Keys_csv",
+    "get_Daemon API Key_by_id",
+    "list_Daemon API Keys",
+    "bulk_delete_Daemon API Keys",
+    "create_daemon_api_key",
+    "rotate_key_handler",
+    "update_daemon_api_key",
+    "delete_Daemon API Key"
+  ]
+}

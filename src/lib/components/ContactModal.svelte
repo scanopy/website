@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { X, Send, CheckCircle, AlertCircle } from 'lucide-svelte';
-	import { isPostHogLoaded, getPostHog } from '$lib/posthog';
 	import { analytics } from '$lib/analytics.svelte';
+	import { submitToHubSpot } from '$lib/hubspot';
+	import { getCookie } from '$lib/cookies';
+	import {
+		PUBLIC_HUBSPOT_PORTAL_ID,
+		PUBLIC_HUBSPOT_CONTACT_FORM_GUID
+	} from '$env/static/public';
 
 	interface Props {
 		open: boolean;
@@ -16,6 +21,8 @@
 	let name = $state('');
 	let company = $state('');
 	let teamSize = $state('');
+	let urgency = $state('');
+	let networkCount = $state('');
 	let useCase = $state('');
 	let loading = $state(false);
 	let status = $state<'idle' | 'success' | 'error'>('idle');
@@ -23,13 +30,37 @@
 
 	const teamSizeOptions = [
 		{ value: '1-10', label: '1-10 employees' },
-		{ value: '11-50', label: '11-50 employees' },
-		{ value: '51-200', label: '51-200 employees' },
-		{ value: '200+', label: '200+ employees' }
+		{ value: '11-25', label: '11-25 employees' },
+		{ value: '26-50', label: '26-50 employees' },
+		{ value: '51-100', label: '51-100 employees' },
+		{ value: '101-250', label: '101-250 employees' },
+		{ value: '251-500', label: '251-500 employees' },
+		{ value: '501-1000', label: '501-1000 employees' },
+		{ value: '1001+', label: '1001+ employees' }
 	];
+
+	const urgencyOptions = [
+		{ value: 'immediately', label: 'Immediately' },
+		{ value: '1-3 months', label: '1-3 months' },
+		{ value: '3-6 months', label: '3-6 months' },
+		{ value: 'exploring', label: 'Just exploring' }
+	];
+
 
 	function validateEmail(email: string): boolean {
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+	}
+
+	function splitName(fullName: string): { firstname: string; lastname: string } {
+		const trimmed = fullName.trim();
+		const spaceIndex = trimmed.indexOf(' ');
+		if (spaceIndex === -1) {
+			return { firstname: trimmed, lastname: '' };
+		}
+		return {
+			firstname: trimmed.slice(0, spaceIndex),
+			lastname: trimmed.slice(spaceIndex + 1)
+		};
 	}
 
 	function resetForm() {
@@ -37,6 +68,8 @@
 		name = '';
 		company = '';
 		teamSize = '';
+		urgency = '';
+		networkCount = '';
 		useCase = '';
 		status = 'idle';
 		errorMessage = '';
@@ -88,7 +121,7 @@
 
 		if (!teamSize) {
 			status = 'error';
-			errorMessage = 'Please select your team size';
+			errorMessage = 'Please select your company size';
 			return;
 		}
 
@@ -96,30 +129,37 @@
 		status = 'idle';
 		errorMessage = '';
 
-		let posthogId: string | undefined;
-		if (isPostHogLoaded()) {
-			posthogId = getPostHog().get_distinct_id();
-		}
-
 		try {
-			const formData = new FormData();
-			formData.append('email', email.trim());
-			formData.append('subject', `${planName} Plan Inquiry`);
-			formData.append('name', name.trim());
-			formData.append('company', company.trim());
-			formData.append('team_size', teamSize);
-			formData.append('use_case', useCase.trim());
-			formData.append('plan_type', planType);
-			if (posthogId) {
-				formData.append('posthog_id', posthogId);
+			const { firstname, lastname } = splitName(name);
+
+			const context: { pageUri: string; pageName: string; hutk?: string } = {
+				pageUri: window.location.href,
+				pageName: document.title
+			};
+			const hutk = getCookie('hubspotutk');
+			if (hutk) {
+				context.hutk = hutk;
 			}
 
-			const response = await fetch('https://formbold.com/s/3dk7E', {
-				method: 'POST',
-				body: formData
-			});
+			const success = await submitToHubSpot(
+				PUBLIC_HUBSPOT_PORTAL_ID,
+				PUBLIC_HUBSPOT_CONTACT_FORM_GUID,
+				{
+					email: email.trim(),
+					firstname,
+					lastname,
+					company: company.trim(),
+					numemployees: teamSize,
+					scanopy_urgency: urgency || undefined,
+					network_count: networkCount || undefined,
+					message: useCase.trim() || undefined,
+					plan_type: planType,
+					lifecyclestage: 'lead'
+				},
+				context
+			);
 
-			if (response.ok) {
+			if (success) {
 				status = 'success';
 				analytics.planInquirySubmitted({ planType, success: true });
 			} else {
@@ -156,7 +196,7 @@
 		onkeydown={handleKeydown}
 	>
 		<div
-			class="relative w-full max-w-md rounded-xl border border-gray-700 bg-gray-900 p-6 shadow-2xl"
+			class="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl border border-gray-700 bg-gray-900 p-6 shadow-2xl"
 		>
 			<button
 				type="button"
@@ -236,7 +276,7 @@
 
 					<div>
 						<label for="contact-team-size" class="mb-1 block text-sm font-medium text-gray-300">
-							Team Size <span class="text-red-400">*</span>
+							Company Size <span class="text-red-400">*</span>
 						</label>
 						<select
 							id="contact-team-size"
@@ -245,11 +285,43 @@
 							disabled={loading}
 							class="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
 						>
-							<option value="" disabled>Select team size</option>
+							<option value="" disabled>Select company size</option>
 							{#each teamSizeOptions as option (option.value)}
 								<option value={option.value}>{option.label}</option>
 							{/each}
 						</select>
+					</div>
+
+					<div>
+						<label for="contact-urgency" class="mb-1 block text-sm font-medium text-gray-300">
+							How soon do you need a solution? <span class="text-gray-500">(optional)</span>
+						</label>
+						<select
+							id="contact-urgency"
+							bind:value={urgency}
+							disabled={loading}
+							class="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+						>
+							<option value="">Select timeline</option>
+							{#each urgencyOptions as option (option.value)}
+								<option value={option.value}>{option.label}</option>
+							{/each}
+						</select>
+					</div>
+
+					<div>
+						<label for="contact-network-count" class="mb-1 block text-sm font-medium text-gray-300">
+							How many networks/sites? <span class="text-gray-500">(optional)</span>
+						</label>
+						<input
+							id="contact-network-count"
+							type="number"
+							min="0"
+							placeholder="Number of networks"
+							bind:value={networkCount}
+							disabled={loading}
+							class="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+						/>
 					</div>
 
 					<div>

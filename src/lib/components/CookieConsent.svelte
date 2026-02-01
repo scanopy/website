@@ -4,18 +4,20 @@
 	import { optInAnalytics, optOutAnalytics, isPostHogLoaded, getPostHog } from '$lib/posthog';
 
 	/**
-	 * Optional callback when analytics preferences change.
-	 * Used by main site for feature flags, ignored by docs.
+	 * Optional callbacks when preferences change.
+	 * Used by main site for feature flags and HubSpot loading.
 	 */
 	interface Props {
 		onAnalyticsChange?: (enabled: boolean) => void;
+		onMarketingChange?: (enabled: boolean) => void;
 	}
 
-	let { onAnalyticsChange }: Props = $props();
+	let { onAnalyticsChange, onMarketingChange }: Props = $props();
 
 	let preferences: CookiePreferences = $state({
 		necessary: true,
-		analytics: false
+		analytics: false,
+		marketing: false
 	});
 
 	let showBanner = $state(false);
@@ -45,6 +47,7 @@
 			}
 		}
 		onAnalyticsChange?.(preferences.analytics);
+		onMarketingChange?.(preferences.marketing);
 	}
 
 	function savePreferences() {
@@ -56,12 +59,12 @@
 	}
 
 	function acceptAll() {
-		preferences = { necessary: true, analytics: true };
+		preferences = { necessary: true, analytics: true, marketing: true };
 		savePreferences();
 	}
 
 	function rejectAll() {
-		preferences = { necessary: true, analytics: false };
+		preferences = { necessary: true, analytics: false, marketing: false };
 		savePreferences();
 	}
 
@@ -137,6 +140,20 @@
 							<p class="option-description">
 								Help us understand how visitors interact with our website by collecting anonymous
 								usage data.
+							</p>
+						</div>
+
+						<div class="cookie-option">
+							<div class="option-header">
+								<label class="option-label">
+									<input type="checkbox" bind:checked={preferences.marketing} />
+									<span class="checkbox"></span>
+									<span class="option-title">Marketing</span>
+								</label>
+							</div>
+							<p class="option-description">
+								Allow HubSpot to track your visits so we can provide better support and personalized
+								follow-up when you contact us.
 							</p>
 						</div>
 					</div>

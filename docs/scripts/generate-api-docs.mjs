@@ -252,6 +252,23 @@ function addMethodToTitles(apiDir) {
   console.log('Added method prefixes to API page titles');
 }
 
+// Convert a tag name to the kebab-case folder name that fumadocs generates
+function tagNameToFolderName(tagName) {
+  return tagName.toLowerCase().replace(/\s+/g, '-');
+}
+
+// Build a map from folder names to original tag names
+function buildFolderToTagMap(spec) {
+  const map = {};
+  if (spec.tags) {
+    for (const tag of spec.tags) {
+      const folderName = tagNameToFolderName(tag.name);
+      map[folderName] = tag.name;
+    }
+  }
+  return map;
+}
+
 // Generate index.mdx files for each API tag folder with tag descriptions
 function generateIndexPages(spec, apiDir) {
   // Build a map of tag name -> description from the spec
@@ -262,6 +279,9 @@ function generateIndexPages(spec, apiDir) {
     }
   }
 
+  // Build folder name -> tag name mapping
+  const folderToTag = buildFolderToTagMap(spec);
+
   // Get all folders in the API directory
   const folders = readdirSync(apiDir, { withFileTypes: true })
     .filter(d => d.isDirectory())
@@ -269,25 +289,14 @@ function generateIndexPages(spec, apiDir) {
 
   for (const folder of folders) {
     const folderPath = resolve(apiDir, folder);
-    const description = tagDescriptions[folder];
+    const tagName = folderToTag[folder];
+    const description = tagName ? tagDescriptions[tagName] : null;
 
     // Skip folders without a description
     if (!description) {
       console.log(`Skipped index.mdx for ${folder} (no description)`);
       continue;
     }
-
-    // Convert folder_name to Title Case
-    const acronyms = ['api', 'id', 'oidc', 'url', 'uri'];
-    const title = folder
-      .split('_')
-      .map(word => {
-        if (acronyms.includes(word.toLowerCase())) {
-          return word.toUpperCase();
-        }
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
-      .join(' ');
 
     // Strip leading whitespace from each line (OpenAPI descriptions are often indented)
     const bodyContent = description.replace(/^[ \t]+/gm, '').trim();
@@ -308,6 +317,9 @@ ${bodyContent}
 function generateMetaFiles(spec, apiDir) {
   // Method sort order
   const methodOrder = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+
+  // Build folder name -> tag name mapping
+  const folderToTag = buildFolderToTagMap(spec);
 
   // Get all folders in the API directory
   const folders = readdirSync(apiDir, { withFileTypes: true })
@@ -339,17 +351,8 @@ function generateMetaFiles(spec, apiDir) {
       })
       .map(f => f.name);
 
-    // Convert folder_name to Title Case, with special handling for acronyms
-    const acronyms = ['api', 'id', 'oidc', 'url', 'uri'];
-    let title = folder
-      .split('_')
-      .map(word => {
-        if (acronyms.includes(word.toLowerCase())) {
-          return word.toUpperCase();
-        }
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
-      .join(' ');
+    // Use the original tag name from the OpenAPI spec, or fall back to folder name
+    const title = folderToTag[folder] || folder;
 
     const meta = {
       title,

@@ -17,8 +17,8 @@ Daemons are lightweight agents that perform network discovery. Deploy daemons on
 2. Click **"Create Daemon"**
 3. Select the target network
 4. Select daemon mode:
-   - **Pull** (recommended): Daemon polls server for work — no inbound firewall rules needed
-   - **Push**: Server initiates scans — daemon must be reachable from server
+   - **DaemonPoll**: All connections strictly Daemon -> Server. No firewall rules needed to allow server to reach daemon.
+   - **ServerPoll**: All connections strictly Server -> Daemon. Requires a URL where the server can reach the daemon and firewall configured to allow connections from server to daemon.
 5. Click **"Generate Key"** to create an API key
 6. Copy either the Docker Compose or binary installation command
 

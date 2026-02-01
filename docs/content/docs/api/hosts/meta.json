@@ -2,6 +2,8 @@
   "title": "Hosts",
   "pages": [
     "index",
+    "export_Hosts_csv",
+    "export_hosts_zip",
     "get_all_hosts",
     "get_host_by_id",
     "bulk_delete_hosts",

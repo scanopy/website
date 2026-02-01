@@ -112,7 +112,7 @@ For consolidating hosts that appear on multiple VLANs, see [Consolidating Duplic
 
 ## Network Requirements
 
-### Firewall Rules for Pull Mode (Recommended)
+### Firewall Rules for DaemonPoll Mode (Default)
 
 Daemon initiates all connections. Minimal firewall changes needed.
 
@@ -121,12 +121,12 @@ Daemon initiates all connections. Minimal firewall changes needed.
 | Daemon | Server       | 60072 | TCP      | API communication |
 | Daemon | Local subnet | \*    | TCP      | Network scanning  |
 
-### Firewall Rules for Push Mode
+### Firewall Rules for ServerPoll Mode
 
 Server initiates scan requests. Daemon must be reachable.
 
 | Source | Destination  | Port  | Protocol | Purpose            |
 | ------ | ------------ | ----- | -------- | ------------------ |
-| Server | Daemon       | 60073 | TCP      | Push scan requests |
+| Server | Daemon       | 60073 | TCP      | ServerPoll communication |
 | Daemon | Server       | 60072 | TCP      | Report results     |
 | Daemon | Local subnet | \*    | TCP      | Network scanning   |

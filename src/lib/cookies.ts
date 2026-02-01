@@ -36,6 +36,7 @@ export function setCookie(name: string, value: string, days: number, domain?: st
 export interface CookiePreferences {
 	necessary: boolean;
 	analytics: boolean;
+	marketing: boolean;
 }
 
 /**
@@ -71,4 +72,12 @@ export function hasAnalyticsConsent(): boolean {
  */
 export function hasGdprDecision(): boolean {
 	return getGdprPreferences() !== null;
+}
+
+/**
+ * Check if user has consented to marketing cookies.
+ */
+export function hasMarketingConsent(): boolean {
+	const prefs = getGdprPreferences();
+	return prefs?.marketing ?? false;
 }

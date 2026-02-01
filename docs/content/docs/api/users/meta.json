@@ -2,6 +2,7 @@
   "title": "Users",
   "pages": [
     "index",
+    "export_Users_csv",
     "get_all_users",
     "bulk_delete_users"
   ]

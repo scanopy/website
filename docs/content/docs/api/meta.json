@@ -2,11 +2,12 @@
   "pages": [
     "index",
     "bindings",
-    "daemon_api_keys",
+    "daemon-api-keys",
     "daemons",
     "discoveries",
     "groups",
     "hosts",
+    "iftable-entries",
     "interfaces",
     "invites",
     "networks",
@@ -14,11 +15,12 @@
     "ports",
     "services",
     "shares",
+    "snmp-credentials",
     "subnets",
     "system",
     "tags",
-    "topology",
-    "user_api_keys",
+    "topologies",
+    "user-api-keys",
     "users"
   ]
 }

@@ -6,10 +6,15 @@
 
 	interface Props {
 		healthStatus?: 'loading' | 'healthy' | 'unhealthy';
-		plunkApiKey?: string;
+		hubspotPortalId?: string;
+		hubspotNewsletterFormGuid?: string;
 	}
 
-	let { healthStatus = 'loading', plunkApiKey = '' }: Props = $props();
+	let {
+		healthStatus = 'loading',
+		hubspotPortalId = '',
+		hubspotNewsletterFormGuid = ''
+	}: Props = $props();
 
 	function trackExternalLink(destination: string, url: string) {
 		if (isPostHogLoaded()) {
@@ -168,8 +173,12 @@
 			<!-- Newsletter -->
 			<div>
 				<h4 class="mb-4 font-semibold text-white">Stay Updated</h4>
-				{#if plunkApiKey}
-					<NewsletterSignup apiKey={plunkApiKey} eventName="website_newsletter" compact={true} />
+				{#if hubspotPortalId && hubspotNewsletterFormGuid}
+					<NewsletterSignup
+						portalId={hubspotPortalId}
+						formGuid={hubspotNewsletterFormGuid}
+						compact={true}
+					/>
 				{/if}
 			</div>
 		</div>

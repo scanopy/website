@@ -23,10 +23,10 @@ Scanopy stores information about devices and services on networks you configure 
 
 ### Daemon Communication
 
-Scanopy daemon communicates with the server using:
+Scanopy daemon communicates with the server in one of two modes:
 
-- **Pull mode** (default): Daemon polls the server for scan instructions
-- **Push mode**: Server connects to daemon to initiate scans (requires daemon to be accessible from server)
+- **DaemonPoll mode** (default): Daemon initiates all connections, polling the server for scan instructions. Best for daemons behind NAT or firewalls.
+- **ServerPoll mode**: Server initiates connections to the daemon to poll for status and results. Best for DMZ deployments where the daemon cannot make outbound connections to the server.
 
 ### Network Discovery
 

@@ -1,0 +1,13 @@
+{
+  "title": "SNMP Credentials",
+  "pages": [
+    "index",
+    "export_SNMP Credentials_csv",
+    "get_all_snmp_credentials",
+    "get_SNMP Credential_by_id",
+    "bulk_delete_snmp_credentials",
+    "create_snmp_credential",
+    "update_snmp_credential",
+    "delete_snmp_credential"
+  ]
+}

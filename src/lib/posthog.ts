@@ -20,15 +20,19 @@ export interface PostHogConfig {
 export function initPostHog(config: PostHogConfig): void {
 	if (initialized || typeof window === 'undefined') return;
 
-	posthog.init(config.apiKey, {
-		api_host: config.apiHost || 'https://ph.scanopy.net',
-		ui_host: config.uiHost || 'https://us.posthog.com',
-		person_profiles: 'identified_only',
-		persistence: 'memory',
-		opt_out_capturing_by_default: true,
-		capture_pageview: false,
-		capture_pageleave: false,
-		secure_cookie: true
+	posthog.init(config.apiKey, {  
+		api_host: 'https://ph.scanopy.net',  
+		ui_host: 'https://us.posthog.com',  
+		defaults: '2025-11-30',  
+		secure_cookie: true,  
+		persistence: 'localStorage+cookie',
+		opt_out_capturing_by_default: !hasAnalyticsConsent(),
+		opt_out_capturing_persistence_type: 'localStorage', // Respect opt-out choice  
+		capture_pageview: true,  
+		capture_pageleave: true,  
+		
+		// Don't auto-identify until consent  
+		person_profiles: 'identified_only', // Only create person profiles after identify  
 	});
 
 	initialized = true;

@@ -2,12 +2,13 @@
   "title": "Shares",
   "pages": [
     "index",
+    "export_Shares_csv",
     "get_public_share_metadata",
-    "get_share_by_id",
-    "list_shares",
-    "bulk_delete_shares",
+    "get_Share_by_id",
+    "list_Shares",
+    "bulk_delete_Shares",
     "create_share",
     "update_share",
-    "delete_share"
+    "delete_Share"
   ]
 }

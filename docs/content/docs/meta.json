@@ -33,11 +33,12 @@
     "---API Reference---",
     "api/index",
     "api/bindings",
-    "api/daemon_api_keys",
+    "api/daemon-api-keys",
     "api/daemons",
     "api/discoveries",
     "api/groups",
     "api/hosts",
+    "api/iftable-entries",
     "api/interfaces",
     "api/invites",
     "api/networks",
@@ -45,11 +46,12 @@
     "api/ports",
     "api/services",
     "api/shares",
+    "api/snmp-credentials",
     "api/subnets",
     "api/system",
     "api/tags",
-    "api/topology",
-    "api/user_api_keys",
+    "api/topologies",
+    "api/user-api-keys",
     "api/users"
   ]
 }

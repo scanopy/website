@@ -81,7 +81,43 @@ Technical overview of Scanopy's system design, components, and data flows.
 
 ## Data Flows
 
-### Discovery Flow (Pull Mode)
+### DaemonPoll Mode
+
+DaemonPoll is the default mode. The daemon initiates all connections to the server, making it ideal for daemons behind NAT or firewalls.
+
+#### Initialization (DaemonPoll)
+
+<Mermaid chart={`
+sequenceDiagram
+    participant D as Daemon
+    participant S as Server
+
+    Note over D: Daemon starts with API key
+    D->>S: POST /api/daemons/register<br/>{network_id, name}
+    S->>S: Create/update daemon record
+    S-->>D: {daemon_id, network_id}
+    Note over D: Store daemon_id for future requests
+`} />
+
+#### Runtime Polling (DaemonPoll)
+
+<Mermaid chart={`
+sequenceDiagram
+    participant D as Daemon
+    participant S as Server
+
+    loop Every 30 seconds
+        D->>S: POST /api/daemons/work<br/>{daemon_id, status, interfaces}
+        alt Has pending work
+            S-->>D: {work: DiscoverySession}
+            D->>D: Execute discovery
+        else No work
+            S-->>D: {work: null}
+        end
+    end
+`} />
+
+#### Discovery Flow (DaemonPoll)
 
 <Mermaid chart={`
 flowchart TD
@@ -100,23 +136,112 @@ flowchart TD
     step3 --> step4
     step4 --> step5["5. Daemon sends discovered<br/>entities to server (batched)"]
 
-    subgraph step6["6. Server processes and stores entities"]
+    subgraph step6["6. Server processes entities immediately"]
         proc1["Creates/updates hosts"]
         proc2["Creates/updates interfaces"]
         proc3["Creates/updates services"]
         proc4["Associates with subnets"]
-        proc5["Logs discovery metadata"]
     end
 
     step5 --> step6
-    step6 --> step7["7. Server broadcasts progress<br/>updates via SSE"]
-    step7 --> step8["8. UI receives real-time updates<br/>and refreshes display"]
-    step8 --> step9["9. Discovery completes,<br/>final status recorded"]
+    step6 --> step7["7. Server broadcasts updates via SSE"]
+    step7 --> step8["8. UI receives real-time updates"]
 `} />
 
-### Discovery Flow (Push Mode)
+### ServerPoll Mode
 
-Same as Pull mode, except in step 3 the server initiates the connection to the daemon instead of the daemon polling.
+ServerPoll mode is for DMZ deployments where the daemon cannot make outbound connections. The server initiates all connections to the daemon. Requires the daemon to be network-accessible from the server.
+
+#### Initialization (ServerPoll)
+
+<Mermaid chart={`
+sequenceDiagram
+    participant A as Admin
+    participant S as Server
+    participant D as Daemon
+
+    Note over A,S: Admin provisions daemon in UI
+    A->>S: POST /api/daemons/provision<br/>{name, network_id, url}
+    S->>S: Create daemon record + API key
+    S-->>A: {daemon_id, api_key}
+    Note over A: Configure daemon with API key
+
+    Note over D: Daemon starts, waits for server
+    S->>D: GET /api/poll (first contact)
+    D-->>S: {daemon_id: null, interfaces}
+    S->>S: Assign daemon_id, link to record
+    S-->>D: {daemon_id, config}
+`} />
+
+#### Runtime Polling (ServerPoll)
+
+<Mermaid chart={`
+sequenceDiagram
+    participant S as Server
+    participant D as Daemon
+    participant B as EntityBuffer
+
+    loop Every 30 seconds
+        S->>D: GET /api/poll
+        D-->>S: {status, interfaces}
+
+        alt Daemon has buffered entities
+            S->>D: GET /api/poll/entities
+            D->>B: Fetch pending entities
+            B-->>D: Entities with Pending status
+            D-->>S: {entities: [...]}
+            S->>S: Process and store entities
+            S->>D: POST /api/discovery/entities-created<br/>{entity_ids: [...]}
+            D->>B: Mark entities as Created
+        end
+    end
+`} />
+
+#### Discovery Flow (ServerPoll)
+
+<Mermaid chart={`
+flowchart TD
+    step1["1. User triggers discovery<br/>(manual or scheduled)"]
+    step2["2. Server creates discovery session"]
+    step3["3. Server polls daemon,<br/>sends discovery instruction"]
+
+    step1 --> step2 --> step3
+
+    subgraph step4["4. Daemon executes scan"]
+        scan1["Network Scan:<br/>Scans IP range, detects ports/services"]
+        scan2["Docker Scan:<br/>Queries Docker socket for containers"]
+        scan3["Self-Report:<br/>Reports own capabilities"]
+    end
+
+    step3 --> step4
+
+    subgraph step5["5. Daemon buffers entities locally"]
+        buf1["Store in EntityBuffer"]
+        buf2["Status: Pending"]
+    end
+
+    step4 --> step5
+
+    subgraph step6["6. Server fetches entities on next poll"]
+        fetch1["GET /api/poll/entities"]
+        fetch2["Process and store"]
+        fetch3["POST /api/discovery/entities-created"]
+    end
+
+    step5 --> step6
+    step6 --> step7["7. Daemon confirms, marks Created"]
+    step7 --> step8["8. Server broadcasts updates via SSE"]
+`} />
+
+### Mode Comparison
+
+| Aspect | DaemonPoll | ServerPoll |
+|--------|------------|------------|
+| Connection direction | Daemon → Server | Server → Daemon |
+| Setup | Daemon self-registers | Admin provisions in UI |
+| Firewall requirements | Outbound only from daemon | Inbound to daemon (port 60073) |
+| Best for | NAT/firewall environments | DMZ deployments |
+| Entity handling | Immediate processing | Buffered with confirmation |
 
 ## Discovery Pipeline
 

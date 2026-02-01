@@ -2,14 +2,15 @@
   "title": "Tags",
   "pages": [
     "index",
+    "export_Tags_csv",
     "get_all_tags",
-    "get_tag_by_id",
+    "get_Tag_by_id",
     "bulk_add_tag",
-    "bulk_delete_tags",
+    "bulk_delete_Tags",
     "bulk_remove_tag",
     "create_tag",
     "set_entity_tags",
-    "update_tag",
-    "delete_tag"
+    "update_Tag",
+    "delete_Tag"
   ]
 }

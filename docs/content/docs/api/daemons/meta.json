@@ -1,9 +1,12 @@
 {
   "title": "Daemons",
   "pages": [
+    "index",
+    "export_Daemons_csv",
     "get_daemon_by_id",
     "get_daemons",
-    "bulk_delete_daemons",
-    "delete_daemon"
+    "bulk_delete_Daemons",
+    "retry_daemon_connection",
+    "delete_Daemon"
   ]
 }

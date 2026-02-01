@@ -64,13 +64,13 @@ For best results, deploy a daemon on each network segment. See [Multi-VLAN Deplo
 | Component | Port  | Purpose                 |
 | --------- | ----- | ----------------------- |
 | Server    | 60072 | Web UI and API          |
-| Daemon    | 60073 | Push mode communication |
+| Daemon    | 60073 | ServerPoll mode (server connects to daemon) |
 
 ### Does the daemon need inbound firewall rules?
 
-**Pull mode** (recommended): No. The daemon only makes outbound connections to the server.
+**DaemonPoll mode** (default): No. The daemon only makes outbound connections to the server.
 
-**Push mode**: Yes. The server needs to reach the daemon on port 60073.
+**ServerPoll mode**: Yes. The server needs to reach the daemon on port 60073.
 
 ## Getting Help
 

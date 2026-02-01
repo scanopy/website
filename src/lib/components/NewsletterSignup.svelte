@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { Mail, CheckCircle, AlertCircle } from 'lucide-svelte';
 	import { isPostHogLoaded, getPostHog } from '$lib/posthog';
+	import { submitToHubSpot } from '$lib/hubspot';
 
 	interface Props {
-		apiKey: string;
-		eventName?: string;
+		portalId: string;
+		formGuid: string;
 		class?: string;
 		compact?: boolean;
 	}
 
 	let {
-		apiKey,
-		eventName = 'newsletter-signup',
+		portalId,
+		formGuid,
 		class: className = '',
 		compact = false
 	}: Props = $props();
@@ -45,20 +46,12 @@
 		errorMessage = '';
 
 		try {
-			const response = await fetch('https://next-api.useplunk.com/v1/track', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${apiKey}`
-				},
-				body: JSON.stringify({
-					event: eventName,
-					email: email.trim(),
-					subscribed: true
-				})
+			const success = await submitToHubSpot(portalId, formGuid, {
+				email: email.trim(),
+				lifecyclestage: 'subscriber'
 			});
 
-			if (response.ok) {
+			if (success) {
 				status = 'success';
 				email = '';
 				if (isPostHogLoaded()) {

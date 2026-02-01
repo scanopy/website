@@ -297,11 +297,44 @@
 				<p class="mb-2 text-gray-300">
 					We may use third-party cloud service providers to host our Service and store your data.
 				</p>
+				<ul class="mb-6 list-inside list-disc space-y-1 text-gray-300">
+					<li>
+						<strong class="text-white">Hetzner:</strong>
+						<a
+							href="https://www.hetzner.com/privacy"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-blue-400 hover:text-blue-300">Privacy Policy</a
+						>
+					</li>
+				</ul>
+
+				<h3 class="mb-3 text-xl font-semibold text-white">8.3 Analytics</h3>
+				<p class="mb-2 text-gray-300">
+					We use analytics services to understand how visitors use our website and to improve our
+					Service.
+				</p>
+				<ul class="mb-6 list-inside list-disc space-y-1 text-gray-300">
+					<li>
+						<strong class="text-white">PostHog:</strong>
+						<a
+							href="https://posthog.com/privacy"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-blue-400 hover:text-blue-300">Privacy Policy</a
+						>
+					</li>
+				</ul>
+
+				<h3 class="mb-3 text-xl font-semibold text-white">8.4 Marketing & CRM</h3>
+				<p class="mb-2 text-gray-300">
+					We use marketing tools to manage customer relationships and improve our outreach.
+				</p>
 				<ul class="list-inside list-disc space-y-1 text-gray-300">
 					<li>
-						<strong class="text-white">Amazon Web Services (AWS):</strong>
+						<strong class="text-white">HubSpot:</strong>
 						<a
-							href="https://aws.amazon.com/privacy/"
+							href="https://legal.hubspot.com/privacy-policy"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="text-blue-400 hover:text-blue-300">Privacy Policy</a

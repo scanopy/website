@@ -2,8 +2,9 @@
   "title": "Networks",
   "pages": [
     "index",
-    "get_network_by_id",
-    "list_networks",
+    "export_Networks_csv",
+    "get_Network_by_id",
+    "list_Networks",
     "bulk_delete_networks",
     "create_network",
     "update_network",
