@@ -106,13 +106,37 @@ jobs:
           async function postTweet() {
             try {
               // Upload media using v1.1 API
-              const mediaId = await client.v1.uploadMedia('./gallery-image.png', {
+              const mediaResponse = await client.v1.uploadMedia('./gallery-image.png', {
                 mimeType: 'image/png',
               });
-              console.log('Media uploaded, ID:', mediaId);
 
-              // Wait for media processing to complete
-              await new Promise(resolve => setTimeout(resolve, 5000));
+              // Debug: inspect what uploadMedia actually returns
+              console.log('=== Media Upload Debug ===');
+              console.log('Raw response:', mediaResponse);
+              console.log('Type:', typeof mediaResponse);
+              console.log('JSON stringify:', JSON.stringify(mediaResponse));
+              if (typeof mediaResponse === 'object' && mediaResponse !== null) {
+                console.log('Object keys:', Object.keys(mediaResponse));
+                console.log('media_id_string:', mediaResponse.media_id_string);
+                console.log('media_id:', mediaResponse.media_id);
+              }
+
+              // Extract media ID - handle both string and object responses
+              const mediaId = typeof mediaResponse === 'string'
+                ? mediaResponse
+                : (mediaResponse.media_id_string || String(mediaResponse.media_id));
+              console.log('Using mediaId:', mediaId, '(type:', typeof mediaId + ')');
+
+              // Check media processing status
+              try {
+                const mediaInfo = await client.v1.mediaInfo(mediaId);
+                console.log('Media info:', JSON.stringify(mediaInfo, null, 2));
+              } catch (infoErr) {
+                console.log('Could not get media info:', infoErr.message);
+              }
+
+              // Wait for media processing
+              await new Promise(resolve => setTimeout(resolve, 3000));
 
               // Compose tweet text
               const text = [
@@ -128,6 +152,8 @@ jobs:
               ].join('\n');
 
               // Post tweet using v2 API with media
+              console.log('=== Posting Tweet ===');
+              console.log('Media IDs array:', [mediaId]);
               const tweet = await client.v2.tweet({
                 text: text,
                 media: { media_ids: [mediaId] }
