@@ -105,21 +105,29 @@ jobs:
 
           async function postTweet() {
             try {
+              // TEST: First try a text-only tweet to verify auth works
+              console.log('=== Testing Text-Only Tweet ===');
+              try {
+                const testTweet = await client.v2.tweet({
+                  text: `Test tweet from Scanopy bot - ${new Date().toISOString()}`
+                });
+                console.log('Text-only tweet SUCCESS! ID:', testTweet.data.id);
+                // Delete the test tweet
+                await client.v2.deleteTweet(testTweet.data.id);
+                console.log('Test tweet deleted');
+              } catch (testErr) {
+                console.error('Text-only tweet FAILED:', testErr.message);
+                console.error('This indicates an auth issue, not a media issue');
+                throw testErr;
+              }
+
               // Upload media using v1.1 API
+              console.log('=== Media Upload Debug ===');
               const mediaResponse = await client.v1.uploadMedia('./gallery-image.png', {
                 mimeType: 'image/png',
               });
-
-              // Debug: inspect what uploadMedia actually returns
-              console.log('=== Media Upload Debug ===');
               console.log('Raw response:', mediaResponse);
               console.log('Type:', typeof mediaResponse);
-              console.log('JSON stringify:', JSON.stringify(mediaResponse));
-              if (typeof mediaResponse === 'object' && mediaResponse !== null) {
-                console.log('Object keys:', Object.keys(mediaResponse));
-                console.log('media_id_string:', mediaResponse.media_id_string);
-                console.log('media_id:', mediaResponse.media_id);
-              }
 
               // Extract media ID - handle both string and object responses
               const mediaId = typeof mediaResponse === 'string'
@@ -152,7 +160,7 @@ jobs:
               ].join('\n');
 
               // Post tweet using v2 API with media
-              console.log('=== Posting Tweet ===');
+              console.log('=== Posting Tweet With Media ===');
               console.log('Media IDs array:', [mediaId]);
               const tweet = await client.v2.tweet({
                 text: text,
