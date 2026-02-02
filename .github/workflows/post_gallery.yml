@@ -95,6 +95,11 @@ jobs:
           npm install twitter-api-v2
           node << 'SCRIPT'
           const { TwitterApi } = require('twitter-api-v2');
+          const fs = require('fs');
+
+          // Check library version
+          const pkg = require('twitter-api-v2/package.json');
+          console.log('twitter-api-v2 version:', pkg.version);
 
           const client = new TwitterApi({
             appKey: process.env.TWITTER_CONSUMER_KEY,
@@ -105,46 +110,35 @@ jobs:
 
           async function postTweet() {
             try {
-              // TEST: First try a text-only tweet to verify auth works
-              console.log('=== Testing Text-Only Tweet ===');
+              // Read image file
+              const imageBuffer = fs.readFileSync('./gallery-image.png');
+              console.log('Image size:', imageBuffer.length, 'bytes');
+
+              // Try v2 media upload (new endpoint)
+              console.log('=== Trying v2.uploadMedia ===');
+              let mediaId;
               try {
-                const testTweet = await client.v2.tweet({
-                  text: `Test tweet from Scanopy bot - ${new Date().toISOString()}`
+                mediaId = await client.v2.uploadMedia(imageBuffer, {
+                  media_type: 'image/png',
+                  media_category: 'tweet_image',
                 });
-                console.log('Text-only tweet SUCCESS! ID:', testTweet.data.id);
-                // Delete the test tweet
-                await client.v2.deleteTweet(testTweet.data.id);
-                console.log('Test tweet deleted');
-              } catch (testErr) {
-                console.error('Text-only tweet FAILED:', testErr.message);
-                console.error('This indicates an auth issue, not a media issue');
-                throw testErr;
+                console.log('v2.uploadMedia SUCCESS! mediaId:', mediaId);
+              } catch (v2Err) {
+                console.log('v2.uploadMedia failed:', v2Err.message);
+
+                // Fallback to v1 (in case v2 not supported)
+                console.log('=== Falling back to v1.uploadMedia ===');
+                mediaId = await client.v1.uploadMedia(imageBuffer, {
+                  mimeType: 'image/png',
+                  target: 'tweet',
+                });
+                console.log('v1.uploadMedia response:', mediaId);
               }
 
-              // Upload media using v1.1 API
-              console.log('=== Media Upload Debug ===');
-              const mediaResponse = await client.v1.uploadMedia('./gallery-image.png', {
-                mimeType: 'image/png',
-              });
-              console.log('Raw response:', mediaResponse);
-              console.log('Type:', typeof mediaResponse);
-
-              // Extract media ID - handle both string and object responses
-              const mediaId = typeof mediaResponse === 'string'
-                ? mediaResponse
-                : (mediaResponse.media_id_string || String(mediaResponse.media_id));
               console.log('Using mediaId:', mediaId, '(type:', typeof mediaId + ')');
 
-              // Check media processing status
-              try {
-                const mediaInfo = await client.v1.mediaInfo(mediaId);
-                console.log('Media info:', JSON.stringify(mediaInfo, null, 2));
-              } catch (infoErr) {
-                console.log('Could not get media info:', infoErr.message);
-              }
-
               // Wait for media processing
-              await new Promise(resolve => setTimeout(resolve, 3000));
+              await new Promise(resolve => setTimeout(resolve, 2000));
 
               // Compose tweet text
               const text = [
