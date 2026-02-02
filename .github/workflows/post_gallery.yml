@@ -92,14 +92,11 @@ jobs:
           TWEET_AUTHOR: ${{ steps.gallery.outputs.author_name }}
           TWEET_TAGS: ${{ steps.gallery.outputs.tags }}
         run: |
-          npm install twitter-api-v2
+          npm install twitter-api-v2 sharp
           node << 'SCRIPT'
           const { TwitterApi } = require('twitter-api-v2');
           const fs = require('fs');
-
-          // Check library version
-          const pkg = require('twitter-api-v2/package.json');
-          console.log('twitter-api-v2 version:', pkg.version);
+          const sharp = require('sharp');
 
           const client = new TwitterApi({
             appKey: process.env.TWITTER_CONSUMER_KEY,
@@ -110,49 +107,27 @@ jobs:
 
           async function postTweet() {
             try {
-              // Read image file
-              const imageBuffer = fs.readFileSync('./gallery-image.png');
-              console.log('Image size:', imageBuffer.length, 'bytes');
+              // Check original image size
+              const stats = fs.statSync('./gallery-image.png');
+              console.log('Original image size:', stats.size, 'bytes', '(' + (stats.size / 1024 / 1024).toFixed(2) + ' MB)');
 
-              // Try v2 media upload (new endpoint)
-              console.log('=== Trying v2.uploadMedia ===');
-              let mediaId;
-              try {
-                const uploadResponse = await client.v2.uploadMedia(imageBuffer, {
-                  media_type: 'image/png',
-                  media_category: 'tweet_image',
-                });
-                console.log('v2.uploadMedia raw response:', uploadResponse);
-                console.log('v2.uploadMedia type:', typeof uploadResponse);
-                console.log('v2.uploadMedia JSON:', JSON.stringify(uploadResponse, null, 2));
-                if (typeof uploadResponse === 'object' && uploadResponse !== null) {
-                  console.log('Keys:', Object.keys(uploadResponse));
-                  console.log('data:', uploadResponse.data);
-                  console.log('media_id:', uploadResponse.media_id);
-                  console.log('media_id_string:', uploadResponse.media_id_string);
-                }
-                // Extract the actual media_id
-                mediaId = typeof uploadResponse === 'string'
-                  ? uploadResponse
-                  : (uploadResponse.media_id_string || uploadResponse.media_id || uploadResponse);
-                console.log('Extracted mediaId:', mediaId);
-              } catch (v2Err) {
-                console.log('v2.uploadMedia failed:', v2Err.message);
-
-                // Fallback to v1 (in case v2 not supported)
-                console.log('=== Falling back to v1.uploadMedia ===');
-                mediaId = await client.v1.uploadMedia(imageBuffer, {
-                  mimeType: 'image/png',
-                  target: 'tweet',
-                });
-                console.log('v1.uploadMedia response:', mediaId);
+              // Compress image if larger than 1MB (Twitter limit is 5MB but smaller is safer)
+              let imagePath = './gallery-image.png';
+              if (stats.size > 1024 * 1024) {
+                console.log('Image too large, compressing...');
+                await sharp('./gallery-image.png')
+                  .resize(1920, 1920, { fit: 'inside', withoutEnlargement: true })
+                  .png({ quality: 80, compressionLevel: 9 })
+                  .toFile('./gallery-image-compressed.png');
+                const compressedStats = fs.statSync('./gallery-image-compressed.png');
+                console.log('Compressed image size:', compressedStats.size, 'bytes', '(' + (compressedStats.size / 1024 / 1024).toFixed(2) + ' MB)');
+                imagePath = './gallery-image-compressed.png';
               }
 
-              console.log('Using mediaId:', mediaId, '(type:', typeof mediaId + ')');
-
-              // Wait for media processing (3MB image may need more time)
-              console.log('Waiting 5s for media processing...');
-              await new Promise(resolve => setTimeout(resolve, 5000));
+              // Upload media using v1.1 API (the original working method)
+              console.log('Uploading media...');
+              const mediaId = await client.v1.uploadMedia(imagePath);
+              console.log('Media uploaded, ID:', mediaId);
 
               // Compose tweet text
               const text = [
@@ -168,8 +143,6 @@ jobs:
               ].join('\n');
 
               // Post tweet using v2 API with media
-              console.log('=== Posting Tweet With Media ===');
-              console.log('Media IDs array:', [mediaId]);
               const tweet = await client.v2.tweet({
                 text: text,
                 media: { media_ids: [mediaId] }
