@@ -118,11 +118,24 @@ jobs:
               console.log('=== Trying v2.uploadMedia ===');
               let mediaId;
               try {
-                mediaId = await client.v2.uploadMedia(imageBuffer, {
+                const uploadResponse = await client.v2.uploadMedia(imageBuffer, {
                   media_type: 'image/png',
                   media_category: 'tweet_image',
                 });
-                console.log('v2.uploadMedia SUCCESS! mediaId:', mediaId);
+                console.log('v2.uploadMedia raw response:', uploadResponse);
+                console.log('v2.uploadMedia type:', typeof uploadResponse);
+                console.log('v2.uploadMedia JSON:', JSON.stringify(uploadResponse, null, 2));
+                if (typeof uploadResponse === 'object' && uploadResponse !== null) {
+                  console.log('Keys:', Object.keys(uploadResponse));
+                  console.log('data:', uploadResponse.data);
+                  console.log('media_id:', uploadResponse.media_id);
+                  console.log('media_id_string:', uploadResponse.media_id_string);
+                }
+                // Extract the actual media_id
+                mediaId = typeof uploadResponse === 'string'
+                  ? uploadResponse
+                  : (uploadResponse.media_id_string || uploadResponse.media_id || uploadResponse);
+                console.log('Extracted mediaId:', mediaId);
               } catch (v2Err) {
                 console.log('v2.uploadMedia failed:', v2Err.message);
 
@@ -137,8 +150,9 @@ jobs:
 
               console.log('Using mediaId:', mediaId, '(type:', typeof mediaId + ')');
 
-              // Wait for media processing
-              await new Promise(resolve => setTimeout(resolve, 2000));
+              // Wait for media processing (3MB image may need more time)
+              console.log('Waiting 5s for media processing...');
+              await new Promise(resolve => setTimeout(resolve, 5000));
 
               // Compose tweet text
               const text = [

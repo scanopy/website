@@ -56,34 +56,10 @@
 			}
 		},
 		{
-			id: 'api-access',
-			name: 'API Access',
-			description:
-				'Programmatic access to Scanopy data and functionality. Enable third-party integrations and custom workflows.',
-			category: 'Developer',
-			icon: null,
-			color: null,
-			metadata: {
-				is_coming_soon: true
-			}
-		},
-		{
 			id: 'plugin-system',
 			name: 'Plugin/Extension System',
 			description: 'Extend Scanopy with custom plugins. Add new integrations and functionality.',
 			category: 'Developer',
-			icon: null,
-			color: null,
-			metadata: {
-				is_coming_soon: true
-			}
-		},
-		{
-			id: 'snmp-discovery',
-			name: 'SNMP Discovery',
-			description:
-				'Discover network devices and infrastructure via SNMP. Gain visibility into switches, routers, and other network equipment.',
-			category: 'Discovery',
 			icon: null,
 			color: null,
 			metadata: {
