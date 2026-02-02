@@ -158,6 +158,46 @@ jobs:
           postTweet();
           SCRIPT
 
+      - name: Compress image for Bluesky
+        if: steps.gallery.outputs.has_entry == 'true'
+        run: |
+          node << 'SCRIPT'
+          const sharp = require('sharp');
+          const fs = require('fs');
+
+          async function compress() {
+            // Bluesky has a 976KB limit, compress aggressively to JPEG
+            let quality = 70;
+            let size = 1200;
+
+            while (size >= 600) {
+              await sharp('./gallery-image.png')
+                .resize(size, size, { fit: 'inside', withoutEnlargement: true })
+                .jpeg({ quality })
+                .toFile('./gallery-image-bsky.jpg');
+
+              const stats = fs.statSync('./gallery-image-bsky.jpg');
+              console.log(`Size ${size}px, quality ${quality}: ${(stats.size / 1024).toFixed(0)}KB`);
+
+              if (stats.size < 950000) {
+                console.log('Compression successful!');
+                return;
+              }
+
+              // Try lower quality first, then smaller size
+              if (quality > 50) {
+                quality -= 10;
+              } else {
+                size -= 200;
+                quality = 70;
+              }
+            }
+            console.log('Warning: Could not compress below 950KB');
+          }
+
+          compress().catch(console.error);
+          SCRIPT
+
       - name: Post to Bluesky
         if: steps.gallery.outputs.has_entry == 'true'
         uses: myConsciousness/bluesky-post@v5
@@ -172,7 +212,7 @@ jobs:
             Check out more at https://scanopy.net/showcase?utm_source=bluesky&utm_medium=social&utm_campaign=gallery
 
             ${{ steps.gallery.outputs.tags }} #Scanopy #NetworkDiagram #Homelab
-          media: gallery-image.png
+          media: gallery-image-bsky.jpg
           media-alt: "Network diagram: ${{ steps.gallery.outputs.title }} by ${{ steps.gallery.outputs.author_name }}"
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
