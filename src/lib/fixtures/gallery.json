@@ -12,6 +12,18 @@
 		"featured": false
 	},
 	{
+		"id": "datacenter",
+		"title": "DATACENTER",
+		"description": "",
+		"image": "/gallery/DATACENTER.png",
+		"author": {
+			"name": "",
+			"url": ""
+		},
+		"tags": [], 
+		"featured": false
+	},
+	{
 		"id": "tay",
 		"title": "Tay März's Homelab",
 		"description": "A Chaotic Mess with 2 Homelab Servers, 3 Docker Nodes and many more things",
