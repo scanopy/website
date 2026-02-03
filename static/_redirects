@@ -1,0 +1,22 @@
+# Docs restructure redirects (Jan 2026)
+/docs/getting-started/quick-start/ /docs/quick-start/ 301
+/docs/getting-started/introduction/ /docs/introduction/ 301
+/docs/daemons/troubleshooting/ /docs/daemon-troubleshooting/ 301
+/docs/daemons/daemon-configuration/ /docs/daemon-configuration/ 301
+/docs/daemons/installing-daemon/ /docs/installing-daemon/ 301
+/docs/self-hosted/troubleshooting/ /docs/server-troubleshooting/ 301
+/docs/self-hosted/server-installation/ /docs/server-installation/ 301
+/docs/self-hosted/server-configuration/ /docs/server-configuration/ 301
+/docs/self-hosted/oidc/ /docs/oidc/ 301
+/docs/reference/security/ /docs/security/ 301
+/docs/reference/service-detection/ /docs/service-detection/ 301
+/docs/reference/architecture/ /docs/architecture/ 301
+/docs/using-scanopy/discovery/ /docs/discovery/ 301
+/docs/using-scanopy/organization/ /docs/organization/ 301
+
+# Catch-all for old docs structure patterns
+/docs/getting-started/* /docs/:splat 301
+/docs/daemons/* /docs/:splat 301
+/docs/self-hosted/* /docs/:splat 301
+/docs/reference/* /docs/:splat 301
+/docs/using-scanopy/* /docs/:splat 301

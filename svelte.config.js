@@ -15,6 +15,7 @@ const config = {
 		paths: {
 			base: ''
 		},
+		trailingSlash: 'never',
 		prerender: {
 			handleHttpError: ({ path, message }) => {
 				// Ignore /docs links - handled by separate Astro site
