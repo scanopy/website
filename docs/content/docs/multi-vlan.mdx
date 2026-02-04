@@ -118,7 +118,7 @@ Daemon initiates all connections. Minimal firewall changes needed.
 
 | Source | Destination  | Port  | Protocol | Purpose           |
 | ------ | ------------ | ----- | -------- | ----------------- |
-| Daemon | Server       | 60072 | TCP      | API communication |
+| Daemon | Server       | 60072 | TCP      | Server API requests |
 | Daemon | Local subnet | \*    | TCP      | Network scanning  |
 
 ### Firewall Rules for ServerPoll Mode
@@ -127,6 +127,5 @@ Server initiates scan requests. Daemon must be reachable.
 
 | Source | Destination  | Port  | Protocol | Purpose            |
 | ------ | ------------ | ----- | -------- | ------------------ |
-| Server | Daemon       | 60073 | TCP      | ServerPoll communication |
-| Daemon | Server       | 60072 | TCP      | Report results     |
+| Server | Daemon       | 60073 | TCP      | Daemon API requests |
 | Daemon | Local subnet | \*    | TCP      | Network scanning   |
