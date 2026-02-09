@@ -126,8 +126,7 @@
 			<p class="mt-4 text-gray-300">
 				You may cancel your Subscription at any time through your account settings or by contacting
 				us. If you cancel, you may continue to use the Service until the end of your current billing
-				period, but you will not be eligible for a refund of any portion of the Subscription fee
-				except as expressly provided in these Terms or as required by applicable law.
+				period. Refunds are subject to our <a href="/refund" class="text-blue-400 hover:text-blue-300">Refund Policy</a>.
 			</p>
 		</section>
 
@@ -984,10 +983,9 @@
 
 					<h4 class="mb-2 text-lg font-semibold text-white">Refunds</h4>
 					<p class="mb-4 text-gray-300">
-						All subscription fees are non-refundable except as expressly stated in these Terms or as
-						required by applicable law. In exceptional circumstances, we may, at our sole
-						discretion, offer a partial or full refund. Any refunds will be processed using the
-						original payment method unless otherwise specified.
+						Refunds are handled in accordance with our <a href="/refund" class="text-blue-400 hover:text-blue-300">Refund Policy</a>.
+						Any approved refunds will be processed using the original payment method unless
+						otherwise specified.
 					</p>
 
 					<h4 class="mb-2 text-lg font-semibold text-white">Account Delinquency</h4>
