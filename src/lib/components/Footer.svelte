@@ -192,6 +192,7 @@
 			<div class="flex gap-6">
 				<a href="/privacy" class="text-sm text-gray-500 hover:text-gray-400">Privacy</a>
 				<a href="/terms" class="text-sm text-gray-500 hover:text-gray-400">Terms</a>
+				<a href="/refund" class="text-sm text-gray-500 hover:text-gray-400">Refund Policy</a>
 			</div>
 		</div>
 	</div>
