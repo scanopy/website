@@ -1,7 +1,7 @@
 import { generateFiles } from 'fumadocs-openapi';
 import { createOpenAPI } from 'fumadocs-openapi/server';
 import { resolve } from 'path';
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync } from 'fs';
 
 // Preprocess spec to convert text/plain to application/json (fumadocs doesn't support text/plain)
 function preprocessSpec() {
@@ -27,6 +27,17 @@ function preprocessSpec() {
 
   // Sort properties with required fields first
   sortPropertiesRequiredFirst(spec);
+
+  // Strip newlines from operation summaries to keep MDX titles single-line
+  // (multi-line titles produce YAML block scalars that break the icon regex)
+  if (spec.paths) {
+    for (const pathItem of Object.values(spec.paths)) {
+      for (const operation of Object.values(pathItem)) {
+        if (typeof operation !== 'object' || !operation.summary) continue;
+        operation.summary = operation.summary.split('\n')[0].trim();
+      }
+    }
+  }
 
   const processedPath = resolve('./openapi-processed.json');
   writeFileSync(processedPath, JSON.stringify(spec, null, 2));
@@ -377,6 +388,11 @@ const openapi = createOpenAPI({
 
 async function main() {
   const apiDir = './content/docs/api';
+
+  // Clean output to prevent stale files (avoids duplicates from case-sensitive filesystems)
+  if (existsSync(apiDir)) {
+    rmSync(apiDir, { recursive: true });
+  }
 
   await generateFiles({
     input: openapi,

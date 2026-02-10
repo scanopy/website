@@ -23,4 +23,6 @@ yarn-error.log*
 # others
 .env*.local
 .vercel
-next-env.d.tsopenapi-processed.json
+next-env.d.ts
+openapi-processed.json
+content/docs/api/

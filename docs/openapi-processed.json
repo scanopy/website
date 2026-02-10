@@ -4469,7 +4469,7 @@
         "tags": [
           "Interfaces"
         ],
-        "summary": "Create a new interface\nPosition is automatically assigned to the end of the host's interface list.",
+        "summary": "Create a new interface",
         "operationId": "create_interface",
         "requestBody": {
           "content": {
@@ -4518,7 +4518,7 @@
         "tags": [
           "Interfaces"
         ],
-        "summary": "Bulk delete interfaces\nRemaining interfaces for affected hosts are renumbered to maintain sequential positions.",
+        "summary": "Bulk delete interfaces",
         "operationId": "bulk_delete_interfaces",
         "requestBody": {
           "content": {
@@ -4716,7 +4716,7 @@
         "tags": [
           "Interfaces"
         ],
-        "summary": "Update an interface\nPosition must be within valid range and not conflict with other interfaces.",
+        "summary": "Update an interface",
         "operationId": "update_interface",
         "parameters": [
           {
@@ -4785,7 +4785,7 @@
         "tags": [
           "Interfaces"
         ],
-        "summary": "Delete an interface\nRemaining interfaces for the host are renumbered to maintain sequential positions.",
+        "summary": "Delete an interface",
         "operationId": "delete_interface",
         "parameters": [
           {
