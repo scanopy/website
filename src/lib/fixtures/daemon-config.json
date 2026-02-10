@@ -1,3 +1,4 @@
+[success] [1m[32m[paraglide-js] [39m[22mCompilation complete (locale-modules)
 [
   {
     "id": "server_url",
@@ -45,7 +46,7 @@
     "cliFlag": "--mode",
     "envVar": "SCANOPY_MODE",
     "configFileKey": "mode",
-    "default": "daemon_poll",
+    "default": "server_poll",
     "description": "DaemonPoll: Daemon connects to server; works behind NAT/firewall without opening ports. ServerPoll: Server connects to daemon, for deployments where daemon cannot make outbound connections - requires providing Daemon URL",
     "docsOnly": false
   },
@@ -215,7 +216,7 @@
     "cliFlag": "--concurrent-scans",
     "envVar": "SCANOPY_CONCURRENT_SCANS",
     "configFileKey": "concurrent_scans",
-    "default": "() => __vite_ssr_import_1__.common_auto()",
+    "default": "Auto",
     "description": "Maximum parallel host scans",
     "docsOnly": false
   }
