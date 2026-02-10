@@ -6,14 +6,12 @@
 
 	interface Props {
 		healthStatus?: 'loading' | 'healthy' | 'unhealthy';
-		hubspotPortalId?: string;
-		hubspotNewsletterFormGuid?: string;
+		brevoNewsletterFormUrl?: string;
 	}
 
 	let {
 		healthStatus = 'loading',
-		hubspotPortalId = '',
-		hubspotNewsletterFormGuid = ''
+		brevoNewsletterFormUrl = ''
 	}: Props = $props();
 
 	function trackExternalLink(destination: string, url: string) {
@@ -173,10 +171,9 @@
 			<!-- Newsletter -->
 			<div>
 				<h4 class="mb-4 font-semibold text-white">Stay Updated</h4>
-				{#if hubspotPortalId && hubspotNewsletterFormGuid}
+				{#if brevoNewsletterFormUrl}
 					<NewsletterSignup
-						portalId={hubspotPortalId}
-						formGuid={hubspotNewsletterFormGuid}
+						formUrl={brevoNewsletterFormUrl}
 						compact={true}
 					/>
 				{/if}

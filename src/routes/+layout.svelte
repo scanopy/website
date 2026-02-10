@@ -3,10 +3,7 @@
 	import { browser, dev } from '$app/environment';
 	import { Footer } from '$lib/components';
 	import { Menu, X } from 'lucide-svelte';
-	import {
-		PUBLIC_HUBSPOT_PORTAL_ID,
-		PUBLIC_HUBSPOT_NEWSLETTER_FORM_GUID
-	} from '$env/static/public';
+	import { PUBLIC_BREVO_NEWSLETTER_FORM_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
@@ -17,7 +14,6 @@
 		loadPh,
 		initFeatureFlags
 	} from '$lib/analytics.svelte';
-	import { hasMarketingConsent } from '$lib/cookies';
 
 	interface Props {
 		children: Snippet;
@@ -28,37 +24,16 @@
 	let healthStatus = $state<'loading' | 'healthy' | 'unhealthy'>('loading');
 	let mobileMenuOpen = $state(false);
 
-	function loadHubSpotScript() {
-		if (typeof document === 'undefined') return;
-		if (document.getElementById('hs-script-loader')) return;
-		const script = document.createElement('script');
-		script.id = 'hs-script-loader';
-		script.src = `//js.hs-scripts.com/${PUBLIC_HUBSPOT_PORTAL_ID}.js`;
-		script.async = true;
-		script.defer = true;
-		document.head.appendChild(script);
-	}
-
-	function handleMarketingChange(enabled: boolean) {
-		if (enabled) {
-			loadHubSpotScript();
-		}
-	}
-
 	onMount(async () => {
 		try {
 			const res = await fetch('https://app.scanopy.net/api/health');
 			healthStatus = res.ok ? 'healthy' : 'unhealthy';
-			// await load()
 		} catch {
 			healthStatus = 'unhealthy';
 		}
 
 		if (browser) {
 			loadPh();
-			if (hasMarketingConsent()) {
-				loadHubSpotScript();
-			}
 		}
 	});
 
@@ -234,12 +209,10 @@
 
 	<Footer
 		{healthStatus}
-		hubspotPortalId={PUBLIC_HUBSPOT_PORTAL_ID}
-		hubspotNewsletterFormGuid={PUBLIC_HUBSPOT_NEWSLETTER_FORM_GUID}
+		brevoNewsletterFormUrl={PUBLIC_BREVO_NEWSLETTER_FORM_URL}
 	/>
 </div>
 
 <CookieConsent
 	onAnalyticsChange={(enabled) => enabled && initFeatureFlags()}
-	onMarketingChange={handleMarketingChange}
 />

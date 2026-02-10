@@ -332,9 +332,9 @@
 				</p>
 				<ul class="list-inside list-disc space-y-1 text-gray-300">
 					<li>
-						<strong class="text-white">HubSpot:</strong>
+						<strong class="text-white">Brevo:</strong>
 						<a
-							href="https://legal.hubspot.com/privacy-policy"
+							href="https://www.brevo.com/legal/privacypolicy/"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="text-blue-400 hover:text-blue-300">Privacy Policy</a

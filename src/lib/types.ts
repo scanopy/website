@@ -18,6 +18,8 @@ export interface BillingPlan {
 	included_seats: number | null;
 	network_cents: number | null;
 	included_networks: number | null;
+	host_cents: number | null;
+	included_hosts: number | null;
 	rate: string;
 	trial_days: number;
 	type: BillingPlanType;

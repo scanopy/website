@@ -1,18 +1,16 @@
 <script lang="ts">
 	import { Mail, CheckCircle, AlertCircle } from 'lucide-svelte';
 	import { isPostHogLoaded, getPostHog } from '$lib/posthog';
-	import { submitToHubSpot } from '$lib/hubspot';
+	import { submitNewsletter } from '$lib/brevo';
 
 	interface Props {
-		portalId: string;
-		formGuid: string;
+		formUrl: string;
 		class?: string;
 		compact?: boolean;
 	}
 
 	let {
-		portalId,
-		formGuid,
+		formUrl,
 		class: className = '',
 		compact = false
 	}: Props = $props();
@@ -46,10 +44,7 @@
 		errorMessage = '';
 
 		try {
-			const success = await submitToHubSpot(portalId, formGuid, {
-				email: email.trim(),
-				lifecyclestage: 'subscriber'
-			});
+			const success = await submitNewsletter(formUrl, email.trim());
 
 			if (success) {
 				status = 'success';

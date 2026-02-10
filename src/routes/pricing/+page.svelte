@@ -45,6 +45,8 @@
 			included_seats: number | null;
 			network_cents: number | null;
 			included_networks: number | null;
+			host_cents: number | null;
+			included_hosts: number | null;
 			rate: string;
 			trial_days: number;
 			features: BillingPlanMetadata['features'];
@@ -80,6 +82,8 @@
 		included_seats: item.metadata.included_seats,
 		network_cents: item.metadata.network_cents,
 		included_networks: item.metadata.included_networks,
+		host_cents: item.metadata.host_cents,
+		included_hosts: item.metadata.included_hosts,
 		rate: item.metadata.rate,
 		trial_days: item.metadata.trial_days,
 		type: item.id

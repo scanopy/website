@@ -1,12 +1,8 @@
 <script lang="ts">
 	import { X, Send, CheckCircle, AlertCircle } from 'lucide-svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { submitToHubSpot } from '$lib/hubspot';
-	import { getCookie } from '$lib/cookies';
-	import {
-		PUBLIC_HUBSPOT_PORTAL_ID,
-		PUBLIC_HUBSPOT_CONTACT_FORM_GUID
-	} from '$env/static/public';
+	import { submitContactInquiry } from '$lib/brevo';
+	import { PUBLIC_BREVO_CONTACT_FORM_URL } from '$env/static/public';
 
 	interface Props {
 		open: boolean;
@@ -18,7 +14,8 @@
 	let { open, onClose, planType, planName }: Props = $props();
 
 	let email = $state('');
-	let name = $state('');
+	let firstName = $state('');
+	let lastName = $state('');
 	let company = $state('');
 	let teamSize = $state('');
 	let urgency = $state('');
@@ -51,21 +48,10 @@
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 	}
 
-	function splitName(fullName: string): { firstname: string; lastname: string } {
-		const trimmed = fullName.trim();
-		const spaceIndex = trimmed.indexOf(' ');
-		if (spaceIndex === -1) {
-			return { firstname: trimmed, lastname: '' };
-		}
-		return {
-			firstname: trimmed.slice(0, spaceIndex),
-			lastname: trimmed.slice(spaceIndex + 1)
-		};
-	}
-
 	function resetForm() {
 		email = '';
-		name = '';
+		firstName = '';
+		lastName = '';
 		company = '';
 		teamSize = '';
 		urgency = '';
@@ -107,9 +93,15 @@
 			return;
 		}
 
-		if (!name.trim()) {
+		if (!firstName.trim()) {
 			status = 'error';
-			errorMessage = 'Please enter your name';
+			errorMessage = 'Please enter your first name';
+			return;
+		}
+
+		if (!lastName.trim()) {
+			status = 'error';
+			errorMessage = 'Please enter your last name';
 			return;
 		}
 
@@ -130,35 +122,17 @@
 		errorMessage = '';
 
 		try {
-			const { firstname, lastname } = splitName(name);
-
-			const context: { pageUri: string; pageName: string; hutk?: string; formName: string } = {
-				pageUri: window.location.href,
-				pageName: document.title,
-				formName: 'Lead Form'
-			};
-			const hutk = getCookie('hubspotutk');
-			if (hutk) {
-				context.hutk = hutk;
-			}
-
-			const success = await submitToHubSpot(
-				PUBLIC_HUBSPOT_PORTAL_ID,
-				PUBLIC_HUBSPOT_CONTACT_FORM_GUID,
-				{
-					email: email.trim(),
-					firstname,
-					lastname,
-					company: company.trim(),
-					numemployees: teamSize,
-					scanopy_inquiry_urgency_for_company: urgency || undefined,
-					network_count: networkCount || undefined,
-					message: useCase.trim() || undefined,
-					scanopy_inquiry_plan_type_for_company: planType,
-					lifecyclestage: 'lead'
-				},
-				context
-			);
+			const success = await submitContactInquiry(PUBLIC_BREVO_CONTACT_FORM_URL, {
+				email: email.trim(),
+				firstname: firstName.trim(),
+				lastname: lastName.trim(),
+				company: company.trim(),
+				numemployees: teamSize,
+				urgency: urgency || undefined,
+				networkCount: networkCount || undefined,
+				message: useCase.trim() || undefined,
+				planType
+			});
 
 			if (success) {
 				status = 'success';
@@ -229,7 +203,7 @@
 					Tell us about your needs and we'll get back to you shortly.
 				</p>
 
-				<form onsubmit={handleSubmit} class="space-y-4" data-hs-do-not-collect="true">
+				<form onsubmit={handleSubmit} class="space-y-4">
 					<div>
 						<label for="contact-email" class="mb-1 block text-sm font-medium text-gray-300">
 							Email <span class="text-red-400">*</span>
@@ -245,19 +219,35 @@
 						/>
 					</div>
 
-					<div>
-						<label for="contact-name" class="mb-1 block text-sm font-medium text-gray-300">
-							Name <span class="text-red-400">*</span>
-						</label>
-						<input
-							id="contact-name"
-							type="text"
-							placeholder="Your name"
-							bind:value={name}
-							oninput={clearError}
-							disabled={loading}
-							class="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
-						/>
+					<div class="grid grid-cols-2 gap-3">
+						<div>
+							<label for="contact-firstname" class="mb-1 block text-sm font-medium text-gray-300">
+								First Name <span class="text-red-400">*</span>
+							</label>
+							<input
+								id="contact-firstname"
+								type="text"
+								placeholder="First name"
+								bind:value={firstName}
+								oninput={clearError}
+								disabled={loading}
+								class="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+							/>
+						</div>
+						<div>
+							<label for="contact-lastname" class="mb-1 block text-sm font-medium text-gray-300">
+								Last Name <span class="text-red-400">*</span>
+							</label>
+							<input
+								id="contact-lastname"
+								type="text"
+								placeholder="Last name"
+								bind:value={lastName}
+								oninput={clearError}
+								disabled={loading}
+								class="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+							/>
+						</div>
 					</div>
 
 					<div>

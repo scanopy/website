@@ -121,6 +121,12 @@
 			if (billingPeriod === 'yearly') return plan.rate === 'Year';
 			return true;
 		});
+		// Sort so Free plan is always first
+		result.sort((a, b) => {
+			if (a.type === 'Free' && b.type !== 'Free') return -1;
+			if (a.type !== 'Free' && b.type === 'Free') return 1;
+			return 0;
+		});
 		return result;
 	});
 
@@ -196,6 +202,12 @@
 	function formatNetworkAddonPricing(plan: BillingPlan): string {
 		if (plan.network_cents)
 			return `+$${plan.network_cents / 100} / network / ${plan.rate.toLowerCase()}`;
+		return '';
+	}
+
+	function formatHostAddonPricing(plan: BillingPlan): string {
+		if (plan.host_cents)
+			return `+$${plan.host_cents / 100} / host / ${plan.rate.toLowerCase()}`;
 		return '';
 	}
 
@@ -393,6 +405,25 @@
 							>
 							{#if plan.network_cents}
 								<span class="text-tertiary text-xs">{formatNetworkAddonPricing(plan)}</span>
+							{/if}
+						</div>
+					</div>
+				{/each}
+			</div>
+
+			<!-- Hosts Row -->
+			<div class="grid-row" style="grid-template-columns: {gridColumns}">
+				<div class="grid-cell label-cell">
+					<div class="text-xs font-medium lg:text-sm">Hosts</div>
+				</div>
+				{#each filteredPlans as plan (plan.type)}
+					<div class="grid-cell plan-cell text-center">
+						<div class="flex flex-col">
+							<span class="text-secondary text-xs lg:text-base"
+								>{plan.included_hosts === null ? 'Unlimited' : plan.included_hosts}</span
+							>
+							{#if plan.host_cents}
+								<span class="text-tertiary text-xs">{formatHostAddonPricing(plan)}</span>
 							{/if}
 						</div>
 					</div>

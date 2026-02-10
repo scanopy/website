@@ -5,14 +5,13 @@
 
 	/**
 	 * Optional callbacks when preferences change.
-	 * Used by main site for feature flags and HubSpot loading.
+	 * Used by main site for feature flags.
 	 */
 	interface Props {
 		onAnalyticsChange?: (enabled: boolean) => void;
-		onMarketingChange?: (enabled: boolean) => void;
 	}
 
-	let { onAnalyticsChange, onMarketingChange }: Props = $props();
+	let { onAnalyticsChange }: Props = $props();
 
 	let preferences: CookiePreferences = $state({
 		necessary: true,
@@ -47,7 +46,6 @@
 			}
 		}
 		onAnalyticsChange?.(preferences.analytics);
-		onMarketingChange?.(preferences.marketing);
 	}
 
 	function savePreferences() {
@@ -143,19 +141,6 @@
 							</p>
 						</div>
 
-						<div class="cookie-option">
-							<div class="option-header">
-								<label class="option-label">
-									<input type="checkbox" bind:checked={preferences.marketing} />
-									<span class="checkbox"></span>
-									<span class="option-title">Marketing</span>
-								</label>
-							</div>
-							<p class="option-description">
-								Allow HubSpot to track your visits so we can provide better support and personalized
-								follow-up when you contact us.
-							</p>
-						</div>
 					</div>
 
 					<div class="settings-buttons">
