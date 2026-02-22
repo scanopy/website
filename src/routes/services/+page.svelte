@@ -31,7 +31,7 @@
 		<div class="mt-16 text-center">
 			<p class="mb-4 text-gray-400">Don't see a service you use? We're constantly adding more.</p>
 			<a
-				href="https://github.com/scanopy/scanopy/issues/new?template=service-detection-issue.md"
+				href="https://github.com/scanopy/scanopy/issues/new?template=service-detection-issue.yml"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="btn-secondary"

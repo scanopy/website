@@ -13,8 +13,8 @@
 {#if mentions.length > 0}
 	<section class="border-t border-gray-800 py-16">
 		<div class="container mx-auto px-4">
-			<div class="mb-10 text-center">
-				<p class="text-sm font-medium uppercase tracking-wider text-gray-500">{title}</p>
+			<div class="mb-16 text-center">
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">{title}</h2>
 			</div>
 
 			<div

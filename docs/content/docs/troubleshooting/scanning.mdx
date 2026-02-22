@@ -1,120 +1,51 @@
 ---
-title: Daemon Troubleshooting
-description: Common issues and solutions for Scanopy daemons.
+title: Scanning Issues
+description: Troubleshooting issues triggered by running scans, including network load, missing hosts, and scan performance.
 ---
 
-Common issues and solutions for Scanopy daemons.
+Issues triggered by running scans, including network load, missing hosts, and scan performance.
 
-## Daemon Issues
+## Port Scanning Slows Down or Crashes Target Hosts
 
-### Daemon Not Connecting to Server
+**Symptoms**: Web interfaces on target hosts become unresponsive during scans; network feels slow; IoT devices or services with small listen backlogs (e.g. Pi-hole) stop responding; services require restart after scan.
 
-**Symptoms**: Daemon shows as offline in the UI, or logs show connection errors
-
-**Diagnosis**:
-
-```bash
-# Check daemon logs
-docker logs scanopy-daemon
-
-# Test connectivity to server
-curl https://your-server-url/api/health
-```
+**Cause**: The default port scan rate (500 pps) and batch size (200 ports) can overwhelm hosts with small TCP listen queues, especially on low-latency networks (e.g. LXC containers on the same Proxmox host).
 
 **Solutions**:
 
-1. **Verify server URL**: Ensure `SCANOPY_SERVER_URL` is correct and reachable from the daemon host
-2. **Check API key**: Verify the API key is valid and not expired in **Manage > API Keys**
-3. **Firewall rules**: Ensure outbound HTTPS (port 443) is allowed from the daemon host
+Reduce `scan_rate_pps` and/or `port_scan_batch_size` in your daemon configuration:
 
-### Discovery Fails with "CONCURRENT_SCANS too high"
+```bash
+# CLI
+scanopy-daemon --scan-rate-pps 100 --port-scan-batch-size 100
 
-**Symptoms**: Daemon crashes or runs out of memory during scans
+# Environment variables
+export SCANOPY_SCAN_RATE_PPS=100
+export SCANOPY_PORT_SCAN_BATCH_SIZE=100
 
-**Solution**: Reduce concurrent scans in daemon configuration:
-
-**Docker:**
-
-```yaml
+# Docker
 environment:
-  - SCANOPY_CONCURRENT_SCANS=10 # Reduce from default
+  - SCANOPY_SCAN_RATE_PPS=100
+  - SCANOPY_PORT_SCAN_BATCH_SIZE=100
 ```
 
-**Binary:**
+**Recommended values:**
 
-```bash
-scanopy-daemon --concurrent-scans 10 ...
-```
+| Scenario | `scan_rate_pps` | `port_scan_batch_size` |
+|----------|----------------|----------------------|
+| Sensitive network (IoT, Pi-hole, embedded) | 50–100 | 50–100 |
+| Mixed IoT and servers | 100–200 | 100–150 |
+| Robust servers only | 500 (default) | 200 (default) |
 
-See [Daemon Configuration](/daemon-configuration/#concurrent-scans) for recommended values.
+See [Daemon Configuration](/daemon-configuration/) for the full parameter reference.
 
-### "Too Many Open Files" Error
-
-**Symptoms**: `Critical error scanning: Too many open files (os error 24)` in daemon logs
-
-**Causes**: System file descriptor limit is too low for the configured concurrent scans.
-
-**Solutions**:
-
-1. **Reduce concurrent scans** (easiest):
-
-   ```yaml
-   environment:
-     - SCANOPY_CONCURRENT_SCANS=10
-   ```
-
-2. **Increase system file descriptor limit**:
-
-   ```bash
-   # Check current limit
-   ulimit -n
-
-   # Increase temporarily
-   ulimit -n 65535
-
-   # Increase permanently (add to /etc/security/limits.conf)
-   * soft nofile 65535
-   * hard nofile 65535
-   ```
-
-3. **For Docker**: Add to your daemon container:
-   ```yaml
-   ulimits:
-     nofile:
-       soft: 65535
-       hard: 65535
-   ```
-
-### Permission Denied Errors (Linux)
-
-**Symptoms**: "Permission denied" when accessing Docker socket
-
-**Solution**: Add user to docker group:
-
-```bash
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-Log out and back in for changes to take effect.
-
-If you're using a Docker socket proxy and getting permission errors, see [Docker Socket Proxy troubleshooting](/docker-proxy/#troubleshooting).
-
-### Daemon Stops When Terminal Closes
-
-**Symptoms**: Daemon runs in foreground and stops when SSH session ends
-
-**Solution**: Install as a systemd service (see [Installing a Daemon](/installing-daemon/#systemd-service-linux)), or run with a process manager like `screen` or `tmux`.
-
-## Discovery Issues
-
-### Hosts Not Discovered / Missing IPs
+## Hosts Not Discovered / Missing IPs
 
 **Symptoms**: Discovery completes but some known hosts are missing from results. Manual `arping` to the missing IPs works fine.
 
 **Most likely cause**: Switch rate limiting is dropping ARP packets before they reach hosts or before responses return.
 
-#### Understanding ARP Scanning
+### Understanding ARP Scanning
 
 Scanopy uses broadcast ARP for fast host discovery. For each target IP, we send an ARP "who-has" request and wait for a reply. This is faster and more reliable than TCP/UDP probing because hosts cannot firewall ARP and still communicate on the network.
 
@@ -132,7 +63,7 @@ However, many managed switches implement **Dynamic ARP Inspection (DAI)** to pre
 
 If your switch has DAI enabled and Scanopy sends ARP faster than the limit allows, excess packets are dropped and those hosts appear offline.
 
-#### How Retries Work
+### How Retries Work
 
 Scanopy uses **targeted retries** rather than simple broadcast flooding:
 
@@ -154,7 +85,7 @@ This approach minimizes total packets sent (only non-responders are retried) whi
 
 If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those hosts—often successfully since the burst is smaller.
 
-#### Diagnosis
+### Diagnosis
 
 1. **Check if your switch has DAI enabled.** Consult your switch documentation for how to view DAI configuration and statistics. Look for rate limit violations or dropped ARP packets.
 
@@ -166,7 +97,7 @@ If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those 
    arping -c 3 <missing-ip>
    ```
 
-#### Solutions
+### Solutions
 
 **Option 1: Reduce ARP scan rate**
 
@@ -244,7 +175,7 @@ environment:
 - Scanning small networks where speed doesn't matter
 - You want zero additional dependencies
 
-#### Tuning for Your Network
+### Tuning for Your Network
 
 | Situation | Recommended Settings |
 |-----------|---------------------|
@@ -254,7 +185,7 @@ environment:
 
 See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
 
-### Discovery Takes Hours
+## Discovery Takes Hours
 
 **Symptoms**: Network discovery takes 10+ hours to complete
 
@@ -268,7 +199,7 @@ See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
 
 3. **Check your subnet list**: Only scan subnets that actually contain hosts
 
-### Topology Empty After Discovery
+## Topology Empty After Discovery
 
 **Symptoms**: Discovery completes but topology shows nothing
 
@@ -279,6 +210,64 @@ See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
 3. **Refresh mode**: Press "Rebuild" or change from manual to auto to get live updates
 4. **Service filters**: Category filters may be hiding everything
 5. **Reachability**: Verify daemon can actually reach the target network
+
+## Discovery Fails with "CONCURRENT_SCANS too high"
+
+**Symptoms**: Daemon crashes or runs out of memory during scans
+
+**Solution**: Reduce concurrent scans in daemon configuration:
+
+**Docker:**
+
+```yaml
+environment:
+  - SCANOPY_CONCURRENT_SCANS=10 # Reduce from default
+```
+
+**Binary:**
+
+```bash
+scanopy-daemon --concurrent-scans 10 ...
+```
+
+See [Daemon Configuration](/daemon-configuration/#concurrent-scans) for recommended values.
+
+## "Too Many Open Files" Error
+
+**Symptoms**: `Critical error scanning: Too many open files (os error 24)` in daemon logs
+
+**Causes**: System file descriptor limit is too low for the configured concurrent scans.
+
+**Solutions**:
+
+1. **Reduce concurrent scans** (easiest):
+
+   ```yaml
+   environment:
+     - SCANOPY_CONCURRENT_SCANS=10
+   ```
+
+2. **Increase system file descriptor limit**:
+
+   ```bash
+   # Check current limit
+   ulimit -n
+
+   # Increase temporarily
+   ulimit -n 65535
+
+   # Increase permanently (add to /etc/security/limits.conf)
+   * soft nofile 65535
+   * hard nofile 65535
+   ```
+
+3. **For Docker**: Add to your daemon container:
+   ```yaml
+   ulimits:
+     nofile:
+       soft: 65535
+       hard: 65535
+   ```
 
 ## Getting Help
 

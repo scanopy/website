@@ -1,0 +1,54 @@
+---
+title: Daemon Setup
+description: Troubleshooting issues getting the Scanopy daemon running.
+---
+
+Issues getting the daemon connected and running. For problems that occur during scans, see [Scanning Issues](/troubleshooting/scanning/).
+
+## Daemon Not Connecting to Server
+
+**Symptoms**: Daemon shows as offline in the UI, or logs show connection errors
+
+**Diagnosis**:
+
+```bash
+# Check daemon logs
+docker logs scanopy-daemon
+
+# Test connectivity to server
+curl https://your-server-url/api/health
+```
+
+**Solutions**:
+
+1. **Verify server URL**: Ensure `SCANOPY_SERVER_URL` is correct and reachable from the daemon host
+2. **Check API key**: Verify the API key is valid and not expired in **Manage > API Keys**
+3. **Firewall rules**: Ensure outbound HTTPS (port 443) is allowed from the daemon host
+
+## Permission Denied Errors (Linux)
+
+**Symptoms**: "Permission denied" when accessing Docker socket
+
+**Solution**: Add user to docker group:
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+Log out and back in for changes to take effect.
+
+If you're using a Docker socket proxy and getting permission errors, see [Docker Socket Proxy troubleshooting](/docker-proxy/#troubleshooting).
+
+## Daemon Stops When Terminal Closes
+
+**Symptoms**: Daemon runs in foreground and stops when SSH session ends
+
+**Solution**: Install as a systemd service (see [Installing a Daemon](/installing-daemon/#systemd-service-linux)), or run with a process manager like `screen` or `tmux`.
+
+## Getting Help
+
+If your issue isn't covered here:
+
+- **Discord**: Join our [Discord community](https://discord.gg/b7ffQr8AcZ)
+- **GitHub Issues**: [Open an issue](https://github.com/scanopy/scanopy/issues/new)

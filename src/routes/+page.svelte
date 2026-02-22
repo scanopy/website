@@ -186,7 +186,7 @@
 </section>
 
 <!-- Use Cases Section -->
-<section class="border-t border-gray-800 py-20">
+<section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
@@ -225,6 +225,9 @@
 	</div>
 </section>
 
+<!-- Featured In Section -->
+<FeaturedIn mentions={pressMentions} />
+
 <!-- Community Section -->
 <section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
@@ -247,9 +250,6 @@
 		</div>
 	</div>
 </section>
-
-<!-- Featured In Section -->
-<FeaturedIn mentions={pressMentions} />
 
 <!-- CTA Section -->
 <section class="border-t border-gray-800 py-20">
