@@ -56,7 +56,7 @@
     "envVar": "SCANOPY_DAEMON_URL",
     "configFileKey": "daemon_url",
     "default": "_Required_",
-    "description": "Base URL where server can reach daemon (without port). Port is specified separately",
+    "description": "Base URL where server can reach daemon",
     "docsOnly": false
   },
   {
@@ -66,47 +66,7 @@
     "envVar": "SCANOPY_DAEMON_PORT",
     "configFileKey": "daemon_port",
     "default": "60073",
-    "description": "Port the daemon listens on. Combined with daemon URL for server to connect",
-    "docsOnly": false
-  },
-  {
-    "id": "bind_address",
-    "label": "Bind Address",
-    "cliFlag": "--bind-address",
-    "envVar": "SCANOPY_BIND_ADDRESS",
-    "configFileKey": "bind_address",
-    "default": null,
-    "description": "IP address to bind daemon to",
-    "docsOnly": false
-  },
-  {
-    "id": "allow_self_signed_certs",
-    "label": "Allow Self-Signed Certificates",
-    "cliFlag": "--allow-self-signed-certs",
-    "envVar": "SCANOPY_ALLOW_SELF_SIGNED_CERTS",
-    "configFileKey": "allow_self_signed_certs",
-    "default": "false",
-    "description": "Allow self-signed certs for daemon -> server connections",
-    "docsOnly": false
-  },
-  {
-    "id": "log_level",
-    "label": "Log Level",
-    "cliFlag": "--log-level",
-    "envVar": "SCANOPY_LOG_LEVEL",
-    "configFileKey": "log_level",
-    "default": "info",
-    "description": "Logging verbosity",
-    "docsOnly": false
-  },
-  {
-    "id": "heartbeat_interval",
-    "label": "Heartbeat Interval",
-    "cliFlag": "--heartbeat-interval",
-    "envVar": "SCANOPY_HEARTBEAT_INTERVAL",
-    "configFileKey": "heartbeat_interval",
-    "default": "30",
-    "description": "Seconds between heartbeat updates / work requests (for daemons in pull mode) to server",
+    "description": "Port the daemon listens on.",
     "docsOnly": false
   },
   {
@@ -116,7 +76,7 @@
     "envVar": "SCANOPY_DOCKER_PROXY",
     "configFileKey": "docker_proxy",
     "default": null,
-    "description": "Optional proxy for Docker API. Can use both non-SSL and SSL proxy; SSL proxy requires additional SSL config vars",
+    "description": "Optional local proxy for Docker API on the daemon host. Supports non-SSL and SSL; SSL requires additional config vars",
     "docsOnly": false
   },
   {
@@ -156,7 +116,7 @@
     "envVar": "SCANOPY_INTERFACES",
     "configFileKey": "interfaces",
     "default": null,
-    "description": "Restrict daemon to specific network interface(s). Comma-separated for multiple (e.g., eth0,eth1). Leave empty for all interfaces. Only applies to network discovery",
+    "description": "Restrict daemon to specific network interface(s). Comma-separated for multiple (e.g., eth0,eth1). Leave empty for all interfaces",
     "docsOnly": false
   },
   {
@@ -217,6 +177,46 @@
     "configFileKey": "concurrent_scans",
     "default": "Auto",
     "description": "Maximum parallel host scans",
+    "docsOnly": false
+  },
+  {
+    "id": "bind_address",
+    "label": "Bind Address",
+    "cliFlag": "--bind-address",
+    "envVar": "SCANOPY_BIND_ADDRESS",
+    "configFileKey": "bind_address",
+    "default": null,
+    "description": "IP address to bind daemon to",
+    "docsOnly": false
+  },
+  {
+    "id": "allow_self_signed_certs",
+    "label": "Allow Self-Signed Certificates",
+    "cliFlag": "--allow-self-signed-certs",
+    "envVar": "SCANOPY_ALLOW_SELF_SIGNED_CERTS",
+    "configFileKey": "allow_self_signed_certs",
+    "default": "false",
+    "description": "Allow self-signed certs for daemon -> server connections",
+    "docsOnly": false
+  },
+  {
+    "id": "log_level",
+    "label": "Log Level",
+    "cliFlag": "--log-level",
+    "envVar": "SCANOPY_LOG_LEVEL",
+    "configFileKey": "log_level",
+    "default": "info",
+    "description": "Logging verbosity",
+    "docsOnly": false
+  },
+  {
+    "id": "heartbeat_interval",
+    "label": "Heartbeat Interval",
+    "cliFlag": "--heartbeat-interval",
+    "envVar": "SCANOPY_HEARTBEAT_INTERVAL",
+    "configFileKey": "heartbeat_interval",
+    "default": "30",
+    "description": "Seconds between heartbeat updates to the server",
     "docsOnly": false
   }
 ]
