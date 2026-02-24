@@ -116,7 +116,7 @@
 	<!-- Background image -->
 	<div
 		class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('/hero-network.jpeg');"
+		style="background-image: url('/topology-hero.png');"
 	></div>
 	<!-- Dark overlay -->
 	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>

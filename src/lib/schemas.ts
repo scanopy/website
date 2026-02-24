@@ -95,7 +95,7 @@ export function getSoftwareApplicationSchema() {
 			'Automatic network discovery and documentation software. Create live, auto-updating network diagrams with one-time setup and zero upkeep.',
 		url: 'https://scanopy.net',
 		image: 'https://scanopy.net/scanopy-logo.png',
-		screenshot: 'https://scanopy.net/hero-network.jpeg',
+		screenshot: 'https://scanopy.net/topology-hero.png',
 		softwareVersion: '1.0',
 		author: {
 			'@type': 'Organization',
