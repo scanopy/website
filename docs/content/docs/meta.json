@@ -13,6 +13,7 @@
     "---Daemons---",
     "installing-daemon",
     "daemon-configuration",
+    "daemon-status",
     "multi-vlan",
     "docker-proxy",
     "macvlan-setup",

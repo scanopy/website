@@ -1,0 +1,77 @@
+---
+title: Daemon Status
+description: What each daemon status tag means and how to resolve issues.
+---
+
+Scanopy monitors daemon health and displays status tags in the UI. A daemon with no issues shows no tag. When problems are detected, a colored tag appears next to the daemon name indicating the most important issue.
+
+## Status Reference
+
+| Status | Meaning |
+| ------ | ------- |
+| <StatusTag status="Healthy" /> | Running current version, communicating normally |
+| <StatusTag status="Standby" /> | Plan doesn't support DaemonPoll mode |
+| <StatusTag status="Unreachable" /> | Server cannot reach the daemon |
+| <StatusTag status="Deprecated" /> | Daemon version is no longer supported |
+| <StatusTag status="Outdated" /> | Newer daemon version available |
+
+## Standby
+
+**Purple tag**. The daemon is registered but won't run jobs because your current plan doesn't support DaemonPoll mode.
+
+**How to resolve**:
+
+- Upgrade to a plan that supports DaemonPoll
+- Switch the daemon to ServerPoll mode — see [Installing a Daemon](/docs/installing-daemon) for mode details
+
+## Unreachable
+
+**Red tag**. The server cannot reach a ServerPoll daemon at its configured URL.
+
+**How to resolve**:
+
+1. Verify the daemon process is running on the host
+2. Check that the daemon's configured URL is correct and reachable from the server
+3. Check firewall rules — the server must be able to connect to the daemon
+4. Restart the daemon and retry
+
+See [Daemon Troubleshooting](/docs/troubleshooting/daemon) for detailed connectivity debugging.
+
+## Deprecated
+
+**Orange tag**. The daemon is running a version that is no longer supported. A deprecated daemon will not be allowed to connect to the server or run discovery.
+
+**How to resolve**:
+
+- Upgrade the daemon to the latest version immediately — see [Installing a Daemon](/docs/installing-daemon) for installation steps
+
+## Outdated
+
+**Yellow tag**. A newer daemon version is available. The current version still works but may be missing features or fixes.
+
+**How to resolve**:
+
+- Upgrade the daemon at your convenience — see [Installing a Daemon](/docs/installing-daemon) for installation steps
+
+## Healthy
+
+No tag is shown. The daemon is running a current version and communicating with the server normally.
+
+## Status Priority
+
+When multiple statuses apply, the UI shows the highest-priority one:
+
+**Standby > Unreachable > Deprecated > Outdated**
+
+The Home tab shows all active statuses across your daemons.
+
+## Troubleshooting
+
+If a daemon shows an unexpected status:
+
+- **Check daemon logs** for errors or connection failures
+- **Verify connectivity** between server and daemon (for ServerPoll daemons)
+- **Upgrade the daemon** if Deprecated or Outdated
+- **Review your plan** if a daemon is in Standby
+
+For more help, see [Daemon Troubleshooting](/docs/troubleshooting/daemon) and [Installing a Daemon](/docs/installing-daemon).
