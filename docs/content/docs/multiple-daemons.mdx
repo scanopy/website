@@ -1,0 +1,195 @@
+---
+title: Multiple Daemons on One Host
+description: How to run multiple Scanopy daemon instances on a single machine, each scanning different interfaces or networks.
+---
+
+A single host with multiple network interfaces can run several daemon instances, each responsible for a different interface or network segment. This is useful when one machine bridges isolated VLANs or when you want separate scan configurations per network.
+
+## When to use multiple daemons on one host
+
+A single daemon scans all interfaces on its host by default. You only need multiple daemons on one host when:
+
+- **The host connects to isolated networks** — e.g., a hypervisor or router with interfaces on separate VLANs that don't route to each other
+- **You want separate scan configurations per network** — different scan rates, concurrency limits, or polling modes for production vs. lab traffic
+- **You need per-interface Layer 2 discovery** — each daemon reports its own interfaced subnets and MAC-level data independently
+
+If your subnets are routable from the host, a single daemon with no interface restriction handles them all. See [Multi-VLAN Deployment](/docs/multi-vlan) for guidance on when one daemon is sufficient.
+
+## How config namespacing works
+
+Every daemon instance has a name. The default is `scanopy-daemon`. When you pass `--name`, the daemon stores its configuration in a subdirectory named after that value:
+
+| Name | Config path (Linux) |
+| --- | --- |
+| _(default)_ | `~/.config/scanopy/daemon/config.json` |
+| `--name eth0` | `~/.config/scanopy/daemon/eth0/config.json` |
+| `--name iot` | `~/.config/scanopy/daemon/iot/config.json` |
+
+Each named daemon gets its own config file with its own daemon ID, API key, server URL, and runtime state. They are fully independent — starting, stopping, or reconfiguring one does not affect the others.
+
+**Platform paths:**
+
+| Platform | Base directory |
+| --- | --- |
+| Linux | `~/.config/scanopy/daemon/` |
+| macOS | `~/Library/Application Support/com.scanopy.daemon/` |
+| Windows | `%APPDATA%\scanopy\daemon\` |
+
+## Restricting daemons to specific interfaces
+
+Use `--interfaces` to limit which network interfaces a daemon scans. Without it, the daemon scans all interfaces.
+
+```bash
+# Scan only eth0
+scanopy-daemon --name eth0 --interfaces eth0
+
+# Scan two interfaces
+scanopy-daemon --name production --interfaces eth0,eth1
+```
+
+The same setting works as an environment variable or in the config file:
+
+```bash
+# Environment variable
+SCANOPY_INTERFACES=eth0,eth1
+
+# config.json
+{ "interfaces": ["eth0", "eth1"] }
+```
+
+When `--interfaces` is set, the daemon only reports and scans subnets attached to those interfaces. This prevents overlap between daemon instances sharing the same host.
+
+## Setting up multiple daemons
+
+### Step 1: Create daemons in the UI
+
+Create a separate daemon entry in **Manage > Daemons** for each instance. Each daemon gets its own API key and can target the same or different networks.
+
+### Step 2: Run each instance with a unique name
+
+```bash
+# First daemon — production VLAN on eth0
+sudo scanopy-daemon \
+  --name eth0 \
+  --server-url http://scanopy.example.com:60072 \
+  --daemon-api-key KEY_1 \
+  --interfaces eth0
+
+# Second daemon — IoT VLAN on eth1
+sudo scanopy-daemon \
+  --name eth1 \
+  --server-url http://scanopy.example.com:60072 \
+  --daemon-api-key KEY_2 \
+  --interfaces eth1
+```
+
+After first run, each daemon persists its settings to its namespaced config file. Subsequent starts only need the name:
+
+```bash
+sudo scanopy-daemon --name eth0
+sudo scanopy-daemon --name eth1
+```
+
+### Step 3: Set up as systemd services (Linux)
+
+Scanopy provides a systemd template unit `scanopy-daemon@.service` for running multiple instances. Copy it to your systemd directory:
+
+```bash
+sudo cp scanopy-daemon@.service /etc/systemd/system/
+sudo systemctl daemon-reload
+```
+
+The template uses the instance identifier as both `--name` and `--interfaces`:
+
+```ini
+ExecStart=/usr/local/bin/scanopy-daemon --name=%i --interfaces=%i
+SyslogIdentifier=scanopy-daemon-%i
+```
+
+Enable and start instances by appending the interface name after `@`:
+
+```bash
+sudo systemctl enable --now scanopy-daemon@eth0
+sudo systemctl enable --now scanopy-daemon@eth1
+```
+
+Each instance gets separate journal logs:
+
+```bash
+journalctl -u scanopy-daemon@eth0
+journalctl -u scanopy-daemon@eth1
+```
+
+<Callout type="info">
+  The template ties the instance name to a single interface. If a daemon needs multiple interfaces, create a custom service file that passes `--interfaces eth0,eth1` and a descriptive `--name`.
+</Callout>
+
+## Listing existing daemon configs
+
+To see which named daemons are configured on a host, list the config directory:
+
+```bash
+# Linux
+ls ~/.config/scanopy/daemon/
+
+# macOS
+ls ~/Library/Application\ Support/com.scanopy.daemon/
+
+# Windows
+dir %APPDATA%\scanopy\daemon\
+```
+
+Each subdirectory corresponds to a named daemon instance. A `config.json` at the top level is the default (unnamed) daemon.
+
+## Upgrading and restarting
+
+All daemon instances share the same binary at `/usr/local/bin/scanopy-daemon`. To upgrade:
+
+1. **Stop all running daemons**
+
+    ```bash
+    # systemd template instances
+    sudo systemctl stop scanopy-daemon@eth0
+    sudo systemctl stop scanopy-daemon@eth1
+
+    # or kill all at once if running directly
+    sudo pkill scanopy-daemon
+    ```
+
+2. **Replace the binary** — download the new version or re-run the install script
+
+3. **Start each daemon again**
+
+    ```bash
+    sudo systemctl start scanopy-daemon@eth0
+    sudo systemctl start scanopy-daemon@eth1
+    ```
+
+Configuration is preserved across upgrades. Each daemon reads its settings from its own config file on startup — no need to re-enter server URLs, API keys, or other settings.
+
+## Docker
+
+For Docker deployments, run a separate container per daemon instance with the `SCANOPY_NAME` and `SCANOPY_INTERFACES` environment variables:
+
+```yaml
+services:
+  daemon-eth0:
+    image: scanopy/daemon:latest
+    network_mode: host
+    environment:
+      - SCANOPY_NAME=eth0
+      - SCANOPY_SERVER_URL=http://scanopy.example.com:60072
+      - SCANOPY_DAEMON_API_KEY=KEY_1
+      - SCANOPY_INTERFACES=eth0
+
+  daemon-eth1:
+    image: scanopy/daemon:latest
+    network_mode: host
+    environment:
+      - SCANOPY_NAME=eth1
+      - SCANOPY_SERVER_URL=http://scanopy.example.com:60072
+      - SCANOPY_DAEMON_API_KEY=KEY_2
+      - SCANOPY_INTERFACES=eth1
+```
+
+Both containers share the host network stack via `network_mode: host` but each scans only its assigned interface.
