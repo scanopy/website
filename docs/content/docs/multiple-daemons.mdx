@@ -61,27 +61,7 @@ When `--interfaces` is set, the daemon only reports and scans subnets attached t
 
 ## Setting up multiple daemons
 
-### Step 1: Create daemons in the UI
-
-Create a separate daemon entry in **Manage > Daemons** for each instance. Each daemon gets its own API key and can target the same or different networks.
-
-### Step 2: Run each instance with a unique name
-
-```bash
-# First daemon — production VLAN on eth0
-sudo scanopy-daemon \
-  --name eth0 \
-  --server-url http://scanopy.example.com:60072 \
-  --daemon-api-key KEY_1 \
-  --interfaces eth0
-
-# Second daemon — IoT VLAN on eth1
-sudo scanopy-daemon \
-  --name eth1 \
-  --server-url http://scanopy.example.com:60072 \
-  --daemon-api-key KEY_2 \
-  --interfaces eth1
-```
+Create a separate daemon entry in **Manage > Daemons** for each instance. Each daemon gets its own API key and can target the same or different networks. During setup, use the **Advanced** tab to configure interface restrictions under Network Discovery. The app provides platform-specific install and run commands with your settings included.
 
 After first run, each daemon persists its settings to its namespaced config file. Subsequent starts only need the name:
 
@@ -90,7 +70,7 @@ sudo scanopy-daemon --name eth0
 sudo scanopy-daemon --name eth1
 ```
 
-### Step 3: Set up as systemd services (Linux)
+### systemd template (Linux)
 
 Scanopy provides a systemd template unit `scanopy-daemon@.service` for running multiple instances. Copy it to your systemd directory:
 
@@ -143,53 +123,21 @@ Each subdirectory corresponds to a named daemon instance. A `config.json` at the
 
 ## Upgrading and restarting
 
-All daemon instances share the same binary at `/usr/local/bin/scanopy-daemon`. To upgrade:
+All daemon instances share the same binary. When the app shows an upgrade is available, it provides stop, install, and start commands. With multiple daemons you need to stop and restart each instance individually:
 
-1. **Stop all running daemons**
+```bash
+# systemd template instances
+sudo systemctl stop scanopy-daemon@eth0
+sudo systemctl stop scanopy-daemon@eth1
 
-    ```bash
-    # systemd template instances
-    sudo systemctl stop scanopy-daemon@eth0
-    sudo systemctl stop scanopy-daemon@eth1
+# replace the binary (use the install command from the app)
 
-    # or kill all at once if running directly
-    sudo pkill scanopy-daemon
-    ```
+sudo systemctl start scanopy-daemon@eth0
+sudo systemctl start scanopy-daemon@eth1
+```
 
-2. **Replace the binary** — download the new version or re-run the install script
-
-3. **Start each daemon again**
-
-    ```bash
-    sudo systemctl start scanopy-daemon@eth0
-    sudo systemctl start scanopy-daemon@eth1
-    ```
-
-Configuration is preserved across upgrades. Each daemon reads its settings from its own config file on startup — no need to re-enter server URLs, API keys, or other settings.
+Configuration is preserved across upgrades — each daemon reads its settings from its own config file on startup.
 
 ## Docker
 
-For Docker deployments, run a separate container per daemon instance with the `SCANOPY_NAME` and `SCANOPY_INTERFACES` environment variables:
-
-```yaml
-services:
-  daemon-eth0:
-    image: scanopy/daemon:latest
-    network_mode: host
-    environment:
-      - SCANOPY_NAME=eth0
-      - SCANOPY_SERVER_URL=http://scanopy.example.com:60072
-      - SCANOPY_DAEMON_API_KEY=KEY_1
-      - SCANOPY_INTERFACES=eth0
-
-  daemon-eth1:
-    image: scanopy/daemon:latest
-    network_mode: host
-    environment:
-      - SCANOPY_NAME=eth1
-      - SCANOPY_SERVER_URL=http://scanopy.example.com:60072
-      - SCANOPY_DAEMON_API_KEY=KEY_2
-      - SCANOPY_INTERFACES=eth1
-```
-
-Both containers share the host network stack via `network_mode: host` but each scans only its assigned interface.
+For Docker deployments, run a separate container per daemon instance. Use the install commands from the app for each daemon entry and add the `SCANOPY_INTERFACES` environment variable to restrict each container to its assigned interface. Both containers need `network_mode: host` to access host interfaces.
