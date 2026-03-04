@@ -24,3 +24,6 @@
 /docs/self-hosted/* /docs/:splat 301
 /docs/reference/* /docs/:splat 301
 /docs/using-scanopy/* /docs/:splat 301
+
+# 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
+/* /404.html 404
