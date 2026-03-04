@@ -11,9 +11,6 @@ const inter = Inter({
 
 export const metadata = {
   metadataBase: new URL('https://scanopy.net/docs'),
-  alternates: {
-    canonical: './',
-  },
   title: {
     default: 'Scanopy Docs',
     template: '%s | Scanopy Docs',

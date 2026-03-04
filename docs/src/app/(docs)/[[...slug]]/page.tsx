@@ -44,9 +44,16 @@ export async function generateMetadata(
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  const canonical = page.slugs.length === 0
+    ? '/'
+    : `/${page.slugs.join('/')}/`;
+
   return {
     title: page.data.title,
     description: page.data.description,
+    alternates: {
+      canonical,
+    },
     openGraph: {
       images: getPageImage(page).url,
     },
