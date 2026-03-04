@@ -41,11 +41,45 @@ See [Daemon Configuration](/daemon-configuration/) for the full parameter refere
 
 ## Hosts Not Discovered / Missing IPs
 
-**Symptoms**: Discovery completes but some known hosts are missing from results. Manual `arping` to the missing IPs works fine.
+**Symptoms**: Discovery completes but some known hosts are missing from results.
 
-**Most likely cause**: Switch rate limiting is dropping ARP packets before they reach hosts or before responses return.
+**Most likely causes**:
+- **The host is not responding to ARP** — it's on a different subnet, asleep, filtering ARP, or on an overlay network.
+- **Switch rate limiting (DAI)** — the switch is dropping ARP packets before they reach hosts or before responses return.
 
-### Understanding ARP Scanning
+To tell them apart, run `arping -c 3 <missing-ip>` from the scanner host. If arping also fails, the host is unreachable at Layer 2 — see [Hosts Not Responding to ARP](#hosts-not-responding-to-arp). If arping succeeds but Scanopy misses the host, the issue is likely rate limiting — see [Switch Rate Limiting (DAI)](#switch-rate-limiting-dai).
+
+### Hosts Not Responding to ARP
+
+These issues are independent of Scanopy — the host is genuinely unreachable via Layer 2 ARP from the scanner's network segment. Manual `arping` will also fail.
+
+#### Host is on a different subnet or behind a router
+
+ARP is Layer 2 only. Hosts on other subnets won't see broadcast ARP requests from the scanner's VLAN — routers don't forward ARP broadcasts.
+
+**Solution**: Run a scanner daemon on each subnet, or add the remote subnet as a target so the daemon's routed-ping fallback can reach it.
+
+#### Host is asleep or in low-power mode
+
+Laptops, IoT devices, and phones in sleep or Wi-Fi power-save mode may not respond to ARP promptly or at all.
+
+**Solution**: Increase `arp_retries` to give sleeping hosts more chances to wake and respond. Schedule scans during active hours. Accept that sleeping devices will appear intermittently.
+
+#### Host has static ARP or ARP filtering enabled
+
+Some hardened hosts or embedded devices ignore broadcast ARP or only reply to unicast ARP for known peers.
+
+**Solution**: Increase `arp_retries` (unicast retries may succeed where broadcast failed). Verify with `arping -c 3 <ip>` from the scanner host — if that also fails, the host is filtering ARP.
+
+#### Virtual machines or containers with restricted networking
+
+VMs in NAT mode or containers on an overlay network are not reachable via Layer 2 ARP on the physical segment.
+
+**Solution**: Scan from within the virtual network, or switch the VM/container to bridged networking so it appears on the physical segment.
+
+### Switch Rate Limiting (DAI)
+
+#### Understanding ARP Scanning
 
 Scanopy uses broadcast ARP for fast host discovery. For each target IP, we send an ARP "who-has" request and wait for a reply. This is faster and more reliable than TCP/UDP probing because hosts cannot firewall ARP and still communicate on the network.
 
@@ -63,7 +97,7 @@ However, many managed switches implement **Dynamic ARP Inspection (DAI)** to pre
 
 If your switch has DAI enabled and Scanopy sends ARP faster than the limit allows, excess packets are dropped and those hosts appear offline.
 
-### How Retries Work
+#### How Retries Work
 
 Scanopy uses **targeted retries** rather than simple broadcast flooding:
 
@@ -85,7 +119,7 @@ This approach minimizes total packets sent (only non-responders are retried) whi
 
 If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those hosts—often successfully since the burst is smaller.
 
-### Diagnosis
+#### Diagnosis
 
 1. **Check if your switch has DAI enabled.** Consult your switch documentation for how to view DAI configuration and statistics. Look for rate limit violations or dropped ARP packets.
 
@@ -93,11 +127,11 @@ If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those 
 
 3. **Test with manual arping:**
    ```bash
-   # If this finds the host but Scanopy doesn't, rate limiting is likely
    arping -c 3 <missing-ip>
    ```
+   If arping finds the host but Scanopy doesn't, rate limiting is likely the cause. If arping also fails, the host is unreachable at Layer 2 — see [Hosts Not Responding to ARP](#hosts-not-responding-to-arp) above.
 
-### Solutions
+#### Solutions
 
 **Option 1: Reduce ARP scan rate**
 
@@ -175,7 +209,7 @@ environment:
 - Scanning small networks where speed doesn't matter
 - You want zero additional dependencies
 
-### Tuning for Your Network
+#### Tuning for Your Network
 
 | Situation | Recommended Settings |
 |-----------|---------------------|
@@ -187,17 +221,19 @@ See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
 
 ## Discovery Takes Hours
 
-**Symptoms**: Network discovery takes 10+ hours to complete
+**Symptoms**: Network discovery takes hours to complete.
 
-**Most likely cause**: You're scanning a Docker bridge network. The default 172.17.0.0/16 is 65,536 IPs.
+**Most likely cause**: You're scanning a large subnet the daemon isn't directly connected to. Without Layer 2 adjacency, ARP-based discovery is unavailable and the daemon falls back to slower TCP probing — scanning each IP individually.
 
 **Solutions**:
 
-1. **Remove large subnets**: In your Network Scan discovery, remove any Docker bridge networks (172.17.0.0/16, etc.)
+1. **Remove or shrink oversized subnets**: Check your target list for /16s or larger subnets. Only scan subnets that actually contain hosts you care about.
 
-2. **Use Docker discovery instead**: It queries the Docker API directly and takes seconds
+2. **Use Docker discovery for Docker networks**: The default Docker bridge network (172.17.0.0/16) is 65,536 IPs and the daemon has no L2 path to it. Use Docker discovery instead — it queries the Docker API directly and takes seconds.
 
-3. **Check your subnet list**: Only scan subnets that actually contain hosts
+3. **Deploy a daemon on the target segment**: If the daemon reaches a subnet only via a gateway, ARP is unavailable and discovery falls back to TCP probing. Deploy a daemon on the target segment for fast L2 scanning, or accept slower scans. See [Multi-VLAN Deployment](/multi-vlan/) and [Limitations — Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3).
+
+4. **Review your subnet list**: Periodically audit your configured subnets and remove any that are no longer needed or contain no relevant hosts.
 
 ## Topology Empty After Discovery
 
