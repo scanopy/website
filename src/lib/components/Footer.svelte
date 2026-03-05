@@ -108,6 +108,9 @@
 						<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
 					</li>
 					<li>
+						<a href="/blog" class="text-sm text-gray-400 hover:text-white">Blog</a>
+					</li>
+					<li>
 						<a href="/showcase" class="text-sm text-gray-400 hover:text-white">Showcase</a>
 					</li>
 				</ul>
