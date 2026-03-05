@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BillingPlanForm, FeaturedIn } from '$lib/components';
+	import { BillingPlanForm, ContactModal, FeaturedIn } from '$lib/components';
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import type {
@@ -53,8 +53,8 @@
 			is_commercial: boolean;
 			hosting: string;
 			custom_price: string | null;
-			custom_checkout_cta: string | null;
-			custom_checkout_link: string | null;
+			incremental_features: string[];
+			previous_tier: string | null;
 		};
 	}
 
@@ -134,8 +134,8 @@
 			is_commercial: item.metadata.is_commercial,
 			hosting: item.metadata.hosting,
 			custom_price: item.metadata.custom_price,
-			custom_checkout_cta: item.metadata.custom_checkout_cta,
-			custom_checkout_link: item.metadata.custom_checkout_link
+			incremental_features: item.metadata.incremental_features,
+			previous_tier: item.metadata.previous_tier
 		} as BillingPlanMetadata
 	}));
 
@@ -146,6 +146,20 @@
 	const featureHelpers = createMetadataHelpers<FeatureFixture, FeatureMetadata>(featureFixtures);
 
 	// ============================================================================
+	// Contact Modal State
+	// ============================================================================
+
+	let showContactModal = $state(false);
+	let selectedPlanType = $state('');
+	let selectedPlanName = $state('');
+
+	function handlePlanInquiry(plan: BillingPlan) {
+		selectedPlanType = plan.type;
+		selectedPlanName = billingPlanHelpers.getName(plan.type);
+		showContactModal = true;
+	}
+
+	// ============================================================================
 	// Lifecycle & Callbacks
 	// ============================================================================
 
@@ -154,12 +168,7 @@
 	});
 
 	function handlePlanSelect(plan: BillingPlan) {
-		// Open the app's checkout flow in a new tab
-		window.open(
-			`https://app.scanopy.net/billing?plan=${plan.type}`,
-			'_blank',
-			'noopener,noreferrer'
-		);
+		window.open('https://app.scanopy.net/?modal=billing-plan', '_blank', 'noopener,noreferrer');
 	}
 
 	// Get schemas from unified schema utilities
@@ -193,9 +202,19 @@
 			{billingPlanHelpers}
 			{featureHelpers}
 			onPlanSelect={handlePlanSelect}
+			onPlanInquiry={handlePlanInquiry}
 			showGithubStars={true}
+			showHosting={true}
+			initialPlanFilter="all"
 		/>
 	</div>
 </section>
 
 <FeaturedIn mentions={pressMentions} />
+
+<ContactModal
+	open={showContactModal}
+	onClose={() => (showContactModal = false)}
+	planType={selectedPlanType}
+	planName={selectedPlanName}
+/>

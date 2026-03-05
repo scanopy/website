@@ -10,7 +10,15 @@ export interface TypeMetadata<TMetadata = Record<string, unknown>> {
 	metadata: TMetadata;
 }
 
-export type BillingPlanType = 'Community' | 'Starter' | 'Pro' | 'Team' | 'Business' | 'Enterprise';
+export type BillingPlanType =
+	| 'Free'
+	| 'Community'
+	| 'Starter'
+	| 'Pro'
+	| 'Team'
+	| 'Business'
+	| 'Enterprise'
+	| 'CommercialSelfHosted';
 
 export interface BillingPlan {
 	base_cents: number;
@@ -26,33 +34,18 @@ export interface BillingPlan {
 }
 
 export interface BillingPlanMetadata {
-	features: {
-		audit_logs: boolean;
-		commercial_license: boolean;
-		community_support: boolean;
-		custom_sso: boolean;
-		email_support: boolean;
-		embeds: boolean;
-		invoice_billing: boolean;
-		live_chat_support: boolean;
-		managed_deployment: boolean;
-		onboarding_call: boolean;
-		priority_support: boolean;
-		remove_created_with: boolean;
-		share_views: boolean;
-		webhooks: boolean;
-		whitelabeling: boolean;
-	};
+	features: Record<string, boolean | string | number | null>;
 	is_commercial: boolean;
 	hosting: string;
 	custom_price: string | null;
-	custom_checkout_cta: string | null;
-	custom_checkout_link: string | null;
+	incremental_features: string[];
+	previous_tier: string | null;
 }
 
 export interface FeatureMetadata {
 	is_coming_soon: boolean;
 	use_null_as_unlimited?: boolean;
+	minimum_plan?: string | null;
 }
 
 export interface ServiceDefinition {
