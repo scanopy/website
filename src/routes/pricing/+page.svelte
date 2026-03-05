@@ -193,8 +193,9 @@
 	<div class="container mx-auto px-2">
 		<div class="mb-12 text-center">
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">
-				Simple pricing. Unlimited scans.
+				Unlimited hosts. No per-device fees, ever.
 			</h1>
+			<p class="text-lg text-gray-400">Unlimited scans on every plan.</p>
 		</div>
 
 		<BillingPlanForm

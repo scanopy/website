@@ -1,44 +1,50 @@
 [
 	{
-		"id": "automatic_discovery",
-		"title": "Never miss a device",
-		"description": "Scans any network and discovers every host, service, and subnet automatically.",
+		"id": "deploy_scanner",
+		"title": "Deploy a scanner",
+		"description": "Install a lightweight daemon on any network. It auto-discovers hosts, services, and subnets.",
+		"icon": "Download",
+		"schemaLabel": "Automatic network discovery",
+		"group": "how_it_works"
+	},
+	{
+		"id": "topology_builds_itself",
+		"title": "Topology builds itself",
+		"description": "As the scan runs, a full network topology generates automatically — no manual drawing.",
 		"icon": "Network",
-		"schemaLabel": "Automatic network discovery"
+		"schemaLabel": "Automatic topology generation",
+		"group": "how_it_works"
 	},
 	{
-		"id": "versioning",
-		"title": "Versioning without the commits",
-		"description": "Create branches, lock versions, and compare network state over time.",
-		"icon": "GitBranch",
-		"schemaLabel": "Network versioning and branching"
-	},
-	{
-		"id": "security_visibility",
-		"title": "Know what's exposed",
-		"description": "See which services are reachable and flag misconfigurations before they become incidents.",
-		"icon": "Shield",
-		"schemaLabel": "Security visibility"
+		"id": "stays_up_to_date",
+		"title": "Stays up to date on a schedule",
+		"description": "Topology regenerates automatically. No manual re-scans, no stale docs.",
+		"icon": "RefreshCw",
+		"schemaLabel": "Scheduled automatic updates",
+		"group": "how_it_works"
 	},
 	{
 		"id": "service_detection",
-		"title": "Auto-detects 200+ services",
-		"description": "Identifies <a href=\"/services\" class=\"text-blue-400 hover:underline\">200+ services</a> including Docker, PostgreSQL, nginx, Prometheus, and Active Directory.",
+		"title": "See every service at a glance",
+		"description": "The topology shows <a href=\"/services\" class=\"text-blue-400 hover:underline\">200+ detected services</a> — Docker, PostgreSQL, nginx, and more — right in the visualization.",
 		"icon": "Box",
-		"schemaLabel": "200+ service detection"
+		"schemaLabel": "200+ service detection",
+		"group": "what_you_get"
+	},
+	{
+		"id": "versioning",
+		"title": "Version history",
+		"description": "Create branches, lock versions, and compare network state over time.",
+		"icon": "GitBranch",
+		"schemaLabel": "Network versioning and branching",
+		"group": "what_you_get"
 	},
 	{
 		"id": "sharing",
-		"title": "Share with anyone",
-		"description": "Export diagrams, send live view links, or create embeds.",
-		"icon": "FileCode",
-		"schemaLabel": "Diagram sharing and export"
-	},
-	{
-		"id": "live_diagrams",
-		"title": "Diagrams that never go stale",
-		"description": "Live topology diagrams that update as each network changes.",
-		"icon": "Eye",
-		"schemaLabel": "Live topology diagrams"
+		"title": "Share, export, embed",
+		"description": "Send live view links, export diagrams, or embed maps anywhere.",
+		"icon": "Share2",
+		"schemaLabel": "Diagram sharing and export",
+		"group": "what_you_get"
 	}
 ]

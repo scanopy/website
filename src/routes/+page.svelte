@@ -6,15 +6,17 @@
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import {
 		Network,
-		Eye,
+		Download,
 		GitBranch,
-		Shield,
+		RefreshCw,
 		Box,
-		FileCode,
+		Share2,
 		Quote,
 		Users,
 		ClipboardCheck,
-		Briefcase
+		Briefcase,
+		Monitor,
+		Server
 	} from 'lucide-svelte';
 	import type { Component } from 'svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
@@ -34,21 +36,24 @@
 
 	// Icon mapping from fixture string names to Svelte components
 	const iconMap: Record<string, Component> = {
+		Download,
 		Network,
-		Eye,
-		GitBranch,
-		Shield,
+		RefreshCw,
 		Box,
-		FileCode
+		GitBranch,
+		Share2
 	};
 
 	// Load features from fixture and map icons
 	const productFeatures = getProductFeatures();
-	const features = productFeatures.map((f) => ({
+	const allFeatures = productFeatures.map((f) => ({
 		icon: iconMap[f.icon] || Box,
 		title: f.title,
-		description: f.description
+		description: f.description,
+		group: f.group
 	}));
+	const howItWorks = allFeatures.filter((f) => f.group === 'how_it_works');
+	const whatYouGet = allFeatures.filter((f) => f.group === 'what_you_get');
 
 	// Generate schema from fixtures
 	const softwareApplicationSchema = getSoftwareApplicationSchema();
@@ -63,12 +68,13 @@
 		{
 			icon: Briefcase,
 			title: 'Impress your customers',
-			description: 'Turn documentation into a live client portal — zero manual updates.'
+			description:
+				'Transform documentation into a live client portal with zero manual updates.'
 		},
 		{
 			icon: ClipboardCheck,
-			title: 'Streamline audits & compliance',
-			description: 'Hand auditors a live network map instead of stale spreadsheets.'
+			title: 'Streamline audits',
+			description: 'Hand auditors a live network map instead of outdated spreadsheets.'
 		}
 	];
 
@@ -99,7 +105,7 @@
 	<title>Scanopy - Automatic Network Documentation</title>
 	<meta
 		name="description"
-		content="Automatic network diagrams that stay up to date. Open source."
+		content="Network documentation that updates itself. Deploy a scanner, get live diagrams in minutes. Open source."
 	/>
 	<link rel="canonical" href="https://scanopy.net/" />
 	<link
@@ -130,15 +136,13 @@
 
 			<!-- Headline -->
 			<h1 class="mb-6 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
-				Clean network diagrams.<br />One-time setup, zero upkeep
-				<!-- No setup. No maintenance. Just clean network docs. -->
-				<!-- Clean network documentation without the overhead -->
+				Network documentation that updates itself
 			</h1>
 
 			<!-- Subheadline -->
 			<p class="mx-auto mb-10 max-w-2xl text-xl text-gray-300">
-				From one site to hundreds — scan any network<br />and get live, auto-updating documentation
-				in minutes
+				Deploy a lightweight scanner, get live network diagrams in minutes.<br />No manual
+				maintenance, no stale Visio files.
 			</p>
 
 			<!-- CTAs -->
@@ -162,17 +166,36 @@
 	</div>
 </section>
 
-<!-- Features Section -->
+<!-- How it works Section -->
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-				Scan once. Stay documented forever.
-			</h2>
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">How it works</h2>
 		</div>
 
-		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-			{#each features as feature (feature.title)}
+		<div class="grid gap-8 md:grid-cols-3">
+			{#each howItWorks as feature (feature.title)}
+				<div class="card card-static p-6">
+					<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
+						<feature.icon class="h-6 w-6 text-blue-400" />
+					</div>
+					<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
+					<p class="text-sm text-gray-400">{@html feature.description}</p>
+				</div>
+			{/each}
+		</div>
+	</div>
+</section>
+
+<!-- What you get Section -->
+<section class="border-t border-gray-800 bg-gray-900/50 py-20">
+	<div class="container mx-auto px-4">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">What you get</h2>
+		</div>
+
+		<div class="grid gap-8 md:grid-cols-3">
+			{#each whatYouGet as feature (feature.title)}
 				<div class="card card-static p-6">
 					<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
 						<feature.icon class="h-6 w-6 text-blue-400" />
@@ -186,7 +209,7 @@
 </section>
 
 <!-- Use Cases Section -->
-<section class="border-t border-gray-800 bg-gray-900/50 py-20">
+<section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
@@ -221,6 +244,75 @@
 					<p class="text-gray-400">{useCase.description}</p>
 				</div>
 			{/each}
+		</div>
+	</div>
+</section>
+
+<!-- Who it's for Section -->
+<section class="border-t border-gray-800 bg-gray-900/50 py-20">
+	<div class="container mx-auto px-4">
+		<div class="mb-16 text-center">
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">Who it's for</h2>
+		</div>
+
+		<div class="grid gap-8 md:grid-cols-3">
+			<div class="card card-static p-6 text-center">
+				<div
+					class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10"
+				>
+					<Monitor class="h-7 w-7 text-blue-400" />
+				</div>
+				<h3 class="mb-2 text-xl font-semibold text-white">IT Teams</h3>
+				<p class="mb-4 text-gray-400">
+					Your network diagram is always out of date. Fix it permanently.
+				</p>
+				<a
+					href="https://app.scanopy.net/onboarding"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-sm font-medium text-blue-400 hover:underline"
+				>
+					Get started &rarr;
+				</a>
+			</div>
+
+			<div class="card card-static p-6 text-center">
+				<div
+					class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10"
+				>
+					<Briefcase class="h-7 w-7 text-blue-400" />
+				</div>
+				<h3 class="mb-2 text-xl font-semibold text-white">MSPs</h3>
+				<p class="mb-4 text-gray-400">
+					Document every client network. Share live maps without granting logins.
+				</p>
+				<a
+					href="https://app.scanopy.net/onboarding"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-sm font-medium text-blue-400 hover:underline"
+				>
+					Get started &rarr;
+				</a>
+			</div>
+
+			<div class="card card-static p-6 text-center">
+				<div
+					class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10"
+				>
+					<Server class="h-7 w-7 text-blue-400" />
+				</div>
+				<h3 class="mb-2 text-xl font-semibold text-white">Self-Hosters</h3>
+				<p class="mb-4 text-gray-400">Free, open-source, runs on your hardware.</p>
+				<a
+					href="https://github.com/scanopy/scanopy"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-sm font-medium text-blue-400 hover:underline"
+				>
+					View on GitHub &rarr;
+				</a>
+			</div>
 		</div>
 	</div>
 </section>

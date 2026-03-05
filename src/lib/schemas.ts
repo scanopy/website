@@ -26,6 +26,7 @@ interface ProductFeature {
 	description: string;
 	icon: string;
 	schemaLabel: string;
+	group: 'how_it_works' | 'what_you_get';
 }
 
 const billingPlans = billingPlansData as BillingPlan[];
