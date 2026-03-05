@@ -1,0 +1,52 @@
+---
+title: Upgrading a Self-Hosted Server
+description: How to upgrade a self-hosted Scanopy server and daemon using Docker Compose.
+---
+
+## Upgrading with Docker Compose
+
+Pull the latest images and recreate the containers:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+This upgrades both the server and any daemons defined in your compose file. Volumes are preserved, so no re-registration or reconfiguration is needed.
+
+<Callout type="warn">
+If you use the integrated daemon, do not delete the `daemon-config` volume during upgrades — it stores the daemon's identity (ID, API key, and network assignment). Only delete it if you need to re-register the daemon from scratch.
+</Callout>
+
+After restarting, the daemon reports its new version to the server and the version status should immediately show **Current** in the UI.
+
+If you run standalone daemons on separate hosts, you'll need to upgrade those independently — see [Managing Daemons](/setting-up-daemons/managing-daemons).
+
+## Daemon still shows Outdated after upgrading
+
+If a daemon still shows [**Outdated**](/reference/daemon-status#outdated) after upgrading:
+
+### 1. Verify the daemon is running the new image
+
+```bash
+docker compose logs daemon | head -20
+```
+
+The startup log prints the daemon version. If it still shows the old version, the image wasn't actually pulled. Pull it explicitly and restart:
+
+```bash
+docker compose pull daemon
+docker compose up -d daemon
+```
+
+### 2. Check that the daemon can reach the server
+
+If the daemon can't connect to the server (for example, due to network issues between containers), it can't announce its version. Look for connection errors in the daemon logs:
+
+```bash
+docker compose logs daemon
+```
+
+### 3. Wait for the next poll cycle
+
+The daemon version is also reported on every regular poll to the server, so even if the startup announcement fails, the version will update within a few seconds on the next successful poll.

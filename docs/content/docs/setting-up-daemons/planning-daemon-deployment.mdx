@@ -1,0 +1,172 @@
+---
+title: Planning Daemon Deployment
+description: Decide how many daemons you need and where to place them.
+---
+
+Daemons are lightweight agents that scan your network and report findings to the server. Most networks need at least one, and many need several. This guide helps you decide how many daemons to deploy and where to place them based on your network topology.
+
+## Layer 2 vs Layer 3 discovery
+
+This tradeoff drives every decision on this page. When a daemon has a **network interface** on a subnet, it gets Layer 2 access. When it can only route to a subnet, it's limited to Layer 3.
+
+| | Layer 2 (interfaced) | Layer 3 (routed) |
+|---|---|---|
+| **How it works** | ARP scanning on the local segment | TCP port scanning through a gateway |
+| **Finds hosts without open ports** | Yes | No |
+| **Collects MAC addresses** | Yes | No |
+| **Discovery speed** | Fast — ARP is lightweight | Slower — must probe individual ports |
+| **Requires** | Daemon host has an interface on the subnet | Daemon host can route to the subnet |
+
+**Layer 2 is always preferred.** It's faster, finds more devices, and gives you complete visibility. Layer 3 is a fallback for subnets where you can't place a daemon — it will miss hosts that don't have open ports and won't collect MAC addresses. When planning your deployment, aim for Layer 2 coverage on every segment you care about.
+
+See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3) for more detail.
+
+## Deployment strategies
+
+### Single daemon with routing
+
+**Start with one daemon and extend its reach before adding more.** A single daemon automatically scans every subnet its host has an interface on (Layer 2). It can also scan remote subnets it can route to, but those fall back to Layer 3 — a good way to get initial visibility while you plan where to place additional daemons for full coverage.
+
+
+<Mermaid chart={`
+flowchart TB
+    server["Scanopy Server<br/>(Cloud or Self-Hosted)"]
+
+    server --> host
+
+    subgraph host["Single Host"]
+        d1["Daemon"]
+    end
+
+    d1 -- "L2 (interfaced)" --> lan["LAN<br/>192.168.1.0/24"]
+    d1 -. "L3 (routed)" .-> remote1["Remote Subnet<br/>10.0.1.0/24"]
+    d1 -. "L3 (routed)" .-> remote2["Remote Subnet<br/>10.0.2.0/24"]
+`} />
+
+**Extending what a single daemon scans:**
+
+- **Remote subnets**: The daemon can scan subnets it can route to but doesn't have an interface on (Layer 3 only). See [Scanning Remote Subnets](/guides/scanning-remote-subnets/).
+- **VPN networks**: If the daemon's host is connected to a VPN, it can scan that network with full Layer 2 access. See [Scanning VPN Networks](/guides/scanning-vpn-networks/).
+
+**Best for:** Getting started quickly. For subnets the daemon can only route to, plan to deploy additional daemons for full Layer 2 coverage when you can.
+
+### Daemon per network segment
+
+**Deploy a daemon on each VLAN or network segment for full Layer 2 access everywhere.**
+
+<Mermaid chart={`
+flowchart TB
+    server["Scanopy Server<br/>(Cloud or Self-Hosted)"]
+
+    server --> vlan1
+    server --> vlan2
+    server --> vlan3
+
+    subgraph vlan1["VLAN 1 - Production"]
+        d1["192.168.1.0/24<br/>Daemon 1"]
+    end
+
+    subgraph vlan2["VLAN 2 - IoT"]
+        d2["192.168.2.0/24<br/>Daemon 2"]
+    end
+
+    subgraph vlan3["VLAN 3 - Guest"]
+        d3["192.168.3.0/24<br/>Daemon 3"]
+    end
+`} />
+
+Each daemon runs on a host within its segment and reports full Layer 2 data. Install each one through **Discover > Daemons** — see [Managing Daemons](/setting-up-daemons/managing-daemons/) for setup instructions.
+
+When a device appears on multiple VLANs, it may show up as separate hosts. Use [host consolidation](/using-scanopy/network-data/#consolidating-duplicate-hosts) to merge them.
+
+**Best for:** Any multi-segment network. This is the ideal deployment — every segment gets full discovery. Required for isolated networks with no routing between segments.
+
+### Multiple daemons on one host
+
+**Run several daemon instances on a single machine that bridges multiple isolated networks.** This is common with hypervisors, routers, or servers that have interfaces on VLANs that don't route to each other.
+
+<Mermaid chart={`
+flowchart TB
+    server["Scanopy Server<br/>(Cloud or Self-Hosted)"]
+
+    server --> host
+
+    subgraph host["Multi-NIC Host (Hypervisor / Router)"]
+        d1["Daemon 1<br/>--interfaces eth0"]
+        d2["Daemon 2<br/>--interfaces eth1"]
+    end
+
+    d1 -- "L2" --> vlan1["VLAN 1 - Production<br/>192.168.1.0/24"]
+    d2 -- "L2" --> vlan2["VLAN 2 - IoT<br/>192.168.2.0/24"]
+`} />
+
+Each instance gets a name and is restricted to specific interfaces so they don't overlap:
+
+```bash
+scanopy-daemon --name production --interfaces eth0
+scanopy-daemon --name iot --interfaces eth1
+```
+
+Create a separate daemon entry in **Discover > Daemons** for each instance. Each gets its own API key and can target the same or different Scanopy networks.
+
+This gives you Layer 2 discovery on each segment without needing a separate physical host per VLAN. See [Scanning Isolated Networks from One Host](/guides/multiple-daemons/) for the full setup guide, including config namespacing, systemd templates, and Docker configuration.
+
+**Best for:** Hypervisors, routers, or multi-NIC servers bridging isolated VLANs where deploying separate hosts isn't practical.
+
+### Hybrid
+
+Use a central daemon for routable subnets and add dedicated daemons only where you need Layer 2 access or where networks are truly isolated. Most real-world deployments end up here — one daemon covers the majority of the network, with one or two more for specific segments.
+
+<Mermaid chart={`
+flowchart TB
+    server["Scanopy Server<br/>(Cloud or Self-Hosted)"]
+
+    server --> d1
+    server --> d2
+
+    subgraph main["Main Network"]
+        d1["Daemon 1<br/>(central)"]
+    end
+
+    d1 -- "L2" --> lan["LAN<br/>192.168.1.0/24"]
+    d1 -. "L3" .-> routed["Routed Subnet<br/>10.0.1.0/24"]
+
+    subgraph isolated["Isolated Segment"]
+        d2["Daemon 2<br/>(dedicated)"]
+    end
+
+    d2 -- "L2" --> iot["IoT VLAN<br/>172.16.0.0/24"]
+`} />
+
+## Choosing a polling mode
+
+Each daemon uses a polling mode that determines which side initiates the connection.
+
+| | DaemonPoll (default) | ServerPoll |
+|---|---|---|
+| **Connection direction** | Daemon → Server | Server → Daemon |
+| **Firewall requirements** | Daemon needs outbound access to server | Server needs inbound access to daemon (port 60073) |
+| **Setup** | Daemon self-registers with an API key | Admin provisions the daemon in the UI and configures its URL |
+| **Best for** | Most deployments — works behind NAT and firewalls | DMZ or restricted environments where the daemon cannot make outbound connections |
+
+**Use DaemonPoll unless your daemon cannot reach the server.** It's simpler to set up and requires no inbound firewall rules on the daemon host.
+
+## Network requirements
+
+### Firewall rules for DaemonPoll mode (default)
+
+Daemon initiates all connections. Minimal firewall changes needed.
+
+| Source | Destination  | Port  | Protocol | Purpose           |
+| ------ | ------------ | ----- | -------- | ----------------- |
+| Daemon | Server       | 60072 | TCP      | Server API requests |
+| Daemon | Local subnet | \*    | TCP      | Network scanning  |
+
+### Firewall rules for ServerPoll mode
+
+Server initiates scan requests. Daemon must be reachable.
+
+| Source | Destination  | Port  | Protocol | Purpose            |
+| ------ | ------------ | ----- | -------- | ------------------ |
+| Server | Daemon       | 60073 | TCP      | Daemon API requests |
+| Daemon | Local subnet | \*    | TCP      | Network scanning   |

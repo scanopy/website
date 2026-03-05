@@ -1,6 +1,6 @@
 ---
-title: Docker Socket Proxy
-description: Configuring Docker socket proxies for secure container discovery.
+title: Securing Docker Discovery with a Socket Proxy
+description: How to use a Docker socket proxy to restrict API access when discovering containers.
 ---
 
 Scanopy daemons can discover Docker containers by connecting to the Docker API. By default, daemons connect directly to `/var/run/docker.sock`. A Docker socket proxy provides an additional security layer by restricting which Docker API operations are allowed.

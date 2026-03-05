@@ -2,28 +2,55 @@
 /docs/getting-started/quick-start/ /docs/quick-start/ 301
 /docs/getting-started/introduction/ /docs/introduction/ 301
 /docs/daemons/troubleshooting/ /docs/troubleshooting/scanning/ 301
-/docs/daemons/daemon-configuration/ /docs/daemon-configuration/ 301
-/docs/daemons/installing-daemon/ /docs/installing-daemon/ 301
-/docs/self-hosted/troubleshooting/ /docs/troubleshooting/server/ 301
-/docs/self-hosted/server-installation/ /docs/server-installation/ 301
-/docs/self-hosted/server-configuration/ /docs/server-configuration/ 301
-/docs/self-hosted/oidc/ /docs/oidc/ 301
-/docs/reference/security/ /docs/security/ 301
-/docs/reference/service-detection/ /docs/service-detection/ 301
-/docs/reference/architecture/ /docs/architecture/ 301
-/docs/using-scanopy/discovery/ /docs/discovery/ 301
-/docs/using-scanopy/organization/ /docs/organization/ 301
 
 # Troubleshooting restructure (Feb 2026)
 /docs/daemon-troubleshooting/ /docs/troubleshooting/scanning/ 301
 /docs/server-troubleshooting/ /docs/troubleshooting/server/ 301
 
+# Section restructure (Mar 2026)
+# Old flat paths → new folder paths
+/docs/discovery/ /docs/using-scanopy/discovery/ 301
+/docs/topology/ /docs/using-scanopy/topology/ 301
+/docs/organization/ /docs/using-scanopy/organization/ 301
+/docs/network-data/ /docs/using-scanopy/network-data/ 301
+/docs/installing-daemon/ /docs/setting-up-daemons/managing-daemons/ 301
+/docs/setting-up-daemons/installing-daemon/ /docs/setting-up-daemons/managing-daemons/ 301
+/docs/planning-daemon-deployment/ /docs/setting-up-daemons/planning-daemon-deployment/ 301
+/docs/multi-vlan/ /docs/setting-up-daemons/planning-daemon-deployment/ 301
+/docs/server-installation/ /docs/self-hosted-server/server-installation/ 301
+/docs/upgrading/ /docs/self-hosted-server/upgrading/ 301
+/docs/server-configuration/ /docs/reference/server-configuration/ 301
+/docs/multiple-daemons/ /docs/guides/multiple-daemons/ 301
+/docs/docker-proxy/ /docs/guides/docker-proxy/ 301
+/docs/macvlan-setup/ /docs/guides/macvlan-setup/ 301
+/docs/oidc/ /docs/guides/oidc/ 301
+/docs/prometheus-setup/ /docs/guides/prometheus-setup/ 301
+/docs/daemon-configuration/ /docs/reference/daemon-configuration/ 301
+/docs/daemon-status/ /docs/reference/daemon-status/ 301
+/docs/service-detection/ /docs/reference/service-detection/ 301
+/docs/architecture/ /docs/reference/architecture/ 301
+/docs/database-schema/ /docs/reference/database-schema/ 301
+/docs/limitations/ /docs/reference/limitations/ 301
+/docs/security/ /docs/reference/security/ 301
+/docs/faq/ /docs/reference/faq/ 301
+
+# Old nested paths from Jan 2026 restructure → new folder paths
+/docs/daemons/daemon-configuration/ /docs/reference/daemon-configuration/ 301
+/docs/daemons/installing-daemon/ /docs/setting-up-daemons/managing-daemons/ 301
+/docs/self-hosted/server-installation/ /docs/self-hosted-server/server-installation/ 301
+/docs/self-hosted/server-configuration/ /docs/reference/server-configuration/ 301
+/docs/self-hosted/oidc/ /docs/guides/oidc/ 301
+/docs/self-hosted/troubleshooting/ /docs/troubleshooting/server/ 301
+/docs/reference/security/ /docs/reference/security/ 301
+/docs/reference/service-detection/ /docs/reference/service-detection/ 301
+/docs/reference/architecture/ /docs/reference/architecture/ 301
+/docs/using-scanopy/discovery/ /docs/using-scanopy/discovery/ 301
+/docs/using-scanopy/organization/ /docs/using-scanopy/organization/ 301
+
 # Catch-all for old docs structure patterns
 /docs/getting-started/* /docs/:splat 301
 /docs/daemons/* /docs/:splat 301
 /docs/self-hosted/* /docs/:splat 301
-/docs/reference/* /docs/:splat 301
-/docs/using-scanopy/* /docs/:splat 301
 
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404

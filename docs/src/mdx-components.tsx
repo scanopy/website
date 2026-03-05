@@ -5,6 +5,7 @@ import { DaemonConfigTable } from '@/components/daemon-config-table';
 import { EntityCoreTables } from '@/components/entity-core-tables';
 import { Mermaid } from '@/components/mermaid';
 import { SchemaERDiagram, SchemaFullDiagram } from '@/components/schema-diagrams';
+import { SectionCards } from '@/components/section-cards';
 import { StatusTag } from '@/components/status-tag';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -16,6 +17,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Mermaid,
     SchemaERDiagram,
     SchemaFullDiagram,
+    SectionCards,
     StatusTag,
     ...components,
   };

@@ -42,7 +42,7 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Identify services via pattern matching
 - Connect to Docker socket for container discovery
 - Report host interfaces and capabilities
-- Send heartbeats to maintain connection
+- Maintain server connection via periodic polling (each poll implicitly updates the daemon's health status)
 - Execute scheduled discovery tasks
 
 **Implementation**:
@@ -119,33 +119,39 @@ sequenceDiagram
 
 #### Discovery Flow (DaemonPoll)
 
+1. User triggers a scan via the UI or API — the server creates a discovery session in **Pending** state
+2. On its next polling cycle, the daemon receives the pending session as part of the `request-work` response
+3. The server transitions the session to **Starting** to prevent re-dispatch to other polls
+4. The daemon executes the discovery (network scan, Docker scan, or self-report depending on type)
+5. The daemon sends periodic progress updates to the server, including discovered entities
+6. The server processes entities immediately — deduplicating and persisting via upsert
+7. The server broadcasts progress to the UI via SSE
+8. The daemon sends a terminal phase (**Completed** or **Failed**) to end the session
+
 <Mermaid chart={`
-flowchart TD
-    step1["1. User triggers discovery<br/>(manual or scheduled)"]
-    step2["2. Server creates discovery session"]
-    step3["3. Daemon polls server for work,<br/>retrieves discovery session"]
+sequenceDiagram
+    participant U as User/Scheduler
+    participant S as Server
+    participant D as Daemon
+    participant UI as UI (SSE)
 
-    step1 --> step2 --> step3
+    U->>S: Trigger scan
+    S->>S: Create session (Pending)
 
-    subgraph step4["4. Daemon executes scan"]
-        scan1["Network Scan:<br/>Scans IP range, detects ports/services"]
-        scan2["Docker Scan:<br/>Queries Docker socket for containers"]
-        scan3["Self-Report:<br/>Reports own capabilities"]
+    Note over D: Next 30s poll cycle
+    D->>S: POST /api/daemons/work
+    S->>S: Transition to Starting
+    S-->>D: {work: DiscoverySession}
+
+    D->>D: Execute discovery
+
+    loop Progress updates
+        D->>S: POST progress + entities
+        S->>S: Deduplicate & persist
+        S-->>UI: SSE update
     end
 
-    step3 --> step4
-    step4 --> step5["5. Daemon sends discovered<br/>entities to server (batched)"]
-
-    subgraph step6["6. Server processes entities immediately"]
-        proc1["Creates/updates hosts"]
-        proc2["Creates/updates interfaces"]
-        proc3["Creates/updates services"]
-        proc4["Associates with subnets"]
-    end
-
-    step5 --> step6
-    step6 --> step7["7. Server broadcasts updates via SSE"]
-    step7 --> step8["8. UI receives real-time updates"]
+    D->>S: POST terminal phase (Completed/Failed)
 `} />
 
 ### ServerPoll Mode
@@ -247,42 +253,45 @@ flowchart TD
 
 ### Network Scan
 
+Network discovery runs in three phases:
+
+1. **ARP Discovery** — The daemon sends ARP broadcasts across configured subnets to discover active hosts. This is the primary mechanism for finding devices on the local network, returning IP and MAC address pairs.
+2. **Deep Scanning** — Each discovered host is scanned in detail:
+   - TCP and UDP port scanning on configurable port lists
+   - DNS reverse lookup for hostname resolution
+   - SNMP queries for system information (if credentials are configured)
+   - Service detection by matching open ports against 235 service definitions
+3. **Grace Period** — A brief window after deep scanning completes to catch any late ARP responses. Newly discovered hosts receive a full deep scan before the session completes.
+
+The UI displays real-time progress across all three phases via Server-Sent Events.
+
 <Mermaid chart={`
 flowchart TD
-    subgraph init["Initialization"]
-        i1["1. Determine target subnets"]
-        i2["2. Calculate total IP count"]
-        i3["3. Establish concurrent scan limit"]
+    subgraph phase1["1. ARP Discovery"]
+        a1["Broadcast ARP across target subnets"]
+        a2["Collect IP + MAC pairs"]
     end
 
-    subgraph scan["Per-IP Scan (Parallel)"]
-        s1["1. TCP port scan (common + custom ports)"]
-        s2["2. HTTP endpoint probing"]
-        s3["3. Collect responses and headers"]
+    subgraph phase2["2. Deep Scanning (per host)"]
+        s1["TCP/UDP port scanning"]
+        s2["DNS reverse lookup"]
+        s3["SNMP queries (if configured)"]
+        s4["Service pattern matching (235 definitions)"]
+        s5["Host assembly + subnet association"]
     end
 
-    subgraph match["Service Pattern Matching"]
-        m1["1. Match port numbers"]
-        m2["2. Match HTTP endpoints"]
-        m3["3. Check headers and content"]
-        m4["4. Apply MAC vendor patterns"]
-        m5["5. Assign confidence score"]
-    end
-
-    subgraph assemble["Host Assembly"]
-        a1["1. Perform reverse DNS lookup"]
-        a2["2. Determine hostname (DNS > service > IP)"]
-        a3["3. Group services by interface"]
-        a4["4. Associate with subnet"]
+    subgraph phase3["3. Grace Period"]
+        g1["Catch late ARP responses"]
+        g2["Deep scan newly found hosts"]
     end
 
     subgraph report["Report to Server"]
-        r1["1. Send discovered host + interfaces + services"]
-        r2["2. Server stores in database"]
-        r3["3. Server broadcasts update via SSE"]
+        r1["Send host + interfaces + services"]
+        r2["Server deduplicates & persists"]
+        r3["Server broadcasts via SSE"]
     end
 
-    init --> scan --> match --> assemble --> report
+    phase1 --> phase2 --> phase3 --> report
 `} />
 
 ### Docker Discovery

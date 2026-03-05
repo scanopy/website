@@ -3,7 +3,7 @@ title: Discovery
 description: How Scanopy discovers hosts and services on your network.
 ---
 
-Discovery is the process of scanning your network to find hosts and services. Daemons perform discovery and report findings to the server.
+Daemons scan your network to discover hosts and services, then report findings to the server. This page covers how discovery works and how to configure it.
 
 ## Discovery Types
 
@@ -12,7 +12,7 @@ Discovery is the process of scanning your network to find hosts and services. Da
 Scans IP addresses on configured subnets to find hosts and services.
 
 - Detects open TCP and UDP ports
-- Identifies services via [pattern matching](/service-detection/)
+- Identifies services via [pattern matching](/reference/service-detection/)
 - Performs reverse DNS lookups
 - Collects MAC addresses (for directly connected subnets only)
 
@@ -20,7 +20,7 @@ Scans IP addresses on configured subnets to find hosts and services.
 
 **Configuring subnets to scan**: Go to **Discover > Scheduled**, edit a Network Scan discovery, and add subnets to the scan list. You can add any subnet — including ones the daemon doesn't have a direct interface on.
 
-**Layer 2 vs Layer 3**: When the daemon has a network interface on the subnet being scanned, you get full Layer 2 access (MAC addresses via ARP, better host discovery). When scanning remote subnets, you're limited to Layer 3 — only hosts with open ports will be discovered. See [limitations](/limitations/#layer-2-vs-layer-3) for details.
+**Layer 2 vs Layer 3**: When the daemon has a network interface on the subnet being scanned, you get full Layer 2 access (MAC addresses via ARP, better host discovery). When scanning remote subnets, you're limited to Layer 3 — only hosts with open ports will be discovered. See [limitations](/reference/limitations/#layer-2-vs-layer-3) for details.
 
 ### Docker
 
@@ -31,7 +31,7 @@ Discovers containers via the Docker socket on the daemon's host.
 - Identifies containerized services
 - Creates Docker bridge subnets automatically
 
-Requires Docker socket access — see [Docker Socket Proxy](/docker-proxy/) for secure configuration.
+Requires Docker socket access — see [Securing Docker Discovery with a Socket Proxy](/guides/docker-proxy/) for secure configuration.
 
 ### Self-Report
 
@@ -50,13 +50,14 @@ Daemon reports its own capabilities to the server.
 
 ## Discovery Duration
 
-**Benchmark**: A /24 subnet (256 IPs) takes **5-10 minutes** to scan.
+**Benchmark**: A /24 subnet typically takes around **30 minutes** to scan with Layer 2 access. Duration depends primarily on the number of active hosts on the network.
 
 Factors affecting speed:
 
-- Subnet size (a /16 is 65,536 IPs — avoid scanning these via Network Scan)
+- Number of active hosts — more hosts means more deep scanning work
 - Concurrent scans setting (default: 15, configurable per daemon)
 - Network latency and host responsiveness
+- Network prefix size — only a limiting factor without a Layer 2 interface, since the daemon must probe every IP individually via TCP
 
 **Watch out**: Accidentally added 172.17.0.0/16 to your network scan? That's 65,536 IPs. Docker bridge networks should use Docker discovery instead — it queries the Docker API directly and takes seconds.
 
@@ -82,7 +83,7 @@ When a daemon discovers a host, Scanopy checks if it already exists before creat
 - A host is rediscovered across multiple scan sessions
 - Docker and Network discovery both find the same machine
 
-Host deduplication is only applied to hosts on the same [Network](/organization/#networks). If two hosts on different Networks meet the criteria below, they will not be deduplicated.
+Host deduplication is only applied to hosts on the same [Network](/using-scanopy/organization/#networks). If two hosts on different Networks meet the criteria below, they will not be deduplicated.
 
 ### Interface Matching
 
@@ -93,7 +94,7 @@ Scanopy primarily identifies duplicate hosts by comparing network interfaces. Tw
 | **Same IP + Same Subnet** | Most common. If a host has `192.168.1.50` on subnet `192.168.1.0/24`, any discovery finding that same IP on that subnet matches. |
 | **Same MAC Address** | Useful when IPs change (DHCP) but MAC stays constant. Both interfaces must have a MAC address set. |
 
-MAC addresses are available when the daemon is directly connected to the subnet being scanned (via ARP) or from Docker container network configuration. See [Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3) for details on when MAC addresses are collected.
+MAC addresses are available when the daemon is directly connected to the subnet being scanned (via ARP) or from Docker container network configuration. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3) for details on when MAC addresses are collected.
 
 ### Docker Host Matching
 
@@ -102,7 +103,7 @@ Docker discovery is local-only — it discovers containers on the daemon's own h
 This has two implications:
 
 - **No cross-host deduplication**: Since Docker discovery only sees one host, there's nothing to deduplicate
-- **Docker proxies don't change this**: Even when using a [Docker Socket Proxy](/docker-proxy/) pointing to a remote host, services are still assigned to the daemon's host
+- **Docker proxies don't change this**: Even when using a [Securing Docker Discovery with a Socket Proxy](/guides/docker-proxy/) pointing to a remote host, services are still assigned to the daemon's host
 
 For accurate Docker discovery, run the daemon on the same machine as Docker.
 
@@ -151,4 +152,4 @@ Container names appear in the virtualization metadata, not as the host's hostnam
 
 Automatic deduplication handles most cases, but sometimes hosts slip through as duplicates — for example, when a server has interfaces on multiple VLANs that were scanned by different daemons before the interfaces could be matched.
 
-Use manual consolidation to merge these. See [Consolidating Duplicate Hosts](/network-data/#consolidating-duplicate-hosts).
+Use manual consolidation to merge these. See [Consolidating Duplicate Hosts](/using-scanopy/network-data/#consolidating-duplicate-hosts).

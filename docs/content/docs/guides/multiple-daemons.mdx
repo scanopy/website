@@ -1,19 +1,9 @@
 ---
-title: Multiple Daemons on One Host
-description: How to run multiple Scanopy daemon instances on a single machine, each scanning different interfaces or networks.
+title: Scanning Isolated Networks from One Host
+description: How to run multiple Scanopy daemon instances on a single machine, each scanning different isolated networks or interfaces.
 ---
 
-A single host with multiple network interfaces can run several daemon instances, each responsible for a different interface or network segment. This is useful when one machine bridges isolated VLANs or when you want separate scan configurations per network.
-
-## When to use multiple daemons on one host
-
-A single daemon scans all interfaces on its host by default. You only need multiple daemons on one host when:
-
-- **The host connects to isolated networks** — e.g., a hypervisor or router with interfaces on separate VLANs that don't route to each other
-- **You want separate scan configurations per network** — different scan rates, concurrency limits, or polling modes for production vs. lab traffic
-- **You need per-interface Layer 2 discovery** — each daemon reports its own interfaced subnets and MAC-level data independently
-
-If your subnets are routable from the host, a single daemon with no interface restriction handles them all. See [Multi-VLAN Deployment](/docs/multi-vlan) for guidance on when one daemon is sufficient.
+This guide walks through running multiple daemon instances on a single host, each scanning different interfaces or network segments. For help deciding whether this is the right approach for your network, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
 ## How config namespacing works
 
@@ -61,7 +51,7 @@ When `--interfaces` is set, the daemon only reports and scans subnets attached t
 
 ## Setting up multiple daemons
 
-Create a separate daemon entry in **Manage > Daemons** for each instance. Each daemon gets its own API key and can target the same or different networks. During setup, use the **Advanced** tab to configure interface restrictions under Network Discovery. The app provides platform-specific install and run commands with your settings included.
+Create a separate daemon entry in **Discover > Daemons** for each instance. Each daemon gets its own API key and can target the same or different networks. During setup, use the **Advanced** tab to configure interface restrictions under Network Discovery. The app provides platform-specific install and run commands with your settings included.
 
 After first run, each daemon persists its settings to its namespaced config file. Subsequent starts only need the name:
 

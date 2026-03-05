@@ -1,0 +1,15 @@
+{
+  "title": "Reference",
+  "defaultOpen": true,
+  "pages": [
+    "daemon-configuration",
+    "daemon-status",
+    "server-configuration",
+    "service-detection",
+    "architecture",
+    "database-schema",
+    "limitations",
+    "security",
+    "faq"
+  ]
+}

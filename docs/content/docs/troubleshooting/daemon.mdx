@@ -1,5 +1,5 @@
 ---
-title: Daemon Setup
+title: Daemon Issues
 description: Troubleshooting issues getting the Scanopy daemon running.
 ---
 
@@ -22,7 +22,7 @@ curl https://your-server-url/api/health
 **Solutions**:
 
 1. **Verify server URL**: Ensure `SCANOPY_SERVER_URL` is correct and reachable from the daemon host
-2. **Check API key**: Verify the API key is valid and not expired in **Manage > API Keys**
+2. **Check API key**: Verify the API key is valid and not expired in **Platform > API Keys**
 3. **Firewall rules**: Ensure outbound HTTPS (port 443) is allowed from the daemon host
 
 ## Permission Denied Errors (Linux)
@@ -38,13 +38,13 @@ newgrp docker
 
 Log out and back in for changes to take effect.
 
-If you're using a Docker socket proxy and getting permission errors, see [Docker Socket Proxy troubleshooting](/docker-proxy/#troubleshooting).
+If you're using a Docker socket proxy and getting permission errors, see [Securing Docker Discovery with a Socket Proxy — Troubleshooting](/guides/docker-proxy/#troubleshooting).
 
 ## Daemon Stops When Terminal Closes
 
 **Symptoms**: Daemon runs in foreground and stops when SSH session ends
 
-**Solution**: Install as a systemd service (see [Installing a Daemon](/installing-daemon/#systemd-service-linux)), or run with a process manager like `screen` or `tmux`.
+**Solution**: Install as a systemd service (see [Managing Daemons](/setting-up-daemons/managing-daemons/#systemd-service-linux)), or run with a process manager like `screen` or `tmux`.
 
 ## Getting Help
 

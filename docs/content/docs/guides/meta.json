@@ -1,0 +1,5 @@
+{
+  "title": "Guides",
+  "defaultOpen": true,
+  "pages": ["multiple-daemons", "scanning-remote-subnets", "scanning-vpn-networks", "docker-proxy", "macvlan-setup", "oidc", "prometheus-setup"]
+}

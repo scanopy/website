@@ -37,7 +37,7 @@ environment:
 | Mixed IoT and servers | 100–200 | 100–150 |
 | Robust servers only | 500 (default) | 200 (default) |
 
-See [Daemon Configuration](/daemon-configuration/) for the full parameter reference.
+See [Daemon Configuration](/reference/daemon-configuration/) for the full parameter reference.
 
 ## Hosts Not Discovered / Missing IPs
 
@@ -217,7 +217,7 @@ environment:
 | Missing hosts | `arp_retries=3` or `arp_retries=4` |
 | Scans are too slow | Increase `arp_rate_pps` if DAI allows, or trust the port |
 
-See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
+See [Daemon Configuration](/reference/daemon-configuration/) for all ARP settings.
 
 ## Discovery Takes Hours
 
@@ -231,7 +231,7 @@ See [Daemon Configuration](/daemon-configuration/) for all ARP settings.
 
 2. **Use Docker discovery for Docker networks**: The default Docker bridge network (172.17.0.0/16) is 65,536 IPs and the daemon has no L2 path to it. Use Docker discovery instead — it queries the Docker API directly and takes seconds.
 
-3. **Deploy a daemon on the target segment**: If the daemon reaches a subnet only via a gateway, ARP is unavailable and discovery falls back to TCP probing. Deploy a daemon on the target segment for fast L2 scanning, or accept slower scans. See [Multi-VLAN Deployment](/multi-vlan/) and [Limitations — Layer 2 vs Layer 3](/limitations/#layer-2-vs-layer-3).
+3. **Deploy a daemon on the target segment**: If the daemon reaches a subnet only via a gateway, ARP is unavailable and discovery falls back to TCP probing. Deploy a daemon on the target segment for fast L2 scanning, or accept slower scans. See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/) and [Limitations — Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3).
 
 4. **Review your subnet list**: Periodically audit your configured subnets and remove any that are no longer needed or contain no relevant hosts.
 
@@ -266,7 +266,7 @@ environment:
 scanopy-daemon --concurrent-scans 10 ...
 ```
 
-See [Daemon Configuration](/daemon-configuration/#concurrent-scans) for recommended values.
+See [Daemon Configuration](/reference/daemon-configuration/#concurrent-scans) for recommended values.
 
 ## "Too Many Open Files" Error
 

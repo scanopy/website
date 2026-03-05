@@ -3,79 +3,64 @@ title: Quick Start
 description: Get up and running with Scanopy in minutes.
 ---
 
-This guide walks you through your first network discovery with Scanopy.
+## Cloud
 
-## Cloud Users
+### 1. Sign up
 
-### Step 1: Start Onboarding
+Go to [scanopy.net](https://scanopy.net) and click **Get Started**. The onboarding wizard guides you through creating your organization and network.
 
-Go to [scanopy.net](https://scanopy.net) and click **Get Started**.
+### 2. Install a daemon
 
-1. Select your use case (Homelab, Company, or MSP)
-2. Enter your organization name and first network name
+After onboarding, you'll be prompted to install a **daemon**. A daemon is a lightweight agent that runs on your network, discovers hosts and services, and reports findings to the server. Follow the install command shown in the modal for your platform, or see [Managing Daemons](/setting-up-daemons/managing-daemons/) for details.
 
-### Step 2: Set Up Your Daemon
+### 3. Run your first scan
 
-Before creating your account, you'll configure a daemon for your network.
+Once the daemon connects, navigate to **Discover > Scheduled** and click **Run** on the Network Scan discovery. A typical /24 subnet takes around 30 minutes depending on the number of active hosts. You can watch progress in real-time on the **Discovery** page.
 
-Choose **Install Now** to get installation commands, or **Install Later** to skip.
+### 4. Explore your network
 
-See [Installing a Daemon](/installing-daemon/) for platform-specific information.
+- **Topology** — Interactive diagram of discovered hosts and connections
+- **Assets > Hosts** — All discovered devices
+- **Assets > Services** — Detected services across your network
 
-### Step 3: Create Your Account
-
-Complete registration with your email and password. Your daemon will automatically connect and begin scanning once your account is created.
-
-### Step 4: View Your Network
-
-Once discovery completes (typically 5-10 minutes per /24 subnet):
-
-1. **Topology** — See your network diagram
-2. **Manage > Hosts** — View discovered devices
-3. **Manage > Services** — See detected services
+<Callout type="info">
+The Getting Started checklist on the home page tracks your progress through these steps.
+</Callout>
 
 ---
 
-## Self-Hosted Users
+## Self-Hosted
 
-### Prerequisites
+**Prerequisite:** A running Scanopy server. See [Installing Scanopy (Self-Hosted)](/self-hosted-server/server-installation/).
 
-A running Scanopy server. See [Server Installation](/server-installation/).
+### 1. Complete onboarding
 
-### Step 1: Complete Onboarding
+Open your server URL. The onboarding wizard walks you through initial setup.
 
-Access your server URL and complete the onboarding wizard:
+### 2. Wait for your first scan
 
-1. Select your use case
-2. Enter your organization name and first network name
-3. Create your account
+Docker Compose deployments include an **integrated daemon** that automatically begins scanning your network after onboarding. A typical /24 subnet takes around 30 minutes depending on the number of active hosts. Watch progress in real-time on the **Discovery** page.
 
-### Step 2: Run Discovery
+### 3. Explore your network
 
-If you deployed with Docker Compose, the **integrated daemon** is already running and connected to your first network.
+- **Topology** — Interactive diagram of discovered hosts and connections
+- **Assets > Hosts** — All discovered devices
+- **Assets > Services** — Detected services across your network
 
-1. Navigate to **Discover > Scheduled**
-2. Find the Network Scan discovery for your network
-3. Click **Run** to start your first scan
-
-Discovery typically takes 5-10 minutes per /24 subnet (256 IP addresses).
-
-### Step 3: View Your Network
-
-Once discovery completes:
-
-1. **Topology** — See your network diagram
-2. **Manage > Hosts** — View discovered devices
-3. **Manage > Services** — See detected services
-
-### Adding More Daemons
-
-To scan additional networks or VLANs, deploy additional daemons. See [Multi-VLAN Deployment](/multi-vlan/).
+To scan additional networks, deploy daemons on other segments. See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
 ---
 
 ## Next Steps
 
-- [Discovery](/discovery/) — Configure scheduled scans
-- [Topology](/topology/) — Customize your network visualization
-- [Hosts, Subnets & Groups](/network-data/) — Organize your network data
+**Learn the features:**
+
+- [Discovery](/using-scanopy/discovery/) — How scanning works and how to configure it
+- [Topology](/using-scanopy/topology/) — Customize your network visualization
+- [Hosts, Subnets & Groups](/using-scanopy/network-data/) — Organize your discovered data
+- [Organization & Access](/using-scanopy/organization/) — Users, roles, API keys, and tags
+
+**Expand your deployment:**
+
+- [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/) — Decide how many daemons you need and where to place them
+- [Managing Daemons](/setting-up-daemons/managing-daemons/) — Install, upgrade, and remove daemons

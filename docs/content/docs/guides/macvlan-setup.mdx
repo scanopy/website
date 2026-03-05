@@ -1,6 +1,6 @@
 ---
-title: MACVLAN Networking
-description: Deploy the Scanopy daemon with Docker MACVLAN for network isolation.
+title: Isolating Daemon Networking with MACVLAN
+description: How to deploy the Scanopy daemon with Docker MACVLAN for network isolation.
 ---
 
 MACVLAN lets you deploy the daemon as a separate device on your LAN with its own MAC and IP address, without using `--network=host`. This provides network isolation and avoids port conflicts.
@@ -133,4 +133,4 @@ For other issues, see [Daemon Setup Troubleshooting](/troubleshooting/daemon/).
 
 ## Combining with Multi-VLAN
 
-MACVLAN works with the strategies in [Multi-VLAN Deployment](/multi-vlan/). Deploy one MACVLAN daemon per VLAN for full Layer 2 access on each segment.
+MACVLAN works with the strategies in [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/). Deploy one MACVLAN daemon per VLAN for full Layer 2 access on each segment.

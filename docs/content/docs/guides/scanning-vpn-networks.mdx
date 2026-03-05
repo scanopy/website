@@ -1,0 +1,41 @@
+---
+title: Scanning VPN Networks
+description: How to discover hosts and services on VPN networks with an existing daemon.
+---
+
+If the daemon's host is connected to a VPN, the daemon can scan that network. Scanopy works with **WireGuard**, **Tailscale**, **Headscale**, **OpenVPN**, and any other VPN that creates a network interface on the host.
+
+## Setup
+
+### 1. Connect the daemon's host to your VPN
+
+Install and configure your VPN client on the machine running the daemon. Verify the VPN interface is up:
+
+```bash
+# You should see a VPN interface (e.g. wg0, tailscale0, tun0)
+ip addr
+```
+
+### 2. Report the new interface to Scanopy
+
+The daemon needs to detect the new VPN interface. Either:
+
+- **Run a Self-Report discovery** from **Discover > Scheduled** — this tells the daemon to re-scan its own interfaces and report them to the server
+- **Restart the daemon** — it reports interfaces on startup
+
+### 3. Verify the VPN subnet appears
+
+After the Self-Report completes, check **Assets > Subnets**. The VPN subnet should appear as an interfaced subnet for the daemon.
+
+### 4. Configure scanning
+
+- **If your Network Scan has no specific subnets configured** (the default), the VPN subnet is picked up and scanned automatically on the next run.
+- **If you've configured specific subnets**, add the VPN subnet manually via **Discover > Scheduled**.
+
+## What to expect
+
+Since the daemon has a network interface on the VPN, it gets **Layer 2 access** — full ARP discovery, MAC addresses, and the ability to find hosts even without open ports. This is the same quality of discovery as a local network.
+
+## Multiple VPN networks
+
+If the daemon's host is connected to multiple VPNs, each VPN interface is detected and its subnet is scanned. No additional configuration is needed beyond connecting the VPN client.

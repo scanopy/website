@@ -1,0 +1,30 @@
+---
+title: Scanning Remote Subnets
+description: How to scan subnets that the daemon doesn't have a direct interface on.
+---
+
+A daemon automatically discovers and scans every subnet its host has a network interface on. But it can also scan subnets it can only route to — you just need to tell it about them.
+
+<Callout type="info">
+Remote subnets are scanned via Layer 3 (TCP probing) since the daemon has no local interface for ARP. This means hosts without open ports won't be found, and MAC addresses won't be collected. For full Layer 2 coverage, deploy a daemon on the target segment — see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
+</Callout>
+
+## Adding a subnet to scan
+
+1. Go to **Discover > Scheduled** and edit the Network Scan discovery for the daemon
+2. Add the target subnet to the scan list
+
+If the subnet doesn't exist in Scanopy yet (because no daemon has reported an interface on it), create it first:
+
+1. Go to **Assets > Subnets**
+2. Click **Create Subnet**
+3. Enter the CIDR (e.g. `10.0.50.0/24`) and assign it to the appropriate network
+4. Return to **Discover > Scheduled** and add it to the Network Scan
+
+## When to use this
+
+- **Quick visibility into a remote segment** before deploying a dedicated daemon there
+- **Small subnets with known services** where Layer 3 discovery is sufficient
+- **Temporary scanning** of a network you're evaluating
+
+For permanent monitoring of a subnet, deploy a daemon on the segment for full Layer 2 discovery. See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/) to decide on your strategy.
