@@ -10,19 +10,20 @@ Scanopy monitors daemon health and displays status tags in the UI. A daemon with
 | Status | Meaning |
 | ------ | ------- |
 | <StatusTag status="Healthy" /> | Running current version, communicating normally |
-| <StatusTag status="Standby" /> | Plan doesn't support DaemonPoll mode |
+| <StatusTag status="Standby" /> | No discovery session in the last 30 days |
 | <StatusTag status="Unreachable" /> | Server cannot reach the daemon |
 | <StatusTag status="Deprecated" /> | Daemon version is no longer supported |
 | <StatusTag status="Outdated" /> | Newer daemon version available |
 
 ## Standby
 
-**Purple tag**. The daemon is registered but won't run jobs because your current plan doesn't support DaemonPoll mode.
+**Purple tag**. The daemon is registered but hasn't run a discovery session in over 30 days.
 
 **How to resolve**:
 
-- Upgrade to a plan that supports DaemonPoll
-- Switch the daemon to ServerPoll mode — see [Managing Daemons](/setting-up-daemons/managing-daemons) for mode details
+- Run a manual discovery session to bring the daemon back to active status
+- Verify the daemon process is still running on the host
+- Check that scheduled discovery is configured if you expect automatic scans
 
 ## Unreachable
 
@@ -72,6 +73,6 @@ If a daemon shows an unexpected status:
 - **Check daemon logs** for errors or connection failures
 - **Verify connectivity** between server and daemon (for ServerPoll daemons)
 - **Upgrade the daemon** if Deprecated or Outdated
-- **Review your plan** if a daemon is in Standby
+- **Run a discovery session** if a daemon is in Standby
 
 For more help, see [Daemon Troubleshooting](/docs/troubleshooting/daemon) and [Managing Daemons](/setting-up-daemons/managing-daemons).
