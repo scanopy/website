@@ -192,9 +192,9 @@
     }
   },
   {
-    "id": "diagram_export",
-    "name": "Diagram Export",
-    "description": "Export network diagrams as high-resolution PNG or SVG images",
+    "id": "png_export",
+    "name": "PNG Export",
+    "description": "Export network diagrams as high-resolution PNG images",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
@@ -204,15 +204,39 @@
     }
   },
   {
-    "id": "host_inventory",
-    "name": "Host Inventory",
-    "description": "Searchable inventory of all discovered hosts and their details",
+    "id": "svg_export",
+    "name": "SVG Export",
+    "description": "Export network diagrams as scalable SVG vector images",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Free"
+      "minimum_plan": "Starter"
+    }
+  },
+  {
+    "id": "mermaid_export",
+    "name": "Mermaid Export",
+    "description": "Export topology as Mermaid flowchart for use in documentation and wikis",
+    "category": "Visualization",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Pro"
+    }
+  },
+  {
+    "id": "confluence_export",
+    "name": "Confluence Export",
+    "description": "Export topology as Confluence wiki markup tables for team documentation",
+    "category": "Visualization",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Business"
     }
   },
   {
@@ -236,7 +260,7 @@
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Starter"
+      "minimum_plan": "Free"
     }
   },
   {

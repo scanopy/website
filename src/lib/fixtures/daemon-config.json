@@ -35,7 +35,7 @@
     "cliFlag": "--name",
     "envVar": "SCANOPY_NAME",
     "configFileKey": "name",
-    "default": "_Required_",
+    "default": "scanopy-daemon",
     "description": "Name for this daemon",
     "docsOnly": false
   },
@@ -45,7 +45,7 @@
     "cliFlag": "--mode",
     "envVar": "SCANOPY_MODE",
     "configFileKey": "mode",
-    "default": "server_poll",
+    "default": "daemon_poll",
     "description": "DaemonPoll: Daemon connects to server; works behind NAT/firewall without opening ports. ServerPoll: Server connects to daemon, for deployments where daemon cannot make outbound connections - requires providing Daemon URL",
     "docsOnly": false
   },
