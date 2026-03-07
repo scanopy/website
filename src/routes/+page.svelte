@@ -1,7 +1,77 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import { GithubStars, FeaturedIn } from '$lib/components';
+	import { GithubStars, FeaturedIn, PricingSection } from '$lib/components';
+
+	// Tilt action: entrance tilt on scroll + mouse-follow tilt
+	function tilt(node: HTMLElement) {
+		const rect = node.getBoundingClientRect();
+		const isSmall = rect.width < 400 || rect.height < 300;
+		const maxTilt = isSmall ? 10 : 8;
+
+		// Entrance animation via IntersectionObserver
+		node.style.transform = 'perspective(800px) rotateX(3deg) rotateY(-3deg)';
+		node.style.opacity = '0';
+		node.style.transition = 'transform 0.6s cubic-bezier(0.23,1,0.32,1), opacity 0.6s ease';
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						node.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+						node.style.opacity = '1';
+						observer.unobserve(node);
+					}
+				}
+			},
+			{ threshold: 0.2 }
+		);
+		observer.observe(node);
+
+		// Mouse-follow tilt with smoothing
+		let targetX = 0;
+		let targetY = 0;
+		let currentX = 0;
+		let currentY = 0;
+		let rafId: number | null = null;
+
+		function animate() {
+			currentX += (targetX - currentX) * 0.08;
+			currentY += (targetY - currentY) * 0.08;
+			node.style.transition = 'none';
+			node.style.transform = `perspective(800px) rotateY(${currentX * maxTilt}deg) rotateX(${-currentY * maxTilt}deg)`;
+			if (Math.abs(targetX - currentX) > 0.001 || Math.abs(targetY - currentY) > 0.001) {
+				rafId = requestAnimationFrame(animate);
+			} else {
+				rafId = null;
+			}
+		}
+
+		function handleMove(e: MouseEvent) {
+			const r = node.getBoundingClientRect();
+			targetX = (e.clientX - r.left) / r.width - 0.5;
+			targetY = (e.clientY - r.top) / r.height - 0.5;
+			if (!rafId) rafId = requestAnimationFrame(animate);
+		}
+
+		function handleLeave() {
+			targetX = 0;
+			targetY = 0;
+			if (!rafId) rafId = requestAnimationFrame(animate);
+		}
+
+		node.addEventListener('mousemove', handleMove);
+		node.addEventListener('mouseleave', handleLeave);
+
+		return {
+			destroy() {
+				observer.disconnect();
+				if (rafId) cancelAnimationFrame(rafId);
+				node.removeEventListener('mousemove', handleMove);
+				node.removeEventListener('mouseleave', handleLeave);
+			}
+		};
+	}
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import {
@@ -16,7 +86,8 @@
 		ClipboardCheck,
 		Briefcase,
 		Monitor,
-		Server
+		Server,
+		ArrowRight
 	} from 'lucide-svelte';
 	import type { Component } from 'svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
@@ -53,10 +124,31 @@
 		group: f.group
 	}));
 	const howItWorks = allFeatures.filter((f) => f.group === 'how_it_works');
-	const whatYouGet = allFeatures.filter((f) => f.group === 'what_you_get');
+	const whatYouGet = allFeatures
+		.filter((f) => f.group === 'what_you_get')
+		.sort((a, b) => {
+			// Put "Version history" last since it has no screenshot
+			if (a.title === 'Version history') return 1;
+			if (b.title === 'Version history') return -1;
+			return 0;
+		});
 
 	// Generate schema from fixtures
 	const softwareApplicationSchema = getSoftwareApplicationSchema();
+
+	// How it works step screenshots
+	const howItWorksScreenshots = [
+		'/screenshots/daemon-install.png',
+		'/screenshots/discovery-progress.png',
+		'/hero-topology-dark.png'
+	];
+
+	// What you get screenshots — matches sorted order: service_detection, sharing, versioning
+	const whatYouGetScreenshots: (string | null)[] = [
+		'/screenshots/hosts-catalog.png',
+		'/screenshots/export-modal.png',
+		null
+	];
 
 	const useCases = [
 		{
@@ -118,48 +210,90 @@
 </svelte:head>
 
 <!-- Hero Section -->
-<section class="relative flex min-h-[600px] items-center overflow-hidden lg:min-h-[700px]">
-	<!-- Background image -->
+<section class="relative overflow-hidden py-16 lg:py-24">
+	<!-- Radial glow behind the image -->
 	<div
-		class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('/topology-hero.png');"
+		class="pointer-events-none absolute right-0 top-1/2 hidden h-[600px] w-[600px] -translate-y-1/2 translate-x-[10%] rounded-full opacity-30 blur-3xl lg:block"
+		style="background: radial-gradient(circle, rgba(59,130,246,0.4) 0%, rgba(96,165,250,0.15) 50%, transparent 70%);"
 	></div>
-	<!-- Dark overlay -->
-	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>
 
 	<div class="container relative z-10 mx-auto px-4">
-		<div class="mx-auto max-w-4xl text-center">
-			<!-- Badge -->
-			<div class="pb-4">
-				<GithubStars />
+		<div class="flex flex-col items-center gap-12 lg:flex-row lg:gap-16">
+			<!-- Left side: text -->
+			<div class="flex-shrink-0 text-center lg:w-[40%] lg:text-left">
+				<div class="mb-6">
+					<GithubStars />
+				</div>
+
+				<h1 class="mb-6 text-5xl font-bold leading-tight text-rose-400 lg:text-7xl">
+					Network documentation that updates itself
+				</h1>
+
+				<p class="mb-10 max-w-xl text-xl text-gray-300">
+					Deploy a lightweight scanner, get live network diagrams in minutes. No manual
+					maintenance, no stale Visio files.
+				</p>
+
+				<div class="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+					<a
+						href="https://app.scanopy.net/onboarding"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-primary px-8 py-3 text-lg"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'hero',
+								destination: 'app_onboarding',
+								text: featureFlags.mainCtaText
+							})}
+					>
+						{featureFlags.mainCtaText}
+						<ArrowRight class="h-5 w-5" />
+					</a>
+					<a
+						href="/pricing"
+						class="btn-secondary px-8 py-3 text-lg"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'hero',
+								destination: 'pricing',
+								text: 'Compare Plans'
+							})}
+					>
+						Compare Plans
+					</a>
+				</div>
 			</div>
 
-			<!-- Headline -->
-			<h1 class="mb-6 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
-				Network documentation that updates itself
-			</h1>
-
-			<!-- Subheadline -->
-			<p class="mx-auto mb-10 max-w-2xl text-xl text-gray-300">
-				Deploy a lightweight scanner, get live network diagrams in minutes.<br />No manual
-				maintenance, no stale Visio files.
-			</p>
-
-			<!-- CTAs -->
-			<div class="flex flex-col justify-center gap-4 sm:flex-row">
+			<!-- Right side: product screenshot in browser mockup -->
+			<div class="w-full lg:w-[60%]">
 				<a
-					href="https://app.scanopy.net/onboarding"
+					href="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="btn-primary px-8 py-3 text-lg"
+					class="group block"
 					onclick={() =>
 						analytics.ctaClicked({
 							location: 'hero',
-							destination: 'app_onboarding',
-							text: featureFlags.mainCtaText
+							destination: 'share_demo',
+							text: 'Hero topology screenshot'
 						})}
 				>
-					{featureFlags.mainCtaText}
+					<div use:tilt class="browser-frame transition-shadow duration-200 group-hover:shadow-blue-500/10 group-hover:shadow-2xl">
+						<div class="browser-frame-bar">
+							<span class="browser-frame-dot bg-red-500/70"></span>
+							<span class="browser-frame-dot bg-yellow-500/70"></span>
+							<span class="browser-frame-dot bg-green-500/70"></span>
+							<span class="ml-3 text-xs text-gray-500">demo.scanopy.net</span>
+						</div>
+						<img
+							src="/hero-topology-dark.png"
+							alt="Scanopy network topology showing subnets, services, and connections"
+							class="block w-full"
+							loading="eager"
+						/>
+					</div>
+					<p class="mt-2 text-center text-sm text-gray-500 group-hover:text-blue-400 transition-colors">View live topology &rarr;</p>
 				</a>
 			</div>
 		</div>
@@ -170,19 +304,53 @@
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">How it works</h2>
+			<span
+				class="mb-4 inline-block rounded-full border border-blue-800 bg-blue-950/50 px-3 py-1 text-xs font-medium uppercase tracking-wider text-blue-400"
+			>
+				How it works
+			</span>
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
+				Up and running in three simple steps
+			</h2>
 		</div>
 
-		<div class="grid gap-8 md:grid-cols-3">
-			{#each howItWorks as feature (feature.title)}
-				<div class="card card-static p-6">
-					<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
-						<feature.icon class="h-6 w-6 text-blue-400" />
+		<!-- Timeline -->
+		<div class="relative">
+			<!-- Connecting line (desktop) -->
+			<div
+				class="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-blue-800 to-transparent md:block"
+			></div>
+
+			<div class="grid gap-12 md:grid-cols-3 md:gap-8">
+				{#each howItWorks as feature, i (feature.title)}
+					<div class="relative flex flex-col items-center text-center">
+						<!-- Step number -->
+						<div
+							class="relative z-10 mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gray-800 text-lg font-bold text-blue-400 ring-1 ring-blue-800"
+						>
+							{i + 1}
+						</div>
+
+						<!-- Icon + text -->
+						<div class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+							<feature.icon class="h-5 w-5 text-blue-400" />
+						</div>
+						<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
+						<p class="mb-6 text-sm text-gray-400">{@html feature.description}</p>
+
+						<!-- Screenshot -->
+						{#if howItWorksScreenshots[i]}
+							<img
+								use:tilt
+								src={howItWorksScreenshots[i]}
+								alt={feature.title}
+								class="w-full rounded-xl border border-gray-700/50" style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
+								loading="lazy"
+							/>
+						{/if}
 					</div>
-					<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
-					<p class="text-sm text-gray-400">{@html feature.description}</p>
-				</div>
-			{/each}
+				{/each}
+			</div>
 		</div>
 	</div>
 </section>
@@ -191,18 +359,77 @@
 <section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">What you get</h2>
+			<span
+				class="mb-4 inline-block rounded-full border border-blue-800 bg-blue-950/50 px-3 py-1 text-xs font-medium uppercase tracking-wider text-blue-400"
+			>
+				What you get
+			</span>
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
+				Everything you need to master your network
+			</h2>
 		</div>
 
-		<div class="grid gap-8 md:grid-cols-3">
-			{#each whatYouGet as feature (feature.title)}
-				<div class="card card-static p-6">
-					<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
-						<feature.icon class="h-6 w-6 text-blue-400" />
+		<div class="space-y-16">
+			{#each whatYouGet as feature, i (feature.title)}
+				{@const screenshot = whatYouGetScreenshots[i]}
+				{@const reversed = i % 2 === 1}
+				{#if screenshot}
+					<!-- Alternating split layout -->
+					<div
+						class="flex flex-col items-center gap-8 lg:gap-12 {reversed
+							? 'lg:flex-row-reverse'
+							: 'lg:flex-row'}"
+					>
+						<div class="lg:w-1/2">
+							<div
+								class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10"
+							>
+								<feature.icon class="h-6 w-6 text-blue-400" />
+							</div>
+							<h3 class="mb-3 text-2xl font-semibold text-white">{feature.title}</h3>
+							<p class="text-gray-400">{@html feature.description}</p>
+						</div>
+						<div class="lg:w-1/2">
+							{#if screenshot === '/screenshots/hosts-catalog.png'}
+								<div use:tilt class="browser-frame">
+									<div class="browser-frame-bar">
+										<span class="browser-frame-dot bg-red-500/70"></span>
+										<span class="browser-frame-dot bg-yellow-500/70"></span>
+										<span class="browser-frame-dot bg-green-500/70"></span>
+										<span class="ml-3 text-xs text-gray-500">app.scanopy.net</span>
+									</div>
+									<img
+										src={screenshot}
+										alt={feature.title}
+										class="block w-full"
+										loading="lazy"
+									/>
+								</div>
+							{:else}
+								<img
+									use:tilt
+									src={screenshot}
+									alt={feature.title}
+									class="mx-auto max-w-xs rounded-xl border border-gray-700/50" style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
+									loading="lazy"
+								/>
+							{/if}
+						</div>
 					</div>
-					<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
-					<p class="text-sm text-gray-400">{@html feature.description}</p>
-				</div>
+				{:else}
+					<!-- Card layout for features without screenshots -->
+					<div class="mx-auto max-w-2xl">
+						<div class="card card-static p-8 text-center">
+							<div
+								class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10"
+							>
+								<feature.icon class="h-6 w-6 text-blue-400" />
+							</div>
+							<h3 class="mb-3 text-2xl font-semibold text-white">{feature.title}</h3>
+							<p class="text-gray-400">{@html feature.description}</p>
+						</div>
+					</div>
+				{/if}
 			{/each}
 		</div>
 	</div>
@@ -212,6 +439,11 @@
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
+			<span
+				class="mb-4 inline-block rounded-full border border-blue-800 bg-blue-950/50 px-3 py-1 text-xs font-medium uppercase tracking-wider text-blue-400"
+			>
+				Use cases
+			</span>
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Less
 				<span
@@ -252,7 +484,12 @@
 <section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">Who it's for</h2>
+			<span
+				class="mb-4 inline-block rounded-full border border-blue-800 bg-blue-950/50 px-3 py-1 text-xs font-medium uppercase tracking-wider text-blue-400"
+			>
+				Who it's for
+			</span>
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">Built for your team</h2>
 		</div>
 
 		<div class="grid gap-8 md:grid-cols-3">
@@ -287,12 +524,12 @@
 					Document every client network. Share live maps without granting logins.
 				</p>
 				<a
-					href="https://app.scanopy.net/onboarding"
+					href="https://demo.scanopy.net/"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="text-sm font-medium text-blue-400 hover:underline"
 				>
-					Get started &rarr;
+					See a live demo &rarr;
 				</a>
 			</div>
 
@@ -324,6 +561,11 @@
 <section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
+			<span
+				class="mb-4 inline-block rounded-full border border-blue-800 bg-blue-950/50 px-3 py-1 text-xs font-medium uppercase tracking-wider text-blue-400"
+			>
+				Community
+			</span>
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Feedback from r/selfhosted and r/homelab
 			</h2>
@@ -340,6 +582,24 @@
 				</div>
 			{/each}
 		</div>
+	</div>
+</section>
+
+<!-- Pricing Section -->
+<section class="border-t border-gray-800 py-20">
+	<div class="container mx-auto px-2">
+		<div class="mb-12 text-center">
+			<span
+				class="mb-4 inline-block rounded-full border border-blue-800 bg-blue-950/50 px-3 py-1 text-xs font-medium uppercase tracking-wider text-blue-400"
+			>
+				Pricing
+			</span>
+			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
+				Unlimited hosts. No per-device fees, ever.
+			</h2>
+		</div>
+
+		<PricingSection showGithubStars={false} showHosting={true} initialPlanFilter="all" />
 	</div>
 </section>
 
@@ -364,6 +624,7 @@
 						})}
 				>
 					{featureFlags.mainCtaText}
+					<ArrowRight class="h-5 w-5" />
 				</a>
 				<a
 					href="/pricing"

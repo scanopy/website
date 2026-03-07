@@ -20,7 +20,7 @@
 	.btn-primary {
 		@apply bg-blue-700 hover:bg-blue-600;
 		@apply border border-blue-600 hover:border-blue-500;
-		@apply rounded-md px-4 py-2 font-medium text-white;
+		@apply rounded-full px-6 py-3 font-medium text-white;
 		@apply transition-colors duration-150;
 		@apply inline-flex items-center justify-center gap-2;
 	}
@@ -29,9 +29,23 @@
 	.btn-secondary {
 		@apply bg-transparent hover:bg-gray-800;
 		@apply border border-gray-700 hover:border-gray-600;
-		@apply rounded-md px-4 py-2 font-medium text-gray-400 hover:text-gray-200;
+		@apply rounded-full px-6 py-3 font-medium text-gray-400 hover:text-gray-200;
 		@apply transition-colors duration-150;
 		@apply inline-flex items-center justify-center gap-2;
+	}
+
+	/* Browser mockup frame */
+	.browser-frame {
+		@apply rounded-xl border border-gray-700/50 bg-gray-900 overflow-hidden;
+		box-shadow: 0 4px 40px rgba(59, 130, 246, 0.08), 0 8px 24px rgba(0, 0, 0, 0.4);
+	}
+
+	.browser-frame-bar {
+		@apply flex items-center gap-1.5 border-b border-gray-700/50 bg-gray-800/80 px-3 py-2;
+	}
+
+	.browser-frame-dot {
+		@apply h-2.5 w-2.5 rounded-full;
 	}
 
 	/* Card component */
@@ -102,6 +116,13 @@
 @layer utilities {
 	.text-gradient {
 		background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #64748b 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.text-gradient-accent {
+		background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #818cf8 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;

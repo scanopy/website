@@ -42,7 +42,7 @@
 	{
 		"id": "sharing",
 		"title": "Share, export, embed",
-		"description": "Send live view links, export diagrams, or embed maps anywhere.",
+		"description": "Send <a href=\"https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-400 hover:underline\">live view links</a>, export diagrams, or embed maps anywhere.",
 		"icon": "Share2",
 		"schemaLabel": "Diagram sharing and export",
 		"group": "what_you_get"
