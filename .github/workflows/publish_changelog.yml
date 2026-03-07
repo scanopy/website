@@ -47,10 +47,14 @@ jobs:
           TITLE=$(grep '^title:' "$CHANGELOG_FILE" | head -1 | sed 's/title: *//')
           SOCIAL_POST=$(grep '^social_post:' "$CHANGELOG_FILE" | head -1 | sed 's/social_post: *//' | sed 's/^"//;s/"$//' | sed 's/\\n/\n/g')
           CONTRIBUTORS=$(grep '^contributors:' "$CHANGELOG_FILE" | head -1 | sed 's/contributors: *//')
+          CATEGORY=$(grep '^category:' "$CHANGELOG_FILE" | head -1 | sed 's/category: *//')
+          EMAIL_SUBJECT=$(grep '^email_subject:' "$CHANGELOG_FILE" | head -1 | sed 's/email_subject: *//')
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "title=$TITLE" >> $GITHUB_OUTPUT
           echo "contributors=$CONTRIBUTORS" >> $GITHUB_OUTPUT
+          echo "category=$CATEGORY" >> $GITHUB_OUTPUT
+          echo "email_subject=$EMAIL_SUBJECT" >> $GITHUB_OUTPUT
 
           # Handle multiline social_post
           {
@@ -68,8 +72,20 @@ jobs:
           echo "$BODY" >> $GITHUB_OUTPUT
           echo "$EOF" >> $GITHUB_OUTPUT
 
+          # Read email HTML file if it exists
+          EMAIL_FILE="${CHANGELOG_FILE%.md}.email.html"
+          if [ -f "$EMAIL_FILE" ]; then
+            EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+            echo "email_body<<$EOF" >> $GITHUB_OUTPUT
+            cat "$EMAIL_FILE" >> $GITHUB_OUTPUT
+            echo "$EOF" >> $GITHUB_OUTPUT
+          else
+            echo "email_body=" >> $GITHUB_OUTPUT
+          fi
+
           echo "Version: $VERSION"
           echo "Title: $TITLE"
+          echo "Category: $CATEGORY"
 
       - name: Send Discord notification
         env:
@@ -155,24 +171,62 @@ jobs:
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
 
-      # - name: Post to Reddit
-      #   uses: bluwy/release-for-reddit-action@v2
-      #   with:
-      #     username: ${{ secrets.REDDIT_USERNAME }}
-      #     password: ${{ secrets.REDDIT_PASSWORD }}
-      #     app-id: ${{ secrets.REDDIT_APP_ID }}
-      #     app-secret: ${{ secrets.REDDIT_APP_SECRET }}
-      #     subreddit: scanopy
-      #     title: "Scanopy v${{ steps.changelog.outputs.version }}: ${{ steps.changelog.outputs.title }}"
-      #     text: |
-      #       ${{ steps.changelog.outputs.social_post }}
+      - name: Send product update email via Brevo
+        if: contains(fromJSON('["A", "B"]'), steps.changelog.outputs.category)
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          EMAIL_SUBJECT: ${{ steps.changelog.outputs.email_subject }}
+          EMAIL_BODY: ${{ steps.changelog.outputs.email_body }}
+          VERSION: ${{ steps.changelog.outputs.version }}
+        run: |
+          if [ -z "$BREVO_API_KEY" ]; then
+            echo "::warning::BREVO_API_KEY not set — skipping email"
+            exit 0
+          fi
 
-      #       **What's New:**
+          if [ -z "$EMAIL_BODY" ]; then
+            echo "::warning::No email body found — skipping email"
+            exit 0
+          fi
 
-      #       ${{ steps.changelog.outputs.body }}
+          # Add UTM tracking to changelog link in email body
+          TRACKED_BODY=$(echo "$EMAIL_BODY" | sed "s|https://scanopy.net/changelog|https://scanopy.net/changelog?utm_source=brevo\&utm_medium=email\&utm_campaign=product_update_v${VERSION}|g")
 
-      #       ---
+          # Escape for JSON
+          ESCAPED_SUBJECT=$(echo "$EMAIL_SUBJECT" | jq -Rs . | sed 's/^"//;s/"$//')
+          ESCAPED_BODY=$(printf '%s' "$TRACKED_BODY" | jq -Rs .)
 
-      #       [Full changelog on scanopy.net](https://scanopy.net/changelog?utm_source=reddit&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }})
+          # Create email campaign
+          CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": {\"name\": \"Scanopy\", \"email\": \"no-reply@email.scanopy.net\"},
+              \"name\": \"Product Update v${VERSION}\",
+              \"subject\": \"${ESCAPED_SUBJECT}\",
+              \"htmlContent\": ${ESCAPED_BODY},
+              \"recipients\": {\"listIds\": [9]},
+              \"replyTo\": \"no-reply@email.scanopy.net\"
+            }") || {
+            echo "::warning::Failed to create Brevo campaign — skipping email"
+            exit 0
+          }
 
-      #       #Scanopy #NetworkDiscovery #OpenSource #SelfHosted
+          CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
+
+          if [ -z "$CAMPAIGN_ID" ] || [ "$CAMPAIGN_ID" = "null" ]; then
+            echo "::warning::Failed to get campaign ID from Brevo response: $CAMPAIGN_RESPONSE"
+            exit 0
+          fi
+
+          echo "Created Brevo campaign: $CAMPAIGN_ID"
+
+          # Send the campaign immediately
+          curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns/${CAMPAIGN_ID}/sendNow" \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" || {
+            echo "::warning::Failed to send Brevo campaign $CAMPAIGN_ID"
+            exit 0
+          }
+
+          echo "Product update email sent via Brevo (campaign $CAMPAIGN_ID)"
