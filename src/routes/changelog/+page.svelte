@@ -7,6 +7,7 @@
 		title: string;
 		content: string;
 		slug: string;
+		imageUrl?: string;
 	}
 
 	interface PageData {
@@ -77,6 +78,15 @@
 								</div>
 								<h2 class="mt-2 text-2xl font-bold text-white">{entry.title}</h2>
 							</header>
+
+							{#if entry.imageUrl}
+								<img
+									src={entry.imageUrl}
+									alt="Screenshot for v{entry.version}"
+									class="mb-4 w-full rounded-lg border border-gray-800"
+									loading="lazy"
+								/>
+							{/if}
 
 							<div class="prose prose-invert prose-gray max-w-none">
 								{@html entry.content}
