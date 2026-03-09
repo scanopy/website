@@ -1,5 +1,5 @@
 {
   "title": "Setting Up Daemons",
   "defaultOpen": true,
-  "pages": ["managing-daemons", "planning-daemon-deployment"]
+  "pages": ["managing-daemons", "planning-daemon-deployment", "troubleshooting-setup", "troubleshooting-scans"]
 }

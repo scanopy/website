@@ -1,0 +1,87 @@
+---
+title: Troubleshooting Setup
+description: Troubleshooting issues getting the Scanopy daemon running.
+---
+
+Issues getting the daemon connected and running. For problems that occur during scans, see [Troubleshooting Scans](/setting-up-daemons/troubleshooting-scans/).
+
+## Checking Daemon Logs
+
+**Symptoms**: Daemon appears to start but nothing happens, scans don't run, or you need to share logs with support
+
+First, enable debug logging for more detail:
+
+```bash
+scanopy-daemon --log-level debug
+```
+
+Then check logs for your platform:
+
+- **Foreground**: Logs appear in your terminal
+- **Docker**: `docker logs -f scanopy-daemon`
+- **Linux (systemd)**: `journalctl -u scanopy-daemon -f`
+- **macOS (launchd)**: `tail -f /tmp/scanopy-daemon.stderr.log`
+- **Windows (NSSM)**: `Get-Content "C:\ProgramData\scanopy\daemon.log" -Wait`
+
+To capture logs to a file for sharing with support:
+
+```bash
+# Linux / macOS
+./scanopy-daemon --log-level debug 2>&1 | tee ~/scanopy-daemon.log
+```
+
+```powershell
+# Windows (PowerShell)
+.\scanopy-daemon.exe --log-level debug 2>&1 | Tee-Object -FilePath "$env:USERPROFILE\scanopy-daemon.log"
+```
+
+For full details on log levels and output destinations, see [Logging](/reference/daemon-configuration/#logging).
+
+## Daemon Not Connecting to Server
+
+**Symptoms**: Daemon shows as offline in the UI, or logs show connection errors
+
+**Diagnosis**: Test connectivity to the server from the daemon host:
+
+```bash
+curl https://your-server-url/api/health
+```
+
+```powershell
+# Windows (PowerShell)
+Test-NetConnection -ComputerName your-server-hostname -Port 443
+```
+
+**Solutions**:
+
+1. **Verify server URL**: Ensure `SCANOPY_SERVER_URL` is correct and reachable from the daemon host
+2. **Check API key**: Verify the API key is valid and not expired in **Platform > API Keys**
+3. **Firewall rules**: Ensure outbound HTTPS (port 443) is allowed from the daemon host. On Windows, verify the daemon executable is allowed through **Windows Defender Firewall > Allow an app through firewall**.
+
+## Permission Denied Errors (Linux)
+
+**Symptoms**: "Permission denied" when accessing Docker socket
+
+**Solution**: Add user to docker group:
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+Log out and back in for changes to take effect.
+
+If you're using a Docker socket proxy and getting permission errors, see [Securing Docker Discovery with a Socket Proxy — Troubleshooting](/guides/docker-proxy/#troubleshooting).
+
+## Daemon Stops When Terminal Closes
+
+**Symptoms**: Daemon runs in foreground and stops when SSH session or terminal window ends
+
+**Solution**: Install the daemon as a background service so it runs independently of your terminal session and survives reboots. See [Running as a Service](/setting-up-daemons/managing-daemons/#running-as-a-service).
+
+## Getting Help
+
+If your issue isn't covered here:
+
+- **Discord**: Join our [Discord community](https://discord.gg/b7ffQr8AcZ)
+- **GitHub Issues**: [Open an issue](https://github.com/scanopy/scanopy/issues/new)

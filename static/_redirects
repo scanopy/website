@@ -3,14 +3,14 @@
 /docs/getting-started/quick-start/ /docs/quick-start/ 301
 /docs/getting-started/introduction /docs/introduction/ 301
 /docs/getting-started/introduction/ /docs/introduction/ 301
-/docs/daemons/troubleshooting /docs/troubleshooting/scanning/ 301
-/docs/daemons/troubleshooting/ /docs/troubleshooting/scanning/ 301
+/docs/daemons/troubleshooting /docs/setting-up-daemons/troubleshooting-scans/ 301
+/docs/daemons/troubleshooting/ /docs/setting-up-daemons/troubleshooting-scans/ 301
 
 # Troubleshooting restructure (Feb 2026)
-/docs/daemon-troubleshooting /docs/troubleshooting/scanning/ 301
-/docs/daemon-troubleshooting/ /docs/troubleshooting/scanning/ 301
-/docs/server-troubleshooting /docs/troubleshooting/server/ 301
-/docs/server-troubleshooting/ /docs/troubleshooting/server/ 301
+/docs/daemon-troubleshooting /docs/setting-up-daemons/troubleshooting-scans/ 301
+/docs/daemon-troubleshooting/ /docs/setting-up-daemons/troubleshooting-scans/ 301
+/docs/server-troubleshooting /docs/self-hosted-server/troubleshooting/ 301
+/docs/server-troubleshooting/ /docs/self-hosted-server/troubleshooting/ 301
 
 # Section restructure (Mar 2026)
 # Old flat paths → new folder paths
@@ -74,8 +74,16 @@
 /docs/self-hosted/server-configuration/ /docs/reference/server-configuration/ 301
 /docs/self-hosted/oidc /docs/guides/oidc/ 301
 /docs/self-hosted/oidc/ /docs/guides/oidc/ 301
-/docs/self-hosted/troubleshooting /docs/troubleshooting/server/ 301
-/docs/self-hosted/troubleshooting/ /docs/troubleshooting/server/ 301
+/docs/self-hosted/troubleshooting /docs/self-hosted-server/troubleshooting/ 301
+/docs/self-hosted/troubleshooting/ /docs/self-hosted-server/troubleshooting/ 301
+
+# Troubleshooting pages moved under their parent sections (Mar 2026)
+/docs/troubleshooting/daemon /docs/setting-up-daemons/troubleshooting-setup/ 301
+/docs/troubleshooting/daemon/ /docs/setting-up-daemons/troubleshooting-setup/ 301
+/docs/troubleshooting/server /docs/self-hosted-server/troubleshooting/ 301
+/docs/troubleshooting/server/ /docs/self-hosted-server/troubleshooting/ 301
+/docs/troubleshooting/scanning /docs/setting-up-daemons/troubleshooting-scans/ 301
+/docs/troubleshooting/scanning/ /docs/setting-up-daemons/troubleshooting-scans/ 301
 
 # Catch-all for old docs structure patterns
 /docs/getting-started/* /docs/:splat 301

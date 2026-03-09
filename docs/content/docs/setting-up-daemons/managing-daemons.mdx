@@ -11,12 +11,131 @@ description: Create, upgrade, and remove daemons.
 
 ## Creating a Daemon
 
-Go to **Discover > Daemons** and click **Create Daemon**. The wizard walks you through setup and generates a ready-to-copy install command with the correct API key, server URL, and daemon name.
+Go to **Discover > Daemons** and click **Create Daemon**. The wizard walks you through setup and generates a ready-to-copy install command with the correct API key, server URL, and daemon name. For help choosing a polling mode and planning where to place daemons, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
-When choosing a daemon mode:
+## Running as a Service
 
-- **DaemonPoll** (default): The daemon initiates all connections to the server. It periodically heartbeats outbound to request work. No firewall rules needed for inbound connections to the daemon — it just needs outbound HTTPS access to the server. Best for most deployments.
-- **ServerPoll**: The server initiates all connections to the daemon. An admin configures the daemon's reachable URL in the Scanopy UI. Use this for DMZ or restricted environments where the daemon cannot make outbound connections. Requires firewall rules allowing the server to reach the daemon on the configured port.
+By default the daemon runs in the foreground and stops when you close the terminal. To keep it running across reboots, install it as a background service.
+
+### Linux (systemd)
+
+The install script offers to set up a systemd service automatically. If you skipped that step or installed manually, download the [systemd service file](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon.service) and install it:
+
+```bash
+sudo curl -o /etc/systemd/system/scanopy-daemon.service \
+  https://raw.githubusercontent.com/scanopy/scanopy/main/scanopy-daemon.service
+sudo systemctl daemon-reload
+sudo systemctl enable scanopy-daemon
+sudo systemctl start scanopy-daemon
+```
+
+Verify it's running:
+
+```bash
+sudo systemctl status scanopy-daemon
+```
+
+The service logs to the journal — view logs with `journalctl -u scanopy-daemon -f`.
+
+<Callout type="info">
+If you run multiple daemons on one host, see [Running Multiple Daemons](/guides/multiple-daemons/) for the systemd template unit.
+</Callout>
+
+### macOS (launchd)
+
+Create a launch agent plist:
+
+```bash
+cat > ~/Library/LaunchAgents/com.scanopy.daemon.plist <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.scanopy.daemon</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/scanopy-daemon</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/scanopy-daemon.stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/scanopy-daemon.stderr.log</string>
+</dict>
+</plist>
+EOF
+```
+
+Load and start the service:
+
+```bash
+launchctl load ~/Library/LaunchAgents/com.scanopy.daemon.plist
+```
+
+Verify it's running:
+
+```bash
+launchctl list | grep scanopy
+```
+
+To stop and unload:
+
+```bash
+launchctl unload ~/Library/LaunchAgents/com.scanopy.daemon.plist
+```
+
+### Windows (NSSM)
+
+[NSSM](https://nssm.cc/) (Non-Sucking Service Manager) lets you run any executable as a Windows service.
+
+1. Download and install [NSSM](https://nssm.cc/download)
+
+2. Install the daemon as a service:
+
+```powershell
+nssm install ScanopyDaemon "C:\Path\To\scanopy-daemon.exe"
+```
+
+3. Configure log output so you can troubleshoot issues:
+
+```powershell
+nssm set ScanopyDaemon AppStdout "C:\ProgramData\scanopy\daemon.log"
+nssm set ScanopyDaemon AppStderr "C:\ProgramData\scanopy\daemon.log"
+nssm set ScanopyDaemon AppRotateFiles 1
+```
+
+4. Start the service:
+
+```powershell
+nssm start ScanopyDaemon
+```
+
+5. Verify it's running:
+
+```powershell
+Get-Service ScanopyDaemon
+```
+
+To stop or remove the service:
+
+```powershell
+nssm stop ScanopyDaemon
+nssm remove ScanopyDaemon confirm
+```
+
+## Integrated Daemon (Self-Hosted)
+
+Self-hosted Docker Compose deployments include an **integrated daemon** that runs alongside the server. This daemon is managed as part of your Compose stack — it upgrades when you upgrade the server and doesn't need separate installation or API key setup. For upgrading the integrated daemon along with your server, see [Upgrading a Self-Hosted Server](/self-hosted-server/upgrading/).
+
+## Upgrading
+
+When an update is available, the daemon card in **Discover > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps. Configuration is preserved across upgrades.
+
+For upgrading self-hosted server and integrated daemon together, see [Upgrading](/self-hosted-server/upgrading).
 
 ## Updating Daemon Properties
 
@@ -24,27 +143,7 @@ You can update daemon properties after creation by editing the [daemon config fi
 
 The daemon's name is the only property that propagates to the server. All other config properties are local to the daemon.
 
-To update daemon capabilities (docker socket integration and interfaced subnets), run a SelfReport discovery to report the new capabilities to the server.
-
-## Daemon Capabilities
-
-Each daemon reports its capabilities:
-
-**Docker Socket Access**
-
-- **True**: Can discover Docker containers
-- **False**: Cannot access Docker socket
-
-**Interfaced Subnets**
-
-- Lists which subnets the daemon has network interfaces with
-- The daemon will scan these subnets by default during network discovery
-
-## Upgrading
-
-When an update is available, the daemon card in **Discover > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps. Configuration is preserved across upgrades.
-
-For upgrading self-hosted server and integrated daemon together, see [Upgrading](/self-hosted-server/upgrading).
+Each daemon also reports its **capabilities** to the server: whether it has Docker socket access (for container discovery) and which subnets it has network interfaces on (for default scan targets). To update capabilities after changing the host's network configuration or Docker access, run a SelfReport discovery.
 
 ## Removing a Daemon
 
@@ -92,7 +191,3 @@ Windows:
 No. Daemons discover host-specific data (network interfaces, Docker containers, local services) tied to the machine they run on. Moving a daemon's identity to a different host would produce inaccurate data.
 
 If you're replacing a host, create a new daemon on the new machine and delete the old one.
-
-## Integrated daemon (self-hosted)
-
-Self-hosted Docker Compose deployments include an **integrated daemon** that runs alongside the server. This daemon is managed as part of your Compose stack — it upgrades when you upgrade the server and doesn't need separate installation or API key setup. For upgrading the integrated daemon along with your server, see [Upgrading a Self-Hosted Server](/self-hosted-server/upgrading/).

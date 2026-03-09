@@ -101,3 +101,74 @@ environment:
 
 - Lower value = slower scans, more stable
 - Higher value = faster scans, more memory usage
+
+## Logging
+
+### Output Destination
+
+The daemon logs to stdout and stderr on all platforms. Where those logs end up depends on how you run the daemon.
+
+### Log Levels
+
+Set the log level with `--log-level` or `SCANOPY_LOG_LEVEL`:
+
+| Level | Description |
+|-------|-------------|
+| `error` | Errors that prevent normal operation |
+| `warn` | Unexpected conditions that don't stop operation |
+| `info` | General operational messages (default) |
+| `debug` | Detailed diagnostic information |
+| `trace` | Very verbose output, including raw network data |
+
+```bash
+# CLI
+scanopy-daemon --log-level debug
+
+# Environment
+export SCANOPY_LOG_LEVEL=debug
+```
+
+### Viewing Logs by Platform
+
+**Foreground (all platforms)**: Logs appear directly in the terminal where you started the daemon.
+
+**Docker**:
+
+```bash
+docker logs scanopy-daemon
+docker logs -f scanopy-daemon  # follow/stream logs
+```
+
+**Linux (systemd)**: The [systemd service file](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon.service) directs output to the journal.
+
+```bash
+journalctl -u scanopy-daemon -f
+```
+
+**macOS (launchd)**: Logs are written to the paths configured in the plist file. See [Running as a Service](/setting-up-daemons/managing-daemons/#macos-launchd) for setup.
+
+```bash
+tail -f /tmp/scanopy-daemon.stderr.log
+```
+
+**Windows (NSSM)**: Logs are written to the paths configured during service installation. See [Running as a Service](/setting-up-daemons/managing-daemons/#windows-nssm) for setup.
+
+```powershell
+Get-Content "C:\ProgramData\scanopy\daemon.log" -Wait
+```
+
+### Capturing Logs to a File
+
+When running in the foreground, you can capture logs to a file for sharing with support:
+
+**Linux / macOS**:
+
+```bash
+./scanopy-daemon 2>&1 | tee ~/scanopy-daemon.log
+```
+
+**Windows (PowerShell)**:
+
+```powershell
+.\scanopy-daemon.exe 2>&1 | Tee-Object -FilePath "$env:USERPROFILE\scanopy-daemon.log"
+```

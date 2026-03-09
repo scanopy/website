@@ -62,10 +62,11 @@ sudo scanopy-daemon --name eth1
 
 ### systemd template (Linux)
 
-Scanopy provides a systemd template unit `scanopy-daemon@.service` for running multiple instances. Copy it to your systemd directory:
+Scanopy provides a [systemd template unit](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon%40.service) for running multiple instances. Download and install it:
 
 ```bash
-sudo cp scanopy-daemon@.service /etc/systemd/system/
+sudo curl -o /etc/systemd/system/scanopy-daemon@.service \
+  https://raw.githubusercontent.com/scanopy/scanopy/main/scanopy-daemon%40.service
 sudo systemctl daemon-reload
 ```
 
