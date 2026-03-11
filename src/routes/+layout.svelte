@@ -24,16 +24,16 @@
 	let healthStatus = $state<'loading' | 'healthy' | 'unhealthy'>('loading');
 	let mobileMenuOpen = $state(false);
 
+	if (browser) {
+		loadPh();
+	}
+
 	onMount(async () => {
 		try {
 			const res = await fetch('https://app.scanopy.net/api/health');
 			healthStatus = res.ok ? 'healthy' : 'unhealthy';
 		} catch {
 			healthStatus = 'unhealthy';
-		}
-
-		if (browser) {
-			loadPh();
 		}
 	});
 

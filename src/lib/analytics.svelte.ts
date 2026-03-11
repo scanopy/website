@@ -1,13 +1,8 @@
 import posthog from 'posthog-js';
 import { browser } from '$app/environment';
-
-const PUBLIC_POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY || '';
+import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 
 export async function loadPh() {
-	if (!PUBLIC_POSTHOG_KEY) {
-		console.warn('PostHog key not configured');
-		return;
-	}
 	posthog.init(PUBLIC_POSTHOG_KEY, {
 		api_host: 'https://ph.scanopy.net',
 		ui_host: 'https://us.posthog.com',

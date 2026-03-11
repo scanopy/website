@@ -78,6 +78,7 @@ jobs:
             EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
             echo "email_body<<$EOF" >> $GITHUB_OUTPUT
             cat "$EMAIL_FILE" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
             echo "$EOF" >> $GITHUB_OUTPUT
           else
             echo "email_body=" >> $GITHUB_OUTPUT
@@ -86,6 +87,72 @@ jobs:
           echo "Version: $VERSION"
           echo "Title: $TITLE"
           echo "Category: $CATEGORY"
+
+      # Requires a Brevo email template with these params:
+      #   {{ params.content }}  — AI-generated release highlights (HTML fragment)
+      #   {{ params.version }}  — version string (e.g., "0.14.14")
+      # Template handles header, footer, branding, unsubscribe. Set BREVO_TEMPLATE_ID to the template ID.
+      - name: Send product update email via Brevo
+        if: contains(fromJSON('["A", "B"]'), steps.changelog.outputs.category)
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_TEMPLATE_ID: ${{ vars.BREVO_TEMPLATE_ID }}
+          EMAIL_SUBJECT: ${{ steps.changelog.outputs.email_subject }}
+          EMAIL_BODY: ${{ steps.changelog.outputs.email_body }}
+          VERSION: ${{ steps.changelog.outputs.version }}
+        run: |
+          if [ -z "$BREVO_API_KEY" ]; then
+            echo "::warning::BREVO_API_KEY not set — skipping email"
+            exit 0
+          fi
+
+          if [ -z "$BREVO_TEMPLATE_ID" ]; then
+            echo "::warning::BREVO_TEMPLATE_ID not set — skipping email"
+            exit 0
+          fi
+
+          if [ -z "$EMAIL_BODY" ]; then
+            echo "::warning::No email body found — skipping email"
+            exit 0
+          fi
+
+          # Build changelog URL with UTM tracking (for template CTA)
+          CHANGELOG_URL="https://scanopy.net/changelog?utm_source=brevo&utm_medium=email&utm_campaign=product_update_v${VERSION}"
+
+          # Build JSON payload — templateId + params instead of raw htmlContent
+          PAYLOAD=$(jq -n \
+            --arg subject "$EMAIL_SUBJECT" \
+            --arg content "$EMAIL_BODY" \
+            --arg version "$VERSION" \
+            --arg changelog_url "$CHANGELOG_URL" \
+            --arg name "Product Update v${VERSION}" \
+            --argjson templateId "$BREVO_TEMPLATE_ID" \
+            '{
+              type: "classic",
+              sender: {name: "Scanopy", email: "no-reply@email.scanopy.net"},
+              name: $name,
+              subject: $subject,
+              templateId: $templateId,
+              params: {content: $content, version: $version, changelog_url: $changelog_url},
+              recipients: {listIds: [13]},
+              replyTo: {email: "no-reply@email.scanopy.net"}
+            }')
+
+          # Create email campaign
+          CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD")
+
+          CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
+
+          if [ -z "$CAMPAIGN_ID" ] || [ "$CAMPAIGN_ID" = "null" ]; then
+            echo "::error::Failed to get campaign ID from Brevo response: $CAMPAIGN_RESPONSE"
+            exit 1
+          fi
+
+          echo "Brevo campaign draft created: $CAMPAIGN_ID"
+          echo "Preview and send from https://app.brevo.com/campaign/email/$CAMPAIGN_ID"
 
       - name: Send Discord notification
         env:
@@ -171,62 +238,3 @@ jobs:
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
 
-      - name: Send product update email via Brevo
-        if: contains(fromJSON('["A", "B"]'), steps.changelog.outputs.category)
-        env:
-          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          EMAIL_SUBJECT: ${{ steps.changelog.outputs.email_subject }}
-          EMAIL_BODY: ${{ steps.changelog.outputs.email_body }}
-          VERSION: ${{ steps.changelog.outputs.version }}
-        run: |
-          if [ -z "$BREVO_API_KEY" ]; then
-            echo "::warning::BREVO_API_KEY not set — skipping email"
-            exit 0
-          fi
-
-          if [ -z "$EMAIL_BODY" ]; then
-            echo "::warning::No email body found — skipping email"
-            exit 0
-          fi
-
-          # Add UTM tracking to changelog link in email body
-          TRACKED_BODY=$(echo "$EMAIL_BODY" | sed "s|https://scanopy.net/changelog|https://scanopy.net/changelog?utm_source=brevo\&utm_medium=email\&utm_campaign=product_update_v${VERSION}|g")
-
-          # Escape for JSON
-          ESCAPED_SUBJECT=$(echo "$EMAIL_SUBJECT" | jq -Rs . | sed 's/^"//;s/"$//')
-          ESCAPED_BODY=$(printf '%s' "$TRACKED_BODY" | jq -Rs .)
-
-          # Create email campaign
-          CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
-            -H "api-key: ${BREVO_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"sender\": {\"name\": \"Scanopy\", \"email\": \"no-reply@email.scanopy.net\"},
-              \"name\": \"Product Update v${VERSION}\",
-              \"subject\": \"${ESCAPED_SUBJECT}\",
-              \"htmlContent\": ${ESCAPED_BODY},
-              \"recipients\": {\"listIds\": [9]},
-              \"replyTo\": \"no-reply@email.scanopy.net\"
-            }") || {
-            echo "::warning::Failed to create Brevo campaign — skipping email"
-            exit 0
-          }
-
-          CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
-
-          if [ -z "$CAMPAIGN_ID" ] || [ "$CAMPAIGN_ID" = "null" ]; then
-            echo "::warning::Failed to get campaign ID from Brevo response: $CAMPAIGN_RESPONSE"
-            exit 0
-          fi
-
-          echo "Created Brevo campaign: $CAMPAIGN_ID"
-
-          # Send the campaign immediately
-          curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns/${CAMPAIGN_ID}/sendNow" \
-            -H "api-key: ${BREVO_API_KEY}" \
-            -H "Content-Type: application/json" || {
-            echo "::warning::Failed to send Brevo campaign $CAMPAIGN_ID"
-            exit 0
-          }
-
-          echo "Product update email sent via Brevo (campaign $CAMPAIGN_ID)"

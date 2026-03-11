@@ -6,7 +6,6 @@ interface ChangelogEntry {
 	title: string;
 	content: string;
 	slug: string;
-	imageUrl?: string;
 }
 
 function parseFrontmatter(content: string): { frontmatter: Record<string, string>; body: string } {
@@ -46,8 +45,7 @@ export async function load() {
 			date: frontmatter.date || '',
 			title: frontmatter.title || `Version ${frontmatter.version || slug}`,
 			content: await marked.parse(body),
-			slug,
-			imageUrl: frontmatter.image_url || undefined
+			slug
 		});
 	}
 

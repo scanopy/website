@@ -7,7 +7,6 @@
 		title: string;
 		content: string;
 		slug: string;
-		imageUrl?: string;
 	}
 
 	interface PageData {
@@ -79,15 +78,6 @@
 								<h2 class="mt-2 text-2xl font-bold text-white">{entry.title}</h2>
 							</header>
 
-							{#if entry.imageUrl}
-								<img
-									src={entry.imageUrl}
-									alt="Screenshot for v{entry.version}"
-									class="mb-4 w-full rounded-lg border border-gray-800"
-									loading="lazy"
-								/>
-							{/if}
-
 							<div class="prose prose-invert prose-gray max-w-none">
 								{@html entry.content}
 							</div>
@@ -147,6 +137,13 @@
 		border-radius: 0.25rem;
 		font-size: 0.875rem;
 		color: rgb(229 231 235);
+	}
+
+	:global(.prose img) {
+		width: 100%;
+		border-radius: 0.5rem;
+		border: 1px solid rgb(31 41 55);
+		margin: 1rem 0;
 	}
 
 	:global(.prose hr) {
