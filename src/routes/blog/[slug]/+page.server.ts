@@ -7,6 +7,7 @@ interface BlogPost {
 	date: string;
 	keyword: string;
 	slug: string;
+	image: string;
 	content: string;
 }
 
@@ -46,6 +47,7 @@ export async function load({ params }) {
 				date: frontmatter.date || '',
 				keyword: frontmatter.keyword || '',
 				slug,
+				image: frontmatter.image || '/topology-hero.png',
 				content: await marked.parse(body)
 			};
 

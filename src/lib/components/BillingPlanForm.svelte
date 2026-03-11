@@ -38,12 +38,10 @@
 		featureHelpers: MetadataHelpers<FeatureMetadata>;
 		onPlanSelect: (plan: BillingPlan) => void | Promise<void>;
 		onPlanInquiry?: (plan: BillingPlan) => void | Promise<void>;
-		initialPlanFilter?: 'all' | 'personal' | 'commercial';
 		showGithubStars?: boolean;
 		showHosting?: boolean;
 		class?: string;
 		recommendedPlan?: string | null;
-		forceCommercial?: boolean;
 		/** If true, user is a returning customer and should not see trial offers */
 		isReturningCustomer?: boolean;
 	}
@@ -55,40 +53,21 @@
 		featureHelpers,
 		onPlanSelect,
 		onPlanInquiry,
-		initialPlanFilter = 'commercial',
 		showGithubStars = true,
 		class: className = '',
 		showHosting = false,
 		recommendedPlan = null,
-		forceCommercial = false,
 		isReturningCustomer = false
 	}: Props = $props();
 
 	let loadingPlanType = $state<string | null>(null);
 	let showFullComparison = $state(false);
 
-	type PlanFilter = 'all' | 'personal' | 'commercial';
-	let planFilter = $state<PlanFilter>(initialPlanFilter);
-
 	type BillingPeriod = 'monthly' | 'yearly';
 	let billingPeriod = $state<BillingPeriod>('yearly');
 
 	type HostingFilter = 'cloud' | 'selfhosted';
 	let hostingFilter = $state<HostingFilter>('cloud');
-
-	// Filter out personal option when forceCommercial is true
-	let planTypeOptions = $derived(
-		forceCommercial
-			? [
-					{ value: 'all', label: 'All Plans' },
-					{ value: 'commercial', label: 'Commercial' }
-				]
-			: [
-					{ value: 'all', label: 'All Plans' },
-					{ value: 'personal', label: 'Personal' },
-					{ value: 'commercial', label: 'Commercial' }
-				]
-	);
 
 	const billingPeriodOptions = [
 		{ value: 'monthly', label: 'Monthly' },
@@ -102,14 +81,6 @@
 
 	let filteredPlans = $derived.by(() => {
 		let result = plans;
-		if (planFilter !== 'all') {
-			result = result.filter((plan) => {
-				const metadata = billingPlanHelpers.getMetadata(plan.type);
-				if (planFilter === 'commercial') return metadata.is_commercial;
-				if (planFilter === 'personal') return !metadata.is_commercial;
-				return true;
-			});
-		}
 		if (showHosting) {
 			result = result.filter((plan) => {
 				const hosting = getHosting(plan);
@@ -350,6 +321,20 @@
 		return value == null ? 'Unlimited' : String(value);
 	}
 
+	function getEnabledFeatures(planType: string): string[] {
+		const metadata = billingPlanHelpers.getMetadata(planType);
+		const features = metadata?.features as unknown as Record<string, boolean | string | number | null> | undefined;
+		if (!features) return [];
+		return Object.keys(features).filter((key) => {
+			const value = features[key];
+			return value === true || (typeof value === 'string' && value !== '') || (typeof value === 'number' && value > 0);
+		});
+	}
+
+	function isSelfHosted(plan: BillingPlan): boolean {
+		return getHosting(plan) === 'SelfHosted';
+	}
+
 	function sortFeaturesByCategory(features: string[]): string[] {
 		const order = ['Discovery', 'Visualization', 'Integrations', 'Support', 'Enterprise'];
 		return [...features].sort((a, b) => {
@@ -370,12 +355,6 @@
 		{#if showGithubStars}
 			<!-- <GithubStars /> -->
 		{/if}
-
-		<ToggleGroup
-			options={planTypeOptions}
-			selected={planFilter}
-			onchange={(value) => (planFilter = value as PlanFilter)}
-		/>
 
 		<ToggleGroup
 			options={billingPeriodOptions}
@@ -405,8 +384,9 @@
 				{@const trial = hasTrial(plan)}
 				{@const enterprise = isEnterprise(plan)}
 				{@const metadata = billingPlanHelpers.getMetadata(plan.type)}
-				{@const incrementalFeatures = metadata?.incremental_features ?? []}
-				{@const sortedIncrFeatures = sortFeaturesByCategory(incrementalFeatures)}
+				{@const selfHosted = isSelfHosted(plan)}
+				{@const displayFeatures = selfHosted ? getEnabledFeatures(plan.type) : (metadata?.incremental_features ?? [])}
+				{@const sortedDisplayFeatures = sortFeaturesByCategory(displayFeatures)}
 				{@const prevTier = metadata?.previous_tier}
 
 				<div
@@ -465,12 +445,16 @@
 								{/if}
 							</div>
 						{/if}
-						{#if showBilledYearly(plan)}
-							<div class="text-tertiary text-xs">billed yearly</div>
-						{/if}
-						{#if hasTrial(plan) && !hasCustomPrice(plan)}
-							<div class="text-xs font-medium text-success">{plan.trial_days}-day free trial</div>
-						{/if}
+						<div
+							class={`text-tertiary text-xs ${showBilledYearly(plan) ? 'opacity-100' : 'opacity-0'}`}
+						>
+							billed yearly
+						</div>
+						<div
+							class={`text-xs font-medium text-success ${hasTrial(plan) && !hasCustomPrice(plan) ? 'opacity-100' : 'opacity-0'}`}
+						>
+							{plan.trial_days}-day free trial
+						</div>
 					</div>
 
 					<!-- Description -->
@@ -479,6 +463,62 @@
 							{description}
 						</p>
 					{/if}
+
+					<!-- CTA Button -->
+					<div class="py-4">
+						{#if enterprise && onPlanInquiry}
+							<button
+								type="button"
+								onclick={() => onPlanInquiry(plan)}
+								disabled={loadingPlanType !== null}
+								class="btn-primary w-full text-sm"
+							>
+								Request Information
+							</button>
+						{:else if hosting === 'Cloud'}
+							<button
+								type="button"
+								onclick={() => handlePlanSelect(plan)}
+								disabled={loadingPlanType !== null}
+								class="btn-primary w-full text-sm"
+							>
+								{#if loadingPlanType === plan.type}
+									<Loader2 class="mx-auto h-4 w-4 animate-spin" />
+								{:else}
+									{trial ? `Start ${plan.trial_days}-day free trial` : 'Get Started'}
+								{/if}
+							</button>
+						{:else if hosting === 'SelfHosted'}
+							{#if commercial && onPlanInquiry}
+								<button
+									type="button"
+									onclick={() => onPlanInquiry(plan)}
+									disabled={loadingPlanType !== null}
+									class="btn-primary w-full text-sm"
+								>
+									Contact Us
+								</button>
+							{:else}
+								<a
+									href="https://github.com/scanopy/scanopy"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="btn-secondary inline-block w-full text-center text-sm"
+								>
+									View on GitHub
+								</a>
+							{/if}
+						{:else if commercial && onPlanInquiry}
+							<button
+								type="button"
+								onclick={() => onPlanInquiry(plan)}
+								disabled={loadingPlanType !== null}
+								class="btn-primary w-full text-sm"
+							>
+								Contact Us
+							</button>
+						{/if}
+					</div>
 
 					<!-- Included Resources with Stepper Controls -->
 					<div class="space-y-2 border-b border-gray-700 pb-4">
@@ -570,18 +610,18 @@
 
 					<!-- Incremental Features -->
 					<div class="flex-1 py-4">
-						{#if prevTier}
+						{#if !selfHosted && prevTier}
 							<p class="text-secondary mb-4 text-xs font-medium">
 								Everything in <span class="text-primary">{billingPlanHelpers.getName(prevTier)}</span>, plus:
 							</p>
-						{:else if plan.type !== 'Free' && incrementalFeatures.length > 0}
+						{:else if plan.type !== 'Free' && displayFeatures.length > 0 && !selfHosted}
 							<p class="text-tertiary mb-2 text-xs">Key features:</p>
 						{/if}
 						<ul class="space-y-1.5">
-							{#each sortedIncrFeatures as featureKey, i (featureKey)}
+							{#each sortedDisplayFeatures as featureKey, i (featureKey)}
 								{@const category = featureHelpers.getCategory(featureKey)}
 								{@const prevCategory =
-									i > 0 ? featureHelpers.getCategory(sortedIncrFeatures[i - 1]) : null}
+									i > 0 ? featureHelpers.getCategory(sortedDisplayFeatures[i - 1]) : null}
 								{#if category !== prevCategory}
 									<li
 										class="text-tertiary text-[10px] font-medium uppercase tracking-wider {i > 0
@@ -611,61 +651,6 @@
 						</ul>
 					</div>
 
-					<!-- CTA Button -->
-					<div class="border-t border-gray-700 pt-4">
-						{#if enterprise && onPlanInquiry}
-							<button
-								type="button"
-								onclick={() => onPlanInquiry(plan)}
-								disabled={loadingPlanType !== null}
-								class="btn-primary w-full text-sm"
-							>
-								Request Information
-							</button>
-						{:else if hosting === 'Cloud'}
-							<button
-								type="button"
-								onclick={() => handlePlanSelect(plan)}
-								disabled={loadingPlanType !== null}
-								class="btn-primary w-full text-sm"
-							>
-								{#if loadingPlanType === plan.type}
-									<Loader2 class="mx-auto h-4 w-4 animate-spin" />
-								{:else}
-									{trial ? `Start ${plan.trial_days}-day free trial` : 'Get Started'}
-								{/if}
-							</button>
-						{:else if hosting === 'SelfHosted'}
-							{#if commercial && onPlanInquiry}
-								<button
-									type="button"
-									onclick={() => onPlanInquiry(plan)}
-									disabled={loadingPlanType !== null}
-									class="btn-primary w-full text-sm"
-								>
-									Contact Us
-								</button>
-							{:else}
-								<a
-									href="https://github.com/scanopy/scanopy"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="btn-secondary inline-block w-full text-center text-sm"
-								>
-									View on GitHub
-								</a>
-							{/if}
-						{:else if commercial && onPlanInquiry}
-							<button
-								type="button"
-								onclick={() => onPlanInquiry(plan)}
-								disabled={loadingPlanType !== null}
-								class="btn-primary w-full text-sm"
-							>
-								Contact Us
-							</button>
-						{/if}
-					</div>
 				</div>
 			{/each}
 		</div>

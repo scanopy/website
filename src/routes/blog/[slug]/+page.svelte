@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { PageHero } from '$lib/components';
+
 	interface BlogPost {
 		title: string;
 		description: string;
 		date: string;
 		keyword: string;
 		slug: string;
+		image: string;
 		content: string;
 	}
 
@@ -47,7 +50,7 @@
 			'@type': 'WebPage',
 			'@id': `https://scanopy.net/blog/${data.post.slug}`
 		},
-		image: 'https://scanopy.net/social.webp'
+		image: `https://scanopy.net${data.post.image}`
 	});
 </script>
 
@@ -68,20 +71,20 @@
 	{@html `<script type="application/ld+json">${articleSchema}</script>`}
 </svelte:head>
 
+<PageHero image={data.post.image} title={data.post.title}>
+	{#if data.post.date}
+		<time class="block text-sm text-gray-400" datetime={data.post.date}>
+			{formatDate(data.post.date)}
+		</time>
+	{/if}
+</PageHero>
+
 <article class="py-20">
 	<div class="container mx-auto max-w-3xl px-4">
 		<header class="mb-12">
 			<a href="/blog" class="mb-6 inline-block text-sm text-gray-500 hover:text-blue-400">
 				&larr; Back to blog
 			</a>
-			{#if data.post.date}
-				<time class="block text-sm text-gray-500" datetime={data.post.date}>
-					{formatDate(data.post.date)}
-				</time>
-			{/if}
-			<h1 class="mt-2 text-4xl font-bold text-white lg:text-5xl">
-				{data.post.title}
-			</h1>
 		</header>
 
 		<div class="prose prose-invert prose-gray max-w-none">

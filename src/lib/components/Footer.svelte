@@ -45,6 +45,7 @@
 					<li><a href="/pricing" class="text-sm text-gray-400 hover:text-white">Pricing</a></li>
 					<li><a href="/roadmap" class="text-sm text-gray-400 hover:text-white">Roadmap</a></li>
 					<li><a href="/changelog" class="text-sm text-gray-400 hover:text-white">Changelog</a></li>
+				<li><a href="/about" class="text-sm text-gray-400 hover:text-white">About</a></li>
 					<li>
 						<a href="/services" class="text-sm text-gray-400 hover:text-white"
 							>Discoverable Services</a

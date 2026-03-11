@@ -14,13 +14,11 @@
 	interface Props {
 		showGithubStars?: boolean;
 		showHosting?: boolean;
-		initialPlanFilter?: string;
 	}
 
 	let {
 		showGithubStars = false,
 		showHosting = true,
-		initialPlanFilter = 'all'
 	}: Props = $props();
 
 	// ============================================================================
@@ -170,7 +168,6 @@
 	onPlanInquiry={handlePlanInquiry}
 	{showGithubStars}
 	{showHosting}
-	{initialPlanFilter}
 />
 
 <ContactModal

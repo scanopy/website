@@ -33,7 +33,7 @@
 			<p class="text-lg text-gray-400">Unlimited scans on every plan.</p>
 		</div>
 
-		<PricingSection showGithubStars={true} showHosting={true} initialPlanFilter="all" />
+		<PricingSection showGithubStars={true} showHosting={true} />
 	</div>
 </section>
 

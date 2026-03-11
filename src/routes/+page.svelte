@@ -136,12 +136,6 @@
 	// Generate schema from fixtures (async — resolved at build time during prerender)
 	const softwareApplicationSchemaPromise = getSoftwareApplicationSchema();
 
-	// How it works step screenshots
-	const howItWorksScreenshots = [
-		'/screenshots/daemon-install.webp',
-		'/screenshots/discovery-progress.webp',
-		'/hero-topology-dark.webp'
-	];
 
 	// What you get screenshots — matches sorted order: service_detection, sharing, versioning
 	const whatYouGetScreenshots: (string | null)[] = [
@@ -320,42 +314,35 @@
 			</h2>
 		</div>
 
-		<!-- Timeline -->
-		<div class="relative">
-			<!-- Connecting line (desktop) -->
-			<div
-				class="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-blue-800 to-transparent md:block"
-			></div>
-
-			<div class="grid gap-12 md:grid-cols-3 md:gap-8">
+		<div class="flex flex-col items-center gap-12 lg:flex-row lg:gap-16">
+			<!-- Steps -->
+			<div class="space-y-8 lg:w-1/2">
 				{#each howItWorks as feature, i (feature.title)}
-					<div class="relative flex flex-col items-center text-center">
-						<!-- Step number -->
+					<div class="flex gap-4">
 						<div
-							class="relative z-10 mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gray-800 text-lg font-bold text-blue-400 ring-1 ring-blue-800"
+							class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gray-800 text-lg font-bold text-blue-400 ring-1 ring-blue-800"
 						>
 							{i + 1}
 						</div>
-
-						<!-- Icon + text -->
-						<div class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-							<feature.icon class="h-5 w-5 text-blue-400" />
+						<div>
+							<h3 class="mb-1 text-lg font-semibold text-white">{feature.title}</h3>
+							<p class="text-sm text-gray-400">{@html feature.description}</p>
 						</div>
-						<h3 class="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
-						<p class="mb-6 text-sm text-gray-400">{@html feature.description}</p>
-
-						<!-- Screenshot -->
-						{#if howItWorksScreenshots[i]}
-							<img
-								use:tilt
-								src={howItWorksScreenshots[i]}
-								alt={feature.title}
-								class="w-full rounded-xl border border-gray-700/50" style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
-								loading="lazy"
-							/>
-						{/if}
 					</div>
 				{/each}
+			</div>
+
+			<!-- Screenshot -->
+			<div class="lg:w-1/2 flex justify-center">
+				<img
+					use:tilt
+					src="/screenshots/discovery-progress.webp"
+					alt="Scanopy network scan in progress"
+					class="max-w-sm w-full rounded-xl"
+					loading="lazy"
+					width="778"
+					height="642"
+				/>
 			</div>
 		</div>
 	</div>
@@ -607,7 +594,7 @@
 			</h2>
 		</div>
 
-		<PricingSection showGithubStars={false} showHosting={true} initialPlanFilter="all" />
+		<PricingSection showGithubStars={false} showHosting={true} />
 	</div>
 </section>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { FeaturedIn, GithubStars } from '$lib/components';
+	import { FeaturedIn, GithubStars, PageHero } from '$lib/components';
 	import { ArrowRight, ExternalLink } from 'lucide-svelte';
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
@@ -17,18 +17,10 @@
 	<link rel="canonical" href="https://scanopy.net/about" />
 </svelte:head>
 
-<!-- Hero -->
-<section class="py-16 lg:py-24">
-	<div class="container mx-auto max-w-3xl px-4 text-center">
-		<h1 class="mb-6 text-4xl font-bold leading-tight text-rose-400 lg:text-5xl">
-			Network documentation shouldn't be a chore
-		</h1>
-		<p class="mx-auto max-w-2xl text-xl text-gray-300">
-			Scanopy exists because keeping network diagrams accurate is tedious, thankless work &mdash;
-			and nobody actually does it. We built a tool that does it for you.
-		</p>
-	</div>
-</section>
+<PageHero
+	title="Network documentation shouldn't be a chore"
+	subtitle="Scanopy exists because keeping network diagrams accurate is tedious, thankless work - and nobody actually does it. We built a tool that does it for you."
+/>
 
 <!-- Origin Story -->
 <section class="border-t border-gray-800 py-20">
@@ -37,8 +29,8 @@
 		<div class="space-y-5 text-gray-300 leading-relaxed">
 			<p>
 				If you've spent any time on r/homelab or r/selfhosted, you've seen the posts. Someone
-				shares a beautifully detailed network diagram &mdash; color-coded VLANs, labeled switches,
-				the works &mdash; and the comments light up. <em>"How did you make this?"</em>
+				shares a beautifully detailed network diagram - color-coded VLANs, labeled switches,
+				the works - and the comments light up. <em>"How did you make this?"</em>
 				<em>"What tool is that?"</em> <em>"I need to do this for my network."</em>
 			</p>
 			<p>
@@ -68,7 +60,7 @@
 					Documentation should be derived from infrastructure, not maintained alongside it.
 				</h3>
 				<p class="text-gray-400 leading-relaxed">
-					Think of it like OpenAPI specs annotated inline in the codebase &mdash; the
+					Think of it like OpenAPI specs annotated inline in the codebase - the
 					documentation isn't fully automatic, but it's heavily derived from the technical system
 					it describes. That's the only way it stays accurate. Scanopy works the same way: it
 					pulls directly from your actual network to generate documentation, so the diagram
@@ -83,7 +75,7 @@
 				<p class="text-gray-400 leading-relaxed">
 					Scanopy doesn't do asset lifecycle management, procurement tracking, or compliance
 					workflows. It does network documentation. That's a feature, not a gap. You don't need
-					a $15/device/month platform when what you actually need is an accurate network map.
+					a $15/device/month platform when what you actually need is an accurate network map - and our pricing model is aligned to this, so you'll never pay per device with Scanopy.
 				</p>
 			</div>
 
@@ -93,8 +85,8 @@
 				</h3>
 				<p class="text-gray-400 leading-relaxed">
 					We publish our pricing. We name competitors directly. We show real screenshots, not
-					mockups. If Scanopy isn't the right fit, we'd rather you find out before you deploy
-					it &mdash; not after.
+					mockups. We make demos and self-hostability as accessible as possible. If Scanopy isn't the right fit, we'd rather you find out before you deploy
+					it - not after.
 				</p>
 			</div>
 
@@ -104,7 +96,7 @@
 				</h3>
 				<p class="text-gray-400 leading-relaxed">
 					Every team has someone who "just knows" how the network is set up. When that person
-					goes on vacation &mdash; or leaves &mdash; everyone else is guessing. Living
+					goes on vacation - or leaves - everyone else is guessing. Living
 					documentation fixes the bus factor.
 				</p>
 			</div>
@@ -135,11 +127,28 @@
 <!-- Founder -->
 <section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto max-w-3xl px-4">
-		<h2 class="mb-8 text-3xl font-bold text-rose-400 lg:text-4xl">Built by Maya</h2>
+		<h2 class="mb-8 flex flex-wrap items-center gap-3 text-3xl font-bold text-rose-400 lg:text-4xl">
+			Built by
+			<a
+				href="https://github.com/mayanayza"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800 px-4 py-1.5 text-lg font-medium text-white transition-colors hover:border-gray-500"
+			>
+				<img
+					src="https://github.com/mayanayza.png"
+					alt="Maya"
+					class="h-7 w-7 rounded-full"
+					width="28"
+					height="28"
+				/>
+				mayanayza
+			</a>
+		</h2>
 		<div class="space-y-5 text-gray-300 leading-relaxed">
 			<p>
 				I'm a developer and homelabber. I built Scanopy because my own network documentation
-				lived entirely in my head &mdash; and I knew I'd never maintain a manual diagram.
+				lived entirely in my head - and I knew I'd never maintain a manual diagram.
 			</p>
 			<p>
 				Scanopy started as a side project to scratch my own itch. It turns out a lot of sysadmins,
@@ -147,7 +156,7 @@
 			</p>
 			<p>
 				I'm not an enterprise IT veteran. I've never run an MSP or managed a production data
-				center. What I am is someone who got tired of a problem and built a solution &mdash; and
+				center. What I am is someone who got tired of a problem and built a solution - and
 				then discovered it solved that problem for a lot of other people too.
 			</p>
 		</div>
