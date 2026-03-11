@@ -124,23 +124,19 @@
 		group: f.group
 	}));
 	const howItWorks = allFeatures.filter((f) => f.group === 'how_it_works');
+	const whatYouGetOrder = ['Share, export, embed', 'See every service at a glance', 'Version history'];
 	const whatYouGet = allFeatures
 		.filter((f) => f.group === 'what_you_get')
-		.sort((a, b) => {
-			// Put "Version history" last since it has no screenshot
-			if (a.title === 'Version history') return 1;
-			if (b.title === 'Version history') return -1;
-			return 0;
-		});
+		.sort((a, b) => whatYouGetOrder.indexOf(a.title) - whatYouGetOrder.indexOf(b.title));
 
 	// Generate schema from fixtures (async — resolved at build time during prerender)
 	const softwareApplicationSchemaPromise = getSoftwareApplicationSchema();
 
 
-	// What you get screenshots — matches sorted order: service_detection, sharing, versioning
+	// What you get screenshots — matches sorted order: sharing, service_detection, versioning
 	const whatYouGetScreenshots: (string | null)[] = [
-		'/screenshots/hosts-catalog.webp',
 		'/screenshots/export-modal.webp',
+		'/screenshots/hosts-catalog.webp',
 		null
 	];
 
@@ -339,6 +335,7 @@
 					src="/screenshots/discovery-progress.webp"
 					alt="Scanopy network scan in progress"
 					class="max-w-sm w-full rounded-xl"
+					style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
 					loading="lazy"
 					width="778"
 					height="642"
@@ -365,7 +362,7 @@
 		<div class="space-y-16">
 			{#each whatYouGet as feature, i (feature.title)}
 				{@const screenshot = whatYouGetScreenshots[i]}
-				{@const reversed = i % 2 === 1}
+				{@const reversed = i % 2 === 0}
 				{#if screenshot}
 					<!-- Alternating split layout -->
 					<div
@@ -405,8 +402,11 @@
 									use:tilt
 									src={screenshot}
 									alt={feature.title}
-									class="mx-auto max-w-xs rounded-xl border border-gray-700/50" style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
+									class="mx-auto max-w-xs"
+									style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
 									loading="lazy"
+									width="900"
+									height="1238"
 								/>
 							{/if}
 						</div>
@@ -635,5 +635,13 @@
 				</a>
 			</div>
 		</div>
+	</div>
+</section>
+
+<section class="border-t border-gray-800 py-12">
+	<div class="container mx-auto max-w-5xl px-4">
+		<p class="text-sm text-gray-400 leading-relaxed">
+			Scanopy deploys as a lightweight daemon that runs alongside your existing infrastructure. It discovers every host, maps the connections between them, and renders a live topology diagram — all without agents on your endpoints or changes to your network configuration. Once running, scans repeat on a schedule so your documentation stays accurate as devices come and go.
+		</p>
 	</div>
 </section>

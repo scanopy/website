@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { PageHero } from '$lib/components';
+	import NewsletterSignup from '$lib/components/NewsletterSignup.svelte';
+	import { PUBLIC_BREVO_NEWSLETTER_FORM_URL } from '$env/static/public';
 
 	interface BlogPost {
 		title: string;
 		description: string;
 		date: string;
+		dateModified?: string;
 		keyword: string;
 		slug: string;
 		image: string;
@@ -33,17 +36,18 @@
 		headline: data.post.title,
 		description: data.post.description,
 		datePublished: data.post.date,
+		dateModified: data.post.dateModified || data.post.date,
 		author: {
-			'@type': 'Organization',
-			name: 'Scanopy',
-			url: 'https://scanopy.net'
+			'@type': 'Person',
+			name: 'Maya',
+			url: 'https://scanopy.net/about'
 		},
 		publisher: {
 			'@type': 'Organization',
 			name: 'Scanopy',
 			logo: {
 				'@type': 'ImageObject',
-				url: 'https://scanopy.net/scanopy-logo.png'
+				url: 'https://scanopy.net/scanopy-logo.webp'
 			}
 		},
 		mainEntityOfPage: {
@@ -55,7 +59,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.post.title} | Scanopy</title>
+	<title>{data.post.title} - Scanopy</title>
 	<meta name="description" content={data.post.description} />
 	<link rel="canonical" href="https://scanopy.net/blog/{data.post.slug}" />
 
@@ -90,6 +94,14 @@
 		<div class="prose prose-invert prose-gray max-w-none">
 			{@html data.post.content}
 		</div>
+
+		{#if PUBLIC_BREVO_NEWSLETTER_FORM_URL}
+			<div class="mt-16 rounded-xl border border-gray-800 bg-gray-900/50 p-8">
+				<h3 class="mb-2 text-lg font-semibold text-white">Get notified when we publish new posts</h3>
+				<p class="mb-4 text-sm text-gray-400">Network documentation tips, product updates, and the occasional deep dive.</p>
+				<NewsletterSignup formUrl={PUBLIC_BREVO_NEWSLETTER_FORM_URL} />
+			</div>
+		{/if}
 	</div>
 </article>
 

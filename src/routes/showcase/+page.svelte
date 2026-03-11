@@ -32,6 +32,7 @@
 			<h2 class="mb-2 text-xl font-semibold text-white">Built something cool?</h2>
 			<p class="mb-6 text-gray-400">
 				Share your network topology with the community. We'd love to feature your setup!
+				<a href="/community" class="text-blue-400 hover:text-blue-300">Join the community on Discord and GitHub</a>.
 			</p>
 			<a
 				href="https://tally.so/r/lbqLAv"

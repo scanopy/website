@@ -54,7 +54,7 @@
 		publisher: {
 			'@type': 'Organization',
 			name: 'Scanopy',
-			logo: { '@type': 'ImageObject', url: 'https://scanopy.net/scanopy-logo.png' }
+			logo: { '@type': 'ImageObject', url: 'https://scanopy.net/scanopy-logo.webp' }
 		},
 		mainEntityOfPage: {
 			'@type': 'WebPage',

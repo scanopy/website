@@ -2,6 +2,7 @@
 title: My Network Documentation Template Story (And Why I Built a Tool Instead)
 description: A free network documentation template covering device inventory, IP addressing, and VLANs - plus why I stopped using templates and built an auto-discovery tool instead.
 date: 2026-03-04
+dateModified: 2026-03-04
 keyword: network documentation template
 slug: network-documentation-template
 ---
@@ -80,7 +81,7 @@ Deploy the daemon, point it at your subnets, and you get a live network map in m
 
 Here's what that looks like in practice - this is a real Scanopy map you can click around in:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed" width="800px" height="600px" frameborder="0" style="border: 1px solid #374151; border-radius: 8px;"></iframe>
+<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid #374151; border-radius: 8px;"></iframe>
 
 Compare that to the markdown tables above and you'll see why I stopped maintaining a spreadsheet. And yes, you can embed your own Scanopy network diagrams anywhere too.
 

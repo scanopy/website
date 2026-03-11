@@ -8,7 +8,7 @@
 		children?: Snippet;
 	}
 
-	let { image = '/topology-hero.png', title, subtitle, children }: Props = $props();
+	let { image = '/topology-hero.webp', title, subtitle, children }: Props = $props();
 </script>
 
 <section class="relative overflow-hidden py-16 lg:py-24">

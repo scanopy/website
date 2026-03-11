@@ -52,7 +52,7 @@
 	<!-- Background image -->
 	<div
 		class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('/topology-hero.png');"
+		style="background-image: url('/topology-hero.webp');"
 	></div>
 	<!-- Dark overlay -->
 	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>
@@ -140,6 +140,12 @@ docker compose up -d</code></pre>
 					{/if}
 				</a>
 			{/each}
+			<a
+				href="/showcase"
+				class="inline-flex items-center gap-2 rounded-lg border border-gray-700 px-5 py-3 text-gray-300 transition-colors hover:border-gray-500 hover:text-white"
+			>
+				See what others have built
+			</a>
 		</div>
 	</div>
 </section>

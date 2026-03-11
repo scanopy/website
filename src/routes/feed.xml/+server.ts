@@ -88,7 +88,7 @@ export async function GET() {
     <language>en-us</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <image>
-      <url>https://scanopy.net/scanopy-logo.png</url>
+      <url>https://scanopy.net/scanopy-logo.webp</url>
       <title>Scanopy Changelog</title>
       <link>https://scanopy.net/changelog</link>
     </image>${rssItems}

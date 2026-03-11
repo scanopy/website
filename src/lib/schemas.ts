@@ -139,8 +139,8 @@ export async function getSoftwareApplicationSchema() {
 		description:
 			'Automatic network discovery and documentation software. Create live, auto-updating network diagrams with one-time setup and zero upkeep.',
 		url: 'https://scanopy.net',
-		image: 'https://scanopy.net/scanopy-logo.png',
-		screenshot: 'https://scanopy.net/topology-hero.png',
+		image: 'https://scanopy.net/scanopy-logo.webp',
+		screenshot: 'https://scanopy.net/hero-topology-dark.webp',
 		softwareVersion: version,
 		author: {
 			'@type': 'Organization',
@@ -163,12 +163,48 @@ export function getProductSchema() {
 		name: 'Scanopy',
 		description:
 			'Automatic network discovery and documentation software. Create live, auto-updating network diagrams.',
-		image: 'https://scanopy.net/scanopy-logo.png',
+		image: 'https://scanopy.net/scanopy-logo.webp',
 		brand: {
 			'@type': 'Brand',
 			name: 'Scanopy'
 		},
 		offers: generateOffers()
+	};
+}
+
+/**
+ * BreadcrumbList schema for site-wide breadcrumb navigation
+ * @see https://schema.org/BreadcrumbList
+ */
+export function getBreadcrumbListSchema(items: { name: string; url: string }[]) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: items.map((item, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			name: item.name,
+			item: item.url
+		}))
+	};
+}
+
+/**
+ * FAQPage schema for pages with FAQ sections
+ * @see https://schema.org/FAQPage
+ */
+export function getFAQPageSchema(faqs: { question: string; answer: string }[]) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faqs.map((faq) => ({
+			'@type': 'Question',
+			name: faq.question,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: faq.answer
+			}
+		}))
 	};
 }
 

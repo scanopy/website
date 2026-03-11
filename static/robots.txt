@@ -16,7 +16,3 @@ Allow: /
 
 Sitemap: https://scanopy.net/sitemap.xml
 Sitemap: https://scanopy.net/docs/sitemap.xml
-
-# RSS Feed
-# Subscribe for release updates
-RSS: https://scanopy.net/feed.xml

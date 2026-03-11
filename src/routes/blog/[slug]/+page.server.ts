@@ -5,6 +5,7 @@ interface BlogPost {
 	title: string;
 	description: string;
 	date: string;
+	dateModified?: string;
 	keyword: string;
 	slug: string;
 	image: string;
@@ -45,9 +46,10 @@ export async function load({ params }) {
 				title: frontmatter.title || '',
 				description: frontmatter.description || '',
 				date: frontmatter.date || '',
+				dateModified: frontmatter.dateModified || undefined,
 				keyword: frontmatter.keyword || '',
 				slug,
-				image: frontmatter.image || '/topology-hero.png',
+				image: frontmatter.image || '/topology-hero.webp',
 				content: await marked.parse(body)
 			};
 

@@ -15,20 +15,21 @@ function parseFrontmatter(content: string): Record<string, string> {
 }
 
 export async function GET() {
+	const buildDate = new Date().toISOString().split('T')[0];
+
 	const staticPages = [
-		{ loc: '/', priority: '1.0', lastmod: '2026-03-09' },
-		{ loc: '/pricing', priority: '0.9', lastmod: '2026-03-09' },
-		{ loc: '/services', priority: '0.8', lastmod: '2026-02-01' },
-		{ loc: '/docs/', priority: '0.8', lastmod: '2026-03-09' },
-		{ loc: '/changelog', priority: '0.7', lastmod: '2026-03-09' },
-		{ loc: '/roadmap', priority: '0.7', lastmod: '2026-02-01' },
-		{ loc: '/showcase', priority: '0.7', lastmod: '2026-02-01' },
-		{ loc: '/about', priority: '0.6', lastmod: '2026-03-11' },
-		{ loc: '/blog', priority: '0.6', lastmod: '2026-02-01' },
-		{ loc: '/community', priority: '0.5', lastmod: '2026-02-01' },
-		{ loc: '/privacy', priority: '0.3', lastmod: '2025-12-01' },
-		{ loc: '/terms', priority: '0.3', lastmod: '2025-12-01' },
-		{ loc: '/refund', priority: '0.3', lastmod: '2025-12-01' }
+		{ loc: '/' },
+		{ loc: '/pricing' },
+		{ loc: '/services' },
+		{ loc: '/changelog' },
+		{ loc: '/roadmap' },
+		{ loc: '/showcase' },
+		{ loc: '/about' },
+		{ loc: '/blog' },
+		{ loc: '/community' },
+		{ loc: '/privacy' },
+		{ loc: '/terms' },
+		{ loc: '/refund' }
 	];
 
 	// Load changelog entries for dynamic URLs
@@ -73,8 +74,8 @@ export async function GET() {
 		.map(
 			(page) => `
   <url>
-    <loc>https://scanopy.net${page.loc}</loc>${page.lastmod ? `\n    <lastmod>${page.lastmod}</lastmod>` : ''}
-    <priority>${page.priority}</priority>
+    <loc>https://scanopy.net${page.loc}</loc>
+    <lastmod>${buildDate}</lastmod>
   </url>`
 		)
 		.join('');
@@ -84,7 +85,6 @@ export async function GET() {
 			(entry) => `
   <url>
     <loc>https://scanopy.net/changelog/${entry.slug}</loc>${entry.date ? `\n    <lastmod>${entry.date}</lastmod>` : ''}
-    <priority>0.5</priority>
   </url>`
 		)
 		.join('');
@@ -94,7 +94,6 @@ export async function GET() {
 			(entry) => `
   <url>
     <loc>https://scanopy.net/blog/${entry.slug}</loc>${entry.date ? `\n    <lastmod>${entry.date}</lastmod>` : ''}
-    <priority>0.6</priority>
   </url>`
 		)
 		.join('');

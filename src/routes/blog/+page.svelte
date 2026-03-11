@@ -27,14 +27,14 @@
 </script>
 
 <svelte:head>
-	<title>Blog | Scanopy</title>
+	<title>Blog - Scanopy</title>
 	<meta
 		name="description"
 		content="Technical articles on network documentation, automated discovery, and IT infrastructure management."
 	/>
 	<link rel="canonical" href="https://scanopy.net/blog" />
 
-	<meta property="og:title" content="Blog | Scanopy" />
+	<meta property="og:title" content="Blog - Scanopy" />
 	<meta
 		property="og:description"
 		content="Technical articles on network documentation, automated discovery, and IT infrastructure management."
@@ -43,7 +43,7 @@
 	<meta property="og:url" content="https://scanopy.net/blog" />
 
 	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:title" content="Blog | Scanopy" />
+	<meta name="twitter:title" content="Blog - Scanopy" />
 	<meta
 		name="twitter:description"
 		content="Technical articles on network documentation, automated discovery, and IT infrastructure management."

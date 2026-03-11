@@ -26,6 +26,10 @@
 			</p>
 		</div>
 
+		<p class="mx-auto max-w-3xl mb-12 text-center text-gray-400">
+			Services are detected automatically during network scans using a combination of port checks, HTTP endpoint probing, header analysis, and MAC vendor identification.
+		</p>
+
 		<ServiceCatalog {services} showDiscoveryPatterns={true} />
 
 		<div class="mt-16 text-center">
@@ -39,6 +43,18 @@
 			>
 				Request a Service
 			</a>
+		</div>
+
+		<div class="mx-auto max-w-5xl mt-16 space-y-4 text-sm text-gray-400 leading-relaxed">
+			<p>
+				Scanopy identifies services using a multi-phase detection process. During network discovery, the daemon scans open TCP and UDP ports, probes known HTTP endpoints, and matches responses against a library of service definitions. Detection patterns combine port checks, endpoint content matching, HTTP header analysis, and MAC vendor identification — using combinatorial logic to reduce false positives.
+			</p>
+			<p>
+				Each detected service is assigned a confidence level from Certain to Low based on how specific the match is. Endpoint content and header matches produce High confidence results, while port-only detections are rated lower. This lets you quickly see which identifications are rock-solid and which might need a closer look.
+			</p>
+			<p>
+				For the full technical details on how detection patterns work and the complete list of supported services, see the <a href="/docs/reference/service-detection/" class="text-blue-400 hover:text-blue-300">service detection reference</a>. Want to <a href="/pricing" class="text-blue-400 hover:text-blue-300">compare plans</a>?
+			</p>
 		</div>
 	</div>
 </section>

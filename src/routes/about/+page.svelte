@@ -43,8 +43,8 @@
 				changes, the diagram doesn't, and six months later it's fiction.
 			</p>
 			<p>
-				So I took the technical overkill route and built a tool that scans your network and
-				generates the diagram automatically. That became Scanopy.
+				So I took the technical overkill route and built a tool that <a href="/services" class="text-blue-400 hover:text-blue-300">scans your network</a> and
+				<a href="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">generates the diagram automatically</a>. That became Scanopy.
 			</p>
 		</div>
 	</div>
@@ -75,7 +75,7 @@
 				<p class="text-gray-400 leading-relaxed">
 					Scanopy doesn't do asset lifecycle management, procurement tracking, or compliance
 					workflows. It does network documentation. That's a feature, not a gap. You don't need
-					a $15/device/month platform when what you actually need is an accurate network map - and our pricing model is aligned to this, so you'll never pay per device with Scanopy.
+					a $15/device/month platform when what you actually need is an accurate network map - and our <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing model is aligned</a> to this, so you'll never pay per device with Scanopy.
 				</p>
 			</div>
 
@@ -120,6 +120,13 @@
 				Join our Discord
 				<ExternalLink class="h-4 w-4" />
 			</a>
+			<a
+				href="/showcase"
+				class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+			>
+				See the showcase
+				<ArrowRight class="h-4 w-4" />
+			</a>
 		</div>
 	</div>
 </section>
@@ -147,7 +154,7 @@
 		</h2>
 		<div class="space-y-5 text-gray-300 leading-relaxed">
 			<p>
-				I'm a developer and homelabber. I built Scanopy because my own network documentation
+				I'm a developer and homelabber with over 10 years in tech, spanning B2B SaaS, cybersecurity, privacy, and compliance. I built Scanopy because my own network documentation
 				lived entirely in my head - and I knew I'd never maintain a manual diagram.
 			</p>
 			<p>

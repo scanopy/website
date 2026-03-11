@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { browser, dev } from '$app/environment';
+	import { page } from '$app/state';
 	import { Footer } from '$lib/components';
 	import { Menu, X } from 'lucide-svelte';
 	import { PUBLIC_BREVO_NEWSLETTER_FORM_URL } from '$env/static/public';
@@ -14,6 +15,7 @@
 		loadPh,
 		initFeatureFlags
 	} from '$lib/analytics.svelte';
+	import { getBreadcrumbListSchema } from '$lib/schemas';
 
 	interface Props {
 		children: Snippet;
@@ -49,6 +51,37 @@
 	function closeMobileMenu() {
 		mobileMenuOpen = false;
 	}
+
+	const breadcrumbNameMap: Record<string, string> = {
+		pricing: 'Pricing',
+		about: 'About',
+		blog: 'Blog',
+		services: 'Services',
+		showcase: 'Showcase',
+		community: 'Community',
+		changelog: 'Changelog',
+		roadmap: 'Roadmap',
+		privacy: 'Privacy',
+		terms: 'Terms',
+		refund: 'Refund'
+	};
+
+	let breadcrumbSchema = $derived.by(() => {
+		const pathname = page.url.pathname;
+		if (pathname === '/') return null;
+
+		const segments = pathname.split('/').filter(Boolean);
+		const items = [{ name: 'Home', url: 'https://scanopy.net' }];
+
+		let currentPath = '';
+		for (const segment of segments) {
+			currentPath += `/${segment}`;
+			const name = breadcrumbNameMap[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+			items.push({ name, url: `https://scanopy.net${currentPath}` });
+		}
+
+		return getBreadcrumbListSchema(items);
+	});
 </script>
 
 <svelte:head>
@@ -60,11 +93,11 @@
 	"url": "https://scanopy.net",
 	"logo": {
 		"@type": "ImageObject",
-		"url": "https://scanopy.net/scanopy-logo.png",
+		"url": "https://scanopy.net/scanopy-logo.webp",
 		"width": 500,
 		"height": 500
 	},
-	"image": "https://scanopy.net/scanopy-logo.png",
+	"image": "https://scanopy.net/scanopy-logo.webp",
 	"description": "Automatic network discovery and documentation. Clean network diagrams with one-time setup and zero upkeep.",
 	"sameAs": [
 		"https://github.com/scanopy/scanopy",
@@ -83,6 +116,9 @@
 	"url": "https://scanopy.net"
 }
 </script>`}
+	{#if breadcrumbSchema}
+		{@html `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`}
+	{/if}
 </svelte:head>
 
 <div class="flex min-h-screen flex-col">
@@ -91,7 +127,7 @@
 		<div class="container mx-auto px-4 py-4">
 			<nav class="flex items-center justify-between">
 				<a href="/" class="flex items-center gap-2">
-					<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" width="32" height="32" />
+					<img src="/scanopy-logo.webp" alt="Scanopy" class="h-8 w-8" width="32" height="32" />
 					<span class="text-xl font-bold text-white">Scanopy</span>
 				</a>
 
