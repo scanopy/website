@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Scanopy API",
-    "description": "\nNetwork topology discovery and visualization API.\n\n## Authentication\n\nTwo authentication methods are supported:\n\n| Method | Header | Use Case |\n|--------|--------|----------|\n| User API key | `Authorization: Bearer scp_u_...` | Programmatic access, integrations |\n| Session cookie | `Cookie: session_id=...` | Web UI (via `/api/auth/login`) |\n\nUser API keys require your organization to have API access enabled. Create keys at **Platform > API Keys**.\n\n## Rate Limiting\n\nLimit: 300 requests/minute\n\nBurst: 150\n\nResponse headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`\n\nWhen rate limited, you'll receive HTTP `429 Too Many Requests` with a `Retry-After` header.\n\n## Pagination\n\nList endpoints support pagination via query parameters:\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `limit` | integer | 50 | Maximum results to return (1-1000). Use 0 for no limit. |\n| `offset` | integer | 0 | Number of results to skip |\n\nExample: `GET /api/v1/hosts?limit=10&offset=20`\n\n## Response Format\n\nAll responses use a standard envelope:\n\n```json\n{\n  \"success\": true,\n  \"data\": { ... },\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.14.15\"\n  }\n}\n```\n\n**Paginated list responses** include pagination metadata:\n\n```json\n{\n  \"success\": true,\n  \"data\": [ ... ],\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.14.15\",\n    \"pagination\": {\n      \"total_count\": 142,\n      \"limit\": 50,\n      \"offset\": 0,\n      \"has_more\": true\n    }\n  }\n}\n```\n\n| Field | Description |\n|-------|-------------|\n| `total_count` | Total items matching your query (ignoring pagination) |\n| `limit` | Applied limit (your request or default) |\n| `offset` | Applied offset |\n| `has_more` | `true` if more results exist beyond this page |\n\n**Error responses** include an `error` field instead of `data`:\n\n```json\n{\n  \"success\": false,\n  \"error\": \"Resource not found\",\n  \"meta\": { ... }\n}\n```\n\n**Common status codes:** `400` validation error, `401` unauthorized, `403` forbidden, `404` not found, `409` conflict, `429` rate limited.\n\n## Versioning\n\nThe API version is an integer (`api_version: 1`) incremented only on breaking changes. API is versioned independently from the application. Endpoints are prefixed with `/api/v1/`. Check `GET /api/version` for current versions.\n\n## Multi-Tenancy\n\nResources are scoped to your **organization** and **network(s)**:\n\n- You can only access entities within your organization\n- Network-level entities (hosts, services, etc.) are filtered to networks you have access to\n- Use `?network_id=<UUID>` to filter list endpoints to a specific network\n- API keys can be scoped to a subset of your accessible networks\n",
+    "description": "\nNetwork topology discovery and visualization API.\n\n## Authentication\n\nTwo authentication methods are supported:\n\n| Method | Header | Use Case |\n|--------|--------|----------|\n| User API key | `Authorization: Bearer scp_u_...` | Programmatic access, integrations |\n| Session cookie | `Cookie: session_id=...` | Web UI (via `/api/auth/login`) |\n\nUser API keys require your organization to have API access enabled. Create keys at **Platform > API Keys**.\n\n## Rate Limiting\n\nLimit: 300 requests/minute\n\nBurst: 150\n\nResponse headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`\n\nWhen rate limited, you'll receive HTTP `429 Too Many Requests` with a `Retry-After` header.\n\n## Pagination\n\nList endpoints support pagination via query parameters:\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `limit` | integer | 50 | Maximum results to return (1-1000). Use 0 for no limit. |\n| `offset` | integer | 0 | Number of results to skip |\n\nExample: `GET /api/v1/hosts?limit=10&offset=20`\n\n## Response Format\n\nAll responses use a standard envelope:\n\n```json\n{\n  \"success\": true,\n  \"data\": { ... },\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.14.17\"\n  }\n}\n```\n\n**Paginated list responses** include pagination metadata:\n\n```json\n{\n  \"success\": true,\n  \"data\": [ ... ],\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.14.17\",\n    \"pagination\": {\n      \"total_count\": 142,\n      \"limit\": 50,\n      \"offset\": 0,\n      \"has_more\": true\n    }\n  }\n}\n```\n\n| Field | Description |\n|-------|-------------|\n| `total_count` | Total items matching your query (ignoring pagination) |\n| `limit` | Applied limit (your request or default) |\n| `offset` | Applied offset |\n| `has_more` | `true` if more results exist beyond this page |\n\n**Error responses** include an `error` field instead of `data`:\n\n```json\n{\n  \"success\": false,\n  \"error\": \"Resource not found\",\n  \"meta\": { ... }\n}\n```\n\n**Common status codes:** `400` validation error, `401` unauthorized, `403` forbidden, `404` not found, `409` conflict, `429` rate limited.\n\n## Versioning\n\nThe API version is an integer (`api_version: 1`) incremented only on breaking changes. API is versioned independently from the application. Endpoints are prefixed with `/api/v1/`. Check `GET /api/version` for current versions.\n\n## Multi-Tenancy\n\nResources are scoped to your **organization** and **network(s)**:\n\n- You can only access entities within your organization\n- Network-level entities (hosts, services, etc.) are filtered to networks you have access to\n- Use `?network_id=<UUID>` to filter list endpoints to a specific network\n- API keys can be scoped to a subset of your accessible networks\n",
     "license": {
       "name": "Dual (AGPL3.0, Commercial License Available)"
     },
@@ -6184,6 +6184,21 @@
             }
           },
           {
+            "name": "exclude_categories",
+            "in": "query",
+            "description": "Exclude services belonging to these categories.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/ServiceCategory"
+              }
+            }
+          },
+          {
             "name": "limit",
             "in": "query",
             "description": "Maximum number of results to return (1-1000, default: 50). Use 0 for no limit.",
@@ -6440,6 +6455,21 @@
                   "$ref": "#/components/schemas/OrderDirection"
                 }
               ]
+            }
+          },
+          {
+            "name": "exclude_categories",
+            "in": "query",
+            "description": "Exclude services belonging to these categories.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/ServiceCategory"
+              }
             }
           },
           {
@@ -9462,12 +9492,12 @@
           "server_version": {
             "type": "string",
             "description": "Server version (semver)",
-            "example": "0.14.15"
+            "example": "0.14.17"
           }
         },
         "example": {
           "api_version": 1,
-          "server_version": "0.14.15"
+          "server_version": "0.14.17"
         }
       },
       "ApiResponse": {
@@ -9541,14 +9571,14 @@
             ],
             "description": "Association between a service and a port / interface that the service is listening on",
             "example": {
-              "created_at": "2026-03-07T23:38:51.737121Z",
-              "id": "b468eee7-0d14-4cd0-87a6-10388adb7125",
+              "created_at": "2026-03-10T20:44:32.019375Z",
+              "id": "be073d0d-07b4-4dd1-a7c2-91d2c8db8443",
               "interface_id": "550e8400-e29b-41d4-a716-446655440005",
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "port_id": "550e8400-e29b-41d4-a716-446655440006",
               "service_id": "550e8400-e29b-41d4-a716-446655440007",
               "type": "Port",
-              "updated_at": "2026-03-07T23:38:51.737121Z"
+              "updated_at": "2026-03-10T20:44:32.019375Z"
             }
           },
           "error": {
@@ -10017,12 +10047,28 @@
                   "null"
                 ]
               },
+              "estimated_remaining_secs": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "format": "int32",
+                "minimum": 0
+              },
               "finished_at": {
                 "type": [
                   "string",
                   "null"
                 ],
                 "format": "date-time"
+              },
+              "hosts_discovered": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "format": "int32",
+                "minimum": 0
               },
               "network_id": {
                 "type": "string",
@@ -10348,14 +10394,14 @@
                 {
                   "bindings": [
                     {
-                      "created_at": "2026-03-07T23:38:51.720985Z",
-                      "id": "a7adf428-c2f3-4a8d-826d-237407f0a7df",
+                      "created_at": "2026-03-10T20:44:32.003285Z",
+                      "id": "aa03bacd-b01e-4dd5-93da-ddf9b8e97dfa",
                       "interface_id": "550e8400-e29b-41d4-a716-446655440005",
                       "network_id": "550e8400-e29b-41d4-a716-446655440002",
                       "port_id": "550e8400-e29b-41d4-a716-446655440006",
                       "service_id": "550e8400-e29b-41d4-a716-446655440007",
                       "type": "Port",
-                      "updated_at": "2026-03-07T23:38:51.720985Z"
+                      "updated_at": "2026-03-10T20:44:32.003285Z"
                     }
                   ],
                   "created_at": "2026-01-15T10:30:00Z",
@@ -10364,7 +10410,7 @@
                   "name": "nginx",
                   "network_id": "550e8400-e29b-41d4-a716-446655440002",
                   "position": 0,
-                  "service_definition": "Sonos Speaker",
+                  "service_definition": "UptimeKuma",
                   "source": {
                     "type": "Manual"
                   },
@@ -11066,14 +11112,14 @@
             "example": {
               "bindings": [
                 {
-                  "created_at": "2026-03-07T23:38:51.732549Z",
-                  "id": "7ba4ad9c-e043-4b90-b0a8-ed4afad043a6",
+                  "created_at": "2026-03-10T20:44:32.014786Z",
+                  "id": "275f7b5f-7152-4123-9786-e20a9aa03565",
                   "interface_id": "550e8400-e29b-41d4-a716-446655440005",
                   "network_id": "550e8400-e29b-41d4-a716-446655440002",
                   "port_id": "550e8400-e29b-41d4-a716-446655440006",
                   "service_id": "550e8400-e29b-41d4-a716-446655440007",
                   "type": "Port",
-                  "updated_at": "2026-03-07T23:38:51.732549Z"
+                  "updated_at": "2026-03-10T20:44:32.014786Z"
                 }
               ],
               "created_at": "2026-01-15T10:30:00Z",
@@ -11082,7 +11128,7 @@
               "name": "nginx",
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "position": 0,
-              "service_definition": "Sonos Speaker",
+              "service_definition": "UptimeKuma",
               "source": {
                 "type": "Manual"
               },
@@ -11846,12 +11892,28 @@
                     "null"
                   ]
                 },
+                "estimated_remaining_secs": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "format": "int32",
+                  "minimum": 0
+                },
                 "finished_at": {
                   "type": [
                     "string",
                     "null"
                   ],
                   "format": "date-time"
+                },
+                "hosts_discovered": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "format": "int32",
+                  "minimum": 0
                 },
                 "network_id": {
                   "type": "string",
@@ -12281,14 +12343,14 @@
         ],
         "description": "Association between a service and a port / interface that the service is listening on",
         "example": {
-          "created_at": "2026-03-07T23:38:51.721270Z",
-          "id": "c8d3303f-cc9f-4040-b043-76782424c50b",
+          "created_at": "2026-03-10T20:44:32.003483Z",
+          "id": "15a1c982-d06d-4e8b-9015-62a4f561632b",
           "interface_id": "550e8400-e29b-41d4-a716-446655440005",
           "network_id": "550e8400-e29b-41d4-a716-446655440002",
           "port_id": "550e8400-e29b-41d4-a716-446655440006",
           "service_id": "550e8400-e29b-41d4-a716-446655440007",
           "type": "Port",
-          "updated_at": "2026-03-07T23:38:51.721270Z"
+          "updated_at": "2026-03-10T20:44:32.003483Z"
         }
       },
       "BindingBase": {
@@ -12795,7 +12857,7 @@
               "id": "550e8400-e29b-41d4-a716-446655440007",
               "name": "nginx",
               "position": 0,
-              "service_definition": "Sonos Speaker",
+              "service_definition": "UptimeKuma",
               "tags": [],
               "virtualization": null
             }
@@ -13295,33 +13357,41 @@
           }
         }
       },
-      "DaemonStatusPayload": {
+      "DaemonStatus": {
         "type": "object",
-        "description": "Daemon status payload sent when polling for work or in heartbeats.\nUsed by DaemonPoll mode to send status alongside work requests,\nand by ServerPoll mode when processing daemon status.",
+        "description": "Lightweight daemon status for polling responses.",
         "required": [
           "name",
           "mode"
         ],
         "properties": {
+          "capabilities": {
+            "$ref": "#/components/schemas/DaemonCapabilities",
+            "description": "Daemon capabilities (docker socket, interfaced subnets)"
+          },
           "mode": {
             "$ref": "#/components/schemas/DaemonMode"
           },
           "name": {
             "type": "string"
           },
+          "ready_for_work": {
+            "type": "boolean",
+            "description": "Whether the daemon can accept a new discovery session.\nBoth DaemonPoll and ServerPoll use this to avoid dispatching work to a busy daemon."
+          },
           "url": {
             "type": [
               "string",
               "null"
             ],
-            "description": "URL is ignored by server - kept for backwards compat with old daemons."
+            "description": "URL is not used by server - kept for backwards compat.\nServer never updates daemon URL from status (URL is set during provisioning)."
           },
           "version": {
             "type": [
               "string",
               "null"
             ],
-            "description": "Daemon software version (optional for backwards compat)"
+            "description": "Daemon software version (semver format)"
           }
         }
       },
@@ -13685,12 +13755,28 @@
               "null"
             ]
           },
+          "estimated_remaining_secs": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "minimum": 0
+          },
           "finished_at": {
             "type": [
               "string",
               "null"
             ],
             "format": "date-time"
+          },
+          "hosts_discovered": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "minimum": 0
           },
           "network_id": {
             "type": "string",
@@ -14667,14 +14753,14 @@
             {
               "bindings": [
                 {
-                  "created_at": "2026-03-07T23:38:51.720583Z",
-                  "id": "fdbcd6d3-15fd-44b2-a1d2-838ccc5a8033",
+                  "created_at": "2026-03-10T20:44:32.003014Z",
+                  "id": "6b490933-4767-4741-b311-f7554448db8e",
                   "interface_id": "550e8400-e29b-41d4-a716-446655440005",
                   "network_id": "550e8400-e29b-41d4-a716-446655440002",
                   "port_id": "550e8400-e29b-41d4-a716-446655440006",
                   "service_id": "550e8400-e29b-41d4-a716-446655440007",
                   "type": "Port",
-                  "updated_at": "2026-03-07T23:38:51.720583Z"
+                  "updated_at": "2026-03-10T20:44:32.003014Z"
                 }
               ],
               "created_at": "2026-01-15T10:30:00Z",
@@ -14683,7 +14769,7 @@
               "name": "nginx",
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "position": 0,
-              "service_definition": "Sonos Speaker",
+              "service_definition": "UptimeKuma",
               "source": {
                 "type": "Manual"
               },
@@ -16153,6 +16239,13 @@
             ],
             "format": "date-time",
             "readOnly": true
+          },
+          "use_case": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Use case selection (homelab, company, msp)"
           }
         }
       },
@@ -16178,7 +16271,7 @@
           "server_version": {
             "type": "string",
             "description": "Server version (semver)",
-            "example": "0.14.15"
+            "example": "0.14.17"
           }
         },
         "example": {
@@ -16189,7 +16282,7 @@
             "offset": 0,
             "total_count": 142
           },
-          "server_version": "0.14.15"
+          "server_version": "0.14.17"
         }
       },
       "PaginatedApiResponse_DaemonResponse": {
@@ -16547,14 +16640,14 @@
                   {
                     "bindings": [
                       {
-                        "created_at": "2026-03-07T23:38:51.710793Z",
-                        "id": "d04df2e3-4c81-416a-a45d-8b86b5064246",
+                        "created_at": "2026-03-10T20:44:31.990907Z",
+                        "id": "7b02462e-4d6c-458b-9867-b298aa65f659",
                         "interface_id": "550e8400-e29b-41d4-a716-446655440005",
                         "network_id": "550e8400-e29b-41d4-a716-446655440002",
                         "port_id": "550e8400-e29b-41d4-a716-446655440006",
                         "service_id": "550e8400-e29b-41d4-a716-446655440007",
                         "type": "Port",
-                        "updated_at": "2026-03-07T23:38:51.710793Z"
+                        "updated_at": "2026-03-10T20:44:31.990907Z"
                       }
                     ],
                     "created_at": "2026-01-15T10:30:00Z",
@@ -16563,7 +16656,7 @@
                     "name": "nginx",
                     "network_id": "550e8400-e29b-41d4-a716-446655440002",
                     "position": 0,
-                    "service_definition": "Sonos Speaker",
+                    "service_definition": "UptimeKuma",
                     "source": {
                       "type": "Manual"
                     },
@@ -16640,14 +16733,14 @@
               "example": {
                 "bindings": [
                   {
-                    "created_at": "2026-03-07T23:38:51.731072Z",
-                    "id": "17375c7d-94de-4658-b325-c288985c0d85",
+                    "created_at": "2026-03-10T20:44:32.013911Z",
+                    "id": "88b781c6-0f36-4034-a8ed-0e472a7eea18",
                     "interface_id": "550e8400-e29b-41d4-a716-446655440005",
                     "network_id": "550e8400-e29b-41d4-a716-446655440002",
                     "port_id": "550e8400-e29b-41d4-a716-446655440006",
                     "service_id": "550e8400-e29b-41d4-a716-446655440007",
                     "type": "Port",
-                    "updated_at": "2026-03-07T23:38:51.731072Z"
+                    "updated_at": "2026-03-10T20:44:32.013911Z"
                   }
                 ],
                 "created_at": "2026-01-15T10:30:00Z",
@@ -16656,7 +16749,7 @@
                 "name": "nginx",
                 "network_id": "550e8400-e29b-41d4-a716-446655440002",
                 "position": 0,
-                "service_definition": "Sonos Speaker",
+                "service_definition": "UptimeKuma",
                 "source": {
                   "type": "Manual"
                 },
@@ -17743,14 +17836,14 @@
         "example": {
           "bindings": [
             {
-              "created_at": "2026-03-07T23:38:51.721170Z",
-              "id": "d3f27ed5-3474-4de1-9643-837ff338e6d4",
+              "created_at": "2026-03-10T20:44:32.003414Z",
+              "id": "a5df9e99-1bbe-4f07-8b81-29734c6fcfd3",
               "interface_id": "550e8400-e29b-41d4-a716-446655440005",
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "port_id": "550e8400-e29b-41d4-a716-446655440006",
               "service_id": "550e8400-e29b-41d4-a716-446655440007",
               "type": "Port",
-              "updated_at": "2026-03-07T23:38:51.721170Z"
+              "updated_at": "2026-03-10T20:44:32.003414Z"
             }
           ],
           "created_at": "2026-01-15T10:30:00Z",
@@ -17759,7 +17852,7 @@
           "name": "nginx",
           "network_id": "550e8400-e29b-41d4-a716-446655440002",
           "position": 0,
-          "service_definition": "Sonos Speaker",
+          "service_definition": "UptimeKuma",
           "source": {
             "type": "Manual"
           },
@@ -18120,13 +18213,17 @@
         "required": [
           "show_inspect_panel",
           "show_zoom_controls",
-          "show_export_button"
+          "show_export_button",
+          "show_minimap"
         ],
         "properties": {
           "show_export_button": {
             "type": "boolean"
           },
           "show_inspect_panel": {
+            "type": "boolean"
+          },
+          "show_minimap": {
             "type": "boolean"
           },
           "show_zoom_controls": {
@@ -18761,6 +18858,9 @@
             "type": "string"
           },
           "no_fade_edges": {
+            "type": "boolean"
+          },
+          "show_minimap": {
             "type": "boolean"
           },
           "tag_filter": {

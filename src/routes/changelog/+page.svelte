@@ -9,8 +9,16 @@
 		slug: string;
 	}
 
+	interface OlderEntry {
+		version: string;
+		date: string;
+		title: string;
+		slug: string;
+	}
+
 	interface PageData {
-		entries: ChangelogEntry[];
+		recentEntries: ChangelogEntry[];
+		olderEntries: OlderEntry[];
 	}
 
 	let { data }: { data: PageData } = $props();
@@ -45,7 +53,7 @@
 			<p class="text-xl text-gray-400">New updates and improvements to Scanopy.</p>
 		</div>
 
-		{#if data.entries.length === 0}
+		{#if data.recentEntries.length === 0}
 			<div class="text-center">
 				<p class="text-gray-400">No releases yet. Check back soon!</p>
 			</div>
@@ -55,7 +63,7 @@
 				<div class="absolute left-[7px] top-2 hidden h-full w-0.5 bg-gray-800 md:block"></div>
 
 				<div class="space-y-12">
-					{#each data.entries as entry (entry.slug)}
+					{#each data.recentEntries as entry (entry.slug)}
 						<article class="relative md:pl-10">
 							<!-- Timeline dot -->
 							<div
@@ -64,18 +72,23 @@
 
 							<header class="mb-4">
 								<div class="flex flex-wrap items-center gap-3">
-									<span
-										class="rounded-full bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-400"
+									<a
+										href="/changelog/{entry.slug}"
+										class="rounded-full bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-400 transition-colors hover:bg-blue-500/20"
 									>
 										v{entry.version}
-									</span>
+									</a>
 									{#if entry.date}
 										<time class="text-sm text-gray-500" datetime={entry.date}>
 											{formatDate(entry.date)}
 										</time>
 									{/if}
 								</div>
-								<h2 class="mt-2 text-2xl font-bold text-white">{entry.title}</h2>
+								<h2 class="mt-2 text-2xl font-bold text-white">
+									<a href="/changelog/{entry.slug}" class="hover:text-blue-400 transition-colors">
+										{entry.title}
+									</a>
+								</h2>
 							</header>
 
 							<div class="prose prose-invert prose-gray max-w-none">
@@ -85,6 +98,32 @@
 					{/each}
 				</div>
 			</div>
+
+			{#if data.olderEntries.length > 0}
+				<div class="mt-16 border-t border-gray-800 pt-8">
+					<h2 class="mb-6 text-lg font-semibold text-gray-400">Previous releases</h2>
+					<div class="space-y-3">
+						{#each data.olderEntries as entry (entry.slug)}
+							<a
+								href="/changelog/{entry.slug}"
+								class="flex flex-wrap items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-gray-800/50"
+							>
+								<span
+									class="rounded-full bg-blue-500/10 px-2.5 py-0.5 text-sm font-semibold text-blue-400"
+								>
+									v{entry.version}
+								</span>
+								<span class="text-white">{entry.title}</span>
+								{#if entry.date}
+									<time class="text-sm text-gray-500" datetime={entry.date}>
+										{formatDate(entry.date)}
+									</time>
+								{/if}
+							</a>
+						{/each}
+					</div>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </section>

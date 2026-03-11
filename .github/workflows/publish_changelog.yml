@@ -117,7 +117,7 @@ jobs:
           fi
 
           # Build changelog URL with UTM tracking (for template CTA)
-          CHANGELOG_URL="https://scanopy.net/changelog?utm_source=brevo&utm_medium=email&utm_campaign=product_update_v${VERSION}"
+          CHANGELOG_URL="https://scanopy.net/changelog/v${VERSION}?utm_source=brevo&utm_medium=email&utm_campaign=product_update_v${VERSION}"
 
           # Build JSON payload — templateId + params instead of raw htmlContent
           PAYLOAD=$(jq -n \
@@ -164,7 +164,7 @@ jobs:
           # Truncate body if too long for Discord (max 4096 for embed description)
           TRUNCATED="${BODY:0:3800}"
           if [ ${#BODY} -gt 3800 ]; then
-            TRUNCATED="${TRUNCATED}...\n\n[Read full changelog](https://scanopy.net/changelog)"
+            TRUNCATED="${TRUNCATED}...\n\n[Read full changelog](https://scanopy.net/changelog/v${VERSION})"
           fi
 
           # Escape for JSON
@@ -174,7 +174,7 @@ jobs:
             -d "{
               \"embeds\": [{
                 \"title\": \"v${VERSION}: ${TITLE}\",
-                \"url\": \"https://scanopy.net/changelog\",
+                \"url\": \"https://scanopy.net/changelog/v${VERSION}\",
                 \"description\": ${TRUNCATED},
                 \"color\": 5814783,
                 \"footer\": {
@@ -220,7 +220,7 @@ jobs:
 
             ${{ steps.changelog.outputs.social_post }}
 
-            https://scanopy.net/changelog?utm_source=twitter&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }}
+            https://scanopy.net/changelog/v${{ steps.changelog.outputs.version }}?utm_source=twitter&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }}
           consumer-key: ${{ secrets.TWITTER_CONSUMER_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
           access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
@@ -234,7 +234,7 @@ jobs:
 
             ${{ steps.changelog.outputs.social_post }}
 
-            https://scanopy.net/changelog?utm_source=bluesky&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }}
+            https://scanopy.net/changelog/v${{ steps.changelog.outputs.version }}?utm_source=bluesky&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }}
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
 

@@ -55,5 +55,13 @@ export async function load() {
 		return new Date(b.date).getTime() - new Date(a.date).getTime();
 	});
 
-	return { entries };
+	const recentEntries = entries.slice(0, 5);
+	const olderEntries = entries.slice(5).map(({ version, date, title, slug }) => ({
+		version,
+		date,
+		title,
+		slug
+	}));
+
+	return { recentEntries, olderEntries };
 }
