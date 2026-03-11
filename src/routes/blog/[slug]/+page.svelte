@@ -46,7 +46,8 @@
 		mainEntityOfPage: {
 			'@type': 'WebPage',
 			'@id': `https://scanopy.net/blog/${data.post.slug}`
-		}
+		},
+		image: 'https://scanopy.net/social.webp'
 	});
 </script>
 

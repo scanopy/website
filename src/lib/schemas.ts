@@ -50,20 +50,15 @@ function getUniqueMonthlyPlans(): BillingPlan[] {
  */
 function generateOffers() {
 	return getUniqueMonthlyPlans().map((plan) => {
-		const price =
-			plan.metadata.custom_price === 'Free'
-				? '0'
-				: plan.metadata.custom_price
-					? undefined
-					: (plan.metadata.base_cents / 100).toFixed(2);
+		const isFree = plan.metadata.custom_price === 'Free';
+		const isContactUs = plan.metadata.custom_price && !isFree;
+		const price = isFree ? '0' : isContactUs ? undefined : (plan.metadata.base_cents / 100).toFixed(2);
 
-		return {
+		const offer: Record<string, unknown> = {
 			'@type': 'Offer',
 			name: plan.name,
 			description: plan.description,
-			price: price ?? '0',
 			priceCurrency: 'USD',
-			priceValidUntil: '2025-12-31',
 			availability: 'https://schema.org/InStock',
 			url: 'https://scanopy.net/pricing',
 			seller: {
@@ -71,6 +66,13 @@ function generateOffers() {
 				name: 'Scanopy'
 			}
 		};
+
+		if (price !== undefined) {
+			offer.price = price;
+			offer.priceValidUntil = '2026-12-31';
+		}
+
+		return offer;
 	});
 }
 
@@ -82,10 +84,52 @@ function generateFeatureList(): string[] {
 }
 
 /**
+ * Parse frontmatter from a markdown string
+ */
+function parseFrontmatter(content: string): Record<string, string> {
+	const match = content.match(/^---\n([\s\S]*?)\n---/);
+	if (!match) return {};
+	const fm: Record<string, string> = {};
+	match[1].split('\n').forEach((line) => {
+		const [key, ...valueParts] = line.split(':');
+		if (key && valueParts.length) {
+			fm[key.trim()] = valueParts.join(':').trim();
+		}
+	});
+	return fm;
+}
+
+/**
+ * Get the latest software version from changelog markdown files
+ */
+async function getLatestVersion(): Promise<string> {
+	const changelogFiles = import.meta.glob('/src/lib/changelog/*.md', {
+		query: '?raw',
+		import: 'default'
+	});
+
+	let latestVersion = '0.14.17';
+	let latestDate = '';
+
+	for (const [, loader] of Object.entries(changelogFiles)) {
+		const raw = (await loader()) as string;
+		const fm = parseFrontmatter(raw);
+		if (fm.date && fm.version && fm.date > latestDate) {
+			latestDate = fm.date;
+			latestVersion = fm.version;
+		}
+	}
+
+	return latestVersion;
+}
+
+/**
  * SoftwareApplication schema for homepage
  * @see https://schema.org/SoftwareApplication
  */
-export function getSoftwareApplicationSchema() {
+export async function getSoftwareApplicationSchema() {
+	const version = await getLatestVersion();
+
 	return {
 		'@context': 'https://schema.org',
 		'@type': 'SoftwareApplication',
@@ -97,7 +141,7 @@ export function getSoftwareApplicationSchema() {
 		url: 'https://scanopy.net',
 		image: 'https://scanopy.net/scanopy-logo.png',
 		screenshot: 'https://scanopy.net/topology-hero.png',
-		softwareVersion: '1.0',
+		softwareVersion: version,
 		author: {
 			'@type': 'Organization',
 			name: 'Scanopy',
@@ -125,48 +169,6 @@ export function getProductSchema() {
 			name: 'Scanopy'
 		},
 		offers: generateOffers()
-	};
-}
-
-/**
- * FAQ schema for pricing page
- * @see https://schema.org/FAQPage
- */
-export function getFAQSchema() {
-	const faqs = [
-		{
-			question: 'Is there a free version of Scanopy?',
-			answer:
-				'Yes! The Community edition is completely free and self-hosted. You can scan unlimited networks with no restrictions. All of the paid hosted plans also offer a free trial.'
-		},
-		{
-			question: "What's the difference between cloud and self-hosted?",
-			answer:
-				"Cloud plans run on Scanopy's infrastructure - just install the agent and connect. Self-hosted plans let you run the entire Scanopy server on your own infrastructure for full data control."
-		},
-		{
-			question: 'How many devices can Scanopy discover?',
-			answer:
-				"There's no limit on the number of devices discovered per network. Scanopy can handle everything from small homelabs to enterprise networks with thousands of devices."
-		},
-		{
-			question: 'Do I need to install anything on every device?',
-			answer:
-				'No. Scanopy uses agentless discovery - you only install one lightweight scanner agent that discovers all devices on your network automatically.'
-		}
-	];
-
-	return {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: faqs.map((faq) => ({
-			'@type': 'Question',
-			name: faq.question,
-			acceptedAnswer: {
-				'@type': 'Answer',
-				text: faq.answer
-			}
-		}))
 	};
 }
 

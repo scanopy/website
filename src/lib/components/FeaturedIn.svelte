@@ -31,7 +31,7 @@
 						class="card card-static group relative flex flex-col p-6 transition-colors hover:border-gray-700"
 					>
 						<div class="mb-4 flex items-center justify-between">
-							<img src={mention.logo} alt={mention.name} class="h-8 max-w-[180px] object-contain" />
+							<img src={mention.logo} alt={mention.name} class="h-8 max-w-[180px] object-contain" width="180" height="32" />
 							<ExternalLink
 								class="h-4 w-4 text-gray-600 transition-colors group-hover:text-gray-400"
 							/>

@@ -180,6 +180,8 @@
 											src={service.logo_url}
 											alt="{service.name} logo"
 											class="h-6 w-6 object-contain"
+											width="24"
+											height="24"
 											onerror={(e) => {
 												const target = e.target as HTMLImageElement;
 												target.style.display = 'none';

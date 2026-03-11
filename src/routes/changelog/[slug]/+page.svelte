@@ -33,6 +33,35 @@
 		content="Scanopy v{data.entry.version} — {data.entry.title}"
 	/>
 	<link rel="canonical" href="https://scanopy.net/changelog/{data.entry.slug}" />
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="v{data.entry.version}: {data.entry.title}" />
+	<meta property="og:description" content="Scanopy v{data.entry.version} — {data.entry.title}" />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content="https://scanopy.net/changelog/{data.entry.slug}" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="v{data.entry.version}: {data.entry.title}" />
+	<meta name="twitter:description" content="Scanopy v{data.entry.version} — {data.entry.title}" />
+
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: `v${data.entry.version}: ${data.entry.title}`,
+		datePublished: data.entry.date,
+		author: { '@type': 'Organization', name: 'Scanopy', url: 'https://scanopy.net' },
+		publisher: {
+			'@type': 'Organization',
+			name: 'Scanopy',
+			logo: { '@type': 'ImageObject', url: 'https://scanopy.net/scanopy-logo.png' }
+		},
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': `https://scanopy.net/changelog/${data.entry.slug}`
+		},
+		image: 'https://scanopy.net/social.webp'
+	})}</script>`}
 </svelte:head>
 
 <section class="py-20">

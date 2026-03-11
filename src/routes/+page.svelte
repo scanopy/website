@@ -133,20 +133,20 @@
 			return 0;
 		});
 
-	// Generate schema from fixtures
-	const softwareApplicationSchema = getSoftwareApplicationSchema();
+	// Generate schema from fixtures (async — resolved at build time during prerender)
+	const softwareApplicationSchemaPromise = getSoftwareApplicationSchema();
 
 	// How it works step screenshots
 	const howItWorksScreenshots = [
-		'/screenshots/daemon-install.png',
-		'/screenshots/discovery-progress.png',
-		'/hero-topology-dark.png'
+		'/screenshots/daemon-install.webp',
+		'/screenshots/discovery-progress.webp',
+		'/hero-topology-dark.webp'
 	];
 
 	// What you get screenshots — matches sorted order: service_detection, sharing, versioning
 	const whatYouGetScreenshots: (string | null)[] = [
-		'/screenshots/hosts-catalog.png',
-		'/screenshots/export-modal.png',
+		'/screenshots/hosts-catalog.webp',
+		'/screenshots/export-modal.webp',
 		null
 	];
 
@@ -206,7 +206,10 @@
 		title="Scanopy Changelog"
 		href="https://scanopy.net/feed.xml"
 	/>
-	{@html `<script type="application/ld+json">${JSON.stringify(softwareApplicationSchema)}</script>`}
+	<link rel="preload" as="image" href="/hero-topology-dark.webp" fetchpriority="high" />
+	{#await softwareApplicationSchemaPromise then schema}
+		{@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
+	{/await}
 </svelte:head>
 
 <!-- Hero Section -->
@@ -287,10 +290,13 @@
 							<span class="ml-3 text-xs text-gray-500">demo.scanopy.net</span>
 						</div>
 						<img
-							src="/hero-topology-dark.png"
+							src="/hero-topology-dark.webp"
 							alt="Scanopy network topology showing subnets, services, and connections"
 							class="block w-full"
 							loading="eager"
+							fetchpriority="high"
+							width="3706"
+							height="3030"
 						/>
 					</div>
 					<p class="mt-2 text-center text-sm text-gray-500 group-hover:text-blue-400 transition-colors">View live topology &rarr;</p>
@@ -390,7 +396,7 @@
 							<p class="text-gray-400">{@html feature.description}</p>
 						</div>
 						<div class="lg:w-1/2">
-							{#if screenshot === '/screenshots/hosts-catalog.png'}
+							{#if screenshot === '/screenshots/hosts-catalog.webp'}
 								<div use:tilt class="browser-frame">
 									<div class="browser-frame-bar">
 										<span class="browser-frame-dot bg-red-500/70"></span>
@@ -403,6 +409,8 @@
 										alt={feature.title}
 										class="block w-full"
 										loading="lazy"
+										width="2514"
+										height="1666"
 									/>
 								</div>
 							{:else}

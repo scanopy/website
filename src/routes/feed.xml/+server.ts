@@ -70,8 +70,8 @@ export async function GET() {
 			(entry) => `
     <item>
       <title>${escapeXml(`Scanopy ${entry.version}: ${entry.title}`)}</title>
-      <link>https://scanopy.net/changelog#${entry.slug}</link>
-      <guid isPermaLink="true">https://scanopy.net/changelog#${entry.slug}</guid>
+      <link>https://scanopy.net/changelog/${entry.slug}</link>
+      <guid isPermaLink="true">https://scanopy.net/changelog/${entry.slug}</guid>
       <pubDate>${new Date(entry.date).toUTCString()}</pubDate>
       <description><![CDATA[${entry.content}]]></description>
     </item>`

@@ -193,7 +193,7 @@
 
 <style>
 	.spacer {
-		height: 100px;
+		height: 120px;
 	}
 
 	@media (min-width: 768px) {

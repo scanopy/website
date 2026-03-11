@@ -31,7 +31,7 @@
 			<!-- Brand -->
 			<div class="space-y-4">
 				<div class="flex items-center gap-2">
-					<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" />
+					<img src="/scanopy-logo.png" alt="Scanopy" class="h-8 w-8" width="32" height="32" />
 					<span class="text-xl font-bold text-white">Scanopy</span>
 				</div>
 				<p class="text-sm text-gray-400">Network discovery and documentation on autopilot.</p>

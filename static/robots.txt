@@ -1,6 +1,19 @@
 User-agent: *
 Allow: /
 
+# AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot-Extended
+Allow: /
+
 Sitemap: https://scanopy.net/sitemap.xml
 Sitemap: https://scanopy.net/docs/sitemap.xml
 
