@@ -196,7 +196,14 @@
 		title="Scanopy Changelog"
 		href="https://scanopy.net/feed.xml"
 	/>
-	<link rel="preload" as="image" href="/hero-topology-dark.webp" fetchpriority="high" />
+	<link
+		rel="preload"
+		as="image"
+		type="image/webp"
+		imagesrcset="/hero-topology-dark-960w.webp 960w, /hero-topology-dark-1440w.webp 1440w, /hero-topology-dark-2400w.webp 2400w"
+		imagesizes="(max-width: 1024px) 100vw, 60vw"
+		fetchpriority="high"
+	/>
 	{#await softwareApplicationSchemaPromise then schema}
 		{@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
 	{/await}
@@ -280,13 +287,15 @@
 							<span class="ml-3 text-xs text-gray-500">demo.scanopy.net</span>
 						</div>
 						<img
-							src="/hero-topology-dark.webp"
+							src="/hero-topology-dark-1440w.webp"
+							srcset="/hero-topology-dark-960w.webp 960w, /hero-topology-dark-1440w.webp 1440w, /hero-topology-dark-2400w.webp 2400w"
+							sizes="(max-width: 1024px) 100vw, 60vw"
 							alt="Scanopy network topology showing subnets, services, and connections"
 							class="block w-full"
 							loading="eager"
 							fetchpriority="high"
-							width="3706"
-							height="3030"
+							width="1440"
+							height="1177"
 						/>
 					</div>
 					<p class="mt-2 text-center text-sm text-gray-500 group-hover:text-blue-400 transition-colors">View live topology &rarr;</p>
@@ -332,13 +341,15 @@
 			<div class="lg:w-1/2 flex justify-center">
 				<img
 					use:tilt
-					src="/screenshots/discovery-progress.webp"
+					src="/screenshots/discovery-progress-480w.webp"
+					srcset="/screenshots/discovery-progress-480w.webp 480w, /screenshots/discovery-progress.webp 778w"
+					sizes="(max-width: 1024px) 100vw, 384px"
 					alt="Scanopy network scan in progress"
 					class="max-w-sm w-full rounded-xl"
 					style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
 					loading="lazy"
-					width="778"
-					height="642"
+					width="480"
+					height="396"
 				/>
 			</div>
 		</div>
@@ -389,24 +400,28 @@
 										<span class="ml-3 text-xs text-gray-500">app.scanopy.net</span>
 									</div>
 									<img
-										src={screenshot}
+										src="/screenshots/hosts-catalog-800w.webp"
+										srcset="/screenshots/hosts-catalog-800w.webp 800w, /screenshots/hosts-catalog-1200w.webp 1200w, /screenshots/hosts-catalog.webp 2514w"
+										sizes="(max-width: 1024px) 100vw, 50vw"
 										alt={feature.title}
 										class="block w-full"
 										loading="lazy"
-										width="2514"
-										height="1666"
+										width="1200"
+										height="795"
 									/>
 								</div>
 							{:else}
 								<img
 									use:tilt
-									src={screenshot}
+									src="/screenshots/export-modal-640w.webp"
+									srcset="/screenshots/export-modal-640w.webp 640w, /screenshots/export-modal.webp 900w"
+									sizes="320px"
 									alt={feature.title}
 									class="mx-auto max-w-xs"
 									style="box-shadow: 0 4px 40px rgba(59,130,246,0.08), 0 8px 24px rgba(0,0,0,0.4);"
 									loading="lazy"
-									width="900"
-									height="1238"
+									width="640"
+									height="880"
 								/>
 							{/if}
 						</div>

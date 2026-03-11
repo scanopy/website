@@ -127,7 +127,7 @@
 		<div class="container mx-auto px-4 py-4">
 			<nav class="flex items-center justify-between">
 				<a href="/" class="flex items-center gap-2">
-					<img src="/scanopy-logo.webp" alt="Scanopy" class="h-8 w-8" width="32" height="32" />
+					<img src="/scanopy-logo-64.webp" alt="Scanopy" class="h-8 w-8" width="32" height="32" />
 					<span class="text-xl font-bold text-white">Scanopy</span>
 				</a>
 
