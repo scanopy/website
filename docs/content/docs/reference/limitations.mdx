@@ -60,6 +60,12 @@ See [Service Detection](/reference/service-detection/) for how detection works a
 - Internal application components (microservices behind a gateway)
 - Cloud/SaaS services (Scanopy scans your network, not the internet)
 
+## SNMP
+
+- **SNMPv3 not yet supported** — only SNMPv2c is available. SNMPv3 is planned.
+- **No trap/inform handling** — SNMP data is collected during discovery scans only (poll-based). Scanopy does not listen for SNMP traps or informs.
+- **No custom MIB loading** — only a fixed set of standard MIBs are queried. See [SNMP reference](/reference/snmp/#queried-mibs) for the full list.
+
 ## Platform-Specific
 
 ### Docker on macOS/Windows

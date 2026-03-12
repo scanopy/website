@@ -20,7 +20,7 @@ ip addr
 
 The daemon needs to detect the new VPN interface. Either:
 
-- **Run a Self-Report discovery** from **Discover > Scheduled** — this tells the daemon to re-scan its own interfaces and report them to the server
+- **Run a Self-Report discovery** from **Discover > Scan > Scheduled** — this tells the daemon to re-scan its own interfaces and report them to the server
 - **Restart the daemon** — it reports interfaces on startup
 
 ### 3. Verify the VPN subnet appears
@@ -30,7 +30,7 @@ After the Self-Report completes, check **Assets > Subnets**. The VPN subnet shou
 ### 4. Configure scanning
 
 - **If your Network Scan has no specific subnets configured** (the default), the VPN subnet is picked up and scanned automatically on the next run.
-- **If you've configured specific subnets**, add the VPN subnet manually via **Discover > Scheduled**.
+- **If you've configured specific subnets**, add the VPN subnet manually via **Discover > Scan > Scheduled**.
 
 ## What to expect
 

@@ -11,7 +11,7 @@ description: Create, upgrade, and remove daemons.
 
 ## Creating a Daemon
 
-Go to **Discover > Daemons** and click **Create Daemon**. The wizard walks you through setup and generates a ready-to-copy install command with the correct API key, server URL, and daemon name. For help choosing a polling mode and planning where to place daemons, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
+Go to **Discover > Scan > Daemons** and click **Create Daemon**. The wizard walks you through setup and generates a ready-to-copy install command with the correct API key, server URL, and daemon name. For help choosing a polling mode and planning where to place daemons, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
 ## Running as a Service
 
@@ -133,7 +133,7 @@ Self-hosted Docker Compose deployments include an **integrated daemon** that run
 
 ## Upgrading
 
-When an update is available, the daemon card in **Discover > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps. Configuration is preserved across upgrades.
+When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps. Configuration is preserved across upgrades.
 
 For upgrading self-hosted server and integrated daemon together, see [Upgrading](/self-hosted-server/upgrading).
 
@@ -149,7 +149,7 @@ Each daemon also reports its **capabilities** to the server: whether it has Dock
 
 To fully remove a daemon, delete it from the UI and uninstall it from the host.
 
-**Delete from the UI**: Go to **Discover > Daemons** and click the delete icon on the daemon card.
+**Delete from the UI**: Go to **Discover > Scan > Daemons** and click the delete icon on the daemon card.
 
 <Callout type="warn">
 Deleting or uninstalling a daemon does not delete discovered data. Hosts, services, subnets, and topology remain on the server until you explicitly delete them.

@@ -5,13 +5,13 @@ description: How to control which subnets a daemon scans, including adding remot
 
 ## What a daemon scans by default
 
-A daemon automatically discovers every subnet its host has a network interface on and adds them to its Network Scan discovery. These **interfaced subnets** get fast Layer 2 (ARP) scanning. You can see a daemon's interfaced subnets on its card in **Discover > Daemons**.
+A daemon automatically discovers every subnet its host has a network interface on and adds them to its Network Scan discovery. These **interfaced subnets** get fast Layer 2 (ARP) scanning. You can see a daemon's interfaced subnets on its card in **Discover > Scan > Daemons**.
 
 ## Viewing and editing scan targets
 
 To see exactly which subnets a daemon will scan:
 
-1. Go to **Discover > Scheduled**
+1. Go to **Discover > Scan > Scheduled**
 2. Find the **Network Scan** discovery for the daemon
 3. The subnet list shows all targets for that discovery
 
@@ -26,7 +26,7 @@ If the subnet doesn't exist in Scanopy yet (because no daemon has reported an in
 1. Go to **Assets > Subnets**
 2. Click **Create Subnet**
 3. Enter the CIDR (e.g. `10.0.50.0/24`) and assign it to the appropriate network
-4. Return to **Discover > Scheduled** and add it to the Network Scan
+4. Return to **Discover > Scan > Scheduled** and add it to the Network Scan
 
 <Callout type="info">
 Remote subnets are scanned via Layer 3 (TCP probing) since the daemon has no local interface for ARP. This means hosts without open ports won't be found, and MAC addresses won't be collected. For full Layer 2 coverage, deploy a daemon on the target segment — see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
@@ -42,7 +42,7 @@ For permanent monitoring of a subnet, deploy a daemon on the segment for full La
 
 ## Removing subnets
 
-To stop scanning a subnet, remove it from the Network Scan discovery's subnet list in **Discover > Scheduled**. The daemon will skip it on the next run.
+To stop scanning a subnet, remove it from the Network Scan discovery's subnet list in **Discover > Scan > Scheduled**. The daemon will skip it on the next run.
 
 This is useful for:
 

@@ -6,6 +6,7 @@
     "daemon-status",
     "server-configuration",
     "service-detection",
+    "snmp",
     "architecture",
     "database-schema",
     "limitations",
