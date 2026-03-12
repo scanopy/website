@@ -83,4 +83,4 @@ The distinction: **design** tools vs **documentation** tools. draw.io is great f
 
 Scanopy is free to start. Deploy a daemon and see your actual network in minutes. No drawing required.
 
-[Try Scanopy free](/)
+[Try Scanopy free](app.scanopy.net/onboarding)
