@@ -75,7 +75,7 @@
 				<p class="text-gray-400 leading-relaxed">
 					Scanopy doesn't do asset lifecycle management, procurement tracking, or compliance
 					workflows. It does network documentation. That's a feature, not a gap. You don't need
-					a $15/device/month platform when what you actually need is an accurate network map - and our <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing model is aligned</a> to this, so you'll never pay per device with Scanopy.
+					a $15/device/month platform when what you actually need is an accurate network map - and our <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing model is aligned</a> to this, so you don't pay per device with Scanopy.
 				</p>
 			</div>
 
