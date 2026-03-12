@@ -51,41 +51,6 @@
 							>Discoverable Services</a
 						>
 					</li>
-					<li>
-						{#if healthStatus === 'healthy'}
-							<a
-								href="https://app.scanopy.net"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-							>
-								<span class="relative flex h-3 w-3">
-									<span
-										class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"
-									></span>
-									<span class="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
-								</span>
-								Status
-							</a>
-						{:else}
-							<span class="flex items-center gap-2 text-sm text-gray-400">
-								<span class="relative flex h-3 w-3">
-									{#if healthStatus === 'loading'}
-										<span
-											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gray-400 opacity-75"
-										></span>
-										<span class="relative inline-flex h-3 w-3 rounded-full bg-gray-500"></span>
-									{:else}
-										<span
-											class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"
-										></span>
-										<span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
-									{/if}
-								</span>
-								Status
-							</span>
-						{/if}
-					</li>
 				</ul>
 			</div>
 
@@ -191,6 +156,39 @@
 				© {new Date().getFullYear()} Scanopy
 			</p>
 			<div class="flex gap-6">
+						{#if healthStatus === 'healthy'}
+							<a
+								href="https://app.scanopy.net"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+							>
+								<span class="relative flex h-3 w-3">
+									<span
+										class="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+									></span>
+									<span class="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
+								</span>
+								Status
+							</a>
+						{:else}
+							<span class="flex items-center gap-2 text-sm text-gray-400">
+								<span class="relative flex h-3 w-3">
+									{#if healthStatus === 'loading'}
+										<span
+											class="absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"
+										></span>
+										<span class="relative inline-flex h-3 w-3 rounded-full bg-gray-500"></span>
+									{:else}
+										<span
+											class="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+										></span>
+										<span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+									{/if}
+								</span>
+								Status
+							</span>
+						{/if}
 				<a href="/privacy" class="text-sm text-gray-500 hover:text-gray-400">Privacy</a>
 				<a href="/terms" class="text-sm text-gray-500 hover:text-gray-400">Terms</a>
 				<a href="/refund" class="text-sm text-gray-500 hover:text-gray-400">Refund Policy</a>
