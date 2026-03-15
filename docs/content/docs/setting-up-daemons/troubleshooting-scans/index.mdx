@@ -1,0 +1,41 @@
+---
+title: Overview
+description: Troubleshooting issues triggered by running scans, including network load, missing hosts, and scan performance.
+---
+
+Issues triggered by running scans, including network load, missing hosts, and scan performance.
+
+### [Host Discovery](/setting-up-daemons/troubleshooting-scans/host-discovery/)
+
+Hosts missing from discovery results — ARP issues, switch rate limiting (DAI), Npcap, and tuning.
+
+### [Scan Performance](/setting-up-daemons/troubleshooting-scans/scan-performance/)
+
+Scans crashing targets, taking hours, failing from high concurrency, or hitting file descriptor limits.
+
+### [SNMP](/setting-up-daemons/troubleshooting-scans/snmp/)
+
+SNMP credentials assigned but no data appearing — credential assignment, version compatibility, and log diagnosis.
+
+### [Auto-Pause](/setting-up-daemons/troubleshooting-scans/auto-pause/)
+
+Scheduled scans automatically disabled after repeated stall failures.
+
+## Topology Empty After Discovery
+
+**Symptoms**: Discovery completes but topology shows nothing
+
+**Check these**:
+
+1. **Discovery errors**: Check **Discover > Scan > Sessions** for failures
+2. **Network filter**: Check topology options panel — wrong network may be selected
+3. **Refresh mode**: Press "Rebuild" or change from manual to auto to get live updates
+4. **Service filters**: Category filters may be hiding everything
+5. **Reachability**: Verify daemon can actually reach the target network
+
+## Getting Help
+
+If your issue isn't covered here:
+
+- **Discord**: Join our [Discord community](https://discord.gg/b7ffQr8AcZ)
+- **GitHub Issues**: [Open an issue](https://github.com/scanopy/scanopy/issues/new)

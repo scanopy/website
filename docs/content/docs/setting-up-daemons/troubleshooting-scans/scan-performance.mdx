@@ -1,0 +1,113 @@
+---
+title: Scan Performance
+description: Fixing slow scans, crashes from high concurrency, and file descriptor limits.
+---
+
+## Port Scanning Slows Down or Crashes Target Hosts
+
+**Symptoms**: Web interfaces on target hosts become unresponsive during scans; network feels slow; IoT devices or services with small listen backlogs (e.g. Pi-hole) stop responding; services require restart after scan.
+
+**Cause**: The default port scan rate (500 pps) and batch size (200 ports) can overwhelm hosts with small TCP listen queues, especially on low-latency networks (e.g. LXC containers on the same Proxmox host).
+
+**Solutions**:
+
+Reduce `scan_rate_pps` and/or `port_scan_batch_size` in your daemon configuration:
+
+```bash
+# CLI
+scanopy-daemon --scan-rate-pps 100 --port-scan-batch-size 100
+
+# Environment variables
+export SCANOPY_SCAN_RATE_PPS=100
+export SCANOPY_PORT_SCAN_BATCH_SIZE=100
+
+# Docker
+environment:
+  - SCANOPY_SCAN_RATE_PPS=100
+  - SCANOPY_PORT_SCAN_BATCH_SIZE=100
+```
+
+**Recommended values:**
+
+| Scenario | `scan_rate_pps` | `port_scan_batch_size` |
+|----------|----------------|----------------------|
+| Sensitive network (IoT, Pi-hole, embedded) | 50–100 | 50–100 |
+| Mixed IoT and servers | 100–200 | 100–150 |
+| Robust servers only | 500 (default) | 200 (default) |
+
+See [Daemon Configuration](/reference/daemon-configuration/) for the full parameter reference.
+
+## Discovery Takes Hours
+
+**Symptoms**: Network discovery takes hours to complete.
+
+**Cause**: Slow scans are almost always caused by scanning subnets the daemon doesn't have a network interface on. On interfaced subnets, the daemon uses fast ARP scanning (seconds for a /24). On non-interfaced subnets, it falls back to TCP probing — scanning each IP individually, which is orders of magnitude slower. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3).
+
+**Diagnosis**: Check the daemon's interfaced subnets on its card in **Discover > Daemons**, then compare to the subnets in the Network Scan discovery under **Discover > Scan > Scheduled**. Any subnet not in the interfaced list is being scanned via slow TCP probing. See [Managing Scan Targets](/guides/scanning-remote-subnets/) for how to view and edit what a daemon scans.
+
+**If the slow subnet is not interfaced**:
+
+- **Deploy a daemon on that segment** for fast L2 scanning. See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
+- **Shrink the subnet** if it's larger than needed. A /16 is 65,536 IPs — if only a /24 within it has hosts, target that /24 instead.
+- **Remove it** if you don't need visibility on that segment.
+- **Docker networks** (e.g. 172.17.0.0/16) should not be scanned over the network. Use Docker discovery instead — it queries the Docker API directly and takes seconds.
+
+**If the slow subnet is interfaced**: The daemon should already be using ARP. Check for a large subnet size (/16 or bigger) and consider narrowing the target range. If the subnet is reasonably sized, check `concurrent_scans` — a very low value serializes work across many hosts. See [Concurrent Scans](/reference/daemon-configuration/#concurrent-scans).
+
+## Discovery Fails with "CONCURRENT_SCANS too high"
+
+**Symptoms**: Daemon crashes or runs out of memory during scans
+
+**Solution**: Reduce concurrent scans in daemon configuration:
+
+**Docker:**
+
+```yaml
+environment:
+  - SCANOPY_CONCURRENT_SCANS=10 # Reduce from default
+```
+
+**Binary:**
+
+```bash
+scanopy-daemon --concurrent-scans 10 ...
+```
+
+See [Daemon Configuration](/reference/daemon-configuration/#concurrent-scans) for recommended values.
+
+## "Too Many Open Files" Error
+
+**Symptoms**: `Critical error scanning: Too many open files (os error 24)` in daemon logs
+
+**Causes**: System file descriptor limit is too low for the configured concurrent scans.
+
+**Solutions**:
+
+1. **Reduce concurrent scans** (easiest):
+
+   ```yaml
+   environment:
+     - SCANOPY_CONCURRENT_SCANS=10
+   ```
+
+2. **Increase system file descriptor limit**:
+
+   ```bash
+   # Check current limit
+   ulimit -n
+
+   # Increase temporarily
+   ulimit -n 65535
+
+   # Increase permanently (add to /etc/security/limits.conf)
+   * soft nofile 65535
+   * hard nofile 65535
+   ```
+
+3. **For Docker**: Add to your daemon container:
+   ```yaml
+   ulimits:
+     nofile:
+       soft: 65535
+       hard: 65535
+   ```

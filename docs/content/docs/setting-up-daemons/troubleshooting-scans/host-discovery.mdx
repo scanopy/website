@@ -1,45 +1,7 @@
 ---
-title: Troubleshooting Scans
-description: Troubleshooting issues triggered by running scans, including network load, missing hosts, and scan performance.
+title: Host Discovery
+description: Diagnosing and fixing missing hosts, ARP issues, and switch rate limiting during network discovery.
 ---
-
-Issues triggered by running scans, including network load, missing hosts, and scan performance.
-
-## Port Scanning Slows Down or Crashes Target Hosts
-
-**Symptoms**: Web interfaces on target hosts become unresponsive during scans; network feels slow; IoT devices or services with small listen backlogs (e.g. Pi-hole) stop responding; services require restart after scan.
-
-**Cause**: The default port scan rate (500 pps) and batch size (200 ports) can overwhelm hosts with small TCP listen queues, especially on low-latency networks (e.g. LXC containers on the same Proxmox host).
-
-**Solutions**:
-
-Reduce `scan_rate_pps` and/or `port_scan_batch_size` in your daemon configuration:
-
-```bash
-# CLI
-scanopy-daemon --scan-rate-pps 100 --port-scan-batch-size 100
-
-# Environment variables
-export SCANOPY_SCAN_RATE_PPS=100
-export SCANOPY_PORT_SCAN_BATCH_SIZE=100
-
-# Docker
-environment:
-  - SCANOPY_SCAN_RATE_PPS=100
-  - SCANOPY_PORT_SCAN_BATCH_SIZE=100
-```
-
-**Recommended values:**
-
-| Scenario | `scan_rate_pps` | `port_scan_batch_size` |
-|----------|----------------|----------------------|
-| Sensitive network (IoT, Pi-hole, embedded) | 50–100 | 50–100 |
-| Mixed IoT and servers | 100–200 | 100–150 |
-| Robust servers only | 500 (default) | 200 (default) |
-
-See [Daemon Configuration](/reference/daemon-configuration/) for the full parameter reference.
-
-## Hosts Not Discovered / Missing IPs
 
 **Symptoms**: Discovery completes but some known hosts are missing from results.
 
@@ -49,37 +11,37 @@ See [Daemon Configuration](/reference/daemon-configuration/) for the full parame
 
 To tell them apart, run `arping -c 3 <missing-ip>` from the scanner host. If arping also fails, the host is unreachable at Layer 2 — see [Hosts Not Responding to ARP](#hosts-not-responding-to-arp). If arping succeeds but Scanopy misses the host, the issue is likely rate limiting — see [Switch Rate Limiting (DAI)](#switch-rate-limiting-dai).
 
-### Hosts Not Responding to ARP
+## Hosts Not Responding to ARP
 
 These issues are independent of Scanopy — the host is genuinely unreachable via Layer 2 ARP from the scanner's network segment. Manual `arping` will also fail.
 
-#### Host is on a different subnet or behind a router
+### Host is on a different subnet or behind a router
 
 ARP is Layer 2 only. Hosts on other subnets won't see broadcast ARP requests from the scanner's VLAN — routers don't forward ARP broadcasts.
 
 **Solution**: Run a scanner daemon on each subnet, or add the remote subnet as a target so the daemon's routed-ping fallback can reach it.
 
-#### Host is asleep or in low-power mode
+### Host is asleep or in low-power mode
 
 Laptops, IoT devices, and phones in sleep or Wi-Fi power-save mode may not respond to ARP promptly or at all.
 
 **Solution**: Increase `arp_retries` to give sleeping hosts more chances to wake and respond. Schedule scans during active hours. Accept that sleeping devices will appear intermittently.
 
-#### Host has static ARP or ARP filtering enabled
+### Host has static ARP or ARP filtering enabled
 
 Some hardened hosts or embedded devices ignore broadcast ARP or only reply to unicast ARP for known peers.
 
 **Solution**: Increase `arp_retries` (unicast retries may succeed where broadcast failed). Verify with `arping -c 3 <ip>` from the scanner host — if that also fails, the host is filtering ARP.
 
-#### Virtual machines or containers with restricted networking
+### Virtual machines or containers with restricted networking
 
 VMs in NAT mode or containers on an overlay network are not reachable via Layer 2 ARP on the physical segment.
 
 **Solution**: Scan from within the virtual network, or switch the VM/container to bridged networking so it appears on the physical segment.
 
-### Switch Rate Limiting (DAI)
+## Switch Rate Limiting (DAI)
 
-#### Understanding ARP Scanning
+### Understanding ARP Scanning
 
 Scanopy uses broadcast ARP for fast host discovery. For each target IP, we send an ARP "who-has" request and wait for a reply. This is faster and more reliable than TCP/UDP probing because hosts cannot firewall ARP and still communicate on the network.
 
@@ -97,7 +59,7 @@ However, many managed switches implement **Dynamic ARP Inspection (DAI)** to pre
 
 If your switch has DAI enabled and Scanopy sends ARP faster than the limit allows, excess packets are dropped and those hosts appear offline.
 
-#### How Retries Work
+### How Retries Work
 
 Scanopy uses **targeted retries** rather than simple broadcast flooding:
 
@@ -119,7 +81,7 @@ This approach minimizes total packets sent (only non-responders are retried) whi
 
 If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those hosts—often successfully since the burst is smaller.
 
-#### Diagnosis
+### Diagnosis
 
 1. **Check if your switch has DAI enabled.** Consult your switch documentation for how to view DAI configuration and statistics. Look for rate limit violations or dropped ARP packets.
 
@@ -131,7 +93,7 @@ If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those 
    ```
    If arping finds the host but Scanopy doesn't, rate limiting is likely the cause. If arping also fails, the host is unreachable at Layer 2 — see [Hosts Not Responding to ARP](#hosts-not-responding-to-arp) above.
 
-#### Solutions
+### Solutions
 
 **Option 1: Reduce ARP scan rate**
 
@@ -209,7 +171,7 @@ environment:
 - Scanning small networks where speed doesn't matter
 - You want zero additional dependencies
 
-#### Tuning for Your Network
+### Tuning for Your Network
 
 | Situation | Recommended Settings |
 |-----------|---------------------|
@@ -218,150 +180,3 @@ environment:
 | Scans are too slow | Increase `arp_rate_pps` if DAI allows, or trust the port |
 
 See [Daemon Configuration](/reference/daemon-configuration/) for all ARP settings.
-
-## Discovery Takes Hours
-
-**Symptoms**: Network discovery takes hours to complete.
-
-**Cause**: Slow scans are almost always caused by scanning subnets the daemon doesn't have a network interface on. On interfaced subnets, the daemon uses fast ARP scanning (seconds for a /24). On non-interfaced subnets, it falls back to TCP probing — scanning each IP individually, which is orders of magnitude slower. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3).
-
-**Diagnosis**: Check the daemon's interfaced subnets on its card in **Discover > Daemons**, then compare to the subnets in the Network Scan discovery under **Discover > Scan > Scheduled**. Any subnet not in the interfaced list is being scanned via slow TCP probing. See [Managing Scan Targets](/guides/scanning-remote-subnets/) for how to view and edit what a daemon scans.
-
-**If the slow subnet is not interfaced**:
-
-- **Deploy a daemon on that segment** for fast L2 scanning. See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
-- **Shrink the subnet** if it's larger than needed. A /16 is 65,536 IPs — if only a /24 within it has hosts, target that /24 instead.
-- **Remove it** if you don't need visibility on that segment.
-- **Docker networks** (e.g. 172.17.0.0/16) should not be scanned over the network. Use Docker discovery instead — it queries the Docker API directly and takes seconds.
-
-**If the slow subnet is interfaced**: The daemon should already be using ARP. Check for a large subnet size (/16 or bigger) and consider narrowing the target range. If the subnet is reasonably sized, check `concurrent_scans` — a very low value serializes work across many hosts. See [Concurrent Scans](/reference/daemon-configuration/#concurrent-scans).
-
-## Topology Empty After Discovery
-
-**Symptoms**: Discovery completes but topology shows nothing
-
-**Check these**:
-
-1. **Discovery errors**: Check **Discover > Scan > Sessions** for failures
-2. **Network filter**: Check topology options panel — wrong network may be selected
-3. **Refresh mode**: Press "Rebuild" or change from manual to auto to get live updates
-4. **Service filters**: Category filters may be hiding everything
-5. **Reachability**: Verify daemon can actually reach the target network
-
-## Discovery Fails with "CONCURRENT_SCANS too high"
-
-**Symptoms**: Daemon crashes or runs out of memory during scans
-
-**Solution**: Reduce concurrent scans in daemon configuration:
-
-**Docker:**
-
-```yaml
-environment:
-  - SCANOPY_CONCURRENT_SCANS=10 # Reduce from default
-```
-
-**Binary:**
-
-```bash
-scanopy-daemon --concurrent-scans 10 ...
-```
-
-See [Daemon Configuration](/reference/daemon-configuration/#concurrent-scans) for recommended values.
-
-## "Too Many Open Files" Error
-
-**Symptoms**: `Critical error scanning: Too many open files (os error 24)` in daemon logs
-
-**Causes**: System file descriptor limit is too low for the configured concurrent scans.
-
-**Solutions**:
-
-1. **Reduce concurrent scans** (easiest):
-
-   ```yaml
-   environment:
-     - SCANOPY_CONCURRENT_SCANS=10
-   ```
-
-2. **Increase system file descriptor limit**:
-
-   ```bash
-   # Check current limit
-   ulimit -n
-
-   # Increase temporarily
-   ulimit -n 65535
-
-   # Increase permanently (add to /etc/security/limits.conf)
-   * soft nofile 65535
-   * hard nofile 65535
-   ```
-
-3. **For Docker**: Add to your daemon container:
-   ```yaml
-   ulimits:
-     nofile:
-       soft: 65535
-       hard: 65535
-   ```
-
-## SNMP Not Returning Data
-
-**Symptoms**: Discovery completes, SNMP port (161) detected on hosts, but no SNMP data (sysName, interfaces, LLDP neighbors) appears.
-
-### Check credential assignment
-
-Creating a credential alone doesn't activate SNMP. It must be assigned to the network or to specific hosts.
-
-**How to verify**: Go to **Assets > Networks** → select the network → check that an SNMP credential is set. Or hover the Network chip on **Discover > Daemons** to see the credential assignment.
-
-See the [SNMP Credentials guide](/guides/snmp-credentials/) for setup steps.
-
-### Verify device responds to SNMPv2c
-
-From the daemon host, test SNMP connectivity directly:
-
-```bash
-# Try the default community string
-snmpwalk -v2c -c public DEVICE_IP 1.3.6.1.2.1.2.2.1.2
-
-# Try your configured community string
-snmpwalk -v2c -c YOUR_COMMUNITY_STRING DEVICE_IP 1.3.6.1.2.1.2.2.1.2
-```
-
-- If `public` works but your custom string doesn't → credential mismatch
-- If neither works → SNMP is not enabled on the device or it doesn't support SNMPv2c
-
-### Check SNMP version compatibility
-
-Scanopy supports SNMPv2c only. If devices enforce SNMPv3-only, SNMP queries will fail silently. SNMPv3 support is on the roadmap.
-
-### Check daemon logs
-
-Enable debug logging and look for these messages during a scan of the target host:
-
-| Log message | Meaning |
-| ----------- | ------- |
-| `Creating SNMPv2c session` | Daemon is attempting SNMP |
-| `SNMP session created successfully` | UDP socket opened |
-| `SNMP GET {name} failed from {ip}` | OID query failed (auth or protocol error) |
-| `SNMP GET {name} timeout from {ip}` | Device didn't respond within 5s |
-| `SNMP system info retrieved` with sys_descr/sys_name | Success |
-| `No working SNMP credential found for {ip}` | All credentials tried, none worked |
-
-### Check host SNMP data
-
-Open the host edit modal to inspect what SNMP has collected:
-
-- **SNMP tab** — shows sys_descr, sys_name, sys_location, sys_contact, and credential assignment
-- **ifEntry tab** — shows the interface table from the SNMP walk
-
-If both tabs are empty after a scan with credentials assigned, work through the checks above.
-
-## Getting Help
-
-If your issue isn't covered here:
-
-- **Discord**: Join our [Discord community](https://discord.gg/b7ffQr8AcZ)
-- **GitHub Issues**: [Open an issue](https://github.com/scanopy/scanopy/issues/new)
