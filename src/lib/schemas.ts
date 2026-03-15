@@ -49,31 +49,26 @@ function getUniqueMonthlyPlans(): BillingPlan[] {
  * Generate offers array for schema.org Product/SoftwareApplication
  */
 function generateOffers() {
-	return getUniqueMonthlyPlans().map((plan) => {
-		const isFree = plan.metadata.custom_price === 'Free';
-		const isContactUs = plan.metadata.custom_price && !isFree;
-		const price = isFree ? '0' : isContactUs ? undefined : (plan.metadata.base_cents / 100).toFixed(2);
+	return getUniqueMonthlyPlans()
+		.filter((plan) => !plan.metadata.custom_price || plan.metadata.custom_price === 'Free')
+		.map((plan) => {
+			const price = plan.metadata.custom_price === 'Free' ? '0' : (plan.metadata.base_cents / 100).toFixed(2);
 
-		const offer: Record<string, unknown> = {
-			'@type': 'Offer',
-			name: plan.name,
-			description: plan.description,
-			priceCurrency: 'USD',
-			availability: 'https://schema.org/InStock',
-			url: 'https://scanopy.net/pricing',
-			seller: {
-				'@type': 'Organization',
-				name: 'Scanopy'
-			}
-		};
-
-		if (price !== undefined) {
-			offer.price = price;
-			offer.priceValidUntil = '2026-12-31';
-		}
-
-		return offer;
-	});
+			return {
+				'@type': 'Offer',
+				name: plan.name,
+				description: plan.description,
+				priceCurrency: 'USD',
+				price,
+				priceValidUntil: '2026-12-31',
+				availability: 'https://schema.org/InStock',
+				url: 'https://scanopy.net/pricing',
+				seller: {
+					'@type': 'Organization',
+					name: 'Scanopy'
+				}
+			};
+		});
 }
 
 /**
