@@ -20,7 +20,7 @@
 		},
 		{
 			question: 'Do you charge per device?',
-			answer: "No. Every plan includes unlimited hosts. We don't meter by device count, so your bill stays the same whether you're scanning 10 hosts or 10,000."
+			answer: "No. All plans use flat-rate pricing — we don't meter by device count, so your bill stays the same whether you're scanning 10 hosts or 10,000."
 		},
 		{
 			question: "What's the difference between Cloud and Self-Hosted?",
@@ -62,7 +62,7 @@
 	<div class="container mx-auto px-2">
 		<div class="mb-12 text-center">
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">
-				Unlimited hosts. No per-device fees.
+				Flat-rate pricing. No per-device fees. Scale without surprises.
 			</h1>
 			<p class="text-lg text-gray-400">Unlimited scans on every plan.</p>
 		</div>
@@ -94,7 +94,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm text-gray-400 leading-relaxed">
-			Every Scanopy plan includes unlimited hosts and unlimited scans — you don't pay per device. The Free plan lets you document up to 25 hosts on a single network, which is enough to evaluate everything Scanopy can do. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks — ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community plan is free with no host limits, and the On-Premise plan adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
+			Every Scanopy plan uses flat-rate pricing — you don't pay per device. The Free plan lets you document up to 25 hosts on a single network, which is enough to evaluate everything Scanopy can do. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks — ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community plan is free with no host limits, and the On-Premise plan adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
 		</p>
 	</div>
 </section>

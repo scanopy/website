@@ -605,7 +605,7 @@
 				Pricing
 			</span>
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-				Unlimited hosts. No per-device fees.
+				Flat-rate pricing. No per-device fees. Scale without surprises.
 			</h2>
 		</div>
 
