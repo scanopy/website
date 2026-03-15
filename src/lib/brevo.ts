@@ -9,7 +9,7 @@ let recaptchaLoaded = false;
 
 function loadRecaptcha(): Promise<void> {
 	if (recaptchaLoaded) return Promise.resolve();
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		const script = document.createElement('script');
 		script.src = `https://www.google.com/recaptcha/api.js?render=${PUBLIC_RECAPTCHA_SITE_KEY}`;
 		script.async = true;
@@ -17,17 +17,32 @@ function loadRecaptcha(): Promise<void> {
 			recaptchaLoaded = true;
 			resolve();
 		};
+		script.onerror = () => {
+			reject(new Error('Failed to load reCAPTCHA'));
+		};
+		const timeout = setTimeout(() => {
+			reject(new Error('reCAPTCHA load timeout'));
+		}, 5000);
+		script.onload = () => {
+			clearTimeout(timeout);
+			recaptchaLoaded = true;
+			resolve();
+		};
 		document.head.appendChild(script);
 	});
 }
 
-async function getRecaptchaToken(): Promise<string> {
-	await loadRecaptcha();
-	return new Promise((resolve) => {
-		grecaptcha.ready(() => {
-			grecaptcha.execute(PUBLIC_RECAPTCHA_SITE_KEY, { action: 'submit' }).then(resolve);
+async function getRecaptchaToken(): Promise<string | null> {
+	try {
+		await loadRecaptcha();
+		return await new Promise((resolve) => {
+			grecaptcha.ready(() => {
+				grecaptcha.execute(PUBLIC_RECAPTCHA_SITE_KEY, { action: 'submit' }).then(resolve);
+			});
 		});
-	});
+	} catch {
+		return null;
+	}
 }
 
 interface ContactInquiryData {
@@ -47,7 +62,9 @@ export async function submitNewsletter(formUrl: string, email: string): Promise<
 
 	const formData = new FormData();
 	formData.append('EMAIL', email);
-	formData.append('g-recaptcha-response', token);
+	if (token) {
+		formData.append('g-recaptcha-response', token);
+	}
 	formData.append('email_address_check', '');
 	formData.append('locale', 'en');
 
@@ -77,7 +94,9 @@ export async function submitContactInquiry(
 	formData.append('INQUIRY_NETWORK_COUNT', data.networkCount || '');
 	formData.append('INQUIRY_MESSAGE', data.message || '');
 	formData.append('INQUIRY_PLAN_TYPE', data.planType);
-	formData.append('g-recaptcha-response', token);
+	if (token) {
+		formData.append('g-recaptcha-response', token);
+	}
 	formData.append('email_address_check', '');
 	formData.append('locale', 'en');
 
