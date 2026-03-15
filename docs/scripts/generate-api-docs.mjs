@@ -39,6 +39,28 @@ function preprocessSpec() {
     }
   }
 
+  // Hide specific API sections from the docs
+  const hiddenTags = ['SNMP Credentials', 'Discoveries'];
+
+  if (spec.tags) {
+    spec.tags = spec.tags.filter(t => !hiddenTags.includes(t.name));
+  }
+
+  if (spec.paths) {
+    for (const [path, pathItem] of Object.entries(spec.paths)) {
+      for (const [method, operation] of Object.entries(pathItem)) {
+        if (typeof operation !== 'object' || !operation.tags) continue;
+        if (operation.tags.some(t => hiddenTags.includes(t))) {
+          delete pathItem[method];
+        }
+      }
+      // Remove path entirely if no operations remain
+      if (Object.keys(pathItem).every(k => k === 'parameters')) {
+        delete spec.paths[path];
+      }
+    }
+  }
+
   const processedPath = resolve('./openapi-processed.json');
   writeFileSync(processedPath, JSON.stringify(spec, null, 2));
   return { spec, processedPath };
