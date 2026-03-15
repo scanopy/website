@@ -21,9 +21,11 @@
 			<section>
 				<h2 class="mb-4 text-2xl font-semibold text-rose-400">1. Free Trial</h2>
 				<p class="mb-4 text-gray-300">
-					Scanopy offers a 7-day free trial for new users to experience the services before
-					purchasing a subscription. During the trial period, users can cancel their subscription
-					at any time without being charged.
+					Some Scanopy plans include a free trial period for new users to experience the services
+					before being charged. During the trial period, users can cancel their subscription at
+					any time without being charged. Trial availability and duration vary by plan — see the
+					<a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing page</a> for
+					details.
 				</p>
 			</section>
 
