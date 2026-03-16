@@ -12,5 +12,12 @@
 		"quote": "A tool that creates a network diagram on its own and keeps it up to date - I think we've all dreamed of that. [Translated]",
 		"url": "https://www.it-connect.fr/tuto-scanopy-outil-creation-automatique-diagramme-reseau/",
 		"logo": "/press/it-connect-360w.webp"
+	},
+	{
+		"id": "korben",
+		"name": "Korben",
+		"quote": "It's the network scan + Docker detection combo that makes it useful, because most tools do one or the other but never both. [Translated]",
+		"url": "https://korben.info/scanopy-scanner-reseau-topologie.html",
+		"logo": "/press/korben-360w.webp"
 	}
 ]
