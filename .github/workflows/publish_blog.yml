@@ -1,0 +1,178 @@
+name: Publish Blog Post
+
+on:
+  pull_request:
+    types: [closed]
+    paths:
+      - 'src/lib/blog/*.md'
+  workflow_dispatch:
+    inputs:
+      blog_file:
+        description: 'Blog filename (e.g., network-diagrams-wrong.md)'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect blog file
+        id: detect
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            BLOG_FILE="src/lib/blog/${{ inputs.blog_file }}"
+          else
+            BLOG_FILE=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} \
+              | grep 'src/lib/blog/' | sort | tail -1)
+          fi
+
+          if [ -z "$BLOG_FILE" ] || [ ! -f "$BLOG_FILE" ]; then
+            echo "Blog file not found: $BLOG_FILE"
+            exit 1
+          fi
+
+          echo "file=$BLOG_FILE" >> $GITHUB_OUTPUT
+          echo "Processing: $BLOG_FILE"
+
+      - name: Extract frontmatter
+        id: blog
+        run: |
+          BLOG_FILE="${{ steps.detect.outputs.file }}"
+
+          # Extract frontmatter fields
+          TITLE=$(grep '^title:' "$BLOG_FILE" | head -1 | sed 's/title: *//')
+          DESCRIPTION=$(grep '^description:' "$BLOG_FILE" | head -1 | sed 's/description: *//')
+          DATE=$(grep '^date:' "$BLOG_FILE" | head -1 | sed 's/date: *//')
+
+          # Slug: use frontmatter slug or fall back to filename without .md
+          SLUG=$(grep '^slug:' "$BLOG_FILE" | head -1 | sed 's/slug: *//')
+          if [ -z "$SLUG" ]; then
+            SLUG=$(basename "$BLOG_FILE" .md)
+          fi
+
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+
+          # Extract body (everything after the closing ---)
+          BODY=$(sed -n '/^---$/,/^---$/!p' "$BLOG_FILE" | tail -n +2)
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "body<<$EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+
+          echo "Title: $TITLE"
+          echo "Slug: $SLUG"
+
+      - name: AI-generate social post
+        id: social
+        uses: actions/ai-inference@v1
+        with:
+          model: openai/gpt-4.1
+          system-prompt: |
+            Generate a 1-3 sentence social media post about this blog article.
+            Be conversational and direct. No hashtags, no emojis, no URL (the URL will be appended separately).
+            Write as if you're telling a colleague about something interesting you read.
+          prompt: |
+            Title: ${{ steps.blog.outputs.title }}
+            Description: ${{ steps.blog.outputs.description }}
+
+            ${{ steps.blog.outputs.body }}
+
+      - name: AI-generate email body
+        id: email
+        uses: actions/ai-inference@v1
+        with:
+          model: openai/gpt-4.1
+          system-prompt: |
+            Generate a brief email body in HTML using only <p>, <ul>, <li>, and <strong> tags.
+            Structure: 1-2 sentence intro, then 2-3 key takeaways as a list.
+            Do not include a CTA, unsubscribe link, greeting, or sign-off — the email template handles those.
+          prompt: |
+            Title: ${{ steps.blog.outputs.title }}
+            Description: ${{ steps.blog.outputs.description }}
+
+            ${{ steps.blog.outputs.body }}
+
+      - name: Draft Brevo email campaign
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_TEMPLATE_ID: ${{ vars.BREVO_TEMPLATE_ID }}
+          EMAIL_BODY: ${{ steps.email.outputs.response }}
+          TITLE: ${{ steps.blog.outputs.title }}
+          SLUG: ${{ steps.blog.outputs.slug }}
+        run: |
+          if [ -z "$BREVO_API_KEY" ]; then
+            echo "::warning::BREVO_API_KEY not set — skipping email"
+            exit 0
+          fi
+
+          if [ -z "$BREVO_TEMPLATE_ID" ]; then
+            echo "::warning::BREVO_TEMPLATE_ID not set — skipping email"
+            exit 0
+          fi
+
+          BLOG_URL="https://scanopy.net/blog/${SLUG}?utm_source=brevo&utm_medium=email&utm_campaign=blog_${SLUG}"
+
+          PAYLOAD=$(jq -n \
+            --arg subject "$TITLE" \
+            --arg content "$EMAIL_BODY" \
+            --arg blog_url "$BLOG_URL" \
+            --arg name "Blog: ${TITLE}" \
+            --argjson templateId "$BREVO_TEMPLATE_ID" \
+            '{
+              type: "classic",
+              sender: {name: "Scanopy", email: "no-reply@email.scanopy.net"},
+              name: $name,
+              subject: $subject,
+              templateId: $templateId,
+              params: {content: $content, blog_url: $blog_url},
+              recipients: {listIds: [13]},
+              replyTo: {email: "no-reply@email.scanopy.net"}
+            }')
+
+          CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD")
+
+          CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
+
+          if [ -z "$CAMPAIGN_ID" ] || [ "$CAMPAIGN_ID" = "null" ]; then
+            echo "::error::Failed to get campaign ID from Brevo response: $CAMPAIGN_RESPONSE"
+            exit 1
+          fi
+
+          echo "Brevo campaign draft created: $CAMPAIGN_ID"
+          echo "Preview and send from https://app.brevo.com/campaign/email/$CAMPAIGN_ID"
+
+      - name: Post to Twitter/X
+        uses: noweh/post-tweet-v2-action@v1.0
+        with:
+          message: |
+            ${{ steps.social.outputs.response }}
+
+            https://scanopy.net/blog/${{ steps.blog.outputs.slug }}?utm_source=twitter&utm_medium=social&utm_campaign=blog_${{ steps.blog.outputs.slug }}
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+
+      - name: Post to Bluesky
+        uses: myConsciousness/bluesky-post@v5
+        with:
+          text: |
+            ${{ steps.social.outputs.response }}
+
+            https://scanopy.net/blog/${{ steps.blog.outputs.slug }}?utm_source=bluesky&utm_medium=social&utm_campaign=blog_${{ steps.blog.outputs.slug }}
+          identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
+          password: ${{ secrets.BLUESKY_PASSWORD }}
