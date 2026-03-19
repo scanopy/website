@@ -7,10 +7,30 @@ on:
       - 'src/lib/changelog/*.md'
   workflow_dispatch:
     inputs:
-      changelog_file:
-        description: 'Changelog filename (e.g., v0.12.5.md)'
+      version:
+        description: 'Version number (e.g., 0.14.19)'
         required: true
         type: string
+      send_email:
+        description: 'Send product update email'
+        type: boolean
+        default: true
+      send_discord:
+        description: 'Send Discord notification'
+        type: boolean
+        default: true
+      update_github_release:
+        description: 'Update GitHub release notes'
+        type: boolean
+        default: true
+      post_twitter:
+        description: 'Post to Twitter/X'
+        type: boolean
+        default: true
+      post_bluesky:
+        description: 'Post to Bluesky'
+        type: boolean
+        default: true
 
 jobs:
   publish:
@@ -28,7 +48,8 @@ jobs:
         run: |
           # Find the changelog file
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            CHANGELOG_FILE="src/lib/changelog/${{ inputs.changelog_file }}"
+            VERSION="${{ inputs.version }}"
+            CHANGELOG_FILE="src/lib/changelog/v${VERSION}.md"
           else
             CHANGELOG_FILE=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} \
               | grep 'src/lib/changelog/' | sort -V | tail -1)
@@ -93,7 +114,7 @@ jobs:
       #   {{ params.version }}  — version string (e.g., "0.14.14")
       # Template handles header, footer, branding, unsubscribe. Set BREVO_TEMPLATE_ID to the template ID.
       - name: Send product update email via Brevo
-        if: contains(fromJSON('["A", "B"]'), steps.changelog.outputs.category)
+        if: (github.event_name != 'workflow_dispatch' && contains(fromJSON('["A", "B"]'), steps.changelog.outputs.category)) || (github.event_name == 'workflow_dispatch' && inputs.send_email)
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_TEMPLATE_ID: ${{ vars.BREVO_TEMPLATE_ID }}
@@ -139,10 +160,18 @@ jobs:
             }')
 
           # Create email campaign
-          CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
+          CAMPAIGN_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "https://api.brevo.com/v3/emailCampaigns" \
             -H "api-key: ${BREVO_API_KEY}" \
             -H "Content-Type: application/json" \
             -d "$PAYLOAD")
+
+          HTTP_CODE=$(echo "$CAMPAIGN_RESPONSE" | tail -1)
+          CAMPAIGN_RESPONSE=$(echo "$CAMPAIGN_RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "::error::Brevo API returned HTTP $HTTP_CODE: $CAMPAIGN_RESPONSE"
+            exit 1
+          fi
 
           CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
 
@@ -155,6 +184,7 @@ jobs:
           echo "Preview and send from https://app.brevo.com/campaign/email/$CAMPAIGN_ID"
 
       - name: Send Discord notification
+        if: github.event_name != 'workflow_dispatch' || inputs.send_discord
         env:
           RELEASE_CHANNEL_WEBHOOK: ${{ secrets.RELEASE_CHANNEL_WEBHOOK }}
           VERSION: ${{ steps.changelog.outputs.version }}
@@ -188,6 +218,7 @@ jobs:
           echo "Discord notification sent"
 
       - name: Update GitHub Release Notes
+        if: github.event_name != 'workflow_dispatch' || inputs.update_github_release
         env:
           GH_TOKEN: ${{ secrets.UPDATE_SCANOPY_RELEASES_TOKEN }}
         run: |
@@ -213,6 +244,7 @@ jobs:
           echo "Successfully updated release notes for $RELEASE_TAG"
 
       - name: Post to Twitter/X
+        if: github.event_name != 'workflow_dispatch' || inputs.post_twitter
         uses: noweh/post-tweet-v2-action@v1.0
         with:
           message: |
@@ -227,6 +259,7 @@ jobs:
           access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
 
       - name: Post to Bluesky
+        if: github.event_name != 'workflow_dispatch' || inputs.post_bluesky
         uses: myConsciousness/bluesky-post@v5
         with:
           text: |
