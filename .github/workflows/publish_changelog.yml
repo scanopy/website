@@ -150,7 +150,7 @@ jobs:
             --argjson templateId "$BREVO_TEMPLATE_ID" \
             '{
               type: "classic",
-              sender: {name: "Scanopy", email: "no-reply@email.scanopy.net"},
+              sender: {name: "Maya from Scanopy", email: "maya@email.scanopy.net"},
               name: $name,
               subject: $subject,
               templateId: $templateId,
