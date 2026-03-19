@@ -49,6 +49,37 @@ SCANOPY_INTERFACES=eth0,eth1
 
 When `--interfaces` is set, the daemon only reports and scans subnets attached to those interfaces. This prevents overlap between daemon instances sharing the same host.
 
+## Configuring ports and bind addresses
+
+Every daemon instance runs an HTTP server that binds to `0.0.0.0:60073` by default. Because `0.0.0.0` binds all interfaces, the first daemon claims port 60073 on every address — subsequent instances on the same host will fail with a port conflict.
+
+To fix this, give each instance a unique `--bind-address` (the IP of its specific interface) and a unique `--daemon-port`:
+
+```bash
+# Daemon on eth0 (192.168.1.10) — uses default port
+scanopy-daemon --name eth0 --interfaces eth0 \
+  --bind-address 192.168.1.10 --daemon-port 60073
+
+# Daemon on eth1 (10.0.0.10) — different port
+scanopy-daemon --name eth1 --interfaces eth1 \
+  --bind-address 10.0.0.10 --daemon-port 60074
+```
+
+The same settings work as environment variables or in the config file:
+
+```bash
+# Environment variables
+SCANOPY_BIND_ADDRESS=192.168.1.10
+SCANOPY_DAEMON_PORT=60073
+
+# config.json
+{ "bind_address": "192.168.1.10", "daemon_port": 60073 }
+```
+
+<Callout type="warn">
+  Both `--bind-address` and `--daemon-port` are required when running multiple daemons on one host. Even if each daemon uses a different bind address, using the same port on `0.0.0.0` will cause a conflict.
+</Callout>
+
 ## Setting up multiple daemons
 
 Create a separate daemon entry in **Discover > Scan > Daemons** for each instance. Each daemon gets its own API key and can target the same or different networks. During setup, use the **Advanced** tab to configure interface restrictions under Network Discovery. The app provides platform-specific install and run commands with your settings included.
@@ -60,6 +91,8 @@ sudo scanopy-daemon --name eth0
 sudo scanopy-daemon --name eth1
 ```
 
+The bind address and port are persisted in each daemon's config file, so you only need to pass them on first run.
+
 ### systemd template (Linux)
 
 Scanopy provides a [systemd template unit](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon%40.service) for running multiple instances. Download and install it:
@@ -70,11 +103,33 @@ sudo curl -o /etc/systemd/system/scanopy-daemon@.service \
 sudo systemctl daemon-reload
 ```
 
-The template uses the instance identifier as both `--name` and `--interfaces`:
+The template uses the instance identifier as both `--name` and `--interfaces`. Each instance needs its own bind address and port — set these via environment overrides:
 
 ```ini
 ExecStart=/usr/local/bin/scanopy-daemon --name=%i --interfaces=%i
 SyslogIdentifier=scanopy-daemon-%i
+```
+
+To configure the bind address and port per instance, create a systemd override:
+
+```bash
+sudo systemctl edit scanopy-daemon@eth0
+```
+
+```ini
+[Service]
+Environment="SCANOPY_BIND_ADDRESS=192.168.1.10"
+Environment="SCANOPY_DAEMON_PORT=60073"
+```
+
+```bash
+sudo systemctl edit scanopy-daemon@eth1
+```
+
+```ini
+[Service]
+Environment="SCANOPY_BIND_ADDRESS=10.0.0.10"
+Environment="SCANOPY_DAEMON_PORT=60074"
 ```
 
 Enable and start instances by appending the interface name after `@`:
