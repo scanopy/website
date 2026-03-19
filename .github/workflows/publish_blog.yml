@@ -137,7 +137,7 @@ jobs:
               templateId: $templateId,
               params: {content: $content, blog_url: $blog_url},
               recipients: {listIds: [13]},
-              replyTo: {email: "no-reply@email.scanopy.net"}
+              replyTo: "maya@email.scanopy.net"
             }')
 
           CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
