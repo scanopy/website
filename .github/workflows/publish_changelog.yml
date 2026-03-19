@@ -156,7 +156,7 @@ jobs:
               templateId: $templateId,
               params: {content: $content, version: $version, changelog_url: $changelog_url},
               recipients: {listIds: [13]},
-              replyTo: {name: "Scanopy", email: "no-reply@email.scanopy.net"}
+              replyTo: {name: "Maya from Scanopy", email: "maya@email.scanopy.net"}
             }')
 
           # Create email campaign
