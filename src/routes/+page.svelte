@@ -366,7 +366,7 @@
 				What you get
 			</span>
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-				Everything you need to master your network
+				Everything you need to map your network
 			</h2>
 		</div>
 
