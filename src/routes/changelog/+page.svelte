@@ -179,7 +179,8 @@
 	}
 
 	:global(.prose img) {
-		width: 100%;
+		max-width: 100%;
+		width: auto;
 		border-radius: 0.5rem;
 		border: 1px solid rgb(31 41 55);
 		margin: 1rem 0;
