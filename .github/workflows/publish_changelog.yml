@@ -140,24 +140,36 @@ jobs:
           # Build changelog URL with UTM tracking (for template CTA)
           CHANGELOG_URL="https://scanopy.net/changelog/v${VERSION}?utm_source=brevo&utm_medium=email&utm_campaign=product_update_v${VERSION}"
 
-          # Build JSON payload — templateId + params instead of raw htmlContent
-          PAYLOAD=$(jq -n \
+          # Fetch template HTML from Brevo
+          TEMPLATE_RESPONSE=$(curl -s -w "\n%{http_code}" -X GET "https://api.brevo.com/v3/smtp/templates/${BREVO_TEMPLATE_ID}" \
+            -H "api-key: ${BREVO_API_KEY}")
+
+          HTTP_CODE=$(echo "$TEMPLATE_RESPONSE" | tail -1)
+          TEMPLATE_RESPONSE=$(echo "$TEMPLATE_RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "::error::Failed to fetch Brevo template (HTTP $HTTP_CODE): $TEMPLATE_RESPONSE"
+            exit 1
+          fi
+
+          # Substitute placeholders and build campaign payload
+          PAYLOAD=$(echo "$TEMPLATE_RESPONSE" | jq \
             --arg subject "$EMAIL_SUBJECT" \
             --arg content "$EMAIL_BODY" \
-            --arg version "$VERSION" \
             --arg changelog_url "$CHANGELOG_URL" \
             --arg name "Product Update v${VERSION}" \
-            --argjson templateId "$BREVO_TEMPLATE_ID" \
-            '{
-              type: "classic",
-              sender: {name: "Maya from Scanopy", email: "maya@email.scanopy.net"},
-              name: $name,
-              subject: $subject,
-              templateId: $templateId,
-              params: {content: $content, version: $version, changelog_url: $changelog_url},
-              recipients: {listIds: [13]},
-              replyTo: "maya@email.scanopy.net"
-            }')
+            '.htmlContent
+             | gsub("\\{\\{ params\\.content \\}\\}"; $content)
+             | gsub("\\{\\{ params\\.changelog_url \\}\\}"; $changelog_url)
+             | {
+                 type: "classic",
+                 sender: {name: "Maya from Scanopy", email: "maya@email.scanopy.net"},
+                 name: $name,
+                 subject: $subject,
+                 htmlContent: .,
+                 recipients: {listIds: [13]},
+                 replyTo: "maya@email.scanopy.net"
+               }')
 
           # Create email campaign
           CAMPAIGN_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "https://api.brevo.com/v3/emailCampaigns" \
