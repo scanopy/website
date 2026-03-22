@@ -11,11 +11,9 @@ Most of the migration is automatic — but there are a few things you need to do
 
 When a daemon running v0.15.0 or later connects, the server:
 
-1. Archives all legacy discoveries (Network Scan, Docker, Self-Report) associated with that daemon
+1. Deletes all legacy discoveries (Network Scan, Docker, Self-Report) associated with that daemon
 2. Creates a single new discovery that combines the functionality of all three
 3. Preserves your scan schedules and subnet configuration
-
-No data is lost. Archived discoveries remain visible but can no longer be edited or run.
 
 ## What You Need to Do
 
@@ -28,7 +26,7 @@ No data is lost. Archived discoveries remain visible but can no longer be edited
 3. Select **Docker Proxy** as the type
 4. Enter the proxy port (default: 2376), optional path, and SSL certificates if applicable
 5. Save the credential
-6. Assign it to the target host from the host edit modal (**Credentials** tab)
+6. [Assign it to the target host](/guides/docker-proxy/#assigning-to-a-host) from the host edit modal (**Credentials** tab)
 
 The daemon config flags (`--docker-proxy`, `--docker-proxy-ssl-cert`, `--docker-proxy-ssl-key`, `--docker-proxy-ssl-chain`) still work in v0.15.0 but log deprecation warnings. They will be removed in v0.16.0.
 

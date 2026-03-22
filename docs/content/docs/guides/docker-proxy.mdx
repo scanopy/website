@@ -7,29 +7,29 @@ Scanopy daemons can discover Docker containers by connecting to the Docker API. 
 
 For background on how credentials work — types, scope models, resolution order, and auto-assignment — see [Credentials](/using-scanopy/credentials/).
 
-## When to Use a Docker Proxy
+## Docker Discovery Modes
+
+There are three ways to connect a daemon to the Docker API, depending on where Docker runs and your security requirements:
 
 ### Direct Socket Access (Default)
 
-The daemon connects to the Docker socket on its own host.
+The daemon connects directly to `/var/run/docker.sock` on its own host. No proxy or credential needed.
 
-**Use when:**
-
-- Daemon runs on same host as Docker
-- You trust the daemon with full Docker API access
-- Simplest setup
+**Use when:** The daemon runs on the same host as Docker and you trust it with full Docker API access. This is the simplest setup.
 
 Enable this during daemon setup by selecting **Local Socket** in the Docker mode selector, or toggle **Scan local Docker socket** in the discovery settings.
 
-### Docker Socket Proxy
+### Local Proxy
 
-The daemon connects to a proxy that restricts Docker API operations.
+The daemon connects to a Docker socket proxy running on the same host. The proxy restricts which Docker API operations are allowed.
 
-**Use when:**
+**Use when:** You want to limit what the daemon can do with the Docker API — for example, to satisfy compliance requirements or reduce the blast radius of a compromised daemon.
 
-- You want to restrict Docker API operations
-- You need to discover containers on a remote host
-- Compliance requires limiting Docker access
+### Remote Proxy
+
+The daemon connects to a Docker socket proxy on a different host, enabling container discovery on remote machines.
+
+**Use when:** You want to discover containers on a host where the daemon isn't running. Deploy a proxy on the remote host, then create a Docker Proxy credential pointing to it.
 
 ## Supported Proxies
 

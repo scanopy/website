@@ -54,11 +54,11 @@ Discovery alternates between two scan depths on a configurable interval.
 
 ### Light scans
 
-Light scans focus on host and port discovery using a targeted port set — the ports defined in the discovery's port configuration plus any credential-specific ports (e.g., SNMP port 161). This is faster and sufficient for detecting new hosts and tracking port changes.
+Light scans focus on host and service discovery using a targeted port set — the ports defined in the discovery's port configuration plus any credential-specific ports (e.g., SNMP port 161). This is faster and sufficient for detecting new hosts and tracking port changes.
 
 ### Deep scans
 
-Deep scans perform a full 65,535-port TCP scan on each host. This catches services running on non-standard ports that light scans would miss.
+Deep scans perform a full 65,535-port TCP scan on each host. This catches open ports that aren't covered by the light scan's targeted port set.
 
 ### Scan interval
 
