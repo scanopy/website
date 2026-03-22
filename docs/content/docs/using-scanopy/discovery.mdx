@@ -5,9 +5,20 @@ description: How Scanopy discovers hosts and services on your network.
 
 Daemons scan your network to discover hosts and services, then report findings to the server. This page covers how discovery works and how to configure it.
 
-## Discovery Types
+## How Discovery Works
 
-### Network Scan
+Each daemon runs a single discovery that combines network scanning, Docker container discovery, and self-reporting into one flow. When a discovery runs, the daemon:
+
+1. Scans configured subnets to find hosts via IP, port, and ARP scanning
+2. Queries SNMP on discovered hosts (if [credentials are configured](/using-scanopy/credentials/))
+3. Discovers Docker containers via the local socket or a [Docker Proxy credential](/guides/docker-proxy/)
+4. Reports its own capabilities and reachable subnets to the server
+
+<Callout type="info">
+In versions before v0.15.0, these were separate discovery types (Network Scan, Docker, Self-Report). They have been consolidated into a single discovery. See the [migration guide](/guides/unified-discovery-migration/) if you're upgrading.
+</Callout>
+
+### Network Scanning
 
 Scans IP addresses on configured subnets to find hosts and services.
 
@@ -15,13 +26,53 @@ Scans IP addresses on configured subnets to find hosts and services.
 - Identifies services via [pattern matching](/reference/service-detection/)
 - Performs reverse DNS lookups
 - Collects MAC addresses (for directly connected subnets only)
-- Queries SNMP for device details, interfaces, and neighbors (if [credentials are configured](#snmp))
+- Queries SNMP for device details, interfaces, and neighbors (if [credentials are configured](/using-scanopy/credentials/))
 
 **Key principle**: The daemon can scan any subnet it can route to. If the daemon's host can reach an IP address, the daemon can scan it.
 
-**Configuring subnets to scan**: Go to **Discover > Scan > Scheduled**, edit a Network Scan discovery, and add subnets to the scan list. You can add any subnet — including ones the daemon doesn't have a direct interface on.
+**Configuring subnets to scan**: Edit the discovery and add subnets to the scan list in the **Targets** tab. You can add any subnet — including ones the daemon doesn't have a direct interface on.
 
 **Layer 2 vs Layer 3**: When the daemon has a network interface on the subnet being scanned, you get full Layer 2 access (MAC addresses via ARP, better host discovery). When scanning remote subnets, you're limited to Layer 3 — only hosts with open ports will be discovered. See [limitations](/reference/limitations/#layer-2-vs-layer-3) for details.
+
+### Docker Container Discovery
+
+Discovers containers via the Docker API.
+
+- Lists running containers with names and metadata
+- Maps container networks and port bindings
+- Identifies containerized services
+- Creates Docker bridge subnets automatically
+
+Docker discovery can work in two modes:
+
+- **Local socket** — the daemon connects directly to `/var/run/docker.sock` on its own host. Enable via the **Scan local Docker socket** toggle in the discovery targets.
+- **Docker Proxy credential** — the daemon connects to a Docker socket proxy, which can be local or remote. See [Set up a Docker Proxy](/guides/docker-proxy/) for configuration.
+
+## Scanning Lifecycle
+
+Discovery alternates between two scan depths on a configurable interval.
+
+### Light scans
+
+Light scans focus on host and port discovery using a targeted port set — the ports defined in the discovery's port configuration plus any credential-specific ports (e.g., SNMP port 161). This is faster and sufficient for detecting new hosts and tracking port changes.
+
+### Deep scans
+
+Deep scans perform a full 65,535-port TCP scan on each host. This catches services running on non-standard ports that light scans would miss.
+
+### Scan interval
+
+The **full scan interval** setting (default: 3) controls how often deep scans run. A value of 3 means every third scan is deep, with light scans in between. Specifically:
+
+| Setting | Behavior |
+| ------- | -------- |
+| `1` | Every scan is deep |
+| `3` (default) | Light, light, deep, light, light, deep, ... |
+| `0` | Never deep scan (light scans only) |
+
+You can also force a deep scan at any time from the discovery session controls.
+
+Configure the scan interval in the discovery's **Speed** tab.
 
 ## SNMP
 
@@ -39,12 +90,12 @@ Without SNMP, hosts have only what port scanning and DNS provide — IP addresse
 
 When the daemon queries a host via SNMP, it resolves which community string to use in this order:
 
-1. **Host-specific override** — a credential assigned directly to the host
-2. **Network default** — a credential assigned to the host's network
+1. **Host-specific assignment** — a credential assigned directly to the host
+2. **Network default** — a Broadcast-scoped credential assigned to the host's network
 3. **Fallback** — the community string `public`
 
 <Callout type="info">
-Creating a credential alone doesn't activate SNMP collection — you must assign it to a network or to specific hosts. See the [SNMP Credentials guide](/guides/snmp-credentials/) for setup steps.
+Creating a credential alone doesn't activate SNMP collection — you must assign it to a network or to specific hosts. See the [SNMP Credentials guide](/guides/snmp-credentials/) for setup steps, or [Credentials](/using-scanopy/credentials/) for how assignment works.
 </Callout>
 
 ### What gets queried
@@ -65,25 +116,6 @@ Creating a credential alone doesn't activate SNMP collection — you must assign
 
 See [SNMP reference](/reference/snmp/) for protocol details, timeouts, and the full list of collected OIDs.
 
-### Docker
-
-Discovers containers via the Docker socket on the daemon's host.
-
-- Lists running containers with names and metadata
-- Maps container networks and port bindings
-- Identifies containerized services
-- Creates Docker bridge subnets automatically
-
-Requires Docker socket access — see [Securing Docker Discovery with a Socket Proxy](/guides/docker-proxy/) for secure configuration.
-
-### Self-Report
-
-Daemon reports its own capabilities to the server.
-
-- Identifies which subnets the daemon can reach
-- Reports Docker socket availability
-- Runs automatically on daemon startup
-
 ## Run Types
 
 | Type          | Behavior                                               |
@@ -98,6 +130,7 @@ Duration depends primarily on the number of active hosts on the network, and wil
 Factors affecting speed:
 
 - Number of active hosts — more hosts means more deep scanning work
+- Scan depth — deep scans take longer than light scans
 - Concurrent scans setting (default: 15, configurable per daemon)
 - Network latency and host responsiveness
 - Network prefix size — only a limiting factor without a Layer 2 interface, since the daemon must probe every IP individually via TCP
@@ -114,7 +147,7 @@ When a host is discovered, Scanopy determines its name using this priority:
    - _IP_: Uses the host's IP address
 3. **Remaining fallback** — whichever option wasn't selected in step 2
 
-Configure naming strategy in the discovery type settings.
+Configure naming strategy in the discovery settings.
 
 Manage discoveries via **Discover > Scan > Scheduled** and monitor progress via **Discover > Scan > Sessions**.
 
@@ -124,7 +157,7 @@ When a daemon discovers a host, Scanopy checks if it already exists before creat
 
 - The same host is discovered by multiple daemons
 - A host is rediscovered across multiple scan sessions
-- Docker and Network discovery both find the same machine
+- Docker and network scanning both find the same machine
 
 Host deduplication is only applied to hosts on the same [Network](/using-scanopy/organization/#networks). If two hosts on different Networks meet the criteria below, they will not be deduplicated.
 
@@ -141,14 +174,14 @@ MAC addresses are available when the daemon is directly connected to the subnet 
 
 ### Docker Host Matching
 
-Docker discovery is local-only — it discovers containers on the daemon's own host, not remote machines. All discovered services are assigned to that host.
+Docker container discovery is local-only — it discovers containers on the daemon's own host (or on the host targeted by a Docker Proxy credential), not arbitrary remote machines. All discovered services are assigned to that host.
 
 This has two implications:
 
 - **No cross-host deduplication**: Since Docker discovery only sees one host, there's nothing to deduplicate
-- **Docker proxies don't change this**: Even when using a [Securing Docker Discovery with a Socket Proxy](/guides/docker-proxy/) pointing to a remote host, services are still assigned to the daemon's host
+- **Docker proxies change the target**: When using a [Docker Proxy credential](/guides/docker-proxy/) pointing to a remote host, services are assigned to the remote host, not the daemon's host
 
-For accurate Docker discovery, run the daemon on the same machine as Docker.
+For accurate Docker discovery without a proxy, run the daemon on the same machine as Docker.
 
 ### Upsert Behavior
 
@@ -176,15 +209,16 @@ Ports, interfaces, and services discovered on the duplicate will be reconciled a
 **Always merged:**
 
 - **Discovery metadata** — Each discovery source is recorded, so you can see which daemons and discovery methods found the host
+- **Credential assignments** — When hosts are consolidated, credential assignments are preserved using broadest-scope-wins merging
 
 This means discovery enriches existing hosts without overwriting user customizations.
 
-### Docker vs Network Discovery
+### Network Scanning vs Docker Scanning
 
-Both discovery types use the same deduplication logic. The differences are in what data they provide:
+Both scanning methods use the same deduplication logic. The differences are in what data they provide:
 
-| Aspect | Network Discovery | Docker Discovery |
-| ------ | ----------------- | ---------------- |
+| Aspect | Network Scanning | Docker Scanning |
+| ------ | ---------------- | --------------- |
 | **MAC availability** | Only on directly connected subnets | Always available from Docker API |
 | **Hostname source** | Reverse DNS lookup | None (uses naming fallback) |
 | **Port detection** | Full TCP/UDP scan (1-65535) | Container port mappings + endpoint probing |

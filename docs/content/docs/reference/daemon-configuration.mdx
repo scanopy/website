@@ -52,6 +52,29 @@ The config file stores runtime state (daemon ID, host ID) alongside your setting
 
 <DaemonConfigTable />
 
+## New in v0.15.0
+
+### `--credential-id`
+
+Specifies a credential ID to seed during daemon registration. Can be repeated to seed multiple credentials. Credentials specified here will be used during the daemon's first scan and auto-assigned to discovered hosts at matching IPs. See [Credentials](/using-scanopy/credentials/#during-daemon-setup-new-daemons) for details.
+
+### `--enable-local-docker-socket`
+
+Controls whether the daemon scans containers via the local Docker socket. Defaults to `true`. Set to `false` to disable local Docker discovery (useful when using a Docker Proxy credential instead).
+
+## Deprecated in v0.15.0
+
+<Callout type="warn">
+The following parameters are deprecated and will be removed in v0.16.0. Use [Docker Proxy credentials](/guides/docker-proxy/) instead. See the [migration guide](/guides/unified-discovery-migration/#1-recreate-docker-proxy-configuration-as-a-credential) for steps.
+</Callout>
+
+- `--docker-proxy` / `SCANOPY_DOCKER_PROXY`
+- `--docker-proxy-ssl-cert` / `SCANOPY_DOCKER_PROXY_SSL_CERT`
+- `--docker-proxy-ssl-key` / `SCANOPY_DOCKER_PROXY_SSL_KEY`
+- `--docker-proxy-ssl-chain` / `SCANOPY_DOCKER_PROXY_SSL_CHAIN`
+
+Scan speed settings (`--scan-rate-pps`, `--arp-rate-pps`, etc.) configured at the daemon level are no longer used. Scan speed is now configured per-discovery in the **Speed** tab. See the [migration guide](/guides/unified-discovery-migration/#2-re-apply-scan-speed-overrides).
+
 ## Concurrent Scans
 
 Controls how many hosts the daemon scans simultaneously during network discovery.

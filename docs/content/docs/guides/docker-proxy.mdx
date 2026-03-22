@@ -1,20 +1,17 @@
 ---
-title: Securing Docker Discovery with a Socket Proxy
-description: How to use a Docker socket proxy to restrict API access when discovering containers.
+title: Set up a Docker Proxy
+description: How to use a Docker socket proxy to discover containers securely, including remote Docker hosts.
 ---
 
-Scanopy daemons can discover Docker containers by connecting to the Docker API. By default, daemons connect directly to `/var/run/docker.sock`. A Docker socket proxy provides an additional security layer by restricting which Docker API operations are allowed.
+Scanopy daemons can discover Docker containers by connecting to the Docker API. By default, daemons connect directly to the local Docker socket (`/var/run/docker.sock`). A Docker socket proxy provides an additional security layer by restricting which Docker API operations are allowed — and enables discovering containers on remote hosts.
+
+For background on how credentials work — types, scope models, resolution order, and auto-assignment — see [Credentials](/using-scanopy/credentials/).
 
 ## When to Use a Docker Proxy
 
 ### Direct Socket Access (Default)
 
-Mount the Docker socket directly:
-
-```yaml
-volumes:
-  - /var/run/docker.sock:/var/run/docker.sock:ro
-```
+The daemon connects to the Docker socket on its own host.
 
 **Use when:**
 
@@ -22,19 +19,16 @@ volumes:
 - You trust the daemon with full Docker API access
 - Simplest setup
 
+Enable this during daemon setup by selecting **Local Socket** in the Docker mode selector, or toggle **Scan local Docker socket** in the discovery settings.
+
 ### Docker Socket Proxy
 
-Route requests through a proxy:
-
-```yaml
-environment:
-  - SCANOPY_DOCKER_PROXY=http://docker-proxy:2375
-```
+The daemon connects to a proxy that restricts Docker API operations.
 
 **Use when:**
 
 - You want to restrict Docker API operations
-- Daemon runs in a more restricted security context
+- You need to discover containers on a remote host
 - Compliance requires limiting Docker access
 
 ## Supported Proxies
@@ -91,48 +85,38 @@ services:
 
 Note: wollomatic's proxy uses allowlists. Refer to their documentation for configuring the required endpoints.
 
-## Configuration
+## Creating a Docker Proxy Credential
 
-### HTTP Proxy (Non-SSL)
+Once your proxy is running, create a credential in Scanopy so the daemon knows how to connect.
 
-```yaml
-# Daemon configuration
-environment:
-  - SCANOPY_DOCKER_PROXY=http://docker-proxy:2375
-```
+1. Go to **Assets > Credentials**
+2. Click **Create Credential**
+3. Select **Docker Proxy** as the type
+4. Configure the connection:
+   - **Port** — the proxy's listening port (default: 2376)
+   - **Path** — optional URL path prefix (leave empty for most proxies)
+   - **SSL Certificate**, **SSL Key**, **SSL Chain** — for HTTPS proxies, provide the client certificate, private key, and CA chain. These can be entered inline or as file paths readable by the daemon.
+5. Save the credential
 
-Or via CLI:
+### Assigning to a host
 
-```bash
-scanopy-daemon --docker-proxy http://docker-proxy:2375 ...
-```
+Docker Proxy is a **PerHost** credential — it must be assigned to the specific host where you want Docker discovery.
 
-### HTTPS Proxy (SSL)
+**For new hosts** (not yet discovered): Add the credential during daemon setup or from the discovery **Credentials** tab, along with the target IP of the Docker host. The credential will be auto-assigned after the first scan discovers the host.
 
-For SSL-enabled proxies, provide certificate paths:
+**For existing hosts**: Open the host edit modal, go to the **Credentials** tab, and add the Docker Proxy credential. You can optionally scope it to a specific network interface.
 
-```yaml
-environment:
-  - SCANOPY_DOCKER_PROXY=https://docker-proxy:2376
-  - SCANOPY_DOCKER_PROXY_SSL_CERT=/certs/client-cert.pem
-  - SCANOPY_DOCKER_PROXY_SSL_KEY=/certs/client-key.pem
-  - SCANOPY_DOCKER_PROXY_SSL_CHAIN=/certs/ca.pem
-volumes:
-  - ./certs:/certs:ro
-```
+## Remote Docker Scanning
 
-Or via CLI:
+Docker Proxy credentials can point to any reachable Docker API endpoint — the proxy doesn't need to be on the daemon's host. This enables container discovery on remote machines:
 
-```bash
-scanopy-daemon \
-  --docker-proxy https://docker-proxy:2376 \
-  --docker-proxy-ssl-cert /certs/client-cert.pem \
-  --docker-proxy-ssl-key /certs/client-key.pem \
-  --docker-proxy-ssl-chain /certs/ca.pem \
-  ...
-```
+1. Deploy a Docker socket proxy on the remote host
+2. Create a Docker Proxy credential pointing to the remote proxy's address and port
+3. Assign the credential to the remote host in Scanopy
 
-### Required Docker API Permissions
+The daemon will connect to the remote proxy during discovery and report discovered containers as services on that host.
+
+## Required Docker API Permissions
 
 Scanopy daemon uses the following Docker API endpoints:
 
@@ -146,6 +130,10 @@ Scanopy daemon uses the following Docker API endpoints:
 | `/exec/{id}/start`      | POST   | Start exec to probe HTTP endpoints inside containers |
 
 **Why exec?** Scanopy uses `exec` to probe HTTP endpoints from inside containers that don't expose ports to the host. Without exec access, containers are still discovered but service detection may be less accurate.
+
+<Callout type="warn">
+**Migrating from daemon config?** If you previously configured Docker proxy via `--docker-proxy`, `SCANOPY_DOCKER_PROXY`, or the config file, you need to recreate it as a Docker Proxy credential. The daemon config flags are deprecated in v0.15.0 and will be removed in v0.16.0. See the [migration guide](/guides/unified-discovery-migration/) for details.
+</Callout>
 
 ## Troubleshooting
 

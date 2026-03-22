@@ -213,10 +213,10 @@ flowchart TD
 
     step1 --> step2 --> step3
 
-    subgraph step4["4. Daemon executes scan"]
-        scan1["Network Scan:<br/>Scans IP range, detects ports/services"]
-        scan2["Docker Scan:<br/>Queries Docker socket for containers"]
-        scan3["Self-Report:<br/>Reports own capabilities"]
+    subgraph step4["4. Daemon executes discovery"]
+        scan1["Network scanning:<br/>Scans IP range, detects ports/services"]
+        scan2["Docker scanning:<br/>Queries Docker API for containers"]
+        scan3["Self-report:<br/>Reports own capabilities"]
     end
 
     step3 --> step4
@@ -251,9 +251,9 @@ flowchart TD
 
 ## Discovery Pipeline
 
-### Network Scan
+### Network Scanning
 
-Network discovery runs in three phases:
+Network scanning runs in three phases:
 
 1. **ARP Discovery** — The daemon sends ARP broadcasts across configured subnets to discover active hosts. This is the primary mechanism for finding devices on the local network, returning IP and MAC address pairs.
 2. **Deep Scanning** — Each discovered host is scanned in detail:
