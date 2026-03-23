@@ -11,7 +11,7 @@ Each daemon runs a single discovery that combines network scanning, Docker conta
 
 1. Scans configured subnets to find hosts via IP, port, and ARP scanning
 2. Queries SNMP on discovered hosts (if [credentials are configured](/using-scanopy/credentials/))
-3. Discovers Docker containers via the local socket or a [Docker Proxy credential](/guides/docker-proxy/)
+3. Discovers Docker containers via the local socket or a [Docker Proxy credential](/guides/docker-proxy/) (local or remote)
 4. Reports its own capabilities and reachable subnets to the server
 
 <Callout type="info">
@@ -131,7 +131,6 @@ Factors affecting speed:
 
 - Number of active hosts — more hosts means more deep scanning work
 - Scan depth — deep scans take longer than light scans
-- Concurrent scans setting (default: 15, configurable per daemon)
 - Network latency and host responsiveness
 - Network prefix size — only a limiting factor without a Layer 2 interface, since the daemon must probe every IP individually via TCP
 

@@ -30,6 +30,12 @@ Networks are the primary organizational unit. Each network represents a distinct
 - One network per physical location
 - Distinct networks for different security zones
 
+## Credentials
+
+Credentials store authentication details (SNMP community strings, Docker Proxy certificates) that daemons use to gather data during discovery. Credentials are organization-scoped — they can be assigned to any network or host within the organization.
+
+Manage credentials via **Assets > Credentials**. See [Credentials](/using-scanopy/credentials/) for types, scopes, and assignment.
+
 ## API Keys
 
 Each daemon requires its own API key. Create keys via **Platform > API Keys** or during daemon setup. Use one key per daemon — don't share keys between daemons.

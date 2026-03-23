@@ -102,7 +102,7 @@ Once your proxy is running, create a credential in Scanopy so the daemon knows h
 
 Docker Proxy is a **PerHost** credential — it must be assigned to the specific host where you want Docker discovery.
 
-**For new hosts** (not yet discovered): Add the credential during daemon setup or from the discovery **Credentials** tab, along with the target IP of the Docker host. The credential will be auto-assigned after the first scan discovers the host.
+**For new hosts** (not yet discovered): Add the credential during daemon setup or from the discovery **Credentials** tab, along with the target IP of the Docker host. The credential will be [auto-assigned](/using-scanopy/credentials/#auto-assignment) after the first scan discovers the host.
 
 **For existing hosts**: Open the host edit modal, go to the **Credentials** tab, and add the Docker Proxy credential. You can optionally scope it to a specific network interface.
 
@@ -157,3 +157,4 @@ Proxy is blocking required endpoints. For Tecnativa, ensure:
 1. Verify certificate paths are correct and mounted
 2. Check certificate is valid: `openssl x509 -in /certs/client-cert.pem -text -noout`
 3. Ensure CA chain is included if using self-signed certs
+4. Check that cert and key files aren't swapped — see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/) for diagnosing file read and PEM errors in daemon logs
