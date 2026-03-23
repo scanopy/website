@@ -19,5 +19,12 @@
 		"quote": "It's the network scan + Docker detection combo that makes it useful, because most tools do one or the other but never both. [Translated]",
 		"url": "https://korben.info/scanopy-scanner-reseau-topologie.html",
 		"logo": "/press/korben-360w.webp"
+	},
+	{
+		"id": "mariushosting",
+		"name": "Marius Hosting",
+		"quote": "Built with Rust, Svelte, and TypeScript, it offers a modern alternative to stale manual diagrams like Visio files.",
+		"url": "https://mariushosting.com/how-to-install-scanopy-on-your-synology-nas/",
+		"logo": "/press/mariushosting-360w.webp"
 	}
 ]

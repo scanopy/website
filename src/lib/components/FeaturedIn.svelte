@@ -19,9 +19,10 @@
 			</div>
 
 			<div
-				class="mx-auto grid max-w-5xl gap-8"
+				class="mx-auto grid gap-8"
 				class:md:grid-cols-2={mentions.length >= 2}
-				class:lg:grid-cols-3={mentions.length >= 3}
+				class:lg:grid-cols-3={mentions.length === 3}
+				class:lg:grid-cols-4={mentions.length >= 4}
 			>
 				{#each mentions as mention (mention.id)}
 					<a
