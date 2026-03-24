@@ -70,46 +70,6 @@
     "docsOnly": false
   },
   {
-    "id": "docker_proxy",
-    "label": "Docker Proxy",
-    "cliFlag": "--docker-proxy",
-    "envVar": "SCANOPY_DOCKER_PROXY",
-    "configFileKey": "docker_proxy",
-    "default": null,
-    "description": "Optional local proxy for Docker API on the daemon host. Supports non-SSL and SSL; SSL requires additional config vars",
-    "docsOnly": false
-  },
-  {
-    "id": "docker_proxy_ssl_cert",
-    "label": "Docker Proxy SSL Cert",
-    "cliFlag": "--docker-proxy-ssl-cert",
-    "envVar": "SCANOPY_DOCKER_PROXY_SSL_CERT",
-    "configFileKey": "docker_proxy_ssl_cert",
-    "default": null,
-    "description": "Path to SSL certificate if using a docker proxy with SSL",
-    "docsOnly": false
-  },
-  {
-    "id": "docker_proxy_ssl_key",
-    "label": "Docker Proxy SSL Key",
-    "cliFlag": "--docker-proxy-ssl-key",
-    "envVar": "SCANOPY_DOCKER_PROXY_SSL_KEY",
-    "configFileKey": "docker_proxy_ssl_key",
-    "default": null,
-    "description": "Path to SSL private key if using a docker proxy with SSL",
-    "docsOnly": false
-  },
-  {
-    "id": "docker_proxy_ssl_chain",
-    "label": "Docker Proxy SSL Chain",
-    "cliFlag": "--docker-proxy-ssl-chain",
-    "envVar": "SCANOPY_DOCKER_PROXY_SSL_CHAIN",
-    "configFileKey": "docker_proxy_ssl_chain",
-    "default": null,
-    "description": "Path to SSL chain if using a docker proxy with SSL",
-    "docsOnly": false
-  },
-  {
     "id": "interfaces",
     "label": "Interfaces",
     "cliFlag": "--interfaces",
@@ -117,76 +77,6 @@
     "configFileKey": "interfaces",
     "default": null,
     "description": "Restrict daemon to specific network interface(s). Comma-separated for multiple (e.g., eth0,eth1). Leave empty for all interfaces",
-    "docsOnly": false
-  },
-  {
-    "id": "arp_retries",
-    "label": "Arp Retries",
-    "cliFlag": "--arp-retries",
-    "envVar": "SCANOPY_ARP_RETRIES",
-    "configFileKey": "arp_retries",
-    "default": "2",
-    "description": "Number of ARP retry rounds for non-responding hosts (default: 2, meaning 3 total attempts)",
-    "docsOnly": false
-  },
-  {
-    "id": "scan_rate_pps",
-    "label": "Port Scan Packets per Second",
-    "cliFlag": "--scan-rate-pps",
-    "envVar": "SCANOPY_SCAN_RATE_PPS",
-    "configFileKey": "scan_rate_pps",
-    "default": "500",
-    "description": "Maximum port scan probes per second (default: 500, controls rate of TCP/UDP connection attempts to avoid overwhelming target hosts)",
-    "docsOnly": false
-  },
-  {
-    "id": "port_scan_batch_size",
-    "label": "Port Scan Batch Size",
-    "cliFlag": "--port-scan-batch-size",
-    "envVar": "SCANOPY_PORT_SCAN_BATCH_SIZE",
-    "configFileKey": "port_scan_batch_size",
-    "default": "200",
-    "description": "Number of ports scanned concurrently per host. Higher values scan faster but may overwhelm some hosts",
-    "docsOnly": false
-  },
-  {
-    "id": "arp_rate_pps",
-    "label": "Arp Packets per Second",
-    "cliFlag": "--arp-rate-pps",
-    "envVar": "SCANOPY_ARP_RATE_PPS",
-    "configFileKey": "arp_rate_pps",
-    "default": "50",
-    "description": "Maximum ARP packets per second (default: 50, go more conservative for networks with enterprise switches)",
-    "docsOnly": false
-  },
-  {
-    "id": "use_npcap_arp",
-    "label": "Use Npcap for ARP on Windows",
-    "cliFlag": "--use-npcap-arp",
-    "envVar": "SCANOPY_USE_NPCAP_ARP",
-    "configFileKey": "use_npcap_arp",
-    "default": "false",
-    "description": "Enable faster ARP scanning on Windows by using broadcast ARP via Npcap instead of native SendARP, which doesn't support broadcast. **Requires Npcap installation**. Ignored on Linux/macOS",
-    "docsOnly": false
-  },
-  {
-    "id": "accept_invalid_scan_certs",
-    "label": "Accept Invalid Scan Certificates",
-    "cliFlag": "--accept-invalid-scan-certs",
-    "envVar": "SCANOPY_ACCEPT_INVALID_SCAN_CERTS",
-    "configFileKey": "accept_invalid_scan_certs",
-    "default": "true",
-    "description": "Accept invalid TLS certificates when scanning endpoints. Enabled by default since scanners probe arbitrary internal services.",
-    "docsOnly": false
-  },
-  {
-    "id": "concurrent_scans",
-    "label": "Concurrent Scans",
-    "cliFlag": "--concurrent-scans",
-    "envVar": "SCANOPY_CONCURRENT_SCANS",
-    "configFileKey": "concurrent_scans",
-    "default": "Auto",
-    "description": "Maximum parallel host scans",
     "docsOnly": false
   },
   {
