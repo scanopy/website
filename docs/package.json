@@ -12,6 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "flatted": "^3.4.2",
     "fumadocs-core": "16.3.2",
     "fumadocs-mdx": "14.2.2",
     "fumadocs-openapi": "^10.2.1",
@@ -19,7 +20,7 @@
     "lucide-react": "^0.561.0",
     "marked": "^17.0.1",
     "mermaid": "^11.12.2",
-    "next": "16.1.6",
+    "next": "^16.1.7",
     "posthog-js": "^1.310.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
