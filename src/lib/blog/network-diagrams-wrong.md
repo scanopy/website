@@ -49,7 +49,7 @@ Outdated diagrams aren't just annoying. They're expensive.
 
 The answer isn't "try harder to update your diagrams." The industry has been saying that for decades. It doesn't work because the failure mode is human, not technical.
 
-Automated network documentation flips the model. Instead of drawing a diagram and hoping someone maintains it, you let a tool discover the network, map it, and keep the map current with scheduled scans.
+[Automated network documentation](/blog/automated-network-documentation) flips the model. Instead of drawing a diagram and hoping someone maintains it, you let a tool discover the network, map it, and keep the map current with scheduled scans.
 
 What to look for:
 
@@ -83,4 +83,4 @@ The distinction: **design** tools vs **documentation** tools. draw.io is great f
 
 Scanopy is free to start. Deploy a daemon and see your actual network in minutes. No drawing required.
 
-[Try Scanopy free](https://app.scanopy.net/onboarding)
+[Try Scanopy free](https://app.scanopy.net/onboarding) or [view pricing](https://scanopy.net/pricing)

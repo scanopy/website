@@ -18,6 +18,7 @@
     "---API Reference---",
     "api/index",
     "api/bindings",
+    "api/credentials",
     "api/daemon-api-keys",
     "api/daemons",
     "api/groups",

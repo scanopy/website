@@ -94,7 +94,7 @@ The template gives you a snapshot of column headers. Scanopy gives you an intera
 Templates aren't useless. They're the wrong tool for documenting a live network, but they're great for things that don't change constantly:
 
 - **Planning and design docs.** Designing a new office network? A template or diagram tool is perfect. You're documenting what *should* exist, not what *does* exist.
-- **Compliance documentation.** Some audits require specific formats. Templates give you the structure, but the data filling them should come from an automated source. Scanopy's CSV export and API can feed your compliance templates with current data instead of whatever someone remembered to type in last quarter.
+- **Compliance documentation.** Some audits require specific formats. Templates give you the structure, but the data filling them should come from an [automated source](/blog/automated-network-documentation). Scanopy's CSV export and API can feed your compliance templates with current data instead of whatever someone remembered to type in last quarter.
 
 - **Runbooks and procedures.** "When the VPN goes down, do X, Y, Z." Process docs are stable. Network inventory isn't.
 
@@ -104,4 +104,4 @@ Use templates for things that are static. Use automation for things that evolve.
 
 Scanopy is free to start. Deploy a daemon and see your network documented in minutes. No spreadsheets required.
 
-[Try Scanopy free](https://app.scanopy.net/onboarding)
+[Try Scanopy free](https://app.scanopy.net/onboarding) or [view pricing](https://scanopy.net/pricing)
