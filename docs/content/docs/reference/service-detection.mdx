@@ -21,6 +21,8 @@ For the complete list of detectable services and their match patterns, see [scan
 
 **Firewall blocking the daemon** — The daemon must be able to connect to the service's port. Check that firewall rules allow the daemon to probe the host.
 
+**Service on a raw socket port (9100-9107)** — Ports 9100-9107 are skipped by default to prevent ghost printing on JetDirect printers, since these ports interpret any TCP data as print input. This affects Prometheus Node Exporter (port 9100) and JetDirect printers. Enable **Probe Raw Socket Ports** in your discovery's scan settings to include these ports.
+
 ## How Detection Works
 
 Detection happens in phases:
