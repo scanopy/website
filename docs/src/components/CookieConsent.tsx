@@ -40,7 +40,7 @@ export function CookieConsent() {
     if (isPostHogLoaded()) {
       if (prefs.analytics) {
         optInAnalytics();
-        getPostHog().reloadFeatureFlags();
+        getPostHog()?.reloadFeatureFlags();
       } else {
         optOutAnalytics();
       }
