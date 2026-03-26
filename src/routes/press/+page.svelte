@@ -29,13 +29,15 @@
 			id: 'F4SgNNWzbEA',
 			title: 'Stop Drawing Network Diagrams Manually — Scanopy Does It for You',
 			channel: 'VirtualizationHowto',
-			language: 'English'
+			language: 'English',
+			uploadDate: '2025-12-22'
 		},
 		{
 			id: 'GmpWJpKzihI',
 			title: 'Scanopy : cet outil crée la topologie de votre réseau à votre place',
 			channel: 'IT-Connect',
-			language: 'French'
+			language: 'French',
+			uploadDate: '2026-01-22'
 		}
 	];
 
@@ -51,16 +53,19 @@
 		content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool."
 	/>
 	<link rel="canonical" href="https://scanopy.net/press" />
-	{@html `<script type="application/ld+json">${JSON.stringify(videos.map((v) => ({
-		'@context': 'https://schema.org',
-		'@type': 'VideoObject',
-		name: v.title,
-		description: `${v.channel} reviews Scanopy, the automated network documentation tool.`,
-		thumbnailUrl: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`,
-		uploadDate: '2026-01-01',
-		embedUrl: `https://www.youtube.com/embed/${v.id}`,
-		publisher: { '@type': 'Organization', name: v.channel }
-	})))}</script>`}
+	{#each videos as v}
+		{@html `<script type="application/ld+json">${JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'VideoObject',
+			name: v.title,
+			description: `${v.channel} reviews Scanopy, the automated network documentation and topology mapping tool.`,
+			thumbnailUrl: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`,
+			uploadDate: v.uploadDate,
+			contentUrl: `https://www.youtube.com/watch?v=${v.id}`,
+			embedUrl: `https://www.youtube.com/embed/${v.id}`,
+			publisher: { '@type': 'Organization', name: v.channel }
+		})}</script>`}
+	{/each}
 </svelte:head>
 
 <!-- Hero -->

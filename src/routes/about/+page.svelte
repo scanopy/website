@@ -15,6 +15,20 @@
 		content="Scanopy exists because keeping network diagrams accurate is tedious, thankless work. We built a tool that does it for you."
 	/>
 	<link rel="canonical" href="https://scanopy.net/about" />
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		name: 'Maya',
+		url: 'https://github.com/mayanayza',
+		image: 'https://github.com/mayanayza.png',
+		jobTitle: 'Founder',
+		worksFor: {
+			'@type': 'Organization',
+			name: 'Scanopy',
+			url: 'https://scanopy.net'
+		},
+		sameAs: ['https://github.com/mayanayza']
+	})}</script>`}
 </svelte:head>
 
 <PageHero

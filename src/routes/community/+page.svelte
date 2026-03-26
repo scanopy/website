@@ -45,6 +45,7 @@
 		name="description"
 		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
+	<link rel="canonical" href="https://scanopy.net/community" />
 </svelte:head>
 
 <!-- Hero -->

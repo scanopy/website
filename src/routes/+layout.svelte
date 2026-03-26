@@ -99,6 +99,14 @@
 	},
 	"image": "https://scanopy.net/scanopy-logo.webp",
 	"description": "Automatic network discovery and documentation. Clean network diagrams with one-time setup and zero upkeep.",
+	"address": {
+		"@type": "PostalAddress",
+		"streetAddress": "1207 Delaware Ave Suite 1502",
+		"addressLocality": "Wilmington",
+		"addressRegion": "DE",
+		"postalCode": "19806",
+		"addressCountry": "US"
+	},
 	"sameAs": [
 		"https://github.com/scanopy/scanopy",
 		"https://x.com/getscanopy",

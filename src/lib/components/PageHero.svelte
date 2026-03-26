@@ -12,10 +12,14 @@
 </script>
 
 <section class="relative overflow-hidden py-16 lg:py-24">
-	<div
-		class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('{image}');"
-	></div>
+	<img
+		src={image}
+		alt=""
+		class="absolute inset-0 h-full w-full object-cover"
+		width="1440"
+		height="900"
+		loading="eager"
+	/>
 	<div class="absolute inset-0 bg-gray-900/60 backdrop-blur-[2px]"></div>
 
 	<div class="container relative z-10 mx-auto max-w-3xl px-4 text-center">

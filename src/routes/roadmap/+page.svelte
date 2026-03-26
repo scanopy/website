@@ -169,7 +169,7 @@
 </script>
 
 <svelte:head>
-	<title>Roadmap - Scanopy</title>
+	<title>Product Roadmap - Scanopy</title>
 	<meta
 		name="description"
 		content="See what's coming next to Scanopy. Our product roadmap shows upcoming features and improvements."

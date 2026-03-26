@@ -460,7 +460,7 @@
 				Less
 				<span
 					class="relative inline-block h-[1.15em] overflow-hidden align-baseline"
-					style="top: 0.15em;"
+					style="top: 0.15em; min-width: 5.5ch;"
 				>
 					{#key currentTool}
 						<span
@@ -658,7 +658,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm text-gray-400 leading-relaxed">
-			Scanopy deploys as a lightweight daemon that runs alongside your existing infrastructure. It discovers every host, maps the connections between them, and renders a live topology diagram — all without agents on your endpoints or changes to your network configuration. Once running, scans repeat on a schedule so your documentation stays accurate as devices come and go.
+			Scanopy deploys as a lightweight daemon that runs alongside your existing infrastructure. It discovers every host, maps the connections between them, and renders a live topology diagram — all without agents on your endpoints or changes to your network configuration. Once running, scans repeat on a schedule so your documentation stays accurate as devices come and go. Learn more about <a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300">how automated network documentation works</a>, explore the <a href="/services" class="text-blue-400 hover:text-blue-300">200+ services Scanopy detects</a>, or read about our <a href="/docs/reference/security" class="text-blue-400 hover:text-blue-300">security practices</a>.
 		</p>
 	</div>
 </section>

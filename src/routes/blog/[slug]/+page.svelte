@@ -33,7 +33,7 @@
 
 	const articleSchema = JSON.stringify({
 		'@context': 'https://schema.org',
-		'@type': 'Article',
+		'@type': 'BlogPosting',
 		headline: data.post.title,
 		description: data.post.description,
 		datePublished: data.post.date,
@@ -69,9 +69,12 @@
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content="https://scanopy.net/blog/{data.post.slug}" />
 
-	<meta name="twitter:card" content="summary" />
+	<meta property="og:image" content="https://scanopy.net{data.post.image}" />
+
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={data.post.title} />
 	<meta name="twitter:description" content={data.post.description} />
+	<meta name="twitter:image" content="https://scanopy.net{data.post.image}" />
 
 	{@html `<script type="application/ld+json">${articleSchema}</script>`}
 </svelte:head>

@@ -122,4 +122,14 @@
 			<span>...</span>
 		</span>
 	</div>
+{:else if error}
+	<a
+		href="https://github.com/scanopy/scanopy"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm text-gray-400 shadow-lg backdrop-blur-sm transition-all hover:border-gray-600 hover:bg-gray-700/80 {className}"
+	>
+		<Github class="h-4 w-4" />
+		<span>GitHub</span>
+	</a>
 {/if}

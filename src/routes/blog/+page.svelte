@@ -42,12 +42,15 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://scanopy.net/blog" />
 
-	<meta name="twitter:card" content="summary" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Blog - Scanopy" />
 	<meta
 		name="twitter:description"
 		content="Technical articles on network documentation, automated discovery, and IT infrastructure management."
 	/>
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <section class="py-20">

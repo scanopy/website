@@ -3,6 +3,7 @@ title: Why Your Network Diagrams Are Always Wrong (And How to Fix It)
 description: Network diagrams go stale within weeks. The fix isn't updating more often - it's automating discovery so your diagrams stay current without manual effort.
 keyword: keep network diagrams up to date
 date: 2026-03-11
+dateModified: 2026-03-11
 tldr: Network diagrams go stale because maintaining them manually doesn't scale. The fix isn't updating more often — it's using automated discovery tools that keep diagrams current without human intervention.
 ---
 

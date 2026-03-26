@@ -51,6 +51,7 @@
 						>
 					</li>
 					<li><a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a></li>
+					<li><a href="/docs/reference/security" class="text-sm text-gray-400 hover:text-white">Security</a></li>
 				</ul>
 			</div>
 

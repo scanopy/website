@@ -48,7 +48,7 @@
 </script>
 
 <svelte:head>
-	<title>Pricing - Scanopy</title>
+	<title>Network Documentation Pricing & Plans - Scanopy</title>
 	<meta
 		name="description"
 		content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments."
