@@ -46,6 +46,15 @@
 		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
 	<link rel="canonical" href="https://scanopy.net/community" />
+
+	<meta property="og:title" content="Community Edition - Free, Self-Hosted Network Documentation | Scanopy" />
+	<meta property="og:description" content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
+	<meta property="og:url" content="https://scanopy.net/community" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Community Edition - Free, Self-Hosted Network Documentation | Scanopy" />
+	<meta name="twitter:description" content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <!-- Hero -->

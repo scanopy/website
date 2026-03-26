@@ -168,19 +168,23 @@
 		{
 			quote:
 				"It really helped me catch a couple things that were suboptimal, and be like 'why is that there', and tidy a couple things up.",
-			author: 'u/reinhart_menken'
+			author: 'u/reinhart_menken',
+			url: 'https://www.reddit.com/r/selfhosted/comments/1ohd1ce/comment/nm4isu8/'
 		},
 		{
 			quote: "This is sick. I just tried it out on my network and discovery's doing its thing.",
-			author: 'u/discoshanktank'
+			author: 'u/discoshanktank',
+			url: 'https://www.reddit.com/r/selfhosted/comments/1ohd1ce/comment/nlq3k6n/'
 		},
 		{
 			quote: "You're literally doing the thing I've dreamed of for ages.",
-			author: 'u/blitz9826'
+			author: 'u/blitz9826',
+			url: 'https://www.reddit.com/r/selfhosted/comments/1ohd1ce/comment/nlnyyl2/'
 		},
 		{
 			quote: "So many features, wasn't expecting a lot more than a simple scanner and a UI.",
-			author: 'u/Medium_Chemist_4032'
+			author: 'u/Medium_Chemist_4032',
+			url: 'https://www.reddit.com/r/selfhosted/comments/1ohd1ce/comment/nloqmz8/'
 		}
 	];
 
@@ -194,6 +198,16 @@
 		content="Network documentation that updates itself. Deploy a scanner, get live diagrams in minutes. Open source."
 	/>
 	<link rel="canonical" href="https://scanopy.net/" />
+
+	<meta property="og:title" content="Scanopy - Automatic Network Documentation" />
+	<meta property="og:description" content="Network documentation that updates itself. Deploy a scanner, get live diagrams in minutes. Open source." />
+	<meta property="og:url" content="https://scanopy.net/" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Scanopy - Automatic Network Documentation" />
+	<meta name="twitter:description" content="Network documentation that updates itself. Deploy a scanner, get live diagrams in minutes. Open source." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+
 	<link
 		rel="alternate"
 		type="application/rss+xml"
@@ -306,6 +320,23 @@
 		</div>
 	</div>
 </section>
+
+<!-- Metrics -->
+<div class="border-t border-gray-800 bg-gray-900/30 py-8">
+	<div class="container mx-auto px-4">
+		<div class="flex flex-wrap items-center justify-center gap-8 text-center md:gap-16">
+			<div>
+				<p class="text-2xl font-bold text-white md:text-3xl">52,493</p>
+				<p class="text-sm text-gray-400">hosts discovered</p>
+			</div>
+			<div class="hidden h-8 w-px bg-gray-700 md:block"></div>
+			<div>
+				<p class="text-2xl font-bold text-white md:text-3xl">931</p>
+				<p class="text-sm text-gray-400">networks documented</p>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- How it works Section -->
 <section class="border-t border-gray-800 py-20">
@@ -590,7 +621,7 @@
 					<p class="mb-4 text-sm italic text-gray-300">
 						"{testimonial.quote}"
 					</p>
-					<p class="text-sm font-medium text-gray-400">{testimonial.author}</p>
+					<a href={testimonial.url} target="_blank" rel="noopener" class="text-sm font-medium text-gray-400 hover:text-blue-400">{testimonial.author}</a>
 				</div>
 			{/each}
 		</div>

@@ -39,6 +39,7 @@
 	<meta property="og:description" content="Scanopy v{data.entry.version} — {data.entry.title}" />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content="https://scanopy.net/changelog/{data.entry.slug}" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
 
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary" />

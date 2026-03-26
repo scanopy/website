@@ -14,6 +14,15 @@
 		content="Scanopy can automatically detect 200+ services including Docker, databases, media servers, and more."
 	/>
 	<link rel="canonical" href="https://scanopy.net/services" />
+
+	<meta property="og:title" content="Discoverable Services - Scanopy" />
+	<meta property="og:description" content="Scanopy can automatically detect 200+ services including Docker, databases, media servers, and more." />
+	<meta property="og:url" content="https://scanopy.net/services" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Discoverable Services - Scanopy" />
+	<meta name="twitter:description" content="Scanopy can automatically detect 200+ services including Docker, databases, media servers, and more." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <section class="py-20">

@@ -68,6 +68,8 @@
 	<meta property="og:description" content={data.post.description} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content="https://scanopy.net/blog/{data.post.slug}" />
+	<meta property="article:published_time" content={data.post.date} />
+	<meta property="article:modified_time" content={data.post.dateModified || data.post.date} />
 
 	<meta property="og:image" content="https://scanopy.net{data.post.image}" />
 
@@ -83,6 +85,10 @@
 	{#if data.post.date}
 		<div class="flex items-center gap-2 text-sm text-gray-400">
 			<time datetime={data.post.date}>{formatDate(data.post.date)}</time>
+			{#if data.post.dateModified && data.post.dateModified !== data.post.date}
+				<span>·</span>
+				<span>Updated <time datetime={data.post.dateModified}>{formatDate(data.post.dateModified)}</time></span>
+			{/if}
 			<span>·</span>
 			<a href="/about" class="hover:text-blue-400">Maya</a>
 		</div>

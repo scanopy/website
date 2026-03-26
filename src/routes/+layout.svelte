@@ -113,7 +113,13 @@
 		"https://discord.gg/b7ffQr8AcZ",
 		"https://reddit.com/r/scanopy",
 		"https://bsky.app/profile/scanopy.net"
-	]
+	],
+	"foundingDate": "2025",
+	"contactPoint": {
+		"@type": "ContactPoint",
+		"contactType": "customer support",
+		"url": "https://discord.gg/b7ffQr8AcZ"
+	}
 }
 </script>`}
 	{@html `<script type="application/ld+json">

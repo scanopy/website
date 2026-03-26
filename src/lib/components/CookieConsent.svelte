@@ -40,7 +40,7 @@
 		if (isPostHogLoaded()) {
 			if (preferences.analytics) {
 				optInAnalytics();
-				getPostHog().reloadFeatureFlags();
+				getPostHog()?.reloadFeatureFlags();
 			} else {
 				optOutAnalytics();
 			}

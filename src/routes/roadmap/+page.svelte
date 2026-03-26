@@ -175,6 +175,15 @@
 		content="See what's coming next to Scanopy. Our product roadmap shows upcoming features and improvements."
 	/>
 	<link rel="canonical" href="https://scanopy.net/roadmap" />
+
+	<meta property="og:title" content="Product Roadmap - Scanopy" />
+	<meta property="og:description" content="See what's coming next to Scanopy. Our product roadmap shows upcoming features and improvements." />
+	<meta property="og:url" content="https://scanopy.net/roadmap" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Product Roadmap - Scanopy" />
+	<meta name="twitter:description" content="See what's coming next to Scanopy. Our product roadmap shows upcoming features and improvements." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <section class="py-20">

@@ -54,6 +54,16 @@
 		content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments."
 	/>
 	<link rel="canonical" href="https://scanopy.net/pricing" />
+
+	<meta property="og:title" content="Network Documentation Pricing & Plans - Scanopy" />
+	<meta property="og:description" content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments." />
+	<meta property="og:url" content="https://scanopy.net/pricing" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Network Documentation Pricing & Plans - Scanopy" />
+	<meta name="twitter:description" content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+
 	{@html `<script type="application/ld+json">${JSON.stringify(productSchema)}</script>`}
 </svelte:head>
 

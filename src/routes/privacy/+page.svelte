@@ -5,6 +5,15 @@
 		content="Scanopy Privacy Policy - How we collect, use, and protect your personal information."
 	/>
 	<link rel="canonical" href="https://scanopy.net/privacy" />
+
+	<meta property="og:title" content="Privacy Policy - Scanopy" />
+	<meta property="og:description" content="Scanopy Privacy Policy - How we collect, use, and protect your personal information." />
+	<meta property="og:url" content="https://scanopy.net/privacy" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Privacy Policy - Scanopy" />
+	<meta name="twitter:description" content="Scanopy Privacy Policy - How we collect, use, and protect your personal information." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <section class="py-20">

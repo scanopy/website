@@ -1,5 +1,6 @@
 import { source } from '@/lib/source';
 import type { MetadataRoute } from 'next';
+import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -8,20 +9,24 @@ export const dynamic = 'force-static';
 const baseUrl = 'https://scanopy.net/docs';
 const contentDir = path.resolve(process.cwd(), 'content/docs');
 
-// API docs are regenerated at build time, so their file mtime is always the build timestamp.
-// Use the OpenAPI spec file's mtime instead — it reflects when the API actually changed.
-let apiSpecMtime: Date | undefined;
-try {
-  const specPath = path.resolve(process.cwd(), 'openapi.json');
-  apiSpecMtime = fs.statSync(specPath).mtime;
-} catch {
-  // spec not found, fall back to undefined
+function getGitLastModified(filePath: string): Date | undefined {
+  try {
+    const gitDate = execSync(
+      `git log -1 --format=%cI -- "${filePath}"`,
+      { encoding: 'utf-8', cwd: process.cwd() }
+    ).trim();
+    if (gitDate) return new Date(gitDate);
+  } catch {
+    // git not available or file not tracked
+  }
+  return undefined;
 }
 
 function getLastModified(slugs: string[]): Date | undefined {
-  // For API docs, use the OpenAPI spec's modification time
+  // For API docs, use the OpenAPI spec's git history
   if (slugs.length > 0 && slugs[0] === 'api') {
-    return apiSpecMtime;
+    const specPath = path.resolve(process.cwd(), 'openapi.json');
+    return getGitLastModified(specPath);
   }
 
   // Try index.mdx inside slug directory, then slug.mdx as a file
@@ -34,8 +39,8 @@ function getLastModified(slugs: string[]): Date | undefined {
 
   for (const candidate of candidates) {
     try {
-      const stat = fs.statSync(candidate);
-      return stat.mtime;
+      fs.statSync(candidate); // verify file exists
+      return getGitLastModified(candidate);
     } catch {
       // try next candidate
     }

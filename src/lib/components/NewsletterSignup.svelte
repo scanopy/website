@@ -50,7 +50,7 @@
 				status = 'success';
 				email = '';
 				if (isPostHogLoaded()) {
-					getPostHog().capture('newsletter_submitted', { success: true });
+					getPostHog()?.capture('newsletter_submitted', { success: true });
 				}
 			} else {
 				throw new Error('Failed to subscribe');
@@ -60,7 +60,7 @@
 			status = 'error';
 			errorMessage = 'Something went wrong. Please try again.';
 			if (isPostHogLoaded()) {
-				getPostHog().capture('newsletter_submitted', { success: false, error: errorMessage });
+				getPostHog()?.capture('newsletter_submitted', { success: false, error: errorMessage });
 			}
 		} finally {
 			loading = false;

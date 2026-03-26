@@ -16,7 +16,7 @@
 
 	function trackExternalLink(destination: string, url: string) {
 		if (isPostHogLoaded()) {
-			getPostHog().capture('external_link_clicked', {
+			getPostHog()?.capture('external_link_clicked', {
 				destination,
 				location: 'footer',
 				url

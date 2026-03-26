@@ -1,8 +1,19 @@
-import posthog from 'posthog-js';
+import type { PostHog } from 'posthog-js';
 import { browser } from '$app/environment';
 import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 
+let posthogInstance: PostHog | null = null;
+
+async function getPosthog(): Promise<PostHog> {
+	if (!posthogInstance) {
+		const mod = await import('posthog-js');
+		posthogInstance = mod.default;
+	}
+	return posthogInstance;
+}
+
 export async function loadPh() {
+	const posthog = await getPosthog();
 	posthog.init(PUBLIC_POSTHOG_KEY, {
 		api_host: 'https://ph.scanopy.net',
 		ui_host: 'https://us.posthog.com',
@@ -19,8 +30,8 @@ export async function loadPh() {
  */
 
 function capture(event: string, properties?: Record<string, unknown>) {
-	if (browser && posthog) {
-		posthog.capture(event, properties);
+	if (browser && posthogInstance) {
+		posthogInstance.capture(event, properties);
 	}
 }
 
@@ -32,9 +43,9 @@ export const featureFlags = $state({
 });
 
 export function initFeatureFlags() {
-	if (browser && posthog && !posthog.has_opted_out_capturing()) {
+	if (browser && posthogInstance && !posthogInstance.has_opted_out_capturing()) {
 		// Wait for feature flags to be loaded, then evaluate
-		posthog.onFeatureFlags(() => {
+		posthogInstance.onFeatureFlags(() => {
 			evaluateCtaFlag();
 		});
 	}
@@ -45,8 +56,8 @@ export function initFeatureFlags() {
  * This triggers the $feature_flag_called exposure event.
  */
 export function evaluateCtaFlag() {
-	if (browser && posthog) {
-		const variant = posthog.getFeatureFlag('website-main-cta');
+	if (browser && posthogInstance) {
+		const variant = posthogInstance.getFeatureFlag('website-main-cta');
 
 		if (variant === 'launch') {
 			featureFlags.mainCtaText = 'Launch Scanopy';

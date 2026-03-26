@@ -8,6 +8,15 @@
 		content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software."
 	/>
 	<link rel="canonical" href="https://scanopy.net/terms" />
+
+	<meta property="og:title" content="Terms of Service - Scanopy" />
+	<meta property="og:description" content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software." />
+	<meta property="og:url" content="https://scanopy.net/terms" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Terms of Service - Scanopy" />
+	<meta name="twitter:description" content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <div class="container mx-auto max-w-4xl px-4 py-16">

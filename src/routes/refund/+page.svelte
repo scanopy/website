@@ -5,6 +5,15 @@
 		content="Scanopy Refund Policy - Our refund eligibility, process, and conditions."
 	/>
 	<link rel="canonical" href="https://scanopy.net/refund" />
+
+	<meta property="og:title" content="Refund Policy - Scanopy" />
+	<meta property="og:description" content="Scanopy Refund Policy - Our refund eligibility, process, and conditions." />
+	<meta property="og:url" content="https://scanopy.net/refund" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Refund Policy - Scanopy" />
+	<meta name="twitter:description" content="Scanopy Refund Policy - Our refund eligibility, process, and conditions." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <section class="py-20">

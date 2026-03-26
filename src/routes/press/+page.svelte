@@ -30,14 +30,16 @@
 			title: 'Stop Drawing Network Diagrams Manually — Scanopy Does It for You',
 			channel: 'VirtualizationHowto',
 			language: 'English',
-			uploadDate: '2025-12-22'
+			uploadDate: '2025-12-22',
+			duration: 'PT14M33S'
 		},
 		{
 			id: 'GmpWJpKzihI',
 			title: 'Scanopy : cet outil crée la topologie de votre réseau à votre place',
 			channel: 'IT-Connect',
 			language: 'French',
-			uploadDate: '2026-01-22'
+			uploadDate: '2026-01-22',
+			duration: 'PT23M48S'
 		}
 	];
 
@@ -53,6 +55,16 @@
 		content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool."
 	/>
 	<link rel="canonical" href="https://scanopy.net/press" />
+
+	<meta property="og:title" content="Press & Media - Scanopy" />
+	<meta property="og:description" content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool." />
+	<meta property="og:url" content="https://scanopy.net/press" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Press & Media - Scanopy" />
+	<meta name="twitter:description" content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool." />
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+
 	{#each videos as v}
 		{@html `<script type="application/ld+json">${JSON.stringify({
 			'@context': 'https://schema.org',
@@ -61,6 +73,7 @@
 			description: `${v.channel} reviews Scanopy, the automated network documentation and topology mapping tool.`,
 			thumbnailUrl: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`,
 			uploadDate: v.uploadDate,
+			duration: v.duration,
 			contentUrl: `https://www.youtube.com/watch?v=${v.id}`,
 			embedUrl: `https://www.youtube.com/embed/${v.id}`,
 			publisher: { '@type': 'Organization', name: v.channel }
