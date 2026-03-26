@@ -188,6 +188,12 @@
 				See what's coming next to Scanopy. These features are currently in development. Some
 				features will not be available for all plans.
 			</p>
+			<p class="mx-auto mt-4 max-w-2xl text-gray-500">
+				Features are prioritized based on community feedback, GitHub issues, and what we hear
+				from users on Discord and Reddit. Have a use case that isn't covered? Open a feature
+				request and we'll evaluate it for the roadmap. Most features below are driven by real
+				user requests.
+			</p>
 		</div>
 
 		{#if comingSoonFeatures.length === 0}

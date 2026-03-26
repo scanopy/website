@@ -49,7 +49,9 @@
 		'@context': 'https://schema.org',
 		'@type': 'Article',
 		headline: `v${data.entry.version}: ${data.entry.title}`,
+		description: `Scanopy v${data.entry.version} — ${data.entry.title}`,
 		datePublished: data.entry.date,
+		dateModified: data.entry.date,
 		author: { '@type': 'Organization', name: 'Scanopy', url: 'https://scanopy.net' },
 		publisher: {
 			'@type': 'Organization',

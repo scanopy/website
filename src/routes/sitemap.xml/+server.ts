@@ -1,3 +1,5 @@
+import { execSync } from 'node:child_process';
+
 export const prerender = true;
 
 function parseFrontmatter(content: string): Record<string, string> {
@@ -14,22 +16,31 @@ function parseFrontmatter(content: string): Record<string, string> {
 	return frontmatter;
 }
 
-export async function GET() {
-	const buildDate = new Date().toISOString().split('T')[0];
+function getLastCommitDate(filePath: string): string {
+	try {
+		const date = execSync(`git log -1 --format=%aI -- "${filePath}"`, {
+			encoding: 'utf-8'
+		}).trim();
+		return date ? date.split('T')[0] : new Date().toISOString().split('T')[0];
+	} catch {
+		return new Date().toISOString().split('T')[0];
+	}
+}
 
+export async function GET() {
 	const staticPages = [
-		{ loc: '/' },
-		{ loc: '/pricing' },
-		{ loc: '/services' },
-		{ loc: '/changelog' },
-		{ loc: '/roadmap' },
-		{ loc: '/showcase' },
-		{ loc: '/about' },
-		{ loc: '/blog' },
-		{ loc: '/community' },
-		{ loc: '/privacy' },
-		{ loc: '/terms' },
-		{ loc: '/refund' }
+		{ loc: '/', src: 'src/routes/+page.svelte' },
+		{ loc: '/pricing', src: 'src/routes/pricing/+page.svelte' },
+		{ loc: '/services', src: 'src/routes/services/+page.svelte' },
+		{ loc: '/changelog', src: 'src/routes/changelog/+page.svelte' },
+		{ loc: '/roadmap', src: 'src/routes/roadmap/+page.svelte' },
+		{ loc: '/about', src: 'src/routes/about/+page.svelte' },
+		{ loc: '/blog', src: 'src/routes/blog/+page.svelte' },
+		{ loc: '/community', src: 'src/routes/community/+page.svelte' },
+		{ loc: '/press', src: 'src/routes/press/+page.svelte' },
+		{ loc: '/privacy', src: 'src/routes/privacy/+page.svelte' },
+		{ loc: '/terms', src: 'src/routes/terms/+page.svelte' },
+		{ loc: '/refund', src: 'src/routes/refund/+page.svelte' }
 	];
 
 	// Load changelog entries for dynamic URLs
@@ -75,7 +86,7 @@ export async function GET() {
 			(page) => `
   <url>
     <loc>https://scanopy.net${page.loc}</loc>
-    <lastmod>${buildDate}</lastmod>
+    <lastmod>${getLastCommitDate(page.src)}</lastmod>
   </url>`
 		)
 		.join('');

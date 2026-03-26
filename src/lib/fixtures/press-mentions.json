@@ -2,6 +2,10 @@
 	{
 		"id": "virtualizationhowto",
 		"name": "VirtualizationHowto",
+		"articleTitle": "Stop Drawing Network Diagrams Manually – Scanopy Does It for You",
+		"articleType": "review",
+		"datePublished": "2025-12-22",
+		"language": "en",
 		"quote": "These don't look like just rough diagrams or Mermaid sketches. The visuals are clean and modern.",
 		"url": "https://www.virtualizationhowto.com/2025/12/stop-drawing-network-diagrams-manually-scanopy-does-it-for-you/",
 		"logo": "https://www.virtualizationhowto.com/wp-content/smush-webp/2025/09/cropped-VHT-logo-redesign-2025-2-1-500x125.png.webp"
@@ -9,6 +13,10 @@
 	{
 		"id": "it-connect",
 		"name": "IT-Connect",
+		"articleTitle": "Scanopy : automatisez la création de vos schémas réseau",
+		"articleType": "tutorial",
+		"datePublished": "2026-01-22",
+		"language": "fr",
 		"quote": "A tool that creates a network diagram on its own and keeps it up to date - I think we've all dreamed of that. [Translated]",
 		"url": "https://www.it-connect.fr/tuto-scanopy-outil-creation-automatique-diagramme-reseau/",
 		"logo": "/press/it-connect-360w.webp"
@@ -16,6 +24,10 @@
 	{
 		"id": "korben",
 		"name": "Korben",
+		"articleTitle": "Scanopy - Quand votre réseau se documente tout seul",
+		"articleType": "review",
+		"datePublished": "2026-03-16",
+		"language": "fr",
 		"quote": "It's the network scan + Docker detection combo that makes it useful, because most tools do one or the other but never both. [Translated]",
 		"url": "https://korben.info/scanopy-scanner-reseau-topologie.html",
 		"logo": "/press/korben-360w.webp"
@@ -23,6 +35,10 @@
 	{
 		"id": "mariushosting",
 		"name": "Marius Hosting",
+		"articleTitle": "How to Install Scanopy on Your Synology NAS",
+		"articleType": "guide",
+		"datePublished": "2026-03-24",
+		"language": "en",
 		"quote": "Built with Rust, Svelte, and TypeScript, it offers a modern alternative to stale manual diagrams like Visio files.",
 		"url": "https://mariushosting.com/how-to-install-scanopy-on-your-synology-nas/",
 		"logo": "/press/mariushosting-360w.webp"

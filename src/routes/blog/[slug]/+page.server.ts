@@ -9,6 +9,7 @@ interface BlogPost {
 	keyword: string;
 	slug: string;
 	image: string;
+	tldr?: string;
 	content: string;
 }
 
@@ -50,6 +51,7 @@ export async function load({ params }) {
 				keyword: frontmatter.keyword || '',
 				slug,
 				image: frontmatter.image || '/topology-hero.webp',
+				tldr: frontmatter.tldr || undefined,
 				content: await marked.parse(body)
 			};
 

@@ -74,6 +74,20 @@
 	</div>
 </section>
 
+<!-- Intro -->
+<section class="border-t border-gray-800 py-12">
+	<div class="container mx-auto max-w-3xl px-4">
+		<p class="text-lg leading-relaxed text-gray-300">
+			Scanopy Community is the free, self-hosted edition of Scanopy — the same automatic
+			network discovery engine that powers our cloud plans, running entirely on your
+			infrastructure. It's built for homelabbers, home network enthusiasts, and small teams
+			who want live, auto-updating network diagrams without sending data to a third party.
+			Deploy with a single Docker command, scan your network, and get a topology map in
+			minutes. No account required, no host limits, no time restrictions.
+		</p>
+	</div>
+</section>
+
 <!-- Quick Start -->
 <section id="quickstart" class="border-t border-gray-800 py-20">
 	<div class="container mx-auto max-w-2xl px-4">

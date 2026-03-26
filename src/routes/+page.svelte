@@ -91,7 +91,13 @@
 	} from 'lucide-svelte';
 	import type { Component } from 'svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
-	import { getSoftwareApplicationSchema, getProductFeatures } from '$lib/schemas';
+	import { getProductFeatures } from '$lib/schemas';
+
+	interface PageData {
+		softwareApplicationSchema: Record<string, unknown>;
+	}
+
+	let { data }: { data: PageData } = $props();
 
 	const diagramTools = ['Visio', 'Lucidchart', 'Draw.io', 'PowerPoint', 'Miro', 'Gliffy'];
 	let currentTool = $state(diagramTools[0]);
@@ -129,8 +135,6 @@
 		.filter((f) => f.group === 'what_you_get')
 		.sort((a, b) => whatYouGetOrder.indexOf(a.title) - whatYouGetOrder.indexOf(b.title));
 
-	// Generate schema from fixtures (async — resolved at build time during prerender)
-	const softwareApplicationSchemaPromise = getSoftwareApplicationSchema();
 
 
 	// What you get screenshots — matches sorted order: sharing, service_detection, versioning
@@ -204,9 +208,7 @@
 		imagesizes="(max-width: 1024px) 100vw, 60vw"
 		fetchpriority="high"
 	/>
-	{#await softwareApplicationSchemaPromise then schema}
-		{@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
-	{/await}
+	{@html `<script type="application/ld+json">${JSON.stringify(data.softwareApplicationSchema)}</script>`}
 </svelte:head>
 
 <!-- Hero Section -->

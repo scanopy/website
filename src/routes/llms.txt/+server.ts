@@ -22,7 +22,20 @@ interface Service {
 	category: string;
 }
 
-export function GET() {
+function parseFrontmatter(content: string): Record<string, string> {
+	const match = content.match(/^---\n([\s\S]*?)\n---/);
+	if (!match) return {};
+	const fm: Record<string, string> = {};
+	match[1].split('\n').forEach((line) => {
+		const [key, ...valueParts] = line.split(':');
+		if (key && valueParts.length) {
+			fm[key.trim()] = valueParts.join(':').trim();
+		}
+	});
+	return fm;
+}
+
+export async function GET() {
 	const plans = billingPlansData as BillingPlan[];
 	const services = servicesData as Service[];
 
@@ -72,6 +85,27 @@ export function GET() {
 		.map((s) => s.name)
 		.join(', ');
 
+	// Load blog posts for summaries
+	const blogFiles = import.meta.glob('/src/lib/blog/*.md', {
+		query: '?raw',
+		import: 'default'
+	});
+
+	const blogEntries: { title: string; tldr: string; slug: string }[] = [];
+
+	for (const [path, loader] of Object.entries(blogFiles)) {
+		const raw = (await loader()) as string;
+		const fm = parseFrontmatter(raw);
+		const slug = fm.slug || path.split('/').pop()?.replace('.md', '') || '';
+		if (fm.title && fm.tldr) {
+			blogEntries.push({ title: fm.title, tldr: fm.tldr, slug });
+		}
+	}
+
+	const blogLines = blogEntries
+		.map((b) => `- **${b.title}**: ${b.tldr}\n  URL: https://scanopy.net/blog/${b.slug}`)
+		.join('\n');
+
 	const content = `# Scanopy
 
 > Automatic network discovery and documentation software. Create live, auto-updating network diagrams with one-time setup and zero upkeep.
@@ -108,6 +142,10 @@ ${pricingLines.join('\n')}
 
 Full pricing details: https://scanopy.net/pricing
 
+## Blog
+
+${blogLines}
+
 ## Links
 
 - Website: https://scanopy.net
@@ -127,6 +165,7 @@ Full pricing details: https://scanopy.net/pricing
 
 ## Contact
 
+- General: hello@scanopy.net
 - Support: Discord community or email support (paid plans)
 - Legal: legal@scanopy.net
 `;

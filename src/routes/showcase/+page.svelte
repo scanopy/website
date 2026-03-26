@@ -14,6 +14,7 @@
 		content="See what the Scanopy community is building. Explore topology diagrams from homelabs, businesses, and creative network setups."
 	/>
 	<link rel="canonical" href="https://scanopy.net/showcase" />
+	<meta name="robots" content="noindex" />
 </svelte:head>
 
 <section class="py-20">
@@ -23,6 +24,12 @@
 			<p class="mx-auto max-w-2xl text-xl text-gray-400">
 				See what the community is building with Scanopy. From homelabs to enterprise networks,
 				explore real topology diagrams created by our users.
+			</p>
+			<p class="mx-auto mt-4 max-w-2xl text-gray-500">
+				Every topology below was generated automatically by Scanopy's network discovery engine.
+				No manual drawing, no drag-and-drop — just deploy the scanner and let it map your
+				infrastructure. From single-subnet homelabs to multi-VLAN production networks, these
+				diagrams update themselves as your network changes.
 			</p>
 		</div>
 

@@ -11,6 +11,7 @@
 		keyword: string;
 		slug: string;
 		image: string;
+		tldr?: string;
 		content: string;
 	}
 
@@ -77,9 +78,11 @@
 
 <PageHero image={data.post.image} title={data.post.title}>
 	{#if data.post.date}
-		<time class="block text-sm text-gray-400" datetime={data.post.date}>
-			{formatDate(data.post.date)}
-		</time>
+		<div class="flex items-center gap-2 text-sm text-gray-400">
+			<time datetime={data.post.date}>{formatDate(data.post.date)}</time>
+			<span>·</span>
+			<a href="/about" class="hover:text-blue-400">Maya</a>
+		</div>
 	{/if}
 </PageHero>
 
@@ -90,6 +93,14 @@
 				&larr; Back to blog
 			</a>
 		</header>
+
+		{#if data.post.tldr}
+			<div class="mb-8 rounded-r-lg border-l-[3px] border-blue-500 bg-gray-800/50 px-5 py-4">
+				<p class="text-sm font-medium text-gray-300">
+					<span class="font-semibold text-white">TL;DR:</span> {data.post.tldr}
+				</p>
+			</div>
+		{/if}
 
 		<div class="prose prose-invert prose-gray max-w-none">
 			{@html data.post.content}

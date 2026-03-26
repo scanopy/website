@@ -79,6 +79,10 @@ export interface GalleryItem {
 export interface PressMention {
 	id: string;
 	name: string;
+	articleTitle: string;
+	articleType: string;
+	datePublished: string;
+	language: string;
 	quote?: string;
 	url: string;
 	logo: string;

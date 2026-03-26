@@ -3,6 +3,7 @@ title: Why Your Network Diagrams Are Always Wrong (And How to Fix It)
 description: Network diagrams go stale within weeks. The fix isn't updating more often - it's automating discovery so your diagrams stay current without manual effort.
 keyword: keep network diagrams up to date
 date: 2026-03-11
+tldr: Network diagrams go stale because maintaining them manually doesn't scale. The fix isn't updating more often — it's using automated discovery tools that keep diagrams current without human intervention.
 ---
 
 You know the drill. Someone spends a Friday afternoon in Visio or draw.io, mapping every device, subnet, and connection. It's beautiful. It's accurate. And within two weeks, someone adds a switch, changes a VLAN, or spins up a VM, and nobody updates the diagram.
@@ -58,7 +59,7 @@ What to look for:
 - **Intuitive visualization**: Not just a device list. An intuitive, interactive map showing how things connect - that anyone can quickly get up to speed on.
 - **Shareable output**: The whole team should benefit without everyone needing a login or a license.
 
-We built [Scanopy](/) because we had this exact problem. Deploy a lightweight daemon on your network, point it at your subnets, and it discovers devices, maps connections via SNMP, and generates a topology map that updates itself on every scan. New device shows up? It's on the next map.
+We built [Scanopy](/) because we had this exact problem. Deploy a lightweight daemon on your network, point it at your subnets, and it discovers devices, maps connections via SNMP, and generates a topology map that updates itself on every scan. It detects [over 200 services](/services) automatically. New device shows up? It's on the next map.
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 
@@ -83,4 +84,4 @@ The distinction: **design** tools vs **documentation** tools. draw.io is great f
 
 Scanopy is free to start. Deploy a daemon and see your actual network in minutes. No drawing required.
 
-[Try Scanopy free](https://app.scanopy.net/onboarding) or [view pricing](https://scanopy.net/pricing)
+[Try Scanopy free](https://app.scanopy.net/onboarding), [view pricing](/pricing), or [read the setup guide](/docs) to get started.

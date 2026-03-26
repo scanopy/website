@@ -49,6 +49,10 @@ function getUniqueMonthlyPlans(): BillingPlan[] {
  * Generate offers array for schema.org Product/SoftwareApplication
  */
 function generateOffers() {
+	const futureDate = new Date();
+	futureDate.setFullYear(futureDate.getFullYear() + 1);
+	const priceValidUntil = futureDate.toISOString().split('T')[0];
+
 	return getUniqueMonthlyPlans()
 		.filter((plan) => !plan.metadata.custom_price || plan.metadata.custom_price === 'Free')
 		.map((plan) => {
@@ -60,7 +64,7 @@ function generateOffers() {
 				description: plan.description,
 				priceCurrency: 'USD',
 				price,
-				priceValidUntil: '2026-12-31',
+				priceValidUntil,
 				availability: 'https://schema.org/InStock',
 				url: 'https://scanopy.net/pricing',
 				seller: {
@@ -180,25 +184,6 @@ export function getBreadcrumbListSchema(items: { name: string; url: string }[]) 
 			position: index + 1,
 			name: item.name,
 			item: item.url
-		}))
-	};
-}
-
-/**
- * FAQPage schema for pages with FAQ sections
- * @see https://schema.org/FAQPage
- */
-export function getFAQPageSchema(faqs: { question: string; answer: string }[]) {
-	return {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: faqs.map((faq) => ({
-			'@type': 'Question',
-			name: faq.question,
-			acceptedAnswer: {
-				'@type': 'Answer',
-				text: faq.answer
-			}
 		}))
 	};
 }

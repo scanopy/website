@@ -4,7 +4,7 @@
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { onMount } from 'svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { getProductSchema, getFAQPageSchema } from '$lib/schemas';
+	import { getProductSchema } from '$lib/schemas';
 
 	onMount(() => {
 		analytics.pricingViewed({ referrer: document.referrer || undefined });
@@ -44,7 +44,7 @@
 		}
 	];
 
-	const faqSchema = getFAQPageSchema(pricingFaqs);
+
 </script>
 
 <svelte:head>
@@ -55,7 +55,6 @@
 	/>
 	<link rel="canonical" href="https://scanopy.net/pricing" />
 	{@html `<script type="application/ld+json">${JSON.stringify(productSchema)}</script>`}
-	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
 </svelte:head>
 
 <section class="py-10 pb-24 lg:pb-10">
