@@ -12,6 +12,10 @@ docker compose pull
 docker compose up -d
 ```
 
+<Callout type="info">
+**Podman users**: If you pull the daemon image by tag (e.g., `podman pull …/daemon:v0.15.2`), add `--platform linux/amd64` (or `linux/arm64`) to avoid pulling the wrong architecture. See [Troubleshooting — Podman Pulls Wrong Daemon Version](/self-hosted-server/troubleshooting/#podman-pulls-wrong-daemon-version-amd64).
+</Callout>
+
 This upgrades both the server and any daemons defined in your compose file. Volumes are preserved, so no re-registration or reconfiguration is needed.
 
 <Callout type="warn">

@@ -73,6 +73,24 @@ docker exec scanopy-daemon curl http://scanopy-server:60072/api/health
 
 3. **Check API key**: Ensure the integrated daemon has a valid API key in the database
 
+### Podman Pulls Wrong Daemon Version (amd64)
+
+**Symptoms**: After pulling the daemon image by tag with Podman, the container runs an unexpected version or architecture
+
+**Cause**: Docker buildx provenance attestations add `unknown/unknown` entries to the OCI manifest index. Podman can select these instead of the correct `linux/amd64` image when resolving a multi-platform tag.
+
+**Solution**: Specify the platform explicitly when pulling:
+
+```bash
+podman pull --platform linux/amd64 ghcr.io/scanopy/scanopy/daemon:v0.15.2
+```
+
+For ARM hosts, use `--platform linux/arm64` instead.
+
+<Callout type="info">
+This only affects the daemon image. The server image uses explicit manifest creation and is not affected.
+</Callout>
+
 ## Database Issues
 
 ### How to Backup Data
