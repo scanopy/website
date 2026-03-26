@@ -490,19 +490,19 @@
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Less
 				<span
-					class="relative inline-block h-[1.15em] overflow-hidden align-baseline"
-					style="top: 0.15em; min-width: 5.5ch;"
+					class="relative inline-block h-[1.15em] overflow-hidden align-baseline text-center"
+					style="top: 0.15em; width: 10ch;"
 				>
 					{#key currentTool}
 						<span
-							class="absolute bottom-0 left-0"
+							class="absolute inset-x-0 bottom-0"
 							in:fly={{ y: 24, duration: 250, delay: 150 }}
 							out:fly={{ y: -24, duration: 250 }}
 						>
 							{currentTool}
 						</span>
 					{/key}
-					<span class="invisible">{currentTool}</span>
+					<span class="invisible">Lucidchart</span>
 				</span> wrangling, more clarity
 			</h2>
 		</div>
