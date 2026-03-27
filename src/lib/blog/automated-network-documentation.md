@@ -1,6 +1,6 @@
 ---
-title: Automated Network Documentation: What It Is and Why It Matters
-description: Automated network documentation uses discovery protocols to map your network and keep diagrams current without manual effort. Here's how it works and why it matters.
+title: Automated Network Documentation Explained
+description: Automated network documentation uses SNMP, LLDP, and ARP to map your network and keep diagrams current. How it works, what it replaces, and why it matters.
 date: 2026-03-25
 dateModified: 2026-03-25
 keyword: automated network documentation

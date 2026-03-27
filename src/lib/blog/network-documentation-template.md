@@ -1,6 +1,6 @@
 ---
-title: My Network Documentation Template Story (And Why I Built a Tool Instead)
-description: A free network documentation template covering device inventory, IP addressing, and VLANs - plus why I stopped using templates and built an auto-discovery tool instead.
+title: Network Documentation Template (Free) + Why Templates Fail
+description: Free network documentation template covering device inventory, IP addressing, and VLANs. Download it — then learn why templates always go stale.
 date: 2026-03-04
 dateModified: 2026-03-04
 keyword: network documentation template
