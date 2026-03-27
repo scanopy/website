@@ -23,10 +23,10 @@ function getGitLastModified(filePath: string): Date | undefined {
 }
 
 function getLastModified(slugs: string[]): Date | undefined {
-  // For API docs, use the OpenAPI spec's git history
+  // API docs all derive from openapi.json, so they'd share one lastmod.
+  // Omit lastmod rather than provide a misleading uniform date.
   if (slugs.length > 0 && slugs[0] === 'api') {
-    const specPath = path.resolve(process.cwd(), 'openapi.json');
-    return getGitLastModified(specPath);
+    return undefined;
   }
 
   // Try index.mdx inside slug directory, then slug.mdx as a file

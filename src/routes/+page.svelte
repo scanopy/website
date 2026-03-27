@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import { GithubStars, FeaturedIn, PricingSection } from '$lib/components';
+	import { GithubStars, FeaturedIn } from '$lib/components';
 
 	// Tilt action: entrance tilt on scroll + mouse-follow tilt
 	function tilt(node: HTMLElement) {
@@ -642,7 +642,9 @@
 			</h2>
 		</div>
 
-		<PricingSection showGithubStars={false} showHosting={true} />
+		{#await import('$lib/components/PricingSection.svelte') then { default: PricingSection }}
+			<PricingSection showGithubStars={false} showHosting={true} />
+		{/await}
 	</div>
 </section>
 

@@ -13,6 +13,7 @@
 		image: string;
 		tldr?: string;
 		content: string;
+		wordCount: number;
 	}
 
 	interface PageData {
@@ -38,10 +39,14 @@
 		description: data.post.description,
 		datePublished: data.post.date,
 		dateModified: data.post.dateModified || data.post.date,
+		inLanguage: 'en',
+		wordCount: data.post.wordCount,
 		author: {
 			'@type': 'Person',
 			name: 'Maya',
-			url: 'https://scanopy.net/about'
+			url: 'https://scanopy.net/about',
+			image: 'https://github.com/mayanayza.png',
+			sameAs: ['https://github.com/mayanayza']
 		},
 		publisher: {
 			'@type': 'Organization',
@@ -122,6 +127,24 @@
 				<NewsletterSignup formUrl={PUBLIC_BREVO_NEWSLETTER_FORM_URL} />
 			</div>
 		{/if}
+
+		<div class="mt-12 flex items-start gap-4 rounded-lg border border-gray-800 bg-gray-900/50 p-6">
+			<img
+				src="https://github.com/mayanayza.png"
+				alt="Maya"
+				class="h-14 w-14 rounded-full"
+				width="56"
+				height="56"
+				loading="lazy"
+			/>
+			<div>
+				<a href="/about" class="font-semibold text-white hover:text-blue-400">Maya</a>
+				<p class="mt-1 text-sm text-gray-400">
+					Founder of Scanopy. Self-hoster, homelabber, and the person behind
+					Scanopy's automatic network documentation.
+				</p>
+			</div>
+		</div>
 	</div>
 </article>
 

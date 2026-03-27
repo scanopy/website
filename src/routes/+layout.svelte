@@ -27,7 +27,11 @@
 	let mobileMenuOpen = $state(false);
 
 	if (browser) {
-		loadPh();
+		if ('requestIdleCallback' in window) {
+			requestIdleCallback(() => loadPh());
+		} else {
+			setTimeout(() => loadPh(), 2000);
+		}
 	}
 
 	onMount(async () => {

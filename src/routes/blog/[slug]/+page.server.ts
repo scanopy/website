@@ -11,6 +11,7 @@ interface BlogPost {
 	image: string;
 	tldr?: string;
 	content: string;
+	wordCount: number;
 }
 
 function parseFrontmatter(content: string): { frontmatter: Record<string, string>; body: string } {
@@ -43,6 +44,12 @@ export async function load({ params }) {
 		const slug = frontmatter.slug || path.split('/').pop()?.replace('.md', '') || '';
 
 		if (slug === params.slug) {
+			const htmlContent = await marked.parse(body);
+			const wordCount = htmlContent
+				.replace(/<[^>]*>/g, '')
+				.split(/\s+/)
+				.filter(Boolean).length;
+
 			const post: BlogPost = {
 				title: frontmatter.title || '',
 				description: frontmatter.description || '',
@@ -52,7 +59,8 @@ export async function load({ params }) {
 				slug,
 				image: frontmatter.image || '/topology-hero.webp',
 				tldr: frontmatter.tldr || undefined,
-				content: await marked.parse(body)
+				content: htmlContent,
+				wordCount
 			};
 
 			return { post };

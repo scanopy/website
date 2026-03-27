@@ -35,11 +35,14 @@ function capture(event: string, properties?: Record<string, unknown>) {
 	}
 }
 
+const CTA_CACHE_KEY = 'scanopy_cta_variant';
+
 /**
- * Feature flag state for CTA text experiment
+ * Feature flag state for CTA text experiment.
+ * Reads cached variant from localStorage to prevent flash on repeat visits.
  */
 export const featureFlags = $state({
-	mainCtaText: 'Start Free Trial' // default/control
+	mainCtaText: (browser && localStorage.getItem(CTA_CACHE_KEY)) || 'Start Free Trial'
 });
 
 export function initFeatureFlags() {
@@ -59,12 +62,20 @@ export function evaluateCtaFlag() {
 	if (browser && posthogInstance) {
 		const variant = posthogInstance.getFeatureFlag('website-main-cta');
 
+		let text: string;
 		if (variant === 'launch') {
-			featureFlags.mainCtaText = 'Launch Scanopy';
+			text = 'Launch Scanopy';
 		} else if (variant === 'get-started') {
-			featureFlags.mainCtaText = 'Get Started';
+			text = 'Get Started';
 		} else {
-			featureFlags.mainCtaText = 'Start Free Trial';
+			text = 'Start Free Trial';
+		}
+
+		featureFlags.mainCtaText = text;
+		try {
+			localStorage.setItem(CTA_CACHE_KEY, text);
+		} catch {
+			/* quota exceeded */
 		}
 	}
 }
