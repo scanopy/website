@@ -4,6 +4,7 @@
 		name="description"
 		content="Your newsletter subscription has been confirmed. Welcome to Scanopy updates."
 	/>
+	<meta name="robots" content="noindex, nofollow" />
 	<link rel="canonical" href="https://scanopy.net/newsletter-confirmed" />
 
 	<meta property="og:title" content="Newsletter Confirmed - Scanopy" />
