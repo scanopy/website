@@ -13,7 +13,7 @@
 	{
 		"id": "it-connect",
 		"name": "IT-Connect",
-		"articleTitle": "Scanopy : automatisez la création de vos schémas réseau",
+		"articleTitle": "Scanopy: Automate the Creation of Your Network Diagrams",
 		"articleType": "tutorial",
 		"datePublished": "2026-01-22",
 		"language": "fr",
@@ -24,7 +24,7 @@
 	{
 		"id": "korben",
 		"name": "Korben",
-		"articleTitle": "Scanopy - Quand votre réseau se documente tout seul",
+		"articleTitle": "Scanopy — When Your Network Documents Itself",
 		"articleType": "review",
 		"datePublished": "2026-03-16",
 		"language": "fr",
@@ -42,5 +42,16 @@
 		"quote": "Built with Rust, Svelte, and TypeScript, it offers a modern alternative to stale manual diagrams like Visio files.",
 		"url": "https://mariushosting.com/how-to-install-scanopy-on-your-synology-nas/",
 		"logo": "/press/mariushosting-360w.webp"
+	},
+	{
+		"id": "gigazine",
+		"name": "Gigazine",
+		"articleTitle": "Scanopy: Automatically update network diagrams with zero maintenance",
+		"articleType": "review",
+		"datePublished": "2026-03-28",
+		"language": "ja",
+		"quote": "A very useful tool for corporate network administrators. The larger the network, the less effort it takes to create a diagram and the more ports can be found that are unintentionally open. [Translated]",
+		"url": "https://gigazine.net/news/20260328-scanopy/",
+		"logo": "/press/gigazine-360w.webp"
 	}
 ]

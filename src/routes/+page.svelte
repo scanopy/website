@@ -338,8 +338,11 @@
 	</div>
 </div>
 
+<!-- Featured In Section -->
+<FeaturedIn mentions={pressMentions} />
+
 <!-- How it works Section -->
-<section class="border-t border-gray-800 py-20">
+<section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<span
@@ -390,7 +393,7 @@
 </section>
 
 <!-- What you get Section -->
-<section class="border-t border-gray-800 bg-gray-900/50 py-20">
+<section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<span
@@ -479,7 +482,7 @@
 </section>
 
 <!-- Use Cases Section -->
-<section class="border-t border-gray-800 py-20">
+<section class="border-t border-gray-800 bg-gray-900/50 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<span
@@ -490,8 +493,8 @@
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 				Less
 				<span
-					class="relative inline-block h-[1.15em] overflow-hidden align-baseline text-center"
-					style="top: 0.15em; width: 10ch;"
+					class="relative inline-block overflow-hidden align-baseline text-center"
+					style="top: 0.15em;"
 				>
 					{#key currentTool}
 						<span
@@ -524,7 +527,7 @@
 </section>
 
 <!-- Who it's for Section -->
-<section class="border-t border-gray-800 bg-gray-900/50 py-20">
+<section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-16 text-center">
 			<span
@@ -596,9 +599,6 @@
 		</div>
 	</div>
 </section>
-
-<!-- Featured In Section -->
-<FeaturedIn mentions={pressMentions} />
 
 <!-- Community Section -->
 <section class="border-t border-gray-800 bg-gray-900/50 py-20">
