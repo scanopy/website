@@ -34,6 +34,8 @@ Scans IP addresses on configured subnets to find hosts and services.
 
 **Layer 2 vs Layer 3**: When the daemon has a network interface on the subnet being scanned, you get full Layer 2 access (MAC addresses via ARP, better host discovery). When scanning remote subnets, you're limited to Layer 3 — only hosts with open ports will be discovered. See [limitations](/reference/limitations/#layer-2-vs-layer-3) for details.
 
+**Large interfaced subnets**: For very large subnets (larger than /15 by default), the daemon caps the number of IPs it ARP scans to prevent excessive memory use and scan times. You can adjust this via the `arp_scan_cutoff` scan setting — see [Scan Performance](/setting-up-daemons/troubleshooting-scans/scan-performance/#large-interfaced-subnets) for details.
+
 ### Docker Container Discovery
 
 Discovers containers via the Docker API.
