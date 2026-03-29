@@ -21,7 +21,8 @@
 
 	const languageLabels: Record<string, string> = {
 		en: 'English',
-		fr: 'French'
+		fr: 'French',
+		ja: 'Japanese'
 	};
 
 	const videos = [

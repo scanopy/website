@@ -19,17 +19,14 @@
 			</div>
 
 			<div
-				class="mx-auto grid gap-8"
-				class:md:grid-cols-2={mentions.length >= 2}
-				class:lg:grid-cols-3={mentions.length === 3}
-				class:lg:grid-cols-4={mentions.length >= 4}
+				class="mx-auto flex flex-wrap justify-center gap-8"
 			>
 				{#each mentions as mention (mention.id)}
 					<a
 						href={mention.url}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="card card-static group relative flex flex-col p-6 transition-colors hover:border-gray-700"
+						class="card card-static group relative flex w-full flex-col p-6 transition-colors hover:border-gray-700 md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
 					>
 						<div class="mb-4 flex items-center justify-between">
 							<img src={mention.logo} alt={mention.name} class="h-8 max-w-[180px] object-contain" width="180" height="32" />
