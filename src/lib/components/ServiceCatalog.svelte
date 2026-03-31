@@ -5,6 +5,15 @@
 	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
 	import { analytics } from '$lib/analytics.svelte';
 
+	const logoGlob = import.meta.glob('/static/logos/services/services/*', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+	const logoBySlug = new Map<string, string>();
+	for (const [path, url] of Object.entries(logoGlob)) {
+		const filename = path.split('/').pop()!;
+		const slug = filename.replace(/\.[^.]+$/, '');
+		// url from ?url import retains /static/ prefix; public dir is served at root
+		logoBySlug.set(slug, url.replace(/^\/static\//, '/'));
+	}
+
 	interface Props {
 		services: ServiceDefinition[];
 		class?: string;
@@ -96,6 +105,15 @@
 		selectedCategory = null;
 	}
 
+	function getLocalLogoUrl(service: ServiceDefinition): string | null {
+		if (!service.logo_url) return null;
+		const slug = service.name
+			.toLowerCase()
+			.replace(/ /g, '-')
+			.replace(/[^a-z0-9\-.]/g, '');
+		return logoBySlug.get(slug) ?? null;
+	}
+
 	function getCategoryColorHelper(categoryServices: ServiceDefinition[]) {
 		const firstService = categoryServices[0];
 		return createColorHelper(firstService.color || null);
@@ -176,8 +194,9 @@
 										: 'bg-gray-700/50'}"
 								>
 									{#if service.logo_url}
+									{@const localLogo = getLocalLogoUrl(service)}
 										<img
-											src={service.logo_url}
+											src={localLogo ?? service.logo_url}
 											alt="{service.name} logo"
 											class="h-6 w-6 object-contain"
 											width="24"
