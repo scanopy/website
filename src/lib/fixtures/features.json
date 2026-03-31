@@ -240,6 +240,30 @@
     }
   },
   {
+    "id": "pdf_export",
+    "name": "PDF Export",
+    "description": "Export network diagrams as printable PDF documents",
+    "category": "Visualization",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Pro"
+    }
+  },
+  {
+    "id": "html_export",
+    "name": "HTML Export",
+    "description": "Export network diagrams as self-contained HTML pages for offline viewing",
+    "category": "Visualization",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Pro"
+    }
+  },
+  {
     "id": "scheduled_discovery",
     "name": "Scheduled Discovery",
     "description": "Schedule automatic network discovery scans",

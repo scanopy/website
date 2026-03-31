@@ -100,6 +100,16 @@
     "docsOnly": false
   },
   {
+    "id": "accept_invalid_scan_certs",
+    "label": "Accept Invalid Scan Certificates",
+    "cliFlag": "--accept-invalid-scan-certs",
+    "envVar": "SCANOPY_ACCEPT_INVALID_SCAN_CERTS",
+    "configFileKey": "accept_invalid_scan_certs",
+    "default": "true",
+    "description": "Accept invalid TLS certificates when scanning endpoints. Enabled by default since scanners probe arbitrary internal services.",
+    "docsOnly": false
+  },
+  {
     "id": "log_level",
     "label": "Log Level",
     "cliFlag": "--log-level",
@@ -107,6 +117,16 @@
     "configFileKey": "log_level",
     "default": "info",
     "description": "Logging verbosity",
+    "docsOnly": false
+  },
+  {
+    "id": "log_file",
+    "label": "Log File",
+    "cliFlag": "--log-file",
+    "envVar": "SCANOPY_LOG_FILE",
+    "configFileKey": "log_file",
+    "default": null,
+    "description": "Path to log file. Defaults to platform-specific path. Set to \"none\" to disable file logging.",
     "docsOnly": false
   },
   {
