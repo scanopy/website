@@ -3,7 +3,7 @@
   Cache-Control: public, max-age=0, must-revalidate
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://ph.scanopy.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.scanopy.net https://ph.scanopy.net https://us.posthog.com https://api.iconify.design https://api.github.com https://www.google.com https://*.sibforms.com; img-src 'self' data: https:; font-src 'self' data:; frame-src https://www.google.com https://www.youtube.com; object-src 'none'; base-uri 'self'; form-action 'self' https://*.sibforms.com
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://ph.scanopy.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.scanopy.net https://ph.scanopy.net https://us.posthog.com https://api.iconify.design https://api.github.com https://www.google.com https://*.sibforms.com; img-src 'self' data: https:; font-src 'self' data:; frame-src https://www.google.com https://www.youtube.com https://demo.scanopy.net; object-src 'none'; base-uri 'self'; form-action 'self' https://*.sibforms.com
 
 /_app/immutable/*
   Cache-Control: public, max-age=31536000, immutable
