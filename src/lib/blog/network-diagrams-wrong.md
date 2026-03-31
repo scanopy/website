@@ -43,7 +43,7 @@ Outdated diagrams aren't just annoying. They're expensive.
 
 **Security blind spots.** [NetworkTigers found](https://news.networktigers.com/network-knowhow/stale-network-topology-is-damaging-security-performance-and-your-business/) that stale network topology multiplies security risk in two ways: it raises the chance of exposure and increases the damage when something goes wrong. Undocumented paths, forgotten routes, devices nobody knows about - all invisible on a diagram from six months ago.
 
-**The bus factor.** When the one person who knows the network leaves, what's left? A diagram that's months out of date and tribal knowledge that walked out the door.
+**The bus factor.** When the one person who knows the network leaves, [what's left?](/blog/network-person-leaves) A diagram that's months out of date and tribal knowledge that walked out the door.
 
 **Compliance gaps.** Auditors want current network diagrams. [SecurityMetrics is clear](https://www.securitymetrics.com/blog/network-diagrams-key-compliance-and-security): "current" means it reflects today's network, not that it was created recently.
 

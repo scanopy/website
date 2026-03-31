@@ -68,7 +68,7 @@ If your diagram says the database server is on VLAN 10 but it moved to VLAN 20 s
 
 ### The "hit by a bus" scenario is more common than you think
 
-When the one person who knows the network leaves - quits, gets promoted, goes on leave - undocumented networks become black boxes. On a French sysadmin forum we follow, a junior admin described inheriting a network after the previous admin left, the next two quit, and they were now solo with scattered configs, wrong passwords, and incomplete diagrams. This story shows up in IT communities constantly. Automated documentation means the knowledge lives in the system, not in someone's head.
+When the one person who knows the network leaves - quits, gets promoted, goes on leave - undocumented networks become black boxes. On a French sysadmin forum we follow, a junior admin [described inheriting a network](/blog/network-person-leaves) after the previous admin left, the next two quit, and they were now solo with scattered configs, wrong passwords, and incomplete diagrams. This story shows up in IT communities constantly. Automated documentation means the knowledge lives in the system, not in someone's head.
 
 ### New hires shouldn't need weeks to understand the network
 
