@@ -192,20 +192,20 @@
 </script>
 
 <svelte:head>
-	<title>Scanopy - Automatic Network Documentation</title>
+	<title>Scanopy - Network Diagrams That Update Themselves</title>
 	<meta
 		name="description"
-		content="Network documentation that updates itself. Deploy a scanner, get live diagrams in minutes. Open source."
+		content="Deploy a lightweight scanner, get live network diagrams in minutes. No manual maintenance, no stale Visio files. Self-hosted and open source."
 	/>
 	<link rel="canonical" href="https://scanopy.net/" />
 
-	<meta property="og:title" content="Scanopy - Automatic Network Documentation" />
-	<meta property="og:description" content="Network documentation that updates itself. Deploy a scanner, get live diagrams in minutes. Open source." />
+	<meta property="og:title" content="Scanopy - Network Diagrams That Update Themselves" />
+	<meta property="og:description" content="Deploy a lightweight scanner, get live network diagrams in minutes. No manual maintenance, no stale Visio files. Self-hosted and open source." />
 	<meta property="og:url" content="https://scanopy.net/" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Scanopy - Automatic Network Documentation" />
-	<meta name="twitter:description" content="Network documentation that updates itself. Deploy a scanner, get live diagrams in minutes. Open source." />
+	<meta name="twitter:title" content="Scanopy - Network Diagrams That Update Themselves" />
+	<meta name="twitter:description" content="Deploy a lightweight scanner, get live network diagrams in minutes. No manual maintenance, no stale Visio files. Self-hosted and open source." />
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 
 	<link
@@ -242,7 +242,7 @@
 				</div>
 
 				<h1 class="mb-6 text-5xl font-bold leading-tight text-rose-400 lg:text-7xl">
-					Network documentation that updates itself
+					Network diagrams that update themselves
 				</h1>
 
 				<p class="mb-10 max-w-xl text-xl text-gray-300">

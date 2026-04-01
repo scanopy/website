@@ -8,8 +8,6 @@ dateModified: 2026-03-31
 tldr: Most network documentation depends on one person's memory and habits. When they leave, the knowledge leaves too. The fix isn't documenting more. It's automating documentation so it survives personnel changes.
 ---
 
-# What Happens When Your Network Person Leaves
-
 Your network person puts in two weeks' notice. Or gets a better offer and leaves in one. Or just stops showing up.
 
 Everything they know about your network leaves with them. Subnet layouts, firewall rule rationale, that workaround on the core switch that nobody else understands, the reason VLAN 42 exists. None of it is written down. Some of it is in a spreadsheet from 2023 that's missing half the current infrastructure.
