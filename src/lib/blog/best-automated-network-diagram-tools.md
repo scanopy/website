@@ -3,8 +3,8 @@ title: Best Automated Network Diagram Tools (2026)
 description: "10 network diagram tools compared by discovery method, automation level, and pricing. Monitoring platforms, dedicated mappers, and manual tools."
 keyword: best automated network diagram tool
 slug: best-automated-network-diagram-tools
-date: 2026-03-31
-dateModified: 2026-03-31
+date: 2026-04-01
+dateModified: 2026-04-01
 tldr: "Most 'automated' network diagram tools are actually monitoring platforms that include mapping as a feature, or manual tools with no discovery at all. Here's what each tool actually does, what it costs, and which one fits your setup."
 ---
 
