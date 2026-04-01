@@ -48,9 +48,14 @@ export async function generateMetadata(
     ? '/'
     : `/${page.slugs.join('/')}/`;
 
+  // Noindex individual API endpoint pages (e.g. api/bindings/list_bindings)
+  // but keep resource-level pages indexed (e.g. api/ and api/bindings/)
+  const isApiEndpoint = page.slugs[0] === 'api' && page.slugs.length >= 3;
+
   return {
     title: page.data.title,
     description: page.data.description,
+    ...(isApiEndpoint && { robots: 'noindex, follow' }),
     alternates: {
       canonical,
     },

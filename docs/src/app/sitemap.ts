@@ -51,10 +51,12 @@ function getLastModified(slugs: string[]): Date | undefined {
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = source.getPages();
 
-  return pages.map((page) => ({
-    url: page.slugs.length === 0
-      ? `${baseUrl}/`
-      : `${baseUrl}/${page.slugs.join('/')}/`,
-    lastModified: getLastModified(page.slugs),
-  }));
+  return pages
+    .filter((page) => !(page.slugs[0] === 'api' && page.slugs.length >= 3))
+    .map((page) => ({
+      url: page.slugs.length === 0
+        ? `${baseUrl}/`
+        : `${baseUrl}/${page.slugs.join('/')}/`,
+      lastModified: getLastModified(page.slugs),
+    }));
 }
