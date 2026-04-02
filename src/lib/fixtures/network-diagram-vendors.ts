@@ -48,7 +48,7 @@ export const vendors: Record<string, Vendor> = {
 		discovery: ['SNMP', 'WMI', 'CDP', 'ICMP'],
 		discoverySources: [{ id: 3 }],
 		services: { level: 'no' },
-		autoUpdates: false,
+		autoUpdates: true,
 		openSource: { status: 'no' },
 		pricing: { text: 'From $1,977/yr subscription', sources: [{ id: 3 }] },
 		bestFor: 'Enterprise teams that standardize on Microsoft tools and need Visio-native network diagram exports',

@@ -104,7 +104,7 @@ export type DiscoveryMethod =
 
 export type ServiceLevel = 'yes' | 'no' | 'basic';
 export type OpenSourceStatus = 'osi' | 'source-available' | 'no';
-export type VendorCapability = 'Monitoring' | 'Automation' | 'Traffic Analysis' | 'RMM';
+export type VendorCapability = 'Monitoring' | 'Automation' | 'Traffic Analysis' | 'RMM' | 'Docker Visualization';
 
 export interface SourceRef {
 	id: number;
