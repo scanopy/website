@@ -45,7 +45,7 @@ export const vendors: Record<string, Vendor> = {
 		slug: 'solarwinds-ntm',
 		href: 'https://www.solarwinds.com/network-topology-mapper',
 
-		discovery: ['SNMP', 'WMI', 'CDP', 'ICMP'],
+		discovery: ['SNMP', 'WMI', 'CDP', 'LLDP', 'ICMP'],
 		discoverySources: [{ id: 3 }],
 		services: { level: 'no' },
 		autoUpdates: true,
@@ -53,16 +53,16 @@ export const vendors: Record<string, Vendor> = {
 		pricing: { text: 'From $1,977/yr subscription', sources: [{ id: 3 }] },
 		bestFor: 'Enterprise teams that standardize on Microsoft tools and need Visio-native network diagram exports',
 		description:
-			'Best for organizations that need compliance-ready Visio exports. NTM is the most widely-recommended automated network diagram tool — it scans your network and generates topology diagrams exportable to Visio, PDF, and PNG.',
+			'Best for organizations that need compliance-ready Visio exports. NTM scans your network and generates topology diagrams exportable to Visio, PDF, and PNG. It is a standalone Windows application, separate from the SolarWinds Observability platform.',
 		discoveryNotes:
-			'Scan-on-demand (not continuous). Supports scheduled scans.',
+			'Scan-on-demand (not continuous). Supports scheduled scans. Also discovers VMware and Hyper-V environments.',
 		diagrams:
-			'Multiple diagram types from a single scan (Layer 2, Layer 3, physical). Exports to Visio format. Auto-layout with manual override.',
-		pricingNotes: 'Perpetual license options also available.',
+			'Multiple diagram types from a single scan (Layer 2, Layer 3, physical). Exports to Visio with auto-populated SmartShapes. Auto-layout with manual override.',
+		pricingNotes: 'SolarWinds moved to subscription-only licensing across its product line in 2025. Renewal prices have reportedly increased significantly post-acquisition by Turn/River Capital.',
 		whereItFits:
 			'Enterprise teams that need compliance-ready documentation with Visio exports. The Visio export alone makes it the default choice in organizations that standardize on Microsoft tools.',
 		tradeOff:
-			'Requires Windows. Scan-on-demand means diagrams are snapshots, not living documents (though scheduled scans help). The interface feels dated compared to modern web apps. The SolarWinds brand carries baggage from the 2020 supply chain incident, though NTM is a separate, much simpler product.',
+			'Requires Windows (.NET 3.5 and 4.8). No web-based access, no embeddable maps, no API. NTM has received only maintenance updates since roughly 2016, with no new discovery or mapping features. SolarWinds staff confirmed in 2017 that there is no product roadmap. The product still works, but active development has shifted to SolarWinds Observability. The SolarWinds brand also carries baggage from the 2020 supply chain incident, though NTM is a separate, much simpler product.',
 		tradeOffLabel: 'Trade-offs'
 	},
 	netbrain: {
@@ -85,7 +85,7 @@ export const vendors: Record<string, Vendor> = {
 		whereItFits:
 			"Large, complex networks where diagrams aren't just documentation but part of the operational workflow. NetBrain is genuinely powerful for this use case.",
 		tradeOff:
-			'Overkill for anything smaller than a large enterprise. The pricing and complexity reflect that.'
+			'Overkill for anything smaller than a large enterprise. The pricing and complexity reflect that. Community experiences are polarized: some teams report excellent results, while others have struggled with map accuracy for years. One [r/networking user](https://www.reddit.com/r/networking/comments/uu3wyr/comment/i9duuiu/) spent two years and "hundreds of thousands of dollars" before abandoning it and reverting to manual Visio diagrams. A thorough PoC is essential before committing.'
 	},
 	auvik: {
 		name: 'Auvik',
@@ -281,6 +281,30 @@ export const vendors: Record<string, Vendor> = {
 			"Same as draw.io for on-prem networks: you're drawing the diagram, not discovering it. The cloud import feature is useful for AWS/Azure/GCP environments but doesn't help with physical networks, switches, or on-prem infrastructure.",
 		tradeOffLabel: 'The catch'
 	},
+	netdisco: {
+		name: 'NetDisco',
+		fullName: 'NetDisco',
+		slug: 'netdisco',
+		href: 'https://netdisco.org/',
+
+		discovery: ['SNMP', 'CDP', 'LLDP', 'ARP'],
+		discoverySources: [{ id: 12 }],
+		services: { level: 'no' },
+		autoUpdates: true,
+		openSource: { status: 'osi', license: 'BSD' },
+		pricing: { text: 'Free' },
+		bestFor: 'Network teams that want free, open-source Layer 2 topology discovery and device tracking',
+		description:
+			'The most-recommended open-source network discovery tool in sysadmin and networking communities. NetDisco is a web-based network management tool that discovers devices via SNMP and maps Layer 2 topology using CDP and LLDP neighbor data. Originally developed at the University of Amsterdam, actively maintained since 2003.',
+		discoveryNotes:
+			'SNMP-based device discovery with CDP/LLDP neighbor detection and ARP/MAC table correlation. Tracks switch port usage, VLAN assignments, and device locations over time.',
+		diagrams:
+			'Web-based topology maps with device groupings configurable via config file. Maps take some effort to get looking the way you want, but device groupings work well. Not as polished as commercial tools, but functional.',
+		whereItFits:
+			'Network teams comfortable with Perl and Linux administration who want a free, battle-tested tool for Layer 2 discovery and device tracking. Strong at answering "what device is on which switch port?" questions.',
+		tradeOff:
+			'Perl-based, which limits the contributor pool. Topology visualization is functional but not modern. Requires Linux, PostgreSQL, and some configuration effort. No service detection beyond basic SNMP data. Mapping is a feature of a broader network management tool, not the primary focus.'
+	},
 	'scanopy-ce': {
 		name: 'Scanopy Community Edition',
 		slug: 'scanopy-ce',
@@ -326,7 +350,7 @@ export const tableCategories: VendorCategory[] = [
 		id: 'discovery',
 		heading: 'Discovery Tools',
 		hasAlsoIncludes: true,
-		vendors: ['nmap-zenmap', 'librenms']
+		vendors: ['nmap-zenmap', 'librenms', 'netdisco']
 	},
 	{
 		id: 'manual',
@@ -362,12 +386,12 @@ export const detailSections: VendorCategory[] = [
 		id: 'discovery',
 		heading: 'Discovery Tools',
 		hasAlsoIncludes: false,
-		vendors: ['librenms', 'nmap-zenmap', 'scanopy-ce']
+		vendors: ['librenms', 'netdisco', 'nmap-zenmap', 'scanopy-ce']
 	}
 ];
 
 export const honorableMentions =
-	'**Graphviz / D3.js.** Rendering engines, not discovery tools. If you\'ve already got network data from another source (Nmap scans, SNMP polls, API calls), Graphviz and D3 can turn it into a diagram. This is the DIY path. Extremely flexible, significant engineering effort required.';
+	'**The Dude (MikroTik).** Free network mapping tool from MikroTik. Auto-discovers devices and draws a topology, but requires significant manual cleanup. Best for MikroTik-heavy environments. Loyal user base, but the tool is tightly coupled to the MikroTik ecosystem.\n\n**Graphviz / D3.js.** Rendering engines, not discovery tools. If you\'ve already got network data from another source (Nmap scans, SNMP polls, API calls), Graphviz and D3 can turn it into a diagram. This is the DIY path. Extremely flexible, significant engineering effort required.';
 
 export const vendorSources: VendorSource[] = [
 	{
@@ -424,6 +448,11 @@ export const vendorSources: VendorSource[] = [
 		id: 11,
 		label: 'Lucidchart - Pricing',
 		url: 'https://lucid.app/pricing/lucidchart'
+	},
+	{
+		id: 12,
+		label: 'NetDisco - Documentation',
+		url: 'https://metacpan.org/pod/App::Netdisco'
 	}
 ];
 
@@ -446,7 +475,7 @@ export const vendorFAQs: VendorFAQ[] = [
 	},
 	{
 		question: 'What is the best free self-hosted network diagram tool?',
-		answer: 'LibreNMS for monitoring with basic maps. Scanopy Community Edition for documentation-focused mapping. draw.io for manual diagrams. All three are free.'
+		answer: 'LibreNMS for monitoring with basic maps. NetDisco for Layer 2 topology discovery and device tracking. Scanopy Community Edition for documentation-focused mapping with service detection. draw.io for manual diagrams. All are free.'
 	},
 	{
 		question: 'What is the best network diagram tool for MSPs?',

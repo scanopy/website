@@ -1,10 +1,10 @@
 ---
 title: Best Automated Network Diagram Tools (2026)
-description: "10 network diagram tools compared by discovery method, automation level, and pricing. Monitoring platforms, dedicated mappers, and manual tools."
+description: "13 network diagram tools compared by discovery method, automation level, and pricing. Monitoring platforms, dedicated mappers, open-source options, and manual tools."
 keyword: best automated network diagram tool
 slug: best-automated-network-diagram-tools
 date: 2026-04-01
-dateModified: 2026-04-01
+dateModified: 2026-04-02
 style: comparison
 tldr: "Most 'automated' network diagram tools are actually monitoring platforms that include mapping as a feature, or manual tools with no discovery at all. Here's what each tool actually does, what it costs, and which one fits your setup."
 ctaDescription: Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map. No per-device fees, unlimited hosts. It pairs with whatever monitoring tool you already use.
@@ -22,7 +22,7 @@ There are three categories of network diagram tools: **monitoring platforms** th
 | Diagrams bundled with monitoring | If you already use [Auvik](#auvik), [PRTG](#prtg-network-monitor), [Domotz](#domotz), or [ManageEngine](#manageengine-opmanager) for monitoring, use their built-in mapping. No reason to add another tool for something your monitoring platform already does. |
 | One-time diagram for a presentation or project | [draw.io](#drawio) or [Lucidchart](#lucidchart). Draw it once, export it, done. draw.io is free. Lucidchart is better for team collaboration. |
 | Budget monitoring + mapping | [Domotz](#domotz) ($1.50/device/mo) or [ManageEngine](#manageengine-opmanager) ($95/yr) |
-| Free and self-hosted | [LibreNMS](#librenms) for monitoring with basic maps. [Scanopy Community Edition](/community) for documentation-focused mapping. [draw.io](#drawio) for manual diagrams. All three are free. |
+| Free and self-hosted | [LibreNMS](#librenms) for monitoring with basic maps. [NetDisco](#netdisco) for Layer 2 topology discovery. [Scanopy Community Edition](/community) for documentation-focused mapping. [draw.io](#drawio) for manual diagrams. All free. |
 
 ## What "Automated" Actually Means
 
