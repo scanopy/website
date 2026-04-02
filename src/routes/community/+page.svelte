@@ -88,7 +88,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-3xl px-4">
 		<p class="text-lg leading-relaxed text-gray-300">
-			Scanopy Community is the free, self-hosted edition of Scanopy — the same automatic
+			Scanopy Community is the free, self-hosted edition of Scanopy - the same automatic
 			network discovery engine that powers our cloud plans, running entirely on your
 			infrastructure. It's built for homelabbers, home network enthusiasts, and small teams
 			who want live, auto-updating network diagrams without sending data to a third party.
@@ -127,7 +127,7 @@ docker compose up -d</code></pre>
 		<p class="mb-10 text-center text-gray-400">
 			{communityPlan.metadata.included_hosts === null ? 'Unlimited' : communityPlan.metadata.included_hosts} hosts,
 			{communityPlan.metadata.included_networks} networks,
-			API access — all free.
+			API access - all free.
 		</p>
 		<div class="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			{#each features as feature}
@@ -164,12 +164,6 @@ docker compose up -d</code></pre>
 					{/if}
 				</a>
 			{/each}
-			<a
-				href="/showcase"
-				class="inline-flex items-center gap-2 rounded-lg border border-gray-700 px-5 py-3 text-gray-300 transition-colors hover:border-gray-500 hover:text-white"
-			>
-				See what others have built
-			</a>
 		</div>
 	</div>
 </section>

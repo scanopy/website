@@ -137,7 +137,7 @@
 
 
 
-	// What you get screenshots — matches sorted order: sharing, service_detection, versioning
+	// What you get screenshots - matches sorted order: sharing, service_detection, versioning
 	const whatYouGetScreenshots: (string | null)[] = [
 		'/screenshots/export-modal.webp',
 		'/screenshots/hosts-catalog.webp',
@@ -149,7 +149,7 @@
 			icon: Users,
 			title: 'Onboard faster',
 			description:
-				'New hires and new clients see the whole picture on day one — no digging through outdated wikis.'
+				'New hires and new clients see the whole picture on day one - no digging through outdated wikis.'
 		},
 		{
 			icon: Briefcase,
@@ -691,7 +691,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm text-gray-400 leading-relaxed">
-			Scanopy deploys as a lightweight daemon that runs alongside your existing infrastructure. It discovers every host, maps the connections between them, and renders a live topology diagram — all without agents on your endpoints or changes to your network configuration. Once running, scans repeat on a schedule so your documentation stays accurate as devices come and go. Learn more about <a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300">how automated network documentation works</a>, explore the <a href="/services" class="text-blue-400 hover:text-blue-300">200+ services Scanopy detects</a>, or read about our <a href="/docs/reference/security" class="text-blue-400 hover:text-blue-300">security practices</a>.
+			Scanopy deploys as a lightweight daemon that runs alongside your existing infrastructure. It discovers every host, maps the connections between them, and renders a live topology diagram - all without agents on your endpoints or changes to your network configuration. Once running, scans repeat on a schedule so your documentation stays accurate as devices come and go. Learn more about <a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300">how automated network documentation works</a>, explore the <a href="/services" class="text-blue-400 hover:text-blue-300">200+ services Scanopy detects</a>, or read about our <a href="/docs/reference/security" class="text-blue-400 hover:text-blue-300">security practices</a>.
 		</p>
 	</div>
 </section>

@@ -1,0 +1,521 @@
+<script lang="ts">
+	import { PageHero } from '$lib/components';
+	import VendorComparison from '$lib/components/VendorComparison.svelte';
+	import FAQ from '$lib/components/FAQ.svelte';
+	import AuthorCard from '$lib/components/AuthorCard.svelte';
+	import ArticleCTA from '$lib/components/ArticleCTA.svelte';
+	import ArticleTOC from '$lib/components/ArticleTOC.svelte';
+	import type {
+		Vendor,
+		VendorCategory,
+		VendorSource,
+		VendorFAQ
+	} from '$lib/types';
+
+	interface Heading {
+		id: string;
+		text: string;
+		level: number;
+	}
+
+	interface ComparisonPost {
+		title: string;
+		description: string;
+		date: string;
+		dateModified?: string;
+		keyword: string;
+		slug: string;
+		image: string;
+		tldr?: string;
+		ctaDescription?: string;
+		style?: string;
+		content: string;
+		wordCount: number;
+	}
+
+	type ContentSegment =
+		| { type: 'html'; content: string }
+		| { type: 'vendor-tables' }
+		| { type: 'vendor-section'; id: string }
+		| { type: 'vendor-sources' };
+
+	interface VendorData {
+		vendors: Record<string, Vendor>;
+		tableCategories: VendorCategory[];
+		detailSections: VendorCategory[];
+		sources: VendorSource[];
+		faqs: VendorFAQ[];
+		disclosureText: string;
+		honorableMentions: string;
+		itemListSchema: Record<string, unknown>;
+	}
+
+	interface PageData {
+		post: ComparisonPost;
+		headings: Heading[];
+		contentSegments?: ContentSegment[];
+		vendorData?: VendorData;
+	}
+
+	let { data }: { data: PageData } = $props();
+
+	const showToc = $derived(data.headings && data.headings.length >= 3);
+
+	function formatDate(dateStr: string): string {
+		if (!dateStr) return '';
+		const date = new Date(dateStr + 'T12:00:00');
+		return date.toLocaleDateString('en-US', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		});
+	}
+
+	const articleSchemaObj: Record<string, unknown> = {
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		'@id': `https://scanopy.net/comparisons/${data.post.slug}#article`,
+		headline: data.post.title,
+		description: data.post.description,
+		datePublished: data.post.date,
+		dateModified: data.post.dateModified || data.post.date,
+		inLanguage: 'en',
+		wordCount: data.post.wordCount,
+		author: {
+			'@type': 'Person',
+			name: 'Maya',
+			url: 'https://scanopy.net/about',
+			image: 'https://scanopy.net/maya-headshot.jpg',
+			sameAs: ['https://github.com/mayanayza']
+		},
+		publisher: {
+			'@type': 'Organization',
+			name: 'Scanopy',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://scanopy.net/scanopy-logo.webp'
+			}
+		},
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': `https://scanopy.net/comparisons/${data.post.slug}`
+		},
+		isPartOf: {
+			'@type': 'WebSite',
+			'@id': 'https://scanopy.net'
+		},
+		about: {
+			'@type': 'Thing',
+			name: 'Automated network diagram tools',
+			description: 'Software that discovers network topology and generates diagrams automatically'
+		},
+		image: `https://scanopy.net${data.post.image}`
+	};
+
+	const articleSchema = JSON.stringify(articleSchemaObj);
+
+	const itemListSchema = data.vendorData
+		? JSON.stringify(data.vendorData.itemListSchema)
+		: null;
+</script>
+
+<svelte:head>
+	<title>{data.post.title} - Scanopy</title>
+	<meta name="description" content={data.post.description} />
+	<link rel="canonical" href="https://scanopy.net/comparisons/{data.post.slug}" />
+
+	<meta property="og:title" content={data.post.title} />
+	<meta property="og:description" content={data.post.description} />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content="https://scanopy.net/comparisons/{data.post.slug}" />
+	<meta property="article:published_time" content={data.post.date} />
+	<meta property="article:modified_time" content={data.post.dateModified || data.post.date} />
+
+	<meta property="og:image" content="https://scanopy.net{data.post.image}" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={data.post.title} />
+	<meta name="twitter:description" content={data.post.description} />
+	<meta name="twitter:image" content="https://scanopy.net{data.post.image}" />
+
+	{@html `<script type="application/ld+json">${articleSchema}</script>`}
+	{#if itemListSchema}
+		{@html `<script type="application/ld+json">${itemListSchema}</script>`}
+	{/if}
+</svelte:head>
+
+<PageHero image={data.post.image} title={data.post.title}>
+	{#if data.post.date}
+		<div class="flex items-center gap-2 text-sm text-gray-400">
+			<time datetime={data.post.date}>{formatDate(data.post.date)}</time>
+			{#if data.post.dateModified && data.post.dateModified !== data.post.date}
+				<span>·</span>
+				<span>Updated <time datetime={data.post.dateModified}>{formatDate(data.post.dateModified)}</time></span>
+			{/if}
+			<span>·</span>
+			<a href="/about" class="hover:text-blue-400">Maya</a>
+		</div>
+	{/if}
+</PageHero>
+
+<article class="py-20">
+	<div class="container mx-auto px-4" class:max-w-3xl={!showToc} class:max-w-5xl={showToc}>
+		<div class:blog-layout={showToc}>
+			<div class="blog-content">
+				<header class="mb-12">
+					<a href="/comparisons" class="mb-6 inline-block text-sm text-gray-500 hover:text-blue-400">
+						&larr; Back to comparisons
+					</a>
+				</header>
+
+				{#if data.post.tldr}
+					<div class="mb-8 rounded-r-lg border-l-[3px] border-blue-500 bg-gray-800/50 px-5 py-4">
+						<p class="text-sm font-medium text-gray-300">
+							<span class="font-semibold text-white">TL;DR:</span> {data.post.tldr}
+						</p>
+					</div>
+				{/if}
+
+				<div class="prose prose-invert prose-gray max-w-none" class:prose-comparison={data.post.style === 'comparison'}>
+					{#if data.contentSegments && data.vendorData}
+						{#each data.contentSegments as segment}
+							{#if segment.type === 'html'}
+								{@html segment.content}
+							{:else if segment.type === 'vendor-tables'}
+								<VendorComparison
+									mode="tables"
+									categories={data.vendorData.tableCategories}
+									vendors={data.vendorData.vendors}
+									disclosureText={data.vendorData.disclosureText}
+								/>
+							{:else if segment.type === 'vendor-section'}
+								<VendorComparison
+									mode="detail"
+									section={data.vendorData.detailSections.find((s) => s.id === segment.id)}
+									vendors={data.vendorData.vendors}
+									honorableMentions={segment.id === 'discovery' ? data.vendorData.honorableMentions : undefined}
+								/>
+							{:else if segment.type === 'vendor-sources'}
+								<VendorComparison
+									mode="sources"
+									sources={data.vendorData.sources}
+								/>
+							{/if}
+						{/each}
+					{:else}
+						{@html data.post.content}
+					{/if}
+
+					{#if data.vendorData?.faqs?.length}
+						<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+						<FAQ faqs={data.vendorData.faqs} />
+					{/if}
+				</div>
+
+				<ArticleCTA description={data.post.ctaDescription} />
+				<AuthorCard />
+			</div>
+
+			{#if showToc}
+				<ArticleTOC headings={data.headings} maxDepth={3} />
+			{/if}
+		</div>
+	</div>
+</article>
+
+<style>
+	.blog-layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem;
+	}
+
+	@media (min-width: 1024px) {
+		.blog-layout {
+			grid-template-columns: 1fr 200px;
+		}
+	}
+
+	:global(.prose h2) {
+		margin-top: 3.5rem;
+		margin-bottom: 1rem;
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: white;
+		padding-left: 0.75rem;
+		border-left: 3px solid rgb(59 130 246);
+		scroll-margin-top: 5rem;
+	}
+
+	:global(.prose h3) {
+		margin-top: 1.5rem;
+		margin-bottom: 0.5rem;
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: rgb(229 231 235);
+		scroll-margin-top: 5rem;
+	}
+
+	:global(.prose p) {
+		color: rgb(209 213 219);
+		margin-bottom: 1.25rem;
+		line-height: 1.75;
+	}
+
+	:global(.prose p > strong:first-child) {
+		color: rgb(243 244 246);
+	}
+
+	/* Comparison post style: vendor sections as cards */
+	:global(.prose-comparison h3) {
+		margin-top: 2.5rem;
+		margin-bottom: 0;
+		padding: 1rem 1.25rem;
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: white;
+		background: rgb(31 41 55);
+		border-radius: 0.5rem 0.5rem 0 0;
+		border: 1px solid rgb(55 65 81);
+		border-bottom: 1px solid rgb(55 65 81 / 0.5);
+		scroll-margin-top: 5rem;
+	}
+
+	:global(.prose-comparison h3 + p) {
+		padding: 1rem 1.25rem 0.75rem;
+		border-left: 1px solid rgb(55 65 81);
+		border-right: 1px solid rgb(55 65 81);
+		margin-top: 0;
+		margin-bottom: 0;
+		color: rgb(156 163 175);
+		font-size: 0.9375rem;
+	}
+
+	:global(.prose-comparison h3 + p + p),
+	:global(.prose-comparison h3 ~ p:has(> strong:first-child)) {
+		padding: 0.5rem 1.25rem;
+		border-left: 1px solid rgb(55 65 81);
+		border-right: 1px solid rgb(55 65 81);
+		margin-bottom: 0;
+		font-size: 0.9375rem;
+		line-height: 1.6;
+	}
+
+	:global(.prose-comparison h3 ~ p:has(> strong:first-child) > strong:first-child) {
+		color: rgb(96 165 250);
+		font-size: 0.8125rem;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+
+	/* Last bold-label paragraph before next h3 or h2 gets bottom border + rounded corners */
+	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ h3)),
+	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ h2)),
+	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ iframe)),
+	:global(.prose-comparison h3 ~ p:has(> strong:first-child):last-child) {
+		border-bottom: 1px solid rgb(55 65 81);
+		border-radius: 0 0 0.5rem 0.5rem;
+		padding-bottom: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	/* "How to Choose" decision items - light left-border accent */
+	:global(.prose-comparison #how-to-choose + p),
+	:global(.prose-comparison #how-to-choose + p + p),
+	:global(.prose-comparison #how-to-choose + p + p + p),
+	:global(.prose-comparison #how-to-choose + p + p + p + p),
+	:global(.prose-comparison #how-to-choose + p + p + p + p + p),
+	:global(.prose-comparison #how-to-choose + p + p + p + p + p + p) {
+		border-left: 3px solid rgb(55 65 81);
+		padding-left: 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	:global(.prose-comparison #how-to-choose + p > strong:first-child),
+	:global(.prose-comparison #how-to-choose + p + p > strong:first-child),
+	:global(.prose-comparison #how-to-choose + p + p + p > strong:first-child),
+	:global(.prose-comparison #how-to-choose + p + p + p + p > strong:first-child),
+	:global(.prose-comparison #how-to-choose + p + p + p + p + p > strong:first-child),
+	:global(.prose-comparison #how-to-choose + p + p + p + p + p + p > strong:first-child) {
+		color: rgb(96 165 250);
+		text-transform: none;
+		letter-spacing: normal;
+	}
+
+	:global(.prose ul) {
+		list-style-type: disc;
+		padding-left: 1.25rem;
+		color: rgb(209 213 219);
+		margin-bottom: 1.5rem;
+	}
+
+	:global(.prose li) {
+		color: rgb(209 213 219);
+		margin-top: 0.25rem;
+	}
+
+	:global(.prose a) {
+		color: rgb(96 165 250);
+	}
+
+	:global(.prose a:hover) {
+		color: rgb(147 197 253);
+	}
+
+	:global(.prose code) {
+		background-color: rgb(31 41 55);
+		padding: 0.125rem 0.375rem;
+		border-radius: 0.25rem;
+		font-size: 0.875rem;
+		color: rgb(229 231 235);
+	}
+
+	:global(.prose table) {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 1.5rem;
+		font-size: 0.875rem;
+	}
+
+	:global(.prose-comparison table) {
+		min-width: 800px;
+	}
+
+	:global(.prose-comparison) {
+		overflow-x: auto;
+	}
+
+	:global(.prose-comparison td:nth-child(3)),
+	:global(.prose-comparison td:nth-child(4)),
+	:global(.prose-comparison th:nth-child(3)),
+	:global(.prose-comparison th:nth-child(4)) {
+		text-align: center;
+		white-space: nowrap;
+	}
+
+	:global(.prose-comparison td:nth-child(1)) {
+		white-space: nowrap;
+		font-weight: 600;
+	}
+
+	:global(.prose-comparison .cell-detail) {
+		display: block;
+		font-size: 0.75rem;
+		color: rgb(156 163 175);
+		margin-top: 0.25rem;
+	}
+
+	:global(.prose-comparison a.cell-detail),
+	:global(.prose-comparison .cell-detail a) {
+		color: rgb(96 165 250);
+	}
+
+	:global(.prose-comparison a.cell-detail:hover),
+	:global(.prose-comparison .cell-detail a:hover) {
+		color: rgb(147 197 253);
+	}
+
+	:global(.prose-comparison td:nth-child(2)) {
+		min-width: 140px;
+	}
+
+	:global(.prose-comparison .category-row td) {
+		background: rgb(17 24 39);
+		font-weight: 700;
+		font-size: 0.8125rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: rgb(156 163 175);
+		padding: 0.625rem 0.75rem;
+		border-left: none;
+		border-right: none;
+	}
+
+	:global(.prose th) {
+		background-color: rgb(31 41 55);
+		padding: 0.5rem 0.75rem;
+		text-align: left;
+		font-weight: 600;
+		color: rgb(229 231 235);
+		border: 1px solid rgb(55 65 81);
+	}
+
+	:global(.prose td) {
+		padding: 0.5rem 0.75rem;
+		color: rgb(209 213 219);
+		border: 1px solid rgb(55 65 81);
+	}
+
+	:global(.prose .chip) {
+		display: inline-block;
+		padding: 0.125rem 0.5rem;
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1.5;
+		white-space: nowrap;
+	}
+
+	:global(.prose .chip-positive) {
+		background: rgba(34, 197, 94, 0.15);
+		color: rgb(74 222 128);
+	}
+
+	:global(.prose .chip-negative) {
+		background: rgba(239, 68, 68, 0.15);
+		color: rgb(248 113 113);
+	}
+
+	:global(.prose .chip-neutral) {
+		background: rgba(245, 158, 11, 0.15);
+		color: rgb(251 191 36);
+	}
+
+	:global(.prose .tooltip-header) {
+		position: relative;
+		cursor: help;
+		text-decoration: underline dotted rgba(148, 163, 184, 0.5);
+		text-underline-offset: 3px;
+	}
+
+	:global(.prose .tooltip-content) {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		margin-top: 0.5rem;
+		padding: 0.75rem 1rem;
+		background: rgb(31 41 55);
+		border: 1px solid rgb(55 65 81);
+		border-radius: 0.5rem;
+		font-size: 0.8125rem;
+		font-weight: 400;
+		color: rgb(209 213 219);
+		white-space: nowrap;
+		z-index: 10;
+		line-height: 2;
+	}
+
+	:global(.prose .tooltip-header:hover .tooltip-content) {
+		display: block;
+	}
+
+	:global(.prose strong) {
+		color: rgb(229 231 235);
+	}
+
+	:global(.prose em) {
+		color: rgb(209 213 219);
+	}
+
+	:global(.prose iframe) {
+		max-width: 100%;
+		margin: 1.5rem 0;
+	}
+
+	:global(.prose hr) {
+		border: none;
+		border-top: 1px solid rgb(55 65 81);
+		margin: 2rem 0;
+	}
+</style>

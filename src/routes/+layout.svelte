@@ -67,7 +67,8 @@
 		roadmap: 'Roadmap',
 		privacy: 'Privacy',
 		terms: 'Terms',
-		refund: 'Refund'
+		refund: 'Refund',
+		comparisons: 'Comparisons'
 	};
 
 	let breadcrumbSchema = $derived.by(() => {

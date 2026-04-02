@@ -10,7 +10,7 @@ function parseFrontmatter(content: string): Record<string, string> {
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			frontmatter[key.trim()] = valueParts.join(':').trim();
+			frontmatter[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 	return frontmatter;
@@ -36,6 +36,7 @@ export async function GET() {
 		{ loc: '/roadmap', src: 'src/routes/roadmap/+page.svelte' },
 		{ loc: '/about', src: 'src/routes/about/+page.svelte' },
 		{ loc: '/blog', src: 'src/routes/blog/+page.svelte' },
+		{ loc: '/comparisons', src: 'src/routes/comparisons/+page.svelte' },
 		{ loc: '/community', src: 'src/routes/community/+page.svelte' },
 		{ loc: '/press', src: 'src/routes/press/+page.svelte' },
 		{ loc: '/privacy', src: 'src/routes/privacy/+page.svelte' },
@@ -109,8 +110,36 @@ export async function GET() {
 		)
 		.join('');
 
+	// Load comparison posts for dynamic URLs
+	const comparisonFiles = import.meta.glob('/src/lib/comparisons/*.md', {
+		query: '?raw',
+		import: 'default'
+	});
+
+	const comparisonEntries: { slug: string; date: string }[] = [];
+
+	for (const [path, loader] of Object.entries(comparisonFiles)) {
+		const raw = (await loader()) as string;
+		const frontmatter = parseFrontmatter(raw);
+		const slug = path.split('/').pop()?.replace('.md', '') || '';
+
+		comparisonEntries.push({
+			slug,
+			date: frontmatter.date || ''
+		});
+	}
+
+	const comparisonUrls = comparisonEntries
+		.map(
+			(entry) => `
+  <url>
+    <loc>https://scanopy.net/comparisons/${entry.slug}</loc>${entry.date ? `\n    <lastmod>${entry.date}</lastmod>` : ''}
+  </url>`
+		)
+		.join('');
+
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${changelogUrls}${blogUrls}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${changelogUrls}${blogUrls}${comparisonUrls}
 </urlset>`;
 
 	return new Response(sitemap, {

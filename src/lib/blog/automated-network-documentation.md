@@ -6,6 +6,7 @@ dateModified: 2026-03-25
 keyword: automated network documentation
 slug: automated-network-documentation
 tldr: Automated network documentation uses protocols like SNMP, LLDP, and ARP to discover devices, map connections, and keep records current without manual effort. It replaces spreadsheets and stale Visio files with live, always-accurate diagrams.
+ctaDescription: Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map in minutes. No per-device fees. No infrastructure to maintain.
 ---
 
 Ask an IT team how they document their network and you'll get one of three answers: a spreadsheet that's six months old, a Visio file from a person who no longer works here, or "we don't."
@@ -92,7 +93,7 @@ These three categories get conflated constantly. They're different tools solving
 
 ## What to Look for in an Automated Documentation Tool
 
-If you're evaluating tools, here's what matters:
+If you're evaluating tools, our [comparison of automated network diagram tools](/comparisons/best-automated-network-diagram-tools) covers specific products, pricing, and trade-offs. Here's what matters at a high level:
 
 - **Lightweight deployment**: one scanner per network, not an agent on every device. You're solving a complexity problem; don't add more complexity
 - **Protocol support**: SNMP, LLDP, and CDP at minimum. ARP and MAC table scanning for full topology
@@ -101,8 +102,3 @@ If you're evaluating tools, here's what matters:
 - **Export options**: SVG, embeddable iframes, integrations with tools you already use
 - **Transparent pricing**: avoid per-device models that scale unpredictably as your network grows
 
-## Try It
-
-Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map in minutes. No per-device fees. No infrastructure to maintain.
-
-[Try Scanopy free](https://app.scanopy.net/onboarding), [view pricing](/pricing), or [read the docs](/docs) to get started.

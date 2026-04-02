@@ -1,10 +1,11 @@
 ---
 title: Why Your Network Diagrams Are Always Wrong
-description: Network diagrams go stale within weeks. The fix isn't discipline — it's automated discovery that keeps diagrams current without manual effort.
+description: Network diagrams go stale within weeks. The fix isn't discipline - it's automated discovery that keeps diagrams current without manual effort.
 keyword: keep network diagrams up to date
 date: 2026-03-11
 dateModified: 2026-03-11
-tldr: Network diagrams go stale because maintaining them manually doesn't scale. The fix isn't updating more often — it's using automated discovery tools that keep diagrams current without human intervention.
+tldr: Network diagrams go stale because maintaining them manually doesn't scale. The fix isn't updating more often - it's using automated discovery tools that keep diagrams current without human intervention.
+ctaDescription: Scanopy is free to start. Deploy a daemon and see your actual network in minutes. No drawing required.
 ---
 
 You know the drill. Someone spends a Friday afternoon in Visio or draw.io, mapping every device, subnet, and connection. It's beautiful. It's accurate. And within two weeks, someone adds a switch, changes a VLAN, or spins up a VM, and nobody updates the diagram.
@@ -81,8 +82,3 @@ Manual diagramming tools aren't the enemy. They solve a different problem.
 
 The distinction: **design** tools vs **documentation** tools. draw.io is great for designing what should exist. Automation is for documenting what does exist. They solve different problems, and they can coexist.
 
-## Try It
-
-Scanopy is free to start. Deploy a daemon and see your actual network in minutes. No drawing required.
-
-[Try Scanopy free](https://app.scanopy.net/onboarding), [view pricing](/pricing), or [read the setup guide](/docs) to get started.

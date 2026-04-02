@@ -25,7 +25,7 @@
 
 	function formatDate(dateStr: string): string {
 		if (!dateStr) return '';
-		const date = new Date(dateStr);
+		const date = new Date(dateStr + 'T12:00:00');
 		return date.toLocaleDateString('en-US', {
 			year: 'numeric',
 			month: 'long',

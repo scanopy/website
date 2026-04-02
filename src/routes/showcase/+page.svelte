@@ -27,7 +27,7 @@
 			</p>
 			<p class="mx-auto mt-4 max-w-2xl text-gray-500">
 				Every topology below was generated automatically by Scanopy's network discovery engine.
-				No manual drawing, no drag-and-drop — just deploy the scanner and let it map your
+				No manual drawing, no drag-and-drop - just deploy the scanner and let it map your
 				infrastructure. From single-subnet homelabs to multi-VLAN production networks, these
 				diagrams update themselves as your network changes.
 			</p>

@@ -28,7 +28,7 @@
 	const videos = [
 		{
 			id: 'F4SgNNWzbEA',
-			title: 'Stop Drawing Network Diagrams Manually — Scanopy Does It for You',
+			title: 'Stop Drawing Network Diagrams Manually - Scanopy Does It for You',
 			channel: 'VirtualizationHowto',
 			language: 'English',
 			uploadDate: '2025-12-22',

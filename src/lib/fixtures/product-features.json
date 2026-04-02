@@ -10,7 +10,7 @@
 	{
 		"id": "topology_builds_itself",
 		"title": "Topology builds itself",
-		"description": "As the scan runs, a full network topology generates automatically — no manual drawing.",
+		"description": "As the scan runs, a full network topology generates automatically - no manual drawing.",
 		"icon": "Network",
 		"schemaLabel": "Automatic topology generation",
 		"group": "how_it_works"
@@ -26,7 +26,7 @@
 	{
 		"id": "service_detection",
 		"title": "See every service at a glance",
-		"description": "The topology shows <a href=\"/services\" class=\"text-blue-400 hover:underline\">200+ detected services</a> — Docker, PostgreSQL, nginx, and more — right in the visualization.",
+		"description": "The topology shows <a href=\"/services\" class=\"text-blue-400 hover:underline\">200+ detected services</a> - Docker, PostgreSQL, nginx, and more - right in the visualization.",
 		"icon": "Box",
 		"schemaLabel": "200+ service detection",
 		"group": "what_you_get"

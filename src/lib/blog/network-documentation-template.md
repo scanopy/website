@@ -1,11 +1,12 @@
 ---
 title: Network Documentation Template (Free) + Why Templates Fail
-description: Free network documentation template covering device inventory, IP addressing, and VLANs. Download it — then learn why templates always go stale.
+description: Free network documentation template covering device inventory, IP addressing, and VLANs. Download it - then learn why templates always go stale.
 date: 2026-03-04
 dateModified: 2026-03-04
 keyword: network documentation template
 slug: network-documentation-template
-tldr: A network documentation template covering device inventory, IP addressing, VLANs, and connections. Templates are a reasonable starting point, but they decay fast — automated discovery keeps documentation accurate without the upkeep.
+tldr: A network documentation template covering device inventory, IP addressing, VLANs, and connections. Templates are a reasonable starting point, but they decay fast - automated discovery keeps documentation accurate without the upkeep.
+ctaDescription: Scanopy is free to start. Deploy a daemon and see your network documented in minutes. No spreadsheets required.
 ---
 
 I'll give you the template. It's half a scroll away, and it works as a starting point.
@@ -101,8 +102,3 @@ Templates aren't useless. They're the wrong tool for documenting a live network,
 
 Use templates for things that are static. Use automation for things that evolve.
 
-## Try It
-
-Scanopy is free to start. Deploy a daemon and see your network documented in minutes. No spreadsheets required.
-
-[Try Scanopy free](https://app.scanopy.net/onboarding), [view pricing](/pricing), or follow the [quick-start guide](/docs) to get started.

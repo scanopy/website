@@ -32,7 +32,7 @@
 				<p class="mb-4 text-gray-300">
 					Some Scanopy plans include a free trial period for new users to experience the services
 					before being charged. During the trial period, users can cancel their subscription at
-					any time without being charged. Trial availability and duration vary by plan — see the
+					any time without being charged. Trial availability and duration vary by plan - see the
 					<a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing page</a> for
 					details.
 				</p>

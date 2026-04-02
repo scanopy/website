@@ -43,7 +43,7 @@
 								</p>
 							</div>
 							<p class="mt-4 text-xs font-medium text-gray-500">
-								— {mention.name}
+								 -  {mention.name}
 							</p>
 						{/if}
 					</a>

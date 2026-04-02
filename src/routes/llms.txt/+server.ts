@@ -29,7 +29,7 @@ function parseFrontmatter(content: string): Record<string, string> {
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			fm[key.trim()] = valueParts.join(':').trim();
+			fm[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 	return fm;
@@ -106,6 +106,27 @@ export async function GET() {
 		.map((b) => `- **${b.title}**: ${b.tldr}\n  URL: https://scanopy.net/blog/${b.slug}`)
 		.join('\n');
 
+	// Load comparison posts for summaries
+	const comparisonFiles = import.meta.glob('/src/lib/comparisons/*.md', {
+		query: '?raw',
+		import: 'default'
+	});
+
+	const comparisonEntries: { title: string; tldr: string; slug: string }[] = [];
+
+	for (const [path, loader] of Object.entries(comparisonFiles)) {
+		const raw = (await loader()) as string;
+		const fm = parseFrontmatter(raw);
+		const slug = fm.slug || path.split('/').pop()?.replace('.md', '') || '';
+		if (fm.title && fm.tldr) {
+			comparisonEntries.push({ title: fm.title, tldr: fm.tldr, slug });
+		}
+	}
+
+	const comparisonLines = comparisonEntries
+		.map((c) => `- **${c.title}**: ${c.tldr}\n  URL: https://scanopy.net/comparisons/${c.slug}`)
+		.join('\n');
+
 	const content = `# Scanopy
 
 > Automatic network discovery and documentation software. Create live, auto-updating network diagrams with one-time setup and zero upkeep.
@@ -145,6 +166,10 @@ Full pricing details: https://scanopy.net/pricing
 ## Blog
 
 ${blogLines}
+
+## Comparisons
+
+${comparisonLines}
 
 ## Links
 

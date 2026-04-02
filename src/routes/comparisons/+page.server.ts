@@ -1,6 +1,6 @@
 import { marked } from 'marked';
 
-interface BlogPost {
+interface ComparisonPost {
 	title: string;
 	description: string;
 	date: string;
@@ -27,14 +27,14 @@ function parseFrontmatter(content: string): { frontmatter: Record<string, string
 }
 
 export async function load() {
-	const blogFiles = import.meta.glob('/src/lib/blog/*.md', {
+	const comparisonFiles = import.meta.glob('/src/lib/comparisons/*.md', {
 		query: '?raw',
 		import: 'default'
 	});
 
-	const posts: BlogPost[] = [];
+	const posts: ComparisonPost[] = [];
 
-	for (const [path, loader] of Object.entries(blogFiles)) {
+	for (const [path, loader] of Object.entries(comparisonFiles)) {
 		const raw = (await loader()) as string;
 		const { frontmatter, body } = parseFrontmatter(raw);
 

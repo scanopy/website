@@ -219,7 +219,7 @@
 			<section>
 				<h2 class="mb-4 text-2xl font-semibold text-rose-400">6. Transfer of Your Personal Data</h2>
 				<p class="mb-4 text-gray-300">
-					Your information, including Personal Data, may be transferred to — and maintained on —
+					Your information, including Personal Data, may be transferred to - and maintained on  - 
 					computers located outside of your state, province, country or other governmental
 					jurisdiction where the data protection laws may differ from those of your jurisdiction.
 				</p>

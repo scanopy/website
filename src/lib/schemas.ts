@@ -92,7 +92,7 @@ function parseFrontmatter(content: string): Record<string, string> {
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			fm[key.trim()] = valueParts.join(':').trim();
+			fm[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 	return fm;

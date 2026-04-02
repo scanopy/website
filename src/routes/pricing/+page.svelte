@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PricingSection, FeaturedIn } from '$lib/components';
+	import FAQ from '$lib/components/FAQ.svelte';
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { onMount } from 'svelte';
@@ -16,15 +17,15 @@
 	const pricingFaqs = [
 		{
 			question: 'Is there a free plan?',
-			answer: 'Yes. The Free plan on Scanopy Cloud lets you discover and document up to 25 hosts on one network at no cost — no credit card required. If you prefer to self-host, the Community plan is also free with no host limit.'
+			answer: 'Yes. The Free plan on Scanopy Cloud lets you discover and document up to 25 hosts on one network at no cost - no credit card required. If you prefer to self-host, the Community plan is also free with no host limit.'
 		},
 		{
 			question: 'Do you charge per device?',
-			answer: "No. All plans use flat-rate pricing — we don't meter by device count, so your bill stays the same whether you're scanning 10 hosts or 10,000."
+			answer: "No. All plans use flat-rate pricing - we don't meter by device count, so your bill stays the same whether you're scanning 10 hosts or 10,000."
 		},
 		{
 			question: "What's the difference between Cloud and Self-Hosted?",
-			answer: 'Cloud plans are hosted and managed by Scanopy — you just install the lightweight daemon on your network. Self-Hosted plans (Community and On-Premise) let you run the entire Scanopy stack on your own infrastructure, giving you full control over data and configuration.'
+			answer: 'Cloud plans are hosted and managed by Scanopy - you just install the lightweight daemon on your network. Self-Hosted plans (Community and On-Premise) let you run the entire Scanopy stack on your own infrastructure, giving you full control over data and configuration.'
 		},
 		{
 			question: 'Can I try a paid plan before committing?',
@@ -87,16 +88,7 @@
 <section class="border-t border-gray-800 py-16">
 	<div class="container mx-auto max-w-3xl px-4">
 		<h2 class="mb-8 text-3xl font-bold text-rose-400 lg:text-4xl">Frequently Asked Questions</h2>
-		<div class="space-y-4">
-			{#each pricingFaqs as faq}
-				<details class="group rounded-lg border border-gray-800 bg-gray-900/50 px-6 py-4">
-					<summary class="cursor-pointer text-lg font-semibold text-white select-none group-open:mb-3">
-						{faq.question}
-					</summary>
-					<p class="text-gray-300 leading-relaxed">{faq.answer}</p>
-				</details>
-			{/each}
-		</div>
+		<FAQ faqs={pricingFaqs} />
 	</div>
 </section>
 
@@ -104,7 +96,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm text-gray-400 leading-relaxed">
-			Every Scanopy plan uses flat-rate pricing — you don't pay per device. The Free plan lets you document up to 25 hosts on a single network, which is enough to evaluate everything Scanopy can do. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks — ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community plan is free with no host limits, and the On-Premise plan adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
+			Every Scanopy plan uses flat-rate pricing - you don't pay per device. The Free plan lets you document up to 25 hosts on a single network, which is enough to evaluate everything Scanopy can do. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks - ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community plan is free with no host limits, and the On-Premise plan adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
 		</p>
 	</div>
 </section>

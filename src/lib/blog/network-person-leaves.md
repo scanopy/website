@@ -6,6 +6,7 @@ slug: network-person-leaves
 date: 2026-03-31
 dateModified: 2026-03-31
 tldr: Most network documentation depends on one person's memory and habits. When they leave, the knowledge leaves too. The fix isn't documenting more. It's automating documentation so it survives personnel changes.
+ctaDescription: Your documentation shouldn't depend on any one person. Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map in minutes. When someone leaves, the map stays current because it was never dependent on them.
 ---
 
 Your network person puts in two weeks' notice. Or gets a better offer and leaves in one. Or just stops showing up.
@@ -100,8 +101,3 @@ You don't need a month-long documentation initiative. Start with these:
 
 6. **Stop relying on templates alone.** [Templates are a starting point](/blog/network-documentation-template), but they go stale for the same reason all manual documentation goes stale. The goal is documentation that maintains itself.
 
-## Try It
-
-Your documentation shouldn't depend on any one person. Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map in minutes. When someone leaves, the map stays current because it was never dependent on them.
-
-[Try Scanopy free](https://app.scanopy.net/onboarding), [view pricing](/pricing), or [read the docs](/docs) to get started.

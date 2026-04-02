@@ -56,7 +56,7 @@
 
 		<div class="mx-auto max-w-5xl mt-16 space-y-4 text-sm text-gray-400 leading-relaxed">
 			<p>
-				Scanopy identifies services using a multi-phase detection process. During network discovery, the daemon scans open TCP and UDP ports, probes known HTTP endpoints, and matches responses against a library of service definitions. Detection patterns combine port checks, endpoint content matching, HTTP header analysis, and MAC vendor identification — using combinatorial logic to reduce false positives.
+				Scanopy identifies services using a multi-phase detection process. During network discovery, the daemon scans open TCP and UDP ports, probes known HTTP endpoints, and matches responses against a library of service definitions. Detection patterns combine port checks, endpoint content matching, HTTP header analysis, and MAC vendor identification - using combinatorial logic to reduce false positives.
 			</p>
 			<p>
 				Each detected service is assigned a confidence level from Certain to Low based on how specific the match is. Endpoint content and header matches produce High confidence results, while port-only detections are rated lower. This lets you quickly see which identifications are rock-solid and which might need a closer look.

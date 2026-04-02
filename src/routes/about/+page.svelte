@@ -31,7 +31,7 @@
 		name: 'Maya',
 		description: 'Founder of Scanopy. Over 10 years building compliance and privacy products at major cloud platforms, financial services, and marketing technology companies.',
 		url: 'https://github.com/mayanayza',
-		image: 'https://github.com/mayanayza.png',
+		image: '/maya-headshot.jpg',
 		jobTitle: 'Founder',
 		worksFor: {
 			'@type': 'Organization',
@@ -146,13 +146,6 @@
 				Join our Discord
 				<ExternalLink class="h-4 w-4" />
 			</a>
-			<a
-				href="/showcase"
-				class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white"
-			>
-				See the showcase
-				<ArrowRight class="h-4 w-4" />
-			</a>
 		</div>
 	</div>
 </section>
@@ -169,13 +162,13 @@
 				class="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800 px-4 py-1.5 text-lg font-medium text-white transition-colors hover:border-gray-500"
 			>
 				<img
-					src="https://github.com/mayanayza.png"
+					src="/maya-headshot.jpg"
 					alt="Maya"
-					class="h-7 w-7 rounded-full"
+					class="h-7 w-7 rounded-full object-cover"
 					width="28"
 					height="28"
 				/>
-				mayanayza
+				Maya, Founder
 			</a>
 		</h2>
 		<div class="space-y-5 text-gray-300 leading-relaxed">
@@ -184,13 +177,11 @@
 				lived entirely in my head - and I knew I'd never maintain a manual diagram.
 			</p>
 			<p>
-				Scanopy started as a side project to scratch my own itch. It turns out a lot of sysadmins,
-				MSPs, and network engineers had the same itch.
+				What started as a side project to scratch my own itch pulled me deeper into the networking world than I expected - SNMP MIBs, Layer 3 topology mapping, ARP tables, service fingerprinting. Turns out a lot of sysadmins,
+				MSPs, and network engineers had the same itch, and building for them keeps pushing me further into the protocols and standards that make networks work.
 			</p>
 			<p>
-				I'm not an enterprise IT veteran. I've never run an MSP or managed a production data
-				center. What I am is someone who got tired of a problem and built a solution - and
-				then discovered it solved that problem for a lot of other people too.
+				I'm not an enterprise IT veteran. I came in through the homelab door and I'm learning the enterprise side by building the tool. That perspective shapes Scanopy - it's designed to be simple enough for a homelab but capable enough for production networks.
 			</p>
 		</div>
 		<div class="mt-6 flex flex-wrap gap-4">

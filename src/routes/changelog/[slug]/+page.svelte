@@ -17,7 +17,7 @@
 
 	function formatDate(dateStr: string): string {
 		if (!dateStr) return '';
-		const date = new Date(dateStr);
+		const date = new Date(dateStr + 'T12:00:00');
 		return date.toLocaleDateString('en-US', {
 			year: 'numeric',
 			month: 'long',
@@ -30,13 +30,13 @@
 	<title>v{data.entry.version}: {data.entry.title} - Scanopy Changelog</title>
 	<meta
 		name="description"
-		content="Scanopy v{data.entry.version} — {data.entry.title}"
+		content="Scanopy v{data.entry.version} - {data.entry.title}"
 	/>
 	<link rel="canonical" href="https://scanopy.net/changelog/{data.entry.slug}" />
 
 	<!-- Open Graph -->
 	<meta property="og:title" content="v{data.entry.version}: {data.entry.title}" />
-	<meta property="og:description" content="Scanopy v{data.entry.version} — {data.entry.title}" />
+	<meta property="og:description" content="Scanopy v{data.entry.version} - {data.entry.title}" />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content="https://scanopy.net/changelog/{data.entry.slug}" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
@@ -44,13 +44,13 @@
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content="v{data.entry.version}: {data.entry.title}" />
-	<meta name="twitter:description" content="Scanopy v{data.entry.version} — {data.entry.title}" />
+	<meta name="twitter:description" content="Scanopy v{data.entry.version} - {data.entry.title}" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'Article',
 		headline: `v${data.entry.version}: ${data.entry.title}`,
-		description: `Scanopy v${data.entry.version} — ${data.entry.title}`,
+		description: `Scanopy v${data.entry.version} - ${data.entry.title}`,
 		datePublished: data.entry.date,
 		dateModified: data.entry.date,
 		author: { '@type': 'Organization', name: 'Scanopy', url: 'https://scanopy.net' },

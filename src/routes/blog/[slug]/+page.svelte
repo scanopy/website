@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { PageHero } from '$lib/components';
-	import NewsletterSignup from '$lib/components/NewsletterSignup.svelte';
-	import { PUBLIC_BREVO_NEWSLETTER_FORM_URL } from '$env/static/public';
-	import { onMount } from 'svelte';
+	import AuthorCard from '$lib/components/AuthorCard.svelte';
+	import ArticleCTA from '$lib/components/ArticleCTA.svelte';
+	import ArticleTOC from '$lib/components/ArticleTOC.svelte';
 
 	interface Heading {
 		id: string;
@@ -19,7 +19,7 @@
 		slug: string;
 		image: string;
 		tldr?: string;
-		style?: string;
+		ctaDescription?: string;
 		content: string;
 		wordCount: number;
 	}
@@ -30,35 +30,12 @@
 	}
 
 	let { data }: { data: PageData } = $props();
-	let activeId = $state('');
 
 	const showToc = $derived(data.headings && data.headings.length >= 3);
 
-	onMount(() => {
-		if (!showToc) return;
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) {
-						activeId = entry.target.id;
-					}
-				}
-			},
-			{ rootMargin: '-80px 0px -70% 0px' }
-		);
-
-		for (const heading of data.headings) {
-			const el = document.getElementById(heading.id);
-			if (el) observer.observe(el);
-		}
-
-		return () => observer.disconnect();
-	});
-
 	function formatDate(dateStr: string): string {
 		if (!dateStr) return '';
-		const date = new Date(dateStr);
+		const date = new Date(dateStr + 'T12:00:00');
 		return date.toLocaleDateString('en-US', {
 			year: 'numeric',
 			month: 'long',
@@ -69,6 +46,7 @@
 	const articleSchema = JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
+		'@id': `https://scanopy.net/blog/${data.post.slug}#article`,
 		headline: data.post.title,
 		description: data.post.description,
 		datePublished: data.post.date,
@@ -79,7 +57,7 @@
 			'@type': 'Person',
 			name: 'Maya',
 			url: 'https://scanopy.net/about',
-			image: 'https://github.com/mayanayza.png',
+			image: 'https://scanopy.net/maya-headshot.jpg',
 			sameAs: ['https://github.com/mayanayza']
 		},
 		publisher: {
@@ -93,6 +71,10 @@
 		mainEntityOfPage: {
 			'@type': 'WebPage',
 			'@id': `https://scanopy.net/blog/${data.post.slug}`
+		},
+		isPartOf: {
+			'@type': 'WebSite',
+			'@id': 'https://scanopy.net'
 		},
 		image: `https://scanopy.net${data.post.image}`
 	});
@@ -152,61 +134,16 @@
 					</div>
 				{/if}
 
-				<div class="prose prose-invert prose-gray max-w-none" class:prose-comparison={data.post.style === 'comparison'}>
+				<div class="prose prose-invert prose-gray max-w-none">
 					{@html data.post.content}
 				</div>
 
-				{#if PUBLIC_BREVO_NEWSLETTER_FORM_URL}
-					<div class="mt-16 rounded-xl border border-gray-800 bg-gray-900/50 p-8">
-						<h3 class="mb-2 text-lg font-semibold text-white">Get notified when we publish new posts</h3>
-						<p class="mb-4 text-sm text-gray-400">Network documentation tips, product updates, and the occasional deep dive.</p>
-						<NewsletterSignup formUrl={PUBLIC_BREVO_NEWSLETTER_FORM_URL} />
-					</div>
-				{/if}
-
-				<div class="mt-12 flex items-start gap-4 rounded-lg border border-gray-800 bg-gray-900/50 p-6">
-					<img
-						src="https://github.com/mayanayza.png"
-						alt="Maya"
-						class="h-14 w-14 rounded-full"
-						width="56"
-						height="56"
-						loading="lazy"
-					/>
-					<div>
-						<a href="/about" class="font-semibold text-white hover:text-blue-400">Maya</a>
-						<p class="mt-1 text-sm text-gray-400">
-							Founder of Scanopy. Self-hoster, homelabber, and the person behind
-							Scanopy's automatic network documentation.
-						</p>
-					</div>
-				</div>
+				<ArticleCTA description={data.post.ctaDescription} />
+				<AuthorCard />
 			</div>
 
 			{#if showToc}
-				<nav class="blog-toc" aria-label="Table of contents">
-					<div class="toc-sticky">
-						<p class="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">On this page</p>
-						<ul class="space-y-1">
-							{#each data.headings as heading}
-								<li>
-									<a
-										href="#{heading.id}"
-										class="toc-link block text-sm leading-6 transition-colors"
-										class:toc-link-h3={heading.level === 3}
-										class:toc-active={activeId === heading.id}
-										onclick={(e) => {
-											e.preventDefault();
-											document.getElementById(heading.id)?.scrollIntoView({ behavior: 'smooth' });
-										}}
-									>
-										{heading.text}
-									</a>
-								</li>
-							{/each}
-						</ul>
-					</div>
-				</nav>
+				<ArticleTOC headings={data.headings} />
 			{/if}
 		</div>
 	</div>
@@ -223,40 +160,6 @@
 		.blog-layout {
 			grid-template-columns: 1fr 200px;
 		}
-	}
-
-	.blog-toc {
-		display: none;
-	}
-
-	@media (min-width: 1024px) {
-		.blog-toc {
-			display: block;
-		}
-	}
-
-	.toc-sticky {
-		position: sticky;
-		top: 6rem;
-	}
-
-	.toc-link {
-		color: rgb(107 114 128);
-		border-left: 2px solid transparent;
-		padding-left: 0.75rem;
-	}
-
-	.toc-link-h3 {
-		padding-left: 1.5rem;
-	}
-
-	.toc-link:hover {
-		color: rgb(209 213 219);
-	}
-
-	.toc-active {
-		color: rgb(96 165 250) !important;
-		border-left-color: rgb(59 130 246);
 	}
 
 	:global(.prose h2) {
@@ -287,58 +190,6 @@
 
 	:global(.prose p > strong:first-child) {
 		color: rgb(243 244 246);
-	}
-
-	/* Comparison post style: vendor sections as cards */
-	:global(.prose-comparison h3) {
-		margin-top: 2.5rem;
-		margin-bottom: 0.75rem;
-		padding: 1rem 1.25rem;
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: white;
-		background: rgb(31 41 55);
-		border-radius: 0.5rem 0.5rem 0 0;
-		border: 1px solid rgb(55 65 81);
-		border-bottom: none;
-		scroll-margin-top: 5rem;
-	}
-
-	:global(.prose-comparison h3 + p) {
-		padding: 1rem 1.25rem 0.75rem;
-		border-left: 1px solid rgb(55 65 81);
-		border-right: 1px solid rgb(55 65 81);
-		margin-bottom: 0;
-		color: rgb(156 163 175);
-		font-size: 0.9375rem;
-	}
-
-	:global(.prose-comparison h3 + p + p),
-	:global(.prose-comparison h3 ~ p:has(> strong:first-child)) {
-		padding: 0.5rem 1.25rem;
-		border-left: 1px solid rgb(55 65 81);
-		border-right: 1px solid rgb(55 65 81);
-		margin-bottom: 0;
-		font-size: 0.9375rem;
-		line-height: 1.6;
-	}
-
-	:global(.prose-comparison h3 ~ p:has(> strong:first-child) > strong:first-child) {
-		color: rgb(96 165 250);
-		font-size: 0.8125rem;
-		text-transform: uppercase;
-		letter-spacing: 0.03em;
-	}
-
-	/* Last bold-label paragraph before next h3 or h2 gets bottom border + rounded corners */
-	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ h3)),
-	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ h2)),
-	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ iframe)),
-	:global(.prose-comparison h3 ~ p:has(> strong:first-child):last-child) {
-		border-bottom: 1px solid rgb(55 65 81);
-		border-radius: 0 0 0.5rem 0.5rem;
-		padding-bottom: 1rem;
-		margin-bottom: 0.5rem;
 	}
 
 	:global(.prose ul) {
@@ -376,48 +227,6 @@
 		font-size: 0.875rem;
 	}
 
-	:global(.prose-comparison table) {
-		min-width: 800px;
-	}
-
-	:global(.prose-comparison) {
-		overflow-x: auto;
-	}
-
-	:global(.prose-comparison td:nth-child(3)),
-	:global(.prose-comparison td:nth-child(4)),
-	:global(.prose-comparison th:nth-child(3)),
-	:global(.prose-comparison th:nth-child(4)) {
-		text-align: center;
-		white-space: nowrap;
-	}
-
-	:global(.prose-comparison td:nth-child(1)) {
-		white-space: nowrap;
-		font-weight: 600;
-	}
-
-	:global(.prose-comparison .cell-detail) {
-		display: block;
-		font-size: 0.75rem;
-		color: rgb(156 163 175);
-		margin-top: 0.25rem;
-	}
-
-	:global(.prose-comparison a.cell-detail),
-	:global(.prose-comparison .cell-detail a) {
-		color: rgb(96 165 250);
-	}
-
-	:global(.prose-comparison a.cell-detail:hover),
-	:global(.prose-comparison .cell-detail a:hover) {
-		color: rgb(147 197 253);
-	}
-
-	:global(.prose-comparison td:nth-child(2)) {
-		min-width: 140px;
-	}
-
 	:global(.prose th) {
 		background-color: rgb(31 41 55);
 		padding: 0.5rem 0.75rem;
@@ -432,88 +241,6 @@
 		color: rgb(209 213 219);
 		border: 1px solid rgb(55 65 81);
 	}
-
-	:global(.prose .chip) {
-		display: inline-block;
-		padding: 0.125rem 0.5rem;
-		border-radius: 9999px;
-		font-size: 0.75rem;
-		font-weight: 500;
-		line-height: 1.5;
-		white-space: nowrap;
-	}
-
-	:global(.prose .chip-yes) {
-		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
-	}
-
-	:global(.prose .chip-no) {
-		background: rgba(239, 68, 68, 0.15);
-		color: rgb(248 113 113);
-	}
-
-	:global(.prose .chip-osi) {
-		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
-	}
-
-	:global(.prose .chip-source-available) {
-		background: rgba(245, 158, 11, 0.15);
-		color: rgb(251 191 36);
-	}
-
-	/* Protocol chips */
-	:global(.prose .chip-snmp) { background: rgba(236, 72, 153, 0.15); color: rgb(244 114 182); }
-	:global(.prose .chip-cdp) { background: rgba(34, 197, 94, 0.15); color: rgb(74 222 128); }
-	:global(.prose .chip-lldp) { background: rgba(59, 130, 246, 0.15); color: rgb(147 197 253); }
-	:global(.prose .chip-netflow) { background: rgba(168, 85, 247, 0.15); color: rgb(192 132 252); }
-	:global(.prose .chip-wmi) { background: rgba(245, 158, 11, 0.15); color: rgb(251 191 36); }
-	:global(.prose .chip-arp) { background: rgba(20, 184, 166, 0.15); color: rgb(45 212 191); }
-	:global(.prose .chip-icmp) { background: rgba(239, 68, 68, 0.15); color: rgb(248 113 113); }
-	:global(.prose .chip-vmware) { background: rgba(99, 102, 241, 0.15); color: rgb(129 140 248); }
-	:global(.prose .chip-tcp-udp) { background: rgba(251, 146, 60, 0.15); color: rgb(251 146 60); }
-	:global(.prose .chip-ssh-cli) { background: rgba(234, 179, 8, 0.15); color: rgb(250 204 21); }
-	:global(.prose .chip-ping) { background: rgba(139, 92, 246, 0.15); color: rgb(167 139 250); }
-	:global(.prose .chip-cloud-import) { background: rgba(107, 114, 128, 0.15); color: rgb(156 163 175); }
-	:global(.prose .chip-basic) { background: rgba(245, 158, 11, 0.15); color: rgb(251 191 36); }
-
-	:global(.prose .tooltip-header) {
-		position: relative;
-		cursor: help;
-		text-decoration: underline dotted rgba(148, 163, 184, 0.5);
-		text-underline-offset: 3px;
-	}
-
-	:global(.prose .tooltip-content) {
-		display: none;
-		position: absolute;
-		top: 100%;
-		left: 0;
-		margin-top: 0.5rem;
-		padding: 0.75rem 1rem;
-		background: rgb(31 41 55);
-		border: 1px solid rgb(55 65 81);
-		border-radius: 0.5rem;
-		font-size: 0.8125rem;
-		font-weight: 400;
-		color: rgb(209 213 219);
-		white-space: nowrap;
-		z-index: 10;
-		line-height: 2;
-	}
-
-	:global(.prose .tooltip-header:hover .tooltip-content) {
-		display: block;
-	}
-
-	/* Additional capability chips */
-	:global(.prose .chip-type-traffic-analysis) { background: rgba(139, 92, 246, 0.15); color: rgb(167 139 250); }
-	:global(.prose .chip-type-rmm) { background: rgba(236, 72, 153, 0.15); color: rgb(244 114 182); }
-
-	/* Type chips */
-	:global(.prose .chip-type-monitoring) { background: rgba(245, 158, 11, 0.15); color: rgb(251 191 36); }
-	:global(.prose .chip-type-automation) { background: rgba(168, 85, 247, 0.15); color: rgb(192 132 252); }
 
 	:global(.prose strong) {
 		color: rgb(229 231 235);

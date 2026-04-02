@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { BookOpen } from 'lucide-svelte';
+	import { Scale } from 'lucide-svelte';
 
-	interface BlogPost {
+	interface ComparisonPost {
 		title: string;
 		description: string;
 		date: string;
@@ -10,7 +10,7 @@
 	}
 
 	interface PageData {
-		posts: BlogPost[];
+		posts: ComparisonPost[];
 	}
 
 	let { data }: { data: PageData } = $props();
@@ -27,37 +27,37 @@
 </script>
 
 <svelte:head>
-	<title>Blog - Scanopy</title>
+	<title>Comparisons - Scanopy</title>
 	<meta
 		name="description"
-		content="Technical articles on network documentation, automated discovery, and IT infrastructure management."
+		content="Side-by-side comparisons of network diagram and documentation tools. Pricing, features, and trade-offs."
 	/>
-	<link rel="canonical" href="https://scanopy.net/blog" />
+	<link rel="canonical" href="https://scanopy.net/comparisons" />
 
-	<meta property="og:title" content="Blog - Scanopy" />
+	<meta property="og:title" content="Comparisons - Scanopy" />
 	<meta
 		property="og:description"
-		content="Technical articles on network documentation, automated discovery, and IT infrastructure management."
+		content="Side-by-side comparisons of network diagram and documentation tools. Pricing, features, and trade-offs."
 	/>
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://scanopy.net/blog" />
+	<meta property="og:url" content="https://scanopy.net/comparisons" />
 
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Blog - Scanopy" />
+	<meta name="twitter:title" content="Comparisons - Scanopy" />
 	<meta
 		name="twitter:description"
-		content="Technical articles on network documentation, automated discovery, and IT infrastructure management."
+		content="Side-by-side comparisons of network diagram and documentation tools. Pricing, features, and trade-offs."
 	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'CollectionPage',
-		name: 'Blog - Scanopy',
-		description: 'Technical articles on network documentation, automated discovery, and IT infrastructure management.',
-		url: 'https://scanopy.net/blog',
+		name: 'Comparisons - Scanopy',
+		description: 'Side-by-side comparisons of network diagram and documentation tools. Pricing, features, and trade-offs.',
+		url: 'https://scanopy.net/comparisons',
 		isPartOf: {
 			'@type': 'WebSite',
 			name: 'Scanopy',
@@ -68,7 +68,7 @@
 			itemListElement: data.posts.map((post, i) => ({
 				'@type': 'ListItem',
 				position: i + 1,
-				url: `https://scanopy.net/blog/${post.slug}`,
+				url: `https://scanopy.net/comparisons/${post.slug}`,
 				name: post.title
 			}))
 		}
@@ -79,17 +79,17 @@
 	<div class="container mx-auto max-w-3xl px-4">
 		<div class="mb-12 text-center">
 			<div class="mb-4 flex justify-center">
-				<BookOpen class="h-12 w-12 text-blue-400" />
+				<Scale class="h-12 w-12 text-blue-400" />
 			</div>
-			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Blog</h1>
+			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Comparisons</h1>
 			<p class="text-xl text-gray-400">
-				Network documentation, automated discovery, and lessons from the field.
+				Side-by-side comparisons of network diagram and documentation tools.
 			</p>
 		</div>
 
 		{#if data.posts.length === 0}
 			<div class="text-center">
-				<p class="text-gray-400">No posts yet. Check back soon!</p>
+				<p class="text-gray-400">No comparisons yet. Check back soon!</p>
 			</div>
 		{:else}
 			<div class="space-y-8">
@@ -97,7 +97,7 @@
 					<article
 						class="rounded-lg border border-gray-800 p-6 transition-colors hover:border-gray-700"
 					>
-						<a href="/blog/{post.slug}" class="block">
+						<a href="/comparisons/{post.slug}" class="block">
 							{#if post.date}
 								<time class="text-sm text-gray-500" datetime={post.date}>
 									{formatDate(post.date)}

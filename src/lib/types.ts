@@ -87,3 +87,86 @@ export interface PressMention {
 	url: string;
 	logo: string;
 }
+
+// Comparison blog post types
+export type DiscoveryMethod =
+	| 'SNMP'
+	| 'CDP'
+	| 'LLDP'
+	| 'ARP'
+	| 'ICMP'
+	| 'WMI'
+	| 'TCP/UDP'
+	| 'SSH/CLI'
+	| 'Cloud import'
+	| 'mDNS'
+	| 'NetBIOS';
+
+export type ServiceLevel = 'yes' | 'no' | 'basic';
+export type OpenSourceStatus = 'osi' | 'source-available' | 'no';
+export type VendorCapability = 'Monitoring' | 'Automation' | 'Traffic Analysis' | 'RMM';
+
+export interface SourceRef {
+	id: number;
+}
+
+export interface LinkedText {
+	text: string;
+	href?: string;
+	detail?: string;
+	detailHref?: string;
+	sources?: SourceRef[];
+}
+
+export interface Vendor {
+	// Identity (shared across table + detail)
+	name: string;
+	fullName?: string; // for detail card h3 if different from table name
+	slug: string;
+	href: string;
+
+	// Table data
+	discovery: DiscoveryMethod[];
+	discoverySources?: SourceRef[];
+	services: {
+		level: ServiceLevel;
+		detail?: string;
+		detailHref?: string;
+		sources?: SourceRef[];
+	};
+	autoUpdates: boolean;
+	openSource: { status: OpenSourceStatus; license?: string; href?: string };
+	pricing: LinkedText;
+	alsoIncludes?: VendorCapability[];
+
+	// Detail card data
+	description: string;
+	discoveryNotes?: string; // extra prose appended after auto-generated protocol list
+	integrations?: string; // vendor API integrations, rendered after discovery in detail card
+	diagrams?: string;
+	serviceDiscovery?: string; // replaces diagrams for Scanopy
+	pricingNotes?: string; // extra prose appended after pricing.text
+	whereItFits?: string;
+	tradeOff?: string;
+	tradeOffLabel?: string; // defaults to "Trade-off"
+	iframe?: { src: string; width: string; height: string; caption: string };
+}
+
+export interface VendorCategory {
+	id: string;
+	heading: string;
+	intro?: string;
+	hasAlsoIncludes: boolean;
+	vendors: string[]; // vendor slugs
+}
+
+export interface VendorSource {
+	id: number;
+	label: string;
+	url: string;
+}
+
+export interface VendorFAQ {
+	question: string;
+	answer: string;
+}

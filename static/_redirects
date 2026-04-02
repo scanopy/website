@@ -98,5 +98,8 @@
 /api/hosts/export_hosts_zip /docs/api/hosts/export_hosts_zip 301
 /api/users /docs/api/users/ 301
 
+# Blog to comparisons migration (Apr 2026)
+/blog/best-automated-network-diagram-tools /comparisons/best-automated-network-diagram-tools 301
+
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404
