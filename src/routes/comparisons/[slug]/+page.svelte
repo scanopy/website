@@ -302,7 +302,7 @@
 	}
 
 	:global(.prose-comparison h3 ~ p:has(> strong:first-child) > strong:first-child) {
-		color: rgb(96 165 250);
+		color: rgb(251 113 133);
 		font-size: 0.8125rem;
 		text-transform: uppercase;
 		letter-spacing: 0.03em;
@@ -319,28 +319,6 @@
 		margin-bottom: 0.5rem;
 	}
 
-	/* "How to Choose" decision items - light left-border accent */
-	:global(.prose-comparison #how-to-choose + p),
-	:global(.prose-comparison #how-to-choose + p + p),
-	:global(.prose-comparison #how-to-choose + p + p + p),
-	:global(.prose-comparison #how-to-choose + p + p + p + p),
-	:global(.prose-comparison #how-to-choose + p + p + p + p + p),
-	:global(.prose-comparison #how-to-choose + p + p + p + p + p + p) {
-		border-left: 3px solid rgb(55 65 81);
-		padding-left: 1rem;
-		margin-bottom: 1.25rem;
-	}
-
-	:global(.prose-comparison #how-to-choose + p > strong:first-child),
-	:global(.prose-comparison #how-to-choose + p + p > strong:first-child),
-	:global(.prose-comparison #how-to-choose + p + p + p > strong:first-child),
-	:global(.prose-comparison #how-to-choose + p + p + p + p > strong:first-child),
-	:global(.prose-comparison #how-to-choose + p + p + p + p + p > strong:first-child),
-	:global(.prose-comparison #how-to-choose + p + p + p + p + p + p > strong:first-child) {
-		color: rgb(96 165 250);
-		text-transform: none;
-		letter-spacing: normal;
-	}
 
 	:global(.prose ul) {
 		list-style-type: disc;

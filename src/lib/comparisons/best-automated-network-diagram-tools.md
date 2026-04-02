@@ -10,31 +10,19 @@ tldr: "Most 'automated' network diagram tools are actually monitoring platforms 
 ctaDescription: Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map. No per-device fees, unlimited hosts. It pairs with whatever monitoring tool you already use.
 ---
 
-## Top Picks by Use Case
-
-- **Best for MSPs managing client networks:** [Auvik](#auvik) (bundled monitoring + per-device pricing) or [Scanopy](#scanopy) (flat-rate, documentation-only)
-- **Best for enterprise with automation needs:** [NetBrain](#netbrain)
-- **Best for IT teams that want documentation independent from monitoring:** [Scanopy](#scanopy)
-- **Best for Visio-standardized organizations:** [SolarWinds NTM](#solarwinds-network-topology-mapper)
-- **Best budget monitoring + mapping:** [Domotz](#domotz) ($1.50/device/mo) or [ManageEngine](#manageengine-opmanager) ($95/yr)
-- **Best for one-time diagrams:** [draw.io](#drawio) (free) or [Lucidchart](#lucidchart) (collaboration)
-- **Best free and self-hosted:** [Scanopy Community Edition](/community) or [LibreNMS](#librenms)
-
 ## How to Choose
 
 There are three categories of network diagram tools: **monitoring platforms** that include mapping as a feature, **dedicated diagram tools** that focus only on documentation, and **manual diagramming tools** where you draw everything yourself. The right choice depends on whether you need monitoring bundled in, how often diagrams need to update, and your budget.
 
-**MSP managing multiple client networks?** [Auvik](#auvik) if you want monitoring bundled in (per-device pricing scales with your client base). [Scanopy](#scanopy) if you want documentation decoupled from monitoring ([flat pricing](/pricing) regardless of host count).
-
-**Want documentation independent from your monitoring stack?** [Scanopy](#scanopy) gives you a living, interactive map with flat pricing. [SolarWinds NTM](#solarwinds-network-topology-mapper) exports natively to Visio - the right choice if your team standardizes on Microsoft tools.
-
-**Managing a large enterprise with automation needs?** [NetBrain](#netbrain). Nothing else on this list operates at the same scale with the same automation integration.
-
-**Want diagrams bundled with monitoring?** If you already use [Auvik](#auvik), [PRTG](#prtg-network-monitor), [Domotz](#domotz), or [ManageEngine](#manageengine-opmanager) for monitoring, use their built-in mapping. No reason to add another tool for something your monitoring platform already does.
-
-**Need a one-time diagram for a presentation or project?** [draw.io](#drawio) or [Lucidchart](#lucidchart). Draw it once, export it, done. No ongoing cost, no infrastructure. draw.io is free. Lucidchart is better for team collaboration.
-
-**Want free and self-hosted?** [LibreNMS](#librenms) for monitoring with basic maps. [Scanopy Community Edition](/community) for documentation-focused mapping. [draw.io](#drawio) for manual diagrams. All three are free.
+| Scenario | Recommendation |
+|---|---|
+| MSP managing client networks | [Auvik](#auvik) if you want monitoring bundled in (per-device pricing scales with your client base). [Scanopy](#scanopy) if you want documentation decoupled from monitoring ([flat pricing](/pricing) regardless of host count). |
+| Documentation independent from monitoring | [Scanopy](#scanopy) gives you a living, interactive map with flat pricing. [SolarWinds NTM](#solarwinds-network-topology-mapper) exports natively to Visio — the right choice if your team standardizes on Microsoft tools. |
+| Large enterprise with automation needs | [NetBrain](#netbrain). Nothing else on this list operates at the same scale with the same automation integration. |
+| Diagrams bundled with monitoring | If you already use [Auvik](#auvik), [PRTG](#prtg-network-monitor), [Domotz](#domotz), or [ManageEngine](#manageengine-opmanager) for monitoring, use their built-in mapping. No reason to add another tool for something your monitoring platform already does. |
+| One-time diagram for a presentation or project | [draw.io](#drawio) or [Lucidchart](#lucidchart). Draw it once, export it, done. draw.io is free. Lucidchart is better for team collaboration. |
+| Budget monitoring + mapping | [Domotz](#domotz) ($1.50/device/mo) or [ManageEngine](#manageengine-opmanager) ($95/yr) |
+| Free and self-hosted | [LibreNMS](#librenms) for monitoring with basic maps. [Scanopy Community Edition](/community) for documentation-focused mapping. [draw.io](#drawio) for manual diagrams. All three are free. |
 
 <!-- vendor-tables -->
 

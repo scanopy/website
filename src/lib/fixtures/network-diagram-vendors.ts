@@ -177,16 +177,16 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: 'From $95/yr (10 devices)', sources: [{ id: 9 }] },
 		alsoIncludes: ['Monitoring'],
-		bestFor: 'Mid-market IT teams that want monitoring and visualization without per-device pricing',
+		bestFor: 'Mid-market IT teams that want monitoring and visualization at a lower per-device cost',
 		description:
-			"Best budget option for mid-market teams that want monitoring and topology maps without Auvik's per-device pricing. OpManager provides network monitoring with Layer 2/3 auto-discovery and topology maps, plus rack and floor plan views that most monitoring tools lack.",
+			"Best budget option for mid-market teams that want monitoring and topology maps at a fraction of Auvik's per-device cost. OpManager provides network monitoring with Layer 2/3 auto-discovery and topology maps, plus rack and floor plan views that most monitoring tools lack.",
 		discoveryNotes: 'Auto-maps port-level connectivity.',
 		diagrams:
 			'Topology maps, rack views, floor plan views. More visualization options than most monitoring tools.',
 		pricingNotes:
 			'Professional from $145/year. Free edition available (3 devices).',
 		whereItFits:
-			"Mid-market teams that want monitoring and visualization in one tool without Auvik's per-device pricing model. The visualization options (rack views, floor plans) are unusually good for a monitoring tool."
+			"Mid-market teams that want monitoring and visualization in one tool at a lower per-device cost than Auvik. The visualization options (rack views, floor plans) are unusually good for a monitoring tool."
 	},
 	'nmap-zenmap': {
 		name: 'Nmap + Zenmap',
