@@ -189,25 +189,6 @@ export function getBreadcrumbListSchema(items: { name: string; url: string }[]) 
 }
 
 /**
- * FAQPage schema for pages with Q&A content
- * @see https://schema.org/FAQPage
- */
-export function getFAQPageSchema(faqs: { question: string; answer: string }[]) {
-	return {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: faqs.map((faq) => ({
-			'@type': 'Question',
-			name: faq.question,
-			acceptedAnswer: {
-				'@type': 'Answer',
-				text: faq.answer
-			}
-		}))
-	};
-}
-
-/**
  * Export product features for use in components
  */
 export function getProductFeatures() {

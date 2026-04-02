@@ -140,6 +140,7 @@ export interface Vendor {
 	alsoIncludes?: VendorCapability[];
 
 	// Detail card data
+	bestFor?: string; // one-sentence "who is this for?" for AI extraction
 	description: string;
 	discoveryNotes?: string; // extra prose appended after auto-generated protocol list
 	integrations?: string; // vendor API integrations, rendered after discovery in detail card

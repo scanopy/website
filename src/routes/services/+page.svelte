@@ -23,6 +23,28 @@
 	<meta name="twitter:title" content="Discoverable Services - Scanopy" />
 	<meta name="twitter:description" content="Scanopy can automatically detect 200+ services including Docker, databases, media servers, and more." />
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'Discoverable Services - Scanopy',
+		description: 'Scanopy can automatically detect 200+ services including Docker, databases, media servers, and more.',
+		url: 'https://scanopy.net/services',
+		isPartOf: {
+			'@type': 'WebSite',
+			'@id': 'https://scanopy.net/#website'
+		},
+		mainEntity: {
+			'@type': 'ItemList',
+			name: 'Services detected by Scanopy',
+			numberOfItems: services.length,
+			itemListElement: services.slice(0, 50).map((s, i) => ({
+				'@type': 'ListItem',
+				position: i + 1,
+				name: s.name
+			}))
+		}
+	})}</script>`}
 </svelte:head>
 
 <section class="py-20">

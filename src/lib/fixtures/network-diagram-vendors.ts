@@ -15,8 +15,9 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'osi', license: 'AGPL-3.0', href: '/community' },
 		pricing: { text: 'Flat monthly, unlimited hosts', href: '/pricing' },
 		alsoIncludes: ['Docker Visualization'],
+		bestFor: 'IT teams and MSPs who want automated network documentation without deploying a monitoring platform',
 		description:
-			"Full disclosure: Scanopy is our product. We've tried to be honest about every tool on this list, including our own.\n\nScanopy is an [automated network documentation](/blog/automated-network-documentation) tool. It deploys a lightweight daemon that discovers your network and builds an interactive topology map that updates on a schedule.",
+			"Full disclosure: Scanopy is our product. We've tried to be honest about every tool on this list, including our own.\n\nScanopy is an [automated network documentation](/blog/automated-network-documentation) tool built for IT teams that need living network maps without the overhead of a full monitoring platform. It deploys a lightweight daemon that discovers your network and builds an interactive topology map that updates on a schedule.",
 		discoveryNotes:
 			'One daemon per network. No agents on endpoints, no SSH credentials.',
 		serviceDiscovery:
@@ -26,7 +27,7 @@ export const vendors: Record<string, Vendor> = {
 		pricingNotes:
 			'Free self-hosted [Community edition](/community) available.',
 		whereItFits:
-			'Teams that need network documentation without deploying a monitoring platform. Homelabs, small IT teams, MSPs documenting client networks. Pairs well with whatever monitoring tool you already use.',
+			'MSPs documenting client networks, IT teams that need documentation independent from their monitoring stack, and anyone who wants network maps without deploying another monitoring platform. Pairs well with whatever monitoring tool you already use.',
 		tradeOff:
 			"Monitoring, alerting, traffic analysis, config backup, patch management, software license tracking. It's a documentation tool. If you need monitoring, use a monitoring tool alongside it.",
 		tradeOffLabel: "What Scanopy doesn't do",
@@ -50,8 +51,9 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: false,
 		openSource: { status: 'no' },
 		pricing: { text: 'From $1,977/yr subscription', sources: [{ id: 3 }] },
+		bestFor: 'Enterprise teams that standardize on Microsoft tools and need Visio-native network diagram exports',
 		description:
-			'The most widely-recommended automated network diagram tool. NTM scans your network and generates topology diagrams exportable to Visio, PDF, and PNG.',
+			'Best for organizations that need compliance-ready Visio exports. NTM is the most widely-recommended automated network diagram tool — it scans your network and generates topology diagrams exportable to Visio, PDF, and PNG.',
 		discoveryNotes:
 			'Scan-on-demand (not continuous). Supports scheduled scans.',
 		diagrams:
@@ -73,8 +75,9 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: true,
 		openSource: { status: 'no' },
 		pricing: { text: 'Enterprise (contact sales)' },
+		bestFor: 'Large enterprises that need network maps integrated with automation and troubleshooting workflows',
 		description:
-			'Enterprise-grade dynamic network mapping with automation and troubleshooting workflows. NetBrain maps sit at the center of a broader automation platform.',
+			'The only tool on this list built for large-scale network automation. Enterprise-grade dynamic network mapping with troubleshooting workflows — NetBrain maps sit at the center of a broader automation platform.',
 		discoveryNotes: 'Deep integration with network automation workflows.',
 		diagrams:
 			'Dynamic maps that tie into troubleshooting runbooks and automation playbooks. Maps can trigger actions, not just display data.',
@@ -96,8 +99,9 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: 'Per-device (contact sales)' },
 		alsoIncludes: ['Monitoring', 'Traffic Analysis'],
+		bestFor: 'MSPs who need monitoring, alerting, and network maps in one cloud-managed platform',
 		description:
-			'Cloud-managed network monitoring built for MSPs. Auvik discovers devices via SNMP, CDP, LLDP, and ARP, then builds real-time topology maps that update continuously.',
+			'The strongest option for MSPs who want monitoring and network maps in one platform. Auvik is cloud-managed network monitoring that discovers devices via SNMP, CDP, LLDP, and ARP, then builds real-time topology maps that update continuously.',
 		discoveryNotes:
 			'NetFlow for traffic analysis. Cloud-hosted with an on-site collector agent.',
 		diagrams:
@@ -122,8 +126,9 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: 'Free up to 100 sensors then tiered', sources: [{ id: 4 }] },
 		alsoIncludes: ['Monitoring', 'Traffic Analysis'],
+		bestFor: 'Teams already invested in the Paessler ecosystem who want built-in topology mapping alongside monitoring',
 		description:
-			'Full monitoring stack from Paessler with auto-discovery and interactive maps. PRTG has been around since 2003 and has a large installed base.',
+			'Best for teams already running Paessler for monitoring who want built-in mapping. PRTG is a full monitoring stack with auto-discovery and interactive maps — it has been around since 2003 and has a large installed base.',
 		discoveryNotes:
 			'NetFlow and packet sniffing for traffic analysis. Self-hosted on Windows.',
 		diagrams:
@@ -147,8 +152,9 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: '$1.50/device/mo', sources: [{ id: 7 }] },
 		alsoIncludes: ['Monitoring', 'RMM'],
+		bestFor: 'Cost-conscious MSPs who need monitoring, remote access, and basic network maps at a transparent price',
 		description:
-			'Remote monitoring and management with network mapping. Popular with MSPs as a lower-cost Auvik alternative.',
+			'The most affordable monitoring platform with network maps — best for cost-conscious MSPs. Domotz offers remote monitoring and management with network mapping, popular as a lower-cost Auvik alternative.',
 		discoveryNotes: 'Cloud-hosted with an on-site agent.',
 		diagrams:
 			'Auto-generated topology maps. Functional. The focus is remote access and monitoring, with mapping as a supporting feature.',
@@ -171,8 +177,9 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: 'From $95/yr (10 devices)', sources: [{ id: 9 }] },
 		alsoIncludes: ['Monitoring'],
+		bestFor: 'Mid-market IT teams that want monitoring and visualization without per-device pricing',
 		description:
-			"Network monitoring with Layer 2/3 auto-discovery and topology maps. Part of ManageEngine's larger IT management suite.",
+			"Best budget option for mid-market teams that want monitoring and topology maps without Auvik's per-device pricing. OpManager provides network monitoring with Layer 2/3 auto-discovery and topology maps, plus rack and floor plan views that most monitoring tools lack.",
 		discoveryNotes: 'Auto-maps port-level connectivity.',
 		diagrams:
 			'Topology maps, rack views, floor plan views. More visualization options than most monitoring tools.',
@@ -191,8 +198,9 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: false,
 		openSource: { status: 'source-available', license: 'NPSL' },
 		pricing: { text: 'Free' },
+		bestFor: 'Security audits, one-off network discovery, and as the discovery layer in custom automation pipelines',
 		description:
-			'Nmap is the standard open-source network scanner. Zenmap is its official GUI, which includes basic topology visualization of scan results.',
+			'The go-to tool for one-off network scanning and security audits, not ongoing documentation. Nmap is the standard open-source network scanner. Zenmap is its official GUI, which includes basic topology visualization of scan results.',
 		discoveryNotes:
 			"Port scanning, service fingerprinting, OS detection. Nmap's service detection is thorough: it doesn't just find open ports, it identifies what's running on them.",
 		diagrams:
@@ -214,8 +222,9 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'osi', license: 'GPL-3.0' },
 		pricing: { text: 'Free' },
 		alsoIncludes: ['Monitoring'],
+		bestFor: 'Teams with Linux skills that want free, self-hosted monitoring with basic topology visualization',
 		description:
-			'Open-source network monitoring with auto-discovery and a weathermap plugin for topology visualization. PHP-based. Active community.',
+			'The best free self-hosted monitoring option with basic mapping. LibreNMS is open-source network monitoring with auto-discovery and a weathermap plugin for topology visualization. PHP-based with an active community.',
 		discoveryNotes: undefined,
 		diagrams:
 			'The [Network Weathermap](https://github.com/librenms/librenms) plugin generates topology visualizations. Not a core feature; requires separate setup. New devices are not automatically added to the map - topology layout is manual.',
@@ -235,8 +244,9 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: false,
 		openSource: { status: 'osi', license: 'Apache-2.0' },
 		pricing: { text: 'Free' },
+		bestFor: 'Anyone who needs a one-time, hand-crafted network diagram for a presentation or project',
 		description:
-			'Free, open-source diagramming tool with extensive network shape libraries. The most popular free alternative to Visio.',
+			'The best free option for one-time, hand-drawn network diagrams. draw.io is an open-source diagramming tool with extensive network shape libraries — the most popular free alternative to Visio.',
 		discoveryNotes:
 			'You place shapes and draw connections manually. You can import from CSV or XML if you build the data pipeline yourself.',
 		diagrams:
@@ -257,8 +267,9 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: false,
 		openSource: { status: 'no' },
 		pricing: { text: 'From ~$9/user/mo', sources: [{ id: 11 }] },
+		bestFor: 'Teams that need polished, collaborative network diagrams for documentation or cloud architecture reviews',
 		description:
-			'Collaborative cloud-based diagramming with real-time multi-user editing. Imports infrastructure data from AWS, Azure, and GCP.',
+			'Best for teams that need real-time collaboration on professional diagrams. Lucidchart is cloud-based diagramming with multi-user editing and imports infrastructure data from AWS, Azure, and GCP.',
 		discoveryNotes: 'No on-prem network scanning.',
 		diagrams:
 			'Professional-grade output. Real-time collaboration. Extensive template library. Integrates with Google Workspace, Atlassian, Microsoft.',
@@ -280,8 +291,9 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: true,
 		openSource: { status: 'osi', license: 'AGPL-3.0', href: '/community' },
 		pricing: { text: 'Free' },
+		bestFor: 'Teams that want automated network documentation on their own infrastructure with no SaaS dependency',
 		description:
-			"Scanopy's free, self-hosted edition. Same discovery engine as the paid product - SNMP, LLDP, CDP, ARP - with an interactive topology map and service detection. Open source and runs on your own hardware.",
+			"The best free self-hosted option for automated network documentation. Scanopy CE is the free, self-hosted edition with the same discovery engine as the paid product — SNMP, LLDP, CDP, ARP — with an interactive topology map and service detection. Open source and runs on your own hardware.",
 		discoveryNotes: 'One daemon, no per-device agents.',
 		diagrams:
 			'Interactive topology map with service and interface detail. Exportable as SVG, Mermaid, and Confluence markup.',

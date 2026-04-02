@@ -34,12 +34,19 @@
 		}
 	}
 
-	onMount(async () => {
-		try {
-			const res = await fetch('https://app.scanopy.net/api/health');
-			healthStatus = res.ok ? 'healthy' : 'unhealthy';
-		} catch {
-			healthStatus = 'unhealthy';
+	onMount(() => {
+		const checkHealth = async () => {
+			try {
+				const res = await fetch('https://app.scanopy.net/api/health');
+				healthStatus = res.ok ? 'healthy' : 'unhealthy';
+			} catch {
+				healthStatus = 'unhealthy';
+			}
+		};
+		if ('requestIdleCallback' in window) {
+			requestIdleCallback(() => checkHealth());
+		} else {
+			setTimeout(() => checkHealth(), 2000);
 		}
 	});
 
@@ -94,6 +101,7 @@
 {
 	"@context": "https://schema.org",
 	"@type": "Organization",
+	"@id": "https://scanopy.net/#organization",
 	"name": "Scanopy",
 	"url": "https://scanopy.net",
 	"logo": {
@@ -131,8 +139,10 @@
 {
 	"@context": "https://schema.org",
 	"@type": "WebSite",
+	"@id": "https://scanopy.net/#website",
 	"name": "Scanopy",
-	"url": "https://scanopy.net"
+	"url": "https://scanopy.net",
+	"publisher": {"@id": "https://scanopy.net/#organization"}
 }
 </script>`}
 	{#if breadcrumbSchema}

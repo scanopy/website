@@ -31,7 +31,7 @@
 		name: 'Maya',
 		description: 'Founder of Scanopy. Over 10 years building compliance and privacy products at major cloud platforms, financial services, and marketing technology companies.',
 		url: 'https://github.com/mayanayza',
-		image: '/maya-headshot.jpg',
+		image: 'https://scanopy.net/maya-headshot.jpg',
 		jobTitle: 'Founder',
 		worksFor: {
 			'@type': 'Organization',

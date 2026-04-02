@@ -107,6 +107,9 @@
 
 	function detailFields(vendor: Vendor): { label: string; content: string }[] {
 		const fields: { label: string; content: string }[] = [];
+		if (vendor.bestFor) {
+			fields.push({ label: 'Best for', content: vendor.bestFor });
+		}
 		fields.push({ label: 'Discovery', content: discoveryText(vendor) });
 		if (vendor.integrations) {
 			fields.push({ label: 'Integrations', content: vendor.integrations });
