@@ -24,8 +24,6 @@ There are three categories of network diagram tools: **monitoring platforms** th
 | Budget monitoring + mapping | [Domotz](#domotz) ($1.50/device/mo) or [ManageEngine](#manageengine-opmanager) ($95/yr) |
 | Free and self-hosted | [LibreNMS](#librenms) for monitoring with basic maps. [Scanopy Community Edition](/community) for documentation-focused mapping. [draw.io](#drawio) for manual diagrams. All three are free. |
 
-<!-- vendor-tables -->
-
 ## What "Automated" Actually Means
 
 "Automated" means the tool discovers your network and produces a diagram without you drawing anything. Most tools on this list do that. <!-- manual-tools-list --> don't - they're manual diagramming tools included because they show up in every "best network diagram tool" list. ([Here's a deeper look at how automated network documentation works.](/blog/automated-network-documentation))
@@ -37,6 +35,10 @@ Most teams need both monitoring and documentation. The question isn't whether to
 Monitoring tools charge per-device or per-sensor because continuous state tracking (CPU, bandwidth, alerts) scales with device count. They often need an agent or sensor on (or pointed at) each device. That architecture and pricing model makes sense for monitoring. But documentation doesn't work the same way. A single daemon on your network can discover every device, map connections, and produce a topology diagram. One deployment covers the whole network. The per-device model doesn't apply.
 
 Keeping documentation independent means you can switch monitoring tools without losing your network maps, and you're not paying per-device rates for diagrams.
+
+## Full Comparison
+
+<!-- vendor-tables -->
 
 <!-- vendor-section:monitoring -->
 

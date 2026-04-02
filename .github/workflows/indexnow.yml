@@ -7,6 +7,8 @@ on:
       - 'src/routes/**'
       - 'src/lib/blog/**'
       - 'src/lib/changelog/**'
+      - 'src/lib/comparisons/**'
+      - 'src/lib/fixtures/**'
 
 jobs:
   ping:
@@ -48,6 +50,14 @@ jobs:
                 version=$(basename "$file" .md)
                 urls+=("https://$HOST/changelog/$version")
                 urls+=("https://$HOST/changelog") ;;
+              src/lib/comparisons/*.md)
+                slug=$(basename "$file" .md)
+                urls+=("https://$HOST/comparisons/$slug") ;;
+              src/routes/comparisons/*)
+                urls+=("https://$HOST/comparisons") ;;
+              src/lib/fixtures/*)
+                # Fixture changes likely affect comparison pages; ping the index
+                urls+=("https://$HOST/comparisons") ;;
             esac
           done
 
@@ -66,7 +76,7 @@ jobs:
           fi
 
       - name: Ping IndexNow
-        if: steps.urls.outputs.skip != 'true'
+        if: steps.urls.outputs.skip != 'true' && steps.urls.outputs.url_json != ''
         run: |
           KEY="2c25a6ca44a94f73963bb0e43613d656"
           HOST="scanopy.net"
