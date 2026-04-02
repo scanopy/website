@@ -5,24 +5,43 @@ keyword: best automated network diagram tool
 slug: best-automated-network-diagram-tools
 date: 2026-04-01
 dateModified: 2026-04-01
+style: comparison
 tldr: "Most 'automated' network diagram tools are actually monitoring platforms that include mapping as a feature, or manual tools with no discovery at all. Here's what each tool actually does, what it costs, and which one fits your setup."
 ---
 
-| Tool | Type | Auto-Discovery | Vendor API Integration | Service Discovery | Continuous Updates | Pricing | Best For |
-|------|------|---------------|----------------------|-------------------|-------------------|---------|----------|
-| Auvik | Monitoring + mapping | SNMP, CDP, LLDP | Yes | No | Yes | ~$16/device/mo (contact sales) | MSPs needing monitoring + maps |
-| SolarWinds NTM | Dedicated mapping | SNMP, WMI, CDP | Yes | No | Scan-on-demand | From $1,977/yr subscription | Enterprise, Visio exports |
-| Scanopy | Documentation + mapping | SNMP, LLDP, CDP, ARP | Yes | [Yes (200+ types)](/services) | Yes (scheduled) | [Flat monthly, unlimited hosts](/pricing) | Documentation without monitoring lock-in |
-| NetBrain | Enterprise mapping + automation | Multi-protocol | Yes | No | Yes | Enterprise (contact sales) | Large networks, automation workflows |
-| PRTG | Monitoring + mapping | SNMP, WMI | Yes | No | Yes | Free up to 100 sensors, then tiered | Mid-size monitoring + basic maps |
-| Domotz | Monitoring + mapping | SNMP, scanning | Yes | No | Yes | $1.50/device/mo | Budget-friendly MSP monitoring |
-| ManageEngine OpManager | Monitoring + mapping | CDP, LLDP, ARP | Yes | No | Yes | From ~$245 | Mid-market monitoring + maps |
-| LibreNMS | Open source monitoring | SNMP | Yes | No | Yes | Free | Self-hosted, Linux-savvy teams |
-| Nmap + Zenmap | Discovery toolkit | Host + port scanning | No | Yes (port/service fingerprinting) | Manual | Free | Security audits, one-off discovery |
-| draw.io | Manual diagramming | No | No | No | No | Free | One-time diagrams, presentations |
-| Lucidchart | Collaborative diagramming | Cloud import only | Yes | No | No | From ~$9/user/mo | Team collaboration, cloud architecture |
+**Dedicated Diagram Tools**
 
-Full disclosure: Scanopy is our product. We built this list to be useful whether you pick us or not.
+| Tool | Discovery | Services | Auto-Updates | Open Source | Pricing |
+|------|-----------|----------|-------------|-------------|---------|
+| Scanopy | SNMP LLDP CDP ARP TCP/UDP | [Yes (200+ types)](/services) | Yes | [OSI (AGPL-3.0)](/community) | [Flat monthly, unlimited hosts](/pricing) |
+| SolarWinds NTM | SNMP WMI CDP ICMP VMware <a href="#source-3">[3]</a> | No | No | No | From $1,977/yr subscription <a href="#source-3">[3]</a> |
+| NetBrain | SNMP CDP LLDP ARP SSH/CLI | No | Yes | No | Enterprise (contact sales) |
+
+**Monitoring Platforms with Diagrams**
+
+| Tool | Discovery | Services | Auto-Updates | Open Source | Pricing | Also Includes |
+|------|-----------|----------|-------------|-------------|---------|---------------|
+| Auvik | SNMP CDP LLDP ARP <a href="#source-1">[1]</a> | Basic <a href="#source-2">[2]</a> | Yes | No | Per-device (contact sales) | Monitoring Traffic Analysis |
+| PRTG | SNMP WMI Ping <a href="#source-4">[4]</a> | No | Yes | No | Free up to 100 sensors then tiered <a href="#source-4">[4]</a> | Monitoring Traffic Analysis |
+| Domotz | SNMP ARP ICMP CDP LLDP <a href="#source-5">[5]</a> | Basic <a href="#source-6">[6]</a> | Yes | No | $1.50/device/mo <a href="#source-7">[7]</a> | Monitoring RMM |
+| ManageEngine OpManager | SNMP CDP LLDP ARP <a href="#source-8">[8]</a> | No | Yes | No | From $95/yr (10 devices) <a href="#source-9">[9]</a> | Monitoring |
+
+**Discovery Tools**
+
+| Tool | Discovery | Services | Auto-Updates | Open Source | Pricing | Also Includes |
+|------|-----------|----------|-------------|-------------|---------|---------------|
+| Nmap + Zenmap | ICMP ARP TCP/UDP | Yes | No | Source available (NPSL) | Free | |
+| LibreNMS | SNMP CDP LLDP <a href="#source-10">[10]</a> | No | No | OSI (GPL-3.0) | Free | Monitoring |
+
+**Manual Diagramming**
+
+| Tool | Discovery | Services | Auto-Updates | Open Source | Pricing |
+|------|-----------|----------|-------------|-------------|---------|
+| draw.io | No | No | No | OSI (Apache-2.0) | Free |
+| Lucidchart | Cloud import | No | No | No | From ~$9/user/mo <a href="#source-11">[11]</a> |
+
+
+Full disclosure: Scanopy is our product. We built this list to be useful whether you pick us or not. Vendor details are based on publicly available documentation and pricing as of April 2026. Features, pricing, and capabilities may have changed since publication — check each vendor's website for the latest information.
 
 ## What "Automated" Actually Means
 
@@ -48,25 +67,25 @@ Keeping documentation independent means you can switch monitoring tools without 
 
 These are monitoring tools first, and strong ones. Network diagrams come included as part of the monitoring package. If you already use one of these for monitoring, the built-in mapping may be all you need. If you use a different monitoring stack, or want documentation that isn't tied to your monitoring vendor, a dedicated tool gives you more flexibility.
 
-### Auvik
+### [Auvik](https://www.auvik.com/)
 
-Cloud-managed network monitoring built for MSPs. Auvik discovers devices via SNMP, CDP, LLDP, and NetFlow, then builds real-time topology maps that update continuously.
+Cloud-managed network monitoring built for MSPs. Auvik discovers devices via SNMP, CDP, LLDP, and ARP, then builds real-time topology maps that update continuously.
 
-**Discovery:** SNMP, CDP, LLDP, NetFlow. Cloud-hosted with an on-site collector agent.
+**Discovery:** SNMP, CDP, LLDP, ARP. NetFlow for traffic analysis. Cloud-hosted with an on-site collector agent.
 
 **Diagrams:** Interactive topology maps, real-time updates, Layer 2/3 views. Clean UI. The mapping is genuinely good.
 
-**Pricing:** Not published. Community-reported pricing is roughly $16/device/month, with three device categories charged at different rates. Requires a sales call.
+**Pricing:** Not published. Per-device pricing with multiple device categories charged at different rates. Requires a sales call.
 
 **Where it fits:** If you're an MSP that needs monitoring, alerting, config backup, and network maps in one platform, Auvik is a strong option. The topology mapping is a real feature, not an afterthought.
 
 **Trade-off:** Documentation is coupled to Auvik's per-device pricing and platform. If you already run a different monitoring stack (LibreNMS, Zabbix, PRTG), adding Auvik for diagrams means paying for monitoring capabilities you already have.
 
-### PRTG Network Monitor
+### [PRTG Network Monitor](https://www.paessler.com/prtg)
 
 Full monitoring stack from Paessler with auto-discovery and interactive maps. PRTG has been around since 2003 and has a large installed base.
 
-**Discovery:** SNMP, WMI, NetFlow, packet sniffing. Self-hosted on Windows.
+**Discovery:** SNMP, WMI, Ping. NetFlow and packet sniffing for traffic analysis. Self-hosted on Windows.
 
 **Diagrams:** 2D and 3D maps generated from discovery data. Functional, not the prettiest.
 
@@ -76,23 +95,23 @@ Full monitoring stack from Paessler with auto-discovery and interactive maps. PR
 
 **Trade-off:** Mapping is secondary to monitoring. The diagram feature exists to visualize what PRTG monitors, not to produce shareable documentation.
 
-### ManageEngine OpManager
+### [ManageEngine OpManager](https://www.manageengine.com/network-monitoring/)
 
 Network monitoring with Layer 2/3 auto-discovery and topology maps. Part of ManageEngine's larger IT management suite.
 
-**Discovery:** CDP, LLDP, ARP. Auto-maps port-level connectivity.
+**Discovery:** SNMP, CDP, LLDP, ARP. Auto-maps port-level connectivity.
 
 **Diagrams:** Topology maps, rack views, floor plan views. More visualization options than most monitoring tools.
 
-**Pricing:** Starts around $245 for small deployments. Scales by device count.
+**Pricing:** Standard edition starts at $95/year for 10 devices. Professional from $145/year. Scales by device count. Free edition available (3 devices).
 
 **Where it fits:** Mid-market teams that want monitoring and visualization in one tool without Auvik's per-device pricing model. The visualization options (rack views, floor plans) are unusually good for a monitoring tool.
 
-### Domotz
+### [Domotz](https://www.domotz.com/)
 
 Remote monitoring and management with network mapping. Popular with MSPs as a lower-cost Auvik alternative.
 
-**Discovery:** Network scanning, SNMP. Cloud-hosted with an on-site agent.
+**Discovery:** SNMP, ARP, ICMP, CDP, LLDP, mDNS, NetBIOS. Cloud-hosted with an on-site agent.
 
 **Diagrams:** Auto-generated topology maps. Functional. The focus is remote access and monitoring, with mapping as a supporting feature.
 
@@ -106,7 +125,7 @@ Remote monitoring and management with network mapping. Popular with MSPs as a lo
 
 These exist specifically to discover and map networks. Not monitoring platforms. No alerting, no traffic analysis, no config backup. Their entire purpose is producing accurate network diagrams.
 
-### SolarWinds Network Topology Mapper
+### [SolarWinds Network Topology Mapper](https://www.solarwinds.com/network-topology-mapper)
 
 The most widely-recommended automated network diagram tool. NTM scans your network and generates topology diagrams exportable to Visio, PDF, and PNG.
 
@@ -120,7 +139,7 @@ The most widely-recommended automated network diagram tool. NTM scans your netwo
 
 **Trade-offs:** Requires Windows. Scan-on-demand means diagrams are snapshots, not living documents (though scheduled scans help). The interface feels dated compared to modern web apps. The SolarWinds brand carries baggage from the 2020 supply chain incident, though NTM is a separate, much simpler product.
 
-### Scanopy
+### [Scanopy](/)
 
 Full disclosure: Scanopy is our product. We've tried to be honest about every tool on this list, including our own.
 
@@ -142,7 +161,7 @@ Scanopy is an [automated network documentation](/blog/automated-network-document
 
 This is a live Scanopy map you can interact with. Click a host to see its services and interfaces.
 
-### NetBrain
+### [NetBrain](https://www.netbraintech.com/)
 
 Enterprise-grade dynamic network mapping with automation and troubleshooting workflows. NetBrain maps sit at the center of a broader automation platform.
 
@@ -160,7 +179,7 @@ Enterprise-grade dynamic network mapping with automation and troubleshooting wor
 
 These tools don't discover your network. You draw the diagram yourself. They show up in "automated network diagram" recommendations constantly, so they're worth covering to clarify what they actually do.
 
-### draw.io (diagrams.net)
+### [draw.io (diagrams.net)](https://www.drawio.com/)
 
 Free, open-source diagramming tool with extensive network shape libraries. The most popular free alternative to Visio.
 
@@ -174,7 +193,7 @@ Free, open-source diagramming tool with extensive network shape libraries. The m
 
 **The catch:** The diagram is a snapshot of the moment you drew it. It [won't update when your network changes](/blog/network-diagrams-wrong). If you're looking for automated, continuously updated diagrams, draw.io isn't that. But for a well-crafted, specific-purpose diagram, nothing beats the flexibility of drawing it yourself.
 
-### Lucidchart
+### [Lucidchart](https://www.lucidchart.com/)
 
 Collaborative cloud-based diagramming with real-time multi-user editing. Imports infrastructure data from AWS, Azure, and GCP.
 
@@ -190,13 +209,13 @@ Collaborative cloud-based diagramming with real-time multi-user editing. Imports
 
 ## Open Source Options
 
-### LibreNMS
+### [LibreNMS](https://www.librenms.org/)
 
 Open-source network monitoring with auto-discovery and a weathermap plugin for topology visualization. PHP-based. Active community.
 
-**Discovery:** SNMP-based auto-discovery.
+**Discovery:** SNMP, CDP, LLDP auto-discovery.
 
-**Diagrams:** The [Network Weathermap](https://github.com/librenms/librenms) plugin generates topology visualizations. Not a core feature; requires separate setup.
+**Diagrams:** The [Network Weathermap](https://github.com/librenms/librenms) plugin generates topology visualizations. Not a core feature; requires separate setup. New devices are not automatically added to the map — topology layout is manual.
 
 **Pricing:** Free.
 
@@ -204,7 +223,7 @@ Open-source network monitoring with auto-discovery and a weathermap plugin for t
 
 **Trade-off:** Topology visualization is a community plugin, not a first-class feature. Setup requires Linux, PHP, and database administration. The monitoring side is strong; the diagramming side is minimal.
 
-### Nmap + Zenmap
+### [Nmap + Zenmap](https://nmap.org/)
 
 Nmap is the standard open-source network scanner. Zenmap is its official GUI, which includes basic topology visualization of scan results.
 
@@ -217,6 +236,20 @@ Nmap is the standard open-source network scanner. Zenmap is its official GUI, wh
 **Where it fits:** Security audits, one-off network discovery, and as the discovery layer in custom automation pipelines. If you want to know what's on your network right now and what services are running, Nmap is the fastest path. Pair it with a rendering tool for diagrams.
 
 **Trade-off:** No continuous updates, no topology mapping (LLDP/CDP), no persistent documentation. Each scan is a snapshot. Zenmap's visualization is minimal. For ongoing, automated diagrams, Nmap is the discovery step, not the whole solution.
+
+### [Scanopy Community Edition](/community)
+
+Scanopy's free, self-hosted edition. Same discovery engine as the paid product — SNMP, LLDP, CDP, ARP — with an interactive topology map and service detection. Open source and runs on your own hardware.
+
+**Discovery:** Same multi-protocol discovery as the hosted version. One daemon, no per-device agents.
+
+**Diagrams:** Interactive topology map with service and interface detail. Exportable as SVG, Mermaid, and Confluence markup.
+
+**Pricing:** Free. [Self-hosted](/community).
+
+**Where it fits:** Homelabbers and small teams that want automated network documentation without a SaaS dependency. If you're already self-hosting your infrastructure, this fits right in.
+
+**Trade-off:** Self-hosted means you manage updates and the host it runs on. No cloud dashboard or team sharing features from the paid tiers.
 
 ### Honorable mentions
 
@@ -241,3 +274,21 @@ Nmap is the standard open-source network scanner. Zenmap is its official GUI, wh
 Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map. No per-device fees, unlimited hosts. It pairs with whatever monitoring tool you already use.
 
 [Try Scanopy free](https://app.scanopy.net/onboarding), [view pricing](/pricing), or [read the docs](/docs) to get started.
+
+## Sources
+
+<div style="font-size: 0.8125rem; line-height: 1.8;">
+
+<span id="source-1">[1]</span> [Auvik — How does Auvik discover network topology and device information?](https://support.auvik.com/hc/en-us/articles/202956414)<br>
+<span id="source-2">[2]</span> [Auvik — Can Auvik discover services on my network?](https://support.auvik.com/hc/en-us/articles/203604100)<br>
+<span id="source-3">[3]</span> [SolarWinds — Network Topology Mapper](https://www.solarwinds.com/network-topology-mapper)<br>
+<span id="source-4">[4]</span> [Paessler — PRTG Pricing](https://www.paessler.com/pricing)<br>
+<span id="source-5">[5]</span> [Domotz — Agentless Network Discovery for MSP Client Onboarding](https://blog.domotz.com/all/agentless-network-discovery-msp-client-onboarding/)<br>
+<span id="source-6">[6]</span> [Domotz — Device TCP/UDP Ports/Services Discovery](https://help.domotz.com/monitoring-management/device-tcp-udp-ports-services-discovery/)<br>
+<span id="source-7">[7]</span> [Domotz — Pricing](https://www.domotz.com/pricing/)<br>
+<span id="source-8">[8]</span> [ManageEngine — Discover Networks](https://www.manageengine.com/network-monitoring/help/discover-networks.html)<br>
+<span id="source-9">[9]</span> [ManageEngine — OpManager Editions](https://www.manageengine.com/network-monitoring/opmanager-editions.html)<br>
+<span id="source-10">[10]</span> [LibreNMS — Auto-Discovery](https://docs.librenms.org/Extensions/Auto-Discovery/)<br>
+<span id="source-11">[11]</span> [Lucidchart — Pricing](https://lucid.app/pricing/lucidchart)
+
+</div>
