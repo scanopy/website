@@ -20,7 +20,7 @@ export const vendors: Record<string, Vendor> = {
 		alsoIncludes: ['Docker Visualization'],
 		bestFor: 'IT teams and MSPs who want a dedicated network diagram automation tool which works alongside their existing monitoring platform',
 		description:
-			"Full disclosure: Scanopy is our product. We've tried to be honest about every tool on this list, including our own.\n\nScanopy is an [automated network documentation](/blog/automated-network-documentation) tool built for IT teams that need living network maps without the overhead of a full monitoring platform. It deploys a lightweight daemon that discovers your network and builds an interactive topology map that updates on a schedule.",
+			"Full disclosure: Scanopy is our product. We've tried to be honest about every tool on this list, including our own.\n\nScanopy is an [automated network documentation](/blog/automated-network-documentation) tool built for IT teams that need living network maps that work alongside their monitoring platform. It deploys a lightweight daemon that discovers your network and builds an interactive topology map that updates on a schedule.",
 		discoveryNotes:
 			'One daemon per network. No agents on endpoints, no SSH credentials.',
 		serviceDiscovery:
