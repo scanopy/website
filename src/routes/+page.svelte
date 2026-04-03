@@ -91,7 +91,10 @@
 	} from 'lucide-svelte';
 	import type { Component } from 'svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
-	import { getProductFeatures } from '$lib/schemas';
+	import { getProductFeatures, getServiceCountLabel, getStartingMonthlyPrice } from '$lib/schemas';
+
+	const serviceCount = getServiceCountLabel();
+	const startingPrice = getStartingMonthlyPrice();
 
 	interface PageData {
 		softwareApplicationSchema: Record<string, unknown>;
@@ -691,7 +694,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm text-gray-400 leading-relaxed">
-			Scanopy deploys as a lightweight daemon that runs alongside your existing infrastructure. It discovers every host, maps the connections between them, and renders a live topology diagram - all without agents on your endpoints or changes to your network configuration. Once running, scans repeat on a schedule so your documentation stays accurate as devices come and go. Learn more about <a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300">how automated network documentation works</a>, explore the <a href="/services" class="text-blue-400 hover:text-blue-300">200+ services Scanopy detects</a>, or read about our <a href="/docs/reference/security" class="text-blue-400 hover:text-blue-300">security practices</a>.
+			Scanopy is an automated network discovery and diagramming tool for IT teams and MSPs. A single daemon discovers hosts, maps Layer 2 and Layer 3 connections, and fingerprints <a href="/services" class="text-blue-400 hover:text-blue-300">{serviceCount} services</a> per host using SNMP, LLDP, CDP, and ARP. No per-device agents, no credentials, no manual drawing. Scans repeat on a schedule so diagrams stay current as devices come and go. Unlike monitoring platforms (Auvik, PRTG, Domotz) that bolt on mapping as a side feature, or manual tools (Visio, Lucidchart, draw.io), Scanopy is purpose-built for network documentation. Export as SVG, PNG, Mermaid, or Confluence markup, or embed maps via iframe. The <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is free and open-source (AGPL-3.0). Cloud plans start at {startingPrice}/month billed yearly with flat pricing and no per-device fees. Learn more about <a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300">how automated network documentation works</a> or read about our <a href="/docs/reference/security" class="text-blue-400 hover:text-blue-300">security practices</a>.
 		</p>
 	</div>
 </section>

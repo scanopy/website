@@ -6,7 +6,7 @@ slug: best-automated-network-diagram-tools
 date: 2026-04-01
 dateModified: 2026-04-02
 style: comparison
-tldr: "Most 'automated' network diagram tools are actually monitoring platforms that include mapping as a feature, or manual tools with no discovery at all. Here's what each tool actually does, what it costs, and which one fits your setup."
+tldr: "The best automated network diagram tool for most IT teams is one that combines real auto-discovery with exportable, shareable diagrams — not a monitoring dashboard with a map tab bolted on. Most tools marketed as 'automated' fall into two traps: they're monitoring platforms that include mapping as a feature, or manual tools with zero discovery. Here's what each of the 13 tools actually does, what it costs, and which one fits your network."
 ctaDescription: Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map. No per-device fees, unlimited hosts. It pairs with whatever monitoring tool you already use.
 ---
 
@@ -28,6 +28,23 @@ There are three categories of network diagram tools: **monitoring platforms** th
 
 "Automated" means the tool discovers your network and produces a diagram without you drawing anything. Most tools on this list do that. <!-- manual-tools-list --> don't - they're manual diagramming tools included because they show up in every "best network diagram tool" list. ([Here's a deeper look at how automated network documentation works.](/blog/automated-network-documentation))
 
+<dl>
+<dt><strong>SNMP (Simple Network Management Protocol)</strong></dt>
+<dd>The primary protocol used by network diagram tools to query devices for identity, interface, and neighbor data. Most tools on this list require SNMP to be enabled on managed devices.</dd>
+
+<dt><strong>LLDP (Link Layer Discovery Protocol)</strong></dt>
+<dd>A vendor-neutral protocol that network devices use to advertise their identity and capabilities to directly connected neighbors. Used by diagram tools to map physical Layer 2 topology.</dd>
+
+<dt><strong>CDP (Cisco Discovery Protocol)</strong></dt>
+<dd>Cisco's proprietary equivalent of LLDP. Many diagram tools support both CDP and LLDP to discover neighbor relationships on mixed-vendor networks.</dd>
+
+<dt><strong>Layer 2 vs Layer 3 topology</strong></dt>
+<dd>Layer 2 maps show physical switch-to-switch connections and VLAN assignments. Layer 3 maps show IP subnets and routing relationships. Some tools produce both from a single scan.</dd>
+
+<dt><strong>Service discovery</strong></dt>
+<dd>Identifying what software or services (web servers, databases, DNS) are running on each host, beyond just detecting that the host exists. Nmap and Scanopy perform deep service fingerprinting; most other tools on this list do not.</dd>
+</dl>
+
 ## Why Pricing Models Matter
 
 Most teams need both monitoring and documentation. The question isn't whether to buy a monitoring tool. It's whether your documentation needs to be bundled into it.
@@ -35,6 +52,18 @@ Most teams need both monitoring and documentation. The question isn't whether to
 Monitoring tools charge per-device or per-sensor because continuous state tracking (CPU, bandwidth, alerts) scales with device count. They often need an agent or sensor on (or pointed at) each device. That architecture and pricing model makes sense for monitoring. But documentation doesn't work the same way. A single daemon on your network can discover every device, map connections, and produce a topology diagram. One deployment covers the whole network. The per-device model doesn't apply.
 
 Keeping documentation independent means you can switch monitoring tools without losing your network maps, and you're not paying per-device rates for diagrams.
+
+## Cloud Network Discovery
+
+Most tools on this list discover on-prem devices via SNMP and LLDP. If your infrastructure spans AWS, Azure, or GCP, only three tools can pull cloud topology via API:
+
+| Tool | Cloud Discovery |
+|---|---|
+| [Auvik](https://support.auvik.com/hc/en-us/articles/206173816) | AWS, Azure, GCP via cloud APIs alongside on-prem collector |
+| [NetBrain](https://www.netbraintech.com/docs/ie101/help/discovering-and-visualizing-public-cloud.htm) | AWS VPC/EC2, Azure VNet/VM, GCP VPC/VM — hybrid on-prem/cloud path mapping |
+| [Lucidscale](https://lucid.co/lucidscale/) (Lucidchart) | Imports AWS, Azure, GCP topology (no on-prem network discovery) |
+
+NetBrain is the only tool that renders on-prem and cloud infrastructure in a single hybrid map. Lucidscale imports cloud topology but cannot discover on-prem devices. Auvik bridges both with its collector plus cloud API approach. All other tools on this list are on-premises only.
 
 ## Full Comparison
 

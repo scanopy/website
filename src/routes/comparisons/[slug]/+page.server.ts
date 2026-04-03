@@ -208,6 +208,9 @@ export async function load({ params }) {
 
 			let htmlContent = await marked.parse(body, { renderer });
 
+			// Wrap markdown-rendered tables in scroll containers for mobile
+			htmlContent = htmlContent.replace(/<table>/g, '<div class="table-scroll"><table>').replace(/<\/table>/g, '</table></div>');
+
 			// Replace dynamic markers with vendor-derived content
 			const manualCategory = tableCategories.find((c) => c.id === 'manual');
 			if (manualCategory) {

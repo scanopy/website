@@ -5,6 +5,7 @@
 
 import billingPlansData from '$lib/fixtures/billing-plans.json';
 import productFeaturesData from '$lib/fixtures/product-features.json';
+import servicesData from '$lib/fixtures/services.json';
 
 interface BillingPlan {
 	id: string;
@@ -192,5 +193,35 @@ export function getBreadcrumbListSchema(items: { name: string; url: string }[]) 
  * Export product features for use in components
  */
 export function getProductFeatures() {
-	return productFeatures;
+	const serviceCount = getServiceCountLabel();
+	return productFeatures.map((f) => ({
+		...f,
+		description: f.description.replace('{{SERVICE_COUNT}}', serviceCount),
+		schemaLabel: f.schemaLabel.replace('{{SERVICE_COUNT}}', serviceCount)
+	}));
+}
+
+/**
+ * Get the count of detected services, rounded down to the nearest 10.
+ * Use this everywhere instead of hardcoding "200+".
+ */
+export function getServiceCountLabel(): string {
+	const count = (servicesData as unknown[]).length;
+	const rounded = Math.floor(count / 10) * 10;
+	return `${rounded}+`;
+}
+
+/**
+ * Get the lowest cloud starting price (billed yearly, shown as monthly).
+ */
+export function getStartingMonthlyPrice(): string {
+	const yearlyPlans = billingPlans.filter(
+		(p) => p.metadata.rate === 'Year' && p.metadata.hosting === 'Cloud' && p.metadata.base_cents > 0
+	);
+	if (yearlyPlans.length === 0) return '';
+	const cheapest = yearlyPlans.reduce((a, b) =>
+		a.metadata.base_cents < b.metadata.base_cents ? a : b
+	);
+	const monthlyPrice = cheapest.metadata.base_cents / 100 / 12;
+	return `$${monthlyPrice.toFixed(2)}`;
 }

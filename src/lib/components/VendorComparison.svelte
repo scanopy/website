@@ -121,6 +121,9 @@
 			fields.push({ label: 'Diagrams', content: vendor.diagrams });
 		}
 		fields.push({ label: 'Pricing', content: pricingText(vendor) });
+		if (vendor.deploymentNotes) {
+			fields.push({ label: 'Deployment', content: vendor.deploymentNotes });
+		}
 		if (vendor.whereItFits) {
 			fields.push({ label: 'Where it fits', content: vendor.whereItFits });
 		}
@@ -132,7 +135,17 @@
 </script>
 
 {#if mode === 'tables' && categories && vendors}
-	<table>
+	<div class="table-scroll vendor-table">
+	<table style="table-layout: fixed; min-width: 700px;">
+		<colgroup>
+			<col style="width: 115px;">
+			<col style="width: 120px;">
+			<col style="width: 110px;">
+			<col style="width: 110px;">
+			<col style="width: 110px;">
+			<col style="width: 130px;">
+			<col style="width: 110px;">
+		</colgroup>
 		<thead>
 			<tr>
 				<th class="tooltip-header">Tool<span class="tooltip-content">Product name and link to vendor site</span></th>
@@ -216,6 +229,7 @@
 			{/each}
 		</tbody>
 	</table>
+	</div>
 
 	{#if disclosureText}
 		<p>{disclosureText}</p>

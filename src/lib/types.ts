@@ -105,6 +105,7 @@ export type DiscoveryMethod =
 export type ServiceLevel = 'yes' | 'no' | 'basic';
 export type OpenSourceStatus = 'osi' | 'source-available' | 'no';
 export type VendorCapability = 'Monitoring' | 'Automation' | 'Traffic Analysis' | 'RMM' | 'Docker Visualization';
+export type DeploymentType = 'Cloud' | 'Self-hosted' | 'Desktop' | 'Browser' | 'CLI';
 
 export interface SourceRef {
 	id: number;
@@ -150,6 +151,9 @@ export interface Vendor {
 	whereItFits?: string;
 	tradeOff?: string;
 	tradeOffLabel?: string; // defaults to "Trade-off"
+	deployment?: DeploymentType[];
+	deploymentNotes?: string;
+	deploymentSources?: SourceRef[];
 	iframe?: { src: string; width: string; height: string; caption: string };
 }
 

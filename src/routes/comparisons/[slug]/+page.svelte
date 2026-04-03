@@ -158,8 +158,8 @@
 	{/if}
 </PageHero>
 
-<article class="py-20">
-	<div class="container mx-auto px-4" class:max-w-3xl={!showToc} class:max-w-5xl={showToc}>
+<article class="py-10 sm:py-20">
+	<div class="container mx-auto px-3 sm:px-4" class:max-w-3xl={!showToc} class:max-w-5xl={showToc}>
 		<div class:blog-layout={showToc}>
 			<div class="blog-content">
 				<header class="mb-12">
@@ -230,6 +230,10 @@
 		gap: 2rem;
 	}
 
+	.blog-content {
+		min-width: 0;
+	}
+
 	@media (min-width: 1024px) {
 		.blog-layout {
 			grid-template-columns: 1fr 200px;
@@ -260,6 +264,7 @@
 		color: rgb(209 213 219);
 		margin-bottom: 1.25rem;
 		line-height: 1.75;
+		overflow-wrap: break-word;
 	}
 
 	:global(.prose p > strong:first-child) {
@@ -270,8 +275,8 @@
 	:global(.prose-comparison h3) {
 		margin-top: 2.5rem;
 		margin-bottom: 0;
-		padding: 1rem 1.25rem;
-		font-size: 1.25rem;
+		padding: 0.75rem 1rem;
+		font-size: 1.125rem;
 		font-weight: 700;
 		color: white;
 		background: rgb(31 41 55);
@@ -282,7 +287,7 @@
 	}
 
 	:global(.prose-comparison h3 + p) {
-		padding: 1rem 1.25rem 0.75rem;
+		padding: 0.75rem 1rem 0.5rem;
 		border-left: 1px solid rgb(55 65 81);
 		border-right: 1px solid rgb(55 65 81);
 		margin-top: 0;
@@ -293,7 +298,7 @@
 
 	:global(.prose-comparison h3 + p + p),
 	:global(.prose-comparison h3 ~ p:has(> strong:first-child)) {
-		padding: 0.5rem 1.25rem;
+		padding: 0.5rem 1rem;
 		border-left: 1px solid rgb(55 65 81);
 		border-right: 1px solid rgb(55 65 81);
 		margin-bottom: 0;
@@ -319,6 +324,22 @@
 		margin-bottom: 0.5rem;
 	}
 
+
+	@media (min-width: 640px) {
+		:global(.prose-comparison h3) {
+			padding: 1rem 1.25rem;
+			font-size: 1.25rem;
+		}
+
+		:global(.prose-comparison h3 + p) {
+			padding: 1rem 1.25rem 0.75rem;
+		}
+
+		:global(.prose-comparison h3 + p + p),
+		:global(.prose-comparison h3 ~ p:has(> strong:first-child)) {
+			padding: 0.5rem 1.25rem;
+		}
+	}
 
 	:global(.prose ul) {
 		list-style-type: disc;
@@ -349,30 +370,59 @@
 	}
 
 	:global(.prose table) {
-		width: 100%;
 		border-collapse: collapse;
 		margin-bottom: 1.5rem;
-		font-size: 0.875rem;
+		font-size: 0.8125rem;
 	}
 
-	:global(.prose-comparison table) {
-		min-width: 800px;
+
+	@media (min-width: 640px) {
+		:global(.prose table) {
+			font-size: 0.875rem;
+		}
 	}
 
-	:global(.prose-comparison) {
+	:global(.vendor-table td),
+	:global(.vendor-table th) {
+		overflow-wrap: break-word;
+	}
+
+	:global(.table-scroll) {
 		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior-x: contain;
 	}
 
-	:global(.prose-comparison td:nth-child(3)),
-	:global(.prose-comparison td:nth-child(4)),
-	:global(.prose-comparison th:nth-child(3)),
-	:global(.prose-comparison th:nth-child(4)) {
+	:global(.prose > .table-scroll table) {
+		table-layout: fixed;
+		width: 550px;
+	}
+
+	:global(.prose > .table-scroll th:first-child),
+	:global(.prose > .table-scroll td:first-child) {
+		width: 35%;
+	}
+
+	:global(.prose > .table-scroll td),
+	:global(.prose > .table-scroll th) {
+		overflow-wrap: break-word;
+	}
+
+	:global(.prose) {
+		overflow-wrap: break-word;
+		word-break: break-word;
+		max-width: 100%;
+	}
+
+	:global(.vendor-table td:nth-child(3)),
+	:global(.vendor-table td:nth-child(4)),
+	:global(.vendor-table th:nth-child(3)),
+	:global(.vendor-table th:nth-child(4)) {
 		text-align: center;
 		white-space: nowrap;
 	}
 
-	:global(.prose-comparison td:nth-child(1)) {
-		white-space: nowrap;
+	:global(.vendor-table td:nth-child(1)) {
 		font-weight: 600;
 	}
 
@@ -394,7 +444,12 @@
 	}
 
 	:global(.prose-comparison td:nth-child(2)) {
-		min-width: 140px;
+		min-width: 120px;
+	}
+
+	:global(.prose-comparison td:nth-child(6)),
+	:global(.prose-comparison th:nth-child(6)) {
+		min-width: 130px;
 	}
 
 	:global(.prose-comparison .category-row td) {
@@ -411,7 +466,7 @@
 
 	:global(.prose th) {
 		background-color: rgb(31 41 55);
-		padding: 0.5rem 0.75rem;
+		padding: 0.375rem 0.5rem;
 		text-align: left;
 		font-weight: 600;
 		color: rgb(229 231 235);
@@ -419,9 +474,19 @@
 	}
 
 	:global(.prose td) {
-		padding: 0.5rem 0.75rem;
+		padding: 0.375rem 0.5rem;
 		color: rgb(209 213 219);
 		border: 1px solid rgb(55 65 81);
+	}
+
+	@media (min-width: 640px) {
+		:global(.prose th) {
+			padding: 0.5rem 0.75rem;
+		}
+
+		:global(.prose td) {
+			padding: 0.5rem 0.75rem;
+		}
 	}
 
 	:global(.prose .chip) {
@@ -495,5 +560,29 @@
 		border: none;
 		border-top: 1px solid rgb(55 65 81);
 		margin: 2rem 0;
+	}
+
+	:global(.prose dl) {
+		margin: 1.5rem 0;
+	}
+
+	:global(.prose dt) {
+		color: rgb(229 231 235);
+		margin-top: 1rem;
+		font-size: 0.9375rem;
+	}
+
+	:global(.prose dd) {
+		color: rgb(209 213 219);
+		margin-left: 0;
+		margin-top: 0.25rem;
+		line-height: 1.75;
+		font-size: 0.875rem;
+	}
+
+	@media (min-width: 640px) {
+		:global(.prose dd) {
+			margin-left: 1.25rem;
+		}
 	}
 </style>

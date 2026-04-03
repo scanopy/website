@@ -26,9 +26,9 @@
 	{
 		"id": "service_detection",
 		"title": "See every service at a glance",
-		"description": "The topology shows <a href=\"/services\" class=\"text-blue-400 hover:underline\">200+ detected services</a> - Docker, PostgreSQL, nginx, and more - right in the visualization.",
+		"description": "The topology shows <a href=\"/services\" class=\"text-blue-400 hover:underline\">{{SERVICE_COUNT}} detected services</a> - Docker, PostgreSQL, nginx, and more - right in the visualization.",
 		"icon": "Box",
-		"schemaLabel": "200+ service detection",
+		"schemaLabel": "{{SERVICE_COUNT}} service detection",
 		"group": "what_you_get"
 	},
 	{

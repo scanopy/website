@@ -40,7 +40,7 @@
 
 			<!-- Product -->
 			<div>
-				<h4 class="mb-4 font-semibold text-white">Product</h4>
+				<span class="mb-4 block font-semibold text-white">Product</span>
 				<ul class="space-y-2">
 					<li><a href="/pricing" class="text-sm text-gray-400 hover:text-white">Pricing</a></li>
 					<li><a href="/roadmap" class="text-sm text-gray-400 hover:text-white">Roadmap</a></li>
@@ -57,7 +57,7 @@
 
 			<!-- Company -->
 			<div>
-				<h4 class="mb-4 font-semibold text-white">Company</h4>
+				<span class="mb-4 block font-semibold text-white">Company</span>
 				<ul class="space-y-2">
 					<li><a href="/about" class="text-sm text-gray-400 hover:text-white">About</a></li>
 					<li><a href="/blog" class="text-sm text-gray-400 hover:text-white">Blog</a></li>
@@ -69,7 +69,7 @@
 
 			<!-- Community -->
 			<div>
-				<h4 class="mb-4 font-semibold text-white">Community</h4>
+				<span class="mb-4 block font-semibold text-white">Community</span>
 				<ul class="space-y-2">
 					<li>
 						<a
@@ -136,7 +136,7 @@
 
 			<!-- Newsletter -->
 			<div>
-				<h4 class="mb-4 font-semibold text-white">Stay Updated</h4>
+				<span class="mb-4 block font-semibold text-white">Stay Updated</span>
 				{#if brevoNewsletterFormUrl}
 					<NewsletterSignup
 						formUrl={brevoNewsletterFormUrl}
