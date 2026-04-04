@@ -62,7 +62,9 @@ jobs:
           done
 
           # Deduplicate
-          readarray -t urls < <(printf '%s\n' "${urls[@]}" | sort -u)
+          if [ ${#urls[@]} -gt 0 ]; then
+            readarray -t urls < <(printf '%s\n' "${urls[@]}" | sort -u)
+          fi
 
           if [ ${#urls[@]} -eq 0 ]; then
             echo "skip=true" >> $GITHUB_OUTPUT
