@@ -44,25 +44,6 @@ export async function GET() {
 		{ loc: '/refund', src: 'src/routes/refund/+page.svelte' }
 	];
 
-	// Load changelog entries for dynamic URLs
-	const changelogFiles = import.meta.glob('/src/lib/changelog/*.md', {
-		query: '?raw',
-		import: 'default'
-	});
-
-	const changelogEntries: { slug: string; date: string }[] = [];
-
-	for (const [path, loader] of Object.entries(changelogFiles)) {
-		const raw = (await loader()) as string;
-		const frontmatter = parseFrontmatter(raw);
-		const slug = path.split('/').pop()?.replace('.md', '') || '';
-
-		changelogEntries.push({
-			slug,
-			date: frontmatter.date || ''
-		});
-	}
-
 	// Load blog posts for dynamic URLs
 	const blogFiles = import.meta.glob('/src/lib/blog/*.md', {
 		query: '?raw',
@@ -88,15 +69,6 @@ export async function GET() {
   <url>
     <loc>https://scanopy.net${page.loc}</loc>
     <lastmod>${getLastCommitDate(page.src)}</lastmod>
-  </url>`
-		)
-		.join('');
-
-	const changelogUrls = changelogEntries
-		.map(
-			(entry) => `
-  <url>
-    <loc>https://scanopy.net/changelog/${entry.slug}</loc>${entry.date ? `\n    <lastmod>${entry.date}</lastmod>` : ''}
   </url>`
 		)
 		.join('');
@@ -139,7 +111,7 @@ export async function GET() {
 		.join('');
 
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${changelogUrls}${blogUrls}${comparisonUrls}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${comparisonUrls}
 </urlset>`;
 
 	return new Response(sitemap, {

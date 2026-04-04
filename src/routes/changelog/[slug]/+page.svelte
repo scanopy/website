@@ -33,6 +33,7 @@
 		content="Scanopy v{data.entry.version} - {data.entry.title}"
 	/>
 	<link rel="canonical" href="https://scanopy.net/changelog/{data.entry.slug}" />
+	<meta name="robots" content="noindex, follow" />
 
 	<!-- Open Graph -->
 	<meta property="og:title" content="v{data.entry.version}: {data.entry.title}" />

@@ -97,9 +97,13 @@
 /daemon-troubleshooting/ /docs/setting-up-daemons/troubleshooting-scans/ 301
 /api/hosts/export_hosts_zip /docs/api/hosts/export_hosts_zip 301
 /api/users /docs/api/users/ 301
+/api/invites /docs/api/invites/ 301
 
 # Blog to comparisons migration (Apr 2026)
 /blog/best-automated-network-diagram-tools /comparisons/best-automated-network-diagram-tools 301
+
+# Trailing slash fix
+/blog/ /blog 301
 
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404
