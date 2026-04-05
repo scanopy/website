@@ -447,7 +447,7 @@ export const detailSections: VendorCategory[] = [
 ];
 
 export const honorableMentions =
-	'**The Dude (MikroTik).** Free network mapping tool from MikroTik. Auto-discovers devices and draws a topology, but requires significant manual cleanup. Best for MikroTik-heavy environments. Loyal user base, but the tool is tightly coupled to the MikroTik ecosystem.\n\n**Graphviz / D3.js.** Rendering engines, not discovery tools. If you\'ve already got network data from another source (Nmap scans, SNMP polls, API calls), Graphviz and D3 can turn it into a diagram. This is the DIY path. Extremely flexible, significant engineering effort required.';
+	'**Graphviz / D3.js.** Rendering engines, not discovery tools. If you\'ve already got network data from another source (Nmap scans, SNMP polls, API calls), Graphviz and D3 can turn it into a diagram. This is the DIY path. Extremely flexible, significant engineering effort required.';
 
 export const vendorSources: VendorSource[] = [
 	{

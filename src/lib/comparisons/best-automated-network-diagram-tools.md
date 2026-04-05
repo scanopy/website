@@ -1,12 +1,12 @@
 ---
 title: Best Automated Network Diagram Tools (2026)
-description: "13 network diagram tools compared by discovery method, automation level, and pricing. Monitoring platforms, dedicated mappers, open-source options, and manual tools."
+description: "12 network diagram tools compared by discovery method, automation level, and pricing. Monitoring platforms, dedicated mappers, open-source options, and manual tools."
 keyword: best automated network diagram tool
 slug: best-automated-network-diagram-tools
 date: 2026-04-01
-dateModified: 2026-04-03
+dateModified: 2026-04-05
 style: comparison
-tldr: "The best automated network diagram tool for most IT teams is one that combines real auto-discovery with exportable, shareable diagrams — not a monitoring dashboard with a map tab bolted on. Most tools marketed as 'automated' fall into two traps: they're monitoring platforms that include mapping as a feature, or manual tools with zero discovery. Here's what each of the 13 tools actually does, what it costs, and which one fits your network."
+tldr: "The best automated network diagram tool for most IT teams is one that combines real auto-discovery with exportable, shareable diagrams — not a monitoring dashboard with a map tab bolted on. Most tools marketed as 'automated' fall into two traps: they're monitoring platforms that include mapping as a feature, or manual tools with zero discovery. Here's what each of the 12 tools actually does, what it costs, and which one fits your network."
 ctaDescription: Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map. No per-device fees, unlimited hosts. It pairs with whatever monitoring tool you already use.
 ---
 
