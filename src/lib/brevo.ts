@@ -36,8 +36,17 @@ async function getRecaptchaToken(): Promise<string | null> {
 	try {
 		await loadRecaptcha();
 		return await new Promise((resolve) => {
+			const timeout = setTimeout(() => resolve(null), 5000);
 			grecaptcha.ready(() => {
-				grecaptcha.execute(PUBLIC_RECAPTCHA_SITE_KEY, { action: 'submit' }).then(resolve);
+				grecaptcha.execute(PUBLIC_RECAPTCHA_SITE_KEY, { action: 'submit' })
+					.then((token) => {
+						clearTimeout(timeout);
+						resolve(token);
+					})
+					.catch(() => {
+						clearTimeout(timeout);
+						resolve(null);
+					});
 			});
 		});
 	} catch {
