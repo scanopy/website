@@ -87,10 +87,26 @@ export async function submitNewsletter(formUrl: string, email: string): Promise<
 	return result.success === true;
 }
 
+const BREVO_FIELD_MAP: Record<string, string> = {
+	EMAIL: 'email',
+	FIRSTNAME: 'firstName',
+	LASTNAME: 'lastName',
+	INQUIRY_COMPANY: 'company',
+	INQUIRY_NUM_EMPLOYEES: 'teamSize',
+	INQUIRY_URGENCY: 'urgency',
+	INQUIRY_NETWORK_COUNT: 'networkCount',
+	INQUIRY_MESSAGE: 'useCase'
+};
+
+export interface ContactSubmitResult {
+	success: boolean;
+	fieldErrors?: Record<string, string>;
+}
+
 export async function submitContactInquiry(
 	formUrl: string,
 	data: ContactInquiryData
-): Promise<boolean> {
+): Promise<ContactSubmitResult> {
 	const token = await getRecaptchaToken();
 
 	const formData = new FormData();
@@ -114,7 +130,22 @@ export async function submitContactInquiry(
 		body: formData
 	});
 
-	if (!response.ok) return false;
 	const result = await response.json();
-	return result.success === true;
+
+	if (result.success === true) {
+		return { success: true };
+	}
+
+	if (result.errors) {
+		const fieldErrors: Record<string, string> = {};
+		for (const [brevoField, message] of Object.entries(result.errors)) {
+			const formField = BREVO_FIELD_MAP[brevoField];
+			if (formField) {
+				fieldErrors[formField] = message as string;
+			}
+		}
+		return { success: false, fieldErrors };
+	}
+
+	return { success: false };
 }
