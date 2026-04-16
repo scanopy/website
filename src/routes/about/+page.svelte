@@ -12,17 +12,17 @@
 	<title>About - Scanopy</title>
 	<meta
 		name="description"
-		content="Scanopy exists because keeping network diagrams accurate is tedious, thankless work. We built a tool that does it for you."
+		content="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work. We built a tool that does it for you."
 	/>
 	<link rel="canonical" href="https://scanopy.net/about" />
 
 	<meta property="og:title" content="About - Scanopy" />
-	<meta property="og:description" content="Scanopy exists because keeping network diagrams accurate is tedious, thankless work. We built a tool that does it for you." />
+	<meta property="og:description" content="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work. We built a tool that does it for you." />
 	<meta property="og:url" content="https://scanopy.net/about" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="About - Scanopy" />
-	<meta name="twitter:description" content="Scanopy exists because keeping network diagrams accurate is tedious, thankless work. We built a tool that does it for you." />
+	<meta name="twitter:description" content="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work. We built a tool that does it for you." />
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
@@ -31,21 +31,20 @@
 		name: 'Maya',
 		description: 'Founder of Scanopy. Over 10 years building compliance and privacy products at major cloud platforms, financial services, and marketing technology companies.',
 		url: 'https://github.com/mayanayza',
-		image: 'https://scanopy.net/maya-headshot.jpg',
 		jobTitle: 'Founder',
 		worksFor: {
 			'@type': 'Organization',
 			name: 'Scanopy',
 			url: 'https://scanopy.net'
 		},
-		knowsAbout: ['network documentation', 'network topology', 'automated discovery'],
+		knowsAbout: ['infrastructure documentation', 'network topology', 'automated discovery', 'service dependency mapping'],
 		sameAs: ['https://github.com/mayanayza']
 	})}</script>`}
 </svelte:head>
 
 <PageHero
-	title="Network documentation shouldn't be a chore"
-	subtitle="Scanopy exists because keeping network diagrams accurate is tedious, thankless work - and nobody actually does it. We built a tool that does it for you."
+	title="Infrastructure documentation shouldn't be a chore"
+	subtitle="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work - and nobody actually does it. We built a tool that does it for you."
 />
 
 <!-- Origin Story -->
@@ -100,7 +99,7 @@
 				</h3>
 				<p class="text-gray-400 leading-relaxed">
 					Scanopy doesn't do asset lifecycle management, procurement tracking, or compliance
-					workflows. It does network documentation. That's a feature, not a gap. You don't need
+					workflows. It does infrastructure documentation. That's a feature, not a gap. You don't need
 					a $15/device/month platform when what you actually need is an accurate network map - and our <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing model is aligned</a> to this, so you don't pay per device with Scanopy.
 				</p>
 			</div>
@@ -161,13 +160,6 @@
 				rel="noopener noreferrer"
 				class="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800 px-4 py-1.5 text-lg font-medium text-white transition-colors hover:border-gray-500"
 			>
-				<img
-					src="/maya-headshot.jpg"
-					alt="Maya"
-					class="h-7 w-7 rounded-full object-cover"
-					width="28"
-					height="28"
-				/>
 				Maya, Founder
 			</a>
 		</h2>
@@ -183,17 +175,6 @@
 			<p>
 				I'm not an enterprise IT veteran. I came in through the homelab door and I'm learning the enterprise side by building the tool. That perspective shapes Scanopy - it's designed to be simple enough for a homelab but capable enough for production networks.
 			</p>
-		</div>
-		<div class="mt-6 flex flex-wrap gap-4">
-			<a
-				href="https://noted.lol/scanopy/"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300"
-			>
-				Read the full origin story on noted.lol
-				<ExternalLink class="h-4 w-4" />
-			</a>
 		</div>
 	</div>
 </section>

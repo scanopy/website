@@ -22,7 +22,7 @@ Networks are dynamic. [IT Portal identified the sources of drift](https://www.it
 
 IT Portal also makes a sharper point: the state of your network documentation is an IT maturity indicator. Weak diagrams point to deeper operational gaps. Most organizations fail this test.
 
-My own homelab documentation was no different. My network lived entirely in my head - a vague mental model that got fuzzier every time I [added another container at 2am](https://noted.lol/scanopy/). I tried a spreadsheet. I tried [a template](/blog/network-documentation-template). Both were wrong within a week.
+My own homelab documentation was no different. My network lived entirely in my head - a vague mental model that got fuzzier every time I added another container at 2am. I tried a spreadsheet. I tried [a template](/blog/network-documentation-template). Both were wrong within a week.
 
 ## Why "Just Update It" Doesn't Work
 

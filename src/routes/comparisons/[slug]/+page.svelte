@@ -85,7 +85,6 @@
 			'@type': 'Person',
 			name: 'Maya',
 			url: 'https://scanopy.net/about',
-			image: 'https://scanopy.net/maya-headshot.jpg',
 			sameAs: ['https://github.com/mayanayza']
 		},
 		publisher: {
