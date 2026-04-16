@@ -3,6 +3,8 @@
 	import AuthorCard from '$lib/components/AuthorCard.svelte';
 	import ArticleCTA from '$lib/components/ArticleCTA.svelte';
 	import ArticleTOC from '$lib/components/ArticleTOC.svelte';
+	import VendorComparison from '$lib/components/VendorComparison.svelte';
+	import type { Vendor } from '$lib/types';
 
 	interface Heading {
 		id: string;
@@ -24,9 +26,15 @@
 		wordCount: number;
 	}
 
+	type ContentSegment =
+		| { type: 'html'; content: string }
+		| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] };
+
 	interface PageData {
 		post: BlogPost;
 		headings: Heading[];
+		contentSegments?: ContentSegment[];
+		vendorData?: { vendors: Record<string, Vendor> };
 	}
 
 	let { data }: { data: PageData } = $props();
@@ -135,7 +143,22 @@
 				{/if}
 
 				<div class="prose prose-invert prose-gray max-w-none">
-					{@html data.post.content}
+					{#if data.contentSegments && data.vendorData}
+						{#each data.contentSegments as segment}
+							{#if segment.type === 'html'}
+								{@html segment.content}
+							{:else if segment.type === 'vendor-inline-table'}
+								<VendorComparison
+									mode="inline"
+									vendors={data.vendorData.vendors}
+									vendorSlugs={segment.vendorSlugs}
+									columns={segment.columns}
+								/>
+							{/if}
+						{/each}
+					{:else}
+						{@html data.post.content}
+					{/if}
 				</div>
 
 				<ArticleCTA description={data.post.ctaDescription} />

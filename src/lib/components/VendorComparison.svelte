@@ -9,17 +9,31 @@
 	} from '$lib/types';
 
 	interface Props {
-		mode: 'tables' | 'detail' | 'sources';
+		mode: 'tables' | 'detail' | 'sources' | 'inline';
 		categories?: VendorCategory[];
 		vendors?: Record<string, Vendor>;
 		disclosureText?: string;
 		section?: VendorCategory;
 		honorableMentions?: string;
 		sources?: VendorSource[];
+		vendorSlugs?: string[];
+		columns?: string[];
 	}
 
-	let { mode, categories, vendors, disclosureText, section, honorableMentions, sources }: Props =
+	let { mode, categories, vendors, disclosureText, section, honorableMentions, sources, vendorSlugs, columns }: Props =
 		$props();
+
+	const columnHeaders: Record<string, string> = {
+		name: 'Tool',
+		discovery: 'Discovery',
+		services: 'Services',
+		autoUpdates: 'Live Updates',
+		openSource: 'Open Source',
+		pricing: 'Pricing',
+		alsoIncludes: 'Also Includes',
+		bestFor: 'Best for',
+		deployment: 'Deployment'
+	};
 
 	function v(slug: string): Vendor {
 		return vendors![slug];
@@ -270,6 +284,92 @@
 		<h3 id="honorable-mentions">Honorable mentions</h3>
 		<p>{@html md(honorableMentions)}</p>
 	{/if}
+{/if}
+
+{#if mode === 'inline' && vendorSlugs && vendors && columns}
+	<div class="table-scroll vendor-table">
+	<table>
+		<thead>
+			<tr>
+				{#each columns as col}
+					<th>{columnHeaders[col] || col}</th>
+				{/each}
+			</tr>
+		</thead>
+		<tbody>
+			{#each vendorSlugs as slug}
+				{@const vendor = v(slug)}
+				<tr>
+					{#each columns as col}
+						{#if col === 'name'}
+							<td><a href={vendor.href} {...isExternal(vendor.href) ? { target: '_blank', rel: 'noopener' } : {}}>{vendor.name}</a></td>
+						{:else if col === 'discovery'}
+							<td>
+								{#if vendor.discovery.length === 0}
+									<span class="chip chip-negative">None</span>
+								{:else}
+									{#each vendor.discovery as protocol, i}
+										{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(protocol)}>{protocol}</span>
+									{/each}
+								{/if}
+							</td>
+						{:else if col === 'services'}
+							<td>
+								{#if vendor.services.detail && vendor.services.detailHref}
+									<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span><a href={vendor.services.detailHref} class="cell-detail">{vendor.services.detail}</a>
+								{:else if vendor.services.detail}
+									<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span><span class="cell-detail">{vendor.services.detail}</span>
+								{:else}
+									<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span>
+								{/if}
+							</td>
+						{:else if col === 'autoUpdates'}
+							<td>
+								{#if vendor.autoUpdates}
+									<span class="chip chip-positive">Yes</span>
+								{:else}
+									<span class="chip chip-negative">No</span>
+								{/if}
+							</td>
+						{:else if col === 'openSource'}
+							<td>
+								{#if vendor.openSource.href}
+									<a href={vendor.openSource.href}><span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}>{osInfo(vendor.openSource.status).label}</span></a>
+								{:else}
+									<span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}>{osInfo(vendor.openSource.status).label}</span>
+								{/if}
+								{#if vendor.openSource.license}
+									<span class="cell-detail">{vendor.openSource.license}</span>
+								{/if}
+							</td>
+						{:else if col === 'pricing'}
+							<td>
+								{#if vendor.pricing.href}
+									<a href={vendor.pricing.href}>{vendor.pricing.text}</a>
+								{:else}
+									{vendor.pricing.text}
+								{/if}
+							</td>
+						{:else if col === 'alsoIncludes'}
+							<td>
+								{#if vendor.alsoIncludes}
+									{#each vendor.alsoIncludes as cap, i}
+										{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(cap)}>{cap}</span>
+									{/each}
+								{/if}
+							</td>
+						{:else if col === 'bestFor'}
+							<td>{vendor.bestFor || ''}</td>
+						{:else if col === 'deployment'}
+							<td>{vendor.deployment?.join(', ') || ''}</td>
+						{/if}
+					{/each}
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+	</div>
+	<p style="font-size: 0.8125rem; color: rgb(156 163 175);">For a detailed comparison of these and other tools, see our <a href="/comparisons/best-automated-network-diagram-tools">full comparison of automated network diagram tools</a>.</p>
 {/if}
 
 {#if mode === 'sources' && sources}

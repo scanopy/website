@@ -1,5 +1,7 @@
 import { marked, Renderer } from 'marked';
 import { error } from '@sveltejs/kit';
+import { vendors as allVendors } from '$lib/fixtures/network-diagram-vendors';
+import type { Vendor } from '$lib/types';
 
 interface Heading {
 	id: string;
@@ -19,6 +21,44 @@ interface BlogPost {
 	ctaDescription?: string;
 	content: string;
 	wordCount: number;
+}
+
+type ContentSegment =
+	| { type: 'html'; content: string }
+	| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] };
+
+const DEFAULT_INLINE_COLUMNS = ['name', 'discovery', 'pricing', 'bestFor'];
+
+function splitBlogSegments(html: string): { segments: ContentSegment[]; vendorSlugs: string[] } | null {
+	const markerRegex = /<!--\s*vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?\s*-->/g;
+	let match = markerRegex.exec(html);
+	if (!match) return null;
+
+	const segments: ContentSegment[] = [];
+	const allSlugs: string[] = [];
+	let lastIndex = 0;
+	markerRegex.lastIndex = 0;
+
+	while ((match = markerRegex.exec(html)) !== null) {
+		const before = html.slice(lastIndex, match.index).trim();
+		if (before) {
+			segments.push({ type: 'html', content: before });
+		}
+
+		const vendorSlugs = match[1].split(',').filter(Boolean);
+		const columns = match[2] ? match[2].split(',').filter(Boolean) : DEFAULT_INLINE_COLUMNS;
+		allSlugs.push(...vendorSlugs);
+		segments.push({ type: 'vendor-inline-table', vendorSlugs, columns });
+
+		lastIndex = match.index + match[0].length;
+	}
+
+	const remaining = html.slice(lastIndex).trim();
+	if (remaining) {
+		segments.push({ type: 'html', content: remaining });
+	}
+
+	return { segments, vendorSlugs: [...new Set(allSlugs)] };
 }
 
 function parseFrontmatter(content: string): { frontmatter: Record<string, string>; body: string } {
@@ -95,6 +135,22 @@ export async function load({ params }) {
 				content: htmlContent,
 				wordCount
 			};
+
+			const parsed = splitBlogSegments(htmlContent);
+			if (parsed) {
+				const filteredVendors: Record<string, Vendor> = {};
+				for (const vs of parsed.vendorSlugs) {
+					if (allVendors[vs]) {
+						filteredVendors[vs] = allVendors[vs];
+					}
+				}
+				return {
+					post,
+					headings,
+					contentSegments: parsed.segments,
+					vendorData: { vendors: filteredVendors }
+				};
+			}
 
 			return { post, headings };
 		}

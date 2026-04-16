@@ -1,8 +1,8 @@
 ---
 title: Automated Network Documentation Explained
-description: Automated network documentation uses SNMP, LLDP, and ARP to map your network and keep diagrams current. How it works, what it replaces, and why it matters.
+description: Your network diagrams are wrong by the time you save them. Automated network documentation uses SNMP and LLDP to discover devices, map connections, and keep everything current without manual effort.
 date: 2026-03-25
-dateModified: 2026-03-25
+dateModified: 2026-04-16
 keyword: automated network documentation
 slug: automated-network-documentation
 tldr: Automated network documentation uses protocols like SNMP, LLDP, and ARP to discover devices, map connections, and keep records current without manual effort. It replaces spreadsheets and stale Visio files with live, always-accurate diagrams.
@@ -42,6 +42,22 @@ None of this requires installing agents on endpoints. A single scanner on the ne
 **Continuous, not point-in-time.** A manual diagram captures the network at one moment. Automated documentation rescans on a schedule - daily, hourly, whatever you set. Devices that appear, disappear, or change get reflected automatically.
 
 **Living output, not a static file.** The result is an interactive topology map, not a PNG or a Visio file. You can click a host to see its services, filter by subnet, search by hostname. And because it updates itself, the map you look at during a 2am outage matches reality.
+
+## How Automated Discovery Works, Step by Step
+
+The protocols above sound abstract until you see how they fit together. Here's what actually happens when an automated documentation tool scans your network:
+
+**Step 1: Find live hosts.** The scanner sends ARP requests across your subnets. Every device that responds reveals its IP address and MAC address. This is fast (a /24 subnet takes seconds) and catches everything from servers to printers to IoT devices that don't respond to ping.
+
+**Step 2: Identify what each host is.** For each live IP, the scanner runs service detection: port scans identify what's listening (HTTP on 443, SSH on 22, PostgreSQL on 5432), and SNMP queries pull system descriptions, hardware models, and serial numbers from devices that support it.
+
+**Step 3: Map connections between devices.** This is where topology comes from. The scanner reads LLDP and CDP neighbor tables from switches and routers. These tables contain exactly what's connected to each port and what's on the other end. For devices that don't speak LLDP/CDP, ARP tables and MAC forwarding tables fill the gaps by tracing which MAC addresses are reachable through which switch ports.
+
+**Step 4: Build the topology.** The scanner correlates all of this: host A's MAC address appears in switch B's forwarding table on port 3, and switch B's LLDP table says port 24 connects to router C. The result is a complete map of what's connected to what, built from the network's own data.
+
+**Step 5: Repeat on schedule.** The scanner reruns automatically (daily, hourly, or on demand). New devices appear on the map. Removed devices disappear. Changed connections update. No human intervention required.
+
+The entire process is agentless. Nothing gets installed on the devices being documented. A single lightweight daemon on one machine in the network handles everything.
 
 ## What Automated Discovery Actually Finds
 
@@ -90,6 +106,18 @@ These three categories get conflated constantly. They're different tools solving
 | **Output** | Topology maps, device inventory, connection records | Dashboards, alerts, traffic graphs | Asset registers, license counts, depreciation |
 | **Examples** | Scanopy, NetBox (manual entry) | Auvik, PRTG, LibreNMS, Zabbix | Lansweeper, Device42, Snipe-IT |
 | **Best for** | Documentation, onboarding, DR planning, knowledge sharing | Uptime, performance, active troubleshooting | Procurement, compliance, license management |
+
+The distinction matters because buying the wrong category wastes money and leaves gaps.
+
+If your tool alerts you when a switch goes down, that's monitoring. If it tells you what's connected to that switch so you can assess blast radius during an outage, that's documentation. If it tracks when that switch was purchased and when its warranty expires, that's asset management.
+
+Most teams need all three. The mistake is assuming one tool covers the others. Monitoring tools like Auvik and PRTG show topology views, but those are a byproduct of monitoring data, not a dedicated documentation system. Asset management tools like Lansweeper track what you own, but their network maps are limited to what their agents report, not protocol-level topology. Automated documentation tools focus on one job: knowing what's on your network and how it's connected, kept current without manual effort.
+
+## Tools That Automate Network Documentation
+
+Several tools approach automated documentation from different angles. Some are dedicated documentation tools, others bundle mapping into a monitoring or asset management platform:
+
+<!-- vendor-table:scanopy,auvik,domotz,manageengine-opmanager,netdisco -->
 
 ## What to Look for in an Automated Documentation Tool
 
