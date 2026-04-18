@@ -108,18 +108,6 @@
     }
   },
   {
-    "id": "community_support",
-    "name": "Community Support",
-    "description": "Community support via GitHub issues and discussions",
-    "category": "Support",
-    "icon": "sparkle",
-    "color": "Gray",
-    "metadata": {
-      "is_coming_soon": false,
-      "minimum_plan": "Free"
-    }
-  },
-  {
     "id": "email_support",
     "name": "Email Support",
     "description": "Access to the Scanopy team via email support tickets",
@@ -168,22 +156,10 @@
     }
   },
   {
-    "id": "network_discovery",
-    "name": "Network Discovery",
-    "description": "Automatically discover hosts, services, and connections on your network",
+    "id": "network_mapping",
+    "name": "Automated Network Mapping",
+    "description": "Automatically discover hosts, services, and connections and map them as interactive topology diagrams",
     "category": "Discovery",
-    "icon": "sparkle",
-    "color": "Gray",
-    "metadata": {
-      "is_coming_soon": false,
-      "minimum_plan": "Free"
-    }
-  },
-  {
-    "id": "topology_visualization",
-    "name": "Topology Visualization",
-    "description": "Interactive network topology maps with automatic layout",
-    "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
     "metadata": {
@@ -276,45 +252,9 @@
     }
   },
   {
-    "id": "daemon_poll",
-    "name": "No Port Forwarding",
-    "description": "Run network scans without opening inbound ports or configuring port forwarding",
-    "category": "Discovery",
-    "icon": "sparkle",
-    "color": "Gray",
-    "metadata": {
-      "is_coming_soon": false,
-      "minimum_plan": "Free"
-    }
-  },
-  {
-    "id": "service_definitions",
-    "name": "200+ Service Definitions",
-    "description": "Auto-detect databases, containers, web servers, and more",
-    "category": "Discovery",
-    "icon": "sparkle",
-    "color": "Gray",
-    "metadata": {
-      "is_coming_soon": false,
-      "minimum_plan": "Free"
-    }
-  },
-  {
-    "id": "docker_integration",
-    "name": "Docker Discovery",
-    "description": "Automatic discovery of containerized services",
-    "category": "Discovery",
-    "icon": "sparkle",
-    "color": "Gray",
-    "metadata": {
-      "is_coming_soon": false,
-      "minimum_plan": "Free"
-    }
-  },
-  {
-    "id": "snmp_integration",
-    "name": "SNMP Discovery",
-    "description": "Query network devices for hardware, port, and performance details via SNMP",
+    "id": "discovery_integrations",
+    "name": "Discovery Integrations",
+    "description": "Discover Docker containers and query network devices via SNMP",
     "category": "Discovery",
     "icon": "sparkle",
     "color": "Gray",
