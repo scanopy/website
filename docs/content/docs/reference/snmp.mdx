@@ -12,24 +12,30 @@ Technical reference for Scanopy's SNMP implementation. For setup instructions, s
 | **SNMPv2c** | Supported |
 | **SNMPv3** | Planned |
 | **Transport** | UDP |
-| **Port** | 161 |
+| **Port** | 161, 1161 (fallback) |
 
 ## Queried MIBs
 
 | MIB | RFC | OID prefix | Collected fields |
 | --- | --- | ---------- | ---------------- |
 | **System MIB** | RFC 3418 | `1.3.6.1.2.1.1` | sysDescr, sysObjectID, sysUpTime, sysContact, sysName, sysLocation |
-| **IF-MIB** | RFC 2863 | `1.3.6.1.2.1.2` | ifDescr, ifType, ifSpeed, ifPhysAddress, ifAdminStatus, ifOperStatus |
-| **IP-MIB** | RFC 4293 | `1.3.6.1.2.1.4` | ipAdEntAddr, ipAdEntIfIndex, ipAdEntNetMask |
+| **IF-MIB** | RFC 2863 | `1.3.6.1.2.1.2`, `1.3.6.1.2.1.31.1.1` | ifDescr, ifType, ifSpeed, ifPhysAddress, ifAdminStatus, ifOperStatus, ifName, ifAlias, ifHighSpeed, ifMtu |
+| **IP-MIB** | RFC 4293 | `1.3.6.1.2.1.4` | ipAdEntAddr, ipAdEntIfIndex, ipAdEntNetMask, ipNetToMediaPhysAddress, ipNetToMediaNetAddress |
 | **LLDP-MIB** | IEEE 802.1AB | `1.0.8802.1.1.2` | lldpRemSysName, lldpRemPortId, lldpRemChassisId, lldpRemSysDesc |
 | **CDP-MIB** | Cisco proprietary | `1.3.6.1.4.1.9.9.23` | cdpCacheDeviceId, cdpCachePlatform, cdpCacheDevicePort, cdpCacheAddress |
+| **ENTITY-MIB** | RFC 6933 | `1.3.6.1.2.1.47` | entPhysicalMfgName, entPhysicalModelName, entPhysicalSerialNum |
+| **BRIDGE-MIB / Q-BRIDGE-MIB** | RFC 4188, RFC 4363 | `1.3.6.1.2.1.17` | dot1dTpFdbAddress (MAC learning), dot1qVlanStaticName (VLAN names), dot1qPvid (per-port native VLAN), dot1qVlanCurrentEgressPorts, dot1qVlanCurrentUntaggedPorts (VLAN membership) |
 
-## Planned MIBs
+## Data collected
 
-| MIB | RFC | Purpose |
-| --- | --- | ------- |
-| **Entity-MIB** | RFC 6933 | Physical chassis and module inventory |
-| **Bridge-MIB** | RFC 4188 | MAC address table and VLAN assignments |
+A successful SNMP run against a host populates the following entities in Scanopy:
+
+| Entity | Fields populated from SNMP |
+| ------ | -------------------------- |
+| **Host** | hostname (from sysName when DNS lacks one), sysDescr, sysObjectID, sysLocation, sysContact, sysName, manufacturer, model, serial number, chassis ID |
+| **Interface** | ifIndex, name / alias / description, type, speed, MTU, MAC, admin and oper status, native VLAN, tagged VLAN list, learned MACs, LLDP/CDP neighbor |
+| **Subnet** | CIDRs inferred from ipAddrTable entries |
+| **Host (remote)** | New hosts created from ARP entries on SNMP-discovered subnets |
 
 ## Timeouts and limits
 
@@ -39,6 +45,7 @@ Technical reference for Scanopy's SNMP implementation. For setup instructions, s
 | **Session timeout** | 5s | Timeout for establishing the UDP session |
 | **Walk timeout** | 30s | Maximum time for a full SNMP walk of a MIB table |
 | **Max entries** | 10,000 | Maximum rows returned from a single table walk |
+| **Integration timeout** | 5m | Wall-clock budget for a full SNMP integration run against a single host (probe + all queries) |
 
 ## Credential resolution order
 
@@ -48,12 +55,4 @@ When querying a host, the daemon resolves the community string in this order:
 2. **Network default** — credential assigned to the host's network
 3. **Fallback** — community string `public`
 
-If all credentials fail (timeout or authentication error), the host is scanned without SNMP data.
-
-## Security
-
-| Aspect | Detail |
-| ------ | ------ |
-| **At rest** | Community strings are encrypted in the database |
-| **In API responses** | Community strings are redacted (never returned) |
-| **On the wire** | SNMPv2c transmits community strings in cleartext — this is a protocol limitation. Use dedicated read-only strings and network segmentation to limit exposure |
+If all credentials fail on both UDP 161 and 1161, the host is discovered without SNMP-sourced data. Individual query failures within a successful session are logged and skipped — they do not abort the rest of the collection.
