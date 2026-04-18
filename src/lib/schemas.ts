@@ -137,7 +137,7 @@ export async function getSoftwareApplicationSchema() {
 		applicationCategory: 'NetworkApplication',
 		operatingSystem: 'Linux, Docker',
 		description:
-			'Automatic network discovery and documentation software. Create live, auto-updating network diagrams with one-time setup and zero upkeep.',
+			'Infrastructure documentation software. Deploy a lightweight scanner to automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
 		url: 'https://scanopy.net',
 		image: 'https://scanopy.net/scanopy-logo.webp',
 		screenshot: 'https://scanopy.net/hero-topology-dark.webp',
@@ -162,7 +162,7 @@ export function getProductSchema() {
 		'@type': 'Product',
 		name: 'Scanopy',
 		description:
-			'Automatic network discovery and documentation software. Create live, auto-updating network diagrams.',
+			'Infrastructure documentation software. Automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
 		image: 'https://scanopy.net/scanopy-logo.webp',
 		brand: {
 			'@type': 'Brand',

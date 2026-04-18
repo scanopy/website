@@ -1,0 +1,26 @@
+---
+title: L3 Logical
+description: How your network is logically segmented by subnet.
+---
+
+The L3 Logical perspective shows where every host appears in your network's IP address space. Subnets are containers, and each host is shown inside every subnet it has an address on. When a host has addresses on multiple subnets, it bridges them — making it visible at a glance which devices route, span, or otherwise touch multiple network segments.
+
+This is the default perspective and the most general-purpose view of your network.
+
+## What you see
+
+- **Containers**: Subnets — one per discovered network segment
+- **Nodes**: Each host's presence in each subnet it has an address on
+- **Connections**: Links between subnets where a single host has addresses on both, plus dependency overlays when configured with port-level detail
+
+## What drives it
+
+The L3 view is built from your discovered subnets and the IP addresses found on each host's interfaces. No manual setup is required — it appears as soon as discovery runs. [Dependencies](/using-scanopy/dependencies) configured with port-level detail surface as overlay connections on top of the structural layout.
+
+## When to use it
+
+- General-purpose situational awareness of the network
+- Spotting which devices bridge multiple segments (routers, firewalls, multi-homed servers)
+- Auditing which hosts live on which subnet
+
+See also: [Hosts & Subnets](/using-scanopy/network-data/), [Customizing Views](/using-scanopy/topology/customizing-views).

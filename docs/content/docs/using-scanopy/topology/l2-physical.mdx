@@ -1,0 +1,24 @@
+---
+title: L2 Physical
+description: How your network is physically wired.
+---
+
+The L2 Physical perspective shows the cable-level shape of your network — which device is plugged into which port on which switch. It's built from LLDP and CDP neighbor data, so any device that reports neighbor information appears as a container in this view, with its interfaces and ports as nodes inside.
+
+## What you see
+
+- **Containers**: Devices that report LLDP/CDP neighbors — typically managed switches and routers
+- **Nodes**: Their interfaces and ports
+- **Connections**: Physical links, derived from each side's neighbor table
+
+## What drives it
+
+LLDP and CDP run on managed network gear. When Scanopy queries a device with valid SNMP credentials, it pulls the neighbor table and uses it to draw links between interfaces. Devices that don't report neighbor data simply don't appear here — that's expected for unmanaged switches and most endpoints.
+
+## When to use it
+
+- Troubleshooting connectivity at the cable level
+- Planning physical changes (port moves, recabling)
+- Auditing port utilization and trunk configuration
+
+See also: [Credentials](/using-scanopy/credentials/), [Customizing Views](/using-scanopy/topology/customizing-views).

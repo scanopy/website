@@ -6,6 +6,7 @@ export { default as GalleryShowcase } from './GalleryShowcase.svelte';
 export { default as GithubStars } from './GithubStars.svelte';
 export { default as NewsletterSignup } from './NewsletterSignup.svelte';
 export { default as PageHero } from './PageHero.svelte';
+export { default as ViewSwitcher } from './ViewSwitcher.svelte';
 export { default as PricingSection } from './PricingSection.svelte';
 export { default as ServiceCatalog } from './ServiceCatalog.svelte';
 export { default as Tag } from './Tag.svelte';

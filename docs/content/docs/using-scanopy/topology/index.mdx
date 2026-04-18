@@ -1,0 +1,55 @@
+---
+title: Overview
+description: Interactive multi-perspective visualization of your infrastructure.
+---
+
+The topology generates an interactive visualization of your infrastructure, showing hosts, services, subnets, and their relationships. You can view your infrastructure from four different perspectives, each answering a different question.
+
+## Perspectives
+
+Each perspective shows a different angle of your infrastructure:
+
+- **[L2 Physical](/using-scanopy/topology/l2-physical)** — How is my network physically wired?
+- **[L3 Logical](/using-scanopy/topology/l3-logical)** — How is my network logically segmented?
+- **[Workloads](/using-scanopy/topology/workloads)** — Where does everything run, and what's inside what?
+- **[Application](/using-scanopy/topology/application)** — How do my services depend on each other?
+
+Switch between perspectives using the perspective selector in the toolbar. Each perspective has its own grouping options and edge types.
+
+## Topology States
+
+The topology indicator shows whether your visualization is current with the underlying data.
+
+| State            | Meaning                                                                           |
+| ---------------- | --------------------------------------------------------------------------------- |
+| **Up to Date**   | All data is current. No action needed.                                            |
+| **Stale**        | New entities added since last rebuild. Click **Rebuild** to include them.         |
+| **Conflict**     | Entities have been deleted. Click **Rebuild** to review removals before applying. |
+| **Locked**       | Layout is frozen. Toggle with **Lock/Unlock** to preserve positioning.            |
+| **Auto Rebuild** | Rebuilds automatically after changes. Convenient, but resets manual positioning.  |
+
+**Note**: Rebuilding resets node positions and container sizes. Edge handle positions are preserved when possible.
+
+## Refining Your Topology
+
+After initial discovery, these refinements make your topology more accurate across all perspectives.
+
+### Assign Unclaimed Ports
+
+Open hosts and go to **Services > Unclaimed Open Ports** to assign detected ports to the services that are actually listening on them.
+
+See [Unclaimed Open Ports](/using-scanopy/network-data/#unclaimed-open-ports).
+
+### Consolidate Multi-NIC Hosts
+
+Hosts detected across multiple VLANs can be merged into a single logical host.
+
+See [Consolidating Duplicate Hosts](/using-scanopy/network-data/#consolidating-duplicate-hosts).
+
+## Edit Mode
+
+Toggle **Edit Mode** in the toolbar to enable drag-to-reposition and resize. When edit mode is off, you can pan and zoom without accidentally moving things.
+
+## Exporting
+
+Click **Export** to download a PNG of your topology with all customizations and positioning intact.

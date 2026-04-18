@@ -11,7 +11,7 @@
 	<title>Community Showcase - Scanopy</title>
 	<meta
 		name="description"
-		content="See what the Scanopy community is building. Explore topology diagrams from homelabs, businesses, and creative network setups."
+		content="See what the Scanopy community is building. Explore infrastructure topologies from homelabs, businesses, and enterprise networks."
 	/>
 	<link rel="canonical" href="https://scanopy.net/showcase" />
 	<meta name="robots" content="noindex" />
@@ -23,13 +23,13 @@
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Community Showcase</h1>
 			<p class="mx-auto max-w-2xl text-xl text-gray-400">
 				See what the community is building with Scanopy. From homelabs to enterprise networks,
-				explore real topology diagrams created by our users.
+				explore real topologies created by our users.
 			</p>
 			<p class="mx-auto mt-4 max-w-2xl text-gray-500">
-				Every topology below was generated automatically by Scanopy's network discovery engine.
-				No manual drawing, no drag-and-drop - just deploy the scanner and let it map your
+				Every topology below was generated automatically by Scanopy's discovery engine.
+				No manual drawing, no drag-and-drop. Just deploy the scanner and let it map your
 				infrastructure. From single-subnet homelabs to multi-VLAN production networks, these
-				diagrams update themselves as your network changes.
+				topologies update themselves as your infrastructure changes.
 			</p>
 		</div>
 
@@ -48,7 +48,7 @@
 				class="btn-primary inline-flex items-center gap-2"
 			>
 				<Send class="h-4 w-4" />
-				Submit Your Diagram
+				Submit Your Topology
 			</a>
 		</div>
 	</div>

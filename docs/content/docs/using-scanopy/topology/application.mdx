@@ -1,0 +1,24 @@
+---
+title: Application
+description: How your services depend on each other.
+---
+
+The Application perspective shows your services grouped by application, with explicit dependencies as the connections between them. Generic infrastructure services like SSH, NTP, and DHCP are hidden by default so the view stays focused on the applications you actually care about.
+
+## What you see
+
+- **Containers**: Application groups — one per application tag you've defined
+- **Nodes**: Services that belong to those applications
+- **Connections**: [Dependencies](/using-scanopy/dependencies) — request paths and hub-and-spoke relationships
+
+## What drives it
+
+Application groups are tags with the application flag set. A service joins a group either through its own tag or by inheriting from its host's tag. Connections come from dependencies you've created between services. The first time you open this perspective, the UI walks you through defining groups and assigning services.
+
+## When to use it
+
+- Understanding the shape of an application or stack
+- Mapping request flow across services
+- Communicating service relationships to people who don't think in subnets
+
+See also: [Dependencies](/using-scanopy/dependencies), [Customizing Views](/using-scanopy/topology/customizing-views).

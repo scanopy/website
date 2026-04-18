@@ -77,7 +77,11 @@
 	const billingPlanFixtures = billingPlansData as BillingPlanFixture[];
 	const featureFixtures = featuresData as FeatureFixture[];
 
-	const plans: BillingPlan[] = billingPlanFixtures.map((item) => ({
+	// Build the full plan list, then filter out Free for the public pricing UI.
+	// The full fixture stays accessible via `billingPlanHelpers` below, so
+	// `previous_tier` lookups (e.g., the Starter plan referencing Free for its
+	// incremental feature list) still resolve correctly even though Free is hidden.
+	const allPlans: BillingPlan[] = billingPlanFixtures.map((item) => ({
 		base_cents: item.metadata.base_cents,
 		seat_cents: item.metadata.seat_cents,
 		included_seats: item.metadata.included_seats,
@@ -89,6 +93,7 @@
 		trial_days: item.metadata.trial_days,
 		type: item.id
 	}));
+	const plans: BillingPlan[] = allPlans.filter((p) => p.type !== 'Free');
 
 	// ============================================================================
 	// Metadata Helpers Factory

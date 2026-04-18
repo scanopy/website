@@ -1,0 +1,34 @@
+---
+title: Dependencies
+description: Service-level relationships that show request flows and shared resources.
+---
+
+Dependencies are connections you create between services to capture relationships that network discovery can't infer on its own — like the chain a request travels through your stack, or the set of services that all rely on a shared database.
+
+## Dependency types
+
+**Request Path** — An ordered chain showing how requests flow through services:
+
+```
+Internet → Reverse Proxy → App Server → Database
+```
+
+Use this for request routing, data pipelines, and backup chains.
+
+**Hub and Spoke** — A central service with multiple dependents:
+
+```
+      Web App ─┐
+      Workers ──→ Database
+      Admin ───┘
+```
+
+Use this when several services connect to a shared resource like a database, DNS server, or message queue.
+
+## Where dependencies appear
+
+Dependencies are the primary connections in the **Application** perspective. They can also appear as overlays in the **L3 Logical** perspective when configured with port-level detail. They aren't shown in the **L2 Physical** or **Workloads** perspectives.
+
+## Creating dependencies
+
+Select multiple elements in the topology and create a dependency between them from the selection. You can also manage existing dependencies under **Assets > Dependencies**.

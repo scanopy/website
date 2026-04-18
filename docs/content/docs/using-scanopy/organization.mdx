@@ -18,7 +18,9 @@ Organizations are automatically created during registration and cannot be manual
 | **Member** | Create/edit entities; run discoveries; manage daemons; invite Visualizers |
 | **Viewer** | View entities only                                                        |
 
-Invite users via **Platform > Users** — generate an invite link and share it.
+Account creation is invite-only — there is no self-registration. Invite users via **Platform > Users** — generate an invite link, select the invitee's role and which networks they may access, and share the link or send it by email.
+
+Removing a user revokes all of their API keys, pending invitations, and network access grants.
 
 ## Networks
 
@@ -29,6 +31,10 @@ Networks are the primary organizational unit. Each network represents a distinct
 - Separate networks for production vs. development
 - One network per physical location
 - Distinct networks for different security zones
+
+### Network Access
+
+Users can be restricted to specific networks within an organization. When inviting a user, select which networks they may access — all data queries are filtered to those networks. This allows granting a contractor or external partner visibility into only the networks relevant to them while keeping other environments hidden.
 
 ## Credentials
 

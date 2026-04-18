@@ -2,7 +2,7 @@
   {
     "id": "share_views",
     "name": "Shareable Diagrams",
-    "description": "Share live network diagrams with others",
+    "description": "Share live topology views with others",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
@@ -146,7 +146,7 @@
   {
     "id": "embeds",
     "name": "Embeddable Diagrams",
-    "description": "Embed live network diagrams in wikis, dashboards, or documentation",
+    "description": "Embed live topologies in wikis, dashboards, or documentation",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
@@ -170,7 +170,7 @@
   {
     "id": "png_export",
     "name": "PNG Export",
-    "description": "Export network diagrams as high-resolution PNG images",
+    "description": "Export topologies as high-resolution PNG images",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
@@ -182,7 +182,7 @@
   {
     "id": "svg_export",
     "name": "SVG Export",
-    "description": "Export network diagrams as scalable SVG vector images",
+    "description": "Export topologies as scalable SVG vector images",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
@@ -218,7 +218,7 @@
   {
     "id": "pdf_export",
     "name": "PDF Export",
-    "description": "Export network diagrams as printable PDF documents",
+    "description": "Export topologies as printable PDF documents",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",
@@ -230,7 +230,7 @@
   {
     "id": "html_export",
     "name": "HTML Export",
-    "description": "Export network diagrams as self-contained HTML pages for offline viewing",
+    "description": "Export topologies as self-contained HTML pages for offline viewing",
     "category": "Visualization",
     "icon": "sparkle",
     "color": "Gray",

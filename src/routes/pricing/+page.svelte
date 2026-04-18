@@ -17,7 +17,7 @@
 	const pricingFaqs = [
 		{
 			question: 'Is there a free plan?',
-			answer: 'Yes. The Free plan on Scanopy Cloud lets you discover and document up to 25 hosts on one network at no cost - no credit card required. If you prefer to self-host, the Community plan is also free with no host limit.'
+			answer: 'Pro and Business plans include a 14-day free trial, no credit card required. If you prefer to self-host, the <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is free and open-source with no host limit.'
 		},
 		{
 			question: 'Do you charge per device?',
@@ -34,6 +34,10 @@
 		{
 			question: 'Do you offer annual billing?',
 			answer: 'Yes. Annual billing is available on all paid plans and saves roughly 20% compared to monthly pricing.'
+		},
+		{
+			question: 'How does pricing work for MSPs?',
+			answer: "Each 'network' in Scanopy maps to one client site, VLAN group, or isolated environment — so your plan scales with the number of clients whose infrastructure you document. Shareable views let you give each client a live map of their own environment without needing a Scanopy account."
 		},
 		{
 			question: 'Can I upgrade or downgrade later?',
@@ -79,6 +83,18 @@
 	</div>
 </section>
 
+<!-- For MSPs: one network = one client site -->
+<section class="border-t border-gray-800 py-8">
+	<div class="container mx-auto max-w-3xl px-4">
+		<h3 class="mb-2 text-lg font-semibold text-white">
+			For MSPs: one network = one client site
+		</h3>
+		<p class="text-sm text-gray-400 leading-relaxed">
+			Each network in Scanopy maps to one client site, VLAN group, or isolated environment. Your plan scales with the number of clients whose infrastructure you document. Shareable views let you give each client a live map of their own environment — no logins required.
+		</p>
+	</div>
+</section>
+
 <FeaturedIn mentions={pressMentions} />
 
 <!-- FAQ -->
@@ -93,7 +109,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm text-gray-400 leading-relaxed">
-			Every Scanopy plan uses flat-rate pricing - you don't pay per device. The Free plan lets you document up to 25 hosts on a single network, which is enough to evaluate everything Scanopy can do. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks - ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community plan is free with no host limits, and the On-Premise plan adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
+			Every Scanopy plan uses flat-rate pricing, you don't pay per device. Pro and Business include a 14-day free trial so you can evaluate Scanopy before committing. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks - ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community plan is free with no host limits, and the On-Premise plan adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
 		</p>
 	</div>
 </section>

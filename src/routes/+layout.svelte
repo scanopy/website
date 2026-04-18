@@ -111,7 +111,7 @@
 		"height": 500
 	},
 	"image": "https://scanopy.net/scanopy-logo.webp",
-	"description": "Automatic network discovery and documentation. Clean network diagrams with one-time setup and zero upkeep.",
+	"description": "Infrastructure documentation software. Deploy a lightweight scanner to automatically discover and document network architecture, service dependencies, workload placement, and physical topology.",
 	"address": {
 		"@type": "PostalAddress",
 		"streetAddress": "1207 Delaware Ave Suite 1502",

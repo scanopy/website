@@ -40,20 +40,20 @@
 </script>
 
 <svelte:head>
-	<title>Community Edition - Free, Self-Hosted Network Documentation | Scanopy</title>
+	<title>Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy</title>
 	<meta
 		name="description"
-		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
+		content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
 	<link rel="canonical" href="https://scanopy.net/community" />
 
-	<meta property="og:title" content="Community Edition - Free, Self-Hosted Network Documentation | Scanopy" />
-	<meta property="og:description" content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
+	<meta property="og:title" content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy" />
+	<meta property="og:description" content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
 	<meta property="og:url" content="https://scanopy.net/community" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Community Edition - Free, Self-Hosted Network Documentation | Scanopy" />
-	<meta name="twitter:description" content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
+	<meta name="twitter:title" content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy" />
+	<meta name="twitter:description" content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
@@ -74,7 +74,7 @@
 			</div>
 
 			<h1 class="mb-4 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
-				Free, self-hosted network documentation
+				Free, self-hosted infrastructure documentation
 			</h1>
 
 			<p class="mx-auto max-w-2xl text-xl text-gray-300">
@@ -89,11 +89,11 @@
 	<div class="container mx-auto max-w-3xl px-4">
 		<p class="text-lg leading-relaxed text-gray-300">
 			Scanopy Community is the free, self-hosted edition of Scanopy - the same automatic
-			network discovery engine that powers our cloud plans, running entirely on your
+			discovery engine that powers our cloud plans, running entirely on your
 			infrastructure. It's built for homelabbers, home network enthusiasts, and small teams
-			who want live, auto-updating network diagrams without sending data to a third party.
-			Deploy with a single Docker command, scan your network, and get a topology map in
-			minutes. No account required, no host limits, no time restrictions.
+			who want auto-updating infrastructure documentation without sending data to a third party.
+			Deploy with a single Docker command, scan your network, and get four views of
+			your infrastructure in minutes. No account required, no host limits, no time restrictions.
 		</p>
 	</div>
 </section>

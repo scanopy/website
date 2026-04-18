@@ -1,6 +1,6 @@
 ---
-title: Hosts, Subnets & Groups
-description: Managing discovered hosts, network segments, and logical groupings.
+title: Hosts & Subnets
+description: Managing discovered hosts and network segments.
 ---
 
 ## Hosts
@@ -40,7 +40,7 @@ Scanopy tracks which VMs and containers run on which hosts:
 - **Proxmox**: Links VMs and LXC containers to their Proxmox host
 - **Docker**: Links containers to their Docker host
 
-These relationships appear in the topology and host details, showing your virtualization hierarchy.
+These relationships appear in the topology and host details, showing your virtualization hierarchy. The [Workloads perspective](/using-scanopy/topology/workloads) provides a dedicated view of this hierarchy.
 
 ### Service Detection
 
@@ -85,29 +85,3 @@ Two special subnet types use CIDR `0.0.0.0/0` and serve as organizational contai
 - Remote office machines
 - Friend's servers you want to track
 
-## Groups
-
-Groups create logical connections between services for topology visualization. They don't affect how Scanopy discovers or scans — they're purely for showing relationships that network topology alone doesn't capture.
-
-**Hub and Spoke** — when multiple services connect to a central one (database clients, API consumers):
-
-<Mermaid chart={`
-flowchart TD
-    webapp["Web App"]
-    workers["Workers"]
-    database["Database"]
-    admin["Admin"]
-
-    workers --> webapp
-    database --> webapp
-    admin --> webapp
-`} />
-
-**Path** — for linear flows (request routing, data pipelines, backup chains):
-
-<Mermaid chart={`
-flowchart LR
-    user["User"] --> proxy["Proxy"] --> app["App"] --> database["Database"]
-`} />
-
-Manage groups via **Assets > Groups**.

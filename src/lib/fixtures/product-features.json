@@ -2,26 +2,34 @@
 	{
 		"id": "deploy_scanner",
 		"title": "Deploy a scanner",
-		"description": "Install a lightweight daemon on any network. It auto-discovers hosts, services, and subnets.",
+		"description": "Install a lightweight daemon on any network segment. It discovers hosts, services, subnets, switches, and workloads.",
 		"icon": "Download",
 		"schemaLabel": "Automatic network discovery",
 		"group": "how_it_works"
 	},
 	{
-		"id": "topology_builds_itself",
-		"title": "Topology builds itself",
-		"description": "As the scan runs, a full network topology generates automatically - no manual drawing.",
-		"icon": "Network",
-		"schemaLabel": "Automatic topology generation",
+		"id": "four_views_generate",
+		"title": "Four views generate automatically",
+		"description": "Physical (L2), Logical (L3), Workloads, and Applications. All from one scan.",
+		"icon": "Layers",
+		"schemaLabel": "Four infrastructure topology views",
 		"group": "how_it_works"
 	},
 	{
 		"id": "stays_up_to_date",
-		"title": "Stays up to date on a schedule",
-		"description": "Topology regenerates automatically. No manual re-scans, no stale docs.",
+		"title": "Stays accurate on a schedule",
+		"description": "Rescans on your cadence, so the model never goes stale.",
 		"icon": "RefreshCw",
 		"schemaLabel": "Scheduled automatic updates",
 		"group": "how_it_works"
+	},
+	{
+		"id": "four_views",
+		"title": "Four views of your infrastructure",
+		"description": "Network architecture, service dependencies, workload placement, and physical topology, each answering a different question about your infrastructure.",
+		"icon": "Layers",
+		"schemaLabel": "Four infrastructure views",
+		"group": "what_you_get"
 	},
 	{
 		"id": "service_detection",
@@ -29,6 +37,14 @@
 		"description": "The topology shows <a href=\"/services\" class=\"text-blue-400 hover:underline\">{{SERVICE_COUNT}} detected services</a> - Docker, PostgreSQL, nginx, and more - right in the visualization.",
 		"icon": "Box",
 		"schemaLabel": "{{SERVICE_COUNT}} service detection",
+		"group": "what_you_get"
+	},
+	{
+		"id": "composable_grouping",
+		"title": "Composable grouping",
+		"description": "Organize by VLAN, application group, workload hierarchy, or custom tags. Stack grouping rules to build the view you need.",
+		"icon": "Filter",
+		"schemaLabel": "Composable infrastructure grouping",
 		"group": "what_you_get"
 	},
 	{

@@ -1,0 +1,47 @@
+---
+title: Customizing Views
+description: Tailor your topology with grouping rules, edge filters, and manual layout.
+---
+
+Each topology perspective can be customized with grouping rules, edge filters, and manual positioning to show exactly what you need.
+
+## Grouping Rules
+
+Grouping rules change how things are organized in your topology. Use the **Group by** controls in the toolbar to apply them. Each perspective has a fixed top-level container rule and a customizable set of element rules that organize nodes within those containers.
+
+**Container rules** define what the main containers are:
+
+- **Subnet** — L3 Logical's container rule
+- **Application** — Application's container rule
+- **Host** — L2 Physical and Workloads' container rule
+- **Docker Bridges** — On L3 Logical, collapses Docker bridge subnets into their host
+
+**Element rules** organize nodes within each container into sub-groups. Each rule applies to specific perspectives:
+
+| Rule | Applies to |
+|---|---|
+| **Service Category** | Application, Workloads |
+| **Tag** | All perspectives |
+| **Hypervisor** | Workloads |
+| **Container Runtime** | Workloads |
+| **Docker Stack** | L3 Logical, Application |
+| **Trunk Ports** | L2 Physical |
+| **VLAN** | L2 Physical (groups access ports by native VLAN) |
+| **Port Status** | L2 Physical |
+
+## Edge Filtering
+
+Each perspective shows different connection types. Use the edge filter controls to toggle connection types on or off. Some connections are shown by default and others are available as overlays — toggle them on when you need the extra detail.
+
+## Tag-Based Filtering
+
+Filter your topology by tags to focus on what matters. Filtered elements fade to reduced opacity instead of disappearing, so the overall layout stays stable while your focus area stands out.
+
+## Positioning and Layout
+
+- **Drag nodes** to reposition hosts and services (requires Edit Mode)
+- **Drag container edges** to resize containers
+- **Click connections** to show handles, then drag to reroute them
+
+Use **Lock** to preserve your layout after arranging things.
+

@@ -1,0 +1,40 @@
+---
+title: Workloads
+description: Where everything runs and what's inside what.
+---
+
+The Workloads perspective shows your compute hierarchy — what runs where. Hosts contain hypervisors, hypervisors contain VMs, VMs can contain container runtimes, and container runtimes contain containers. The nesting itself shows the relationships, so this view has no connection lines.
+
+A typical view might show:
+
+```
+bare-metal-host
+  └── Proxmox
+        ├── vm-web-server
+        │     └── Docker
+        │           ├── nginx
+        │           ├── app
+        │           └── postgres
+        └── vm-monitoring
+              └── Docker
+                    ├── grafana
+                    └── prometheus
+```
+
+## What you see
+
+- **Containers**: Hosts, with hypervisor and container-runtime sub-containers nested inside
+- **Nodes**: Managed workloads — VMs, containers, and other virtualized resources
+- **Connections**: None. The nesting is the relationship.
+
+## What drives it
+
+The hierarchy is built from virtualization relationships on each entity: a VM points at the hypervisor service that runs it, and a container points at the container runtime service that runs it. Docker containers populate automatically when a Docker credential is configured. Proxmox VMs and LXC containers must be linked manually since they aren't tied to their hypervisor by network discovery alone.
+
+## When to use it
+
+- Capacity and consolidation planning
+- Tracing what's running on a given physical host
+- Auditing virtualization sprawl
+
+See also: [Virtualization Relationships](/using-scanopy/network-data/#virtualization-relationships).

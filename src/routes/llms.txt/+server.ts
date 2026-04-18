@@ -129,16 +129,16 @@ export async function GET() {
 
 	const content = `# Scanopy
 
-> Automatic network discovery and documentation software. Create live, auto-updating network diagrams with one-time setup and zero upkeep.
+> Infrastructure documentation software. Deploy a scanner, get four views of your infrastructure: network architecture, service dependencies, workload placement, and physical topology. Kept accurate automatically.
 
 ## What is Scanopy?
 
-Scanopy is a network documentation tool that automatically scans networks and generates live topology diagrams. It discovers hosts, services, and subnets, then creates visual documentation that stays up to date without manual intervention.
+Scanopy is an infrastructure documentation platform that automatically scans networks and generates four topology views. It discovers hosts, services, subnets, switches, and workloads, then creates visual documentation that stays up to date without manual intervention.
 
 ## Key Features
 
-- **Automatic Discovery**: Scans any network and discovers every host, service, and subnet automatically
-- **Live Diagrams**: Topology diagrams that update as the network changes
+- **Automatic Discovery**: Scans any network and discovers every host, service, subnet, and workload automatically
+- **Four Topology Views**: Network architecture, service dependencies, workload placement, and physical topology
 - **Service Detection**: Auto-detects ${services.length}+ services across categories: ${topCategories}
 - **Versioning**: Create branches, lock versions, and compare network state over time
 - **Security Visibility**: See which services are exposed and flag misconfigurations
@@ -152,7 +152,7 @@ Full list: https://scanopy.net/services
 
 ## Use Cases
 
-- Network documentation for homelabs and enterprises
+- Infrastructure documentation for IT teams and enterprises
 - Client onboarding for MSPs and IT consultants
 - Audit and compliance documentation
 - Infrastructure change tracking
@@ -186,7 +186,7 @@ ${comparisonLines}
 1. Sign up at https://app.scanopy.net/onboarding
 2. Install the Scanopy agent on your network
 3. Run your first scan
-4. View your auto-generated network diagram
+4. View your auto-generated infrastructure documentation
 
 ## Contact
 

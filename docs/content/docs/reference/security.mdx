@@ -41,6 +41,21 @@ The daemon performs passive and active network discovery:
 - **Scanopy Cloud**: All communication uses HTTPS/TLS encryption
 - **Self-hosted**: HTTP by default for local deployments. HTTPS should be configured if exposing the server over the internet (via reverse proxy like nginx, Caddy, or Traefik)
 
+## Authentication
+
+Scanopy supports email/password authentication with email verification, and single sign-on (SSO) via OpenID Connect (OIDC).
+
+- **Scanopy Cloud**: Google and Microsoft identity providers are available.
+- **Self-hosted / enterprise managed**: Any OIDC-compliant provider can be configured, including Authentik, Keycloak, Auth0, and Okta. See the [OIDC configuration guide](/guides/oidc) for setup instructions.
+
+Account creation is invite-only — there is no self-registration. See [Organization & Access](/using-scanopy/organization) for details on roles and user management.
+
+## Tenant Isolation
+
+Organizations are the top-level tenant boundary in Scanopy. Within an organization, networks provide further separation — each network contains its own hosts, services, subnets, and topology data.
+
+All API queries are scoped to the authenticated user's organization and permitted networks. Users can be restricted to specific networks, ensuring they only see data relevant to them. This is logical multi-tenancy with application-enforced boundaries.
+
 ## Permissions
 
 ### Daemon Requirements
