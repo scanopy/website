@@ -1,0 +1,63 @@
+---
+title: Deploying the Commercial Edition
+description: Run Scanopy's commercial server build with a license key, the integrated daemon, and email.
+---
+
+The commercial edition of Scanopy is a license-gated server build for customers on a commercial plan. This guide covers only what differs from the standard self-hosted install — see [Installing Scanopy (Self-Hosted)](/self-hosted-server/server-installation/) for requirements, verifying the install, and accessing the UI.
+
+## What's different
+
+The commercial deployment is identical to the community deployment except for two things on the `server` service:
+
+| | Community | Commercial |
+| --- | --- | --- |
+| **Server image** | `ghcr.io/scanopy/scanopy/server:latest` | `ghcr.io/scanopy/scanopy/server-commercial:latest` |
+| **License key** | Not used | `SCANOPY_LICENSE_KEY` is **required** |
+
+Without a valid license key, the commercial server starts in a locked state. The bundled `docker-compose.commercial.yml` fails fast at startup if `SCANOPY_LICENSE_KEY` is unset, so you'll see a clear error rather than a silently locked server.
+
+## 1. Download the compose file
+
+```bash
+curl -O https://raw.githubusercontent.com/scanopy/scanopy/refs/heads/main/docker-compose.commercial.yml
+```
+
+## 2. Set your license key
+
+Your license key comes with your commercial plan. If you don't have one, contact `licensing@scanopy.net`.
+
+Create a `.env` file next to the compose file:
+
+```bash
+SCANOPY_LICENSE_KEY=your-license-key-here
+```
+
+Docker Compose loads `.env` automatically. Alternatively, export `SCANOPY_LICENSE_KEY` in your shell before starting.
+
+## 3. Start Scanopy
+
+```bash
+docker compose -f docker-compose.commercial.yml up -d
+```
+
+The rest of the flow — verifying the containers are running and accessing the UI — is the same as the [standard install](/self-hosted-server/server-installation/#4-verify-installation).
+
+## The integrated daemon
+
+The compose stack includes an integrated daemon that runs alongside the server. The server auto-initializes it on first start, and it immediately begins scanning your local network: Layer 2 and Layer 3 host discovery, port and service detection, and Docker container discovery via the mounted Docker socket.
+
+You don't need to configure anything for the integrated daemon to work. If you'd rather not run a daemon in the same stack as the server — for example, you plan to run dedicated daemons elsewhere — remove the `daemon` service from the compose file and clear the `SCANOPY_INTEGRATED_DAEMON_URL` environment variable on the `server` service.
+
+You can then point one or more standalone daemons at your server. See [Setting Up Daemons](/setting-up-daemons/) or the [Quick Start](/quick-start/) for deploying a daemon.
+
+## Recommended: configure SMTP
+
+Configuring an SMTP server lets Scanopy send email. Without it, email-dependent features are disabled — password resets, user invites, and notification emails won't work. For a multi-user commercial deployment we recommend setting it up so your team can invite members and recover accounts.
+
+SMTP is configured with a few environment variables on the `server` service. See [SMTP Configuration](/reference/server-configuration/#smtp-configuration) in the server configuration reference for the full list and an example.
+
+## Next steps
+
+- [Server Configuration](/reference/server-configuration/) — Configure server settings
+- [Configuring Single Sign-On (OIDC)](/guides/oidc/) — Set up enterprise authentication
+- [Quick Start](/quick-start/) — Deploy your first daemon

@@ -1,5 +1,5 @@
 {
   "title": "Self-Hosted Server",
   "defaultOpen": true,
-  "pages": ["server-installation", "upgrading", "troubleshooting"]
+  "pages": ["server-installation", "commercial-deployment", "upgrading", "troubleshooting"]
 }
