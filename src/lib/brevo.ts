@@ -61,7 +61,7 @@ interface ContactInquiryData {
 	company: string;
 	numemployees: string;
 	urgency?: string;
-	networkCount?: string;
+	networkCount?: number | null;
 	message?: string;
 	planType: string;
 }
@@ -116,7 +116,7 @@ export async function submitContactInquiry(
 	formData.append('INQUIRY_COMPANY', data.company);
 	formData.append('INQUIRY_NUM_EMPLOYEES', data.numemployees);
 	formData.append('INQUIRY_URGENCY', data.urgency || '');
-	formData.append('INQUIRY_NETWORK_COUNT', data.networkCount || '');
+	formData.append('INQUIRY_NETWORK_COUNT', data.networkCount != null ? String(data.networkCount) : '');
 	formData.append('INQUIRY_MESSAGE', data.message || '');
 	formData.append('INQUIRY_PLAN_TYPE', data.planType);
 	if (token) {

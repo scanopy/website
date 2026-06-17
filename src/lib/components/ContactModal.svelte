@@ -19,7 +19,7 @@
 	let company = $state('');
 	let teamSize = $state('');
 	let urgency = $state('');
-	let networkCount = $state('');
+	let networkCount = $state<number | null>(null);
 	let useCase = $state('');
 	let loading = $state(false);
 	let status = $state<'idle' | 'success' | 'error'>('idle');
@@ -56,7 +56,7 @@
 		company = '';
 		teamSize = '';
 		urgency = '';
-		networkCount = '';
+		networkCount = null;
 		useCase = '';
 		status = 'idle';
 		errorMessage = '';
@@ -80,69 +80,38 @@
 		}
 	}
 
+	function validateForm(): string | null {
+		if (!email.trim()) return 'Please enter your email address';
+		if (!validateEmail(email)) return 'Please enter a valid email address';
+		if (!firstName.trim()) return 'Please enter your first name';
+		if (!lastName.trim()) return 'Please enter your last name';
+		if (!company.trim()) return 'Please enter your company name';
+		if (!teamSize) return 'Please select your company size';
+		if (!urgency) return 'Please select a timeline';
+		if (networkCount === null || networkCount === undefined)
+			return 'Please enter the number of networks/sites';
+		if (!useCase.trim()) return 'Please describe your use case';
+		return null;
+	}
+
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
 
-		if (!email.trim()) {
-			status = 'error';
-			errorMessage = 'Please enter your email address';
-			return;
-		}
-
-		if (!validateEmail(email)) {
-			status = 'error';
-			errorMessage = 'Please enter a valid email address';
-			return;
-		}
-
-		if (!firstName.trim()) {
-			status = 'error';
-			errorMessage = 'Please enter your first name';
-			return;
-		}
-
-		if (!lastName.trim()) {
-			status = 'error';
-			errorMessage = 'Please enter your last name';
-			return;
-		}
-
-		if (!company.trim()) {
-			status = 'error';
-			errorMessage = 'Please enter your company name';
-			return;
-		}
-
-		if (!teamSize) {
-			status = 'error';
-			errorMessage = 'Please select your company size';
-			return;
-		}
-
-		if (!urgency) {
-			status = 'error';
-			errorMessage = 'Please select a timeline';
-			return;
-		}
-
-		if (!networkCount.trim()) {
-			status = 'error';
-			errorMessage = 'Please enter the number of networks/sites';
-			return;
-		}
-
-		if (!useCase.trim()) {
-			status = 'error';
-			errorMessage = 'Please describe your use case';
-			return;
-		}
-
-		loading = true;
-		status = 'idle';
-		errorMessage = '';
-		fieldErrors = {};
-
+		// Everything runs inside try/catch so an unexpected error can never leave
+		// the form in a silent no-op state — it always surfaces as a visible error.
 		try {
+			const validationError = validateForm();
+			if (validationError) {
+				status = 'error';
+				errorMessage = validationError;
+				return;
+			}
+
+			loading = true;
+			status = 'idle';
+			errorMessage = '';
+			fieldErrors = {};
+
 			const result = await submitContactInquiry(PUBLIC_BREVO_CONTACT_FORM_URL, {
 				email: email.trim(),
 				firstname: firstName.trim(),
@@ -150,7 +119,7 @@
 				company: company.trim(),
 				numemployees: teamSize,
 				urgency: urgency || undefined,
-				networkCount: networkCount || undefined,
+				networkCount: networkCount ?? undefined,
 				message: useCase.trim() || undefined,
 				planType
 			});
