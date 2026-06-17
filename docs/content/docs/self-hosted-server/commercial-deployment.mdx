@@ -3,6 +3,10 @@ title: Deploying the Commercial Edition
 description: Run Scanopy's commercial server build with a license key, the integrated daemon, and email.
 ---
 
+<Callout type="info">
+Interested in running the commercial edition? Reach out to [licensing@scanopy.net](mailto:licensing@scanopy.net) to get a license key. You can review what the commercial self-hosted edition includes on the [pricing page](https://scanopy.net/pricing).
+</Callout>
+
 The commercial edition of Scanopy is a license-gated server build for customers on a commercial plan. This guide covers only what differs from the standard self-hosted install — see [Installing Scanopy (Self-Hosted)](/self-hosted-server/server-installation/) for requirements, verifying the install, and accessing the UI.
 
 ## What's different
@@ -24,7 +28,7 @@ curl -O https://raw.githubusercontent.com/scanopy/scanopy/refs/heads/main/docker
 
 ## 2. Set your license key
 
-Your license key comes with your commercial plan. If you don't have one, contact `licensing@scanopy.net`.
+Your license key comes with your commercial plan. If you don't have one, contact [licensing@scanopy.net](mailto:licensing@scanopy.net).
 
 Create a `.env` file next to the compose file:
 
@@ -52,7 +56,18 @@ You can then point one or more standalone daemons at your server. See [Setting U
 
 ## Recommended: configure SMTP
 
-Configuring an SMTP server lets Scanopy send email. Without it, email-dependent features are disabled — password resets, user invites, and notification emails won't work. For a multi-user commercial deployment we recommend setting it up so your team can invite members and recover accounts.
+Scanopy uses email for account recovery, security notifications, and operational alerts. SMTP is **optional** — the app is fully usable without it (when no email service is configured, new accounts are auto-verified, so users can register and sign in normally) — but we recommend configuring it for any multi-user deployment.
+
+**Works without SMTP**
+
+- Registration and sign-in work normally.
+- You can still invite teammates: the invite screen generates a shareable link you copy and send yourself. SMTP only adds the convenience of having Scanopy email the invite for you.
+
+**Requires SMTP**
+
+- **Password reset** — recovery is email-only. Without SMTP, a user who forgets their password has no self-service way back in, so this is the main reason to set it up.
+- **Security notifications** — alerts when a password or email address changes, or an SSO provider is linked or unlinked.
+- **Operational alerts** — warnings when a daemon becomes unreachable or is placed on standby, plus per-scan discovery summaries.
 
 SMTP is configured with a few environment variables on the `server` service. See [SMTP Configuration](/reference/server-configuration/#smtp-configuration) in the server configuration reference for the full list and an example.
 
