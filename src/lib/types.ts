@@ -88,6 +88,14 @@ export interface PressMention {
 	logo: string;
 }
 
+export interface CustomerLogo {
+	id: string;
+	name: string;
+	logo: string;
+	caption?: string;
+	url?: string;
+}
+
 // Comparison blog post types
 export type DiscoveryMethod =
 	| 'SNMP'

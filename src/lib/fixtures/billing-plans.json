@@ -439,7 +439,7 @@
   },
   {
     "id": "Community",
-    "name": "Community",
+    "name": "Community Edition",
     "description": "Community plan for individuals self-hosting Scanopy - full control over configuration and integrations",
     "category": null,
     "icon": "heart",
@@ -497,7 +497,7 @@
   },
   {
     "id": "CommercialSelfHosted",
-    "name": "On-Premise",
+    "name": "Commercial Edition",
     "description": "Commercial license for self-managed deployments — full control over configuration and integrations",
     "category": null,
     "icon": "server-cog",
@@ -617,7 +617,7 @@
   },
   {
     "id": "Community",
-    "name": "Community",
+    "name": "Community Edition",
     "description": "Community plan for individuals self-hosting Scanopy - full control over configuration and integrations",
     "category": null,
     "icon": "heart",
@@ -675,7 +675,7 @@
   },
   {
     "id": "CommercialSelfHosted",
-    "name": "On-Premise",
+    "name": "Commercial Edition",
     "description": "Commercial license for self-managed deployments — full control over configuration and integrations",
     "category": null,
     "icon": "server-cog",

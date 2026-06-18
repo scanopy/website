@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GithubStars, FeaturedIn, ViewSwitcher } from '$lib/components';
+	import { GithubStars, FeaturedIn, CustomerLogos, ViewSwitcher } from '$lib/components';
 
 	// Tilt action: entrance tilt on scroll + mouse-follow tilt.
 	// Applies transforms to `target` (defaults to node itself).
@@ -82,8 +82,9 @@
 		return tilt(node, target);
 	}
 
-	import type { PressMention } from '$lib/types';
+	import type { PressMention, CustomerLogo } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
+	import customerLogosData from '$lib/fixtures/customer-logos.json';
 	import {
 		Download,
 		GitBranch,
@@ -267,6 +268,7 @@
 	];
 
 	const pressMentions = pressMentionsData as PressMention[];
+	const customerLogos = customerLogosData as CustomerLogo[];
 </script>
 
 <svelte:head>
@@ -344,16 +346,18 @@
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
-						href="/pricing"
+						href="https://cal.com/mferrandiz/scanopy-demo"
+						target="_blank"
+						rel="noopener noreferrer"
 						class="btn-secondary px-8 py-3 text-lg"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'hero',
-								destination: 'pricing',
-								text: 'Compare Plans'
+								destination: 'schedule_demo',
+								text: 'Schedule Demo'
 							})}
 					>
-						Compare Plans
+						Schedule Demo
 					</a>
 				</div>
 			</div>
@@ -397,8 +401,8 @@
 	</div>
 </div>
 
-<!-- Featured In Section -->
-<FeaturedIn mentions={pressMentions} />
+<!-- Customer logos -->
+<CustomerLogos logos={customerLogos} />
 
 <!-- Problem beat -->
 <section class="border-t border-gray-800 bg-gray-900/50 py-20">
@@ -614,6 +618,9 @@
 	</div>
 </section>
 
+<!-- Featured In Section -->
+<FeaturedIn mentions={pressMentions} />
+
 <!-- Pricing Section -->
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-2">
@@ -709,16 +716,18 @@
 					<ArrowRight class="h-5 w-5" />
 				</a>
 				<a
-					href="/pricing"
+					href="https://cal.com/mferrandiz/scanopy-demo"
+					target="_blank"
+					rel="noopener noreferrer"
 					class="btn-secondary px-8 py-3 text-lg"
 					onclick={() =>
 						analytics.ctaClicked({
 							location: 'bottom_cta',
-							destination: 'pricing',
-							text: 'Compare Plans'
+							destination: 'schedule_demo',
+							text: 'Schedule Demo'
 						})}
 				>
-					Compare Plans
+					Schedule Demo
 				</a>
 			</div>
 		</div>

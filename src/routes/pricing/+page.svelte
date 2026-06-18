@@ -25,7 +25,7 @@
 		},
 		{
 			question: "What's the difference between Cloud and Self-Hosted?",
-			answer: 'Cloud plans are hosted and managed by Scanopy - you just install the lightweight daemon on your network. Self-Hosted plans (Community and On-Premise) let you run the entire Scanopy stack on your own infrastructure, giving you full control over data and configuration.'
+			answer: 'Cloud plans are hosted and managed by Scanopy - you just install the lightweight daemon on your network. Self-Hosted plans (Community Edition and Commercial Edition) let you run the entire Scanopy stack on your own infrastructure, giving you full control over data and configuration.'
 		},
 		{
 			question: 'Can I try a paid plan before committing?',
@@ -109,7 +109,7 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm text-gray-400 leading-relaxed">
-			Every Scanopy plan uses flat-rate pricing, you don't pay per device. Pro and Business include a 14-day free trial so you can evaluate Scanopy before committing. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks - ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community plan is free with no host limits, and the On-Premise plan adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
+			Every Scanopy plan uses flat-rate pricing, you don't pay per device. Pro and Business include a 14-day free trial so you can evaluate Scanopy before committing. Starter adds scheduled discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid diagram export, and embeddable views across up to 3 networks - ideal for consultants or multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with Confluence export, audit logs, webhooks, and priority support. All paid plans include annual billing at a ~20% discount. If you prefer to self-host, the Community Edition is free with no host limits, and the Commercial Edition adds commercial licensing and advanced features. Enterprise includes fully managed deployment with SSO, whitelabeling, and live chat support.
 		</p>
 	</div>
 </section>

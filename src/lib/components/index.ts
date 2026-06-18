@@ -1,5 +1,6 @@
 export { default as BillingPlanForm } from './BillingPlanForm.svelte';
 export { default as ContactModal } from './ContactModal.svelte';
+export { default as CustomerLogos } from './CustomerLogos.svelte';
 export { default as FeaturedIn } from './FeaturedIn.svelte';
 export { default as Footer } from './Footer.svelte';
 export { default as GalleryShowcase } from './GalleryShowcase.svelte';

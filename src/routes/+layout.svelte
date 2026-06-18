@@ -166,9 +166,11 @@
 					<a href="/docs" class="text-gray-400 transition-colors hover:text-white">Docs</a>
 					<a
 						href="https://demo.scanopy.net"
+						target="_blank"
+						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
 					>
-						Demo
+						Live Demo
 					</a>
 					<a
 						href="https://app.scanopy.net/login"
@@ -230,10 +232,12 @@
 					</a>
 					<a
 						href="https://demo.scanopy.net"
+						target="_blank"
+						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
 						onclick={closeMobileMenu}
 					>
-						Demo
+						Live Demo
 					</a>
 					<a
 						href="https://app.scanopy.net/login"
