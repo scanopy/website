@@ -19,12 +19,12 @@
 <section class="py-20">
 	<div class="container mx-auto max-w-4xl px-4">
 		<h1 class="mb-4 text-4xl font-bold text-white">Refund Policy</h1>
-		<p class="mb-12 text-gray-400">Last updated: February 9, 2026</p>
+		<p class="mb-12 text-gray-400">Last updated: June 18, 2026</p>
 
 		<div class="prose prose-invert prose-gray max-w-none space-y-8">
 			<p class="mb-4 text-gray-300">
-				Thank you for subscribing to Scanopy's services. We hope you are satisfied with our
-				services, but if not, we're here to help.
+				Thank you for subscribing to the services provided by Scanopy LLC ("Scanopy"). We hope you
+				are satisfied with our services, but if not, we're here to help.
 			</p>
 
 			<section>

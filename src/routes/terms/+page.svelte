@@ -22,6 +22,8 @@
 <div class="container mx-auto max-w-4xl px-4 py-16">
 	<h1 class="mb-8 text-4xl font-bold text-rose-400">Terms of Service</h1>
 
+	<p class="mb-12 text-gray-400">Effective Date: June 18, 2026</p>
+
 	<div class="prose prose-invert prose-gray max-w-none space-y-8">
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">1. Introduction</h2>
@@ -29,7 +31,8 @@
 				These Terms of Service ("Terms") govern your access to and use of the Scanopy software
 				service, including any associated websites, networks, applications, and other services
 				provided by Scanopy (collectively, the "Service"). These Terms constitute a legally binding
-				agreement between you and Scanopy ("we," "us," or "our"). By accessing or using our Service,
+				agreement between you and Scanopy LLC, a New York limited liability company ("Scanopy," "we,"
+				"us," or "our"). By accessing or using our Service,
 				you acknowledge that you have read, understood, and agree to be bound by these Terms.
 			</p>
 		</section>
@@ -364,7 +367,7 @@
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">21. Governing Law</h2>
 			<p class="text-gray-300">
 				These Terms shall be governed by and construed in accordance with the laws of the State of
-				Delaware, without regard to its conflict of law provisions. Our failure to enforce any right
+				New York, without regard to its conflict of law provisions. Our failure to enforce any right
 				or provision of these Terms will not be considered a waiver of those rights.
 			</p>
 		</section>

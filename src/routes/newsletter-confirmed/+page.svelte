@@ -1,3 +1,8 @@
+<script lang="ts">
+	import { page } from '$app/state';
+	import { APP, appHref } from '$lib/config/urls';
+</script>
+
 <svelte:head>
 	<title>Newsletter Confirmed - Scanopy</title>
 	<meta
@@ -25,7 +30,7 @@
 			tips, and news straight to your inbox.
 		</p>
 		<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
-			<a href="https://app.scanopy.net" class="btn-primary">Go to App</a>
+			<a href={appHref(APP.app, page.url.pathname, 'confirm-page')} class="btn-primary">Go to App</a>
 			<a href="/" class="btn-secondary">Back to Homepage</a>
 		</div>
 	</div>

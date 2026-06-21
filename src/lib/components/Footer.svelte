@@ -3,6 +3,8 @@
 	import NewsletterSignup from '$lib/components/NewsletterSignup.svelte';
 
 	import { isPostHogLoaded, getPostHog } from '$lib/posthog';
+	import { page } from '$app/state';
+	import { APP, appHref } from '$lib/config/urls';
 
 	interface Props {
 		healthStatus?: 'loading' | 'healthy' | 'unhealthy';
@@ -150,12 +152,12 @@
 			class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-800 pt-8 md:flex-row"
 		>
 			<p class="text-sm text-gray-500">
-				© {new Date().getFullYear()} Scanopy
+				© {new Date().getFullYear()} Scanopy LLC
 			</p>
 			<div class="flex gap-6">
 						{#if healthStatus === 'healthy'}
 							<a
-								href="https://app.scanopy.net"
+								href={appHref(APP.app, page.url.pathname, 'footer-status', 'footer')}
 								target="_blank"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 text-sm text-gray-400 hover:text-white"

@@ -21,11 +21,11 @@
     "api/credentials",
     "api/daemon-api-keys",
     "api/daemons",
-    "api/groups",
+    "api/dependencies",
     "api/hosts",
-    "api/iftable-entries",
     "api/interfaces",
     "api/invites",
+    "api/ip-addresses",
     "api/networks",
     "api/organizations",
     "api/ports",
@@ -35,6 +35,7 @@
     "api/tags",
     "api/topologies",
     "api/user-api-keys",
-    "api/users"
+    "api/users",
+    "api/vlans"
   ]
 }

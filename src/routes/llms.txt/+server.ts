@@ -1,5 +1,6 @@
 import billingPlansData from '$lib/fixtures/billing-plans.json';
 import servicesData from '$lib/fixtures/services.json';
+import { APP, withUtm } from '$lib/config/urls';
 
 export const prerender = true;
 
@@ -127,6 +128,12 @@ export async function GET() {
 		.map((c) => `- **${c.title}**: ${c.tldr}\n  URL: https://scanopy.net/comparisons/${c.slug}`)
 		.join('\n');
 
+	const onboardingUrl = withUtm(APP.onboarding, {
+		medium: 'llms',
+		campaign: 'llms-txt',
+		content: 'getting-started'
+	});
+
 	const content = `# Scanopy
 
 > Infrastructure documentation software. Deploy a scanner, get four views of your infrastructure: network architecture, service dependencies, workload placement, and physical topology. Kept accurate automatically.
@@ -183,7 +190,7 @@ ${comparisonLines}
 
 ## Getting Started
 
-1. Sign up at https://app.scanopy.net/onboarding
+1. Sign up at ${onboardingUrl}
 2. Install the Scanopy agent on your network
 3. Run your first scan
 4. View your auto-generated infrastructure documentation

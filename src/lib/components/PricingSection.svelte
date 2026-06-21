@@ -10,6 +10,8 @@
 	import { createColorHelper, createIconComponent } from '$lib/utils/styling';
 	import billingPlansData from '$lib/fixtures/billing-plans.json';
 	import featuresData from '$lib/fixtures/features.json';
+	import { page } from '$app/state';
+	import { APP, appHref } from '$lib/config/urls';
 
 	interface Props {
 		showGithubStars?: boolean;
@@ -161,7 +163,11 @@
 	}
 
 	function handlePlanSelect(plan: BillingPlan) {
-		window.open('https://app.scanopy.net/?modal=billing-plan', '_blank', 'noopener,noreferrer');
+		window.open(
+			appHref(APP.billingPlan, page.url.pathname, 'pricing-plan'),
+			'_blank',
+			'noopener,noreferrer'
+		);
 	}
 </script>
 

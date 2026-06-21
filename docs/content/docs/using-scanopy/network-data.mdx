@@ -38,7 +38,9 @@ Useful when Scanopy detects an open port but can't identify the service running 
 Scanopy tracks which VMs and containers run on which hosts:
 
 - **Proxmox**: Links VMs and LXC containers to their Proxmox host
+- **vCenter / ESXi**: Links virtual machines to their VMware vCenter or ESXi hypervisor
 - **Docker**: Links containers to their Docker host
+- **Podman**: Links containers to their Podman host
 
 These relationships appear in the topology and host details, showing your virtualization hierarchy. The [Workloads perspective](/using-scanopy/topology/workloads) provides a dedicated view of this hierarchy.
 
@@ -62,8 +64,6 @@ The button turns blue when a host is hidden. Use the **Hidden** column filter to
 - Flag decommissioned devices that shouldn't appear in diagrams
 - Mark infrastructure hosts that clutter the visualization (PDUs, UPS units, management interfaces)
 - Identify test or development hosts to exclude from production views
-
-After hiding a host, rebuild the topology for changes to take effect.
 
 ## Subnets
 

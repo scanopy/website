@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { APP, appHref } from '$lib/config/urls';
+
 	interface Props {
 		heading?: string;
 		description?: string;
@@ -14,7 +17,7 @@
 	<h3 class="mb-3 text-lg font-semibold text-white">{heading}</h3>
 	<p class="mb-5 text-sm text-gray-400 leading-relaxed">{description}</p>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<a href="https://app.scanopy.net/onboarding" target="_blank" rel="noopener noreferrer" class="btn-primary">Try Scanopy free</a>
+		<a href={appHref(APP.onboarding, page.url.pathname, 'article-cta')} target="_blank" rel="noopener noreferrer" class="btn-primary">Try Scanopy free</a>
 		<a href="/pricing" class="text-gray-400 hover:text-white transition-colors">View pricing</a>
 		<a href="/docs" class="text-gray-400 hover:text-white transition-colors">Read the docs</a>
 	</div>

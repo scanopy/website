@@ -1,0 +1,41 @@
+---
+title: Share a topology link
+description: Create a read-only link to your network topology that anyone can open in a browser — no Scanopy account required.
+---
+
+Share links let you give people outside your organization a read-only view of a network's topology. The recipient opens a link in their browser and sees the live topology — they can't sign in, edit anything, or change your data. Use this for handing a network map to a client, embedding a diagram in an internal wiki, or sharing read-only access with a colleague who doesn't have a Scanopy account.
+
+For the API equivalent, see the [Shares API](/api/shares/).
+
+## Prerequisites
+
+- A network with a topology to share
+- A plan that includes share links — see [pricing](https://scanopy.net/pricing) for which plans include sharing, embedding, and export
+
+## Creating a share
+
+1. Open the network's topology and click the **Share** button in the toolbar
+2. Click **Create Share**
+3. Configure the share:
+   - **Name** — a label to identify this share
+   - **Views** — which perspectives the recipient can see (L2 Physical, L3 Logical, Workloads, Application). The first enabled view is what they land on
+   - **Password** *(optional)* — require a password before the topology loads
+   - **Expiration** *(optional)* — a date after which the link stops working
+   - **Allowed domains** *(optional)* — restrict where the topology can be embedded as an iframe
+   - **Display options** — toggle the inspect panel, zoom controls, export button, and minimap for the recipient
+4. **Save** — the link is live immediately
+
+## What the recipient sees
+
+- A **read-only, live** view of the network limited to the views you enabled — it reflects current discovery data, not a [snapshot](/using-scanopy/topology/snapshots/)
+- No editing, tagging, or account access
+- Only the controls you enabled (inspect panel, zoom, export, minimap)
+- A password prompt first, if you set one
+
+## Managing shares
+
+From the same **Share** dialog you can edit a share's settings, disable it temporarily, or delete it. Disabling or deleting a share takes effect immediately — anyone with the link loses access.
+
+<Callout type="info">
+Share links always show the **live** topology. To preserve a fixed point-in-time view, use a [snapshot](/using-scanopy/topology/snapshots/) instead.
+</Callout>
