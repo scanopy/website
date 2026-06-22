@@ -11,10 +11,6 @@ on:
         description: 'Version number (e.g., 0.14.19)'
         required: true
         type: string
-      send_email:
-        description: 'Send product update email'
-        type: boolean
-        default: true
       send_discord:
         description: 'Send Discord notification'
         type: boolean
@@ -108,92 +104,6 @@ jobs:
           echo "Version: $VERSION"
           echo "Title: $TITLE"
           echo "Category: $CATEGORY"
-
-      # Requires a Brevo email template with these params:
-      #   {{ params.content }}  — AI-generated release highlights (HTML fragment)
-      #   {{ params.version }}  — version string (e.g., "0.14.14")
-      # Template handles header, footer, branding, unsubscribe. Set BREVO_TEMPLATE_ID to the template ID.
-      - name: Send product update email via Brevo
-        if: (github.event_name != 'workflow_dispatch' && contains(fromJSON('["A", "B"]'), steps.changelog.outputs.category)) || (github.event_name == 'workflow_dispatch' && inputs.send_email)
-        env:
-          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          BREVO_TEMPLATE_ID: ${{ vars.BREVO_TEMPLATE_ID }}
-          EMAIL_SUBJECT: ${{ steps.changelog.outputs.email_subject }}
-          EMAIL_BODY: ${{ steps.changelog.outputs.email_body }}
-          VERSION: ${{ steps.changelog.outputs.version }}
-        run: |
-          if [ -z "$BREVO_API_KEY" ]; then
-            echo "::warning::BREVO_API_KEY not set — skipping email"
-            exit 0
-          fi
-
-          if [ -z "$BREVO_TEMPLATE_ID" ]; then
-            echo "::warning::BREVO_TEMPLATE_ID not set — skipping email"
-            exit 0
-          fi
-
-          if [ -z "$EMAIL_BODY" ]; then
-            echo "::warning::No email body found — skipping email"
-            exit 0
-          fi
-
-          # Build changelog URL with UTM tracking (for template CTA)
-          CHANGELOG_URL="https://scanopy.net/changelog/v${VERSION}?utm_source=brevo&utm_medium=email&utm_campaign=product_update_v${VERSION}"
-
-          # Fetch template HTML from Brevo
-          TEMPLATE_RESPONSE=$(curl -s -w "\n%{http_code}" -X GET "https://api.brevo.com/v3/smtp/templates/${BREVO_TEMPLATE_ID}" \
-            -H "api-key: ${BREVO_API_KEY}")
-
-          HTTP_CODE=$(echo "$TEMPLATE_RESPONSE" | tail -1)
-          TEMPLATE_RESPONSE=$(echo "$TEMPLATE_RESPONSE" | sed '$d')
-
-          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
-            echo "::error::Failed to fetch Brevo template (HTTP $HTTP_CODE): $TEMPLATE_RESPONSE"
-            exit 1
-          fi
-
-          # Substitute placeholders and build campaign payload
-          PAYLOAD=$(echo "$TEMPLATE_RESPONSE" | jq \
-            --arg subject "$EMAIL_SUBJECT" \
-            --arg content "$EMAIL_BODY" \
-            --arg changelog_url "$CHANGELOG_URL" \
-            --arg name "Product Update v${VERSION}" \
-            '.htmlContent
-             | gsub("\\{\\{ params\\.content \\}\\}"; $content)
-             | gsub("\\{\\{ params\\.changelog_url \\}\\}"; $changelog_url)
-             | {
-                 type: "classic",
-                 sender: {name: "Maya from Scanopy", email: "maya@email.scanopy.net"},
-                 name: $name,
-                 subject: $subject,
-                 htmlContent: .,
-                 recipients: {listIds: [13]},
-                 replyTo: "maya@email.scanopy.net"
-               }')
-
-          # Create email campaign
-          CAMPAIGN_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "https://api.brevo.com/v3/emailCampaigns" \
-            -H "api-key: ${BREVO_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d "$PAYLOAD")
-
-          HTTP_CODE=$(echo "$CAMPAIGN_RESPONSE" | tail -1)
-          CAMPAIGN_RESPONSE=$(echo "$CAMPAIGN_RESPONSE" | sed '$d')
-
-          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
-            echo "::error::Brevo API returned HTTP $HTTP_CODE: $CAMPAIGN_RESPONSE"
-            exit 1
-          fi
-
-          CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
-
-          if [ -z "$CAMPAIGN_ID" ] || [ "$CAMPAIGN_ID" = "null" ]; then
-            echo "::error::Failed to get campaign ID from Brevo response: $CAMPAIGN_RESPONSE"
-            exit 1
-          fi
-
-          echo "Brevo campaign draft created: $CAMPAIGN_ID"
-          echo "Preview and send from https://app.brevo.com/campaign/email/$CAMPAIGN_ID"
 
       - name: Send Discord notification
         if: github.event_name != 'workflow_dispatch' || inputs.send_discord
