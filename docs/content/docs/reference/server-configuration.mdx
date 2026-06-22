@@ -40,6 +40,7 @@ environment:
 | **Client IP Source**      | `--client-ip-source`           | `SCANOPY_CLIENT_IP_SOURCE`           | -                         | Source of IP address from request headers for reverse proxy setups |
 | **Metrics Token**         | `--metrics-token`              | `SCANOPY_METRICS_TOKEN`              | -                         | Bearer token for Prometheus metrics endpoint authentication        |
 | **Prometheus Allowed IPs**| N/A                            | `SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS` | -            | Comma-separated IPs/CIDRs allowed to access metrics endpoint       |
+| **Snapshot Retention**    | N/A                            | `SCANOPY_SNAPSHOT_RETENTION_DAYS_OVERRIDE` | `90`                | Days to retain topology [snapshots](/using-scanopy/topology/snapshots/) before automatic pruning |
 
 ## Integrated Daemon URL
 

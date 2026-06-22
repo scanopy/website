@@ -16,6 +16,7 @@
 		initFeatureFlags
 	} from '$lib/analytics.svelte';
 	import { getBreadcrumbListSchema } from '$lib/schemas';
+	import { APP, appHref } from '$lib/config/urls';
 
 	interface Props {
 		children: Snippet;
@@ -103,6 +104,7 @@
 	"@type": "Organization",
 	"@id": "https://scanopy.net/#organization",
 	"name": "Scanopy",
+	"legalName": "Scanopy LLC",
 	"url": "https://scanopy.net",
 	"logo": {
 		"@type": "ImageObject",
@@ -114,10 +116,10 @@
 	"description": "Infrastructure documentation software. Deploy a lightweight scanner to automatically discover and document network architecture, service dependencies, workload placement, and physical topology.",
 	"address": {
 		"@type": "PostalAddress",
-		"streetAddress": "1207 Delaware Ave Suite 1502",
-		"addressLocality": "Wilmington",
-		"addressRegion": "DE",
-		"postalCode": "19806",
+		"streetAddress": "418 Broadway Ste N",
+		"addressLocality": "Albany",
+		"addressRegion": "NY",
+		"postalCode": "12207",
 		"addressCountry": "US"
 	},
 	"sameAs": [
@@ -173,7 +175,7 @@
 						Live Demo
 					</a>
 					<a
-						href="https://app.scanopy.net/login"
+						href={appHref(APP.login, page.url.pathname, 'navbar', 'nav')}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
@@ -183,7 +185,7 @@
 						Login
 					</a>
 					<a
-						href="https://app.scanopy.net/onboarding"
+						href={appHref(APP.onboarding, page.url.pathname, 'navbar', 'nav')}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary"
@@ -240,7 +242,7 @@
 						Live Demo
 					</a>
 					<a
-						href="https://app.scanopy.net/login"
+						href={appHref(APP.login, page.url.pathname, 'navbar-mobile', 'nav')}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
@@ -256,7 +258,7 @@
 						Login
 					</a>
 					<a
-						href="https://app.scanopy.net/onboarding"
+						href={appHref(APP.onboarding, page.url.pathname, 'navbar-mobile', 'nav')}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary text-center"

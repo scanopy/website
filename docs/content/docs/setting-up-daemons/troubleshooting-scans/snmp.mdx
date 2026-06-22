@@ -13,9 +13,9 @@ Creating a credential alone doesn't activate SNMP. It must be assigned to the ne
 
 See the [SNMP Credentials guide](/guides/snmp-credentials/) for setup steps, or [Troubleshooting credentials](/setting-up-daemons/troubleshooting-scans/credentials/) for diagnosing file read and loading issues.
 
-## Verify device responds to SNMPv2c
+## Verify the device responds to SNMP
 
-From the daemon host, test SNMP connectivity directly:
+From the daemon host, test SNMP connectivity directly. For SNMPv1/v2c, use the community string:
 
 ```bash
 # Try the default community string
@@ -25,12 +25,20 @@ snmpwalk -v2c -c public DEVICE_IP 1.3.6.1.2.1.2.2.1.2
 snmpwalk -v2c -c YOUR_COMMUNITY_STRING DEVICE_IP 1.3.6.1.2.1.2.2.1.2
 ```
 
+For SNMPv3, test with your USM credentials:
+
+```bash
+snmpwalk -v3 -l authPriv -u SECURITY_NAME \
+  -a SHA -A AUTH_PASSWORD -x AES -X PRIV_PASSWORD \
+  DEVICE_IP 1.3.6.1.2.1.2.2.1.2
+```
+
 - If `public` works but your custom string doesn't → credential mismatch
-- If neither works → SNMP is not enabled on the device or it doesn't support SNMPv2c
+- If neither works → SNMP is not enabled on the device, or it doesn't accept the version you're testing
 
 ## Check SNMP version compatibility
 
-Scanopy supports SNMPv2c only. If devices enforce SNMPv3-only, SNMP queries will fail silently. SNMPv3 support is on the roadmap.
+Scanopy supports SNMPv1, SNMPv2c, and SNMPv3. SNMPv3 is **AuthPriv only** — both authentication and privacy are required, MD5 is not supported (use SHA-1 or SHA-256), and AuthNoPriv/NoAuthNoPriv modes won't connect. If a device enforces SNMPv3-only, configure an SNMPv3 credential rather than a community string.
 
 ## Check daemon logs
 
@@ -40,7 +48,8 @@ For SNMP-specific log messages, enable debug logging and look for these messages
 
 | Log message | Meaning |
 | ----------- | ------- |
-| `Creating SNMPv2c session` | Daemon is attempting SNMP |
+| `Creating SNMP community session` | Daemon is attempting SNMPv1/v2c |
+| `Creating SNMPv3 session` | Daemon is attempting SNMPv3 |
 | `SNMP session created successfully` | UDP socket opened |
 | `SNMP GET {name} failed from {ip}` | OID query failed (auth or protocol error) |
 | `SNMP GET {name} timeout from {ip}` | Device didn't respond within 5s |

@@ -1,0 +1,36 @@
+---
+title: Snapshots
+description: Capture point-in-time, read-only copies of your topology to compare your network against a past state.
+---
+
+A snapshot is a read-only, point-in-time copy of a network's topology — its hosts, services, ports, interfaces, subnets, VLANs, and tags, exactly as they were when you captured it. While the [Live view](/using-scanopy/topology/#live-view-and-snapshots) keeps changing as discovery runs, a snapshot stays frozen, so you can see what your network looked like before a change, a migration, or an incident.
+
+## Taking a Snapshot
+
+Click **Take Snapshot** in the topology toolbar. The snapshot captures the network's current state immediately and is added to the snapshot selector.
+
+Snapshots are captured manually — Scanopy does not take them on a schedule.
+
+## Viewing a Snapshot
+
+Use the snapshot selector in the toolbar to switch between **Live** and any saved snapshot. Selecting a snapshot shows the topology as it was at that moment; switching is instant and keeps your current layout and perspective.
+
+While viewing a snapshot, the topology is read-only. You can:
+
+- Inspect hosts, services, and their details
+- Filter by tags and switch perspectives (L2 Physical, L3 Logical, Workloads, Application)
+- Pan, zoom, and export
+
+You can't edit while viewing a snapshot — tagging, dependency editing, grouping changes, edit mode, and taking new snapshots are only available on the Live view. Switch back to **Live** to make changes.
+
+## Deleting a Snapshot
+
+Select the snapshot and choose **Delete Snapshot**, then confirm. Deleting a snapshot doesn't affect your live topology or any other snapshot.
+
+## Availability and Retention
+
+Snapshots are available on paid plans, and each plan keeps snapshots for a set retention window — older snapshots are pruned automatically once they fall outside it. See [pricing](https://scanopy.net/pricing) for which plans include snapshots and how long each retains them.
+
+<Callout type="info">
+Self-hosted deployments can override the retention window with the `SCANOPY_SNAPSHOT_RETENTION_DAYS_OVERRIDE` environment variable. See [Server Configuration](/reference/server-configuration/).
+</Callout>

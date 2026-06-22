@@ -19,15 +19,15 @@
 <section class="py-20">
 	<div class="container mx-auto max-w-4xl px-4">
 		<h1 class="mb-4 text-4xl font-bold text-white">Privacy Policy</h1>
-		<p class="mb-12 text-gray-400">Effective Date: December 10, 2025</p>
+		<p class="mb-12 text-gray-400">Effective Date: June 18, 2026</p>
 
 		<div class="prose prose-invert prose-gray max-w-none space-y-8">
 			<section>
 				<h2 class="mb-4 text-2xl font-semibold text-rose-400">1. Introduction</h2>
 				<p class="mb-4 text-gray-300">
-					This Privacy Policy describes how Scanopy ("we," "us," or "our") collects, uses, and
-					discloses your personal information when you use our software as a service (the
-					"Service").
+					This Privacy Policy describes how Scanopy LLC, a New York limited liability company
+					("Scanopy," "we," "us," or "our") collects, uses, and discloses your personal information
+					when you use our software as a service (the "Service").
 				</p>
 				<p class="mb-4 text-gray-300">
 					We are committed to protecting your personal information and your right to privacy. When
@@ -59,7 +59,7 @@
 					</li>
 					<li>
 						<strong class="text-white">Company:</strong> when this policy mentions "Company," "we," "us,"
-						or "our," it refers to Scanopy.
+						or "our," it refers to Scanopy LLC.
 					</li>
 					<li>
 						<strong class="text-white">Country:</strong> where Scanopy or the owners/founders of Scanopy

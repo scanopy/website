@@ -105,6 +105,8 @@
 	} from 'lucide-svelte';
 	import type { Component } from 'svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
+	import { page } from '$app/state';
+	import { APP, appHref } from '$lib/config/urls';
 	import { getProductFeatures, getServiceCountLabel, getStartingMonthlyPrice } from '$lib/schemas';
 
 	const serviceCount = getServiceCountLabel();
@@ -244,7 +246,7 @@
 		{
 			label: 'Logical (L3)',
 			question: 'How is our network segmented?',
-			answer: 'Subnets, VLANs, and how hosts bridge them.',
+			answer: 'Subnets and how hosts connect across them.',
 			alt: heroViews[1].alt,
 			src: heroViews[1].src,
 			srcset: heroViews[1].srcset
@@ -331,7 +333,7 @@
 
 				<div class="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
 					<a
-						href="https://app.scanopy.net/onboarding"
+						href={appHref(APP.onboarding, page.url.pathname, 'hero')}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary px-8 py-3 text-lg"
@@ -701,7 +703,7 @@
 			</h2>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
-					href="https://app.scanopy.net/onboarding"
+					href={appHref(APP.onboarding, page.url.pathname, 'bottom-cta')}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"

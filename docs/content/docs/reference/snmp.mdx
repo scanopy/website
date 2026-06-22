@@ -9,8 +9,9 @@ Technical reference for Scanopy's SNMP implementation. For setup instructions, s
 
 | Property | Value |
 | -------- | ----- |
-| **SNMPv2c** | Supported |
-| **SNMPv3** | Planned |
+| **SNMPv1** | Supported (community string) |
+| **SNMPv2c** | Supported (community string) |
+| **SNMPv3** | Supported — AuthPriv only (SHA-1/SHA-256 auth, AES-128/AES-256 privacy) |
 | **Transport** | UDP |
 | **Port** | 161, 1161 (fallback) |
 
@@ -49,10 +50,10 @@ A successful SNMP run against a host populates the following entities in Scanopy
 
 ## Credential resolution order
 
-When querying a host, the daemon resolves the community string in this order:
+When querying a host, the daemon resolves the SNMP credential (community string for v1/v2c, or USM parameters for v3) in this order:
 
 1. **Host-specific override** — credential assigned directly to the host
 2. **Network default** — credential assigned to the host's network
-3. **Fallback** — community string `public`
+3. **Fallback** — community string `public` (v2c)
 
 If all credentials fail on both UDP 161 and 1161, the host is discovered without SNMP-sourced data. Individual query failures within a successful session are logged and skipped — they do not abort the rest of the collection.

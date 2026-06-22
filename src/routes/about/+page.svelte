@@ -4,6 +4,8 @@
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
+	import { page } from '$app/state';
+	import { APP, appHref } from '$lib/config/urls';
 
 	const pressMentions = pressMentionsData as PressMention[];
 </script>
@@ -188,7 +190,7 @@
 			</h2>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
-					href="https://app.scanopy.net/onboarding"
+					href={appHref(APP.onboarding, page.url.pathname, 'about-cta')}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"

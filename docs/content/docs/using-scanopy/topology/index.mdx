@@ -16,19 +16,11 @@ Each perspective shows a different angle of your infrastructure:
 
 Switch between perspectives using the perspective selector in the toolbar. Each perspective has its own grouping options and edge types.
 
-## Topology States
+## Live View and Snapshots
 
-The topology indicator shows whether your visualization is current with the underlying data.
+The **Live** view always reflects your current discovery data — as scans add, change, or remove entities, the topology updates to match. There's no manual rebuild step.
 
-| State            | Meaning                                                                           |
-| ---------------- | --------------------------------------------------------------------------------- |
-| **Up to Date**   | All data is current. No action needed.                                            |
-| **Stale**        | New entities added since last rebuild. Click **Rebuild** to include them.         |
-| **Conflict**     | Entities have been deleted. Click **Rebuild** to review removals before applying. |
-| **Locked**       | Layout is frozen. Toggle with **Lock/Unlock** to preserve positioning.            |
-| **Auto Rebuild** | Rebuilds automatically after changes. Convenient, but resets manual positioning.  |
-
-**Note**: Rebuilding resets node positions and container sizes. Edge handle positions are preserved when possible.
+To preserve a point-in-time view of your infrastructure, capture a **snapshot**. Snapshots are read-only and don't change as discovery continues, so you can compare your network against a past state. See [Snapshots](/using-scanopy/topology/snapshots/).
 
 ## Refining Your Topology
 

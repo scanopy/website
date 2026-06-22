@@ -1,5 +1,6 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Image from 'next/image';
+import { APP, withUtm } from '@/lib/urls';
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -26,7 +27,7 @@ export function baseOptions(): BaseLayoutProps {
       },
       {
         text: 'Login',
-        url: 'https://app.scanopy.net/login',
+        url: withUtm(APP.login, { medium: 'docs', campaign: 'docs-nav', content: 'nav-login' }),
         external: true,
       },
     ],

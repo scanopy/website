@@ -112,7 +112,7 @@ Creating a credential alone doesn't activate SNMP collection — you must assign
 
 ### Limitations
 
-- **SNMPv2c only** — v3 support is planned but not yet available
+- **SNMP v1, v2c, and v3 supported** — v3 uses AuthPriv (SHA-1/SHA-256 auth, AES-128/256 privacy)
 - **No trap handling** — SNMP data is collected during discovery scans only (poll-based)
 - **No custom MIBs** — only the standard MIBs listed above are queried
 
