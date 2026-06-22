@@ -274,5 +274,17 @@
       "is_coming_soon": false,
       "minimum_plan": "Free"
     }
+  },
+  {
+    "id": "snapshot_retention_days",
+    "name": "Snapshot Retention",
+    "description": "How long captured snapshots are retained before automatic deletion",
+    "category": "Visualization",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Starter"
+    }
   }
 ]
