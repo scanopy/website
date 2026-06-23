@@ -25,6 +25,29 @@
 	let status = $state<'idle' | 'success' | 'error'>('idle');
 	let errorMessage = $state('');
 	let fieldErrors = $state<Record<string, string>>({});
+	// When the submission itself fails (network/server), offer an email fallback
+	// pre-filled with whatever the user already entered.
+	let showEmailFallback = $state(false);
+
+	const LICENSING_EMAIL = 'licensing@scanopy.net';
+
+	const mailtoHref = $derived.by(() => {
+		const subject = `${planName} plan inquiry`;
+		const bodyLines = [
+			`Plan: ${planName} (${planType})`,
+			`Email: ${email}`,
+			`First name: ${firstName}`,
+			`Last name: ${lastName}`,
+			`Company: ${company}`,
+			`Company size: ${teamSize}`,
+			`Timeline: ${urgency}`,
+			`Networks/sites: ${networkCount ?? ''}`,
+			'',
+			'Use case:',
+			useCase
+		];
+		return `mailto:${LICENSING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+	});
 
 	const teamSizeOptions = [
 		{ value: '1-10', label: '1-10 employees' },
@@ -61,6 +84,7 @@
 		status = 'idle';
 		errorMessage = '';
 		fieldErrors = {};
+		showEmailFallback = false;
 	}
 
 	function handleClose() {
@@ -111,6 +135,7 @@
 			status = 'idle';
 			errorMessage = '';
 			fieldErrors = {};
+			showEmailFallback = false;
 
 			const result = await submitContactInquiry(PUBLIC_BREVO_CONTACT_FORM_URL, {
 				email: email.trim(),
@@ -134,6 +159,7 @@
 					errorMessage = 'Please fix the highlighted fields below.';
 				} else {
 					errorMessage = 'Something went wrong. Please try again.';
+					showEmailFallback = true;
 				}
 				analytics.planInquirySubmitted({ planType, success: false });
 			}
@@ -141,6 +167,7 @@
 			console.error('Contact form error:', err);
 			status = 'error';
 			errorMessage = 'Something went wrong. Please try again.';
+			showEmailFallback = true;
 			analytics.planInquirySubmitted({ planType, success: false });
 		} finally {
 			loading = false;
@@ -344,9 +371,22 @@
 					</div>
 
 					{#if status === 'error' && errorMessage}
-						<div class="flex items-center gap-2 text-sm text-red-400">
-							<AlertCircle class="h-4 w-4 flex-shrink-0" />
-							<span>{errorMessage}</span>
+						<div class="space-y-2 text-sm text-red-400">
+							<div class="flex items-center gap-2">
+								<AlertCircle class="h-4 w-4 flex-shrink-0" />
+								<span>{errorMessage}</span>
+							</div>
+							{#if showEmailFallback}
+								<p class="text-gray-400">
+									If this error persists, please email your inquiry to
+									<a
+										href={mailtoHref}
+										class="font-medium text-blue-400 underline hover:text-blue-300"
+									>
+										{LICENSING_EMAIL}
+									</a>.
+								</p>
+							{/if}
 						</div>
 					{/if}
 
