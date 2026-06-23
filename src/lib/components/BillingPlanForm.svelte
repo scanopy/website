@@ -320,6 +320,10 @@
 	}
 
 	function formatSnapshotRetention(plan: BillingPlan): string {
+		// Self-hosted and managed plans (Community, Commercial Edition, Enterprise)
+		// configure retention themselves via the deployment override, so there's no
+		// fixed published window.
+		if (getHosting(plan) !== 'Cloud') return 'Custom';
 		const days = getFeatureValue(plan.type, 'snapshot_retention_days');
 		if (typeof days !== 'number' || days <= 0) return 'None';
 		return `${days} days`;
