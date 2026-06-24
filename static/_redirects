@@ -105,5 +105,42 @@
 # Trailing slash fix
 /blog/ /blog 301
 
+# Root-level docs paths missing /docs/ prefix (Jun 2026 — GSC 404 cleanup)
+# Docs were briefly served without the /docs basePath; these recover old inbound links.
+# Single root segments that map into a specific docs section:
+/introduction /docs/introduction/ 301
+/introduction/ /docs/introduction/ 301
+/quick-start /docs/quick-start/ 301
+/quick-start/ /docs/quick-start/ 301
+/oidc /docs/guides/oidc/ 301
+/oidc/ /docs/guides/oidc/ 301
+/prometheus-setup /docs/guides/prometheus-setup/ 301
+/prometheus-setup/ /docs/guides/prometheus-setup/ 301
+/network-data /docs/using-scanopy/network-data/ 301
+/network-data/ /docs/using-scanopy/network-data/ 301
+/service-detection /docs/reference/service-detection/ 301
+/service-detection/ /docs/reference/service-detection/ 301
+/daemon-configuration /docs/reference/daemon-configuration/ 301
+/daemon-configuration/ /docs/reference/daemon-configuration/ 301
+/database-schema /docs/reference/database-schema/ 301
+/database-schema/ /docs/reference/database-schema/ 301
+/server-configuration /docs/reference/server-configuration/ 301
+/server-configuration/ /docs/reference/server-configuration/ 301
+/troubleshooting/scanning /docs/setting-up-daemons/troubleshooting-scans/ 301
+/troubleshooting/scanning/ /docs/setting-up-daemons/troubleshooting-scans/ 301
+/troubleshooting/daemon /docs/setting-up-daemons/troubleshooting-setup/ 301
+/troubleshooting/daemon/ /docs/setting-up-daemons/troubleshooting-setup/ 301
+
+# Section-level catch-alls (cover every page under these old root sections):
+/guides/* /docs/guides/:splat 301
+/reference/* /docs/reference/:splat 301
+/using-scanopy/* /docs/using-scanopy/:splat 301
+/setting-up-daemons/* /docs/setting-up-daemons/:splat 301
+/self-hosted-server/* /docs/self-hosted-server/:splat 301
+
+# Bare old docs index that predates the troubleshooting split
+/docs/troubleshooting /docs/setting-up-daemons/troubleshooting-scans/ 301
+/docs/troubleshooting/ /docs/setting-up-daemons/troubleshooting-scans/ 301
+
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404
