@@ -5,6 +5,7 @@
 	import AuthorCard from '$lib/components/AuthorCard.svelte';
 	import ArticleCTA from '$lib/components/ArticleCTA.svelte';
 	import ArticleTOC from '$lib/components/ArticleTOC.svelte';
+	import { getFAQPageSchema } from '$lib/schemas';
 	import type {
 		Vendor,
 		VendorCategory,
@@ -87,20 +88,14 @@
 			sameAs: ['https://github.com/mayanayza']
 		},
 		publisher: {
-			'@type': 'Organization',
-			name: 'Scanopy',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://scanopy.net/scanopy-logo.webp'
-			}
+			'@id': 'https://scanopy.net/#organization'
 		},
 		mainEntityOfPage: {
 			'@type': 'WebPage',
 			'@id': `https://scanopy.net/comparisons/${data.post.slug}`
 		},
 		isPartOf: {
-			'@type': 'WebSite',
-			'@id': 'https://scanopy.net'
+			'@id': 'https://scanopy.net/#website'
 		},
 		about: {
 			'@type': 'Thing',
@@ -115,6 +110,20 @@
 	const itemListSchema = data.vendorData
 		? JSON.stringify(data.vendorData.itemListSchema)
 		: null;
+
+	// FAQPage schema (AEO), sourced from the same FAQs the page renders. Strip inline
+	// HTML so the schema answer text matches the visible plain-text answer.
+	const faqSchema =
+		data.vendorData?.faqs?.length
+			? JSON.stringify(
+					getFAQPageSchema(
+						data.vendorData.faqs.map((f) => ({
+							question: f.question,
+							answer: f.answer.replace(/<[^>]+>/g, '')
+						}))
+					)
+				)
+			: null;
 </script>
 
 <svelte:head>
@@ -139,6 +148,9 @@
 	{@html `<script type="application/ld+json">${articleSchema}</script>`}
 	{#if itemListSchema}
 		{@html `<script type="application/ld+json">${itemListSchema}</script>`}
+	{/if}
+	{#if faqSchema}
+		{@html `<script type="application/ld+json">${faqSchema}</script>`}
 	{/if}
 </svelte:head>
 

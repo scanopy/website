@@ -5,7 +5,7 @@
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { onMount } from 'svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { getProductSchema } from '$lib/schemas';
+	import { getProductSchema, getFAQPageSchema } from '$lib/schemas';
 
 	onMount(() => {
 		analytics.pricingViewed({ referrer: document.referrer || undefined });
@@ -48,6 +48,12 @@
 			answer: 'Your plan will be auto-downgraded to Free upon cancellation, and any applicable entity caps (hosts, networks, seats) will be applied to your data automatically.'
 		}
 	];
+
+	// FAQPage schema sourced from the same array the page renders (strip the inline
+	// HTML from answers so the schema text matches the visible plain-text answer).
+	const faqSchema = getFAQPageSchema(
+		pricingFaqs.map((f) => ({ question: f.question, answer: f.answer.replace(/<[^>]+>/g, '') }))
+	);
 </script>
 
 <svelte:head>
@@ -68,6 +74,7 @@
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify(productSchema)}</script>`}
+	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
 </svelte:head>
 
 <section class="py-10 pb-24 lg:pb-10">

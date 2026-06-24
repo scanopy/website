@@ -112,12 +112,15 @@ export async function GET() {
 		.join('');
 
 	// Programmatic "Scanopy vs <vendor>" head-to-head comparison pages.
-	// allVsPageSlugs() returns full paths like /comparisons/vs/<vendor>.
+	// allVsPageSlugs() returns full paths like /comparisons/vs/<vendor>. Every page is
+	// rendered from the shared vendor fixture, so its last-commit date is the lastmod.
+	const vsLastmod = getLastCommitDate('src/lib/fixtures/network-diagram-vendors.ts');
 	const vsUrls = allVsPageSlugs()
 		.map(
 			(path) => `
   <url>
     <loc>https://scanopy.net${path}</loc>
+    <lastmod>${vsLastmod}</lastmod>
   </url>`
 		)
 		.join('');

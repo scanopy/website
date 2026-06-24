@@ -15,6 +15,23 @@
 	/>
 	<link rel="canonical" href="https://scanopy.net/showcase" />
 	<meta name="robots" content="noindex" />
+
+	<meta property="og:title" content="Community Showcase - Scanopy" />
+	<meta
+		property="og:description"
+		content="See what the Scanopy community is building. Explore infrastructure topologies from homelabs, businesses, and enterprise networks."
+	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://scanopy.net/showcase" />
+	<meta property="og:image" content="https://scanopy.net/social.webp" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Community Showcase - Scanopy" />
+	<meta
+		name="twitter:description"
+		content="See what the Scanopy community is building. Explore infrastructure topologies from homelabs, businesses, and enterprise networks."
+	/>
+	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
 <section class="py-20">

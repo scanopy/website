@@ -68,20 +68,14 @@
 			sameAs: ['https://github.com/mayanayza']
 		},
 		publisher: {
-			'@type': 'Organization',
-			name: 'Scanopy',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://scanopy.net/scanopy-logo.webp'
-			}
+			'@id': 'https://scanopy.net/#organization'
 		},
 		mainEntityOfPage: {
 			'@type': 'WebPage',
 			'@id': `https://scanopy.net/blog/${data.post.slug}`
 		},
 		isPartOf: {
-			'@type': 'WebSite',
-			'@id': 'https://scanopy.net'
+			'@id': 'https://scanopy.net/#website'
 		},
 		image: `https://scanopy.net${data.post.image}`
 	});

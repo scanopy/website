@@ -208,28 +208,36 @@
 			label: 'Physical (L2)',
 			alt: 'Scanopy Physical (L2) view showing switch ports and discovered links',
 			src: '/l2-1440w.webp',
-			srcset: '/l2-960w.webp 960w, /l2-1440w.webp 1440w, /l2-2400w.webp 2400w'
+			srcset: '/l2-960w.webp 960w, /l2-1440w.webp 1440w, /l2-2400w.webp 2400w',
+			width: 1440,
+			height: 1772
 		},
 		{
 			id: 'l3',
 			label: 'Logical (L3)',
 			alt: 'Scanopy Logical (L3) view showing subnets, hosts, and network segmentation',
 			src: '/l3-1440w.webp',
-			srcset: '/l3-960w.webp 960w, /l3-1440w.webp 1440w, /l3-2400w.webp 2400w'
+			srcset: '/l3-960w.webp 960w, /l3-1440w.webp 1440w, /l3-2400w.webp 2400w',
+			width: 1440,
+			height: 1175
 		},
 		{
 			id: 'workloads',
 			label: 'Workloads',
 			alt: 'Scanopy Workloads view showing VMs and containers nested inside hypervisors and hosts',
 			src: '/wl-1440w.webp',
-			srcset: '/wl-960w.webp 960w, /wl-1440w.webp 1440w, /wl-2400w.webp 2400w'
+			srcset: '/wl-960w.webp 960w, /wl-1440w.webp 1440w, /wl-2400w.webp 2400w',
+			width: 1440,
+			height: 1202
 		},
 		{
 			id: 'application',
 			label: 'Applications',
 			alt: 'Scanopy Application view showing services grouped by application and the dependencies between them',
 			src: '/app-1440w.webp',
-			srcset: '/app-960w.webp 960w, /app-1440w.webp 1440w, /app-2400w.webp 2400w'
+			srcset: '/app-960w.webp 960w, /app-1440w.webp 1440w, /app-2400w.webp 2400w',
+			width: 1440,
+			height: 1601
 		}
 	];
 
@@ -241,7 +249,9 @@
 			answer: 'Every switch, every port, every link, with VLANs and port status.',
 			alt: heroViews[0].alt,
 			src: heroViews[0].src,
-			srcset: heroViews[0].srcset
+			srcset: heroViews[0].srcset,
+			width: heroViews[0].width,
+			height: heroViews[0].height
 		},
 		{
 			label: 'Logical (L3)',
@@ -249,7 +259,9 @@
 			answer: 'Subnets and how hosts connect across them.',
 			alt: heroViews[1].alt,
 			src: heroViews[1].src,
-			srcset: heroViews[1].srcset
+			srcset: heroViews[1].srcset,
+			width: heroViews[1].width,
+			height: heroViews[1].height
 		},
 		{
 			label: 'Workloads',
@@ -257,7 +269,9 @@
 			answer: 'Bare metal to hypervisors to containers. The full nesting chain in one model.',
 			alt: heroViews[2].alt,
 			src: heroViews[2].src,
-			srcset: heroViews[2].srcset
+			srcset: heroViews[2].srcset,
+			width: heroViews[2].width,
+			height: heroViews[2].height
 		},
 		{
 			label: 'Applications',
@@ -265,7 +279,9 @@
 			answer: 'Services and their dependencies, grouped by application.',
 			alt: heroViews[3].alt,
 			src: heroViews[3].src,
-			srcset: heroViews[3].srcset
+			srcset: heroViews[3].srcset,
+			width: heroViews[3].width,
+			height: heroViews[3].height
 		}
 	];
 
@@ -471,6 +487,8 @@
 									srcset={view.srcset}
 									sizes="(max-width: 1024px) 100vw, 50vw"
 									alt={view.alt}
+									width={view.width}
+									height={view.height}
 									class="block h-full w-full object-contain"
 									loading="lazy"
 								/>

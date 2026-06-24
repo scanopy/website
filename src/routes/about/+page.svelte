@@ -31,7 +31,7 @@
 		'@context': 'https://schema.org',
 		'@type': 'Person',
 		name: 'Maya',
-		description: 'Founder of Scanopy. Over 10 years building compliance and privacy products at major cloud platforms, financial services, and marketing technology companies.',
+		description: 'Founder of Scanopy. A homelabber and builder who got tired of network diagrams that go stale the moment you finish drawing them, and built a tool that scans your network and generates living documentation automatically.',
 		url: 'https://github.com/mayanayza',
 		jobTitle: 'Founder',
 		worksFor: {

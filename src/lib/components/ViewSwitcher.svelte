@@ -7,6 +7,8 @@
 		alt: string;
 		src: string;
 		srcset: string;
+		width?: number;
+		height?: number;
 	}
 
 	interface Props {
@@ -102,6 +104,8 @@
 						srcset={active.srcset}
 						sizes="(max-width: 1024px) 100vw, 60vw"
 						alt={active.alt}
+						width={active.width}
+						height={active.height}
 						class="block h-full w-full object-contain"
 						loading={active.id === defaultTab ? 'eager' : 'lazy'}
 						fetchpriority={active.id === defaultTab ? 'high' : undefined}

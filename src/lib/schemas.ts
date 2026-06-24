@@ -77,6 +77,26 @@ function generateOffers() {
 }
 
 /**
+ * Aggregate the priced offers into a single AggregateOffer (low/high/count) for the
+ * pricing-page Product. Cleaner for merchant evaluation than a repeated Offer[] (which
+ * stays on the home SoftwareApplication for the per-plan detail).
+ */
+function generateAggregateOffer() {
+	const offers = generateOffers();
+	if (offers.length === 0) return undefined;
+	const prices = offers.map((o) => parseFloat(o.price)).filter((n) => !Number.isNaN(n));
+	return {
+		'@type': 'AggregateOffer',
+		priceCurrency: 'USD',
+		lowPrice: Math.min(...prices).toFixed(2),
+		highPrice: Math.max(...prices).toFixed(2),
+		offerCount: offers.length,
+		availability: 'https://schema.org/InStock',
+		url: 'https://scanopy.net/pricing'
+	};
+}
+
+/**
  * Generate feature list from product features fixture
  */
 function generateFeatureList(): string[] {
@@ -108,7 +128,9 @@ async function getLatestVersion(): Promise<string> {
 		import: 'default'
 	});
 
-	let latestVersion = '0.14.17';
+	// Fallback only — the real version is parsed from changelog frontmatter below.
+	// Kept current so a parse failure still emits a recent version.
+	let latestVersion = '0.17.0';
 	let latestDate = '';
 
 	for (const [, loader] of Object.entries(changelogFiles)) {
@@ -168,7 +190,27 @@ export function getProductSchema() {
 			'@type': 'Brand',
 			name: 'Scanopy'
 		},
-		offers: generateOffers()
+		offers: generateAggregateOffer()
+	};
+}
+
+/**
+ * FAQPage schema for AEO / AI answer extraction. Answer text MUST match the visible
+ * on-page copy, so callers source it from the same content the page renders.
+ * @see https://schema.org/FAQPage
+ */
+export function getFAQPageSchema(items: { question: string; answer: string }[]) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: items.map((item) => ({
+			'@type': 'Question',
+			name: item.question,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: item.answer
+			}
+		}))
 	};
 }
 

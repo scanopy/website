@@ -46,6 +46,48 @@ export function vendorDisplayName(vendor: Vendor): string {
 	return vendor.fullName || vendor.name;
 }
 
+// Per-matchup differentiator, phrased as "<Scanopy angle> vs <vendor angle>". Drives
+// the unique <title>, the meta description, and the vendor-aware takeaway so every page
+// reads differently instead of sharing one boilerplate line.
+const VS_DIFFERENTIATORS: Record<string, string> = {
+	auvik: 'Documentation vs Monitoring + RMM',
+	netbrain: 'Simple Documentation vs Enterprise Automation',
+	'solarwinds-ntm': 'Live Maps vs On-Demand Visio Exports',
+	domotz: 'Dedicated Maps vs Monitoring + Remote Access',
+	'manageengine-opmanager': 'Documentation Tool vs Monitoring Platform',
+	prtg: 'Auto Topology vs Sensor-Based Monitoring',
+	librenms: 'Automated Docs vs Self-Hosted Monitoring',
+	netdisco: 'Four Views vs Layer 2 Discovery',
+	faddom: 'Network Topology vs Application Dependency Mapping',
+	netbox: 'Topology Visualization vs Source of Truth'
+};
+
+// Proper nouns in the differentiator phrases that must keep their capitalization when
+// the (Title Case) phrase is lowercased for mid-sentence prose.
+const PRESERVE_CASE = new Set(['Visio', 'Paessler']);
+
+/** Lowercase a Title Case phrase for mid-sentence use, preserving all-caps acronyms
+ *  (RMM, VLAN) and known proper nouns (Visio). E.g. "Auto Topology vs Sensor-Based
+ *  Monitoring" → "auto topology vs sensor-based monitoring". */
+function lowerPhrase(text: string): string {
+	return text
+		.split(' ')
+		.map((word) => {
+			if (/^[A-Z0-9+]{2,}$/.test(word)) return word; // acronym (RMM, L2)
+			if (PRESERVE_CASE.has(word)) return word;
+			return word.toLowerCase();
+		})
+		.join(' ');
+}
+
+/** Split a differentiator into its [scanopyAngle, vendorAngle] halves. */
+function differentiatorAngles(vendor: Vendor): { scanopy: string | null; vendor: string | null } {
+	const diff = VS_DIFFERENTIATORS[vendor.slug];
+	if (!diff) return { scanopy: null, vendor: null };
+	const [scanopy, vendorAngle] = diff.split(' vs ');
+	return { scanopy: scanopy?.trim() || null, vendor: vendorAngle?.trim() || null };
+}
+
 // Strip trailing punctuation / a leading "Best for ..." framing from a sentence so it
 // can be spliced into the data-derived intro without reading like marketing copy.
 function trimSentence(text: string): string {
@@ -113,8 +155,14 @@ export function buildIntro(vendor: Vendor): string {
 export function buildTakeaway(vendor: Vendor): { scanopy: string; vendor: string } {
 	const name = vendorDisplayName(vendor);
 
-	const scanopyLine =
-		'You want a dedicated, living network-documentation tool: automatic L2, L3, workload, and application views, per-host service detection, flat pricing regardless of host count, and a free self-hostable Community edition. It sits alongside your monitoring stack rather than replacing it.';
+	// Lead with the matchup-specific contrast (e.g. "live maps over on-demand Visio
+	// exports") so the Scanopy takeaway differs per page, then the shared value props.
+	const angles = differentiatorAngles(vendor);
+	const contrast =
+		angles.scanopy && angles.vendor
+			? `${lowerPhrase(angles.scanopy)} over ${lowerPhrase(angles.vendor)}`
+			: 'a dedicated, living network-documentation tool';
+	const scanopyLine = `You want ${contrast}: automatic L2, L3, workload, and application views, per-host service detection, flat pricing regardless of host count, and a free self-hostable Community edition. It sits alongside your monitoring stack rather than replacing it.`;
 
 	let vendorLine: string;
 	if (vendor.whereItFits) {
@@ -181,24 +229,24 @@ function joinList(items: string[]): string {
 /** Unique <title>: "Scanopy vs <Vendor>: <short differentiator> (2026)". */
 export function buildTitle(vendor: Vendor): string {
 	const name = vendor.name; // table name is shorter; better for a title
-	const differentiators: Record<string, string> = {
-		auvik: 'Documentation vs Monitoring + RMM',
-		netbrain: 'Simple Documentation vs Enterprise Automation',
-		'solarwinds-ntm': 'Live Maps vs On-Demand Visio Exports',
-		domotz: 'Dedicated Maps vs Monitoring + Remote Access',
-		'manageengine-opmanager': 'Documentation Tool vs Monitoring Platform',
-		prtg: 'Auto Topology vs Sensor-Based Monitoring',
-		librenms: 'Automated Docs vs Self-Hosted Monitoring',
-		netdisco: 'Four Views vs Layer 2 Discovery',
-		faddom: 'Network Topology vs Application Dependency Mapping',
-		netbox: 'Topology Visualization vs Source of Truth'
-	};
-	const diff = differentiators[vendor.slug] || 'Network Documentation Compared';
+	const diff = VS_DIFFERENTIATORS[vendor.slug] || 'Network Documentation Compared';
 	return `Scanopy vs ${name}: ${diff} (2026)`;
 }
 
-/** Unique meta description per matchup. */
+/** Unique meta description per matchup — leads with the matchup's differentiator and a
+ *  vendor-specific fit clause so no two descriptions are the same boilerplate. */
 export function buildMetaDescription(vendor: Vendor): string {
 	const name = vendorDisplayName(vendor);
-	return `Scanopy vs ${name}: a head-to-head comparison of discovery methods, the four network topology views (L2, L3, workloads, applications), live updates, open-source licensing, and pricing. See which network documentation tool fits your team.`;
+	const angles = differentiatorAngles(vendor);
+
+	const lead =
+		angles.scanopy && angles.vendor
+			? `Scanopy vs ${name}: ${lowerPhrase(angles.scanopy)} vs ${lowerPhrase(angles.vendor)}.`
+			: `Scanopy vs ${name}: network documentation compared.`;
+
+	const fit = vendor.bestFor
+		? ` ${name} is built for ${lowerFirst(trimSentence(vendor.bestFor))}; Scanopy gives you automatic L2, L3, workload, and application views at flat pricing.`
+		: ` Compare discovery, the four topology views (L2, L3, workloads, applications), licensing, and pricing to see which fits your team.`;
+
+	return lead + fit;
 }

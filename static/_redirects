@@ -86,16 +86,17 @@
 /docs/troubleshooting/scanning/ /docs/setting-up-daemons/troubleshooting-scans/ 301
 
 # Catch-all for old docs structure patterns
-/docs/getting-started/* /docs/:splat 301
-/docs/daemons/* /docs/:splat 301
-/docs/self-hosted/* /docs/:splat 301
+# Targets keep a trailing slash so the docs app doesn't add a second 308 hop.
+/docs/getting-started/* /docs/:splat/ 301
+/docs/daemons/* /docs/:splat/ 301
+/docs/self-hosted/* /docs/:splat/ 301
 
 # Root-level paths missing /docs/ prefix
 /multi-vlan /docs/setting-up-daemons/planning-daemon-deployment/ 301
 /multi-vlan/ /docs/setting-up-daemons/planning-daemon-deployment/ 301
 /daemon-troubleshooting /docs/setting-up-daemons/troubleshooting-scans/ 301
 /daemon-troubleshooting/ /docs/setting-up-daemons/troubleshooting-scans/ 301
-/api/hosts/export_hosts_zip /docs/api/hosts/export_hosts_zip 301
+/api/hosts/export_hosts_zip /docs/api/hosts/export_hosts_zip/ 301
 /api/users /docs/api/users/ 301
 /api/invites /docs/api/invites/ 301
 
@@ -131,12 +132,25 @@
 /troubleshooting/daemon /docs/setting-up-daemons/troubleshooting-setup/ 301
 /troubleshooting/daemon/ /docs/setting-up-daemons/troubleshooting-setup/ 301
 
-# Section-level catch-alls (cover every page under these old root sections):
-/guides/* /docs/guides/:splat 301
-/reference/* /docs/reference/:splat 301
-/using-scanopy/* /docs/using-scanopy/:splat 301
-/setting-up-daemons/* /docs/setting-up-daemons/:splat 301
-/self-hosted-server/* /docs/self-hosted-server/:splat 301
+# Section-level catch-alls (cover every page under these old root sections).
+# Bare-section rules come first so an empty splat (e.g. /guides/) lands on the
+# section index in one hop instead of producing a double slash (/docs/guides//).
+# Splat targets keep a trailing slash to avoid the docs app's 308 slash-add hop.
+/guides /docs/guides/ 301
+/guides/ /docs/guides/ 301
+/guides/* /docs/guides/:splat/ 301
+/reference /docs/reference/ 301
+/reference/ /docs/reference/ 301
+/reference/* /docs/reference/:splat/ 301
+/using-scanopy /docs/using-scanopy/ 301
+/using-scanopy/ /docs/using-scanopy/ 301
+/using-scanopy/* /docs/using-scanopy/:splat/ 301
+/setting-up-daemons /docs/setting-up-daemons/ 301
+/setting-up-daemons/ /docs/setting-up-daemons/ 301
+/setting-up-daemons/* /docs/setting-up-daemons/:splat/ 301
+/self-hosted-server /docs/self-hosted-server/ 301
+/self-hosted-server/ /docs/self-hosted-server/ 301
+/self-hosted-server/* /docs/self-hosted-server/:splat/ 301
 
 # Bare old docs index that predates the troubleshooting split
 /docs/troubleshooting /docs/setting-up-daemons/troubleshooting-scans/ 301

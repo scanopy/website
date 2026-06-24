@@ -79,19 +79,41 @@
 		comparisons: 'Comparisons'
 	};
 
+	// Routes that emit their own page-level BreadcrumbList (with a richer hand-built
+	// trail). Skip the auto-breadcrumb there so a URL never carries two conflicting
+	// trails, and so we don't synthesize a crumb for a non-page segment like `vs`.
+	const SELF_BREADCRUMB_PREFIXES = ['/comparisons/vs/'];
+
+	// Real, human title for the leaf crumb on dynamic detail routes, pulled from the
+	// page's own load data instead of title-casing a raw slug (which produced names
+	// like "Network Diagrams Wrong" rather than the actual post/entry title).
+	function leafName(pathname: string, fallback: string): string {
+		const data = page.data as Record<string, unknown> & {
+			post?: { title?: string };
+			entry?: { title?: string };
+		};
+		if (pathname.startsWith('/blog/')) return data?.post?.title || fallback;
+		if (pathname.startsWith('/comparisons/')) return data?.post?.title || fallback;
+		if (pathname.startsWith('/changelog/')) return data?.entry?.title || fallback;
+		return fallback;
+	}
+
 	let breadcrumbSchema = $derived.by(() => {
 		const pathname = page.url.pathname;
 		if (pathname === '/') return null;
+		if (SELF_BREADCRUMB_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return null;
 
 		const segments = pathname.split('/').filter(Boolean);
 		const items = [{ name: 'Home', url: 'https://scanopy.net' }];
 
 		let currentPath = '';
-		for (const segment of segments) {
+		segments.forEach((segment, index) => {
 			currentPath += `/${segment}`;
-			const name = breadcrumbNameMap[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+			const isLeaf = index === segments.length - 1;
+			const titleCased = segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+			const name = breadcrumbNameMap[segment] || (isLeaf ? leafName(pathname, titleCased) : titleCased);
 			items.push({ name, url: `https://scanopy.net${currentPath}` });
-		}
+		});
 
 		return getBreadcrumbListSchema(items);
 	});
@@ -150,6 +172,13 @@
 	{#if breadcrumbSchema}
 		{@html `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`}
 	{/if}
+
+	<!-- Site-wide social defaults. Only tags no individual page sets live here (so we
+	     never emit duplicate property= meta); per-page og:title/description/image
+	     remain on each page. -->
+	<meta property="og:site_name" content="Scanopy" />
+	<meta property="og:locale" content="en_US" />
+	<meta name="twitter:site" content="@getscanopy" />
 </svelte:head>
 
 <div class="flex min-h-screen flex-col">
