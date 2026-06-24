@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Scale } from 'lucide-svelte';
+	import { CorrectionCallout } from '$lib/components';
 
 	interface ComparisonPost {
 		title: string;
@@ -9,8 +10,14 @@
 		slug: string;
 	}
 
+	interface VsLink {
+		href: string;
+		name: string;
+	}
+
 	interface PageData {
 		posts: ComparisonPost[];
+		vsLinks: VsLink[];
 	}
 
 	let { data }: { data: PageData } = $props();
@@ -87,6 +94,10 @@
 			</p>
 		</div>
 
+		<div class="mx-auto mb-12 max-w-2xl">
+			<CorrectionCallout />
+		</div>
+
 		{#if data.posts.length === 0}
 			<div class="text-center">
 				<p class="text-gray-400">No comparisons yet. Check back soon!</p>
@@ -112,6 +123,26 @@
 						</a>
 					</article>
 				{/each}
+			</div>
+		{/if}
+
+		{#if data.vsLinks.length}
+			<div class="mt-16 border-t border-gray-800 pt-12">
+				<h2 class="mb-3 text-2xl font-bold text-white">Scanopy head-to-head comparisons</h2>
+				<p class="mb-6 text-gray-400">
+					Comparing Scanopy against one specific tool? These focused two-tool pages put Scanopy
+					side by side with each competitor on discovery, the four topology views, pricing, and
+					licensing.
+				</p>
+				<ul class="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+					{#each data.vsLinks as link (link.href)}
+						<li>
+							<a href={link.href} class="text-blue-400 hover:text-blue-300">
+								Scanopy vs {link.name}
+							</a>
+						</li>
+					{/each}
+				</ul>
 			</div>
 		{/if}
 	</div>

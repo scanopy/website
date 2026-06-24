@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PageHero } from '$lib/components';
+	import { PageHero, CorrectionCallout } from '$lib/components';
 	import VendorComparison from '$lib/components/VendorComparison.svelte';
 	import FAQ from '$lib/components/FAQ.svelte';
 	import AuthorCard from '$lib/components/AuthorCard.svelte';
@@ -11,7 +11,6 @@
 		VendorSource,
 		VendorFAQ
 	} from '$lib/types';
-
 	interface Heading {
 		id: string;
 		text: string;
@@ -166,6 +165,8 @@
 						&larr; Back to comparisons
 					</a>
 				</header>
+
+				<CorrectionCallout />
 
 				{#if data.post.tldr}
 					<div class="mb-8 rounded-r-lg border-l-[3px] border-blue-500 bg-gray-800/50 px-5 py-4">
@@ -393,8 +394,8 @@
 	}
 
 	:global(.prose > .table-scroll table) {
-		table-layout: fixed;
-		width: 550px;
+		table-layout: auto;
+		width: 100%;
 	}
 
 	:global(.prose > .table-scroll th:first-child),
@@ -413,12 +414,29 @@
 		max-width: 100%;
 	}
 
+	/* Network Views (3) and Environments (4): center the chip groups. Allow wrapping so chips
+	   never overflow the cell. */
 	:global(.vendor-table td:nth-child(3)),
 	:global(.vendor-table td:nth-child(4)),
 	:global(.vendor-table th:nth-child(3)),
 	:global(.vendor-table th:nth-child(4)) {
 		text-align: center;
-		white-space: nowrap;
+	}
+
+	/* Environments column: neutral, equal-weight on-prem / cloud chips that wrap freely. */
+	:global(.prose .env-tags) {
+		display: inline-flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	:global(.prose .env-tag) {
+		background: rgba(148, 163, 184, 0.14);
+		color: rgb(203 213 225);
+		font-size: 0.6875rem;
+		padding: 0.0625rem 0.375rem;
 	}
 
 	:global(.vendor-table td:nth-child(1)) {
@@ -513,6 +531,39 @@
 		color: rgb(251 191 36);
 	}
 
+	/* Unverified ("unclear") view support: muted, distinct from yes/no. */
+	:global(.prose .chip-unclear) {
+		background: rgba(148, 163, 184, 0.12);
+		color: rgb(148 163 184);
+		border: 1px dashed rgba(148, 163, 184, 0.5);
+	}
+
+	/* Network Views column: compact per-view tags. */
+	:global(.prose .view-tags) {
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+	}
+
+	:global(.prose .view-tag) {
+		font-size: 0.6875rem;
+		padding: 0.0625rem 0.375rem;
+	}
+
+	/* Not-supported view: greyed out, de-emphasised. */
+	:global(.prose .view-tag-no) {
+		background: rgba(75, 85, 99, 0.18);
+		color: rgb(107 114 128);
+		text-decoration: line-through;
+		text-decoration-color: rgba(107, 114, 128, 0.6);
+	}
+
+	:global(.prose .view-legend) {
+		font-size: 0.8125rem;
+		color: rgb(156 163 175);
+		line-height: 2.2;
+	}
+
 	:global(.prose .tooltip-header) {
 		position: relative;
 		cursor: help;
@@ -520,12 +571,14 @@
 		text-underline-offset: 3px;
 	}
 
+	/* The inline .tooltip-content stays hidden; the `use:tooltip` action clones it and
+	   portals the copy (.tooltip-portal) to document.body so it can be position: fixed and
+	   never expand the table cell or the document height. */
 	:global(.prose .tooltip-content) {
 		display: none;
-		position: absolute;
-		top: 100%;
-		left: 0;
-		margin-top: 0.5rem;
+	}
+
+	:global(.tooltip-portal) {
 		padding: 0.75rem 1rem;
 		background: rgb(31 41 55);
 		border: 1px solid rgb(55 65 81);
@@ -533,13 +586,48 @@
 		font-size: 0.8125rem;
 		font-weight: 400;
 		color: rgb(209 213 219);
-		white-space: nowrap;
-		z-index: 10;
 		line-height: 2;
+		z-index: 50;
+		pointer-events: none;
+		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
 	}
 
-	:global(.prose .tooltip-header:hover .tooltip-content) {
-		display: block;
+	:global(.tooltip-portal .chip) {
+		display: inline-block;
+		padding: 0.125rem 0.5rem;
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1.5;
+		white-space: nowrap;
+	}
+
+	:global(.tooltip-portal .chip-positive) {
+		background: rgba(34, 197, 94, 0.15);
+		color: rgb(74 222 128);
+	}
+
+	:global(.tooltip-portal .chip-negative) {
+		background: rgba(239, 68, 68, 0.15);
+		color: rgb(248 113 113);
+	}
+
+	:global(.tooltip-portal .chip-neutral) {
+		background: rgba(245, 158, 11, 0.15);
+		color: rgb(251 191 36);
+	}
+
+	:global(.tooltip-portal .chip-unclear) {
+		background: rgba(148, 163, 184, 0.12);
+		color: rgb(148 163 184);
+		border: 1px dashed rgba(148, 163, 184, 0.5);
+	}
+
+	:global(.tooltip-portal .view-tag-no) {
+		background: rgba(75, 85, 99, 0.18);
+		color: rgb(107 114 128);
+		text-decoration: line-through;
+		text-decoration-color: rgba(107, 114, 128, 0.6);
 	}
 
 	:global(.prose strong) {

@@ -86,7 +86,7 @@
 				Each detected service is assigned a confidence level from Certain to Low based on how specific the match is. Endpoint content and header matches produce High confidence results, while port-only detections are rated lower. This lets you quickly see which identifications are rock-solid and which might need a closer look.
 			</p>
 			<p>
-				For the full technical details on how detection patterns work and the complete list of supported services, see the <a href="/docs/reference/service-detection/" class="text-blue-400 hover:text-blue-300">service detection reference</a>. Want to <a href="/pricing" class="text-blue-400 hover:text-blue-300">compare plans</a>?
+				For the full technical details on how detection patterns work and the complete list of supported services, see the <a href="/docs/reference/service-detection/" class="text-blue-400 hover:text-blue-300">service detection reference</a>. Most network diagram tools detect that a host exists but not what it runs; see how the field compares in our <a href="/comparisons/best-automated-network-diagram-tools" class="text-blue-400 hover:text-blue-300">comparison of automated network diagram tools</a>. Want to <a href="/pricing" class="text-blue-400 hover:text-blue-300">compare plans</a>?
 			</p>
 		</div>
 	</div>

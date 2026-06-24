@@ -1,4 +1,11 @@
 import { marked } from 'marked';
+import { vendors } from '$lib/fixtures/network-diagram-vendors';
+import { VS_VENDOR_SLUGS, vsSlug, vendorDisplayName } from '$lib/compare/vs-pages';
+
+interface VsLink {
+	href: string;
+	name: string;
+}
 
 interface ComparisonPost {
 	title: string;
@@ -55,5 +62,12 @@ export async function load() {
 		return new Date(b.date).getTime() - new Date(a.date).getTime();
 	});
 
-	return { posts };
+	// Head-to-head "Scanopy vs <vendor>" pages, pulled from the shared vendor list so the
+	// hub stays in sync with whatever VS_VENDOR_SLUGS includes.
+	const vsLinks: VsLink[] = VS_VENDOR_SLUGS.map((slug) => ({
+		href: vsSlug(slug),
+		name: vendorDisplayName(vendors[slug])
+	}));
+
+	return { posts, vsLinks };
 }

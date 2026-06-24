@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process';
+import { allVsPageSlugs } from '$lib/compare/vs-pages';
 
 export const prerender = true;
 
@@ -110,8 +111,19 @@ export async function GET() {
 		)
 		.join('');
 
+	// Programmatic "Scanopy vs <vendor>" head-to-head comparison pages.
+	// allVsPageSlugs() returns full paths like /comparisons/vs/<vendor>.
+	const vsUrls = allVsPageSlugs()
+		.map(
+			(path) => `
+  <url>
+    <loc>https://scanopy.net${path}</loc>
+  </url>`
+		)
+		.join('');
+
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${comparisonUrls}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${comparisonUrls}${vsUrls}
 </urlset>`;
 
 	return new Response(sitemap, {

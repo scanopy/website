@@ -206,7 +206,12 @@ export async function load({ params }) {
 				return `<h${depth}>${parsed.replace(/&quot;/g, '"').replace(/&#39;/g, "'")}</h${depth}>`;
 			};
 
-			let htmlContent = await marked.parse(body, { renderer });
+			let htmlContent = (await marked.parse(body, { renderer })) as string;
+			// External (http) reference links open in a new tab.
+			htmlContent = htmlContent.replace(
+				/<a href="(https?:\/\/[^"]+)"/g,
+				'<a href="$1" target="_blank" rel="noopener noreferrer"'
+			);
 
 			// Wrap markdown-rendered tables in scroll containers for mobile
 			htmlContent = htmlContent.replace(/<table>/g, '<div class="table-scroll"><table>').replace(/<\/table>/g, '</table></div>');

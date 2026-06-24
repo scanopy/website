@@ -2,7 +2,7 @@
 title: Automated Network Documentation Explained
 description: Your network diagrams are wrong by the time you save them. Automated network documentation uses SNMP and LLDP to discover devices, map connections, and keep everything current without manual effort.
 date: 2026-03-25
-dateModified: 2026-04-16
+dateModified: 2026-06-23
 keyword: automated network documentation
 slug: automated-network-documentation
 tldr: Automated network documentation uses protocols like SNMP, LLDP, and ARP to discover devices, map connections, and keep records current without manual effort. It replaces spreadsheets and stale Visio files with live, always-accurate diagrams.
@@ -41,7 +41,7 @@ None of this requires installing agents on endpoints. A single scanner on the ne
 
 **Continuous, not point-in-time.** A manual diagram captures the network at one moment. Automated documentation rescans on a schedule - daily, hourly, whatever you set. Devices that appear, disappear, or change get reflected automatically.
 
-**Living output, not a static file.** The result is an interactive topology map, not a PNG or a Visio file. You can click a host to see its services, filter by subnet, search by hostname. And because it updates itself, the map you look at during a 2am outage matches reality.
+**Living output, not a static file.** The result is an interactive topology map, not a PNG or a Visio file. You can click a host to see its services, filter by subnet, search by hostname, and switch between four views of the same scan: physical (L2), logical (L3), workloads (host to hypervisor to container), and applications. And because it updates itself, the map you look at during a 2am outage matches reality.
 
 ## How Automated Discovery Works, Step by Step
 
@@ -53,9 +53,9 @@ The protocols above sound abstract until you see how they fit together. Here's w
 
 **Step 3: Map connections between devices.** This is where topology comes from. The scanner reads LLDP and CDP neighbor tables from switches and routers. These tables contain exactly what's connected to each port and what's on the other end. For devices that don't speak LLDP/CDP, ARP tables and MAC forwarding tables fill the gaps by tracing which MAC addresses are reachable through which switch ports.
 
-**Step 4: Build the topology.** The scanner correlates all of this: host A's MAC address appears in switch B's forwarding table on port 3, and switch B's LLDP table says port 24 connects to router C. The result is a complete map of what's connected to what, built from the network's own data.
+**Step 4: Build the topology.** The scanner correlates all of this: host A's MAC address appears in switch B's forwarding table on port 3, and switch B's LLDP table says port 24 connects to router C. The result is a model of what's connected to what, built from the network's own data and rendered as four views you switch between, not one flattened map.
 
-**Step 5: Repeat on schedule.** The scanner reruns automatically (daily, hourly, or on demand). New devices appear on the map. Removed devices disappear. Changed connections update. No human intervention required.
+**Step 5: Repeat on schedule.** The scanner reruns automatically (daily, hourly, or on demand). New devices appear on the map. Removed devices disappear. Changed connections update, and snapshots version each scan so you can see exactly what changed between two points in time. No human intervention required.
 
 The entire process is agentless. Nothing gets installed on the devices being documented. A single lightweight daemon on one machine in the network handles everything.
 
@@ -71,7 +71,7 @@ This is easier to show than describe. Deploy a scanner on your network, run a di
 | Interface details | SNMP | GigabitEthernet0/8: up, 1Gbps, full duplex |
 | Device metadata | SNMP | Cisco C9200L, uptime 142 days, IOS-XE 17.9 |
 
-The result is a topology map showing every device, what it's running, and how it connects to everything else. Scanopy detects [over 200 service types](/services) automatically -- from enterprise databases to Docker containers to printers.
+The result is interactive topology views of every device, what it's running, and how it connects to everything else. Scanopy detects [over 200 service types](/services) automatically -- from enterprise databases to Docker containers to printers.
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 

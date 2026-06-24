@@ -108,11 +108,25 @@ export type DiscoveryMethod =
 	| 'SSH/CLI'
 	| 'Cloud import'
 	| 'mDNS'
-	| 'NetBIOS';
+	| 'NetBIOS'
+	| 'NetFlow/sFlow';
 
 export type ServiceLevel = 'yes' | 'no' | 'basic';
 export type OpenSourceStatus = 'osi' | 'source-available' | 'no';
-export type VendorCapability = 'Monitoring' | 'Automation' | 'Traffic Analysis' | 'RMM' | 'Docker Visualization';
+
+// Documentation view support: tri-state so uncertainty is first-class and visible.
+// 'yes'/'no' are definite claims (back them with a citation via viewTypesSources or a per-view note);
+// 'unclear' means unverified, rendered visibly distinct rather than left blank.
+export type ViewSupport = 'yes' | 'no' | 'unclear';
+export interface ViewTypes {
+	l2: ViewSupport; // physical switch/port/link topology
+	l3: ViewSupport; // subnet/VLAN/routing topology
+	workload: ViewSupport; // VM/container host nesting (bare metal -> hypervisor -> VM/container)
+	application: ViewSupport; // service-dependency / app-grouping mapping
+	// Optional short note shown in the detail summary (e.g. "user-defined grouping, not auto-inferred").
+	note?: string;
+}
+export type VendorCapability = 'Monitoring' | 'Automation' | 'Traffic Analysis' | 'RMM' | 'Docker Visualization' | 'Dependency Mapping';
 export type DeploymentType = 'Cloud' | 'Self-hosted' | 'Desktop' | 'Browser' | 'CLI';
 
 export interface SourceRef {
@@ -147,6 +161,17 @@ export interface Vendor {
 	openSource: { status: OpenSourceStatus; license?: string; href?: string };
 	pricing: LinkedText;
 	alsoIncludes?: VendorCapability[];
+	viewTypes?: ViewTypes;
+	viewTypesSources?: SourceRef[]; // citations backing the definite (yes/no) view claims
+	// Cloud discovery: whether the tool discovers AWS/Azure/GCP via API. `hybrid` true means it
+	// renders on-prem and cloud in one map; false means cloud-only (no on-prem discovery).
+	// Undefined means on-prem only.
+	cloudDiscovery?: {
+		clouds: ('AWS' | 'Azure' | 'GCP')[];
+		hybrid: boolean;
+		note?: string;
+		sources?: SourceRef[];
+	};
 
 	// Detail card data
 	bestFor?: string; // one-sentence "who is this for?" for AI extraction
@@ -159,6 +184,10 @@ export interface Vendor {
 	whereItFits?: string;
 	tradeOff?: string;
 	tradeOffLabel?: string; // defaults to "Trade-off"
+	// Hand-written prose summarizing how Scanopy compares to THIS vendor, rendered on
+	// the /comparisons/vs/<slug> page. Only set for the strongest, highest-intent
+	// head-to-head matchups; other vendors get the table + data-derived intro only.
+	versus?: string;
 	deployment?: DeploymentType[];
 	deploymentNotes?: string;
 	deploymentSources?: SourceRef[];

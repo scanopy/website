@@ -89,6 +89,8 @@ Compare that to the markdown tables above and you'll see why I stopped maintaini
 
 I built this for my homelab, and the self-hosting community has loved it. But it turns out sysadmins and MSPs have the exact same problem at a much bigger scale. The template above works for 20 devices in a closet. It breaks down at 200 devices across three sites where five people make changes. Brandon Lee at VirtualizationHowTo [put it through its paces](https://www.virtualizationhowto.com/2025/12/stop-drawing-network-diagrams-manually-scanopy-does-it-for-you/) on a production network and came to the same conclusion: manual diagrams don't survive contact with a real environment.
 
+Scanopy isn't the only tool that does this. If you want to weigh the options, we [compared the best automated network diagram tools](/comparisons/best-automated-network-diagram-tools) by discovery method, pricing, and how often the map updates.
+
 The template gives you a snapshot of column headers. Scanopy gives you an interactive, shareable map you can embed anywhere - and it can't go stale because it's reading the network directly. If you still want the spreadsheet, Scanopy exports CSVs and has an API. Same data, always current.
 
 ## When a Template Is the Right Call

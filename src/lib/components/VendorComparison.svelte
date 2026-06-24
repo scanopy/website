@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { marked } from 'marked';
+	import { tooltip } from '$lib/actions/tooltip';
 	import type {
 		Vendor,
 		VendorCategory,
@@ -32,7 +33,8 @@
 		pricing: 'Pricing',
 		alsoIncludes: 'Also Includes',
 		bestFor: 'Best for',
-		deployment: 'Deployment'
+		deployment: 'Deployment',
+		viewTypes: 'Network Views'
 	};
 
 	function v(slug: string): Vendor {
@@ -78,12 +80,24 @@
 		return serviceLevels[level] || serviceLevels.no;
 	}
 
+	const viewOrder: { key: 'l2' | 'l3' | 'workload' | 'application'; label: string }[] = [
+		{ key: 'l2', label: 'L2' },
+		{ key: 'l3', label: 'L3' },
+		{ key: 'workload', label: 'Workload' },
+		{ key: 'application', label: 'Application' }
+	];
+
 	function osInfo(status: string) {
 		return osStatuses[status] || osStatuses.no;
 	}
 
 	function md(text: string): string {
-		return marked.parseInline(text) as string;
+		const html = marked.parseInline(text) as string;
+		// External (http) reference links open in a new tab.
+		return html.replace(
+			/<a href="(https?:\/\/[^"]+)"/g,
+			'<a href="$1" target="_blank" rel="noopener noreferrer"'
+		);
 	}
 
 	function sourceRefHtml(refs: SourceRef[]): string {
@@ -119,12 +133,26 @@
 		return `${base}. ${vendor.pricingNotes}`;
 	}
 
+	function viewTypesText(vendor: Vendor): string | null {
+		if (!vendor.viewTypes) return null;
+		// Coverage (which views) is shown by the table's Network Views chips; this detail line
+		// carries only the per-vendor nuance note plus citations, to avoid restating coverage.
+		if (!vendor.viewTypes.note) return null;
+		let text = vendor.viewTypes.note;
+		if (vendor.viewTypesSources) text += sourceRefHtml(vendor.viewTypesSources);
+		return text;
+	}
+
 	function detailFields(vendor: Vendor): { label: string; content: string }[] {
 		const fields: { label: string; content: string }[] = [];
 		if (vendor.bestFor) {
 			fields.push({ label: 'Best for', content: vendor.bestFor });
 		}
 		fields.push({ label: 'Discovery', content: discoveryText(vendor) });
+		const vt = viewTypesText(vendor);
+		if (vt) {
+			fields.push({ label: 'Network views', content: vt });
+		}
 		if (vendor.integrations) {
 			fields.push({ label: 'Integrations', content: vendor.integrations });
 		}
@@ -148,11 +176,50 @@
 	}
 </script>
 
+{#snippet viewTags(vendor: Vendor)}
+	{#if vendor.viewTypes}
+		<span class="view-tags">
+			{#each viewOrder as view, i}
+				{@const support = vendor.viewTypes[view.key]}
+				{#if support === 'yes'}
+					<span class="chip chip-positive view-tag" title="{view.label}: supported">{view.label}</span>
+				{:else if support === 'unclear'}
+					<span class="chip chip-unclear view-tag" title="{view.label}: unverified">{view.label} ?</span>
+				{:else}
+					<span class="chip view-tag view-tag-no" title="{view.label}: not supported">{view.label}</span>
+				{/if}
+			{/each}
+		</span>
+	{/if}
+{/snippet}
+
+{#snippet environmentsCell(vendor: Vendor)}
+	{@const onPrem = vendor.discovery.length > 0}
+	{@const clouds = vendor.cloudDiscovery?.clouds ?? []}
+	{#if onPrem || clouds.length}
+		<span class="env-tags">
+			{#if onPrem}
+				<span class="chip env-tag" title="Discovers on-prem networks">On-prem</span>
+			{/if}
+			{#each clouds as cloud}
+				<span class="chip env-tag" title="Discovers {cloud}">{cloud}</span>
+			{/each}
+		</span>
+		{#if vendor.cloudDiscovery?.sources}
+			{@html sourceRefHtml(vendor.cloudDiscovery.sources)}
+		{/if}
+	{:else}
+		<span class="cell-detail" title="No discovery">—</span>
+	{/if}
+{/snippet}
+
 {#if mode === 'tables' && categories && vendors}
 	<div class="table-scroll vendor-table">
-	<table style="table-layout: fixed; min-width: 700px;">
+	<table style="table-layout: fixed; min-width: 990px;">
 		<colgroup>
 			<col style="width: 115px;">
+			<col style="width: 120px;">
+			<col style="width: 180px;">
 			<col style="width: 120px;">
 			<col style="width: 110px;">
 			<col style="width: 110px;">
@@ -162,19 +229,21 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th class="tooltip-header">Tool<span class="tooltip-content">Product name and link to vendor site</span></th>
-				<th class="tooltip-header">Discovery<span class="tooltip-content">Protocols used to find devices and map connections</span></th>
-				<th class="tooltip-header">Services<span class="tooltip-content"><span class="chip chip-negative">No</span> No service awareness<br><span class="chip chip-neutral">Basic</span> Common port detection<br><span class="chip chip-positive">Yes</span> Application-level fingerprinting</span></th>
-				<th class="tooltip-header">Live Updates<span class="tooltip-content">Whether diagrams update automatically after initial scan</span></th>
-				<th class="tooltip-header">Open Source<span class="tooltip-content"><span class="chip chip-positive">OSI</span> OSI-approved open source license<br><span class="chip chip-neutral">Source available</span> Source code available, restricted license<br><span class="chip chip-negative">No</span> Proprietary</span></th>
-				<th class="tooltip-header">Pricing<span class="tooltip-content">Starting price or pricing model</span></th>
-				<th class="tooltip-header">Also Includes<span class="tooltip-content">Capabilities beyond network diagramming</span></th>
+				<th class="tooltip-header" use:tooltip>Tool<span class="tooltip-content">Product name and link to vendor site</span></th>
+				<th class="tooltip-header" use:tooltip>Discovery<span class="tooltip-content">Protocols used to find devices and map connections</span></th>
+				<th class="tooltip-header" use:tooltip>Network Views<span class="tooltip-content">Which topology views the tool produces from discovery.<br><span class="chip chip-positive">L2</span> Physical switch ports and links<br><span class="chip chip-positive">L3</span> Subnets, VLANs, routing<br><span class="chip chip-positive">Workload</span> VM/container host nesting<br><span class="chip chip-positive">Application</span> Service-dependency / app grouping<br><br><span class="chip chip-positive">Yes</span> supported<br><span class="chip chip-unclear">Tag ?</span> unverified<br><span class="chip view-tag-no">Greyed</span> not supported</span></th>
+				<th class="tooltip-header" use:tooltip>Environments<span class="tooltip-content">Where the tool discovers/maps: on-prem and/or public cloud (AWS, Azure, GCP).</span></th>
+				<th class="tooltip-header" use:tooltip>Services<span class="tooltip-content"><span class="chip chip-negative">No</span> No service awareness<br><span class="chip chip-neutral">Basic</span> Common port detection<br><span class="chip chip-positive">Yes</span> Application-level fingerprinting</span></th>
+				<th class="tooltip-header" use:tooltip>Live Updates<span class="tooltip-content">Whether diagrams update automatically after initial scan</span></th>
+				<th class="tooltip-header" use:tooltip>Open Source<span class="tooltip-content"><span class="chip chip-positive">OSI</span> OSI-approved open source license<br><span class="chip chip-neutral">Source available</span> Source code available, restricted license<br><span class="chip chip-negative">No</span> Proprietary</span></th>
+				<th class="tooltip-header" use:tooltip>Pricing<span class="tooltip-content">Starting price or pricing model</span></th>
+				<th class="tooltip-header" use:tooltip>Also Includes<span class="tooltip-content">Capabilities beyond network diagramming</span></th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each categories as category}
 				<tr class="category-row">
-					<td colspan="7">{category.heading}</td>
+					<td colspan="9">{category.heading}</td>
 				</tr>
 				{#each category.vendors as slug}
 					{@const vendor = v(slug)}
@@ -191,6 +260,12 @@
 							{#if vendor.discoverySources}
 								{@html sourceRefHtml(vendor.discoverySources)}
 							{/if}
+						</td>
+						<td>
+							{@render viewTags(vendor)}
+						</td>
+						<td>
+							{@render environmentsCell(vendor)}
 						</td>
 						<td>
 							{#if vendor.services.detail && vendor.services.detailHref}
@@ -358,6 +433,8 @@
 									{/each}
 								{/if}
 							</td>
+						{:else if col === 'viewTypes'}
+							<td>{@render viewTags(vendor)}</td>
 						{:else if col === 'bestFor'}
 							<td>{vendor.bestFor || ''}</td>
 						{:else if col === 'deployment'}
@@ -375,7 +452,7 @@
 {#if mode === 'sources' && sources}
 	<div style="font-size: 0.8125rem; line-height: 1.8; color: rgb(156 163 175);">
 		{#each sources as source}
-			<span id="source-{source.id}">[{source.id}]</span> <a href={source.url}>{source.label}</a><br>
+			<span id="source-{source.id}">[{source.id}]</span> <a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a><br>
 		{/each}
 	</div>
 {/if}

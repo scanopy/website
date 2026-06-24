@@ -1,10 +1,11 @@
 import type { Vendor, VendorCategory, VendorSource, VendorFAQ } from '$lib/types';
-import { getServiceCountLabel } from '$lib/schemas';
+import { getServiceCountLabel, getStartingMonthlyPrice } from '$lib/schemas';
 
 const serviceCount = getServiceCountLabel();
+const startingPrice = getStartingMonthlyPrice();
 
 export const disclosureText =
-	"Full disclosure: Scanopy is our product. We built this list to be useful whether you pick us or not. Vendor details are sourced from official documentation, published pricing, and community reports as of April 2026. Features, pricing, and capabilities may have changed since publication — check each vendor's website for the latest information.";
+	"Full disclosure: Scanopy is our product. We built this list to be useful whether you pick us or not. Vendor details are sourced from official documentation, published pricing, and community reports as of June 2026. Features, pricing, and capabilities may have changed since publication. Check each vendor's website for the latest information.";
 
 export const vendors: Record<string, Vendor> = {
 	scanopy: {
@@ -16,17 +17,24 @@ export const vendors: Record<string, Vendor> = {
 		services: { level: 'yes', detail: `${serviceCount} types`, detailHref: '/services' },
 		autoUpdates: true,
 		openSource: { status: 'osi', license: 'AGPL-3.0', href: '/community' },
-		pricing: { text: 'Flat monthly, unlimited hosts', href: '/pricing' },
+		pricing: { text: `Starts at ${startingPrice} monthly, unlimited hosts`, href: '/pricing' },
 		alsoIncludes: ['Docker Visualization'],
+		viewTypes: {
+			l2: 'yes',
+			l3: 'yes',
+			workload: 'yes',
+			application: 'yes'
+		},
+		viewTypesSources: [{ id: 18 }],
 		bestFor: 'IT teams and MSPs who want a dedicated network diagram automation tool which works alongside their existing monitoring platform',
 		description:
-			"Full disclosure: Scanopy is our product. We've tried to be honest about every tool on this list, including our own.\n\nScanopy is an [automated network documentation](/blog/automated-network-documentation) tool built for IT teams that need living network maps that work alongside their monitoring platform. It deploys a lightweight daemon that discovers your network and builds an interactive topology map that updates on a schedule.",
+			"Full disclosure: Scanopy is our product. We've tried to be honest about every tool on this list, including our own.\n\nScanopy is an [automated network documentation](/blog/automated-network-documentation) tool built for IT teams that need living network maps that work alongside their monitoring platform. It deploys a lightweight daemon that discovers your network and builds an interactive topology map that updates on a schedule. A single scan produces four views you can switch between: L2 physical, L3 logical, workloads, and applications.",
 		discoveryNotes:
-			'One daemon per network. No agents on endpoints, no SSH credentials.',
+			'One daemon per network. No agents on endpoints, no SSH credentials. SNMPv1, v2c, and v3 (AuthPriv) are all supported, with credentials applied network-wide or pinned per host.',
 		serviceDiscovery:
 			`This is where Scanopy differs from most tools on this list. Beyond mapping devices and connections, Scanopy fingerprints [${serviceCount} service types](/services) per host: databases, web servers, DNS, DHCP, Docker containers, print services, and more. Most network mapping tools tell you a device exists at an IP address. Scanopy tells you what it's running. When you click a host on the topology map, you see every detected service, not just the host itself.`,
 		diagrams:
-			'Interactive topology map showing devices, connections, services, and interfaces. Shareable via link (no per-seat licensing). Exportable as SVG, Mermaid, and Confluence markup. Embeddable via iframe.',
+			'One scan produces four interactive views you can switch between: L2 physical (switch ports and links), L3 logical (subnets and routing), workloads (Docker containers and what they run), and applications (services grouped into the apps they belong to). Topology snapshots version your network state over time, so you can see what changed between scans. Shareable via link (no per-seat licensing). Exportable as SVG, Mermaid, and Confluence markup. Embeddable via iframe.',
 		pricingNotes:
 			'Free self-hosted [Community edition](/community) available.',
 		whereItFits:
@@ -58,6 +66,14 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: true,
 		openSource: { status: 'no' },
 		pricing: { text: 'From $1,977/yr subscription', sources: [{ id: 3 }] },
+		viewTypes: {
+			l2: 'yes',
+			l3: 'yes',
+			workload: 'unclear',
+			application: 'no',
+			note: 'L2 and L3 diagrams from a single scan.'
+		},
+		viewTypesSources: [{ id: 3 }],
 		bestFor: 'Enterprise teams that standardize on Microsoft tools and need Visio-native network diagram exports',
 		description:
 			'Best for organizations that need compliance-ready Visio exports. NTM scans your network and generates topology diagrams exportable to Visio, PDF, and PNG. It is a standalone Windows application, separate from the SolarWinds Observability platform.',
@@ -86,6 +102,20 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: true,
 		openSource: { status: 'no' },
 		pricing: { text: 'Enterprise (contact sales)' },
+		viewTypes: {
+			l2: 'yes',
+			l3: 'yes',
+			workload: 'yes',
+			application: 'yes',
+			note: 'Virtualization maps (ESXi/vSwitch/VM) and application-path mapping, all on one dynamic map.'
+		},
+		viewTypesSources: [{ id: 34 }, { id: 35 }, { id: 36 }],
+		cloudDiscovery: {
+			clouds: ['AWS', 'Azure', 'GCP'],
+			hybrid: true,
+			note: 'hybrid on-prem/cloud path mapping in one map',
+			sources: [{ id: 21 }]
+		},
 		bestFor: 'Large enterprises that need network maps integrated with automation and troubleshooting workflows',
 		description:
 			'The only tool on this list built for large-scale network automation. Enterprise-grade dynamic network mapping with troubleshooting workflows — NetBrain maps sit at the center of a broader automation platform.',
@@ -101,7 +131,48 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Cloud', 'Self-hosted'],
 		deploymentNotes:
 			'On-premises server or [NetBrain-hosted cloud](https://www.netbrain.com/). Central server polls devices via SNMP and SSH/CLI — no per-device agents.',
-		deploymentSources: [{ id: 21 }]
+		deploymentSources: [{ id: 21 }],
+		versus:
+			"NetBrain and Scanopy answer different questions. NetBrain is an enterprise network-automation platform: its dynamic maps cover L2, L3, virtualization (ESXi/vSwitch/VM), and application-path mapping, and they tie into troubleshooting runbooks and automation playbooks, so a map can trigger actions, not just display data. It is built for large, complex networks with thousands of devices and a team to run it. Scanopy is a focused documentation tool: it discovers your network and produces four switchable views (L2, L3, workloads, applications) plus per-host service fingerprinting, and it stops there. No automation engine, no runbooks.\n\nThe trade-off is scope, price, and effort. NetBrain is enterprise-priced (contact-sales only) and complex enough that a proper proof-of-concept is essential. Community experiences are polarized: some teams get excellent results, others have [struggled with map accuracy for years](https://www.reddit.com/r/networking/comments/uu3wyr/comment/i9duuiu/). Scanopy is [flat monthly with unlimited hosts](/pricing), self-hostable under [AGPL-3.0](/community), and runs from one daemon with no platform to administer. If you need maps wired into operational automation across a large enterprise, NetBrain is the category leader and Scanopy is not a substitute. If you want accurate, living, shareable network documentation without standing up an automation platform, Scanopy is simpler and far cheaper.\n\nHonest note on capability: NetBrain is one of the few tools here that genuinely produces all four view types, so on view coverage alone it matches Scanopy. The difference is everything around the map, not the map itself."
+	},
+	faddom: {
+		name: 'Faddom',
+		slug: 'faddom',
+		href: 'https://faddom.com/',
+
+		discovery: ['NetFlow/sFlow'],
+		discoverySources: [{ id: 23 }],
+		services: { level: 'basic', detail: 'app dependencies', sources: [{ id: 23 }] },
+		autoUpdates: true,
+		openSource: { status: 'no' },
+		pricing: { text: 'Free up to 50 servers then from $19,000/yr', sources: [{ id: 24 }] },
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'unclear',
+			application: 'yes',
+			note: 'Application view is automatic, inferred from observed traffic (NetFlow/sFlow); does no network-layer L2/L3 topology.'
+		},
+		viewTypesSources: [{ id: 23 }],
+		bestFor: 'Enterprise IT teams mapping application dependencies for data center migrations and cloud transitions',
+		description:
+			'Agentless [application dependency mapping](https://faddom.com/) (ADM) for hybrid and multi-cloud infrastructure. Faddom builds real-time maps of how servers, applications, and services depend on each other, aimed at data center migration, cloud transition planning, and change management. Its headline claim is a first map in under 60 minutes, and reviews corroborate the fast time-to-value.',
+		discoveryNotes:
+			'Discovery is agentless and credential-free. Instead of polling devices, Faddom observes network traffic ([NetFlow, sFlow, or a packet copy](https://faddom.com/)) to infer dependencies automatically. That means no agents to roll out, but it typically requires NetFlow/sFlow configuration or port mirroring, which needs network-team buy-in.',
+		serviceDiscovery:
+			'Faddom maps application dependencies (which services talk to which), not the device-level service fingerprinting that Scanopy or Nmap do. It enriches maps through integrations with Kubernetes and APM tools like Datadog.',
+		diagrams:
+			'Real-time application dependency graphs spanning on-prem, AWS, Azure, and GCP. It does not produce network-layer (Layer 2/3) topology — the focus is app-to-app relationships, not switch-port physical maps.',
+		pricingNotes:
+			'Pricing is public, which is rare in this category. A free Community tier covers up to 50 servers (described as "limited time access," so permanence is unclear). Paid plans start at $19,000/year for up to 300 servers (SMB tier) and scale to custom enterprise pricing. Modular: you pay for servers, modules, and users.',
+		whereItFits:
+			'Mid-to-large enterprise IT operations teams planning migrations or cloud moves who need an automatic picture of application dependencies without deploying agents. The public pricing and 50-server free tier make it genuinely evaluable without a sales process, which is unusual for ADM.',
+		tradeOff:
+			'ADM-only scope. No network-layer topology, no CMDB, ITAM, or service management ([per third-party analysis](https://virima.com/blog/faddom-solution-overview-top-alternatives)). Native ITSM integrations are limited to ServiceNow and Splunk. The traffic-capture dependency (NetFlow/sFlow or port mirroring) is a real setup hurdle, and the $19,000/year floor puts it out of reach for SMB and homelab budgets.',
+		tradeOffLabel: 'Trade-offs',
+		deployment: ['Cloud', 'Self-hosted'],
+		deploymentNotes:
+			'Self-hosted appliance (on-prem or cloud), also available via the AWS, Azure, and GCP marketplaces. No per-host agents, but it needs access to network traffic.'
 	},
 	auvik: {
 		name: 'Auvik',
@@ -115,6 +186,20 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: 'Per-device (contact sales)' },
 		alsoIncludes: ['Monitoring', 'Traffic Analysis'],
+		viewTypes: {
+			l2: 'yes',
+			l3: 'yes',
+			workload: 'no',
+			application: 'unclear',
+			note: 'Discovers VMs and containers and shows them as nodes on the L2/L3 map, but no host-to-VM nesting view (VM detail lives in a monitoring dashboard).'
+		},
+		viewTypesSources: [{ id: 37 }, { id: 39 }],
+		cloudDiscovery: {
+			clouds: ['AWS', 'Azure', 'GCP'],
+			hybrid: true,
+			note: 'cloud APIs alongside on-prem collector',
+			sources: [{ id: 20 }]
+		},
 		bestFor: 'MSPs who need monitoring, alerting, and network maps in one cloud-managed platform',
 		description:
 			'The strongest option for MSPs who want monitoring and network maps in one platform. Auvik is cloud-managed network monitoring that discovers devices via SNMP, CDP, LLDP, and ARP, then builds real-time topology maps that update continuously.',
@@ -131,7 +216,9 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Cloud'],
 		deploymentNotes:
 			'Cloud-hosted SaaS. One [collector deployed per network site](https://support.auvik.com/hc/en-us/articles/206173816) forwards data to Auvik\'s platform. No software on monitored devices.',
-		deploymentSources: [{ id: 20 }]
+		deploymentSources: [{ id: 20 }],
+		versus:
+			"Auvik and Scanopy both build live Layer 2/3 topology maps from SNMP, CDP, LLDP, and ARP, so on raw discovery they overlap. The difference is what each is built to be. Auvik is a monitoring-and-RMM platform: alerting, config backup, traffic analysis, and remote management, with topology mapping as one strong feature among many. Scanopy is a dedicated documentation tool. It maps and fingerprints services (databases, web servers, Docker containers, and more) and produces four switchable views (L2, L3, workloads, applications), but it does no monitoring or alerting.\n\nThat shapes the buying decision. Auvik prices per device and does not publish rates, so cost scales with your fleet and you request a quote. Scanopy is [flat monthly with unlimited hosts](/pricing), and there is a free, self-hostable [AGPL-3.0 Community edition](/community). If you are an MSP that wants monitoring, alerting, and maps in one cloud platform, Auvik's bundle is the stronger fit, and its topology mapping is a genuine core feature, not an afterthought. If you already run a monitoring stack (LibreNMS, Zabbix, PRTG) and just need accurate, shareable, exportable documentation that isn't tied to a per-device monitoring bill, Scanopy sits alongside what you have rather than replacing it.\n\nHonest caveat on views: Auvik covers L2 and L3 well and surfaces VMs and containers as nodes, but it has no host-to-VM workload-nesting view and its application grouping is unclear from public docs. Scanopy adds the workload and application views. Neither tool replaces the other's primary job."
 	},
 	prtg: {
 		name: 'PRTG',
@@ -146,6 +233,14 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: 'Free up to 100 sensors then tiered', sources: [{ id: 4 }] },
 		alsoIncludes: ['Monitoring', 'Traffic Analysis'],
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'unclear',
+			application: 'no',
+			note: 'No native auto L2/L3; automatic L2 maps require the third-party UVexplorer add-on.'
+		},
+		viewTypesSources: [{ id: 32 }],
 		bestFor: 'Teams already invested in the Paessler ecosystem who want built-in topology mapping alongside monitoring',
 		description:
 			'Best for teams already running Paessler for monitoring who want built-in mapping. PRTG is a full monitoring stack with auto-discovery and interactive maps — it has been around since 2003 and has a large installed base. PRTG counts sensors, not devices — [most users average 10 sensors per device](https://www.paessler.com/prtg/requirements), so a 1,000-sensor license typically covers around 100 devices.',
@@ -176,6 +271,14 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: '$1.50/device/mo', sources: [{ id: 7 }] },
 		alsoIncludes: ['Monitoring', 'RMM'],
+		viewTypes: {
+			l2: 'yes',
+			l3: 'unclear',
+			workload: 'unclear',
+			application: 'unclear',
+			note: 'L2 map confirmed; L3/VLAN mapping is not documented in Domotz help docs.'
+		},
+		viewTypesSources: [{ id: 29 }],
 		bestFor: 'Cost-conscious MSPs who need monitoring, remote access, and basic network maps at a transparent price',
 		description:
 			'The most affordable monitoring platform with network maps — best for cost-conscious MSPs. Domotz offers remote monitoring and management with network mapping, popular as a lower-cost Auvik alternative. A [single collector deployed to the client\'s network](https://blog.domotz.com/all/agentless-network-discovery-msp-client-onboarding/) provides a real-time inventory within minutes. No endpoint agents required.',
@@ -205,6 +308,14 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'no' },
 		pricing: { text: 'From $95/yr (10 devices)', sources: [{ id: 9 }] },
 		alsoIncludes: ['Monitoring'],
+		viewTypes: {
+			l2: 'yes',
+			l3: 'yes',
+			workload: 'yes',
+			application: 'no',
+			note: 'Host-to-VM and VM-to-datastore virtualization maps.'
+		},
+		viewTypesSources: [{ id: 27 }, { id: 38 }],
 		bestFor: 'Mid-market IT teams that want monitoring and visualization at a lower per-device cost',
 		description:
 			"Best budget option for mid-market teams that want monitoring and topology maps at a fraction of Auvik's per-device cost. OpManager provides [agentless](https://www.manageengine.com/network-monitoring/agentless-network-monitoring.html) network monitoring with Layer 2/3 auto-discovery and topology maps, plus rack and floor plan views that most monitoring tools lack. [Scales up to 30,000 devices](https://www.manageengine.com/network-monitoring/network-monitoring-tool.html) with a distributed monitoring architecture.",
@@ -230,6 +341,14 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: false,
 		openSource: { status: 'source-available', license: 'NPSL' },
 		pricing: { text: 'Free' },
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'The Zenmap topology tab is a traceroute hop graph, not an L2 or L3 map.'
+		},
+		viewTypesSources: [{ id: 17 }],
 		bestFor: 'Security audits, one-off network discovery, and as the discovery layer in custom automation pipelines',
 		description:
 			'The go-to tool for one-off network scanning and security audits, not ongoing documentation. Nmap is the standard open-source network scanner. Zenmap is its official GUI, which includes basic topology visualization of scan results.',
@@ -258,6 +377,14 @@ export const vendors: Record<string, Vendor> = {
 		openSource: { status: 'osi', license: 'GPL-3.0' },
 		pricing: { text: 'Free' },
 		alsoIncludes: ['Monitoring'],
+		viewTypes: {
+			l2: 'yes',
+			l3: 'unclear',
+			workload: 'no',
+			application: 'no',
+			note: 'L2 map built from xDP (CDP/LLDP) and ARP; no L3 subnet map.'
+		},
+		viewTypesSources: [{ id: 30 }],
 		bestFor: 'Teams with Linux skills that want free, self-hosted monitoring with basic topology visualization',
 		description:
 			'The best free self-hosted monitoring option with basic mapping. LibreNMS is open-source network monitoring with auto-discovery and a weathermap plugin for topology visualization. [Requires PHP 8.2+ and MariaDB](https://docs.librenms.org/Installation/Install-LibreNMS/) on Linux. Central server polls devices via SNMP — no per-device agents required.',
@@ -284,6 +411,13 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: false,
 		openSource: { status: 'osi', license: 'Apache-2.0' },
 		pricing: { text: 'Free' },
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'Manual diagramming only, no discovery.'
+		},
 		bestFor: 'Anyone who needs a one-time, hand-crafted network diagram for a presentation or project',
 		description:
 			'The best free option for one-time, hand-drawn network diagrams. draw.io is an open-source diagramming tool with extensive network shape libraries — the most popular free alternative to Visio.',
@@ -305,11 +439,25 @@ export const vendors: Record<string, Vendor> = {
 		slug: 'lucidchart',
 		href: 'https://www.lucidchart.com/',
 
-		discovery: ['Cloud import'],
+		discovery: [],
 		services: { level: 'no' },
 		autoUpdates: false,
 		openSource: { status: 'no' },
 		pricing: { text: 'From $9/user/mo', sources: [{ id: 11 }] },
+		viewTypes: {
+			l2: 'no',
+			l3: 'unclear',
+			workload: 'unclear',
+			application: 'unclear',
+			note: 'Auto-views come only from the Lucidscale cloud import (AWS/Azure/GCP), not on-prem topology.'
+		},
+		viewTypesSources: [{ id: 33 }],
+		cloudDiscovery: {
+			clouds: ['AWS', 'Azure', 'GCP'],
+			hybrid: false,
+			note: 'imports cloud topology; no on-prem discovery',
+			sources: [{ id: 22 }]
+		},
 		bestFor: 'Teams that need polished, collaborative network diagrams for documentation or cloud architecture reviews',
 		description:
 			'Best for teams that need real-time collaboration on professional diagrams. Lucidchart is cloud-based diagramming with multi-user editing and imports infrastructure data from AWS, Azure, and GCP.',
@@ -341,6 +489,14 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: true,
 		openSource: { status: 'osi', license: 'BSD' },
 		pricing: { text: 'Free' },
+		viewTypes: {
+			l2: 'yes',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'Layer 1/2 neighbor map (CDP/LLDP); explicitly no L3 routing or subnet mapping.'
+		},
+		viewTypesSources: [{ id: 31 }],
 		bestFor: 'Network teams that want free, open-source Layer 2 topology discovery and device tracking',
 		description:
 			'The most-recommended open-source network discovery tool in sysadmin and networking communities. NetDisco is a web-based network management tool that discovers devices via SNMP and maps Layer 2 topology using CDP and LLDP neighbor data. Originally developed at the University of Amsterdam, actively maintained since 2003.',
@@ -367,6 +523,14 @@ export const vendors: Record<string, Vendor> = {
 		autoUpdates: true,
 		openSource: { status: 'osi', license: 'AGPL-3.0', href: '/community' },
 		pricing: { text: 'Free' },
+		viewTypes: {
+			l2: 'yes',
+			l3: 'yes',
+			workload: 'yes',
+			application: 'yes',
+			note: 'Same engine and four views as Scanopy SaaS; application view is user-defined.'
+		},
+		viewTypesSources: [{ id: 19 }],
 		bestFor: 'Teams that want automated network documentation on their own infrastructure with no SaaS dependency',
 		description:
 			"The best free self-hosted option for automated network documentation. Scanopy CE is the free, self-hosted edition with the same discovery engine as the paid product — SNMP, LLDP, CDP, ARP — with an interactive topology map and service detection. Open source and runs on your own hardware.",
@@ -382,6 +546,49 @@ export const vendors: Record<string, Vendor> = {
 		deploymentNotes:
 			'Self-hosted via [Docker, Proxmox, or Unraid](https://scanopy.net/community). One daemon, no external dependencies beyond PostgreSQL. Same discovery engine as Scanopy SaaS.',
 		deploymentSources: [{ id: 19 }]
+	},
+	netbox: {
+		name: 'NetBox',
+		slug: 'netbox',
+		href: 'https://netboxlabs.com/',
+
+		discovery: ['ICMP', 'SNMP', 'SSH/CLI'],
+		services: { level: 'no' },
+		autoUpdates: false,
+		openSource: { status: 'osi', license: 'Apache-2.0', href: 'https://github.com/netbox-community/netbox' },
+		pricing: { text: 'Cloud and Enterprise: contact sales', sources: [{ id: 42 }] },
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'Topology visualization comes from community plugins (e.g. netbox-topology-views), not core NetBox.'
+		},
+		viewTypesSources: [{ id: 40 }, { id: 41 }],
+		bestFor: 'Network and automation teams building a structured source of truth to drive Ansible, Nornir, or Terraform',
+		description:
+			'The de facto network source of truth (NSoT), combining DCIM and IPAM. NetBox models the intended state of your network (what it should be) and exposes it through a structured data model and REST and GraphQL API. NetBox Labs also ships NetBox Discovery, an open-source scanning agent that captures operational state and validates it against that intended design. What NetBox does not do natively is visualize your network: topology maps come from community plugins, not the core product.',
+		discoveryNotes:
+			'NetBox core models intended state and does not scan, but NetBox Labs ships [NetBox Discovery](https://netboxlabs.com/blog/announcing-netbox-discovery-infrastructure-design-operational-reality/), an open-source agent that actively scans for hosts and services and captures device configs, interfaces, and operational state via ICMP, SNMP, SSH, and NETCONF, feeding it into the NetBox model and validating drift against intended design. You can also populate NetBox manually, through its REST and GraphQL API, or with feeders like SlurpIT.',
+		diagrams:
+			'No native topology visualization. Community plugins render maps from NetBox data: [netbox-topology-views](https://github.com/netbox-community/netbox-topology-views) (the most popular, drawing topology from your cable records) and Network Canvas (L2 and L3). Core NetBox provides rack elevations and cable traces, not an auto-generated topology map.',
+		pricingNotes:
+			'Paid NetBox Cloud and Enterprise tiers (contact sales) add managed hosting, NetBox Discovery and Assurance, AI (Copilot and an MCP server), and support. The open-source Community edition is free to self-host.',
+		whereItFits:
+			'Network automation teams that need a structured source of truth feeding Ansible, Nornir, or Terraform. It pairs naturally with a discovery tool that keeps it populated.',
+		tradeOff:
+			'No native topology visualization (maps come from community plugins, not the core product). Steep learning curve, and overkill for small networks. NetBox is a source of truth and API, not a diagram tool, even with NetBox Discovery feeding it operational data.',
+		tradeOffLabel: 'Trade-offs',
+		deployment: ['Self-hosted', 'Cloud'],
+		deploymentNotes:
+			'Self-hosted (Python and PostgreSQL, Docker image available) for the Community edition, or managed via NetBox Cloud and NetBox Enterprise.',
+		deploymentSources: [{ id: 43 }],
+		versus:
+			`Scanopy and NetBox serve different primary purposes, and they overlap in part. NetBox is a source of truth: it models the intended state of your network (every device, rack, IP, VLAN, and cable) as structured data behind a REST and GraphQL API, and it is the de facto standard for automation teams feeding Ansible, Nornir, and Terraform. Scanopy is a documentation tool: it discovers the operational state of your network and visualizes it as four switchable views (L2, L3, workloads, applications), with per-host service detection.
+
+Both can discover the network. NetBox Labs ships [NetBox Discovery](https://netboxlabs.com/blog/announcing-netbox-discovery-infrastructure-design-operational-reality/), an open-source agent that actively scans for hosts and services and captures device configs and operational state, then validates that reality against the intended design. So on the discovery layer, NetBox and Scanopy overlap. Scanopy is not a full DCIM/IPAM source of truth, though: it does not model intended state, racks, circuits, or power.
+
+Where they clearly differ is the output. NetBox Discovery feeds NetBox's data model and flags drift; it does not produce topology maps, and NetBox's visualization is plugin-based ([netbox-topology-views](https://github.com/netbox-community/netbox-topology-views)). Scanopy's core output is the interactive, living map itself. So the decision: if you want a structured source of truth that automation consumes and that continuously validates against intended design, NetBox (with Discovery) is the platform. If you want an automatic, always-current visual map of what is actually on your network, Scanopy is built for that and is not trying to be your data model. The two can also work together, with Scanopy as one way to keep NetBox populated.`
 	}
 };
 
@@ -394,7 +601,7 @@ export const tableCategories: VendorCategory[] = [
 		id: 'dedicated',
 		heading: 'Dedicated Diagram Tools',
 		hasAlsoIncludes: false,
-		vendors: ['scanopy', 'solarwinds-ntm', 'netbrain']
+		vendors: ['scanopy', 'solarwinds-ntm', 'netbrain', 'faddom']
 	},
 	{
 		id: 'monitoring',
@@ -427,9 +634,9 @@ export const detailSections: VendorCategory[] = [
 	{
 		id: 'dedicated',
 		heading: 'Dedicated Diagram Tools',
-		intro: 'These exist specifically to discover and map networks. Not monitoring platforms. No alerting, no traffic analysis, no config backup. Their entire purpose is producing accurate network diagrams.',
+		intro: 'These exist specifically to discover and map networks or the applications running on them. Not monitoring platforms. No alerting, no traffic analysis, no config backup. Their entire purpose is producing accurate diagrams.',
 		hasAlsoIncludes: false,
-		vendors: ['solarwinds-ntm', 'scanopy', 'netbrain']
+		vendors: ['solarwinds-ntm', 'scanopy', 'netbrain', 'faddom']
 	},
 	{
 		id: 'manual',
@@ -553,12 +760,117 @@ export const vendorSources: VendorSource[] = [
 	{
 		id: 21,
 		label: 'NetBrain - Discovering and Visualizing Public Cloud',
-		url: 'https://www.netbraintech.com/docs/ie101/help/discovering-and-visualizing-public-cloud.htm'
+		url: 'https://www.netbrain.com/docs/ie101/help/discovering-and-visualizing-public-cloud.htm'
 	},
 	{
 		id: 22,
 		label: 'Lucidscale - Automated Cloud Visualization',
 		url: 'https://lucid.co/lucidscale/'
+	},
+	{
+		id: 23,
+		label: 'Faddom - Agentless Application Dependency Mapping',
+		url: 'https://faddom.com/'
+	},
+	{
+		id: 24,
+		label: 'Faddom - Pricing',
+		url: 'https://faddom.com/pricing/'
+	},
+	{
+		id: 25,
+		label: 'NetBrain - Discovering and Visualizing Virtualization (ESXi host, vSwitch, VM)',
+		url: 'https://www.netbrain.com/docs/ie101/help/discovering-and-visualizing-virtualization.htm'
+	},
+	{
+		id: 26,
+		label: 'Auvik - How does Auvik discover network topology and device information? (L1/L2/L3, ESXi host-to-VM)',
+		url: 'https://support.auvik.com/hc/en-us/articles/202956414'
+	},
+	{
+		id: 27,
+		label: 'ManageEngine OpManager - Layer 2 Maps',
+		url: 'https://www.manageengine.com/network-monitoring/help/layer2-maps.html'
+	},
+	{
+		id: 28,
+		label: 'ManageEngine OpManager - VMware Monitoring (host-to-VM, VM-to-datastore maps)',
+		url: 'https://www.manageengine.com/network-monitoring/vmware-monitoring.html'
+	},
+	{
+		id: 29,
+		label: 'Domotz - Network Topology Mapping (VLAN/subnet, L2/L3)',
+		url: 'https://help.domotz.com/managing-your-account/network-topology/'
+	},
+	{
+		id: 30,
+		label: 'LibreNMS - Network Map (Layer 2 links via xDP and ARP)',
+		url: 'https://docs.librenms.org/Extensions/Network-Map/'
+	},
+	{
+		id: 31,
+		label: 'NetDisco - Network Map (layer1/layer2, not L3 routing/subnets)',
+		url: 'https://github.com/netdisco/netdisco/wiki/Network-Map'
+	},
+	{
+		id: 32,
+		label: 'Paessler - PRTG has no native Layer 2 topology mapping (use UVexplorer)',
+		url: 'https://helpdesk.paessler.com/en/support/solutions/articles/76000082169'
+	},
+	{
+		id: 33,
+		label: 'Lucid - Lucidscale cloud visualization (cloud-only, no on-prem topology)',
+		url: 'https://help.lucid.co/hc/en-us/articles/16080567251604'
+	},
+	{
+		id: 34,
+		label: 'NetBrain - Dynamic Map (Layer 2 and Layer 3 topology)',
+		url: 'https://www.netbrain.com/features/dynamic-map/'
+	},
+	{
+		id: 35,
+		label: 'NetBrain - Visualize VMware vCenter Networks (ESXi host and VM relationships on dynamic maps)',
+		url: 'https://www.netbrain.com/docs/12tp0fe0ge/help/HTML/visualize-vmware-vcenter-networks-1.html'
+	},
+	{
+		id: 36,
+		label: 'NetBrain - Mapping Application Dependencies (A/B Path traffic-flow map)',
+		url: 'https://www.netbrain.com/blog/mapping-application-dependencies-b-path/'
+	},
+	{
+		id: 37,
+		label: 'Auvik - Network Topology Mapper (visualizes physical wiring, VLANs, VMs, containers)',
+		url: 'https://www.auvik.com/network-management-software/use-case/network-topology-mapper/'
+	},
+	{
+		id: 38,
+		label: 'ManageEngine OpManager - Virtual Maps (Host-to-VM, Host-to-Datastore)',
+		url: 'https://www.manageengine.com/network-monitoring/faq/customize-vmmaps.html'
+	},
+	{
+		id: 39,
+		label: 'Auvik - VMware hypervisor dashboard (VMs listed in a dashboard, not a host-to-VM nesting map)',
+		url: 'https://support.auvik.com/hc/en-us/articles/206616706-What-can-I-see-on-a-VMware-hypervisor-dashboard'
+	},
+	{
+		id: 40,
+		label: 'NetBox - Network Source of Truth (DCIM and IPAM)',
+		url: 'https://netboxlabs.com/products/netbox/'
+	},
+	{
+		id: 41,
+		label: 'NetBox - Topology visualization via community plugin (netbox-topology-views)',
+		url: 'https://github.com/netbox-community/netbox-topology-views'
+	},
+	{
+		id: 42,
+		label: 'NetBox Labs - Pricing (Cloud and Enterprise contact sales)',
+		url: 'https://netboxlabs.com/pricing/'
+	},
+	{
+		id: 43,
+		label: 'NetBox - Open source (Apache-2.0), GitHub',
+		url: 'https://github.com/netbox-community/netbox'
 	}
 ];
 
