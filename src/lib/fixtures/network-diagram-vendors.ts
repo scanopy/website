@@ -34,7 +34,7 @@ export const vendors: Record<string, Vendor> = {
 		serviceDiscovery:
 			`This is where Scanopy differs from most tools on this list. Beyond mapping devices and connections, Scanopy fingerprints [${serviceCount} service types](/services) per host: databases, web servers, DNS, DHCP, Docker containers, print services, and more. Most network mapping tools tell you a device exists at an IP address. Scanopy tells you what it's running. When you click a host on the topology map, you see every detected service, not just the host itself.`,
 		diagrams:
-			'One scan produces four interactive views you can switch between: L2 physical (switch ports and links), L3 logical (subnets and routing), workloads (Docker containers and what they run), and applications (services grouped into the apps they belong to). Topology snapshots version your network state over time, so you can see what changed between scans. Shareable via link (no per-seat licensing). Exportable as SVG, Mermaid, and Confluence markup. Embeddable via iframe.',
+			'One scan produces four interactive views you can switch between: L2 physical (switch ports and links), L3 logical (subnets and routing), workloads (Docker containers and what they run), and applications (services grouped into the apps they belong to). Topology snapshots version your network state over time, so you can see what changed between scans. Shareable via link (no per-seat licensing). Exportable as SVG, PNG, HTML, Confluence, Mermaid, and PDF. Embeddable via iframe.',
 		pricingNotes:
 			'Free self-hosted [Community edition](/community) available.',
 		whereItFits:
@@ -90,7 +90,13 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Desktop'],
 		deploymentNotes:
 			'Windows desktop application. Requires .NET 3.5 and 4.8. No web interface, no cloud option. Scans from the machine it\'s installed on.',
-		deploymentSources: [{ id: 3 }]
+		deploymentSources: [{ id: 3 }],
+		versus:
+			`SolarWinds NTM and Scanopy both scan a network over SNMP, CDP, and LLDP and turn it into topology diagrams, so on the surface they do the same job. The difference is what you get at the end. NTM is a [standalone Windows desktop application](https://www.solarwinds.com/network-topology-mapper) whose signature output is a Microsoft Visio export — it auto-populates Visio SmartShapes from the scan, and that single feature makes it the default in shops that standardize on Visio for compliance documentation. Scanopy is a web-based tool: one daemon discovers the network and produces an interactive map you open in a browser, share by link, embed via iframe, and export as SVG, PNG, HTML, Confluence, Mermaid, or PDF.
+
+The real trade-off is a web-based living map versus Windows-bound Visio files, plus the product's trajectory. NTM has no web interface, no API, and no embeddable output, and its result is a static file you regenerate each time you rescan. It has also received only maintenance and security updates since roughly 2016 — SolarWinds staff [stated on the THWACK forum in 2017](https://thwack.solarwinds.com/products/network-topology-mapper-ntm/f/forum/13039/is-ntm-dead) that "there is no current roadmap for the product." If your deliverable is a Visio file for auditors, NTM is the better fit and the export is the whole reason to run it. If you want a shareable, browser-based map that refreshes on a schedule and isn't tied to Windows, Scanopy is the better fit, and it's [flat monthly with unlimited hosts](/pricing) or free under [AGPL-3.0](/community).
+
+Where NTM wins is that Visio export. Scanopy exports SVG, PNG, HTML, Confluence, Mermaid, and PDF, but not native Visio SmartShapes — and for an organization whose documentation standard is Visio, that one format can outweigh everything else.`
 	},
 	netbrain: {
 		name: 'NetBrain',
@@ -133,7 +139,7 @@ export const vendors: Record<string, Vendor> = {
 			'On-premises server or [NetBrain-hosted cloud](https://www.netbrain.com/). Central server polls devices via SNMP and SSH/CLI — no per-device agents.',
 		deploymentSources: [{ id: 21 }],
 		versus:
-			"NetBrain and Scanopy answer different questions. NetBrain is an enterprise network-automation platform: its dynamic maps cover L2, L3, virtualization (ESXi/vSwitch/VM), and application-path mapping, and they tie into troubleshooting runbooks and automation playbooks, so a map can trigger actions, not just display data. It is built for large, complex networks with thousands of devices and a team to run it. Scanopy is a focused documentation tool: it discovers your network and produces four switchable views (L2, L3, workloads, applications) plus per-host service fingerprinting, and it stops there. No automation engine, no runbooks.\n\nThe trade-off is scope, price, and effort. NetBrain is enterprise-priced (contact-sales only) and complex enough that a proper proof-of-concept is essential. Community experiences are polarized: some teams get excellent results, others have [struggled with map accuracy for years](https://www.reddit.com/r/networking/comments/uu3wyr/comment/i9duuiu/). Scanopy is [flat monthly with unlimited hosts](/pricing), self-hostable under [AGPL-3.0](/community), and runs from one daemon with no platform to administer. If you need maps wired into operational automation across a large enterprise, NetBrain is the category leader and Scanopy is not a substitute. If you want accurate, living, shareable network documentation without standing up an automation platform, Scanopy is simpler and far cheaper.\n\nHonest note on capability: NetBrain is one of the few tools here that genuinely produces all four view types, so on view coverage alone it matches Scanopy. The difference is everything around the map, not the map itself."
+			"NetBrain and Scanopy answer different questions. NetBrain is an enterprise network-automation platform: its dynamic maps cover L2, L3, virtualization (ESXi/vSwitch/VM), and application-path mapping, and they tie into troubleshooting runbooks and automation playbooks, so a map can trigger actions, not just display data. It is built for large, complex networks with thousands of devices and a team to run it. Scanopy is a focused documentation tool: it discovers your network and produces four switchable views (L2, L3, workloads, applications) plus per-host service fingerprinting, and it stops there. No automation engine, no runbooks.\n\nThe trade-off is scope, price, and effort. NetBrain is enterprise-priced (contact-sales only) and complex enough that a proper proof-of-concept is essential. Community experiences are polarized: some teams get excellent results, others have [struggled with map accuracy for years](https://www.reddit.com/r/networking/comments/uu3wyr/comment/i9duuiu/). Scanopy is [flat monthly with unlimited hosts](/pricing), self-hostable under [AGPL-3.0](/community), and runs from one daemon with no platform to administer. If you need maps wired into operational automation across a large enterprise, NetBrain is the category leader and Scanopy is not a substitute. If you want accurate, living, shareable network documentation without standing up an automation platform, Scanopy is simpler and far cheaper.\n\nOn view coverage alone, NetBrain is one of the few tools here that produces all four view types, so it matches Scanopy there. The difference is everything around the map, not the map itself."
 	},
 	faddom: {
 		name: 'Faddom',
@@ -166,13 +172,19 @@ export const vendors: Record<string, Vendor> = {
 		pricingNotes:
 			'Pricing is public, which is rare in this category. A free Community tier covers up to 50 servers (described as "limited time access," so permanence is unclear). Paid plans start at $19,000/year for up to 300 servers (SMB tier) and scale to custom enterprise pricing. Modular: you pay for servers, modules, and users.',
 		whereItFits:
-			'Mid-to-large enterprise IT operations teams planning migrations or cloud moves who need an automatic picture of application dependencies without deploying agents. The public pricing and 50-server free tier make it genuinely evaluable without a sales process, which is unusual for ADM.',
+			'Mid-to-large enterprise IT operations teams planning migrations or cloud moves who need an automatic picture of application dependencies without deploying agents. The public pricing and 50-server free tier make it evaluable without a sales process, which is unusual for ADM.',
 		tradeOff:
 			'ADM-only scope. No network-layer topology, no CMDB, ITAM, or service management ([per third-party analysis](https://virima.com/blog/faddom-solution-overview-top-alternatives)). Native ITSM integrations are limited to ServiceNow and Splunk. The traffic-capture dependency (NetFlow/sFlow or port mirroring) is a real setup hurdle, and the $19,000/year floor puts it out of reach for SMB and homelab budgets.',
 		tradeOffLabel: 'Trade-offs',
 		deployment: ['Cloud', 'Self-hosted'],
 		deploymentNotes:
-			'Self-hosted appliance (on-prem or cloud), also available via the AWS, Azure, and GCP marketplaces. No per-host agents, but it needs access to network traffic.'
+			'Self-hosted appliance (on-prem or cloud), also available via the AWS, Azure, and GCP marketplaces. No per-host agents, but it needs access to network traffic.',
+		versus:
+			`Faddom and Scanopy now sit in the same broad category — both can map application dependencies — but they get there from opposite directions, and they don't fully overlap. Faddom is a dedicated [agentless application dependency mapping](https://faddom.com/) (ADM) platform: it observes network traffic (NetFlow, sFlow, or a packet copy) and automatically infers which servers and services depend on each other, aimed at data-center migrations and cloud moves. It does no Layer 2/3 network topology at all — there are no switch-port or subnet maps. Scanopy comes at it from the other side: it maps L2 and L3 network topology, workloads, and applications, with the application view being user-defined grouping on top of automatic service discovery.
+
+The trade-off is automatic app-dependency inference versus network topology and price. Faddom's free tier covers 50 servers, but paid plans [start at $19,000/year](https://faddom.com/pricing/), which puts it out of reach for SMB, mid-market, and homelab budgets, and it needs NetFlow/sFlow or port mirroring to capture traffic. Scanopy is [flat monthly with unlimited hosts](/pricing) or free under [AGPL-3.0](/community), needs no traffic-capture setup, and adds the network-layer views Faddom lacks. If you need automatic, traffic-derived application dependencies for a migration and can fund the price floor, Faddom is the better fit. If you need network topology plus application grouping in one affordable tool, Scanopy is.
+
+On the application view itself, Faddom's automation is the stronger of the two, and it's worth saying plainly: Faddom builds the dependency map automatically from observed traffic, where Scanopy has you define the application grouping yourself on top of automatic service discovery. If you want the app map to draw itself — and you'll set up traffic capture — that's a real Faddom advantage. Scanopy's case isn't that it's uniquely four-view; it's that it covers all four views and stays affordable and self-hostable.`
 	},
 	auvik: {
 		name: 'Auvik',
@@ -218,7 +230,7 @@ export const vendors: Record<string, Vendor> = {
 			'Cloud-hosted SaaS. One [collector deployed per network site](https://support.auvik.com/hc/en-us/articles/206173816) forwards data to Auvik\'s platform. No software on monitored devices.',
 		deploymentSources: [{ id: 20 }],
 		versus:
-			"Auvik and Scanopy both build live Layer 2/3 topology maps from SNMP, CDP, LLDP, and ARP, so on raw discovery they overlap. The difference is what each is built to be. Auvik is a monitoring-and-RMM platform: alerting, config backup, traffic analysis, and remote management, with topology mapping as one strong feature among many. Scanopy is a dedicated documentation tool. It maps and fingerprints services (databases, web servers, Docker containers, and more) and produces four switchable views (L2, L3, workloads, applications), but it does no monitoring or alerting.\n\nThat shapes the buying decision. Auvik prices per device and does not publish rates, so cost scales with your fleet and you request a quote. Scanopy is [flat monthly with unlimited hosts](/pricing), and there is a free, self-hostable [AGPL-3.0 Community edition](/community). If you are an MSP that wants monitoring, alerting, and maps in one cloud platform, Auvik's bundle is the stronger fit, and its topology mapping is a genuine core feature, not an afterthought. If you already run a monitoring stack (LibreNMS, Zabbix, PRTG) and just need accurate, shareable, exportable documentation that isn't tied to a per-device monitoring bill, Scanopy sits alongside what you have rather than replacing it.\n\nHonest caveat on views: Auvik covers L2 and L3 well and surfaces VMs and containers as nodes, but it has no host-to-VM workload-nesting view and its application grouping is unclear from public docs. Scanopy adds the workload and application views. Neither tool replaces the other's primary job."
+			"Auvik and Scanopy both build live Layer 2/3 topology maps from SNMP, CDP, LLDP, and ARP, so on raw discovery they overlap. The difference is what each is built to be. Auvik is a monitoring-and-RMM platform: alerting, config backup, traffic analysis, and remote management, with topology mapping as one strong feature among many. Scanopy is a dedicated documentation tool. It maps and fingerprints services (databases, web servers, Docker containers, and more) and produces four switchable views (L2, L3, workloads, applications), but it does no monitoring or alerting.\n\nThat shapes the buying decision. Auvik prices per device and does not publish rates, so cost scales with your fleet and you request a quote. Scanopy is [flat monthly with unlimited hosts](/pricing), and there is a free, self-hostable [AGPL-3.0 Community edition](/community). If you are an MSP that wants monitoring, alerting, and maps in one cloud platform, Auvik's bundle is the stronger fit, and its topology mapping is a real core feature, not an afterthought. If you already run a monitoring stack (LibreNMS, Zabbix, PRTG) and just need accurate, shareable, exportable documentation that isn't tied to a per-device monitoring bill, Scanopy sits alongside what you have rather than replacing it.\n\nOn views, Auvik covers L2 and L3 well and surfaces VMs and containers as nodes, but it has no host-to-VM workload-nesting view, and its application grouping is unclear from public docs. Scanopy adds the workload and application views. Neither tool replaces the other's primary job."
 	},
 	prtg: {
 		name: 'PRTG',
@@ -257,7 +269,13 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Self-hosted', 'Cloud'],
 		deploymentNotes:
 			'Self-hosted on [Windows Server 2016+](https://www.paessler.com/prtg/requirements). [PRTG Hosted Monitor](https://www.paessler.com/prtg-hosted-monitor) available as cloud alternative. Core server with optional remote probes for distributed monitoring.',
-		deploymentSources: [{ id: 13 }]
+		deploymentSources: [{ id: 13 }],
+		versus:
+			`PRTG and Scanopy both discover a network and draw maps, but they're built for different jobs. PRTG is a mature, sensor-based monitoring platform that's been around since 2003 with a large installed base; its maps exist to visualize what it monitors. It has no native automatic Layer 2/3 topology mapping, though — Paessler's own knowledge base states plainly that ["PRTG has no way of knowing which switch is connected to which so creating an automatic graph is not possible"](https://helpdesk.paessler.com/en/support/solutions/articles/76000082169-layer-network-map), and the documented fix is the third-party UVexplorer add-on. Scanopy's entire job is automatic topology: one daemon produces four switchable views (L2, L3, workloads, applications) plus per-host service fingerprinting, out of the box and with no add-on.
+
+So the trade-off is monitoring-first with bolt-on mapping versus mapping-first as the product. If you already run PRTG and mainly want monitoring, alerting, and traffic analysis — with maps as a secondary view — staying in PRTG (and adding UVexplorer if you need real L2 maps) avoids another tool. If accurate, automatic, shareable, multi-view documentation is the actual goal, Scanopy is built for that and doesn't need a separate discovery engine to produce a topology. Scanopy is [flat monthly with unlimited hosts](/pricing) or free and self-hostable under [AGPL-3.0](/community), and it sits alongside PRTG rather than replacing your monitoring.
+
+PRTG is also a much broader and more proven monitoring platform than Scanopy — two decades of development, a huge sensor library, and an installed base Scanopy can't claim. For monitoring, it wins outright. This comparison is only about which tool draws the network map, and that's Scanopy's automatic topology, not PRTG's.`
 	},
 	domotz: {
 		name: 'Domotz',
@@ -294,7 +312,13 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Cloud'],
 		deploymentNotes:
 			'Cloud-hosted SaaS. [One collector per network](https://blog.domotz.com/all/agentless-network-discovery-msp-client-onboarding/) — runs on Linux, Raspberry Pi, Docker, or NAS. No endpoint agents.',
-		deploymentSources: [{ id: 14 }]
+		deploymentSources: [{ id: 14 }],
+		versus:
+			`Domotz and Scanopy both run a single on-site collector and build a Layer 2 topology map with no endpoint agents, so for basic "what's on this network" mapping they overlap. They're built around different priorities, though. Domotz is a monitoring and remote-access platform — its headline value is monitoring, alerting, and secure remote connections into client devices, with [network topology](https://help.domotz.com/managing-your-account/network-topology/) as a supporting feature. Scanopy is a dedicated documentation tool: it fingerprints services per host and produces four switchable views (L2, L3, workloads, applications), and it does no monitoring or remote access at all.
+
+The decision usually comes down to scope and price. Domotz is cheap and transparently priced at [$1.50/device/month](https://www.domotz.com/pricing/), which is why MSP communities consistently cite it as the most reasonably priced monitoring platform and the go-to lower-cost Auvik alternative. But its pricing is per-device, so a 100-device site is about $150/month, and the mapping sits behind remote access and monitoring. Scanopy is [flat monthly with unlimited hosts](/pricing) and has a free, self-hostable [AGPL-3.0 Community edition](/community). If you want monitoring, remote access, and a basic map in one affordable platform, Domotz is the stronger pick. If you want deep, exportable, multi-view documentation that sits alongside whatever monitoring you already run, Scanopy is — and the two coexist cleanly on the same network.
+
+On views, Domotz's Layer 2 map is confirmed in its help docs and does the job; the L3/VLAN mapping shows up in its marketing but isn't documented as an actual view, and there's no host-to-VM or application view. Scanopy adds L3, workloads, and applications — but Domotz does the monitoring and remote access that Scanopy doesn't touch.`
 	},
 	'manageengine-opmanager': {
 		name: 'ManageEngine OpManager',
@@ -329,7 +353,13 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Self-hosted'],
 		deploymentNotes:
 			'Self-hosted on [Windows or Linux](https://www.manageengine.com/network-monitoring/network-monitoring-tool.html). [Agentless](https://www.manageengine.com/network-monitoring/agentless-network-monitoring.html) — central server polls devices via SNMP, WMI, CLI.',
-		deploymentSources: [{ id: 15 }]
+		deploymentSources: [{ id: 15 }],
+		versus:
+			`OpManager and Scanopy overlap more than most pairings on this list. Both auto-discover L2 and L3 topology over SNMP, CDP, LLDP, and ARP, and — unusually — both produce a workload view: OpManager maps [host-to-VM, VM-to-datastore, and host-to-network relationships](https://www.manageengine.com/network-monitoring/vmware-monitoring.html) through its virtualization maps, which matches Scanopy's workload view. The difference is the category. OpManager is a full monitoring platform (it happens to have unusually deep visualization, including rack and floor-plan views most monitoring tools lack), while Scanopy is a dedicated documentation tool with per-host service fingerprinting and no monitoring, alerting, or polling.
+
+The trade-off is platform versus focus, and price. OpManager is self-hosted on Windows or Linux, is cheap ([from about $95/year for 10 devices](https://www.manageengine.com/network-monitoring/opmanager-editions.html)), scales to tens of thousands of devices, and bundles monitoring you may want anyway. Scanopy is [flat monthly with unlimited hosts](/pricing), self-hostable under [AGPL-3.0](/community), and adds an application-dependency view OpManager doesn't have. If you want monitoring plus strong built-in visualization at a low per-device cost, OpManager is the better fit. If you want documentation that's independent of your monitoring stack — and an application view — Scanopy fits alongside it. Monitor with OpManager, document with Scanopy.
+
+OpManager keeps pace with Scanopy on L2, L3, and the workload (host-to-VM) view, and its rack and floor-plan views are something Scanopy doesn't offer at all. Scanopy pulls ahead in two places: the application-dependency view and per-host service fingerprinting. OpManager has no application-grouping map.`
 	},
 	'nmap-zenmap': {
 		name: 'Nmap + Zenmap',
@@ -398,7 +428,13 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Self-hosted'],
 		deploymentNotes:
 			'Self-hosted on [Linux (Ubuntu, Debian, CentOS)](https://docs.librenms.org/Installation/Install-LibreNMS/). Docker available. Requires MariaDB and PHP 8.2+. Central server polls via SNMP — no per-device agents.',
-		deploymentSources: [{ id: 16 }]
+		deploymentSources: [{ id: 16 }],
+		versus:
+			`LibreNMS and Scanopy CE are both free and self-hosted, so that's the fair matchup here — [Scanopy's AGPL-3.0 Community edition](/community), not the paid product. LibreNMS is GPL-licensed, self-hosted network monitoring: strong SNMP auto-discovery, alerting, and graphing, with topology visualization as a secondary, plugin-based feature. Scanopy is dedicated documentation: one daemon, four switchable views (L2, L3, workloads, applications), and per-host service fingerprinting, with no monitoring or alerting.
+
+The practical difference is what the mapping costs you in effort. LibreNMS's topology comes from the Weathermap plugin, which [the LibreNMS docs now say "does not work on any supported versions of PHP" and recommend against](https://docs.librenms.org/Extensions/Weathermap/), pointing users to Custom Maps where the layout is hand-placed rather than generated. Standing it up also means managing Linux, PHP 8.2+, and MariaDB. Scanopy's map is automatic and is the core product, not a plugin. If you want free, self-hosted monitoring and you're comfortable administering the stack, LibreNMS is excellent and the maps are a bonus. If you want automatic network documentation that refreshes on a schedule without manual map layout, Scanopy CE is the closer fit — and it pairs naturally with LibreNMS if you want both.
+
+LibreNMS has years of development behind it and an active community, and Scanopy does no monitoring — it isn't trying to replace it. For the documentation side specifically, Scanopy's automatic multi-view map is the stronger tool; for free self-hosted monitoring, LibreNMS is the one to beat.`
 	},
 	drawio: {
 		name: 'draw.io',
@@ -511,7 +547,13 @@ export const vendors: Record<string, Vendor> = {
 		deployment: ['Self-hosted'],
 		deploymentNotes:
 			'Self-hosted on Linux. Requires [Perl and PostgreSQL](https://netdisco.org/). Docker image available. [Self-contained](https://netdisco.org/) central server polls via SNMP — no per-device agents.',
-		deploymentSources: [{ id: 12 }]
+		deploymentSources: [{ id: 12 }],
+		versus:
+			`NetDisco and Scanopy both discover devices over SNMP and read CDP/LLDP neighbor data, and both are open source. NetDisco focuses on Layer 2: it collects IP and MAC data into PostgreSQL and answers "what device is on which switch port?" — search a MAC or IP and it shows the exact switch and port, which makes it a long-running favorite for tracking down endpoints and auditing port usage. Scanopy does that same Layer 2 work — switch, port, and MAC/IP visualization — from a single scan, and adds three more views (L3, workloads, applications) plus per-host service fingerprinting on top.
+
+The real difference is scope and setup, not Layer 2 capability. NetDisco is free (BSD-licensed) but it's Perl and PostgreSQL on Linux, and it's [Layer 1/2 only — no L3 routing or subnet mapping](https://github.com/netdisco/netdisco/wiki/Network-Map). Scanopy is [flat monthly with unlimited hosts](/pricing) or free under [AGPL-3.0](/community), runs from one daemon, and covers L3, workloads, and applications alongside the same switch-port and MAC/IP data. If switch-port and MAC tracking is all you need and you're happy administering Perl and Postgres, NetDisco does it well. If you want that Layer 2 visibility plus L3, workload, and application views in one tool you don't have to hand-assemble, Scanopy is the broader fit.
+
+On Layer 2 itself the two land in the same place — switch, port, MAC, IP. What you're really choosing is whether you also want L3, workloads, and applications in the same map (Scanopy), or a focused, free, self-hosted Layer 2 tool you run entirely yourself (NetDisco), which has done that one job well since 2003.`
 	},
 	'scanopy-ce': {
 		name: 'Scanopy Community Edition',
@@ -536,7 +578,7 @@ export const vendors: Record<string, Vendor> = {
 			"The best free self-hosted option for automated network documentation. Scanopy CE is the free, self-hosted edition with the same discovery engine as the paid product — SNMP, LLDP, CDP, ARP — with an interactive topology map and service detection. Open source and runs on your own hardware.",
 		discoveryNotes: 'One daemon, no per-device agents.',
 		diagrams:
-			'Interactive topology map with service and interface detail. Exportable as SVG, Mermaid, and Confluence markup.',
+			'Interactive topology map with service and interface detail. Exportable as SVG, PNG, HTML, Confluence, Mermaid, and PDF.',
 		pricingNotes: '[Self-hosted](/community).',
 		whereItFits:
 			"Homelabbers and small teams that want automated network documentation without a SaaS dependency. If you're already self-hosting your infrastructure, this fits right in.",
@@ -588,7 +630,7 @@ export const vendors: Record<string, Vendor> = {
 
 Both can discover the network. NetBox Labs ships [NetBox Discovery](https://netboxlabs.com/blog/announcing-netbox-discovery-infrastructure-design-operational-reality/), an open-source agent that actively scans for hosts and services and captures device configs and operational state, then validates that reality against the intended design. So on the discovery layer, NetBox and Scanopy overlap. Scanopy is not a full DCIM/IPAM source of truth, though: it does not model intended state, racks, circuits, or power.
 
-Where they clearly differ is the output. NetBox Discovery feeds NetBox's data model and flags drift; it does not produce topology maps, and NetBox's visualization is plugin-based ([netbox-topology-views](https://github.com/netbox-community/netbox-topology-views)). Scanopy's core output is the interactive, living map itself. So the decision: if you want a structured source of truth that automation consumes and that continuously validates against intended design, NetBox (with Discovery) is the platform. If you want an automatic, always-current visual map of what is actually on your network, Scanopy is built for that and is not trying to be your data model. The two can also work together, with Scanopy as one way to keep NetBox populated.`
+Where they clearly differ is the output. NetBox Discovery feeds NetBox's data model and flags drift; it does not produce topology maps, and NetBox's visualization is plugin-based ([netbox-topology-views](https://github.com/netbox-community/netbox-topology-views)). Scanopy's core output is the interactive, living map itself. So the decision: if you want a structured source of truth that automation consumes and that continuously validates against intended design, NetBox (with Discovery) is the platform. If you want an automatic, up-to-date visual map of what is actually on your network, Scanopy is built for that and is not trying to be your data model. The two can also work together, with Scanopy as one way to keep NetBox populated.`
 	}
 };
 
