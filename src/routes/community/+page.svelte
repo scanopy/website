@@ -27,11 +27,23 @@
 		.map((id) => featuresMap.get(id))
 		.filter((f): f is (typeof featuresData)[number] => f != null);
 
+	// Plan limits, sourced from the billing fixture so they stay in sync with the product.
+	const includedHosts = communityPlan.metadata.included_hosts;
+	const includedNetworks = communityPlan.metadata.included_networks;
+	const includedSeats = communityPlan.metadata.included_seats;
+
+	const pluralize = (n: number | null, word: string) =>
+		n === null ? `unlimited ${word}s` : `${n} ${word}${n === 1 ? '' : 's'}`;
+
 	const communityLinks = [
 		{ name: 'GitHub', url: 'https://github.com/scanopy/scanopy', destination: 'github' },
 		{ name: 'Discord', url: 'https://discord.gg/b7ffQr8AcZ', destination: 'discord' },
 		{ name: 'Reddit', url: 'https://reddit.com/r/scanopy', destination: 'reddit' },
-		{ name: 'Documentation', url: '/docs/self-hosted-server/server-installation', destination: 'docs' }
+		{
+			name: 'Documentation',
+			url: '/docs/self-hosted-server/server-installation',
+			destination: 'docs'
+		}
 	];
 
 	function trackLink(destination: string, url: string) {
@@ -47,13 +59,25 @@
 	/>
 	<link rel="canonical" href="https://scanopy.net/community" />
 
-	<meta property="og:title" content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy" />
-	<meta property="og:description" content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
+	<meta
+		property="og:title"
+		content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy"
+	/>
+	<meta
+		property="og:description"
+		content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
+	/>
 	<meta property="og:url" content="https://scanopy.net/community" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy" />
-	<meta name="twitter:description" content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command." />
+	<meta
+		name="twitter:title"
+		content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy"
+	/>
+	<meta
+		name="twitter:description"
+		content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
+	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
@@ -88,12 +112,12 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-3xl px-4">
 		<p class="text-lg leading-relaxed text-gray-300">
-			Scanopy Community is the free, self-hosted edition of Scanopy - the same automatic
-			discovery engine that powers our cloud plans, running entirely on your
-			infrastructure. It's built for homelabbers, home network enthusiasts, and small teams
-			who want auto-updating infrastructure documentation without sending data to a third party.
-			Deploy with a single Docker command, scan your network, and get four views of
-			your infrastructure in minutes. No account required, no host limits, no time restrictions.
+			Scanopy Community is the free, self-hosted edition of Scanopy - the same automatic discovery
+			engine that powers our cloud plans, running entirely on your infrastructure. It's built for
+			homelabbers, home network enthusiasts, and small teams who want auto-updating infrastructure
+			documentation without sending data to a third party. Deploy with a single Docker command, scan
+			your network, and get four views of your infrastructure in minutes. No account required, no
+			time restrictions.
 		</p>
 	</div>
 </section>
@@ -104,18 +128,35 @@
 		<h2 class="mb-8 text-center text-3xl font-bold text-rose-400 lg:text-4xl">Quick Start</h2>
 		<div class="card card-static overflow-hidden p-0">
 			<div class="bg-gray-800/50 px-4 py-2 text-sm text-gray-400">Terminal</div>
-			<pre class="overflow-x-auto p-4 text-sm text-gray-300"><code>curl -O https://raw.githubusercontent.com/scanopy/scanopy/refs/heads/main/docker-compose.yml
-docker compose up -d</code></pre>
+			<pre class="overflow-x-auto p-4 text-sm text-gray-300"><code
+					>curl -O https://raw.githubusercontent.com/scanopy/scanopy/refs/heads/main/docker-compose.yml
+docker compose up -d</code
+				></pre>
 		</div>
 		<p class="mt-4 text-center text-sm text-gray-400">
-			Access the UI at <code class="rounded bg-gray-800 px-1.5 py-0.5 text-gray-300">http://localhost:60072</code>
+			Access the UI at <code class="rounded bg-gray-800 px-1.5 py-0.5 text-gray-300"
+				>http://localhost:60072</code
+			>
 		</p>
 		<p class="mt-3 text-center text-sm text-gray-500">
 			Also available via
-			<a href="https://community-scripts.github.io/ProxmoxVE/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">Proxmox helper script</a>
+			<a
+				href="https://community-scripts.github.io/ProxmoxVE/"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-blue-400 hover:text-blue-300">Proxmox helper script</a
+			>
 			and
-			<a href="https://unraid.net/community/apps" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">Unraid community app</a>.
-			See the <a href="/docs/self-hosted-server/server-installation" class="text-blue-400 hover:text-blue-300">full install docs</a> for more options.
+			<a
+				href="https://unraid.net/community/apps"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-blue-400 hover:text-blue-300">Unraid community app</a
+			>. See the
+			<a
+				href="/docs/self-hosted-server/server-installation"
+				class="text-blue-400 hover:text-blue-300">full install docs</a
+			> for more options.
 		</p>
 	</div>
 </section>
@@ -124,10 +165,9 @@ docker compose up -d</code></pre>
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<h2 class="mb-4 text-center text-3xl font-bold text-rose-400 lg:text-4xl">What's Included</h2>
-		<p class="mb-10 text-center text-gray-400">
-			{communityPlan.metadata.included_hosts === null ? 'Unlimited' : communityPlan.metadata.included_hosts} hosts,
-			{communityPlan.metadata.included_networks} networks,
-			API access - all free.
+		<p class="mb-10 text-center text-gray-400 first-letter:uppercase">
+			{pluralize(includedHosts, 'host')}, {pluralize(includedNetworks, 'network')},
+			{pluralize(includedSeats, 'user seat')}, API access - all free.
 		</p>
 		<div class="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			{#each features as feature}
@@ -142,13 +182,28 @@ docker compose up -d</code></pre>
 				</div>
 			{/each}
 		</div>
+
+		<div
+			class="mx-auto mt-10 max-w-2xl rounded-lg border border-gray-800 bg-gray-900/50 p-5 text-center"
+		>
+			<p class="text-sm text-gray-400">
+				<span class="font-medium text-white">Free plan limits:</span>
+				{pluralize(includedHosts, 'host')}, {pluralize(includedNetworks, 'network')}, and
+				{pluralize(includedSeats, 'user seat')}. Need more networks, team seats, or a commercial
+				license to self-host in your business? See the
+				<a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial Edition</a>
+				or our <a href="/pricing" class="text-blue-400 hover:text-blue-300">cloud plans</a>.
+			</p>
+		</div>
 	</div>
 </section>
 
 <!-- Community Links -->
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
-		<h2 class="mb-8 text-center text-3xl font-bold text-rose-400 lg:text-4xl">Join the Community</h2>
+		<h2 class="mb-8 text-center text-3xl font-bold text-rose-400 lg:text-4xl">
+			Join the Community
+		</h2>
 		<div class="flex flex-wrap items-center justify-center gap-4">
 			{#each communityLinks as link}
 				<a
@@ -171,15 +226,33 @@ docker compose up -d</code></pre>
 <!-- Soft Upsell -->
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto px-4 text-center">
-		<p class="mb-3 text-gray-400">
-			Need more networks, team seats, or managed hosting?
-		</p>
+		<p class="mb-3 text-gray-400">Need more networks, team seats, or managed hosting?</p>
 		<a
 			href="/pricing"
 			class="text-blue-400 hover:text-blue-300"
-			onclick={() => analytics.ctaClicked({ location: 'community_upsell', destination: '/pricing', text: 'View Plans' })}
+			onclick={() =>
+				analytics.ctaClicked({
+					location: 'community_upsell',
+					destination: '/pricing',
+					text: 'View Plans'
+				})}
 		>
 			View Plans &rarr;
 		</a>
+		<p class="mt-4 text-gray-400">
+			Need a commercial license to self-host in your business?
+			<a
+				href="/commercial"
+				class="text-blue-400 hover:text-blue-300"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'community_upsell',
+						destination: '/commercial',
+						text: 'Commercial Edition'
+					})}
+			>
+				See the Commercial Edition &rarr;
+			</a>
+		</p>
 	</div>
 </section>

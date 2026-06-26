@@ -11,7 +11,10 @@ function parseFrontmatter(content: string): Record<string, string> {
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			frontmatter[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
+			frontmatter[key.trim()] = valueParts
+				.join(':')
+				.trim()
+				.replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 	return frontmatter;
@@ -39,6 +42,7 @@ export async function GET() {
 		{ loc: '/blog', src: 'src/routes/blog/+page.svelte' },
 		{ loc: '/comparisons', src: 'src/routes/comparisons/+page.svelte' },
 		{ loc: '/community', src: 'src/routes/community/+page.svelte' },
+		{ loc: '/commercial', src: 'src/routes/commercial/+page.svelte' },
 		{ loc: '/press', src: 'src/routes/press/+page.svelte' },
 		{ loc: '/privacy', src: 'src/routes/privacy/+page.svelte' },
 		{ loc: '/terms', src: 'src/routes/terms/+page.svelte' },

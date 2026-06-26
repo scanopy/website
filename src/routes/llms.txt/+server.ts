@@ -30,7 +30,10 @@ function parseFrontmatter(content: string): Record<string, string> {
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			fm[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
+			fm[key.trim()] = valueParts
+				.join(':')
+				.trim()
+				.replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 	return fm;
@@ -183,6 +186,8 @@ ${comparisonLines}
 - Website: https://scanopy.net
 - Documentation: https://scanopy.net/docs
 - Pricing: https://scanopy.net/pricing
+- Community Edition (free, self-hosted): https://scanopy.net/community
+- Commercial Edition (paid, self-hosted): https://scanopy.net/commercial
 - Changelog: https://scanopy.net/changelog
 - GitHub: https://github.com/scanopy/scanopy
 - Discord: https://discord.gg/b7ffQr8AcZ
