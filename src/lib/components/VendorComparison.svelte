@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { marked } from 'marked';
 	import { tooltip } from '$lib/actions/tooltip';
+	import { theme, withTheme } from '$lib/theme.svelte';
 	import ComparisonTable from '$lib/components/ComparisonTable.svelte';
 	import type {
 		Vendor,
@@ -294,11 +295,11 @@
 
 		{#if vendor.iframe}
 			<iframe
-				src={vendor.iframe.src}
+				src={withTheme(vendor.iframe.src, theme.resolved)}
 				width={vendor.iframe.width}
 				height={vendor.iframe.height}
 				frameborder="0"
-				style="border: 1px solid #374151; border-radius: 8px;"
+				style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"
 				title={vendor.name}
 			></iframe>
 			<p>{vendor.iframe.caption}</p>
@@ -418,7 +419,7 @@
 			</tbody>
 		</table>
 	</div>
-	<p style="font-size: 0.8125rem; color: rgb(156 163 175);">
+	<p style="font-size: 0.8125rem; color: rgb(var(--c-gray-400));">
 		For a detailed comparison of these and other tools, see our <a
 			href="/comparisons/best-automated-network-diagram-tools"
 			>full comparison of automated network diagram tools</a
@@ -427,7 +428,7 @@
 {/if}
 
 {#if mode === 'sources' && sources}
-	<div style="font-size: 0.8125rem; line-height: 1.8; color: rgb(156 163 175);">
+	<div style="font-size: 0.8125rem; line-height: 1.8; color: rgb(var(--c-gray-400));">
 		{#each sources as source}
 			<span id="source-{source.id}">[{source.id}]</span>
 			<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a><br />

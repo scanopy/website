@@ -43,12 +43,18 @@
 	<link rel="canonical" href="https://scanopy.net/changelog" />
 
 	<meta property="og:title" content="Changelog - Scanopy" />
-	<meta property="og:description" content="Scanopy changelog and release notes. See what's new in each version of Scanopy." />
+	<meta
+		property="og:description"
+		content="Scanopy changelog and release notes. See what's new in each version of Scanopy."
+	/>
 	<meta property="og:url" content="https://scanopy.net/changelog" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Changelog - Scanopy" />
-	<meta name="twitter:description" content="Scanopy changelog and release notes. See what's new in each version of Scanopy." />
+	<meta
+		name="twitter:description"
+		content="Scanopy changelog and release notes. See what's new in each version of Scanopy."
+	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
@@ -94,7 +100,7 @@
 									{/if}
 								</div>
 								<h2 class="mt-2 text-2xl font-bold text-white">
-									<a href="/changelog/{entry.slug}" class="hover:text-blue-400 transition-colors">
+									<a href="/changelog/{entry.slug}" class="transition-colors hover:text-blue-400">
 										{entry.title}
 									</a>
 								</h2>
@@ -143,7 +149,7 @@
 		margin-bottom: 0.5rem;
 		font-size: 1.25rem;
 		font-weight: 600;
-		color: rgb(251 113 133);
+		color: rgb(var(--c-rose-400));
 	}
 
 	:global(.prose h3) {
@@ -151,47 +157,47 @@
 		margin-bottom: 0.5rem;
 		font-size: 1.125rem;
 		font-weight: 600;
-		color: rgb(251 113 133);
+		color: rgb(var(--c-rose-400));
 	}
 
 	:global(.prose ul) {
 		list-style-type: disc;
 		padding-left: 1.25rem;
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-bottom: 1.5rem;
 	}
 
 	:global(.prose li) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-top: 0.25rem;
 	}
 
 	:global(.prose p) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-bottom: 1rem;
 	}
 
 	:global(.prose a) {
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	:global(.prose a:hover) {
-		color: rgb(147 197 253);
+		color: rgb(var(--c-blue-300));
 	}
 
 	:global(.prose code) {
-		background-color: rgb(31 41 55);
+		background-color: rgb(var(--c-gray-800));
 		padding: 0.125rem 0.375rem;
 		border-radius: 0.25rem;
 		font-size: 0.875rem;
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 	}
 
 	:global(.prose img) {
 		max-width: 100%;
 		width: auto;
 		border-radius: 0.5rem;
-		border: 1px solid rgb(31 41 55);
+		border: 1px solid rgb(var(--c-gray-800));
 		margin: 1rem 0;
 	}
 

@@ -396,9 +396,7 @@
 				{@const metadata = billingPlanHelpers.getMetadata(plan.type)}
 				{@const incrementalFeatures = metadata?.incremental_features ?? []}
 				{@const prevTier = metadata?.previous_tier}
-				{@const prevTierVisible = prevTier
-					? filteredPlans.some((p) => p.type === prevTier)
-					: false}
+				{@const prevTierVisible = prevTier ? filteredPlans.some((p) => p.type === prevTier) : false}
 				{@const prevTierFeatures =
 					prevTier && !prevTierVisible
 						? (billingPlanHelpers.getMetadata(prevTier)?.incremental_features ?? [])
@@ -437,9 +435,7 @@
 							<span class="text-primary text-2xl font-bold lg:text-3xl">
 								{hasExtras(plan)
 									? formatCents(
-											plan.rate === 'Year'
-												? getEstimatedTotal(plan) / 12
-												: getEstimatedTotal(plan)
+											plan.rate === 'Year' ? getEstimatedTotal(plan) / 12 : getEstimatedTotal(plan)
 										)
 									: formatBasePricing(plan)}
 							</span>
@@ -641,7 +637,9 @@
 					<div class="flex-1 py-4">
 						{#if prevTier && prevTierVisible}
 							<p class="text-secondary mb-2 text-xs font-medium">
-								Everything in <span class="text-primary">{billingPlanHelpers.getName(prevTier)}</span>, plus:
+								Everything in <span class="text-primary"
+									>{billingPlanHelpers.getName(prevTier)}</span
+								>, plus:
 							</p>
 						{/if}
 
@@ -811,7 +809,7 @@
 	}
 
 	.plan-card-recommended {
-		outline: 2px solid rgb(234 179 8);
+		outline: 2px solid rgb(var(--c-yellow-400));
 		outline-offset: -2px;
 	}
 
@@ -829,8 +827,8 @@
 		width: 1.5rem;
 		height: 1.5rem;
 		border-radius: 0.25rem;
-		border: 1px solid rgb(75 85 99);
-		color: rgb(209 213 219);
+		border: 1px solid rgb(var(--c-gray-600));
+		color: rgb(var(--c-gray-300));
 		background: transparent;
 		cursor: pointer;
 		transition:
@@ -839,8 +837,8 @@
 	}
 
 	.stepper-btn:hover:not(:disabled) {
-		background: rgb(55 65 81);
-		border-color: rgb(107 114 128);
+		background: rgb(var(--c-gray-700));
+		border-color: rgb(var(--c-gray-500));
 	}
 
 	.stepper-btn:disabled {
@@ -853,20 +851,20 @@
 	/* ============================================ */
 
 	.comparison-header-row {
-		background: rgb(31 41 55);
+		background: rgb(var(--c-gray-800));
 		position: sticky;
 		top: 0;
 		z-index: 11;
 	}
 
 	.comparison-category-row {
-		border-bottom: 1px solid rgb(55 65 81);
+		border-bottom: 1px solid rgb(var(--c-gray-700));
 	}
 
 	.comparison-row {
 		display: grid;
 		min-width: 500px;
-		border-bottom: 1px solid rgb(55 65 81);
+		border-bottom: 1px solid rgb(var(--c-gray-700));
 	}
 
 	.comparison-row:last-child {
@@ -875,15 +873,15 @@
 
 	.comparison-label-cell {
 		padding: 0.5rem;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		text-align: left;
 		display: flex;
 		align-items: center;
 		position: sticky;
 		left: 0;
 		z-index: 10;
-		background: rgb(31 41 55);
-		border-right: 1px solid rgb(55 65 81);
+		background: rgb(var(--c-gray-800));
+		border-right: 1px solid rgb(var(--c-gray-700));
 	}
 
 	.comparison-value-cell {
@@ -892,7 +890,7 @@
 		align-items: center;
 		justify-content: center;
 		text-align: center;
-		border-right: 1px solid rgb(55 65 81);
+		border-right: 1px solid rgb(var(--c-gray-700));
 	}
 
 	.comparison-value-cell:last-child {
@@ -911,7 +909,7 @@
 		position: relative;
 		cursor: help;
 		text-decoration: underline dotted;
-		text-decoration-color: rgb(107 114 128);
+		text-decoration-color: rgb(var(--c-gray-500));
 		text-underline-offset: 2px;
 	}
 </style>

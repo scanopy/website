@@ -21,7 +21,7 @@ This is the "bus factor" problem, and almost every IT team has it.
 
 Auvik's [2023 Network IT Management Report](https://www.auvik.com/franklyit/reports/network-it-management-report/) surveyed 4,500 IT professionals and found that 45% of IT teams don't fully know the configuration of their own networks. That's not "we forgot to update the diagram." That's "we don't know what's running."
 
-Across industries, [roughly 42% of institutional knowledge](https://www.iteratorshq.com/blog/cost-of-organizational-knowledge-loss-and-countermeasures/) resides solely with individual employees. For network infrastructure specifically, the problem is worse because the most critical knowledge isn't what's configured. It's *why* it's configured that way.
+Across industries, [roughly 42% of institutional knowledge](https://www.iteratorshq.com/blog/cost-of-organizational-knowledge-loss-and-countermeasures/) resides solely with individual employees. For network infrastructure specifically, the problem is worse because the most critical knowledge isn't what's configured. It's _why_ it's configured that way.
 
 The configs are in the devices. You can pull them. What you can't pull:
 
@@ -81,7 +81,7 @@ This is what we built [Scanopy](https://demo.scanopy.net/) to do. Deploy a daemo
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid #374151; border-radius: 8px;"></iframe>
+<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
 
 But even if you don't use Scanopy, the principle holds. Any automated discovery tool ([there are several](/blog/automated-network-documentation)) is better than documentation that relies on human memory.
 
@@ -91,7 +91,7 @@ You don't need a month-long documentation initiative. Start with these:
 
 1. **Identify your bus factor.** Who on your team holds network knowledge that nobody else has? If the answer is one person, that's your single point of failure.
 
-2. **List the undocumented decisions.** Not the configs (those are in the devices) but the *why* behind the configs. Why is the network segmented this way? Why does that rule exist? Write down the reasoning, not just the settings.
+2. **List the undocumented decisions.** Not the configs (those are in the devices) but the _why_ behind the configs. Why is the network segmented this way? Why does that rule exist? Write down the reasoning, not just the settings.
 
 3. **Run an automated discovery scan.** Even a single scan gives the next person a starting point. They'll know what's on the network without having to trace cables. If you're picking a tool, our [comparison of automated network diagram tools](/comparisons/best-automated-network-diagram-tools) breaks down discovery method and pricing across the main options.
 
@@ -100,4 +100,3 @@ You don't need a month-long documentation initiative. Start with these:
 5. **Test the handoff.** Pick a specific task (find the DHCP server, identify what's on VLAN 10, trace the path between two hosts) and ask someone else on your team to do it without asking the network person. If they can't, that's what you need to document first.
 
 6. **Stop relying on templates alone.** [Templates are a starting point](/blog/network-documentation-template), but they go stale for the same reason all manual documentation goes stale. The goal is documentation that maintains itself.
-

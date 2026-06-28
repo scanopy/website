@@ -109,7 +109,11 @@
 			<time datetime={data.post.date}>{formatDate(data.post.date)}</time>
 			{#if data.post.dateModified && data.post.dateModified !== data.post.date}
 				<span>·</span>
-				<span>Updated <time datetime={data.post.dateModified}>{formatDate(data.post.dateModified)}</time></span>
+				<span
+					>Updated <time datetime={data.post.dateModified}
+						>{formatDate(data.post.dateModified)}</time
+					></span
+				>
 			{/if}
 			<span>·</span>
 			<a href="/about" class="hover:text-blue-400">Maya</a>
@@ -130,7 +134,8 @@
 				{#if data.post.tldr}
 					<div class="mb-8 rounded-r-lg border-l-[3px] border-blue-500 bg-gray-800/50 px-5 py-4">
 						<p class="text-sm font-medium text-gray-300">
-							<span class="font-semibold text-white">TL;DR:</span> {data.post.tldr}
+							<span class="font-semibold text-white">TL;DR:</span>
+							{data.post.tldr}
 						</p>
 					</div>
 				{/if}
@@ -183,9 +188,9 @@
 		margin-bottom: 1rem;
 		font-size: 1.5rem;
 		font-weight: 700;
-		color: white;
+		color: rgb(var(--c-white));
 		padding-left: 0.75rem;
-		border-left: 3px solid rgb(59 130 246);
+		border-left: 3px solid rgb(var(--c-blue-500));
 		scroll-margin-top: 5rem;
 	}
 
@@ -194,46 +199,46 @@
 		margin-bottom: 0.5rem;
 		font-size: 1.25rem;
 		font-weight: 600;
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 		scroll-margin-top: 5rem;
 	}
 
 	:global(.prose p) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-bottom: 1.25rem;
 		line-height: 1.75;
 	}
 
 	:global(.prose p > strong:first-child) {
-		color: rgb(243 244 246);
+		color: rgb(var(--c-gray-100));
 	}
 
 	:global(.prose ul) {
 		list-style-type: disc;
 		padding-left: 1.25rem;
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-bottom: 1.5rem;
 	}
 
 	:global(.prose li) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-top: 0.25rem;
 	}
 
 	:global(.prose a) {
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	:global(.prose a:hover) {
-		color: rgb(147 197 253);
+		color: rgb(var(--c-blue-300));
 	}
 
 	:global(.prose code) {
-		background-color: rgb(31 41 55);
+		background-color: rgb(var(--c-gray-800));
 		padding: 0.125rem 0.375rem;
 		border-radius: 0.25rem;
 		font-size: 0.875rem;
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 	}
 
 	:global(.prose table) {
@@ -244,26 +249,26 @@
 	}
 
 	:global(.prose th) {
-		background-color: rgb(31 41 55);
+		background-color: rgb(var(--c-gray-800));
 		padding: 0.5rem 0.75rem;
 		text-align: left;
 		font-weight: 600;
-		color: rgb(229 231 235);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-200));
+		border: 1px solid rgb(var(--c-gray-700));
 	}
 
 	:global(.prose td) {
 		padding: 0.5rem 0.75rem;
-		color: rgb(209 213 219);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-300));
+		border: 1px solid rgb(var(--c-gray-700));
 	}
 
 	:global(.prose strong) {
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 	}
 
 	:global(.prose em) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 	}
 
 	:global(.prose iframe) {
@@ -273,7 +278,7 @@
 
 	:global(.prose hr) {
 		border: none;
-		border-top: 1px solid rgb(55 65 81);
+		border-top: 1px solid rgb(var(--c-gray-700));
 		margin: 2rem 0;
 	}
 </style>

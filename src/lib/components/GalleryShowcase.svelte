@@ -251,7 +251,7 @@
 							<div
 								class="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all group-hover:bg-black/20 group-hover:opacity-100"
 							>
-								<span class="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-gray-900">
+								<span class="rounded-full bg-paper/90 px-3 py-1 text-xs font-medium text-slate-900">
 									Click to enlarge
 								</span>
 							</div>
@@ -336,7 +336,7 @@
 							<div
 								class="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all group-hover:bg-black/20 group-hover:opacity-100"
 							>
-								<span class="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-gray-900">
+								<span class="rounded-full bg-paper/90 px-3 py-1 text-xs font-medium text-slate-900">
 									Click to enlarge
 								</span>
 							</div>

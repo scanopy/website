@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { tooltip } from '$lib/actions/tooltip';
 	import { COLUMN_DEFS } from '$lib/compare/table-columns';
+	import { theme } from '$lib/theme.svelte';
 	import type { Vendor, SourceRef } from '$lib/types';
 
 	interface Group {
@@ -68,7 +69,11 @@
 			hash = str.charCodeAt(i) + ((hash << 5) - hash);
 		}
 		const hue = ((hash % 360) + 360) % 360;
-		return { bg: `hsla(${hue}, 70%, 55%, 0.15)`, fg: `hsl(${hue}, 80%, 75%)` };
+		// Light text on a translucent tint reads on dark; on light we need the inverse
+		// — a darker, more saturated label on a slightly stronger tint.
+		return theme.resolved === 'dark'
+			? { bg: `hsla(${hue}, 70%, 55%, 0.15)`, fg: `hsl(${hue}, 80%, 75%)` }
+			: { bg: `hsla(${hue}, 70%, 45%, 0.14)`, fg: `hsl(${hue}, 70%, 32%)` };
 	}
 	function chipStyle(str: string): string {
 		const { bg, fg } = hashColor(str);
@@ -299,20 +304,20 @@
 	}
 
 	:global(.vendor-table th) {
-		background-color: rgb(31 41 55);
+		background-color: rgb(var(--c-gray-800));
 		padding: 0.375rem 0.5rem;
 		text-align: left;
 		font-weight: 600;
-		color: rgb(229 231 235);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-200));
+		border: 1px solid rgb(var(--c-gray-700));
 		vertical-align: top;
 		overflow-wrap: break-word;
 	}
 
 	:global(.vendor-table td) {
 		padding: 0.375rem 0.5rem;
-		color: rgb(209 213 219);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-300));
+		border: 1px solid rgb(var(--c-gray-700));
 		vertical-align: top;
 		overflow-wrap: break-word;
 	}
@@ -329,12 +334,12 @@
 	}
 
 	:global(.vendor-table .category-row td) {
-		background: rgb(17 24 39);
+		background: rgb(var(--c-gray-900));
 		font-weight: 700;
 		font-size: 0.8125rem;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		padding: 0.625rem 0.75rem;
 		border-left: none;
 		border-right: none;
@@ -352,23 +357,23 @@
 
 	:global(.vendor-table .chip-positive) {
 		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
+		color: rgb(var(--c-green-400));
 	}
 
 	:global(.vendor-table .chip-negative) {
 		background: rgba(239, 68, 68, 0.15);
-		color: rgb(248 113 113);
+		color: rgb(var(--c-red-400));
 	}
 
 	:global(.vendor-table .chip-neutral) {
 		background: rgba(245, 158, 11, 0.15);
-		color: rgb(251 191 36);
+		color: rgb(var(--c-amber-400));
 	}
 
 	:global(.vendor-table .chip-unclear) {
-		background: rgba(148, 163, 184, 0.12);
-		color: rgb(148 163 184);
-		border: 1px dashed rgba(148, 163, 184, 0.5);
+		background: rgb(var(--c-gray-400) / 0.12);
+		color: rgb(var(--c-gray-400));
+		border: 1px dashed rgb(var(--c-gray-400) / 0.5);
 	}
 
 	:global(.vendor-table .view-tags),
@@ -385,15 +390,15 @@
 	}
 
 	:global(.vendor-table .view-tag-no) {
-		background: rgba(75, 85, 99, 0.18);
-		color: rgb(107 114 128);
+		background: rgb(var(--c-gray-600) / 0.18);
+		color: rgb(var(--c-gray-500));
 		text-decoration: line-through;
-		text-decoration-color: rgba(107, 114, 128, 0.6);
+		text-decoration-color: rgb(var(--c-gray-500) / 0.6);
 	}
 
 	:global(.vendor-table .env-tag) {
-		background: rgba(148, 163, 184, 0.14);
-		color: rgb(203 213 225);
+		background: rgb(var(--c-gray-400) / 0.14);
+		color: rgb(var(--c-gray-300));
 		font-size: 0.6875rem;
 		padding: 0.0625rem 0.375rem;
 	}
@@ -401,13 +406,13 @@
 	:global(.vendor-table .cell-detail) {
 		display: block;
 		font-size: 0.75rem;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		margin-top: 0.25rem;
 	}
 
 	:global(.vendor-table a.cell-detail),
 	:global(.vendor-table .cell-detail a) {
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	/* Dotted-underline header that reveals a portaled tooltip on hover. The inline
@@ -416,7 +421,7 @@
 	:global(.tooltip-header) {
 		position: relative;
 		cursor: help;
-		text-decoration: underline dotted rgba(148, 163, 184, 0.5);
+		text-decoration: underline dotted rgb(var(--c-gray-400) / 0.5);
 		text-underline-offset: 3px;
 	}
 
@@ -426,12 +431,12 @@
 
 	:global(.tooltip-portal) {
 		padding: 0.75rem 1rem;
-		background: rgb(31 41 55);
-		border: 1px solid rgb(55 65 81);
+		background: rgb(var(--c-gray-800));
+		border: 1px solid rgb(var(--c-gray-700));
 		border-radius: 0.5rem;
 		font-size: 0.8125rem;
 		font-weight: 400;
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		line-height: 2;
 		z-index: 50;
 		pointer-events: none;
@@ -450,29 +455,29 @@
 
 	:global(.tooltip-portal .chip-positive) {
 		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
+		color: rgb(var(--c-green-400));
 	}
 
 	:global(.tooltip-portal .chip-negative) {
 		background: rgba(239, 68, 68, 0.15);
-		color: rgb(248 113 113);
+		color: rgb(var(--c-red-400));
 	}
 
 	:global(.tooltip-portal .chip-neutral) {
 		background: rgba(245, 158, 11, 0.15);
-		color: rgb(251 191 36);
+		color: rgb(var(--c-amber-400));
 	}
 
 	:global(.tooltip-portal .chip-unclear) {
-		background: rgba(148, 163, 184, 0.12);
-		color: rgb(148 163 184);
-		border: 1px dashed rgba(148, 163, 184, 0.5);
+		background: rgb(var(--c-gray-400) / 0.12);
+		color: rgb(var(--c-gray-400));
+		border: 1px dashed rgb(var(--c-gray-400) / 0.5);
 	}
 
 	:global(.tooltip-portal .view-tag-no) {
-		background: rgba(75, 85, 99, 0.18);
-		color: rgb(107 114 128);
+		background: rgb(var(--c-gray-600) / 0.18);
+		color: rgb(var(--c-gray-500));
 		text-decoration: line-through;
-		text-decoration-color: rgba(107, 114, 128, 0.6);
+		text-decoration-color: rgb(var(--c-gray-500) / 0.6);
 	}
 </style>

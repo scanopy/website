@@ -16,6 +16,7 @@
 		initFeatureFlags
 	} from '$lib/analytics.svelte';
 	import { getBreadcrumbListSchema } from '$lib/schemas';
+	import { initTheme } from '$lib/theme.svelte';
 	import { APP, appHref } from '$lib/config/urls';
 
 	interface Props {
@@ -39,6 +40,20 @@
 	}
 
 	onMount(() => {
+		// Start observing the applied theme so theme-aware components react after hydration.
+		initTheme();
+
+		// Re-apply the theme live when the OS appearance changes (no reload needed),
+		// unless the visitor has an explicit 'scanopy-theme' override.
+		const mql = window.matchMedia('(prefers-color-scheme: dark)');
+		const applySystemTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+			const stored = localStorage.getItem('scanopy-theme');
+			if (stored === 'light' || stored === 'dark') return;
+			document.documentElement.classList.toggle('dark', e.matches);
+			document.documentElement.style.colorScheme = e.matches ? 'dark' : 'light';
+		};
+		mql.addEventListener('change', applySystemTheme);
+
 		const checkHealth = async () => {
 			try {
 				const res = await fetch('https://app.scanopy.net/api/health');
@@ -52,6 +67,8 @@
 		} else {
 			setTimeout(() => checkHealth(), 2000);
 		}
+
+		return () => mql.removeEventListener('change', applySystemTheme);
 	});
 
 	// Evaluate feature flag on mount to trigger exposure event (PostHog best practice)

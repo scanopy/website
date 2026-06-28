@@ -140,7 +140,6 @@
 								usage data.
 							</p>
 						</div>
-
 					</div>
 
 					<div class="settings-buttons">
@@ -221,8 +220,8 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: #1f2937;
-		border-top: 1px solid #374151;
+		background: rgb(var(--c-gray-800));
+		border-top: 1px solid rgb(var(--c-gray-700));
 		padding: 1.25rem;
 		z-index: 9999;
 	}
@@ -235,7 +234,7 @@
 		transform: translate(-50%, -50%);
 		max-width: 500px;
 		width: calc(100% - 2rem);
-		border: 1px solid #374151;
+		border: 1px solid rgb(var(--c-gray-700));
 		border-radius: 0.5rem;
 		max-height: 90vh;
 		overflow-y: auto;
@@ -262,27 +261,27 @@
 	}
 
 	.title {
-		color: white;
+		color: rgb(var(--c-white));
 		font-size: 1rem;
 		font-weight: 600;
 		margin: 0 0 0.25rem 0;
 	}
 
 	.description {
-		color: #9ca3af;
+		color: rgb(var(--c-gray-400));
 		font-size: 0.875rem;
 		margin: 0;
 	}
 
 	.description a,
 	.settings-description a {
-		color: #60a5fa;
+		color: rgb(var(--c-blue-400));
 		text-decoration: underline;
 	}
 
 	.description a:hover,
 	.settings-description a:hover {
-		color: #93c5fd;
+		color: rgb(var(--c-blue-300));
 	}
 
 	.buttons {
@@ -306,36 +305,36 @@
 
 	.btn-primary {
 		background: #1d4ed8;
-		color: white;
+		color: #ffffff;
 		border: 1px solid #2563eb;
 	}
 
 	.btn-primary:hover {
 		background: #2563eb;
-		border-color: #3b82f6;
+		border-color: rgb(var(--c-blue-500));
 	}
 
 	.btn-secondary {
 		background: transparent;
-		color: #9ca3af;
-		border: 1px solid #374151;
+		color: rgb(var(--c-gray-400));
+		border: 1px solid rgb(var(--c-gray-700));
 	}
 
 	.btn-secondary:hover {
-		background: #374151;
-		border-color: #4b5563;
-		color: #e5e7eb;
+		background: rgb(var(--c-gray-700));
+		border-color: rgb(var(--c-gray-600));
+		color: rgb(var(--c-gray-200));
 	}
 
 	.btn-link {
 		background: transparent;
-		color: #9ca3af;
+		color: rgb(var(--c-gray-400));
 		border: 1px solid transparent;
 		text-decoration: underline;
 	}
 
 	.btn-link:hover {
-		color: #e5e7eb;
+		color: rgb(var(--c-gray-200));
 	}
 
 	/* Settings panel styles */
@@ -354,7 +353,7 @@
 	.close-btn {
 		background: transparent;
 		border: none;
-		color: #9ca3af;
+		color: rgb(var(--c-gray-400));
 		cursor: pointer;
 		padding: 0.25rem;
 		display: flex;
@@ -364,12 +363,12 @@
 	}
 
 	.close-btn:hover {
-		color: white;
-		background: #374151;
+		color: rgb(var(--c-white));
+		background: rgb(var(--c-gray-700));
 	}
 
 	.settings-description {
-		color: #9ca3af;
+		color: rgb(var(--c-gray-400));
 		font-size: 0.875rem;
 		margin: 0;
 	}
@@ -382,8 +381,8 @@
 	}
 
 	.cookie-option {
-		background: #111827;
-		border: 1px solid #374151;
+		background: rgb(var(--c-gray-900));
+		border: 1px solid rgb(var(--c-gray-700));
 		border-radius: 0.375rem;
 		padding: 1rem;
 	}
@@ -411,9 +410,9 @@
 	.checkbox {
 		width: 1.25rem;
 		height: 1.25rem;
-		border: 1px solid #4b5563;
+		border: 1px solid rgb(var(--c-gray-600));
 		border-radius: 0.25rem;
-		background: #374151;
+		background: rgb(var(--c-gray-700));
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -443,24 +442,24 @@
 	}
 
 	.option-label:hover .checkbox:not(.disabled) {
-		border-color: #6b7280;
+		border-color: rgb(var(--c-gray-500));
 	}
 
 	.option-title {
-		color: white;
+		color: rgb(var(--c-white));
 		font-weight: 500;
 		font-size: 0.9375rem;
 	}
 
 	.always-on {
-		color: #6b7280;
+		color: rgb(var(--c-gray-500));
 		font-size: 0.75rem;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
 
 	.option-description {
-		color: #9ca3af;
+		color: rgb(var(--c-gray-400));
 		font-size: 0.8125rem;
 		margin: 0;
 		line-height: 1.4;
@@ -472,7 +471,7 @@
 		justify-content: flex-end;
 		flex-wrap: wrap;
 		padding-top: 0.5rem;
-		border-top: 1px solid #374151;
+		border-top: 1px solid rgb(var(--c-gray-700));
 	}
 
 	/* Toggle button */
@@ -483,9 +482,9 @@
 		width: 3rem;
 		height: 3rem;
 		border-radius: 50%;
-		background: #1f2937;
-		border: 1px solid #374151;
-		color: #9ca3af;
+		background: rgb(var(--c-gray-800));
+		border: 1px solid rgb(var(--c-gray-700));
+		color: rgb(var(--c-gray-400));
 		cursor: pointer;
 		display: flex;
 		align-items: center;
@@ -498,7 +497,7 @@
 	}
 
 	.toggle:hover {
-		background: #374151;
-		color: white;
+		background: rgb(var(--c-gray-700));
+		color: rgb(var(--c-white));
 	}
 </style>

@@ -85,8 +85,7 @@
 <section class="relative overflow-hidden py-16 lg:py-24">
 	<!-- Background image -->
 	<div
-		class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('/topology-hero.webp');"
+		class="absolute inset-0 bg-[url('/topology-hero-light.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('/topology-hero.webp')]"
 	></div>
 	<!-- Dark overlay -->
 	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>

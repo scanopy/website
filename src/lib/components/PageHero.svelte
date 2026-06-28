@@ -1,19 +1,26 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { theme } from '$lib/theme.svelte';
 
 	interface Props {
 		image?: string;
+		/** Light-theme variant. Defaults to the `-light` sibling of `image`. */
+		imageLight?: string;
 		title: string;
 		subtitle?: string;
 		children?: Snippet;
 	}
 
-	let { image = '/topology-hero.webp', title, subtitle, children }: Props = $props();
+	let { image = '/topology-hero.webp', imageLight, title, subtitle, children }: Props = $props();
+
+	const resolvedImage = $derived(
+		theme.resolved === 'light' ? (imageLight ?? image.replace(/\.webp$/, '-light.webp')) : image
+	);
 </script>
 
 <section class="relative overflow-hidden py-16 lg:py-24">
 	<img
-		src={image}
+		src={resolvedImage}
 		alt=""
 		class="absolute inset-0 h-full w-full object-cover"
 		width="1440"

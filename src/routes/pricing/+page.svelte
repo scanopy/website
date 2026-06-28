@@ -104,13 +104,13 @@
 				<div class="flex gap-3">
 					<a
 						href="/community"
-						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-300 transition-colors hover:bg-blue-500/10 hover:text-blue-200"
+						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-500/10 hover:text-blue-900 dark:text-blue-300 dark:hover:text-blue-200"
 					>
 						Community Edition
 					</a>
 					<a
 						href="/commercial"
-						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-300 transition-colors hover:bg-blue-500/10 hover:text-blue-200"
+						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-500/10 hover:text-blue-900 dark:text-blue-300 dark:hover:text-blue-200"
 					>
 						Commercial Edition
 					</a>

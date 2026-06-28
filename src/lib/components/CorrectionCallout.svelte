@@ -17,10 +17,10 @@
 		gap: 0.625rem;
 		margin: 0 0 1.5rem;
 		padding: 0.625rem 0.875rem;
-		border: 1px solid rgb(55 65 81);
-		border-left: 3px solid rgb(59 130 246);
+		border: 1px solid rgb(var(--c-gray-700));
+		border-left: 3px solid rgb(var(--c-blue-500));
 		border-radius: 0.375rem;
-		background: rgb(31 41 55 / 0.5);
+		background: rgb(var(--c-gray-800) / 0.5);
 	}
 
 	.correction-callout :global(.callout-icon) {
@@ -28,21 +28,21 @@
 		width: 1rem;
 		height: 1rem;
 		margin-top: 0.15rem;
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	.correction-callout p {
 		margin: 0;
 		font-size: 0.8125rem;
 		line-height: 1.5;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 	}
 
 	.correction-callout a {
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	.correction-callout a:hover {
-		color: rgb(147 197 253);
+		color: rgb(var(--c-blue-300));
 	}
 </style>

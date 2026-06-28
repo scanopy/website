@@ -15,26 +15,26 @@ But I want to be honest about what happened when I tried to use one myself: it w
 
 ## Here's A Network Documentation Template!
 
-This is roughly what I started with for my homelab. It's simple on purpose; an over-engineered template is one you'll never fill in. 
+This is roughly what I started with for my homelab. It's simple on purpose; an over-engineered template is one you'll never fill in.
 
 Also, my homelab was simple. We all start somewhere right?
 
 ### Device Inventory
 
-| Hostname | IP Address | MAC Address | Type | OS / Firmware | Services | Notes |
-|----------|-----------|-------------|------|---------------|----------|-------|
-| router01 | 192.168.1.1 | aa:bb:cc:00:01:01 | Router | OpenWrt 23.05 | DHCP, DNS forwarding, guest WiFi | Living room closet |
-| beelink01 | 192.168.1.10 | aa:bb:cc:00:01:10 | Mini PC | Proxmox VE 8.1 | Home Assistant, WireGuard, Nginx Proxy Manager | Closet shelf |
-| rpi01 | 192.168.1.20 | aa:bb:cc:00:01:20 | SBC | Raspbian 12 | Pi-hole, Unbound | Closet shelf |
-| nas01 | 192.168.1.30 | aa:bb:cc:00:01:30 | NAS | DSM 7.2 | File shares, backups | Closet floor |
+| Hostname  | IP Address   | MAC Address       | Type    | OS / Firmware  | Services                                       | Notes              |
+| --------- | ------------ | ----------------- | ------- | -------------- | ---------------------------------------------- | ------------------ |
+| router01  | 192.168.1.1  | aa:bb:cc:00:01:01 | Router  | OpenWrt 23.05  | DHCP, DNS forwarding, guest WiFi               | Living room closet |
+| beelink01 | 192.168.1.10 | aa:bb:cc:00:01:10 | Mini PC | Proxmox VE 8.1 | Home Assistant, WireGuard, Nginx Proxy Manager | Closet shelf       |
+| rpi01     | 192.168.1.20 | aa:bb:cc:00:01:20 | SBC     | Raspbian 12    | Pi-hole, Unbound                               | Closet shelf       |
+| nas01     | 192.168.1.30 | aa:bb:cc:00:01:30 | NAS     | DSM 7.2        | File shares, backups                           | Closet floor       |
 
 ### Network Layout
 
-| Network | Subnet | Gateway | DHCP Range | Purpose |
-|---------|--------|---------|------------|---------|
-| LAN | 192.168.1.0/24 | 192.168.1.1 | .100-.250 | Everything: servers, clients, devices |
-| WireGuard | 10.0.0.0/24 | 10.0.0.1 | N/A (static) | Remote access VPN |
-| Guest | 192.168.2.0/24 | 192.168.2.1 | .100-.250 | Guest WiFi (router-managed, isolated) |
+| Network   | Subnet         | Gateway     | DHCP Range   | Purpose                               |
+| --------- | -------------- | ----------- | ------------ | ------------------------------------- |
+| LAN       | 192.168.1.0/24 | 192.168.1.1 | .100-.250    | Everything: servers, clients, devices |
+| WireGuard | 10.0.0.0/24    | 10.0.0.1    | N/A (static) | Remote access VPN                     |
+| Guest     | 192.168.2.0/24 | 192.168.2.1 | .100-.250    | Guest WiFi (router-managed, isolated) |
 
 ### Topology Notes
 
@@ -43,15 +43,15 @@ Also, my homelab was simple. We all start somewhere right?
 - Guest network isolated by router, internet only
 - Planned: IoT VLAN for smart home devices (never got around to it)
 
-Copy these tables, swap in your own values, and you have working network documentation. 
+Copy these tables, swap in your own values, and you have working network documentation.
 
-Enjoy! 
+Enjoy!
 
 ...for about a week.
 
-## My Network Documentation Was a *Lie*
+## My Network Documentation Was a _Lie_
 
-I tried the table approach I just shared. It was accurate as long as I didn't change anything, but naturally I'd be tinkering regularly - spinning up new containers, setting up a second Pi-hole to try out high(er) availability,  changing my DNS config, etc. The spreadsheet still showed the old setup. I never opened it again.
+I tried the table approach I just shared. It was accurate as long as I didn't change anything, but naturally I'd be tinkering regularly - spinning up new containers, setting up a second Pi-hole to try out high(er) availability, changing my DNS config, etc. The spreadsheet still showed the old setup. I never opened it again.
 
 So ultimately, my network documentation lived entirely in my head - a vague mental model that got fuzzier every time I added another container at 2am. Not great!
 
@@ -83,7 +83,7 @@ Deploy the daemon, point it at your subnets, and you get a live network map in m
 
 Here's what that looks like in practice - this is a real Scanopy map you can click around in:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid #374151; border-radius: 8px;"></iframe>
+<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
 
 Compare that to the markdown tables above and you'll see why I stopped maintaining a spreadsheet. And yes, you can embed your own Scanopy network diagrams anywhere too.
 
@@ -97,10 +97,9 @@ The template gives you a snapshot of column headers. Scanopy gives you an intera
 
 Templates aren't useless. They're the wrong tool for documenting a live network, but they're great for things that don't change constantly:
 
-- **Planning and design docs.** Designing a new office network? A template or diagram tool is perfect. You're documenting what *should* exist, not what *does* exist.
+- **Planning and design docs.** Designing a new office network? A template or diagram tool is perfect. You're documenting what _should_ exist, not what _does_ exist.
 - **Compliance documentation.** Some audits require specific formats. Templates give you the structure, but the data filling them should come from an [automated source](/blog/automated-network-documentation). Scanopy's CSV export and API can feed your compliance templates with current data instead of whatever someone remembered to type in last quarter.
 
 - **Runbooks and procedures.** "When the VPN goes down, do X, Y, Z." Process docs are stable. Network inventory isn't.
 
 Use templates for things that are static. Use automation for things that evolve.
-

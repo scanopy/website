@@ -6,12 +6,7 @@
 	import ArticleCTA from '$lib/components/ArticleCTA.svelte';
 	import ArticleTOC from '$lib/components/ArticleTOC.svelte';
 	import { getFAQPageSchema } from '$lib/schemas';
-	import type {
-		Vendor,
-		VendorCategory,
-		VendorSource,
-		VendorFAQ
-	} from '$lib/types';
+	import type { Vendor, VendorCategory, VendorSource, VendorFAQ } from '$lib/types';
 	interface Heading {
 		id: string;
 		text: string;
@@ -107,23 +102,20 @@
 
 	const articleSchema = JSON.stringify(articleSchemaObj);
 
-	const itemListSchema = data.vendorData
-		? JSON.stringify(data.vendorData.itemListSchema)
-		: null;
+	const itemListSchema = data.vendorData ? JSON.stringify(data.vendorData.itemListSchema) : null;
 
 	// FAQPage schema (AEO), sourced from the same FAQs the page renders. Strip inline
 	// HTML so the schema answer text matches the visible plain-text answer.
-	const faqSchema =
-		data.vendorData?.faqs?.length
-			? JSON.stringify(
-					getFAQPageSchema(
-						data.vendorData.faqs.map((f) => ({
-							question: f.question,
-							answer: f.answer.replace(/<[^>]+>/g, '')
-						}))
-					)
+	const faqSchema = data.vendorData?.faqs?.length
+		? JSON.stringify(
+				getFAQPageSchema(
+					data.vendorData.faqs.map((f) => ({
+						question: f.question,
+						answer: f.answer.replace(/<[^>]+>/g, '')
+					}))
 				)
-			: null;
+			)
+		: null;
 </script>
 
 <svelte:head>
@@ -160,7 +152,11 @@
 			<time datetime={data.post.date}>{formatDate(data.post.date)}</time>
 			{#if data.post.dateModified && data.post.dateModified !== data.post.date}
 				<span>·</span>
-				<span>Updated <time datetime={data.post.dateModified}>{formatDate(data.post.dateModified)}</time></span>
+				<span
+					>Updated <time datetime={data.post.dateModified}
+						>{formatDate(data.post.dateModified)}</time
+					></span
+				>
 			{/if}
 			<span>·</span>
 			<a href="/about" class="hover:text-blue-400">Maya</a>
@@ -173,7 +169,10 @@
 		<div class:blog-layout={showToc}>
 			<div class="blog-content">
 				<header class="mb-12">
-					<a href="/comparisons" class="mb-6 inline-block text-sm text-gray-500 hover:text-blue-400">
+					<a
+						href="/comparisons"
+						class="mb-6 inline-block text-sm text-gray-500 hover:text-blue-400"
+					>
 						&larr; Back to comparisons
 					</a>
 				</header>
@@ -183,12 +182,16 @@
 				{#if data.post.tldr}
 					<div class="mb-8 rounded-r-lg border-l-[3px] border-blue-500 bg-gray-800/50 px-5 py-4">
 						<p class="text-sm font-medium text-gray-300">
-							<span class="font-semibold text-white">TL;DR:</span> {data.post.tldr}
+							<span class="font-semibold text-white">TL;DR:</span>
+							{data.post.tldr}
 						</p>
 					</div>
 				{/if}
 
-				<div class="prose prose-invert prose-gray max-w-none" class:prose-comparison={data.post.style === 'comparison'}>
+				<div
+					class="prose prose-invert prose-gray max-w-none"
+					class:prose-comparison={data.post.style === 'comparison'}
+				>
 					{#if data.contentSegments && data.vendorData}
 						{#each data.contentSegments as segment}
 							{#if segment.type === 'html'}
@@ -205,13 +208,12 @@
 									mode="detail"
 									section={data.vendorData.detailSections.find((s) => s.id === segment.id)}
 									vendors={data.vendorData.vendors}
-									honorableMentions={segment.id === 'discovery' ? data.vendorData.honorableMentions : undefined}
+									honorableMentions={segment.id === 'discovery'
+										? data.vendorData.honorableMentions
+										: undefined}
 								/>
 							{:else if segment.type === 'vendor-sources'}
-								<VendorComparison
-									mode="sources"
-									sources={data.vendorData.sources}
-								/>
+								<VendorComparison mode="sources" sources={data.vendorData.sources} />
 							{/if}
 						{/each}
 					{:else}
@@ -257,9 +259,9 @@
 		margin-bottom: 1rem;
 		font-size: 1.5rem;
 		font-weight: 700;
-		color: white;
+		color: rgb(var(--c-white));
 		padding-left: 0.75rem;
-		border-left: 3px solid rgb(59 130 246);
+		border-left: 3px solid rgb(var(--c-blue-500));
 		scroll-margin-top: 5rem;
 	}
 
@@ -268,19 +270,19 @@
 		margin-bottom: 0.5rem;
 		font-size: 1.25rem;
 		font-weight: 600;
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 		scroll-margin-top: 5rem;
 	}
 
 	:global(.prose p) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-bottom: 1.25rem;
 		line-height: 1.75;
 		overflow-wrap: break-word;
 	}
 
 	:global(.prose p > strong:first-child) {
-		color: rgb(243 244 246);
+		color: rgb(var(--c-gray-100));
 	}
 
 	/* Comparison post style: vendor sections as cards */
@@ -290,36 +292,36 @@
 		padding: 0.75rem 1rem;
 		font-size: 1.125rem;
 		font-weight: 700;
-		color: white;
-		background: rgb(31 41 55);
+		color: rgb(var(--c-white));
+		background: rgb(var(--c-gray-800));
 		border-radius: 0.5rem 0.5rem 0 0;
-		border: 1px solid rgb(55 65 81);
-		border-bottom: 1px solid rgb(55 65 81 / 0.5);
+		border: 1px solid rgb(var(--c-gray-700));
+		border-bottom: 1px solid rgb(var(--c-gray-700) / 0.5);
 		scroll-margin-top: 5rem;
 	}
 
 	:global(.prose-comparison h3 + p) {
 		padding: 0.75rem 1rem 0.5rem;
-		border-left: 1px solid rgb(55 65 81);
-		border-right: 1px solid rgb(55 65 81);
+		border-left: 1px solid rgb(var(--c-gray-700));
+		border-right: 1px solid rgb(var(--c-gray-700));
 		margin-top: 0;
 		margin-bottom: 0;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		font-size: 0.9375rem;
 	}
 
 	:global(.prose-comparison h3 + p + p),
 	:global(.prose-comparison h3 ~ p:has(> strong:first-child)) {
 		padding: 0.5rem 1rem;
-		border-left: 1px solid rgb(55 65 81);
-		border-right: 1px solid rgb(55 65 81);
+		border-left: 1px solid rgb(var(--c-gray-700));
+		border-right: 1px solid rgb(var(--c-gray-700));
 		margin-bottom: 0;
 		font-size: 0.9375rem;
 		line-height: 1.6;
 	}
 
 	:global(.prose-comparison h3 ~ p:has(> strong:first-child) > strong:first-child) {
-		color: rgb(251 113 133);
+		color: rgb(var(--c-rose-400));
 		font-size: 0.8125rem;
 		text-transform: uppercase;
 		letter-spacing: 0.03em;
@@ -330,12 +332,11 @@
 	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ h2)),
 	:global(.prose-comparison h3 ~ p:has(> strong:first-child):has(+ iframe)),
 	:global(.prose-comparison h3 ~ p:has(> strong:first-child):last-child) {
-		border-bottom: 1px solid rgb(55 65 81);
+		border-bottom: 1px solid rgb(var(--c-gray-700));
 		border-radius: 0 0 0.5rem 0.5rem;
 		padding-bottom: 1rem;
 		margin-bottom: 0.5rem;
 	}
-
 
 	@media (min-width: 640px) {
 		:global(.prose-comparison h3) {
@@ -356,29 +357,29 @@
 	:global(.prose ul) {
 		list-style-type: disc;
 		padding-left: 1.25rem;
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-bottom: 1.5rem;
 	}
 
 	:global(.prose li) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-top: 0.25rem;
 	}
 
 	:global(.prose a) {
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	:global(.prose a:hover) {
-		color: rgb(147 197 253);
+		color: rgb(var(--c-blue-300));
 	}
 
 	:global(.prose code) {
-		background-color: rgb(31 41 55);
+		background-color: rgb(var(--c-gray-800));
 		padding: 0.125rem 0.375rem;
 		border-radius: 0.25rem;
 		font-size: 0.875rem;
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 	}
 
 	:global(.prose table) {
@@ -386,7 +387,6 @@
 		margin-bottom: 1.5rem;
 		font-size: 0.8125rem;
 	}
-
 
 	@media (min-width: 640px) {
 		:global(.prose table) {
@@ -445,8 +445,8 @@
 	}
 
 	:global(.prose .env-tag) {
-		background: rgba(148, 163, 184, 0.14);
-		color: rgb(203 213 225);
+		background: rgb(var(--c-gray-400) / 0.14);
+		color: rgb(var(--c-gray-300));
 		font-size: 0.6875rem;
 		padding: 0.0625rem 0.375rem;
 	}
@@ -458,18 +458,18 @@
 	:global(.prose-comparison .cell-detail) {
 		display: block;
 		font-size: 0.75rem;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		margin-top: 0.25rem;
 	}
 
 	:global(.prose-comparison a.cell-detail),
 	:global(.prose-comparison .cell-detail a) {
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	:global(.prose-comparison a.cell-detail:hover),
 	:global(.prose-comparison .cell-detail a:hover) {
-		color: rgb(147 197 253);
+		color: rgb(var(--c-blue-300));
 	}
 
 	:global(.prose-comparison td:nth-child(2)) {
@@ -482,30 +482,30 @@
 	}
 
 	:global(.prose-comparison .category-row td) {
-		background: rgb(17 24 39);
+		background: rgb(var(--c-gray-900));
 		font-weight: 700;
 		font-size: 0.8125rem;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		padding: 0.625rem 0.75rem;
 		border-left: none;
 		border-right: none;
 	}
 
 	:global(.prose th) {
-		background-color: rgb(31 41 55);
+		background-color: rgb(var(--c-gray-800));
 		padding: 0.375rem 0.5rem;
 		text-align: left;
 		font-weight: 600;
-		color: rgb(229 231 235);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-200));
+		border: 1px solid rgb(var(--c-gray-700));
 	}
 
 	:global(.prose td) {
 		padding: 0.375rem 0.5rem;
-		color: rgb(209 213 219);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-300));
+		border: 1px solid rgb(var(--c-gray-700));
 	}
 
 	@media (min-width: 640px) {
@@ -530,24 +530,24 @@
 
 	:global(.prose .chip-positive) {
 		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
+		color: rgb(var(--c-green-400));
 	}
 
 	:global(.prose .chip-negative) {
 		background: rgba(239, 68, 68, 0.15);
-		color: rgb(248 113 113);
+		color: rgb(var(--c-red-400));
 	}
 
 	:global(.prose .chip-neutral) {
 		background: rgba(245, 158, 11, 0.15);
-		color: rgb(251 191 36);
+		color: rgb(var(--c-amber-400));
 	}
 
 	/* Unverified ("unclear") view support: muted, distinct from yes/no. */
 	:global(.prose .chip-unclear) {
-		background: rgba(148, 163, 184, 0.12);
-		color: rgb(148 163 184);
-		border: 1px dashed rgba(148, 163, 184, 0.5);
+		background: rgb(var(--c-gray-400) / 0.12);
+		color: rgb(var(--c-gray-400));
+		border: 1px dashed rgb(var(--c-gray-400) / 0.5);
 	}
 
 	/* Network Views column: compact per-view tags. */
@@ -564,22 +564,22 @@
 
 	/* Not-supported view: greyed out, de-emphasised. */
 	:global(.prose .view-tag-no) {
-		background: rgba(75, 85, 99, 0.18);
-		color: rgb(107 114 128);
+		background: rgb(var(--c-gray-600) / 0.18);
+		color: rgb(var(--c-gray-500));
 		text-decoration: line-through;
-		text-decoration-color: rgba(107, 114, 128, 0.6);
+		text-decoration-color: rgb(var(--c-gray-500) / 0.6);
 	}
 
 	:global(.prose .view-legend) {
 		font-size: 0.8125rem;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		line-height: 2.2;
 	}
 
 	:global(.prose .tooltip-header) {
 		position: relative;
 		cursor: help;
-		text-decoration: underline dotted rgba(148, 163, 184, 0.5);
+		text-decoration: underline dotted rgb(var(--c-gray-400) / 0.5);
 		text-underline-offset: 3px;
 	}
 
@@ -592,12 +592,12 @@
 
 	:global(.tooltip-portal) {
 		padding: 0.75rem 1rem;
-		background: rgb(31 41 55);
-		border: 1px solid rgb(55 65 81);
+		background: rgb(var(--c-gray-800));
+		border: 1px solid rgb(var(--c-gray-700));
 		border-radius: 0.5rem;
 		font-size: 0.8125rem;
 		font-weight: 400;
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		line-height: 2;
 		z-index: 50;
 		pointer-events: none;
@@ -616,38 +616,38 @@
 
 	:global(.tooltip-portal .chip-positive) {
 		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
+		color: rgb(var(--c-green-400));
 	}
 
 	:global(.tooltip-portal .chip-negative) {
 		background: rgba(239, 68, 68, 0.15);
-		color: rgb(248 113 113);
+		color: rgb(var(--c-red-400));
 	}
 
 	:global(.tooltip-portal .chip-neutral) {
 		background: rgba(245, 158, 11, 0.15);
-		color: rgb(251 191 36);
+		color: rgb(var(--c-amber-400));
 	}
 
 	:global(.tooltip-portal .chip-unclear) {
-		background: rgba(148, 163, 184, 0.12);
-		color: rgb(148 163 184);
-		border: 1px dashed rgba(148, 163, 184, 0.5);
+		background: rgb(var(--c-gray-400) / 0.12);
+		color: rgb(var(--c-gray-400));
+		border: 1px dashed rgb(var(--c-gray-400) / 0.5);
 	}
 
 	:global(.tooltip-portal .view-tag-no) {
-		background: rgba(75, 85, 99, 0.18);
-		color: rgb(107 114 128);
+		background: rgb(var(--c-gray-600) / 0.18);
+		color: rgb(var(--c-gray-500));
 		text-decoration: line-through;
-		text-decoration-color: rgba(107, 114, 128, 0.6);
+		text-decoration-color: rgb(var(--c-gray-500) / 0.6);
 	}
 
 	:global(.prose strong) {
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 	}
 
 	:global(.prose em) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 	}
 
 	:global(.prose iframe) {
@@ -657,7 +657,7 @@
 
 	:global(.prose hr) {
 		border: none;
-		border-top: 1px solid rgb(55 65 81);
+		border-top: 1px solid rgb(var(--c-gray-700));
 		margin: 2rem 0;
 	}
 
@@ -666,13 +666,13 @@
 	}
 
 	:global(.prose dt) {
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 		margin-top: 1rem;
 		font-size: 0.9375rem;
 	}
 
 	:global(.prose dd) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-left: 0;
 		margin-top: 0.25rem;
 		line-height: 1.75;

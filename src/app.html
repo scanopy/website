@@ -2,6 +2,24 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+		<!--
+			Apply the theme before first paint to avoid a flash. Follows the OS theme
+			automatically, but honors a shared 'scanopy-theme' override (set by the
+			Scanopy app) for cross-property consistency. Must stay first in <head>.
+		-->
+		<script>
+			(function () {
+				try {
+					var t = localStorage.getItem('scanopy-theme') || 'system';
+					var d =
+						t === 'dark' ||
+						(t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+					document.documentElement.classList.toggle('dark', d);
+					document.documentElement.style.colorScheme = d ? 'dark' : 'light';
+				} catch (e) {}
+			})();
+		</script>
+		<meta name="color-scheme" content="light dark" />
 		<link rel="icon" href="%sveltekit.assets%/scanopy-logo.webp" type="image/webp" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="preconnect" href="https://app.scanopy.net" />

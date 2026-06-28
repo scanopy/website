@@ -27,8 +27,8 @@
 			{#if option.badge}
 				<span
 					class="ml-1 text-xs font-semibold {selected === option.value
-						? 'text-green-300'
-						: 'text-success'}">{option.badge}</span
+						? 'text-green-700 dark:text-green-300'
+						: 'text-green-700 dark:text-success'}">{option.badge}</span
 				>
 			{/if}
 		</button>

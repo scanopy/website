@@ -1,13 +1,13 @@
 ---
 title: Map Network Topology with SNMP (The Manual Way)
-description: "Map your network topology by hand with snmpwalk. Every SNMP MIB and OID that matters for discovery, what they mean, and how to correlate them into a map."
+description: 'Map your network topology by hand with snmpwalk. Every SNMP MIB and OID that matters for discovery, what they mean, and how to correlate them into a map.'
 keyword: SNMP network topology mapping
 slug: snmp-network-topology-mapping
 date: 2026-06-23
 dateModified: 2026-06-23
 tldr: "You can map your whole network topology using nothing but snmpwalk and a terminal. This walks through every SNMP MIB that matters, what the OIDs mean, and how to correlate the data into a map. By the end you'll understand exactly what automated discovery tools do under the hood."
 ctaHeading: Skip the snmpwalk marathon
-ctaDescription: "Scanopy queries every MIB in this article across your whole network in minutes, then keeps the map current on a schedule. Deploy a daemon and see it automated."
+ctaDescription: 'Scanopy queries every MIB in this article across your whole network in minutes, then keeps the map current on a schedule. Deploy a daemon and see it automated.'
 ---
 
 Ever wonder what network discovery tools actually do? They walk SNMP. That's most of it. They query a handful of standard MIBs, pull device identities, interface lists, and neighbor tables, then correlate the results into a graph.
@@ -39,14 +39,14 @@ SNMPv2-MIB::sysDescr.0 = STRING: Cisco IOS Software, C2960 Software (C2960-LANBA
 
 `sysDescr` is a free-text description of the device: OS, model, version. It varies wildly by vendor, so you can't parse it reliably, but it's human-readable and tells you what you're looking at. The other System MIB OIDs round out the picture:
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.3.6.1.2.1.1.1.0` | sysDescr | Full device description (OS, model, version). Free text. |
+| OID                 | Name        | What it tells you                                                                                                                        |
+| ------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `1.3.6.1.2.1.1.1.0` | sysDescr    | Full device description (OS, model, version). Free text.                                                                                 |
 | `1.3.6.1.2.1.1.2.0` | sysObjectID | Vendor identity. The number after `1.3.6.1.4.1.X` is the Private Enterprise Number: 9 is Cisco, 8072 is net-snmp/Linux, 2636 is Juniper. |
-| `1.3.6.1.2.1.1.3.0` | sysUpTime | Uptime in hundredths of a second. Tells you if a device rebooted recently. |
-| `1.3.6.1.2.1.1.5.0` | sysName | Hostname, ideally the FQDN. Usually the most useful identifier. |
-| `1.3.6.1.2.1.1.6.0` | sysLocation | Physical location string. Often empty or vague, though a diligent admin fills it in. |
-| `1.3.6.1.2.1.1.7.0` | sysServices | Bitfield for the OSI layers the device operates at. Helps classify device type. |
+| `1.3.6.1.2.1.1.3.0` | sysUpTime   | Uptime in hundredths of a second. Tells you if a device rebooted recently.                                                               |
+| `1.3.6.1.2.1.1.5.0` | sysName     | Hostname, ideally the FQDN. Usually the most useful identifier.                                                                          |
+| `1.3.6.1.2.1.1.6.0` | sysLocation | Physical location string. Often empty or vague, though a diligent admin fills it in.                                                     |
+| `1.3.6.1.2.1.1.7.0` | sysServices | Bitfield for the OSI layers the device operates at. Helps classify device type.                                                          |
 
 ```
 $ snmpget -v2c -c netdefault 192.168.7.230 sysName.0 sysLocation.0 sysObjectID.0
@@ -73,24 +73,24 @@ IF-MIB::ifDescr.4 = STRING: Vlan10
 
 That number after `ifDescr` is the `ifIndex`. It's the join key for everything that follows. Every per-interface table (speeds, MACs, status, IP assignments, neighbors) is indexed by `ifIndex`. Once you have it, you can line up the rest.
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.3.6.1.2.1.2.1.0` | ifNumber | Total interface count. Sets expectations for the walk. |
-| `1.3.6.1.2.1.2.2.1.1` | ifIndex | Unique interface ID. The key that ties everything together. |
-| `1.3.6.1.2.1.2.2.1.2` | ifDescr | Interface description (e.g. "GigabitEthernet0/1"). |
-| `1.3.6.1.2.1.2.2.1.3` | ifType | IANA interface type. 6 is ethernet, 24 is loopback, 53 is propVirtual, 131 is tunnel, 135 is l2vlan, 161 is 802.11. |
-| `1.3.6.1.2.1.2.2.1.5` | ifSpeed | Speed in bits/sec. A 32-bit gauge, so it caps out around 4 Gbps and reports wrong for faster links. |
-| `1.3.6.1.2.1.2.2.1.6` | ifPhysAddress | The interface MAC. You'll need this later for correlation. |
-| `1.3.6.1.2.1.2.2.1.7` | ifAdminStatus | Desired state: up(1), down(2), testing(3). |
-| `1.3.6.1.2.1.2.2.1.8` | ifOperStatus | Actual state. Seven possible values, including dormant and lowerLayerDown. |
+| OID                   | Name          | What it tells you                                                                                                   |
+| --------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `1.3.6.1.2.1.2.1.0`   | ifNumber      | Total interface count. Sets expectations for the walk.                                                              |
+| `1.3.6.1.2.1.2.2.1.1` | ifIndex       | Unique interface ID. The key that ties everything together.                                                         |
+| `1.3.6.1.2.1.2.2.1.2` | ifDescr       | Interface description (e.g. "GigabitEthernet0/1").                                                                  |
+| `1.3.6.1.2.1.2.2.1.3` | ifType        | IANA interface type. 6 is ethernet, 24 is loopback, 53 is propVirtual, 131 is tunnel, 135 is l2vlan, 161 is 802.11. |
+| `1.3.6.1.2.1.2.2.1.5` | ifSpeed       | Speed in bits/sec. A 32-bit gauge, so it caps out around 4 Gbps and reports wrong for faster links.                 |
+| `1.3.6.1.2.1.2.2.1.6` | ifPhysAddress | The interface MAC. You'll need this later for correlation.                                                          |
+| `1.3.6.1.2.1.2.2.1.7` | ifAdminStatus | Desired state: up(1), down(2), testing(3).                                                                          |
+| `1.3.6.1.2.1.2.2.1.8` | ifOperStatus  | Actual state. Seven possible values, including dormant and lowerLayerDown.                                          |
 
 The `ifSpeed` cap is a real gotcha. On a 10G or 40G interface, the 32-bit gauge overflows and gives you garbage. The fix lives in the extended interface table (ifXTable):
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.3.6.1.2.1.31.1.1.1.1` | ifName | Short interface name (e.g. "Gi0/1"). Often cleaner than ifDescr. |
-| `1.3.6.1.2.1.31.1.1.1.15` | ifHighSpeed | Speed in Mbps. Use this instead of ifSpeed for 10G and up. |
-| `1.3.6.1.2.1.31.1.1.1.18` | ifAlias | The description the admin typed into the interface config. |
+| OID                       | Name        | What it tells you                                                |
+| ------------------------- | ----------- | ---------------------------------------------------------------- |
+| `1.3.6.1.2.1.31.1.1.1.1`  | ifName      | Short interface name (e.g. "Gi0/1"). Often cleaner than ifDescr. |
+| `1.3.6.1.2.1.31.1.1.1.15` | ifHighSpeed | Speed in Mbps. Use this instead of ifSpeed for 10G and up.       |
+| `1.3.6.1.2.1.31.1.1.1.18` | ifAlias     | The description the admin typed into the interface config.       |
 
 `ifAlias` is gold when it's populated. It's whatever the admin wrote in the config (`description Uplink to core`), so it often tells you what a port is for in plain language:
 
@@ -116,10 +116,10 @@ IP-MIB::ipAdEntIfIndex.192.168.7.230 = INTEGER: 3
 
 Look closely at the OID. The IP address is encoded into the OID suffix itself, one octet per component. `ipAdEntIfIndex.192.168.7.230` means "the interface index for IP 192.168.7.230," and the value (3) is the `ifIndex`. So this device has 192.168.7.230 on interface 3, which from Step 2 is GigabitEthernet0/3.
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.3.6.1.2.1.4.20.1.1` | ipAdEntAddr | IP address assigned to an interface. |
-| `1.3.6.1.2.1.4.20.1.2` | ipAdEntIfIndex | Which interface (ifIndex) the IP belongs to. |
+| OID                    | Name           | What it tells you                                    |
+| ---------------------- | -------------- | ---------------------------------------------------- |
+| `1.3.6.1.2.1.4.20.1.1` | ipAdEntAddr    | IP address assigned to an interface.                 |
+| `1.3.6.1.2.1.4.20.1.2` | ipAdEntIfIndex | Which interface (ifIndex) the IP belongs to.         |
 | `1.3.6.1.2.1.4.20.1.3` | ipAdEntNetMask | Subnet mask. Combine with the IP to get the network. |
 
 Parsing IPs out of OID suffixes instead of values trips people up the first time. It's worth internalizing because LLDP and ARP do the same kind of suffix encoding, and you'll hit it again in the next two steps.
@@ -137,16 +137,16 @@ iso.0.8802.1.1.2.1.4.1.1.9.0.1.1 = STRING: "switch-access-01"
 
 Two things to notice. First, the OID prints numerically (`iso.0.8802...`) instead of with friendly names, because net-snmp doesn't ship the LLDP-MIB by default. The numbers are the same either way. Second, that trailing `.0.1.1` is the index, and it matters.
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.0.8802.1.1.2.1.3.2.0` | lldpLocChassisId | This device's chassis ID (usually its MAC). |
-| `1.0.8802.1.1.2.1.3.3.0` | lldpLocSysName | This device's system name. |
-| `1.0.8802.1.1.2.1.4.1.1.5` | lldpRemChassisId | Remote device's chassis ID. |
-| `1.0.8802.1.1.2.1.4.1.1.7` | lldpRemPortId | Remote port identifier. |
-| `1.0.8802.1.1.2.1.4.1.1.8` | lldpRemPortDesc | Remote port description. |
-| `1.0.8802.1.1.2.1.4.1.1.9` | lldpRemSysName | Remote device's hostname. This is what builds the topology. |
-| `1.0.8802.1.1.2.1.4.1.1.10` | lldpRemSysDesc | Remote device description. |
-| `1.0.8802.1.1.2.1.4.2.1.2` | lldpRemManAddr | Remote management IP. |
+| OID                         | Name             | What it tells you                                           |
+| --------------------------- | ---------------- | ----------------------------------------------------------- |
+| `1.0.8802.1.1.2.1.3.2.0`    | lldpLocChassisId | This device's chassis ID (usually its MAC).                 |
+| `1.0.8802.1.1.2.1.3.3.0`    | lldpLocSysName   | This device's system name.                                  |
+| `1.0.8802.1.1.2.1.4.1.1.5`  | lldpRemChassisId | Remote device's chassis ID.                                 |
+| `1.0.8802.1.1.2.1.4.1.1.7`  | lldpRemPortId    | Remote port identifier.                                     |
+| `1.0.8802.1.1.2.1.4.1.1.8`  | lldpRemPortDesc  | Remote port description.                                    |
+| `1.0.8802.1.1.2.1.4.1.1.9`  | lldpRemSysName   | Remote device's hostname. This is what builds the topology. |
+| `1.0.8802.1.1.2.1.4.1.1.10` | lldpRemSysDesc   | Remote device description.                                  |
+| `1.0.8802.1.1.2.1.4.2.1.2`  | lldpRemManAddr   | Remote management IP.                                       |
 
 The LLDP remote table index is `timeMark.localPortNum.remIndex`, three numbers tacked onto the OID. In `...1.1.9.0.1.1` above, the `0` is timeMark, the `1` in the middle is the local port number, and the trailing `1` is the remote index. The middle number is the one you care about: it's how you tie a remote neighbor back to a local port. Scanopy pulls the value from position 1 of the suffix to match each neighbor to the right local interface. Parse the wrong position and your edges connect to the wrong ports.
 
@@ -161,12 +161,12 @@ Cross-reference local port 1 against your `ifName` walk from Step 2 (it's Gi0/1)
 
 If you're in a Cisco shop, CDP (Cisco Discovery Protocol) gives you the same kind of data, often with extra detail like the exact platform model. This lab is multi-vendor and the devices advertise over LLDP, so there's nothing to show from this host, but the walk looks like the LLDP one against the CDP cache:
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.3.6.1.4.1.9.9.23.1.2.1.1.4` | cdpCacheAddress | Remote device's IP. |
-| `1.3.6.1.4.1.9.9.23.1.2.1.1.6` | cdpCacheDeviceId | Remote hostname. |
-| `1.3.6.1.4.1.9.9.23.1.2.1.1.7` | cdpCacheDevicePort | Remote port name. |
-| `1.3.6.1.4.1.9.9.23.1.2.1.1.8` | cdpCachePlatform | Device model/platform (e.g. "WS-C3750-48P"). |
+| OID                            | Name               | What it tells you                            |
+| ------------------------------ | ------------------ | -------------------------------------------- |
+| `1.3.6.1.4.1.9.9.23.1.2.1.1.4` | cdpCacheAddress    | Remote device's IP.                          |
+| `1.3.6.1.4.1.9.9.23.1.2.1.1.6` | cdpCacheDeviceId   | Remote hostname.                             |
+| `1.3.6.1.4.1.9.9.23.1.2.1.1.7` | cdpCacheDevicePort | Remote port name.                            |
+| `1.3.6.1.4.1.9.9.23.1.2.1.1.8` | cdpCachePlatform   | Device model/platform (e.g. "WS-C3750-48P"). |
 
 The CDP index is simpler: `cdpCacheIfIndex.cdpCacheDeviceIndex`. The first number is the local `ifIndex` directly, so it maps straight back to your interface table from Step 2. No middle-position parsing needed.
 
@@ -184,29 +184,29 @@ IP-MIB::ipNetToMediaPhysAddress.3.192.168.7.235 = STRING: 38:7c:76:05:b6:b6
 
 Every entry is a device that has communicated through that router recently. The IP is encoded in the OID suffix again (after the leading `ifIndex`), and the value is the MAC. This is how you discover hosts that would otherwise be invisible to SNMP-based discovery, like the printer at `.234` that never answers a neighbor query.
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
+| OID                    | Name                    | What it tells you                           |
+| ---------------------- | ----------------------- | ------------------------------------------- |
 | `1.3.6.1.2.1.4.22.1.2` | ipNetToMediaPhysAddress | MAC address for a given IP (the ARP cache). |
-| `1.3.6.1.2.1.4.22.1.3` | ipNetToMediaNetAddress | IP address for a given MAC. |
-| `1.3.6.1.2.1.4.22.1.4` | ipNetToMediaType | Entry type: static(4), dynamic(3). |
+| `1.3.6.1.2.1.4.22.1.3` | ipNetToMediaNetAddress  | IP address for a given MAC.                 |
+| `1.3.6.1.2.1.4.22.1.4` | ipNetToMediaType        | Entry type: static(4), dynamic(3).          |
 
 To place those devices on a physical port, you need one more table. On switches, the Bridge MIB (RFC 4188) records which MACs each port has seen:
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.3.6.1.2.1.17.4.3` | dot1dTpFdbTable | MAC forwarding table (non-VLAN). |
+| OID                      | Name            | What it tells you                |
+| ------------------------ | --------------- | -------------------------------- |
+| `1.3.6.1.2.1.17.4.3`     | dot1dTpFdbTable | MAC forwarding table (non-VLAN). |
 | `1.3.6.1.2.1.17.7.1.2.2` | dot1qTpFdbTable | VLAN-aware MAC forwarding table. |
 
 Take a MAC from the ARP table, find which switch port saw it in the forwarding table, and you've mapped a silent device to a physical port. That's the same correlation a discovery tool runs to place an unmanaged printer in the right rack.
 
 While you're enumerating hardware, the Entity MIB (RFC 4133) is worth a walk too. It reports the physical components inside a device, including serial numbers and model names that never show up in `sysDescr`:
 
-| OID | Name | What it tells you |
-|-----|------|-------------------|
-| `1.3.6.1.2.1.47.1.1.1.1.5` | entPhysicalClass | Component type: chassis(3), module(9), port(10). |
-| `1.3.6.1.2.1.47.1.1.1.1.11` | entPhysicalSerialNum | Serial number. |
-| `1.3.6.1.2.1.47.1.1.1.1.12` | entPhysicalMfgName | Manufacturer. |
-| `1.3.6.1.2.1.47.1.1.1.1.13` | entPhysicalModelName | Model name/number. |
+| OID                         | Name                 | What it tells you                                |
+| --------------------------- | -------------------- | ------------------------------------------------ |
+| `1.3.6.1.2.1.47.1.1.1.1.5`  | entPhysicalClass     | Component type: chassis(3), module(9), port(10). |
+| `1.3.6.1.2.1.47.1.1.1.1.11` | entPhysicalSerialNum | Serial number.                                   |
+| `1.3.6.1.2.1.47.1.1.1.1.12` | entPhysicalMfgName   | Manufacturer.                                    |
+| `1.3.6.1.2.1.47.1.1.1.1.13` | entPhysicalModelName | Model name/number.                               |
 
 ## Step 6: Putting It Together
 
@@ -258,6 +258,6 @@ Everything on that map traces back to an OID you queried by hand. The port label
 
 You can explore a live one yourself:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid #374151; border-radius: 8px;"></iframe>
+<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
 
 The SNMP data you just spent an hour querying by hand is always current, because the daemon re-walks it on every scan. Export the map to SVG, Mermaid, or Confluence markup, or embed it the same way the demo above is embedded, straight into your wiki, your runbook, or your Confluence page. It updates itself as the network changes. For the higher-level view of how automated discovery fits into documentation, see our companion piece on [how automated network documentation actually works](/blog/automated-network-documentation).

@@ -129,8 +129,7 @@
 <section class="relative overflow-hidden py-16 lg:py-24">
 	<!-- Background image -->
 	<div
-		class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-		style="background-image: url('/topology-hero.webp');"
+		class="absolute inset-0 bg-[url('/topology-hero-light.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('/topology-hero.webp')]"
 	></div>
 	<!-- Dark overlay -->
 	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>
@@ -225,9 +224,9 @@
 			evaluation, and small teams.
 		</p>
 		<p class="text-lg leading-relaxed text-gray-300">
-			Step up to the Commercial Edition when you need a commercial license for business use, no limits
-			on networks or seats, advanced features like custom SSO, audit logs, Confluence export, and
-			webhooks, or email and priority support backing your deployment.
+			Step up to the Commercial Edition when you need a commercial license for business use, no
+			limits on networks or seats, advanced features like custom SSO, audit logs, Confluence export,
+			and webhooks, or email and priority support backing your deployment.
 		</p>
 	</div>
 </section>

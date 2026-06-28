@@ -183,7 +183,7 @@
 
 					{#if data.sources.length}
 						<h2 id="sources">Sources</h2>
-						<div style="font-size: 0.8125rem; line-height: 1.8; color: rgb(156 163 175);">
+						<div style="font-size: 0.8125rem; line-height: 1.8; color: rgb(var(--c-gray-400));">
 							{#each data.sources as source}
 								<span id="source-{source.id}">[{source.id}]</span>
 								<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a><br
@@ -229,29 +229,29 @@
 		margin-bottom: 1rem;
 		font-size: 1.5rem;
 		font-weight: 700;
-		color: white;
+		color: rgb(var(--c-white));
 		padding-left: 0.75rem;
-		border-left: 3px solid rgb(59 130 246);
+		border-left: 3px solid rgb(var(--c-blue-500));
 		scroll-margin-top: 5rem;
 	}
 
 	:global(.prose p) {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		margin-bottom: 1.25rem;
 		line-height: 1.75;
 		overflow-wrap: break-word;
 	}
 
 	:global(.prose a) {
-		color: rgb(96 165 250);
+		color: rgb(var(--c-blue-400));
 	}
 
 	:global(.prose a:hover) {
-		color: rgb(147 197 253);
+		color: rgb(var(--c-blue-300));
 	}
 
 	:global(.prose strong) {
-		color: rgb(229 231 235);
+		color: rgb(var(--c-gray-200));
 	}
 
 	:global(.prose table) {
@@ -278,19 +278,19 @@
 	}
 
 	:global(.prose th) {
-		background-color: rgb(31 41 55);
+		background-color: rgb(var(--c-gray-800));
 		padding: 0.5rem 0.75rem;
 		text-align: left;
 		font-weight: 600;
-		color: rgb(229 231 235);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-200));
+		border: 1px solid rgb(var(--c-gray-700));
 		vertical-align: top;
 	}
 
 	:global(.prose td) {
 		padding: 0.5rem 0.75rem;
-		color: rgb(209 213 219);
-		border: 1px solid rgb(55 65 81);
+		color: rgb(var(--c-gray-300));
+		border: 1px solid rgb(var(--c-gray-700));
 		vertical-align: top;
 	}
 
@@ -301,7 +301,7 @@
 	:global(.cell-detail) {
 		display: block;
 		font-size: 0.75rem;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		margin-top: 0.25rem;
 	}
 
@@ -317,23 +317,23 @@
 
 	:global(.prose .chip-positive) {
 		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
+		color: rgb(var(--c-green-400));
 	}
 
 	:global(.prose .chip-negative) {
 		background: rgba(239, 68, 68, 0.15);
-		color: rgb(248 113 113);
+		color: rgb(var(--c-red-400));
 	}
 
 	:global(.prose .chip-neutral) {
 		background: rgba(245, 158, 11, 0.15);
-		color: rgb(251 191 36);
+		color: rgb(var(--c-amber-400));
 	}
 
 	:global(.prose .chip-unclear) {
-		background: rgba(148, 163, 184, 0.12);
-		color: rgb(148 163 184);
-		border: 1px dashed rgba(148, 163, 184, 0.5);
+		background: rgb(var(--c-gray-400) / 0.12);
+		color: rgb(var(--c-gray-400));
+		border: 1px dashed rgb(var(--c-gray-400) / 0.5);
 	}
 
 	/* Network Views row: per-view tags wrap inside the cell, never overflow. */
@@ -350,15 +350,15 @@
 	}
 
 	:global(.prose .view-tag-no) {
-		background: rgba(75, 85, 99, 0.18);
-		color: rgb(107 114 128);
+		background: rgb(var(--c-gray-600) / 0.18);
+		color: rgb(var(--c-gray-500));
 		text-decoration: line-through;
-		text-decoration-color: rgba(107, 114, 128, 0.6);
+		text-decoration-color: rgb(var(--c-gray-500) / 0.6);
 	}
 
 	:global(.prose .view-legend) {
 		font-size: 0.8125rem;
-		color: rgb(156 163 175);
+		color: rgb(var(--c-gray-400));
 		line-height: 2.2;
 		margin-top: -0.5rem;
 	}
@@ -369,7 +369,7 @@
 	:global(.prose .tooltip-header) {
 		position: relative;
 		cursor: help;
-		text-decoration: underline dotted rgba(148, 163, 184, 0.5);
+		text-decoration: underline dotted rgb(var(--c-gray-400) / 0.5);
 		text-underline-offset: 3px;
 	}
 
@@ -381,12 +381,12 @@
 
 	:global(.tooltip-portal) {
 		padding: 0.75rem 1rem;
-		background: rgb(31 41 55);
-		border: 1px solid rgb(55 65 81);
+		background: rgb(var(--c-gray-800));
+		border: 1px solid rgb(var(--c-gray-700));
 		border-radius: 0.5rem;
 		font-size: 0.8125rem;
 		font-weight: 400;
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 		line-height: 2;
 		z-index: 50;
 		pointer-events: none;
@@ -405,19 +405,19 @@
 
 	:global(.tooltip-portal .chip-positive) {
 		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
+		color: rgb(var(--c-green-400));
 	}
 
 	:global(.tooltip-portal .chip-unclear) {
-		background: rgba(148, 163, 184, 0.12);
-		color: rgb(148 163 184);
-		border: 1px dashed rgba(148, 163, 184, 0.5);
+		background: rgb(var(--c-gray-400) / 0.12);
+		color: rgb(var(--c-gray-400));
+		border: 1px dashed rgb(var(--c-gray-400) / 0.5);
 	}
 
 	:global(.tooltip-portal .view-tag-no) {
-		background: rgba(75, 85, 99, 0.18);
-		color: rgb(107 114 128);
+		background: rgb(var(--c-gray-600) / 0.18);
+		color: rgb(var(--c-gray-500));
 		text-decoration: line-through;
-		text-decoration-color: rgba(107, 114, 128, 0.6);
+		text-decoration-color: rgb(var(--c-gray-500) / 0.6);
 	}
 </style>

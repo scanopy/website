@@ -5,7 +5,11 @@
 	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
 	import { analytics } from '$lib/analytics.svelte';
 
-	const logoGlob = import.meta.glob('/static/logos/services/services/*', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+	const logoGlob = import.meta.glob('/static/logos/services/services/*', {
+		eager: true,
+		query: '?url',
+		import: 'default'
+	}) as Record<string, string>;
 	const logoBySlug = new Map<string, string>();
 	for (const [path, url] of Object.entries(logoGlob)) {
 		const filename = path.split('/').pop()!;
@@ -138,7 +142,7 @@
 				onclick={() => (selectedCategory = null)}
 				class="rounded-full px-3 py-1 text-xs font-medium transition-colors {selectedCategory ===
 				null
-					? 'bg-blue-700 text-white'
+					? 'bg-blue-700 text-paper'
 					: 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
 			>
 				All ({services.length})
@@ -149,7 +153,7 @@
 					onclick={() => (selectedCategory = selectedCategory === category ? null : category)}
 					class="rounded-full px-3 py-1 text-xs font-medium transition-colors {selectedCategory ===
 					category
-						? 'bg-blue-700 text-white'
+						? 'bg-blue-700 text-paper'
 						: 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
 				>
 					{category}
@@ -190,11 +194,11 @@
 							<div class="flex items-start gap-3">
 								<div
 									class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg {service.logo_needs_white_background
-										? 'bg-white'
+										? 'bg-paper'
 										: 'bg-gray-700/50'}"
 								>
 									{#if service.logo_url}
-									{@const localLogo = getLocalLogoUrl(service)}
+										{@const localLogo = getLocalLogoUrl(service)}
 										<img
 											src={localLogo ?? service.logo_url}
 											alt="{service.name} logo"

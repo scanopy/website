@@ -18,12 +18,7 @@
 		rotateIntervalMs?: number;
 	}
 
-	let {
-		views,
-		defaultTab,
-		autoRotate = false,
-		rotateIntervalMs = 5000
-	}: Props = $props();
+	let { views, defaultTab, autoRotate = false, rotateIntervalMs = 5000 }: Props = $props();
 	let activeId = $state(defaultTab ?? views[0]?.id ?? '');
 
 	const active = $derived(views.find((v) => v.id === activeId) ?? views[0]);
@@ -95,10 +90,10 @@
 				<span class="browser-frame-dot bg-red-500/70"></span>
 				<span class="browser-frame-dot bg-yellow-500/70"></span>
 				<span class="browser-frame-dot bg-green-500/70"></span>
-				<span class="ml-3 text-xs text-gray-500">demo.scanopy.net</span>
+				<span class="ml-3 text-xs text-gray-500">app.scanopy.net</span>
 			</div>
 			{#key active.id}
-				<div class="aspect-[4/3] p-6" style="background-color: #15131d;">
+				<div class="aspect-[4/3] p-6" style="background-color: var(--topo-bg);">
 					<img
 						src={active.src}
 						srcset={active.srcset}

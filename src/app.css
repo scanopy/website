@@ -3,6 +3,89 @@
 @tailwind utilities;
 
 @layer base {
+	/*
+	 * Theme tokens. Each variable holds space-separated RGB channels consumed by
+	 * Tailwind via rgb(var(--c-…) / <alpha-value>) (see tailwind.config.ts), so
+	 * opacity modifiers keep working. :root is the light theme; html.dark is the
+	 * dark theme. The neutral ramp position-mirrors a slate palette so that both
+	 * backgrounds (bg-gray-800 → light surface) and text (text-gray-300 → dark
+	 * secondary) invert correctly with no markup changes. Mirrors the Scanopy
+	 * app's light/dark tokens for visual parity.
+	 */
+	:root {
+		color-scheme: light;
+
+		--c-white: 15 23 42; /* primary text / headings */
+		--c-gray-50: 15 23 42;
+		--c-gray-100: 30 41 59;
+		--c-gray-200: 51 65 85;
+		--c-gray-300: 71 85 105; /* secondary text */
+		--c-gray-400: 100 116 139; /* tertiary text */
+		--c-gray-500: 148 163 184; /* muted text */
+		--c-gray-600: 203 213 225;
+		--c-gray-700: 226 232 240; /* borders */
+		--c-gray-800: 241 245 249; /* surfaces / cards */
+		--c-gray-900: 248 250 252; /* deep sections */
+		--c-gray-950: 255 255 255;
+
+		--c-blue-300: 37 99 235;
+		--c-blue-400: 37 99 235; /* accent links/text, readable on white */
+		--c-blue-500: 37 99 235;
+		--c-rose-400: 244 63 94;
+		--c-green-400: 22 163 74;
+		--c-emerald-400: 5 150 105;
+		--c-red-400: 220 38 38;
+		--c-yellow-400: 202 138 4;
+		--c-amber-400: 180 83 9;
+
+		--c-body: 255 255 255;
+		/* Background of the topology screenshots; the faux browser frame uses this so
+		   the screenshot blends seamlessly with its frame. */
+		--topo-bg: #f9fafe;
+
+		--glass-bg: rgba(0, 0, 0, 0.03);
+		--glass-border: rgba(0, 0, 0, 0.08);
+		--gradient-text: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
+		--gradient-text-accent: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #4f46e5 100%);
+		--shadow-browser: 0 4px 40px rgba(59, 130, 246, 0.1), 0 12px 32px rgba(15, 23, 42, 0.12);
+	}
+
+	html.dark {
+		color-scheme: dark;
+
+		--c-white: 255 255 255;
+		--c-gray-50: 249 250 251;
+		--c-gray-100: 243 244 246;
+		--c-gray-200: 229 231 235;
+		--c-gray-300: 209 213 219;
+		--c-gray-400: 156 163 175;
+		--c-gray-500: 107 114 128;
+		--c-gray-600: 75 85 99;
+		--c-gray-700: 55 65 81;
+		--c-gray-800: 31 41 55;
+		--c-gray-900: 17 24 39;
+		--c-gray-950: 3 7 18;
+
+		--c-blue-300: 147 197 253;
+		--c-blue-400: 96 165 250;
+		--c-blue-500: 59 130 246;
+		--c-rose-400: 251 113 133;
+		--c-green-400: 74 222 128;
+		--c-emerald-400: 52 211 153;
+		--c-red-400: 248 113 113;
+		--c-yellow-400: 250 204 21;
+		--c-amber-400: 251 191 36;
+
+		--c-body: 26 29 41;
+		--topo-bg: #15141b;
+
+		--glass-bg: rgba(255, 255, 255, 0.03);
+		--glass-border: rgba(255, 255, 255, 0.08);
+		--gradient-text: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #64748b 100%);
+		--gradient-text-accent: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #818cf8 100%);
+		--shadow-browser: 0 4px 40px rgba(59, 130, 246, 0.08), 0 8px 24px rgba(0, 0, 0, 0.4);
+	}
+
 	html {
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 		scroll-behavior: smooth;
@@ -11,7 +94,7 @@
 	body {
 		margin: 0;
 		padding: 0;
-		background: #1a1d29;
+		background: rgb(var(--c-body));
 		min-height: 100vh;
 	}
 }
@@ -21,7 +104,7 @@
 	.btn-primary {
 		@apply bg-blue-700 hover:bg-blue-600;
 		@apply border border-blue-600 hover:border-blue-500;
-		@apply rounded-full px-6 py-3 font-medium text-white;
+		@apply rounded-full px-6 py-3 font-medium text-paper;
 		@apply transition-colors duration-150;
 		@apply inline-flex items-center justify-center gap-2;
 	}
@@ -37,8 +120,8 @@
 
 	/* Browser mockup frame */
 	.browser-frame {
-		@apply rounded-xl border border-gray-700/50 bg-gray-900 overflow-hidden;
-		box-shadow: 0 4px 40px rgba(59, 130, 246, 0.08), 0 8px 24px rgba(0, 0, 0, 0.4);
+		@apply overflow-hidden rounded-xl border border-gray-700/50 bg-gray-900;
+		box-shadow: var(--shadow-browser);
 	}
 
 	.browser-frame-bar {
@@ -47,6 +130,14 @@
 
 	.browser-frame-dot {
 		@apply h-2.5 w-2.5 rounded-full;
+	}
+
+	/* Accent eyebrow pill (section labels, view-type tags). Soft blue in light,
+	   deep translucent blue in dark. */
+	.pill-eyebrow {
+		@apply inline-block rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-wider;
+		@apply border-blue-200 bg-blue-50 text-blue-700;
+		@apply dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-400;
 	}
 
 	/* Card component */
@@ -92,7 +183,7 @@
 	/* Scrollbar styling */
 	* {
 		scrollbar-width: thin;
-		scrollbar-color: #374151 transparent;
+		scrollbar-color: rgb(var(--c-gray-700)) transparent;
 	}
 
 	::-webkit-scrollbar {
@@ -105,33 +196,33 @@
 	}
 
 	::-webkit-scrollbar-thumb {
-		background-color: #374151;
+		background-color: rgb(var(--c-gray-700));
 		border-radius: 4px;
 	}
 
 	::-webkit-scrollbar-thumb:hover {
-		background-color: #4b5563;
+		background-color: rgb(var(--c-gray-600));
 	}
 }
 
 @layer utilities {
 	.text-gradient {
-		background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #64748b 100%);
+		background: var(--gradient-text);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 	}
 
 	.text-gradient-accent {
-		background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #818cf8 100%);
+		background: var(--gradient-text-accent);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 	}
 
 	.glass {
-		background: rgba(255, 255, 255, 0.03);
+		background: var(--glass-bg);
 		backdrop-filter: blur(10px);
-		border: 1px solid rgba(255, 255, 255, 0.08);
+		border: 1px solid var(--glass-border);
 	}
 }

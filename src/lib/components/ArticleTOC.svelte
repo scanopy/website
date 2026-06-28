@@ -88,7 +88,7 @@
 	}
 
 	.toc-link {
-		color: rgb(107 114 128);
+		color: rgb(var(--c-gray-500));
 		border-left: 2px solid transparent;
 		padding-left: 0.75rem;
 	}
@@ -98,11 +98,11 @@
 	}
 
 	.toc-link:hover {
-		color: rgb(209 213 219);
+		color: rgb(var(--c-gray-300));
 	}
 
 	.toc-active {
-		color: rgb(96 165 250) !important;
-		border-left-color: rgb(59 130 246);
+		color: rgb(var(--c-blue-400)) !important;
+		border-left-color: rgb(var(--c-blue-500));
 	}
 </style>

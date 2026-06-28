@@ -63,19 +63,19 @@ The entire process is agentless. Nothing gets installed on the devices being doc
 
 This is easier to show than describe. Deploy a scanner on your network, run a discovery, and within minutes you get:
 
-| What | How | Example |
-|------|-----|---------|
-| Hosts | ARP scanning, ICMP | 192.168.1.30 -- nas01 (Synology) |
+| What              | How                            | Example                                            |
+| ----------------- | ------------------------------ | -------------------------------------------------- |
+| Hosts             | ARP scanning, ICMP             | 192.168.1.30 -- nas01 (Synology)                   |
 | Services per host | Port scanning + fingerprinting | PostgreSQL, Nginx, Pi-hole, Docker (12 containers) |
-| Connections | LLDP, CDP, ARP, MAC tables | nas01 → port 8 on switch02 → port 1 on core-sw |
-| Interface details | SNMP | GigabitEthernet0/8: up, 1Gbps, full duplex |
-| Device metadata | SNMP | Cisco C9200L, uptime 142 days, IOS-XE 17.9 |
+| Connections       | LLDP, CDP, ARP, MAC tables     | nas01 → port 8 on switch02 → port 1 on core-sw     |
+| Interface details | SNMP                           | GigabitEthernet0/8: up, 1Gbps, full duplex         |
+| Device metadata   | SNMP                           | Cisco C9200L, uptime 142 days, IOS-XE 17.9         |
 
 The result is interactive topology views of every device, what it's running, and how it connects to everything else. Scanopy detects [over 200 service types](/services) automatically -- from enterprise databases to Docker containers to printers.
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid #374151; border-radius: 8px;"></iframe>
+<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
 
 ## Why It Matters
 
@@ -99,13 +99,13 @@ Compliance audits require demonstrating what's on your network right now. Automa
 
 These three categories get conflated constantly. They're different tools solving different problems:
 
-| | Automated Documentation | Network Monitoring | IT Asset Management |
-|---|---|---|---|
-| **Primary question** | What do I have and how is it connected? | Is it working right now? | What did I buy and where is it? |
-| **Updates** | Auto-discovery on schedule | Real-time alerting | Manual + periodic scans |
-| **Output** | Topology maps, device inventory, connection records | Dashboards, alerts, traffic graphs | Asset registers, license counts, depreciation |
-| **Examples** | Scanopy, NetBox (manual entry) | Auvik, PRTG, LibreNMS, Zabbix | Lansweeper, Device42, Snipe-IT |
-| **Best for** | Documentation, onboarding, DR planning, knowledge sharing | Uptime, performance, active troubleshooting | Procurement, compliance, license management |
+|                      | Automated Documentation                                   | Network Monitoring                          | IT Asset Management                           |
+| -------------------- | --------------------------------------------------------- | ------------------------------------------- | --------------------------------------------- |
+| **Primary question** | What do I have and how is it connected?                   | Is it working right now?                    | What did I buy and where is it?               |
+| **Updates**          | Auto-discovery on schedule                                | Real-time alerting                          | Manual + periodic scans                       |
+| **Output**           | Topology maps, device inventory, connection records       | Dashboards, alerts, traffic graphs          | Asset registers, license counts, depreciation |
+| **Examples**         | Scanopy, NetBox (manual entry)                            | Auvik, PRTG, LibreNMS, Zabbix               | Lansweeper, Device42, Snipe-IT                |
+| **Best for**         | Documentation, onboarding, DR planning, knowledge sharing | Uptime, performance, active troubleshooting | Procurement, compliance, license management   |
 
 The distinction matters because buying the wrong category wastes money and leaves gaps.
 
@@ -129,4 +129,3 @@ If you're evaluating tools, our [comparison of automated network diagram tools](
 - **Shareable output**: your whole team should see the map without per-seat licensing
 - **Export options**: SVG, embeddable iframes, integrations with tools you already use
 - **Transparent pricing**: avoid per-device models that scale unpredictably as your network grows
-

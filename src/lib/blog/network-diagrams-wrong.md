@@ -67,7 +67,7 @@ We built [Scanopy](/) because we had this exact problem. Deploy a lightweight da
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid #374151; border-radius: 8px;"></iframe>
+<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
 
 That embed isn't a screenshot. It's a live, interactive map. And this is part of the fix for stale documentation: Scanopy maps are embeddable anywhere that supports iframes. Your wiki, your internal docs, your runbooks. Embed the map once, and every place that references your network topology stays current automatically. No re-exporting PNGs, no copy-pasting updated diagrams into twelve different Confluence pages. The embed always reflects the latest scan.
 
@@ -83,4 +83,3 @@ Manual diagramming tools aren't the enemy. They solve a different problem.
 - **Compliance docs with specific formats.** Some audits require particular layouts. Use automation as the data source and templates for the format.
 
 The distinction: **design** tools vs **documentation** tools. draw.io is great for designing what should exist. Automation is for documenting what does exist. They solve different problems, and they can coexist.
-

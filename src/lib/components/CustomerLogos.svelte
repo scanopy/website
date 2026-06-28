@@ -32,7 +32,7 @@
 						class="group flex flex-col items-center text-center"
 					>
 						<div
-							class="flex h-20 w-48 items-center justify-center rounded-xl bg-white px-6 py-4 shadow-sm transition-transform group-hover:-translate-y-0.5"
+							class="flex h-20 w-48 items-center justify-center rounded-xl bg-paper px-6 py-4 shadow-sm transition-transform group-hover:-translate-y-0.5"
 						>
 							<img
 								src={logo.logo}
