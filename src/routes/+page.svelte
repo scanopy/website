@@ -767,7 +767,11 @@
 				per host — documenting not just the network but the services, dependencies, and workloads running
 				on it, in four views from one scan and keeping them current on a schedule. The
 				<a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
-				is free and open-source (AGPL-3.0); Cloud plans start at {startingPrice}/month. Read
+				is free and open-source (AGPL-3.0); a
+				<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial license</a>
+				lifts the self-host caps, and
+				<a href="/pricing" class="text-blue-400 hover:text-blue-300">cloud plans</a>
+				start at {startingPrice}/month. Read
 				<a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300"
 					>how automated network documentation works</a
 				>, compare the

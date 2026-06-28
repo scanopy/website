@@ -185,6 +185,9 @@
 									<a href="/commercial" class="text-gray-400 transition-colors hover:text-white"
 										>Commercial edition</a
 									>
+									<a href="/community" class="text-gray-400 transition-colors hover:text-white"
+										>Community edition</a
+									>
 								</div>
 							{:else if alt.vsHref}
 								<a

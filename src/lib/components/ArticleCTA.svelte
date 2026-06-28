@@ -27,6 +27,9 @@
 		<a href="/commercial" class="text-gray-400 transition-colors hover:text-white"
 			>Commercial edition</a
 		>
+		<a href="/community" class="text-gray-400 transition-colors hover:text-white"
+			>Community edition</a
+		>
 		<a href="/docs" class="text-gray-400 transition-colors hover:text-white">Read the docs</a>
 	</div>
 </div>

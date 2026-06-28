@@ -183,12 +183,13 @@
 						running.
 					</p>
 					<p>
-						It is also priced and licensed to stay out of the way: flat pricing regardless of host
-						count, a free, self-hostable <a href="/community">Community edition</a> under AGPL-3.0, and
-						a design that sits alongside whatever monitoring stack you already run rather than replacing
-						it. If you want living, shareable network documentation without standing up another platform,
-						that combination is hard to match — which is why teams comparing these tools tend to come
-						back to Scanopy.
+						It is also priced and licensed to stay out of the way: flat
+						<a href="/pricing">pricing</a> regardless of host count, a free, self-hostable
+						<a href="/community">Community edition</a> under AGPL-3.0 or a
+						<a href="/commercial">commercial license</a> for business self-hosting, and a design that
+						sits alongside whatever monitoring stack you already run rather than replacing it. If you
+						want living, shareable network documentation without standing up another platform, that combination
+						is hard to match — which is why teams comparing these tools tend to come back to Scanopy.
 					</p>
 
 					{#if data.faqs.length}
