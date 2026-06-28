@@ -3,9 +3,36 @@
 @import 'fumadocs-ui/css/preset.css';
 @import 'fumadocs-openapi/css/preset.css';
 
-/* Scanopy dark theme - matches main website */
+/* Scanopy theme — matches the main website. :root is light, .dark is dark.
+   These override the Fumadocs preset (imported above) since they come later. */
 :root {
-  /* Force dark mode */
+  color-scheme: light;
+
+  /* Background colors */
+  --color-fd-background: #ffffff;
+  --color-fd-muted: #f1f5f9;
+  --color-fd-card: #ffffff;
+
+  /* Text colors */
+  --color-fd-foreground: #0f172a;
+  --color-fd-muted-foreground: #64748b;
+
+  /* Primary accent - blue (darkened for contrast on white) */
+  --color-fd-primary: #2563eb;
+  --color-fd-primary-foreground: #ffffff;
+
+  /* Secondary/accent - rose for interactive elements */
+  --color-fd-accent: rgba(244, 63, 94, 0.1);
+  --color-fd-accent-foreground: #e11d48;
+
+  /* Border colors */
+  --color-fd-border: #e2e8f0;
+
+  /* Ring/focus color */
+  --color-fd-ring: #2563eb;
+}
+
+.dark {
   color-scheme: dark;
 
   /* Background colors - dark navy theme */
@@ -32,20 +59,20 @@
   --color-fd-ring: #3b82f6;
 }
 
-/* Hide theme toggle - dark only */
+/* Hide theme toggle - the theme follows the OS automatically (matches the main site) */
 [data-theme-toggle] {
   display: none !important;
 }
 
 /* Sidebar selected item - rose accent */
 nav[aria-label="Docs"] a[aria-current="page"] {
-  color: #fb7185 !important;
-  background: rgba(251, 113, 133, 0.1);
+  color: var(--color-fd-accent-foreground) !important;
+  background: var(--color-fd-accent);
 }
 
 /* Link hover - rose accent */
 .prose a:hover {
-  color: #fb7185;
+  color: var(--color-fd-accent-foreground);
 }
 
 /* More visually distinct headers */
@@ -78,9 +105,13 @@ nav[aria-label="Docs"] a[aria-current="page"] {
   border-left: 3px solid var(--color-fd-primary);
 }
 
-/* Scrollbar styling */
+/* Scrollbar styling — light thumb by default, darker in dark mode */
 * {
   scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.dark * {
   scrollbar-color: #374151 transparent;
 }
 
@@ -94,11 +125,19 @@ nav[aria-label="Docs"] a[aria-current="page"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #374151;
+  background-color: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #374151;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background-color: #4b5563;
 }
 
@@ -258,8 +297,8 @@ nav[aria-label="Docs"] a[aria-current="page"] {
 .mermaid-diagram-inner .er.attributeBoxEven,
 .mermaid-diagram-inner rect.er.attributeBoxOdd,
 .mermaid-diagram-inner rect.er.attributeBoxEven {
-  fill: #1f2937 !important;
-  stroke: #374151 !important;
+  fill: var(--color-fd-card) !important;
+  stroke: var(--color-fd-border) !important;
 }
 
 /* Override inline fills on ER diagram rects - targets the alternating rows */
@@ -271,14 +310,14 @@ nav[aria-label="Docs"] a[aria-current="page"] {
 .mermaid-diagram rect[fill="#f2f2f2"],
 .mermaid-diagram-inner rect[fill="#ffffff"],
 .mermaid-diagram-inner rect[fill="#f2f2f2"] {
-  fill: #1f2937 !important;
+  fill: var(--color-fd-card) !important;
 }
 
 /* ER Diagram entity box header */
 .mermaid-diagram .er.entityBox,
 .mermaid-diagram-inner .er.entityBox {
-  fill: #1f2937 !important;
-  stroke: #3b82f6 !important;
+  fill: var(--color-fd-card) !important;
+  stroke: var(--color-fd-primary) !important;
 }
 
 /* ER Diagram text colors */
@@ -288,16 +327,16 @@ nav[aria-label="Docs"] a[aria-current="page"] {
 .mermaid-diagram-inner .er.entityLabel,
 .mermaid-diagram-inner .er.attributeKey,
 .mermaid-diagram-inner .er.attributeValue {
-  fill: #f8fafc !important;
+  fill: var(--color-fd-foreground) !important;
 }
 
 /* ER Diagram relationship lines */
 .mermaid-diagram .er.relationshipLine,
 .mermaid-diagram-inner .er.relationshipLine {
-  stroke: #94a3b8 !important;
+  stroke: var(--color-fd-muted-foreground) !important;
 }
 
 .mermaid-diagram .er.relationshipLabel,
 .mermaid-diagram-inner .er.relationshipLabel {
-  fill: #94a3b8 !important;
+  fill: var(--color-fd-muted-foreground) !important;
 }

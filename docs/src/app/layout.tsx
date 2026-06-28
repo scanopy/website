@@ -23,7 +23,7 @@ export const metadata = {
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${inter.className} dark`} suppressHydrationWarning>
+    <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <RootProvider
           search={{
@@ -33,8 +33,11 @@ export default function Layout({ children }: LayoutProps<'/'>) {
             },
           }}
           theme={{
-            defaultTheme: 'dark',
-            forcedTheme: 'dark',
+            defaultTheme: 'system',
+            enableSystem: true,
+            // Share the main site's preference key so the theme carries across
+            // scanopy.net and scanopy.net/docs (values: system | light | dark).
+            storageKey: 'scanopy-theme',
           }}
         >
           {children}

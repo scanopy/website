@@ -43,18 +43,18 @@ export function EntityCoreTables() {
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="text-left py-2 pr-4 font-medium text-gray-300">Table</th>
-                    <th className="text-left py-2 font-medium text-gray-300">Purpose</th>
+                  <tr className="border-b border-fd-border">
+                    <th className="text-left py-2 pr-4 font-medium text-fd-muted-foreground">Table</th>
+                    <th className="text-left py-2 font-medium text-fd-muted-foreground">Purpose</th>
                   </tr>
                 </thead>
                 <tbody>
                   {entities.map((entity) => (
-                    <tr key={entity.id} className="border-b border-gray-800">
+                    <tr key={entity.id} className="border-b border-fd-border">
                       <td className="py-2 pr-4">
-                        <code className="text-blue-400">{entity.table_name}</code>
+                        <code className="text-fd-primary">{entity.table_name}</code>
                       </td>
-                      <td className="py-2 text-gray-300">
+                      <td className="py-2 text-fd-foreground">
                         {entity.description.split('.')[0]}.
                       </td>
                     </tr>
