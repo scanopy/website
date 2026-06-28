@@ -108,6 +108,14 @@
 	// trails, and so we don't synthesize a crumb for a non-page segment like `vs`.
 	const SELF_BREADCRUMB_PREFIXES = ['/comparisons/vs/'];
 
+	// The "/comparisons/<vendor>-alternatives" listicle pages also emit their own
+	// BreadcrumbList; match them by suffix (they share the /comparisons/ prefix with the
+	// markdown comparison pages, so a prefix can't distinguish them).
+	function hasSelfBreadcrumb(pathname: string): boolean {
+		if (SELF_BREADCRUMB_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return true;
+		return pathname.startsWith('/comparisons/') && pathname.endsWith('-alternatives');
+	}
+
 	// Real, human title for the leaf crumb on dynamic detail routes, pulled from the
 	// page's own load data instead of title-casing a raw slug (which produced names
 	// like "Network Diagrams Wrong" rather than the actual post/entry title).
@@ -125,7 +133,7 @@
 	let breadcrumbSchema = $derived.by(() => {
 		const pathname = page.url.pathname;
 		if (pathname === '/') return null;
-		if (SELF_BREADCRUMB_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return null;
+		if (hasSelfBreadcrumb(pathname)) return null;
 
 		const segments = pathname.split('/').filter(Boolean);
 		const items = [{ name: 'Home', url: 'https://scanopy.net' }];

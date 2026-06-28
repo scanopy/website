@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 import { allVsPageSlugs } from '$lib/compare/vs-pages';
+import { allAltPageSlugs } from '$lib/compare/alternatives-pages';
 
 export const prerender = true;
 
@@ -41,6 +42,10 @@ export async function GET() {
 		{ loc: '/about', src: 'src/routes/about/+page.svelte' },
 		{ loc: '/blog', src: 'src/routes/blog/+page.svelte' },
 		{ loc: '/comparisons', src: 'src/routes/comparisons/+page.svelte' },
+		{
+			loc: '/comparisons/scanopy-alternatives',
+			src: 'src/routes/comparisons/scanopy-alternatives/+page.svelte'
+		},
 		{ loc: '/community', src: 'src/routes/community/+page.svelte' },
 		{ loc: '/commercial', src: 'src/routes/commercial/+page.svelte' },
 		{ loc: '/press', src: 'src/routes/press/+page.svelte' },
@@ -129,8 +134,20 @@ export async function GET() {
 		)
 		.join('');
 
+	// Programmatic "Best <vendor> alternatives" listicle pages — same fixture-derived
+	// lastmod as the vs pages.
+	const altUrls = allAltPageSlugs()
+		.map(
+			(path) => `
+  <url>
+    <loc>https://scanopy.net${path}</loc>
+    <lastmod>${vsLastmod}</lastmod>
+  </url>`
+		)
+		.join('');
+
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${comparisonUrls}${vsUrls}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${comparisonUrls}${vsUrls}${altUrls}
 </urlset>`;
 
 	return new Response(sitemap, {

@@ -83,6 +83,10 @@
 						<li>
 							<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
 						</li>
+						<li><a href="/blog" class="text-sm text-gray-400 hover:text-white">Blog</a></li>
+						<li>
+							<a href="/comparisons" class="text-sm text-gray-400 hover:text-white">Comparisons</a>
+						</li>
 						<li>
 							<a href="/services" class="text-sm text-gray-400 hover:text-white"
 								>Discoverable Services</a
@@ -101,10 +105,6 @@
 					<span class="mb-4 block font-semibold text-white">Company</span>
 					<ul class="space-y-2">
 						<li><a href="/about" class="text-sm text-gray-400 hover:text-white">About</a></li>
-						<li><a href="/blog" class="text-sm text-gray-400 hover:text-white">Blog</a></li>
-						<li>
-							<a href="/comparisons" class="text-sm text-gray-400 hover:text-white">Comparisons</a>
-						</li>
 						<li><a href="/press" class="text-sm text-gray-400 hover:text-white">Press</a></li>
 						<li>
 							<a href="mailto:hello@scanopy.net" class="text-sm text-gray-400 hover:text-white"

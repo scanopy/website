@@ -1,111 +1,93 @@
 <script lang="ts">
 	import { PageHero, CorrectionCallout } from '$lib/components';
 	import ComparisonTable from '$lib/components/ComparisonTable.svelte';
+	import FAQ from '$lib/components/FAQ.svelte';
 	import ArticleCTA from '$lib/components/ArticleCTA.svelte';
 	import AuthorCard from '$lib/components/AuthorCard.svelte';
 	import ArticleTOC from '$lib/components/ArticleTOC.svelte';
 	import ScanopyDemo from '$lib/components/ScanopyDemo.svelte';
-	import { ALT_VENDOR_SLUGS, altSlug } from '$lib/compare/alternatives-pages';
-	import type { Vendor, VendorSource, SourceRef } from '$lib/types';
+	import { getFAQPageSchema, getBreadcrumbListSchema } from '$lib/schemas';
+	import { page } from '$app/state';
+	import { APP, appHref } from '$lib/config/urls';
+	import type { Vendor, VendorFAQ, VendorSource } from '$lib/types';
+
+	interface AltCard {
+		slug: string;
+		name: string;
+		href: string;
+		blurb: string;
+		isScanopy: boolean;
+		vsHref: string | null;
+	}
 
 	interface PageData {
-		pageSlug: string;
-		scanopySlug: string;
 		vendorSlug: string;
-		scanopy: Vendor;
-		vendor: Vendor;
 		vendorName: string;
+		vendorHref: string;
 		title: string;
 		description: string;
 		intro: string;
-		takeaway: { scanopy: string; vendor: string };
-		versusHtml: string | null;
+		alternatives: AltCard[];
+		tableSlugs: string[];
+		tableVendors: Record<string, Vendor>;
+		versusHtml: string;
+		faqs: VendorFAQ[];
 		sources: VendorSource[];
 	}
 
 	let { data }: { data: PageData } = $props();
 
-	const canonical = `https://scanopy.net/comparisons/vs/${data.vendorSlug}`;
+	const canonical = `https://scanopy.net/comparisons/${data.vendorSlug}-alternatives`;
 	const mainComparison = 'https://scanopy.net/comparisons/best-automated-network-diagram-tools';
-	const altHref = ALT_VENDOR_SLUGS.includes(data.vendorSlug) ? altSlug(data.vendorSlug) : null;
+	const vsHref = `/comparisons/vs/${data.vendorSlug}`;
 
 	function abs(href: string): string {
 		return href.startsWith('http') ? href : `https://scanopy.net${href}`;
 	}
 
-	function sourceRefHtml(refs?: SourceRef[]): string {
-		if (!refs) return '';
-		return refs.map((r) => ` <a href="#source-${r.id}">[${r.id}]</a>`).join('');
-	}
-
-	// Data-derived view-coverage prose, folded into the intro (not a labeled block). The
-	// table itself shows the per-view chips; these sentences summarize them with citations.
-
-	// Schema: model each compared product as a SoftwareApplication, wrapped in an ItemList
-	// (the approach the main comparison page already uses), and a BreadcrumbList for context.
+	// Schema: each featured tool as a SoftwareApplication inside an ItemList (the ranked
+	// list of alternatives), plus a BreadcrumbList and the FAQPage.
 	const itemListSchema = {
 		'@context': 'https://schema.org',
 		'@type': 'ItemList',
 		name: data.title,
 		description: data.description,
 		url: canonical,
-		numberOfItems: 2,
-		itemListElement: [data.scanopy, data.vendor].map((v, i) => ({
+		numberOfItems: data.alternatives.length,
+		itemListElement: data.alternatives.map((alt, i) => ({
 			'@type': 'ListItem',
 			position: i + 1,
 			item: {
 				'@type': 'SoftwareApplication',
-				name: v.fullName || v.name,
+				name: alt.name,
 				applicationCategory: 'NetworkApplication',
-				url: abs(v.href),
-				...(v.bestFor ? { description: v.bestFor } : {})
+				url: abs(alt.href),
+				description: alt.blurb
 			}
 		}))
 	};
 
-	const breadcrumbSchema = {
-		'@context': 'https://schema.org',
-		'@type': 'BreadcrumbList',
-		itemListElement: [
-			{
-				'@type': 'ListItem',
-				position: 1,
-				name: 'Comparisons',
-				item: 'https://scanopy.net/comparisons'
-			},
-			{
-				'@type': 'ListItem',
-				position: 2,
-				name: `Best automated network diagram tools`,
-				item: mainComparison
-			},
-			{ '@type': 'ListItem', position: 3, name: data.title, item: canonical }
-		]
-	};
+	const breadcrumbSchema = getBreadcrumbListSchema([
+		{ name: 'Comparisons', url: 'https://scanopy.net/comparisons' },
+		{ name: 'Best automated network diagram tools', url: mainComparison },
+		{ name: data.title, url: canonical }
+	]);
+
+	const faqSchema = data.faqs.length ? getFAQPageSchema(data.faqs) : null;
 
 	const itemListJson = JSON.stringify(itemListSchema);
 	const breadcrumbJson = JSON.stringify(breadcrumbSchema);
+	const faqJson = faqSchema ? JSON.stringify(faqSchema) : null;
 
-	// Head-to-head table: attributes as rows, Scanopy + the vendor as columns.
-	const tableVendors = { [data.scanopySlug]: data.scanopy, [data.vendorSlug]: data.vendor };
-	const tableSlugs = [data.scanopySlug, data.vendorSlug];
-	const tableColumns = [
-		'discovery',
-		'services',
-		'viewTypes',
-		'autoUpdates',
-		'openSource',
-		'pricing',
-		'alsoIncludes'
-	];
+	const tableColumns = ['name', 'discovery', 'viewTypes', 'services', 'pricing', 'openSource'];
 
-	// Sticky table of contents, mirroring the comparisons/blog pages. Build from the H2s
-	// actually rendered (the "Sources" section is intentionally omitted — ArticleTOC hides
-	// it anyway). The TOC shows only when there are at least 3 entries.
+	// Sticky table of contents, mirroring the comparisons/blog pages. Shows when there are
+	// at least 3 entries.
 	const headings = $derived([
-		{ id: 'head-to-head', text: 'Head to head', level: 2 },
-		...(data.versusHtml ? [{ id: 'how-they-compare', text: 'How they compare', level: 2 }] : []),
-		{ id: 'when-to-choose-which', text: 'When to choose which', level: 2 }
+		{ id: 'best-alternatives', text: 'Best alternatives', level: 2 },
+		{ id: 'compared', text: 'Compared', level: 2 },
+		{ id: 'why-scanopy', text: 'Why Scanopy', level: 2 },
+		...(data.faqs.length ? [{ id: 'faq', text: 'FAQ', level: 2 }] : [])
 	]);
 	const showToc = $derived(headings.length >= 3);
 </script>
@@ -128,9 +110,12 @@
 
 	{@html `<script type="application/ld+json">${itemListJson}</script>`}
 	{@html `<script type="application/ld+json">${breadcrumbJson}</script>`}
+	{#if faqJson}
+		{@html `<script type="application/ld+json">${faqJson}</script>`}
+	{/if}
 </svelte:head>
 
-<PageHero image="/topology-hero.webp" title="Scanopy vs {data.vendorName}" />
+<PageHero image="/topology-hero.webp" title="Best {data.vendorName} Alternatives" />
 
 <article class="py-10 sm:py-20">
 	<div class="container mx-auto px-3 sm:px-4" class:max-w-3xl={!showToc} class:max-w-5xl={showToc}>
@@ -150,38 +135,110 @@
 				<div class="prose prose-invert prose-gray max-w-none">
 					<p>{data.intro}</p>
 
-					<h2 id="head-to-head">Scanopy vs {data.vendorName}: head to head</h2>
+					<h2 id="best-alternatives">The best {data.vendorName} alternatives</h2>
+				</div>
+
+				<!-- Card listicle: custom UI, kept outside .prose so its Tailwind colors apply. -->
+				<div class="my-8 space-y-4">
+					{#each data.alternatives as alt, i (alt.slug)}
+						<div
+							class="rounded-lg border p-5 {alt.isScanopy
+								? 'border-blue-500/60 bg-blue-500/5'
+								: 'border-gray-800'}"
+						>
+							<div class="flex items-baseline gap-3">
+								<span
+									class="flex h-7 w-7 flex-none items-center justify-center rounded-full text-sm font-bold {alt.isScanopy
+										? 'bg-blue-500 text-white'
+										: 'bg-gray-800 text-gray-300'}"
+								>
+									{i + 1}
+								</span>
+								<h3 class="m-0 text-xl font-bold text-white">
+									<a
+										href={alt.href}
+										class="hover:text-blue-400"
+										{...alt.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {}}
+									>
+										{alt.name}
+									</a>
+									{#if alt.isScanopy}
+										<span
+											class="ml-2 rounded-full bg-blue-500/15 px-2 py-0.5 align-middle text-xs font-semibold text-blue-300"
+											>Our pick</span
+										>
+									{/if}
+								</h3>
+							</div>
+							<p class="mb-0 mt-2 leading-relaxed text-gray-300">{alt.blurb}</p>
+							{#if alt.isScanopy}
+								<div class="mt-4 flex flex-wrap items-center gap-4 text-sm">
+									<a
+										href={appHref(APP.onboarding, page.url.pathname, 'alternatives-card')}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="btn-primary">Try Scanopy free</a
+									>
+									<a href="/pricing" class="text-gray-400 transition-colors hover:text-white"
+										>See pricing</a
+									>
+									<a href="/commercial" class="text-gray-400 transition-colors hover:text-white"
+										>Commercial edition</a
+									>
+								</div>
+							{:else if alt.vsHref}
+								<a
+									href={alt.vsHref}
+									class="mt-3 inline-block text-sm text-blue-400 hover:text-blue-300"
+								>
+									Scanopy vs {alt.name}, head to head &rarr;
+								</a>
+							{/if}
+						</div>
+					{/each}
+				</div>
+
+				<div class="prose prose-invert prose-gray max-w-none">
+					<h2 id="compared">{data.vendorName} alternatives compared</h2>
+					<p>
+						How {data.vendorName} and each alternative compare on discovery, the four topology views
+						(L2, L3, workloads, applications), service detection, pricing, and licensing.
+					</p>
 					<ComparisonTable
-						vendors={tableVendors}
-						vendorSlugs={tableSlugs}
+						vendors={data.tableVendors}
+						vendorSlugs={data.tableSlugs}
 						columns={tableColumns}
-						orientation="row"
-						minWidth="560px"
-						colWidths={['26%', '37%', '37%']}
 					/>
 
 					<ScanopyDemo />
 
-					{#if data.versusHtml}
-						<h2 id="how-they-compare">How they compare</h2>
-						{@html data.versusHtml}
+					<h2 id="why-scanopy">Why Scanopy is a strong {data.vendorName} alternative</h2>
+					{@html data.versusHtml}
+
+					{#if data.faqs.length}
+						<h2 id="faq">Frequently asked questions</h2>
 					{/if}
+				</div>
 
-					<h2 id="when-to-choose-which">When to choose which</h2>
-					<p><strong>Choose Scanopy when:</strong> {data.takeaway.scanopy}</p>
-					<p><strong>Choose {data.vendorName} when:</strong> {data.takeaway.vendor}</p>
+				{#if data.faqs.length}
+					<div class="mt-6">
+						<FAQ faqs={data.faqs} />
+					</div>
+				{/if}
 
+				<div class="prose prose-invert prose-gray mt-10 max-w-none">
 					<p>
-						This is a focused, two-tool comparison.{#if altHref}
-							Weighing other options too? See the
-							<a href={altHref}>best {data.vendorName} alternatives</a>.{/if} For all 13 tools side by
-						side, see the
+						Comparing just these two? See the focused <a href={vsHref}
+							>Scanopy vs {data.vendorName} head-to-head</a
+						>. For all 13 tools side by side, see the
 						<a href="/comparisons/best-automated-network-diagram-tools"
 							>full comparison of automated network diagram tools</a
 						>.
 					</p>
+				</div>
 
-					{#if data.sources.length}
+				{#if data.sources.length}
+					<div class="prose prose-invert prose-gray mt-10 max-w-none">
 						<h2 id="sources">Sources</h2>
 						<div style="font-size: 0.8125rem; line-height: 1.8; color: rgb(156 163 175);">
 							{#each data.sources as source}
@@ -190,8 +247,8 @@
 								/>
 							{/each}
 						</div>
-					{/if}
-				</div>
+					</div>
+				{/if}
 
 				<ArticleCTA />
 				<AuthorCard />
@@ -222,8 +279,8 @@
 		}
 	}
 
-	/* Shared comparison-table + chip styles, mirrored from the comparisons [slug] page so
-	   the view-type tags and [n] citations render identically. */
+	/* Shared comparison-table + chip styles, mirrored from the vs/[slug] page so the
+	   VendorComparison inline table's view-type tags and chips render identically here. */
 	:global(.prose h2) {
 		margin-top: 3rem;
 		margin-bottom: 1rem;
@@ -294,10 +351,6 @@
 		vertical-align: top;
 	}
 
-	:global(.prose .view-cell) {
-		text-align: center;
-	}
-
 	:global(.cell-detail) {
 		display: block;
 		font-size: 0.75rem;
@@ -330,17 +383,9 @@
 		color: rgb(251 191 36);
 	}
 
-	:global(.prose .chip-unclear) {
-		background: rgba(148, 163, 184, 0.12);
-		color: rgb(148 163 184);
-		border: 1px dashed rgba(148, 163, 184, 0.5);
-	}
-
-	/* Network Views row: per-view tags wrap inside the cell, never overflow. */
 	:global(.prose .view-tags) {
 		display: inline-flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 0.25rem;
 	}
 
@@ -349,72 +394,13 @@
 		padding: 0.0625rem 0.375rem;
 	}
 
-	:global(.prose .view-tag-no) {
-		background: rgba(75, 85, 99, 0.18);
-		color: rgb(107 114 128);
-		text-decoration: line-through;
-		text-decoration-color: rgba(107, 114, 128, 0.6);
-	}
-
-	:global(.prose .view-legend) {
-		font-size: 0.8125rem;
-		color: rgb(156 163 175);
-		line-height: 2.2;
-		margin-top: -0.5rem;
-	}
-
-	/* Dotted-underline hover tooltips on the head-to-head table's row labels. Mirrored from
-	   the comparisons [slug] article page so the tooltip markup VsComparison emits renders
-	   identically here (this content is wrapped in a .prose container above). */
-	:global(.prose .tooltip-header) {
-		position: relative;
-		cursor: help;
-		text-decoration: underline dotted rgba(148, 163, 184, 0.5);
-		text-underline-offset: 3px;
-	}
-
-	/* Inline tooltip content stays hidden; `use:tooltip` portals a fixed-positioned copy
-	   (.tooltip-portal) to document.body so it never expands the table or page height. */
-	:global(.prose .tooltip-content) {
-		display: none;
-	}
-
-	:global(.tooltip-portal) {
-		padding: 0.75rem 1rem;
-		background: rgb(31 41 55);
-		border: 1px solid rgb(55 65 81);
-		border-radius: 0.5rem;
-		font-size: 0.8125rem;
-		font-weight: 400;
-		color: rgb(209 213 219);
-		line-height: 2;
-		z-index: 50;
-		pointer-events: none;
-		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-	}
-
-	:global(.tooltip-portal .chip) {
-		display: inline-block;
-		padding: 0.125rem 0.5rem;
-		border-radius: 9999px;
-		font-size: 0.75rem;
-		font-weight: 500;
-		line-height: 1.5;
-		white-space: nowrap;
-	}
-
-	:global(.tooltip-portal .chip-positive) {
-		background: rgba(34, 197, 94, 0.15);
-		color: rgb(74 222 128);
-	}
-
-	:global(.tooltip-portal .chip-unclear) {
+	:global(.prose .chip-unclear) {
 		background: rgba(148, 163, 184, 0.12);
 		color: rgb(148 163 184);
 		border: 1px dashed rgba(148, 163, 184, 0.5);
 	}
 
-	:global(.tooltip-portal .view-tag-no) {
+	:global(.prose .view-tag-no) {
 		background: rgba(75, 85, 99, 0.18);
 		color: rgb(107 114 128);
 		text-decoration: line-through;

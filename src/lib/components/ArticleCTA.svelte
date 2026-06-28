@@ -15,10 +15,18 @@
 
 <div class="mt-12 rounded-xl border border-gray-800 bg-gray-900/50 p-8">
 	<h3 class="mb-3 text-lg font-semibold text-white">{heading}</h3>
-	<p class="mb-5 text-sm text-gray-400 leading-relaxed">{description}</p>
+	<p class="mb-5 text-sm leading-relaxed text-gray-400">{description}</p>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<a href={appHref(APP.onboarding, page.url.pathname, 'article-cta')} target="_blank" rel="noopener noreferrer" class="btn-primary">Try Scanopy free</a>
-		<a href="/pricing" class="text-gray-400 hover:text-white transition-colors">View pricing</a>
-		<a href="/docs" class="text-gray-400 hover:text-white transition-colors">Read the docs</a>
+		<a
+			href={appHref(APP.onboarding, page.url.pathname, 'article-cta')}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="btn-primary">Try Scanopy free</a
+		>
+		<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">View pricing</a>
+		<a href="/commercial" class="text-gray-400 transition-colors hover:text-white"
+			>Commercial edition</a
+		>
+		<a href="/docs" class="text-gray-400 transition-colors hover:text-white">Read the docs</a>
 	</div>
 </div>

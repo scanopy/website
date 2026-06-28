@@ -25,6 +25,20 @@ export type VsVendorSlug = (typeof VS_VENDOR_SLUGS)[number];
 
 export const SCANOPY_SLUG = 'scanopy';
 
+// Canonical phrasings of Scanopy's recurring value props. Defined once and reused across
+// the generated vs / alternatives prose so the claims stay consistent and update in a
+// single place, instead of drifting across the dozens of hand-typed copies they replaced.
+// Note: meta descriptions deliberately keep their own compact wording (e.g. bare "flat
+// pricing") for length; these constants drive the body prose.
+export const SCANOPY_CLAIMS = {
+	views: 'L2, L3, workload, and application views',
+	viewsParenthetical: 'four switchable views (L2 physical, L3 logical, workloads, and applications)',
+	serviceDetection: 'per-host service detection',
+	flatPricing: 'flat pricing regardless of host count',
+	freeCE: 'a free, self-hostable Community edition',
+	alongside: 'It sits alongside your monitoring stack rather than replacing it.'
+} as const;
+
 /** Route path for a vendor's head-to-head page: `/comparisons/vs/<vendorSlug>`. */
 export function vsSlug(vendorSlug: string): string {
 	return `/comparisons/vs/${vendorSlug}`;
@@ -90,13 +104,15 @@ function differentiatorAngles(vendor: Vendor): { scanopy: string | null; vendor:
 
 // Strip trailing punctuation / a leading "Best for ..." framing from a sentence so it
 // can be spliced into the data-derived intro without reading like marketing copy.
-function trimSentence(text: string): string {
+// Exported so the alternatives-page generator can reuse the same normalization.
+export function trimSentence(text: string): string {
 	return text.trim().replace(/\s+/g, ' ').replace(/[.\s]+$/, '');
 }
 
 // Lowercase the first letter only when it isn't the start of an acronym (e.g. keep
 // "IT teams", "MSPs" intact, but turn "Enterprise IT teams" into "enterprise IT teams").
-function lowerFirst(text: string): string {
+// Exported so the alternatives-page generator can reuse the same normalization.
+export function lowerFirst(text: string): string {
 	if (text.length >= 2 && text[1] === text[1].toUpperCase() && /[A-Z]/.test(text[1])) {
 		return text;
 	}
@@ -162,7 +178,7 @@ export function buildTakeaway(vendor: Vendor): { scanopy: string; vendor: string
 		angles.scanopy && angles.vendor
 			? `${lowerPhrase(angles.scanopy)} over ${lowerPhrase(angles.vendor)}`
 			: 'a dedicated, living network-documentation tool';
-	const scanopyLine = `You want ${contrast}: automatic L2, L3, workload, and application views, per-host service detection, flat pricing regardless of host count, and a free self-hostable Community edition. It sits alongside your monitoring stack rather than replacing it.`;
+	const scanopyLine = `You want ${contrast}: automatic ${SCANOPY_CLAIMS.views}, ${SCANOPY_CLAIMS.serviceDetection}, ${SCANOPY_CLAIMS.flatPricing}, and ${SCANOPY_CLAIMS.freeCE}. ${SCANOPY_CLAIMS.alongside}`;
 
 	let vendorLine: string;
 	if (vendor.whereItFits) {
@@ -245,7 +261,7 @@ export function buildMetaDescription(vendor: Vendor): string {
 			: `Scanopy vs ${name}: network documentation compared.`;
 
 	const fit = vendor.bestFor
-		? ` ${name} is built for ${lowerFirst(trimSentence(vendor.bestFor))}; Scanopy gives you automatic L2, L3, workload, and application views at flat pricing.`
+		? ` ${name} is built for ${lowerFirst(trimSentence(vendor.bestFor))}; Scanopy gives you automatic ${SCANOPY_CLAIMS.views} at flat pricing.`
 		: ` Compare discovery, the four topology views (L2, L3, workloads, applications), licensing, and pricing to see which fits your team.`;
 
 	return lead + fit;

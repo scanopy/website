@@ -1,6 +1,7 @@
 import { marked } from 'marked';
 import { vendors } from '$lib/fixtures/network-diagram-vendors';
 import { VS_VENDOR_SLUGS, vsSlug, vendorDisplayName } from '$lib/compare/vs-pages';
+import { ALT_VENDOR_SLUGS, altSlug } from '$lib/compare/alternatives-pages';
 
 interface VsLink {
 	href: string;
@@ -69,5 +70,11 @@ export async function load() {
 		name: vendorDisplayName(vendors[slug])
 	}));
 
-	return { posts, vsLinks };
+	// "Best <vendor> alternatives" listicle pages, gated to vendors with a full versus writeup.
+	const altLinks: VsLink[] = ALT_VENDOR_SLUGS.map((slug) => ({
+		href: altSlug(slug),
+		name: vendorDisplayName(vendors[slug])
+	}));
+
+	return { posts, vsLinks, altLinks };
 }

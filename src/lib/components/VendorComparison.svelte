@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { marked } from 'marked';
 	import { tooltip } from '$lib/actions/tooltip';
+	import ComparisonTable from '$lib/components/ComparisonTable.svelte';
 	import type {
 		Vendor,
 		VendorCategory,
@@ -21,8 +22,42 @@
 		columns?: string[];
 	}
 
-	let { mode, categories, vendors, disclosureText, section, honorableMentions, sources, vendorSlugs, columns }: Props =
-		$props();
+	let {
+		mode,
+		categories,
+		vendors,
+		disclosureText,
+		section,
+		honorableMentions,
+		sources,
+		vendorSlugs,
+		columns
+	}: Props = $props();
+
+	// Column set + widths for the main categorized comparison table (now rendered via the
+	// shared ComparisonTable). Matches the previous hardcoded layout exactly.
+	const MAIN_COLUMNS = [
+		'name',
+		'discovery',
+		'viewTypes',
+		'environments',
+		'services',
+		'autoUpdates',
+		'openSource',
+		'pricing',
+		'alsoIncludes'
+	];
+	const MAIN_COL_WIDTHS = [
+		'115px',
+		'120px',
+		'180px',
+		'120px',
+		'110px',
+		'110px',
+		'110px',
+		'130px',
+		'110px'
+	];
 
 	const columnHeaders: Record<string, string> = {
 		name: 'Tool',
@@ -182,11 +217,17 @@
 			{#each viewOrder as view, i}
 				{@const support = vendor.viewTypes[view.key]}
 				{#if support === 'yes'}
-					<span class="chip chip-positive view-tag" title="{view.label}: supported">{view.label}</span>
+					<span class="chip chip-positive view-tag" title="{view.label}: supported"
+						>{view.label}</span
+					>
 				{:else if support === 'unclear'}
-					<span class="chip chip-unclear view-tag" title="{view.label}: unverified">{view.label} ?</span>
+					<span class="chip chip-unclear view-tag" title="{view.label}: unverified"
+						>{view.label} ?</span
+					>
 				{:else}
-					<span class="chip view-tag view-tag-no" title="{view.label}: not supported">{view.label}</span>
+					<span class="chip view-tag view-tag-no" title="{view.label}: not supported"
+						>{view.label}</span
+					>
 				{/if}
 			{/each}
 		</span>
@@ -214,111 +255,14 @@
 {/snippet}
 
 {#if mode === 'tables' && categories && vendors}
-	<div class="table-scroll vendor-table">
-	<table style="table-layout: fixed; min-width: 990px;">
-		<colgroup>
-			<col style="width: 115px;">
-			<col style="width: 120px;">
-			<col style="width: 180px;">
-			<col style="width: 120px;">
-			<col style="width: 110px;">
-			<col style="width: 110px;">
-			<col style="width: 110px;">
-			<col style="width: 130px;">
-			<col style="width: 110px;">
-		</colgroup>
-		<thead>
-			<tr>
-				<th class="tooltip-header" use:tooltip>Tool<span class="tooltip-content">Product name and link to vendor site</span></th>
-				<th class="tooltip-header" use:tooltip>Discovery<span class="tooltip-content">Protocols used to find devices and map connections</span></th>
-				<th class="tooltip-header" use:tooltip>Network Views<span class="tooltip-content">Which topology views the tool produces from discovery.<br><span class="chip chip-positive">L2</span> Physical switch ports and links<br><span class="chip chip-positive">L3</span> Subnets, VLANs, routing<br><span class="chip chip-positive">Workload</span> VM/container host nesting<br><span class="chip chip-positive">Application</span> Service-dependency / app grouping<br><br><span class="chip chip-positive">Yes</span> supported<br><span class="chip chip-unclear">Tag ?</span> unverified<br><span class="chip view-tag-no">Greyed</span> not supported</span></th>
-				<th class="tooltip-header" use:tooltip>Environments<span class="tooltip-content">Where the tool discovers/maps: on-prem and/or public cloud (AWS, Azure, GCP).</span></th>
-				<th class="tooltip-header" use:tooltip>Services<span class="tooltip-content"><span class="chip chip-negative">No</span> No service awareness<br><span class="chip chip-neutral">Basic</span> Common port detection<br><span class="chip chip-positive">Yes</span> Application-level fingerprinting</span></th>
-				<th class="tooltip-header" use:tooltip>Live Updates<span class="tooltip-content">Whether diagrams update automatically after initial scan</span></th>
-				<th class="tooltip-header" use:tooltip>Open Source<span class="tooltip-content"><span class="chip chip-positive">OSI</span> OSI-approved open source license<br><span class="chip chip-neutral">Source available</span> Source code available, restricted license<br><span class="chip chip-negative">No</span> Proprietary</span></th>
-				<th class="tooltip-header" use:tooltip>Pricing<span class="tooltip-content">Starting price or pricing model</span></th>
-				<th class="tooltip-header" use:tooltip>Also Includes<span class="tooltip-content">Capabilities beyond network diagramming</span></th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each categories as category}
-				<tr class="category-row">
-					<td colspan="9">{category.heading}</td>
-				</tr>
-				{#each category.vendors as slug}
-					{@const vendor = v(slug)}
-					<tr>
-						<td><a href={vendor.href} {...isExternal(vendor.href) ? { target: '_blank', rel: 'noopener' } : {}}>{vendor.name}</a></td>
-						<td>
-							{#if vendor.discovery.length === 0}
-								<span class="chip chip-negative">No</span>
-							{:else}
-								{#each vendor.discovery as protocol, i}
-									{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(protocol)}>{protocol}</span>
-								{/each}
-							{/if}
-							{#if vendor.discoverySources}
-								{@html sourceRefHtml(vendor.discoverySources)}
-							{/if}
-						</td>
-						<td>
-							{@render viewTags(vendor)}
-						</td>
-						<td>
-							{@render environmentsCell(vendor)}
-						</td>
-						<td>
-							{#if vendor.services.detail && vendor.services.detailHref}
-								<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span><a href={vendor.services.detailHref} class="cell-detail">{vendor.services.detail}</a>
-							{:else if vendor.services.detail}
-								<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span><span class="cell-detail">{vendor.services.detail}</span>
-							{:else}
-								<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span>
-							{/if}
-							{#if vendor.services.sources}
-								{@html sourceRefHtml(vendor.services.sources)}
-							{/if}
-						</td>
-						<td>
-							{#if vendor.autoUpdates}
-								<span class="chip chip-positive">Yes</span>
-							{:else}
-								<span class="chip chip-negative">No</span>
-							{/if}
-						</td>
-						<td>
-							{#if vendor.openSource.href}
-								<a href={vendor.openSource.href}><span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}>{osInfo(vendor.openSource.status).label}</span></a>
-							{:else}
-								<span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}>{osInfo(vendor.openSource.status).label}</span>
-							{/if}
-							{#if vendor.openSource.license}
-								<span class="cell-detail">{vendor.openSource.license}</span>
-							{/if}
-						</td>
-						<td>
-							{#if vendor.pricing.href}
-								<a href={vendor.pricing.href}>{vendor.pricing.text}</a>
-							{:else}
-								{vendor.pricing.text}
-							{/if}
-							{#if vendor.pricing.sources}
-								{@html sourceRefHtml(vendor.pricing.sources)}
-							{/if}
-						</td>
-					<td>
-						{#if vendor.alsoIncludes}
-							{#each vendor.alsoIncludes as cap, i}
-								{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(cap)}>{cap}</span>
-							{/each}
-						{/if}
-					</td>
-					</tr>
-				{/each}
-			{/each}
-		</tbody>
-	</table>
-	</div>
+	<ComparisonTable
+		{vendors}
+		orientation="column"
+		columns={MAIN_COLUMNS}
+		colWidths={MAIN_COL_WIDTHS}
+		minWidth="990px"
+		groups={categories.map((c) => ({ heading: c.heading, vendorSlugs: c.vendors }))}
+	/>
 
 	{#if disclosureText}
 		<p>{disclosureText}</p>
@@ -334,7 +278,13 @@
 
 	{#each section.vendors as slug}
 		{@const vendor = v(slug)}
-		<h3 id={slugify(vendor.fullName || vendor.name)}><a href={vendor.href} {...isExternal(vendor.href) ? { target: '_blank', rel: 'noopener' } : {}}>{vendor.fullName || vendor.name}</a></h3>
+		<h3 id={slugify(vendor.fullName || vendor.name)}>
+			<a
+				href={vendor.href}
+				{...isExternal(vendor.href) ? { target: '_blank', rel: 'noopener' } : {}}
+				>{vendor.fullName || vendor.name}</a
+			>
+		</h3>
 
 		<p>{@html md(vendor.description)}</p>
 
@@ -363,96 +313,124 @@
 
 {#if mode === 'inline' && vendorSlugs && vendors && columns}
 	<div class="table-scroll vendor-table">
-	<table>
-		<thead>
-			<tr>
-				{#each columns as col}
-					<th>{columnHeaders[col] || col}</th>
-				{/each}
-			</tr>
-		</thead>
-		<tbody>
-			{#each vendorSlugs as slug}
-				{@const vendor = v(slug)}
+		<table>
+			<thead>
 				<tr>
 					{#each columns as col}
-						{#if col === 'name'}
-							<td><a href={vendor.href} {...isExternal(vendor.href) ? { target: '_blank', rel: 'noopener' } : {}}>{vendor.name}</a></td>
-						{:else if col === 'discovery'}
-							<td>
-								{#if vendor.discovery.length === 0}
-									<span class="chip chip-negative">None</span>
-								{:else}
-									{#each vendor.discovery as protocol, i}
-										{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(protocol)}>{protocol}</span>
-									{/each}
-								{/if}
-							</td>
-						{:else if col === 'services'}
-							<td>
-								{#if vendor.services.detail && vendor.services.detailHref}
-									<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span><a href={vendor.services.detailHref} class="cell-detail">{vendor.services.detail}</a>
-								{:else if vendor.services.detail}
-									<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span><span class="cell-detail">{vendor.services.detail}</span>
-								{:else}
-									<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}>{serviceInfo(vendor.services.level).label}</span>
-								{/if}
-							</td>
-						{:else if col === 'autoUpdates'}
-							<td>
-								{#if vendor.autoUpdates}
-									<span class="chip chip-positive">Yes</span>
-								{:else}
-									<span class="chip chip-negative">No</span>
-								{/if}
-							</td>
-						{:else if col === 'openSource'}
-							<td>
-								{#if vendor.openSource.href}
-									<a href={vendor.openSource.href}><span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}>{osInfo(vendor.openSource.status).label}</span></a>
-								{:else}
-									<span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}>{osInfo(vendor.openSource.status).label}</span>
-								{/if}
-								{#if vendor.openSource.license}
-									<span class="cell-detail">{vendor.openSource.license}</span>
-								{/if}
-							</td>
-						{:else if col === 'pricing'}
-							<td>
-								{#if vendor.pricing.href}
-									<a href={vendor.pricing.href}>{vendor.pricing.text}</a>
-								{:else}
-									{vendor.pricing.text}
-								{/if}
-							</td>
-						{:else if col === 'alsoIncludes'}
-							<td>
-								{#if vendor.alsoIncludes}
-									{#each vendor.alsoIncludes as cap, i}
-										{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(cap)}>{cap}</span>
-									{/each}
-								{/if}
-							</td>
-						{:else if col === 'viewTypes'}
-							<td>{@render viewTags(vendor)}</td>
-						{:else if col === 'bestFor'}
-							<td>{vendor.bestFor || ''}</td>
-						{:else if col === 'deployment'}
-							<td>{vendor.deployment?.join(', ') || ''}</td>
-						{/if}
+						<th>{columnHeaders[col] || col}</th>
 					{/each}
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{#each vendorSlugs as slug}
+					{@const vendor = v(slug)}
+					<tr>
+						{#each columns as col}
+							{#if col === 'name'}
+								<td
+									><a
+										href={vendor.href}
+										{...isExternal(vendor.href) ? { target: '_blank', rel: 'noopener' } : {}}
+										>{vendor.name}</a
+									></td
+								>
+							{:else if col === 'discovery'}
+								<td>
+									{#if vendor.discovery.length === 0}
+										<span class="chip chip-negative">None</span>
+									{:else}
+										{#each vendor.discovery as protocol, i}
+											{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(protocol)}
+												>{protocol}</span
+											>
+										{/each}
+									{/if}
+								</td>
+							{:else if col === 'services'}
+								<td>
+									{#if vendor.services.detail && vendor.services.detailHref}
+										<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}
+											>{serviceInfo(vendor.services.level).label}</span
+										><a href={vendor.services.detailHref} class="cell-detail"
+											>{vendor.services.detail}</a
+										>
+									{:else if vendor.services.detail}
+										<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}
+											>{serviceInfo(vendor.services.level).label}</span
+										><span class="cell-detail">{vendor.services.detail}</span>
+									{:else}
+										<span class={sentimentClass(serviceInfo(vendor.services.level).sentiment)}
+											>{serviceInfo(vendor.services.level).label}</span
+										>
+									{/if}
+								</td>
+							{:else if col === 'autoUpdates'}
+								<td>
+									{#if vendor.autoUpdates}
+										<span class="chip chip-positive">Yes</span>
+									{:else}
+										<span class="chip chip-negative">No</span>
+									{/if}
+								</td>
+							{:else if col === 'openSource'}
+								<td>
+									{#if vendor.openSource.href}
+										<a href={vendor.openSource.href}
+											><span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}
+												>{osInfo(vendor.openSource.status).label}</span
+											></a
+										>
+									{:else}
+										<span class={sentimentClass(osInfo(vendor.openSource.status).sentiment)}
+											>{osInfo(vendor.openSource.status).label}</span
+										>
+									{/if}
+									{#if vendor.openSource.license}
+										<span class="cell-detail">{vendor.openSource.license}</span>
+									{/if}
+								</td>
+							{:else if col === 'pricing'}
+								<td>
+									{#if vendor.pricing.href}
+										<a href={vendor.pricing.href}>{vendor.pricing.text}</a>
+									{:else}
+										{vendor.pricing.text}
+									{/if}
+								</td>
+							{:else if col === 'alsoIncludes'}
+								<td>
+									{#if vendor.alsoIncludes}
+										{#each vendor.alsoIncludes as cap, i}
+											{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(cap)}>{cap}</span>
+										{/each}
+									{/if}
+								</td>
+							{:else if col === 'viewTypes'}
+								<td>{@render viewTags(vendor)}</td>
+							{:else if col === 'bestFor'}
+								<td>{vendor.bestFor || ''}</td>
+							{:else if col === 'deployment'}
+								<td>{vendor.deployment?.join(', ') || ''}</td>
+							{/if}
+						{/each}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
 	</div>
-	<p style="font-size: 0.8125rem; color: rgb(156 163 175);">For a detailed comparison of these and other tools, see our <a href="/comparisons/best-automated-network-diagram-tools">full comparison of automated network diagram tools</a>.</p>
+	<p style="font-size: 0.8125rem; color: rgb(156 163 175);">
+		For a detailed comparison of these and other tools, see our <a
+			href="/comparisons/best-automated-network-diagram-tools"
+			>full comparison of automated network diagram tools</a
+		>.
+	</p>
 {/if}
 
 {#if mode === 'sources' && sources}
 	<div style="font-size: 0.8125rem; line-height: 1.8; color: rgb(156 163 175);">
 		{#each sources as source}
-			<span id="source-{source.id}">[{source.id}]</span> <a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a><br>
+			<span id="source-{source.id}">[{source.id}]</span>
+			<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a><br />
 		{/each}
 	</div>
 {/if}

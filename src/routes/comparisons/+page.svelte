@@ -18,6 +18,7 @@
 	interface PageData {
 		posts: ComparisonPost[];
 		vsLinks: VsLink[];
+		altLinks: VsLink[];
 	}
 
 	let { data }: { data: PageData } = $props();
@@ -139,6 +140,26 @@
 						<li>
 							<a href={link.href} class="text-blue-400 hover:text-blue-300">
 								Scanopy vs {link.name}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
+
+		{#if data.altLinks.length}
+			<div class="mt-16 border-t border-gray-800 pt-12">
+				<h2 class="mb-3 text-2xl font-bold text-white">Looking for an alternative to a specific tool?</h2>
+				<p class="mb-6 text-gray-400">
+					Shopping for a replacement? These roundups list the best alternatives to each tool,
+					compared on discovery, the four topology views, pricing, and licensing. Comparing Scanopy
+					itself? See <a href="/comparisons/scanopy-alternatives" class="text-blue-400 hover:text-blue-300">Scanopy alternatives</a>.
+				</p>
+				<ul class="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+					{#each data.altLinks as link (link.href)}
+						<li>
+							<a href={link.href} class="text-blue-400 hover:text-blue-300">
+								Best {link.name} alternatives
 							</a>
 						</li>
 					{/each}
