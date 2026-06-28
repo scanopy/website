@@ -277,25 +277,31 @@
 </script>
 
 <svelte:head>
-	<title>Scanopy - The Infrastructure Documentation Platform</title>
+	<title>Automated Network Diagram & Documentation Software - Scanopy</title>
 	<meta
 		name="description"
-		content="Never maintain another network diagram. Create a living model of your infrastructure. Built for modern teams and agents."
+		content="Scanopy discovers your network and builds living diagrams and documentation automatically. Never maintain another network diagram by hand."
 	/>
 	<link rel="canonical" href="https://scanopy.net/" />
 
-	<meta property="og:title" content="Scanopy - The Infrastructure Documentation Platform" />
+	<meta
+		property="og:title"
+		content="Automated Network Diagram & Documentation Software - Scanopy"
+	/>
 	<meta
 		property="og:description"
-		content="Never maintain another network diagram. Create a living model of your infrastructure. Built for modern teams and agents."
+		content="Scanopy discovers your network and builds living diagrams and documentation automatically. Never maintain another network diagram by hand."
 	/>
 	<meta property="og:url" content="https://scanopy.net/" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Scanopy - The Infrastructure Documentation Platform" />
+	<meta
+		name="twitter:title"
+		content="Automated Network Diagram & Documentation Software - Scanopy"
+	/>
 	<meta
 		name="twitter:description"
-		content="Never maintain another network diagram. Create a living model of your infrastructure. Built for modern teams and agents."
+		content="Scanopy discovers your network and builds living diagrams and documentation automatically. Never maintain another network diagram by hand."
 	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 
@@ -353,7 +359,8 @@
 					</h1>
 
 					<p class="mb-8 max-w-xl text-xl text-gray-300">
-						Create a living model of your infrastructure. Built for modern teams and agents.
+						Living network documentation that builds itself — and doesn't stop at the network. Built
+						for modern teams and agents.
 					</p>
 
 					<div class="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
@@ -436,7 +443,7 @@
 		<div class="container mx-auto max-w-4xl px-4">
 			<div class="mb-12 text-center">
 				<h2 class="text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Your infrastructure isn't documented. It's inferred.
+					Your network isn't documented. It's inferred.
 				</h2>
 			</div>
 
@@ -477,7 +484,7 @@
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Visualize your infrastructure from every angle
+					Visualize your whole network — and everything running on it
 				</h2>
 			</div>
 
@@ -685,7 +692,7 @@
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-3xl text-center">
 				<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl">
-					Your living infrastructure documentation is minutes away.
+					Your living network documentation is minutes away.
 				</h2>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
 					<a
@@ -752,19 +759,22 @@
 	<section class="border-t border-gray-800 py-12">
 		<div class="container mx-auto max-w-5xl px-4">
 			<p class="text-sm leading-relaxed text-gray-400">
-				Scanopy is an infrastructure documentation platform. A single scanner discovers hosts, maps
-				Layer 2 and Layer 3 topology, and fingerprints <a
+				Scanopy is a network documentation platform. A single scanner discovers hosts, maps Layer 2
+				and Layer 3 topology, and fingerprints <a
 					href="/services"
 					class="text-blue-400 hover:text-blue-300">{serviceCount} services</a
 				>
-				per host, generating four views of your infrastructure from one scan and keeping them current
-				on a schedule. The
+				per host — documenting not just the network but the services, dependencies, and workloads running
+				on it, in four views from one scan and keeping them current on a schedule. The
 				<a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
 				is free and open-source (AGPL-3.0); Cloud plans start at {startingPrice}/month. Read
 				<a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300"
-					>how automated infrastructure documentation works</a
-				>
-				or our
+					>how automated network documentation works</a
+				>, compare the
+				<a
+					href="/comparisons/best-automated-network-diagram-tools"
+					class="text-blue-400 hover:text-blue-300">best automated network diagram software</a
+				>, or review our
 				<a href="/docs/reference/security" class="text-blue-400 hover:text-blue-300"
 					>security practices</a
 				>.

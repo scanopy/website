@@ -159,7 +159,7 @@ export async function getSoftwareApplicationSchema() {
 		applicationCategory: 'NetworkApplication',
 		operatingSystem: 'Linux, Docker',
 		description:
-			'Infrastructure documentation software. Deploy a lightweight scanner to automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
+			'Automated network documentation and diagram software. Deploy a lightweight scanner to discover and document network architecture, service dependencies, workload placement, and physical topology.',
 		url: 'https://scanopy.net',
 		image: 'https://scanopy.net/scanopy-logo.webp',
 		screenshot: 'https://scanopy.net/hero-topology-dark.webp',
@@ -184,7 +184,7 @@ export function getProductSchema() {
 		'@type': 'Product',
 		name: 'Scanopy',
 		description:
-			'Infrastructure documentation software. Automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
+			'Automated network documentation and diagram software. Automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
 		image: 'https://scanopy.net/scanopy-logo.webp',
 		brand: {
 			'@type': 'Brand',
