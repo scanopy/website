@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { GithubStars, FeaturedIn, CustomerLogos, ViewSwitcher } from '$lib/components';
+	import {
+		GithubStars,
+		FeaturedIn,
+		CustomerLogos,
+		ViewSwitcher,
+		DiscoveryCardDemo
+	} from '$lib/components';
 	import { theme } from '$lib/theme.svelte';
 
 	// Tilt action: entrance tilt on scroll + mouse-follow tilt.
@@ -668,20 +674,11 @@
 					{/each}
 				</div>
 
-				<!-- Screenshot -->
+				<!-- Live discovery card (HTML re-creation of the in-app scan card) -->
 				<div class="flex justify-center lg:w-1/2">
-					<img
-						use:tilt
-						src="/screenshots/discovery-progress-480w.webp"
-						srcset="/screenshots/discovery-progress-480w.webp 480w, /screenshots/discovery-progress.webp 778w"
-						sizes="(max-width: 1024px) 100vw, 384px"
-						alt="Scanopy network scan in progress"
-						class="w-full max-w-sm rounded-xl"
-						style="box-shadow: 0 4px 40px rgb(var(--c-blue-500) / 0.08), 0 8px 24px rgba(0,0,0,0.4);"
-						loading="lazy"
-						width="480"
-						height="396"
-					/>
+					<div use:tilt class="w-full max-w-sm">
+						<DiscoveryCardDemo />
+					</div>
 				</div>
 			</div>
 		</div>
