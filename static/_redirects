@@ -103,6 +103,12 @@
 # Blog to comparisons migration (Apr 2026)
 /blog/best-automated-network-diagram-tools /comparisons/best-automated-network-diagram-tools 301
 
+# Blog → guides migration (Jul 2026): how-to / reference guides moved to /guides
+/blog/snmp-network-topology-mapping /guides/snmp-network-topology-mapping 301
+/blog/snmp-network-topology-mapping/ /guides/snmp-network-topology-mapping 301
+/blog/visualize-docker-containers-network /guides/visualize-docker-containers-network 301
+/blog/visualize-docker-containers-network/ /guides/visualize-docker-containers-network 301
+
 # Trailing slash fix
 /blog/ /blog 301
 
@@ -133,12 +139,33 @@
 /troubleshooting/daemon/ /docs/setting-up-daemons/troubleshooting-setup/ 301
 
 # Section-level catch-alls (cover every page under these old root sections).
-# Bare-section rules come first so an empty splat (e.g. /guides/) lands on the
-# section index in one hop instead of producing a double slash (/docs/guides//).
+# Bare-section rules come first so an empty splat (e.g. /reference/) lands on the
+# section index in one hop instead of producing a double slash (/docs/reference//).
 # Splat targets keep a trailing slash to avoid the docs app's 308 slash-add hop.
-/guides /docs/guides/ 301
-/guides/ /docs/guides/ 301
-/guides/* /docs/guides/:splat/ 301
+# /guides is now the marketing guides section (src/lib/guides). The docs guides live under
+# /docs/guides. Recover old inbound links to docs guides that were briefly served at /guides/<slug>
+# with EXPLICIT per-slug redirects, so they don't shadow the marketing /guides/<slug> pages.
+# (No bare /guides or /guides/* catch-all — those would swallow the marketing section.)
+/guides/docker-proxy /docs/guides/docker-proxy/ 301
+/guides/docker-proxy/ /docs/guides/docker-proxy/ 301
+/guides/macvlan-setup /docs/guides/macvlan-setup/ 301
+/guides/macvlan-setup/ /docs/guides/macvlan-setup/ 301
+/guides/multiple-daemons /docs/guides/multiple-daemons/ 301
+/guides/multiple-daemons/ /docs/guides/multiple-daemons/ 301
+/guides/oidc /docs/guides/oidc/ 301
+/guides/oidc/ /docs/guides/oidc/ 301
+/guides/prometheus-setup /docs/guides/prometheus-setup/ 301
+/guides/prometheus-setup/ /docs/guides/prometheus-setup/ 301
+/guides/scanning-remote-subnets /docs/guides/scanning-remote-subnets/ 301
+/guides/scanning-remote-subnets/ /docs/guides/scanning-remote-subnets/ 301
+/guides/scanning-vpn-networks /docs/guides/scanning-vpn-networks/ 301
+/guides/scanning-vpn-networks/ /docs/guides/scanning-vpn-networks/ 301
+/guides/sharing-topology /docs/guides/sharing-topology/ 301
+/guides/sharing-topology/ /docs/guides/sharing-topology/ 301
+/guides/snmp-credentials /docs/guides/snmp-credentials/ 301
+/guides/snmp-credentials/ /docs/guides/snmp-credentials/ 301
+/guides/unified-discovery-migration /docs/guides/unified-discovery-migration/ 301
+/guides/unified-discovery-migration/ /docs/guides/unified-discovery-migration/ 301
 /reference /docs/reference/ 301
 /reference/ /docs/reference/ 301
 /reference/* /docs/reference/:splat/ 301

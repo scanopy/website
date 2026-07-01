@@ -246,13 +246,13 @@ The difference is scale and repetition. Scanopy does this across your entire net
 
 Start with a single device. Here is the same SNMP data you walked by hand, the system identity from Step 1 and the interface list from Step 2, pulled and structured automatically for switch-core-01:
 
-![Scanopy host detail for switch-core-01: the SNMP System Information panel with the C2960 system description, system OID 1.3.6.1.4.1.9.1.1208, and location, the same fields the System MIB walk returned in Step 1.](/blog/snmp-network-topology-mapping/host-modal-details.png)
+![Scanopy host detail for switch-core-01: the SNMP System Information panel with the C2960 system description, system OID 1.3.6.1.4.1.9.1.1208, and location, the same fields the System MIB walk returned in Step 1.](/guides/snmp-network-topology-mapping/host-modal-details.png)
 
-![Scanopy interface list for switch-core-01: GigabitEthernet0/1 to 0/3 and Vlan10, with Gi0/1 expanded to show ifName, ifType, speed, admin and operational status, and the alias "Uplink to switch-access-01", the same fields the Interface MIB walk returned in Step 2.](/blog/snmp-network-topology-mapping/host-modal-interfaces.png)
+![Scanopy interface list for switch-core-01: GigabitEthernet0/1 to 0/3 and Vlan10, with Gi0/1 expanded to show ifName, ifType, speed, admin and operational status, and the alias "Uplink to switch-access-01", the same fields the Interface MIB walk returned in Step 2.](/guides/snmp-network-topology-mapping/host-modal-interfaces.png)
 
 Now the part that took real work in Step 6, correlating neighbors into a topology, done for you across a whole network. This is an L2 (physical) view of a small datacenter:
 
-![Scanopy L2 physical topology view: a switch (dc-switch-01) with labeled trunk and VLAN 20 server ports linked to a firewall, a Proxmox hypervisor, a Docker host, and an HAProxy load balancer, each link showing the port speed and MAC address.](/blog/snmp-network-topology-mapping/l2.png)
+![Scanopy L2 physical topology view: a switch (dc-switch-01) with labeled trunk and VLAN 20 server ports linked to a firewall, a Proxmox hypervisor, a Docker host, and an HAProxy load balancer, each link showing the port speed and MAC address.](/guides/snmp-network-topology-mapping/l2.png)
 
 Everything on that map traces back to an OID you queried by hand. The port labels (Firewall uplink, Proxmox uplink, Docker host uplink) are `ifAlias` values from the Interface MIB. The 10G speeds come from `ifHighSpeed`, the MAC addresses from `ifPhysAddress`, and the lines between ports are LLDP neighbor data. The down ports are collapsed into a single group off `ifOperStatus`. Same data, same MIBs, correlated and drawn automatically, then re-walked on every scan so it never goes stale.
 

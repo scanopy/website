@@ -73,6 +73,16 @@
 						<li>
 							<a href="/changelog" class="text-sm text-gray-400 hover:text-white">Changelog</a>
 						</li>
+						<li>
+							<a href="/services" class="text-sm text-gray-400 hover:text-white"
+								>Discoverable Services</a
+							>
+						</li>
+						<li>
+							<a href="/docs/reference/security" class="text-sm text-gray-400 hover:text-white"
+								>Security</a
+							>
+						</li>
 					</ul>
 				</div>
 
@@ -83,19 +93,12 @@
 						<li>
 							<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
 						</li>
+						<li>
+							<a href="/guides" class="text-sm text-gray-400 hover:text-white">Guides</a>
+						</li>
 						<li><a href="/blog" class="text-sm text-gray-400 hover:text-white">Blog</a></li>
 						<li>
 							<a href="/comparisons" class="text-sm text-gray-400 hover:text-white">Comparisons</a>
-						</li>
-						<li>
-							<a href="/services" class="text-sm text-gray-400 hover:text-white"
-								>Discoverable Services</a
-							>
-						</li>
-						<li>
-							<a href="/docs/reference/security" class="text-sm text-gray-400 hover:text-white"
-								>Security</a
-							>
 						</li>
 					</ul>
 				</div>

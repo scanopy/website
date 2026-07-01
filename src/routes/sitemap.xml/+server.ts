@@ -41,6 +41,7 @@ export async function GET() {
 		{ loc: '/roadmap', src: 'src/routes/roadmap/+page.svelte' },
 		{ loc: '/about', src: 'src/routes/about/+page.svelte' },
 		{ loc: '/blog', src: 'src/routes/blog/+page.svelte' },
+		{ loc: '/guides', src: 'src/routes/guides/+page.svelte' },
 		{ loc: '/comparisons', src: 'src/routes/comparisons/+page.svelte' },
 		{
 			loc: '/comparisons/scanopy-alternatives',
@@ -88,6 +89,34 @@ export async function GET() {
 			(entry) => `
   <url>
     <loc>https://scanopy.net/blog/${entry.slug}</loc>${entry.date ? `\n    <lastmod>${entry.date}</lastmod>` : ''}
+  </url>`
+		)
+		.join('');
+
+	// Load resources (guides) for dynamic URLs
+	const resourceFiles = import.meta.glob('/src/lib/guides/*.md', {
+		query: '?raw',
+		import: 'default'
+	});
+
+	const resourceEntries: { slug: string; date: string }[] = [];
+
+	for (const [path, loader] of Object.entries(resourceFiles)) {
+		const raw = (await loader()) as string;
+		const frontmatter = parseFrontmatter(raw);
+		const slug = path.split('/').pop()?.replace('.md', '') || '';
+
+		resourceEntries.push({
+			slug,
+			date: frontmatter.date || ''
+		});
+	}
+
+	const resourceUrls = resourceEntries
+		.map(
+			(entry) => `
+  <url>
+    <loc>https://scanopy.net/guides/${entry.slug}</loc>${entry.date ? `\n    <lastmod>${entry.date}</lastmod>` : ''}
   </url>`
 		)
 		.join('');
@@ -147,7 +176,7 @@ export async function GET() {
 		.join('');
 
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${comparisonUrls}${vsUrls}${altUrls}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${resourceUrls}${comparisonUrls}${vsUrls}${altUrls}
 </urlset>`;
 
 	return new Response(sitemap, {
