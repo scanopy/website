@@ -77,7 +77,7 @@ I did what any good homelabber would do - went the technical overkill route and 
 
 If you've spent any time on r/selfhosted, you've seen those beautiful hand-drawn network diagrams. They're great for learning and sharing, but they have the same problem as templates. The moment you change something, the diagram is wrong. I wanted that same utility, but alive. Something that stays current without you thinking about it.
 
-[Scanopy](/) deploys a lightweight daemon on your network. It discovers devices and [over 200 services](/services), maps connections via SNMP, and generates an interactive topology map that stays current with scheduled scans. It even visualizes Docker containers and what they're running. No spreadsheets. No manual entry. The documentation stays current because it's generated from the actual network, not from someone's memory.
+[Scanopy](/) deploys a lightweight daemon on your network. It discovers devices and [over 200 services](/services), maps connections [via SNMP](/blog/snmp-network-topology-mapping), and generates an interactive topology map that stays current with scheduled scans. It even [visualizes Docker containers](/blog/visualize-docker-containers-network) and what they're running. No spreadsheets. No manual entry. The documentation stays current because it's generated from the actual network, not from someone's memory.
 
 Deploy the daemon, point it at your subnets, and you get a live network map in minutes. Scanopy runs scheduled scans, so the map stays current as your network changes. New device? It shows up on the next scan.
 

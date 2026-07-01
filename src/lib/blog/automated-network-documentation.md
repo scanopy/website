@@ -45,7 +45,7 @@ None of this requires installing agents on endpoints. A single scanner on the ne
 
 ## How Automated Discovery Works, Step by Step
 
-The protocols above sound abstract until you see how they fit together. Here's what actually happens when an automated documentation tool scans your network:
+The protocols above sound abstract until you see how they fit together. If you want to see exactly what that looks like without a tool, here's [how to map network topology with SNMP by hand](/blog/snmp-network-topology-mapping). Here's what actually happens when an automated documentation tool scans your network:
 
 **Step 1: Find live hosts.** The scanner sends ARP requests across your subnets. Every device that responds reveals its IP address and MAC address. This is fast (a /24 subnet takes seconds) and catches everything from servers to printers to IoT devices that don't respond to ping.
 
