@@ -103,57 +103,57 @@ jobs:
 
             ${{ steps.blog.outputs.body }}
 
-      - name: Draft Brevo email campaign
-        env:
-          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          BREVO_TEMPLATE_ID: ${{ vars.BREVO_TEMPLATE_ID }}
-          EMAIL_BODY: ${{ steps.email.outputs.response }}
-          TITLE: ${{ steps.blog.outputs.title }}
-          SLUG: ${{ steps.blog.outputs.slug }}
-        run: |
-          if [ -z "$BREVO_API_KEY" ]; then
-            echo "::warning::BREVO_API_KEY not set — skipping email"
-            exit 0
-          fi
+      # - name: Draft Brevo email campaign
+      #   env:
+      #     BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+      #     BREVO_TEMPLATE_ID: ${{ vars.BREVO_TEMPLATE_ID }}
+      #     EMAIL_BODY: ${{ steps.email.outputs.response }}
+      #     TITLE: ${{ steps.blog.outputs.title }}
+      #     SLUG: ${{ steps.blog.outputs.slug }}
+      #   run: |
+      #     if [ -z "$BREVO_API_KEY" ]; then
+      #       echo "::warning::BREVO_API_KEY not set — skipping email"
+      #       exit 0
+      #     fi
 
-          if [ -z "$BREVO_TEMPLATE_ID" ]; then
-            echo "::warning::BREVO_TEMPLATE_ID not set — skipping email"
-            exit 0
-          fi
+      #     if [ -z "$BREVO_TEMPLATE_ID" ]; then
+      #       echo "::warning::BREVO_TEMPLATE_ID not set — skipping email"
+      #       exit 0
+      #     fi
 
-          BLOG_URL="https://scanopy.net/blog/${SLUG}?utm_source=brevo&utm_medium=email&utm_campaign=blog_${SLUG}"
+      #     BLOG_URL="https://scanopy.net/blog/${SLUG}?utm_source=brevo&utm_medium=email&utm_campaign=blog_${SLUG}"
 
-          PAYLOAD=$(jq -n \
-            --arg subject "$TITLE" \
-            --arg content "$EMAIL_BODY" \
-            --arg blog_url "$BLOG_URL" \
-            --arg name "Blog: ${TITLE}" \
-            --argjson templateId "$BREVO_TEMPLATE_ID" \
-            '{
-              type: "classic",
-              sender: {name: "Maya from Scanopy", email: "maya@email.scanopy.net"},
-              name: $name,
-              subject: $subject,
-              templateId: $templateId,
-              params: {content: $content, blog_url: $blog_url},
-              recipients: {listIds: [13]},
-              replyTo: "maya@email.scanopy.net"
-            }')
+      #     PAYLOAD=$(jq -n \
+      #       --arg subject "$TITLE" \
+      #       --arg content "$EMAIL_BODY" \
+      #       --arg blog_url "$BLOG_URL" \
+      #       --arg name "Blog: ${TITLE}" \
+      #       --argjson templateId "$BREVO_TEMPLATE_ID" \
+      #       '{
+      #         type: "classic",
+      #         sender: {name: "Maya from Scanopy", email: "maya@email.scanopy.net"},
+      #         name: $name,
+      #         subject: $subject,
+      #         templateId: $templateId,
+      #         params: {content: $content, blog_url: $blog_url},
+      #         recipients: {listIds: [13]},
+      #         replyTo: "maya@email.scanopy.net"
+      #       }')
 
-          CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
-            -H "api-key: ${BREVO_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d "$PAYLOAD")
+      #     CAMPAIGN_RESPONSE=$(curl -sf -X POST "https://api.brevo.com/v3/emailCampaigns" \
+      #       -H "api-key: ${BREVO_API_KEY}" \
+      #       -H "Content-Type: application/json" \
+      #       -d "$PAYLOAD")
 
-          CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
+      #     CAMPAIGN_ID=$(echo "$CAMPAIGN_RESPONSE" | jq -r '.id')
 
-          if [ -z "$CAMPAIGN_ID" ] || [ "$CAMPAIGN_ID" = "null" ]; then
-            echo "::error::Failed to get campaign ID from Brevo response: $CAMPAIGN_RESPONSE"
-            exit 1
-          fi
+      #     if [ -z "$CAMPAIGN_ID" ] || [ "$CAMPAIGN_ID" = "null" ]; then
+      #       echo "::error::Failed to get campaign ID from Brevo response: $CAMPAIGN_RESPONSE"
+      #       exit 1
+      #     fi
 
-          echo "Brevo campaign draft created: $CAMPAIGN_ID"
-          echo "Preview and send from https://app.brevo.com/campaign/email/$CAMPAIGN_ID"
+      #     echo "Brevo campaign draft created: $CAMPAIGN_ID"
+      #     echo "Preview and send from https://app.brevo.com/campaign/email/$CAMPAIGN_ID"
 
       - name: Post to Twitter/X
         uses: noweh/post-tweet-v2-action@v1.0
