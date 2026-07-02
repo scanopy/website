@@ -1,5 +1,5 @@
 {
   "title": "Guides",
   "defaultOpen": true,
-  "pages": ["unified-discovery-migration", "snmp-credentials", "sharing-topology", "multiple-daemons", "scanning-remote-subnets", "scanning-vpn-networks", "docker-proxy", "macvlan-setup", "oidc", "prometheus-setup"]
+  "pages": ["unified-discovery-migration", "snmp-credentials", "sharing-topology", "multiple-daemons", "scanning-remote-subnets", "scanning-vpn-networks", "docker-proxy", "podman", "macvlan-setup", "oidc", "prometheus-setup"]
 }

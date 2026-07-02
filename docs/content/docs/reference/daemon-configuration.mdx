@@ -52,15 +52,39 @@ The config file stores runtime state (daemon ID, host ID) alongside your setting
 
 <DaemonConfigTable />
 
-## New in v0.15.0
+## Seeding Credentials at Registration
 
-### `--credential-id`
+### `--credential-id` / `SCANOPY_CREDENTIAL_IDS`
 
-Specifies a credential ID to seed during daemon registration. Can be repeated to seed multiple credentials. Credentials specified here will be used during the daemon's first scan and [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts at matching IPs. See [Credentials](/using-scanopy/credentials/#during-daemon-setup-new-daemons) for details.
+Seeds one or more credentials for the daemon to use on its first scan — so it can gather SNMP, Docker, or Podman data before you assign credentials in the UI. Provide credentials as a repeatable `--credential-id` flag or as a comma-separated `SCANOPY_CREDENTIAL_IDS` environment variable.
 
-### `--enable-local-docker-socket`
+Each entry is a credential ID, optionally targeted at specific IP addresses:
 
-Controls whether the daemon scans containers via the local Docker socket. Defaults to `true`. Set to `false` to disable local Docker discovery (useful when using a Docker Proxy credential instead).
+| Form | Applies the credential to |
+| ---- | ------------------------- |
+| `<uuid>` | The whole network (network default — tried on every host the daemon scans). |
+| `<uuid>@<ip>` | The host discovered at `<ip>`. |
+| `<uuid>@<ip>+<ip>` | Several specific hosts — join IPs with `+`. |
+
+To target the daemon's **own** host — for example a local Docker or Podman socket credential — use its loopback address: `<uuid>@127.0.0.1`.
+
+```bash
+# CLI (repeatable)
+scanopy-daemon --credential-id 1a2b3c4d-...@192.168.1.10 --credential-id 5e6f7a8b-...@127.0.0.1
+
+# Environment (comma-separated)
+export SCANOPY_CREDENTIAL_IDS="1a2b3c4d-...@192.168.1.10,5e6f7a8b-...@127.0.0.1"
+```
+
+After the first scan, seeded credentials are [auto-assigned](/using-scanopy/credentials/#auto-assignment) to the matching hosts and used on every subsequent scan.
+
+<Callout type="info">
+Seeded credentials are applied **only at first registration**. If the daemon is already registered, they are ignored and the daemon logs a reminder to manage its credentials in the Scanopy UI instead.
+</Callout>
+
+<Callout type="info">
+There is no flag for scanning the local Docker or Podman socket. Local sockets are ordinary credentials — create a [Docker Socket](/guides/docker-proxy/) or [Podman Socket](/guides/podman/) credential and, if seeding it here, reference it with the loopback form above.
+</Callout>
 
 ## Deprecated in v0.15.0
 

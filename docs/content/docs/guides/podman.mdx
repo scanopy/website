@@ -1,0 +1,106 @@
+---
+title: Set up Podman discovery
+description: How Scanopy discovers Podman containers and pods, via the local socket or a remote Podman API proxy.
+---
+
+Scanopy daemons discover Podman containers and pods by connecting to the Podman API. Because Podman exposes a Docker-compatible API, discovery works the same way as [Docker](/guides/docker-proxy/): the daemon lists running containers, maps their networks and published ports, identifies containerized services, and creates container bridge subnets automatically.
+
+For background on how credentials work — types, scope models, resolution order, and auto-assignment — see [Credentials](/using-scanopy/credentials/).
+
+## Discovery Modes
+
+There are three ways to connect a daemon to the Podman API, depending on where Podman runs and your security requirements:
+
+### Direct Socket Access (Default)
+
+The daemon connects directly to the Podman socket on its own host. The daemon scans it automatically whenever the socket is accessible — there's no toggle to switch on.
+
+The daemon looks for the socket in this order:
+
+1. The `CONTAINER_HOST` environment variable, when it points at a `unix://` socket path
+2. The rootful socket: `/run/podman/podman.sock`
+3. The rootless socket: `$XDG_RUNTIME_DIR/podman/podman.sock`
+
+**Use when:** The daemon runs on the same host as Podman and you trust it with Podman API access. This is the simplest setup.
+
+If your socket lives at a non-default path, create a **Podman Socket** credential and set its socket path — this overrides auto-detection.
+
+### Local Proxy
+
+The daemon connects to a proxy in front of the Podman socket on the same host. A proxy lets you restrict which API operations are allowed.
+
+**Use when:** You want to limit what the daemon can do with the Podman API — for example, to satisfy compliance requirements or reduce the blast radius of a compromised daemon.
+
+### Remote Proxy
+
+The daemon connects to a Podman API endpoint on a different host, enabling container discovery on remote machines.
+
+**Use when:** You want to discover containers on a host where the daemon isn't running. Expose the Podman API on the remote host, then create a Podman Proxy credential pointing to it.
+
+## Enabling the Podman API Socket
+
+Podman's API socket isn't always running by default. Start it with systemd:
+
+```bash
+# Rootless (per-user socket at $XDG_RUNTIME_DIR/podman/podman.sock)
+systemctl --user start podman.socket
+
+# Rootful (system socket at /run/podman/podman.sock)
+sudo systemctl start podman.socket
+```
+
+<Callout type="info">
+**Rootless vs rootful.** A rootless socket only sees that user's containers, and rootless networking may not expose a bridge subnet. Run the daemon (or the proxy) as the same user that owns the containers you want to discover, or use the rootful socket for host-wide visibility.
+</Callout>
+
+## Exposing Podman Over the Network
+
+For remote discovery, put the Podman socket behind a TCP endpoint. Any reverse proxy that forwards to the socket works — for example, an nginx proxy that maps a TCP port onto `/run/podman/podman.sock`, optionally terminating TLS for a secure connection. Restrict the proxy to the API operations Scanopy needs (see [Required API operations](#required-api-operations) below).
+
+Once the endpoint is reachable, point a Podman Proxy credential at its address and port.
+
+## Creating a Podman Credential
+
+Create a credential in Scanopy so the daemon knows how to connect.
+
+1. Go to **Assets > Credentials**
+2. Click **Create Credential**
+3. Select **Podman Proxy** (for a network endpoint) or **Podman Socket** (for a non-default local socket path) as the type
+4. Configure the connection:
+   - **Podman Proxy** — the endpoint **Port** (default: 2375), an optional URL **Path** prefix, and, for HTTPS endpoints, the **SSL Certificate**, **SSL Key**, and **SSL Chain** (entered inline or as file paths readable by the daemon)
+   - **Podman Socket** — the **socket path** to use instead of the auto-detected default
+5. Save the credential
+
+### Assigning to a host
+
+Podman credentials are **PerHost** — assign them to the specific host where you want Podman discovery.
+
+**For new hosts** (not yet discovered): Add the credential during daemon setup (the **Integrations** step) or from the discovery **Credentials** tab, targeting the host by IP — or the daemon host itself (`127.0.0.1`) for a local socket. The credential is [auto-assigned](/using-scanopy/credentials/#auto-assignment) after the first scan discovers the host.
+
+**For existing hosts**: Open the host edit modal, go to the **Credentials** tab, and add the Podman credential. You can optionally scope it to a specific network interface.
+
+## How Podman Containers Appear
+
+Discovered Podman containers show up as first-class **Podman Container** services on their host, with their published ports and networks — the same way Docker containers appear as **Docker Container** services. Pods are modeled as generic containers, with each container in the pod attributed individually. The container-to-host relationship shows up in the [Workloads perspective](/using-scanopy/topology/workloads).
+
+## Required API Operations
+
+Scanopy uses the same API operations for Podman as it does for Docker — listing and inspecting containers, listing networks for subnet discovery, and `exec` to probe HTTP endpoints inside containers that don't publish ports to the host. When you put a proxy in front of the socket, allow these operations. See [Required Docker API Permissions](/guides/docker-proxy/#required-docker-api-permissions) for the endpoint-by-endpoint list — the Podman compatibility API mirrors it.
+
+## Troubleshooting
+
+### No containers discovered
+
+1. Confirm the API socket is running: `systemctl --user status podman.socket` (rootless) or `sudo systemctl status podman.socket` (rootful)
+2. Confirm the daemon can see the socket path — check `CONTAINER_HOST`, `/run/podman/podman.sock`, and `$XDG_RUNTIME_DIR/podman/podman.sock`
+3. If the daemon and containers run under different users, the rootless socket won't expose them — run both as the same user or use the rootful socket
+
+### "Connection refused" to a proxy
+
+1. Verify the proxy is running and listening on the expected port
+2. Ensure the daemon can reach the proxy (same network or an exposed port)
+3. Check the proxy forwards to a valid Podman socket path
+
+### SSL certificate errors
+
+For HTTPS endpoints, see the [Docker Proxy SSL troubleshooting](/guides/docker-proxy/#ssl-certificate-errors) steps — certificate handling is identical.

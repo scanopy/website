@@ -13,10 +13,9 @@ description: Create, upgrade, and remove daemons.
 
 Go to **Discover > Scan > Daemons** and click **Create Daemon**. The wizard walks you through:
 
-1. **Configuration** — network, polling mode, and daemon name
-2. **Credentials** — optionally add SNMP and Docker Proxy credentials with target IPs. These will be [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan. See [Credentials](/using-scanopy/credentials/#during-daemon-setup-new-daemons) for details.
-3. **Advanced** — Docker mode selection (Disabled, Local Socket, or Proxy) and other options
-4. **Install** — a ready-to-copy install command with the correct API key, server URL, daemon name, and any `--credential-id` flags
+1. **Setup** — network, polling mode, and daemon name
+2. **Integrations** — optionally add SNMP, Docker, and Podman credentials, targeting all hosts or specific hosts. These are [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan. See [Credentials](/using-scanopy/credentials/#during-daemon-setup-new-daemons) for details.
+3. **Install** — a ready-to-copy install command with the correct API key, server URL, daemon name, and any `--credential-id` flags
 
 For help choosing a polling mode and planning where to place daemons, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
@@ -150,7 +149,7 @@ You can update daemon properties after creation by editing the [daemon config fi
 
 The daemon's name is the only property that propagates to the server. All other config properties are local to the daemon.
 
-Each daemon also reports its **capabilities** to the server: whether it has Docker socket access (for container discovery) and which subnets it has network interfaces on (for default scan targets). To update capabilities after changing the host's network configuration or Docker access, run a SelfReport discovery.
+Each daemon also reports its **capabilities** to the server: whether it has Docker or Podman socket access (for container discovery) and which subnets it has network interfaces on (for default scan targets). To update capabilities after changing the host's network configuration or Docker access, run a SelfReport discovery.
 
 ## Removing a Daemon
 

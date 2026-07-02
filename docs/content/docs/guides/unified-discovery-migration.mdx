@@ -57,13 +57,9 @@ Update any code that creates credentials or filters by credential type. The vers
 
 When creating a new daemon or editing an existing discovery, a **Credentials** tab lets you add SNMP and Docker Proxy credentials with target IPs. Credentials are [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan. See [Credentials](/using-scanopy/credentials/) for details.
 
-### Docker mode selection
+### Container discovery
 
-During daemon setup, you can now choose how Docker discovery works:
-
-- **Disabled** — no Docker scanning
-- **Local Socket** — scan containers via the local Docker socket (default)
-- **Proxy** — scan containers via a remote Docker Proxy credential
+Docker and Podman container discovery run automatically when the daemon can reach a local socket — there's no mode to select. To scan a remote or access-restricted runtime, add a proxy credential instead. See [Set up a Docker Proxy](/guides/docker-proxy/) or [Set up Podman discovery](/guides/podman/).
 
 ### Scan lifecycle
 

@@ -11,7 +11,7 @@ Each daemon runs a single discovery that combines network scanning, Docker conta
 
 1. Scans configured subnets to find hosts via IP, port, and ARP scanning
 2. Queries SNMP on discovered hosts (if [credentials are configured](/using-scanopy/credentials/))
-3. Discovers Docker containers via the local socket or a [Docker Proxy credential](/guides/docker-proxy/) (local or remote)
+3. Discovers Docker and Podman containers via the local socket or a [proxy credential](/guides/docker-proxy/) (local or remote)
 4. Reports its own capabilities and reachable subnets to the server
 
 <Callout type="info">
@@ -36,19 +36,19 @@ Scans IP addresses on configured subnets to find hosts and services.
 
 **Large interfaced subnets**: For very large subnets (larger than /15 by default), the daemon caps the number of IPs it ARP scans to prevent excessive memory use and scan times. You can adjust this via the `arp_scan_cutoff` scan setting — see [Scan Performance](/setting-up-daemons/troubleshooting-scans/scan-performance/#large-interfaced-subnets) for details.
 
-### Docker Container Discovery
+### Container Discovery
 
-Discovers containers via the Docker API.
+Discovers containers via the Docker or Podman API.
 
 - Lists running containers with names and metadata
 - Maps container networks and port bindings
 - Identifies containerized services
-- Creates Docker bridge subnets automatically
+- Creates container bridge subnets automatically
 
-Docker discovery can work in two modes:
+The daemon can reach a container runtime in two ways:
 
-- **Local socket** — the daemon connects directly to `/var/run/docker.sock` on its own host. Enable via the **Scan local Docker socket** toggle in the discovery targets.
-- **Docker Proxy credential** — the daemon connects to a Docker socket proxy, which can be local or remote. See [Set up a Docker Proxy](/guides/docker-proxy/) for configuration.
+- **Local socket** — the daemon connects directly to the Docker or Podman socket on its own host. This happens automatically when the socket is accessible; create a **Docker Socket** or **Podman Socket** credential only to point at a non-default socket path.
+- **Proxy credential** — the daemon connects to a Docker or Podman API proxy, which can be local or remote. See [Set up a Docker Proxy](/guides/docker-proxy/) or [Set up Podman discovery](/guides/podman/) for configuration.
 
 ## Scanning Lifecycle
 

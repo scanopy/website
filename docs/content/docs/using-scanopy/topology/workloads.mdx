@@ -29,7 +29,7 @@ bare-metal-host
 
 ## What drives it
 
-The hierarchy is built from virtualization relationships on each entity: a VM points at the hypervisor service that runs it, and a container points at the container runtime service that runs it. Docker containers populate automatically when a Docker credential is configured. VMs and containers managed by Proxmox, vCenter, ESXi, or Podman are linked through the virtualization assignment UI, since network discovery alone doesn't tie them to their manager.
+The hierarchy is built from virtualization relationships on each entity: a VM points at the hypervisor service that runs it, and a container points at the container runtime service that runs it. Docker and Podman containers populate automatically when a Docker or Podman credential is configured. VMs and containers managed by Proxmox, vCenter, or ESXi are linked through the virtualization assignment UI, since network discovery alone doesn't tie them to their manager.
 
 ## When to use it
 
