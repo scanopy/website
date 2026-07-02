@@ -93,7 +93,7 @@ Without SNMP, hosts have only what port scanning and DNS provide — IP addresse
 When the daemon queries a host via SNMP, it resolves which community string to use in this order:
 
 1. **Host-specific assignment** — a credential assigned directly to the host
-2. **Network default** — a Broadcast-scoped credential assigned to the host's network
+2. **Network default** — a credential targeted at the host's whole network (the **Network** target)
 3. **Fallback** — the community string `public`
 
 <Callout type="info">

@@ -73,7 +73,7 @@ Create a credential in Scanopy so the daemon knows how to connect.
 
 ### Assigning to a host
 
-Podman credentials are **PerHost** — assign them to the specific host where you want Podman discovery.
+Podman credentials target a specific host — the **Daemon host** (for a local socket) or a **Remote host** — so assign them to the host where you want Podman discovery.
 
 **For new hosts** (not yet discovered): Add the credential during daemon setup (the **Integrations** step) or from the discovery **Credentials** tab, targeting the host by IP — or the daemon host itself (`127.0.0.1`) for a local socket. The credential is [auto-assigned](/using-scanopy/credentials/#auto-assignment) after the first scan discovers the host.
 
