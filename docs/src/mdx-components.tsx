@@ -1,6 +1,7 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import { APIPage } from '@/components/api-page';
+import { CredentialTypesTable } from '@/components/credential-types-table';
 import { DaemonConfigTable } from '@/components/daemon-config-table';
 import { EntityCoreTables } from '@/components/entity-core-tables';
 import { Mermaid } from '@/components/mermaid';
@@ -12,6 +13,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
     APIPage,
+    CredentialTypesTable,
     DaemonConfigTable,
     EntityCoreTables,
     Mermaid,
