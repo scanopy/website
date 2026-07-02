@@ -37,6 +37,7 @@ export async function GET() {
 		{ loc: '/', src: 'src/routes/+page.svelte' },
 		{ loc: '/pricing', src: 'src/routes/pricing/+page.svelte' },
 		{ loc: '/services', src: 'src/routes/services/+page.svelte' },
+		{ loc: '/integrations', src: 'src/routes/integrations/+page.svelte' },
 		{ loc: '/changelog', src: 'src/routes/changelog/+page.svelte' },
 		{ loc: '/roadmap', src: 'src/routes/roadmap/+page.svelte' },
 		{ loc: '/about', src: 'src/routes/about/+page.svelte' },

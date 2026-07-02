@@ -74,11 +74,6 @@
 							<a href="/changelog" class="text-sm text-gray-400 hover:text-white">Changelog</a>
 						</li>
 						<li>
-							<a href="/services" class="text-sm text-gray-400 hover:text-white"
-								>Discoverable Services</a
-							>
-						</li>
-						<li>
 							<a href="/docs/reference/security" class="text-sm text-gray-400 hover:text-white"
 								>Security</a
 							>
@@ -90,6 +85,14 @@
 				<div>
 					<span class="mb-4 block font-semibold text-white">Resources</span>
 					<ul class="space-y-2">
+						<li>
+							<a href="/integrations" class="text-sm text-gray-400 hover:text-white">Integrations</a>
+						</li>
+						<li>
+							<a href="/services" class="text-sm text-gray-400 hover:text-white"
+								>Discoverable Services</a
+							>
+						</li>
 						<li>
 							<a href="/docs" class="text-sm text-gray-400 hover:text-white">Documentation</a>
 						</li>
@@ -109,6 +112,18 @@
 					<ul class="space-y-2">
 						<li><a href="/about" class="text-sm text-gray-400 hover:text-white">About</a></li>
 						<li><a href="/press" class="text-sm text-gray-400 hover:text-white">Press</a></li>
+						<li>
+							<a
+								href="https://www.linkedin.com/company/scanopynet/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-sm text-gray-400 hover:text-white"
+								onclick={() =>
+									trackExternalLink('linkedin', 'https://www.linkedin.com/company/scanopynet/')}
+							>
+								LinkedIn
+							</a>
+						</li>
 						<li>
 							<a href="mailto:hello@scanopy.net" class="text-sm text-gray-400 hover:text-white"
 								>hello@scanopy.net</a

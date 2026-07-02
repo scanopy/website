@@ -58,6 +58,28 @@ export interface ServiceDefinition {
 	logo_needs_white_background?: boolean;
 }
 
+export interface IntegrationTransport {
+	id: string;
+	name: string;
+	description: string;
+	requires_config: boolean;
+	single_endpoint_per_host: boolean;
+	targets: string[];
+}
+
+export interface Integration {
+	id: string;
+	name: string;
+	category: string;
+	has_logo: boolean;
+	logo_ext: string;
+	logo_slug: string;
+	logo_needs_white_background: boolean;
+	discovers: string;
+	summary: string;
+	transports: IntegrationTransport[];
+}
+
 export interface GalleryAuthor {
 	name: string;
 	url?: string;

@@ -162,6 +162,13 @@ export const analytics = {
 	},
 
 	/**
+	 * Track integration request button clicks
+	 */
+	integrationRequestClicked: () => {
+		capture('integration_request_clicked');
+	},
+
+	/**
 	 * Track interest in roadmap items (clicks to expand/view details)
 	 */
 	roadmapItemClicked: (props: { feature_id: string; feature_name: string; category: string }) => {
