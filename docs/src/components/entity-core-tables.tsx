@@ -1,6 +1,6 @@
 'use client';
 
-import entityMetadata from '@/lib/fixtures/entity-metadata.json';
+import entityMetadata from '$lib/fixtures/entity-metadata.json';
 
 interface EntityMetadataEntry {
   id: string;

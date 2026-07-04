@@ -1,8 +1,8 @@
 'use client';
 
 import { Mermaid } from './mermaid';
-import schemaER from '@/lib/fixtures/schema-er.mermaid?raw';
-import schemaFull from '@/lib/fixtures/schema.mermaid?raw';
+import schemaER from '$lib/fixtures/schema-er.mermaid?raw';
+import schemaFull from '$lib/fixtures/schema.mermaid?raw';
 
 /**
  * Simplified ER diagram showing only table relationships (no columns).
