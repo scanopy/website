@@ -598,9 +598,11 @@
 				</h2>
 			</div>
 
-			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+			<div
+				class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 md:grid md:snap-none md:gap-6 md:overflow-visible md:pb-0 md:grid-cols-2 lg:grid-cols-3"
+			>
 				{#each useCases as useCase (useCase.title)}
-					<div class="card card-static p-8">
+					<div class="card card-static shrink-0 basis-[85%] snap-start p-8 md:basis-auto">
 						<div
 							class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10"
 						>
@@ -732,9 +734,11 @@
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">What users are saying</h2>
 			</div>
 
-			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+			<div
+				class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 md:grid md:snap-none md:gap-6 md:overflow-visible md:pb-0 md:grid-cols-2 lg:grid-cols-4"
+			>
 				{#each testimonials as testimonial (testimonial.author)}
-					<div class="card card-static relative p-5">
+					<div class="card card-static relative shrink-0 basis-[85%] snap-start p-5 md:basis-auto">
 						<Quote class="absolute right-3 top-3 h-6 w-6 text-blue-500/20" />
 						<p class="mb-4 text-sm italic text-gray-300">
 							"{testimonial.quote}"

@@ -6,13 +6,14 @@
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { onMount } from 'svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { getProductSchema, getFAQPageSchema } from '$lib/schemas';
+	import { getProductSchema, getFAQPageSchema, getStartingMonthlyPrice } from '$lib/schemas';
 
 	onMount(() => {
 		analytics.pricingViewed({ referrer: document.referrer || undefined });
 	});
 
 	const productSchema = getProductSchema();
+	const startingPrice = getStartingMonthlyPrice();
 	const pressMentions = pressMentionsData as PressMention[];
 
 	const pricingFaqs = [
@@ -160,20 +161,15 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-5xl px-4">
 		<p class="text-sm leading-relaxed text-gray-400">
-			Every Scanopy plan uses flat-rate pricing, you don't pay per device. Pro and Business include
-			a 14-day free trial so you can evaluate Scanopy before committing. Starter adds scheduled
-			discovery, shareable views, and SVG export for $14.99/month. Pro unlocks API access, Mermaid
-			diagram export, and embeddable views across up to 3 networks - ideal for consultants or
-			multi-site setups. Business is built for MSPs and IT teams managing 15+ networks, with
-			Confluence export, audit logs, webhooks, and priority support. All paid plans include annual
-			billing at a ~20% discount. If you prefer to self-host, the <a
-				href="/community"
-				class="text-blue-400 hover:text-blue-300">Community Edition</a
-			>
-			is free for a single network and user, and the
-			<a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial Edition</a> adds commercial
-			licensing, unlimited networks and seats, and advanced features. Enterprise includes fully managed
-			deployment with SSO, whitelabeling, and live chat support.
+			Every Scanopy plan uses flat-rate pricing — you pay per plan, not per device, so your bill
+			stays the same whether you're documenting 10 hosts or 10,000. Cloud plans start at
+			{startingPrice}/month (billed annually) and include a free trial, scaling from a single network
+			up to the multi-network tiers built for consultants, MSPs, and IT teams. Prefer to self-host? The
+			<a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
+			is free and open-source, the
+			<a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial Edition</a>
+			adds a commercial license, unlimited networks and seats, and advanced features, and Enterprise
+			adds fully managed deployment with SSO, whitelabeling, and support.
 		</p>
 	</div>
 </section>
