@@ -14,17 +14,17 @@
 	<title>About - Scanopy</title>
 	<meta
 		name="description"
-		content="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work. We built a tool that does it for you."
+		content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you."
 	/>
 	<link rel="canonical" href="https://scanopy.net/about" />
 
 	<meta property="og:title" content="About - Scanopy" />
-	<meta property="og:description" content="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work. We built a tool that does it for you." />
+	<meta property="og:description" content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you." />
 	<meta property="og:url" content="https://scanopy.net/about" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="About - Scanopy" />
-	<meta name="twitter:description" content="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work. We built a tool that does it for you." />
+	<meta name="twitter:description" content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you." />
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
@@ -39,14 +39,14 @@
 			name: 'Scanopy',
 			url: 'https://scanopy.net'
 		},
-		knowsAbout: ['infrastructure documentation', 'network topology', 'automated discovery', 'service dependency mapping'],
+		knowsAbout: ['network documentation', 'network topology', 'automated discovery', 'service dependency mapping'],
 		sameAs: ['https://github.com/mayanayza']
 	})}</script>`}
 </svelte:head>
 
 <PageHero
-	title="Infrastructure documentation shouldn't be a chore"
-	subtitle="Scanopy exists because keeping infrastructure documentation accurate is tedious, thankless work - and nobody actually does it. We built a tool that does it for you."
+	title="Network documentation shouldn't be a chore"
+	subtitle="Scanopy exists because keeping network documentation accurate is tedious, thankless work - and nobody actually does it. We built a tool that does it for you."
 />
 
 <!-- Origin Story -->
@@ -101,7 +101,7 @@
 				</h3>
 				<p class="text-gray-400 leading-relaxed">
 					Scanopy doesn't do asset lifecycle management, procurement tracking, or compliance
-					workflows. It does infrastructure documentation. That's a feature, not a gap. You don't need
+					workflows. It does network documentation. That's a feature, not a gap. You don't need
 					a $15/device/month platform when what you actually need is an accurate network map - and our <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing model is aligned</a> to this, so you don't pay per device with Scanopy.
 				</p>
 			</div>
@@ -212,7 +212,7 @@
 					onclick={() =>
 						analytics.ctaClicked({
 							location: 'about_cta',
-							destination: 'demo',
+							destination: 'live_demo',
 							text: 'View Live Demo'
 						})}
 				>

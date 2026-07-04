@@ -3,7 +3,7 @@ title: Set up Podman discovery
 description: How Scanopy discovers Podman containers and pods, via the local socket or a remote Podman API proxy.
 ---
 
-Scanopy daemons discover Podman containers and pods by connecting to the Podman API. Because Podman exposes a Docker-compatible API, discovery works the same way as [Docker](/guides/docker-proxy/): the daemon lists running containers, maps their networks and published ports, identifies containerized services, and creates container bridge subnets automatically.
+Scanopy daemons discover Podman containers and pods by connecting to the Podman API. Because Podman exposes a Docker-compatible API, discovery works the same way as [Docker](/guides/integrations/docker/): the daemon lists running containers, maps their networks and published ports, identifies containerized services, and creates container bridge subnets automatically.
 
 For background on how credentials work — types, scope models, resolution order, and auto-assignment — see [Credentials](/using-scanopy/credentials/).
 
@@ -85,7 +85,7 @@ Discovered Podman containers show up as first-class **Podman Container** service
 
 ## Required API Operations
 
-Scanopy uses the same API operations for Podman as it does for Docker — listing and inspecting containers, listing networks for subnet discovery, and `exec` to probe HTTP endpoints inside containers that don't publish ports to the host. When you put a proxy in front of the socket, allow these operations. See [Required Docker API Permissions](/guides/docker-proxy/#required-docker-api-permissions) for the endpoint-by-endpoint list — the Podman compatibility API mirrors it.
+Scanopy uses the same API operations for Podman as it does for Docker — listing and inspecting containers, listing networks for subnet discovery, and `exec` to probe HTTP endpoints inside containers that don't publish ports to the host. When you put a proxy in front of the socket, allow these operations. See [Required Docker API Permissions](/guides/integrations/docker/#required-docker-api-permissions) for the endpoint-by-endpoint list — the Podman compatibility API mirrors it.
 
 ## Troubleshooting
 
@@ -103,4 +103,4 @@ Scanopy uses the same API operations for Podman as it does for Docker — listin
 
 ### SSL certificate errors
 
-For HTTPS endpoints, see the [Docker Proxy SSL troubleshooting](/guides/docker-proxy/#ssl-certificate-errors) steps — certificate handling is identical.
+For HTTPS endpoints, see the [Docker Proxy SSL troubleshooting](/guides/integrations/docker/#ssl-certificate-errors) steps — certificate handling is identical.

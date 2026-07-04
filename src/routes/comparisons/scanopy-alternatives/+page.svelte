@@ -177,7 +177,7 @@
 					<p>
 						The tools above each lead with a different job — monitoring, discovery, or a structured
 						source of truth — and several can produce a diagram as a byproduct. Scanopy's job is
-						infrastructure documentation: a single scan returns four switchable views (L2 physical,
+						network documentation: a single scan returns four switchable views (L2 physical,
 						L3 logical, workloads, and applications) and fingerprints the services running on each
 						host, so the map shows not just what is connected but what each device is actually
 						running.

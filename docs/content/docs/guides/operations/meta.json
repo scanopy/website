@@ -1,0 +1,5 @@
+{
+  "title": "Access & Operations",
+  "defaultOpen": true,
+  "pages": ["oidc", "prometheus-setup", "sharing-topology", "unified-discovery-migration"]
+}

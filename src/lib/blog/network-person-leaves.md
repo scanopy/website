@@ -4,9 +4,22 @@ description: 42% of network knowledge lives in one person's head. When they leav
 keyword: network documentation best practices
 slug: network-person-leaves
 date: 2026-03-31
-dateModified: 2026-03-31
+dateModified: 2026-07-03
 tldr: Most network documentation depends on one person's memory and habits. When they leave, the knowledge leaves too. The fix isn't documenting more. It's automating documentation so it survives personnel changes.
 ctaDescription: Your documentation shouldn't depend on any one person. Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map in minutes. When someone leaves, the map stays current because it was never dependent on them.
+faq:
+  - question: What is the bus factor, and why does it matter for networks?
+    answer: The bus factor is how many people would need to leave before critical knowledge is lost, often just one. For networks it is acute because the most valuable knowledge is not the configuration itself, which lives in the devices, but the reasoning behind it. That why accumulates over years in one person's head and can walk out the door in an afternoon.
+  - question: Why isn't just document everything enough?
+    answer: Because manual documentation is a second job nobody signed up for, and it decays by default. Surveys show many organizations rarely update their docs even though they change configs weekly, so a gap opens between what changed and what is written down. Telling overworked staff to document more adds a task to an already overloaded list rather than fixing the cause.
+  - question: What network knowledge is lost when the network person leaves?
+    answer: The configs stay in the devices, but the reasoning leaves: why the OSPF areas are split a certain way, which firewall rules were temporary fixes never removed, why a subnet uses a /23, which vendor's SNMP needs a workaround, and undocumented dependencies between systems. This tribal knowledge accumulates over years and is the hardest part for a replacement to reverse-engineer.
+  - question: How do you keep network documentation from depending on one person?
+    answer: Remove the human bottleneck by generating documentation from the network itself. A lightweight daemon scans on a schedule and discovers hosts, services, connections, and topology via SNMP, LLDP, CDP, and ARP, producing a live map that reflects the network right now. Anything that updates itself survives a departure; anything that depends on one person's habits does not.
+  - question: What can I do this week to reduce my bus factor?
+    answer: Identify who holds knowledge nobody else has, list the undocumented decisions behind the configs (the why, not the settings), run an automated discovery scan to give the next person a starting point, export your current network state, and test a handoff by asking someone else to complete a specific task without the network person. Whatever they cannot do is what to document first.
+  - question: What are the network documentation best practices that actually stick?
+    answer: Favor documentation that maintains itself over documentation that relies on memory. Use automated discovery for the live inventory and topology, write down the reasoning behind design decisions separately, keep output shareable so the whole team can use it, and treat templates as a starting point rather than the system of record. The goal is documentation that survives personnel changes.
 ---
 
 Your network person puts in two weeks' notice. Or gets a better offer and leaves in one. Or just stops showing up.
@@ -81,7 +94,7 @@ This is what we built [Scanopy](https://demo.scanopy.net/) to do. Deploy a daemo
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
+<!-- scanopy-demo -->
 
 But even if you don't use Scanopy, the principle holds. Any automated discovery tool ([there are several](/blog/automated-network-documentation)) is better than documentation that relies on human memory.
 

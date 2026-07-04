@@ -47,7 +47,26 @@ function getUniqueMonthlyPlans(): BillingPlan[] {
 }
 
 /**
- * Generate offers array for schema.org Product/SoftwareApplication
+ * Monthly-equivalent price (in cents) of a plan's annual tier — the yearly base price
+ * divided by 12. The pricing page defaults to the annual-billed-monthly figure (e.g.
+ * $11.99 rather than the $14.99 month-to-month rate), so advertising this in schema keeps
+ * the Offer price matched to the number the visitor actually sees. Returns null when the
+ * plan has no paid Cloud yearly tier (free/custom plans fall back to their own price).
+ */
+function getYearlyMonthlyEquivalentCents(planId: string): number | null {
+	const yearly = billingPlans.find(
+		(p) =>
+			p.id === planId &&
+			p.metadata.rate === 'Year' &&
+			p.metadata.hosting === 'Cloud' &&
+			p.metadata.base_cents > 0
+	);
+	return yearly ? yearly.metadata.base_cents / 12 : null;
+}
+
+/**
+ * Generate offers array for schema.org Product/SoftwareApplication.
+ * Paid tiers advertise the annual-billed-monthly price to match the pricing page default.
  */
 function generateOffers() {
 	const futureDate = new Date();
@@ -57,7 +76,9 @@ function generateOffers() {
 	return getUniqueMonthlyPlans()
 		.filter((plan) => !plan.metadata.custom_price || plan.metadata.custom_price === 'Free')
 		.map((plan) => {
-			const price = plan.metadata.custom_price === 'Free' ? '0' : (plan.metadata.base_cents / 100).toFixed(2);
+			const priceCents =
+				getYearlyMonthlyEquivalentCents(plan.id) ?? plan.metadata.base_cents;
+			const price = plan.metadata.custom_price === 'Free' ? '0' : (priceCents / 100).toFixed(2);
 
 			return {
 				'@type': 'Offer',
@@ -97,10 +118,13 @@ function generateAggregateOffer() {
 }
 
 /**
- * Generate feature list from product features fixture
+ * Generate feature list from product features fixture.
+ * Substitutes {{SERVICE_COUNT}} the same way getProductFeatures() does, so the
+ * live service count reaches the schema instead of a raw placeholder.
  */
 function generateFeatureList(): string[] {
-	return productFeatures.map((f) => f.schemaLabel);
+	const serviceCount = getServiceCountLabel();
+	return productFeatures.map((f) => f.schemaLabel.replace('{{SERVICE_COUNT}}', serviceCount));
 }
 
 /**
@@ -159,7 +183,7 @@ export async function getSoftwareApplicationSchema() {
 		applicationCategory: 'NetworkApplication',
 		operatingSystem: 'Linux, Docker',
 		description:
-			'Automated network documentation and diagram software. Deploy a lightweight scanner to discover and document network architecture, service dependencies, workload placement, and physical topology.',
+			'Automated network diagram and documentation software. Deploy a lightweight scanner to discover and document network architecture, service dependencies, workload placement, and physical topology.',
 		url: 'https://scanopy.net',
 		image: 'https://scanopy.net/scanopy-logo.webp',
 		screenshot: 'https://scanopy.net/hero-topology-dark.webp',
@@ -184,7 +208,7 @@ export function getProductSchema() {
 		'@type': 'Product',
 		name: 'Scanopy',
 		description:
-			'Automated network documentation and diagram software. Automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
+			'Automated network diagram and documentation software. Automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
 		image: 'https://scanopy.net/scanopy-logo.webp',
 		brand: {
 			'@type': 'Brand',

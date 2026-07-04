@@ -9,6 +9,11 @@ interface Heading {
 	level: number;
 }
 
+interface FaqItem {
+	question: string;
+	answer: string;
+}
+
 interface BlogPost {
 	title: string;
 	description: string;
@@ -19,25 +24,31 @@ interface BlogPost {
 	image: string;
 	tldr?: string;
 	ctaDescription?: string;
+	format?: string;
+	faq: FaqItem[];
 	content: string;
 	wordCount: number;
 }
 
 type ContentSegment =
 	| { type: 'html'; content: string }
-	| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] };
+	| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
+	| { type: 'scanopy-demo' };
 
 const DEFAULT_INLINE_COLUMNS = ['name', 'discovery', 'pricing', 'bestFor'];
 
+// Splits rendered markdown on inline component markers so they render as Svelte components
+// instead of raw HTML: `<!-- vendor-table:slug,slug [columns:a,b] -->` and `<!-- scanopy-demo -->`
+// (a theme-aware live map embed). Returns null when the post has neither marker.
 function splitBlogSegments(html: string): { segments: ContentSegment[]; vendorSlugs: string[] } | null {
-	const markerRegex = /<!--\s*vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?\s*-->/g;
-	let match = markerRegex.exec(html);
-	if (!match) return null;
+	const markerRegex = /<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo)\s*-->/g;
+	if (!markerRegex.test(html)) return null;
 
 	const segments: ContentSegment[] = [];
 	const allSlugs: string[] = [];
 	let lastIndex = 0;
 	markerRegex.lastIndex = 0;
+	let match: RegExpExecArray | null;
 
 	while ((match = markerRegex.exec(html)) !== null) {
 		const before = html.slice(lastIndex, match.index).trim();
@@ -45,10 +56,14 @@ function splitBlogSegments(html: string): { segments: ContentSegment[]; vendorSl
 			segments.push({ type: 'html', content: before });
 		}
 
-		const vendorSlugs = match[1].split(',').filter(Boolean);
-		const columns = match[2] ? match[2].split(',').filter(Boolean) : DEFAULT_INLINE_COLUMNS;
-		allSlugs.push(...vendorSlugs);
-		segments.push({ type: 'vendor-inline-table', vendorSlugs, columns });
+		if (match[1]) {
+			const vendorSlugs = match[1].split(',').filter(Boolean);
+			const columns = match[2] ? match[2].split(',').filter(Boolean) : DEFAULT_INLINE_COLUMNS;
+			allSlugs.push(...vendorSlugs);
+			segments.push({ type: 'vendor-inline-table', vendorSlugs, columns });
+		} else {
+			segments.push({ type: 'scanopy-demo' });
+		}
 
 		lastIndex = match.index + match[0].length;
 	}
@@ -76,6 +91,48 @@ function parseFrontmatter(content: string): { frontmatter: Record<string, string
 	});
 
 	return { frontmatter, body: match[2] };
+}
+
+// The naive scalar parser above flattens everything to strings, so a nested `faq:` list
+// (question/answer pairs that feed FAQPage structured data) is parsed structurally here.
+// Convention: single-line question/answer values (colons in the value are fine).
+//   faq:
+//     - question: ...
+//       answer: ...
+function parseFaq(content: string): FaqItem[] {
+	const match = content.match(/^---\n([\s\S]*?)\n---/);
+	if (!match) return [];
+
+	const unquote = (s: string) => s.trim().replace(/^["'](.*)["']$/, '$1');
+	const faq: FaqItem[] = [];
+	let inFaq = false;
+	let current: FaqItem | null = null;
+
+	for (const line of match[1].split('\n')) {
+		// A column-0 key ends any faq block and toggles whether we're inside `faq:`.
+		const topKey = line.match(/^([A-Za-z0-9_]+):/);
+		if (topKey) {
+			if (current) {
+				faq.push(current);
+				current = null;
+			}
+			inFaq = topKey[1] === 'faq';
+			continue;
+		}
+		if (!inFaq) continue;
+
+		const q = line.match(/^\s*-\s*question:\s*(.*)$/);
+		if (q) {
+			if (current) faq.push(current);
+			current = { question: unquote(q[1]), answer: '' };
+			continue;
+		}
+		const a = line.match(/^\s*answer:\s*(.*)$/);
+		if (a && current) current.answer = unquote(a[1]);
+	}
+	if (current) faq.push(current);
+
+	return faq.filter((f) => f.question && f.answer);
 }
 
 export async function load({ params }) {
@@ -132,6 +189,8 @@ export async function load({ params }) {
 				image: frontmatter.image || '/topology-hero.webp',
 				tldr: frontmatter.tldr || undefined,
 				ctaDescription: frontmatter.ctaDescription || undefined,
+				format: frontmatter.format || undefined,
+				faq: parseFaq(raw),
 				content: htmlContent,
 				wordCount
 			};

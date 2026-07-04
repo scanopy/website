@@ -26,11 +26,11 @@ When a daemon running v0.15.0 or later connects, the server:
 3. Select **Docker Proxy** as the type
 4. Enter the proxy port (default: 2376), optional path, and SSL certificates if applicable
 5. Save the credential
-6. [Assign it to the target host](/guides/docker-proxy/#assigning-to-a-host) from the host edit modal (**Credentials** tab)
+6. [Assign it to the target host](/guides/integrations/docker/#assigning-to-a-host) from the host edit modal (**Credentials** tab)
 
 The daemon config flags (`--docker-proxy`, `--docker-proxy-ssl-cert`, `--docker-proxy-ssl-key`, `--docker-proxy-ssl-chain`) still work in v0.15.0 but log deprecation warnings. They will be removed in v0.16.0.
 
-See the [Docker Proxy guide](/guides/docker-proxy/) for the full setup process.
+See the [Docker discovery guide](/guides/integrations/docker/) for the full setup process.
 
 ### 2. Re-apply scan speed overrides
 
@@ -59,7 +59,7 @@ When creating a new daemon or editing an existing discovery, a **Credentials** t
 
 ### Container discovery
 
-Docker and Podman container discovery run automatically when the daemon can reach a local socket — there's no mode to select. To scan a remote or access-restricted runtime, add a proxy credential instead. See [Set up a Docker Proxy](/guides/docker-proxy/) or [Set up Podman discovery](/guides/podman/).
+Docker and Podman container discovery run automatically when the daemon can reach a local socket — there's no mode to select. To scan a remote or access-restricted runtime, add a proxy credential instead. See [Set up Docker discovery](/guides/integrations/docker/) or [Set up Podman discovery](/guides/integrations/podman/).
 
 ### Scan lifecycle
 

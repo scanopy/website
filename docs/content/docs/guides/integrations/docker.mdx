@@ -1,11 +1,11 @@
 ---
-title: Set up a Docker Proxy
-description: How to use a Docker socket proxy to discover containers securely, including remote Docker hosts.
+title: Set up Docker discovery
+description: How Scanopy discovers Docker containers — the default local socket, plus using a socket proxy for restricted access or remote hosts.
 ---
 
 Scanopy daemons can discover Docker containers by connecting to the Docker API. By default, daemons connect directly to the local Docker socket (`/var/run/docker.sock`). A Docker socket proxy provides an additional security layer by restricting which Docker API operations are allowed — and enables discovering containers on remote hosts.
 
-For background on how credentials work — types, scope models, resolution order, and auto-assignment — see [Credentials](/using-scanopy/credentials/). Running Podman instead? See [Set up Podman discovery](/guides/podman/), which follows the same pattern.
+For background on how credentials work — types, scope models, resolution order, and auto-assignment — see [Credentials](/using-scanopy/credentials/). Running Podman instead? See [Set up Podman discovery](/guides/integrations/podman/), which follows the same pattern.
 
 ## Docker Discovery Modes
 
@@ -132,7 +132,7 @@ Scanopy daemon uses the following Docker API endpoints:
 **Why exec?** Scanopy uses `exec` to probe HTTP endpoints from inside containers that don't expose ports to the host. Without exec access, containers are still discovered but service detection may be less accurate.
 
 <Callout type="warn">
-**Migrating from daemon config?** If you previously configured Docker proxy via `--docker-proxy`, `SCANOPY_DOCKER_PROXY`, or the config file, you need to recreate it as a Docker Proxy credential. The daemon config flags are deprecated in v0.15.0 and will be removed in v0.16.0. See the [migration guide](/guides/unified-discovery-migration/) for details.
+**Migrating from daemon config?** If you previously configured Docker proxy via `--docker-proxy`, `SCANOPY_DOCKER_PROXY`, or the config file, you need to recreate it as a Docker Proxy credential. The daemon config flags are deprecated in v0.15.0 and will be removed in v0.16.0. See the [migration guide](/guides/operations/unified-discovery-migration/) for details.
 </Callout>
 
 ## Troubleshooting

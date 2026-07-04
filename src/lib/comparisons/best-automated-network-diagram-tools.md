@@ -49,7 +49,7 @@ There are three categories of network diagram tools: **monitoring platforms** th
 
 Most teams need both monitoring and documentation. The question isn't whether to buy a monitoring tool, it's whether your documentation should be priced like one.
 
-Per-device pricing fits monitoring because monitoring's value is per-device, and it can be tuned to match. You watch critical devices closely and can sample, throttle, or skip the rest, so paying in proportion to what you actively monitor lines up with the value you get (and with the cost, since continuous polling, storage, and alerting genuinely scale per device).
+Per-device pricing fits monitoring because monitoring's value is per-device, and it can be tuned to match. You watch critical devices closely and can sample, throttle, or skip the rest, so paying in proportion to what you actively monitor lines up with the value you get (and with the cost, since continuous polling, storage, and alerting scale per device).
 
 Documentation works the opposite way. Its value is in completeness. A diagram that covers 80% of your devices isn't 80% as useful, it's close to useless, because the gaps are exactly where you get burned. You can't sample documentation by criticality the way you can monitoring, so charging per device penalizes the one thing that makes documentation worth having: the complete picture. It also creates a backwards incentive, where documenting more of your network costs you more, when full coverage was the whole point.
 
@@ -71,7 +71,7 @@ The table breaks each tool down by which views it actually renders: Layer 2 phys
 
 ## How We Compiled This
 
-Every capability claim in this comparison (pricing, discovery methods, service detection, and which view types each tool supports) is sourced to the vendor's own documentation, with inline citations you can check. I verified the figures in June 2026. Where a vendor's docs don't actually confirm a capability, I marked it "unclear" rather than guessing. I built Scanopy, so I have a horse in this race, but the goal here is an honest map of the category. Where a competitor is genuinely stronger at something, I say so.
+Every capability claim in this comparison (pricing, discovery methods, service detection, and which view types each tool supports) is sourced to the vendor's own documentation, with inline citations you can check. I verified the figures in June 2026. Where a vendor's docs don't actually confirm a capability, I marked it "unclear" rather than guessing. I built Scanopy, so I have a horse in this race, but the goal here is an honest map of the category. Where a competitor is stronger at something, I say so.
 
 ## Sources
 

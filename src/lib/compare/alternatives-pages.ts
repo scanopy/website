@@ -4,6 +4,7 @@ import {
 	VS_VENDOR_SLUGS,
 	SCANOPY_SLUG,
 	SCANOPY_CLAIMS,
+	REVIEW_YEAR,
 	vendorDisplayName,
 	trimSentence,
 	lowerFirst
@@ -78,10 +79,10 @@ function firstSentence(text: string): string {
 	return (match ? match[1] : cleaned).replace(/[.\s]+$/, '');
 }
 
-/** Unique <title>: "Best <Vendor> Alternatives (2026): N Tools Compared". */
+/** Unique <title>: "Best <Vendor> Alternatives (<REVIEW_YEAR>): N Tools Compared". */
 export function buildAltTitle(vendor: Vendor): string {
 	const count = selectAlternatives(vendor.slug).length;
-	return `Best ${vendor.name} Alternatives (2026): ${count} Tools Compared`;
+	return `Best ${vendor.name} Alternatives (${REVIEW_YEAR}): ${count} Tools Compared`;
 }
 
 /** Unique meta description per page — leads with the "alternative" framing the query uses
@@ -223,7 +224,7 @@ export function scanopyEdge(vendor: Vendor): string {
 	return `Scanopy matches its topology coverage and adds ${SCANOPY_CLAIMS.serviceDetection}, at ${SCANOPY_CLAIMS.flatPricing} with ${SCANOPY_CLAIMS.freeCE}.`;
 }
 
-export const SCANOPY_ALT_TITLE = 'Scanopy Alternatives (2026): Network Mapping Tools Compared';
+export const SCANOPY_ALT_TITLE = `Scanopy Alternatives (${REVIEW_YEAR}): Network Mapping Tools Compared`;
 
 export const SCANOPY_ALT_DESCRIPTION =
 	'Comparing alternatives to Scanopy? See the closest network discovery and topology tools — and where ' +

@@ -2,11 +2,24 @@
 title: Automated Network Documentation Explained
 description: Your network diagrams are wrong by the time you save them. Automated network documentation uses SNMP and LLDP to discover devices, map connections, and keep everything current without manual effort.
 date: 2026-03-25
-dateModified: 2026-06-23
+dateModified: 2026-07-03
 keyword: automated network documentation
 slug: automated-network-documentation
 tldr: Automated network documentation uses protocols like SNMP, LLDP, and ARP to discover devices, map connections, and keep records current without manual effort. It replaces spreadsheets and stale Visio files with live, always-accurate diagrams.
 ctaDescription: Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map in minutes. No per-device fees. No infrastructure to maintain.
+faq:
+  - question: What is automated network documentation?
+    answer: Automated network documentation is software that discovers what is on your network, maps how it connects, and keeps that record current on a schedule, instead of a person maintaining a spreadsheet or Visio file. It captures device inventory, services, connections, interface details, and device metadata, and renders them as a living, interactive topology map rather than a static file.
+  - question: What protocols does automated network documentation use?
+    answer: It relies on protocols your devices already speak. SNMP pulls device details, interface status, and system information from managed switches, routers, and servers. LLDP and CDP reveal physical connections between devices. ARP tables and MAC forwarding tables map IP-to-MAC relationships and trace which devices connect through which switch ports. Together these build the topology from the network's own data.
+  - question: Does automated network documentation require installing agents on every device?
+    answer: No. The process is agentless. A single lightweight scanner on one machine in the network queries devices over SNMP, LLDP, CDP, and ARP and reads the data they already expose. Nothing gets installed on the endpoints being documented, which is part of why one daemon can reach everything these protocols reveal.
+  - question: What is the difference between network documentation, monitoring, and asset management?
+    answer: They answer different questions. Documentation answers what do I have and how is it connected, monitoring answers is it working right now, and asset management answers what did I buy and where is it. Most teams need all three; the mistake is assuming one tool covers the others. Scanopy is a documentation tool and complements monitoring and asset management rather than replacing them.
+  - question: How often does automated network documentation update?
+    answer: On whatever schedule you set: daily, hourly, or on demand. Each rescan reflects devices that appeared, disappeared, or changed, and snapshots version every scan so you can compare two points in time. This is the key difference from a manual diagram, which captures the network at a single moment and starts decaying immediately.
+  - question: What should I look for in an automated documentation tool?
+    answer: Lightweight deployment (one scanner per network, not an agent on every device), protocol support for SNMP, LLDP, and CDP plus ARP and MAC-table scanning for full topology, scheduled rescans rather than one-time discovery, shareable output without per-seat licensing, export options like SVG and embeddable iframes, and transparent pricing that does not scale unpredictably per device.
 ---
 
 Ask an IT team how they document their network and you'll get one of three answers: a spreadsheet that's six months old, a Visio file from a person who no longer works here, or "we don't."
@@ -75,7 +88,7 @@ The result is interactive topology views of every device, what it's running, and
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
+<!-- scanopy-demo -->
 
 ## Why It Matters
 

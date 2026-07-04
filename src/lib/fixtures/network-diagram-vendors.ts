@@ -929,7 +929,7 @@ export const vendorFAQs: VendorFAQ[] = [
 	},
 	{
 		question: 'How often should automated network diagrams be updated?',
-		answer: 'It depends on how often your network changes. Tools like Scanopy, Auvik, and Domotz update maps continuously or on a schedule (hourly to daily). SolarWinds NTM runs on-demand scans. For most IT teams, daily or weekly updates catch device additions and topology changes. Environments with frequent changes (cloud, DevOps) benefit from continuous updates.'
+		answer: 'It depends on how often your network changes. Scanopy runs scheduled scans (hourly to daily), while tools like Auvik and Domotz poll continuously. SolarWinds NTM runs on-demand scans. For most IT teams, daily or weekly updates catch device additions and topology changes. Environments with frequent changes (cloud, DevOps) benefit from more frequent scan schedules.'
 	},
 	{
 		question: 'Can network diagram tools discover cloud infrastructure?',

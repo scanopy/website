@@ -1,6 +1,16 @@
 import billingPlansData from '$lib/fixtures/billing-plans.json';
 import servicesData from '$lib/fixtures/services.json';
 import { APP, withUtm } from '$lib/config/urls';
+import { vendors } from '$lib/fixtures/network-diagram-vendors';
+import { VS_VENDOR_SLUGS, vsSlug, buildTitle, buildMetaDescription } from '$lib/compare/vs-pages';
+import {
+	ALT_VENDOR_SLUGS,
+	altSlug,
+	buildAltTitle,
+	buildAltMetaDescription,
+	SCANOPY_ALT_TITLE,
+	SCANOPY_ALT_DESCRIPTION
+} from '$lib/compare/alternatives-pages';
 
 export const prerender = true;
 
@@ -42,6 +52,11 @@ function parseFrontmatter(content: string): Record<string, string> {
 export async function GET() {
 	const plans = billingPlansData as BillingPlan[];
 	const services = servicesData as Service[];
+
+	// Rounded-down-to-nearest-ten label, matching getServiceCountLabel() used on the site
+	// (home + schema). Keeps the "N+ services" figure identical everywhere instead of
+	// exposing the raw array length here (which drifted to a different number).
+	const serviceCountLabel = `${Math.floor(services.length / 10) * 10}+`;
 
 	// Get unique monthly plans for pricing section
 	const monthlyPlans = plans.filter((p) => p.metadata.rate === 'Month');
@@ -131,6 +146,45 @@ export async function GET() {
 		.map((c) => `- **${c.title}**: ${c.tldr}\n  URL: https://scanopy.net/comparisons/${c.slug}`)
 		.join('\n');
 
+	// The "Scanopy vs X" and "X alternatives" pages are generated from vendor fixtures, not
+	// markdown, so they never entered the glob above. Enumerate them here from the same
+	// title/description helpers the pages render, so the AI index stays complete and in sync.
+	const vsLines = VS_VENDOR_SLUGS.map((slug) => {
+		const v = vendors[slug];
+		return `- **${buildTitle(v)}**: ${buildMetaDescription(v)}\n  URL: https://scanopy.net${vsSlug(slug)}`;
+	});
+
+	const altLines = [
+		`- **${SCANOPY_ALT_TITLE}**: ${SCANOPY_ALT_DESCRIPTION}\n  URL: https://scanopy.net/comparisons/scanopy-alternatives`,
+		...ALT_VENDOR_SLUGS.map((slug) => {
+			const v = vendors[slug];
+			return `- **${buildAltTitle(v)}**: ${buildAltMetaDescription(v)}\n  URL: https://scanopy.net${altSlug(slug)}`;
+		})
+	];
+
+	const allComparisonLines = [comparisonLines, ...vsLines, ...altLines].join('\n');
+
+	// Load guides for summaries (same frontmatter shape as blog: title + tldr + slug)
+	const guideFiles = import.meta.glob('/src/lib/guides/*.md', {
+		query: '?raw',
+		import: 'default'
+	});
+
+	const guideEntries: { title: string; tldr: string; slug: string }[] = [];
+
+	for (const [path, loader] of Object.entries(guideFiles)) {
+		const raw = (await loader()) as string;
+		const fm = parseFrontmatter(raw);
+		const slug = fm.slug || path.split('/').pop()?.replace('.md', '') || '';
+		if (fm.title && fm.tldr) {
+			guideEntries.push({ title: fm.title, tldr: fm.tldr, slug });
+		}
+	}
+
+	const guideLines = guideEntries
+		.map((g) => `- **${g.title}**: ${g.tldr}\n  URL: https://scanopy.net/guides/${g.slug}`)
+		.join('\n');
+
 	const onboardingUrl = withUtm(APP.onboarding, {
 		medium: 'llms',
 		campaign: 'llms-txt',
@@ -139,30 +193,30 @@ export async function GET() {
 
 	const content = `# Scanopy
 
-> Infrastructure documentation software. Deploy a scanner, get four views of your infrastructure: network architecture, service dependencies, workload placement, and physical topology. Kept accurate automatically.
+> Automated network diagram and documentation software. Deploy a scanner, get four views of your network and the infrastructure running on it: network architecture, service dependencies, workload placement, and physical topology. Kept accurate automatically.
 
 ## What is Scanopy?
 
-Scanopy is an infrastructure documentation platform that automatically scans networks and generates four topology views. It discovers hosts, services, subnets, switches, and workloads, then creates visual documentation that stays up to date without manual intervention.
+Scanopy is automated network diagram and documentation software that automatically scans networks and generates four topology views. It discovers hosts, services, subnets, switches, and workloads, then creates visual documentation that stays up to date without manual intervention.
 
 ## Key Features
 
 - **Automatic Discovery**: Scans any network and discovers every host, service, subnet, and workload automatically
 - **Four Topology Views**: Network architecture, service dependencies, workload placement, and physical topology
-- **Service Detection**: Auto-detects ${services.length}+ services across categories: ${topCategories}
+- **Service Detection**: Auto-detects ${serviceCountLabel} services across categories: ${topCategories}
 - **Versioning**: Create branches, lock versions, and compare network state over time
 - **Security Visibility**: See which services are exposed and flag misconfigurations
 - **Sharing**: Export diagrams, send live view links, or create embeds
 
 ## Detected Services
 
-Scanopy automatically identifies ${services.length}+ services including: ${exampleServices}, and many more.
+Scanopy automatically identifies ${serviceCountLabel} services including: ${exampleServices}, and many more.
 
 Full list: https://scanopy.net/services
 
 ## Use Cases
 
-- Infrastructure documentation for IT teams and enterprises
+- Network documentation for teams that manage infrastructure (in-house IT, platform teams, MSPs)
 - Client onboarding for MSPs and IT consultants
 - Audit and compliance documentation
 - Infrastructure change tracking
@@ -177,20 +231,28 @@ Full pricing details: https://scanopy.net/pricing
 
 ${blogLines}
 
+## Guides
+
+${guideLines}
+
 ## Comparisons
 
-${comparisonLines}
+${allComparisonLines}
 
 ## Links
 
 - Website: https://scanopy.net
 - Documentation: https://scanopy.net/docs
 - Pricing: https://scanopy.net/pricing
+- Comparisons: https://scanopy.net/comparisons
+- Guides: https://scanopy.net/guides
 - Community Edition (free, self-hosted): https://scanopy.net/community
 - Commercial Edition (paid, self-hosted): https://scanopy.net/commercial
 - Changelog: https://scanopy.net/changelog
 - GitHub: https://github.com/scanopy/scanopy
+- X: https://x.com/getscanopy
 - Discord: https://discord.gg/b7ffQr8AcZ
+- Reddit: https://reddit.com/r/scanopy
 - Bluesky: https://bsky.app/profile/scanopy.net
 
 ## Getting Started
@@ -198,7 +260,7 @@ ${comparisonLines}
 1. Sign up at ${onboardingUrl}
 2. Install the Scanopy agent on your network
 3. Run your first scan
-4. View your auto-generated infrastructure documentation
+4. View your auto-generated network documentation and diagrams
 
 ## Contact
 

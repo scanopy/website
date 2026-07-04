@@ -25,6 +25,13 @@ export type VsVendorSlug = (typeof VS_VENDOR_SLUGS)[number];
 
 export const SCANOPY_SLUG = 'scanopy';
 
+// The year stamped into generated comparison titles as a freshness signal. Bump this
+// (deliberately, when you re-verify the vendor data) so every "vs" and "alternatives"
+// title moves together instead of drifting across dozens of hardcoded strings. Not derived
+// from the current date on purpose — the year should claim recency only when the figures
+// were actually re-checked.
+export const REVIEW_YEAR = 2026;
+
 // Canonical phrasings of Scanopy's recurring value props. Defined once and reused across
 // the generated vs / alternatives prose so the claims stay consistent and update in a
 // single place, instead of drifting across the dozens of hand-typed copies they replaced.
@@ -242,11 +249,11 @@ function joinList(items: string[]): string {
 	return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
 }
 
-/** Unique <title>: "Scanopy vs <Vendor>: <short differentiator> (2026)". */
+/** Unique <title>: "Scanopy vs <Vendor>: <short differentiator> (<REVIEW_YEAR>)". */
 export function buildTitle(vendor: Vendor): string {
 	const name = vendor.name; // table name is shorter; better for a title
 	const diff = VS_DIFFERENTIATORS[vendor.slug] || 'Network Documentation Compared';
-	return `Scanopy vs ${name}: ${diff} (2026)`;
+	return `Scanopy vs ${name}: ${diff} (${REVIEW_YEAR})`;
 }
 
 /** Unique meta description per matchup — leads with the matchup's differentiator and a

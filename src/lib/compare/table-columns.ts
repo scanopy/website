@@ -47,5 +47,13 @@ export const COLUMN_DEFS: Record<string, ColumnDef> = {
 	alsoIncludes: {
 		label: 'Also Includes',
 		tooltip: 'Capabilities beyond network diagramming'
+	},
+	bestFor: {
+		label: 'Best for',
+		tooltip: 'Who the tool is the best fit for'
+	},
+	deployment: {
+		label: 'Deployment',
+		tooltip: 'How the tool is hosted and run (cloud, self-hosted, desktop)'
 	}
 };

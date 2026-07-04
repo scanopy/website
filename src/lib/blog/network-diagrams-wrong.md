@@ -3,9 +3,22 @@ title: Why Your Network Diagrams Are Always Wrong
 description: Network diagrams go stale within weeks. The fix isn't discipline - it's automated discovery that keeps diagrams current without manual effort.
 keyword: keep network diagrams up to date
 date: 2026-03-11
-dateModified: 2026-03-11
+dateModified: 2026-07-03
 tldr: Network diagrams go stale because maintaining them manually doesn't scale. The fix isn't updating more often - it's using automated discovery tools that keep diagrams current without human intervention.
 ctaDescription: Scanopy is free to start. Deploy a daemon and see your actual network in minutes. No drawing required.
+faq:
+  - question: Why do network diagrams get out of date so quickly?
+    answer: Networks change constantly and diagrams do not update themselves. Emergency firewall rules, temporary VPNs, one-off routing changes, and IaC deployments all cause infrastructure drift the moment you save a Visio file. Each change is too small to stop and document, but they accumulate until the diagram bears only a passing resemblance to the real network.
+  - question: How do I keep network diagrams up to date?
+    answer: Stop relying on manual updates and use automated discovery. A tool that scans the network via SNMP, ARP tables, and network scanning finds devices for you and refreshes the map on a schedule, so drift never accumulates. The failure mode of stale diagrams is human, not technical, so the durable fix is removing the manual maintenance step rather than trying harder.
+  - question: Why doesn't updating the diagram after every change work?
+    answer: Three reasons. Nobody truly owns the diagram, so it becomes untrusted over time. Changes happen faster than updates, especially emergency and automated ones. And the person who knows the network already has it in their head, so updating docs is pure overhead with no personal benefit. This advice has existed for over twenty years and still fails.
+  - question: What do stale network diagrams actually cost?
+    answer: They slow troubleshooting, because responders make decisions from false data during outages. They create security blind spots, since undocumented paths and forgotten devices are invisible on an old map. They raise the bus factor when the person who knows the network leaves. And they cause compliance gaps, because auditors expect diagrams that reflect today's network.
+  - question: Can automated network diagrams replace Visio or draw.io?
+    answer: For documenting a live network, yes; for designing one, no. Automation can only discover what already exists, so Visio and draw.io remain the right tools for planning a network that is not built yet or for producing a specific audit layout. The clean split is design tools for what should exist and documentation tools for what does exist.
+  - question: What should I look for in a tool that keeps diagrams current?
+    answer: Four things: auto-discovery via SNMP, scanning, and ARP tables so the tool finds devices instead of you listing them; scheduled updates so drift does not accumulate; intuitive, interactive visualization rather than a plain device list; and shareable output so the whole team benefits without everyone needing a login. Scanopy was built around these criteria.
 ---
 
 You know the drill. Someone spends a Friday afternoon in Visio or draw.io, mapping every device, subnet, and connection. It's beautiful. It's accurate. And within two weeks, someone adds a switch, changes a VLAN, or spins up a VM, and nobody updates the diagram.
@@ -67,7 +80,7 @@ We built [Scanopy](/) because we had this exact problem. Deploy a lightweight da
 
 Here's what that looks like in practice; this is a live Scanopy map you can interact with:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
+<!-- scanopy-demo -->
 
 That embed isn't a screenshot. It's a live, interactive map. And this is part of the fix for stale documentation: Scanopy maps are embeddable anywhere that supports iframes. Your wiki, your internal docs, your runbooks. Embed the map once, and every place that references your network topology stays current automatically. No re-exporting PNGs, no copy-pasting updated diagrams into twelve different Confluence pages. The embed always reflects the latest scan.
 

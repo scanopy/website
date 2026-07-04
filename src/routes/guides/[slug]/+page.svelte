@@ -4,12 +4,20 @@
 	import ArticleCTA from '$lib/components/ArticleCTA.svelte';
 	import ArticleTOC from '$lib/components/ArticleTOC.svelte';
 	import VendorComparison from '$lib/components/VendorComparison.svelte';
+	import FAQ from '$lib/components/FAQ.svelte';
+	import ScanopyDemo from '$lib/components/ScanopyDemo.svelte';
+	import { getFAQPageSchema } from '$lib/schemas';
 	import type { Vendor } from '$lib/types';
 
 	interface Heading {
 		id: string;
 		text: string;
 		level: number;
+	}
+
+	interface FaqItem {
+		question: string;
+		answer: string;
 	}
 
 	interface BlogPost {
@@ -22,13 +30,16 @@
 		image: string;
 		tldr?: string;
 		ctaDescription?: string;
+		format?: string;
+		faq: FaqItem[];
 		content: string;
 		wordCount: number;
 	}
 
 	type ContentSegment =
 		| { type: 'html'; content: string }
-		| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] };
+		| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
+		| { type: 'scanopy-demo' };
 
 	interface PageData {
 		post: BlogPost;
@@ -39,7 +50,15 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const showToc = $derived(data.headings && data.headings.length >= 3);
+	// The FAQ heading is rendered from frontmatter (outside the parsed markdown), so add it to
+	// the TOC list explicitly when the guide has FAQ items. Its id matches the rendered <h2>.
+	const tocHeadings = $derived(
+		data.post.faq && data.post.faq.length > 0
+			? [...data.headings, { id: 'frequently-asked-questions', text: 'Frequently Asked Questions', level: 2 }]
+			: data.headings
+	);
+
+	const showToc = $derived(tocHeadings && tocHeadings.length >= 3);
 
 	function formatDate(dateStr: string): string {
 		if (!dateStr) return '';
@@ -79,6 +98,36 @@
 		},
 		image: `https://scanopy.net${data.post.image}`
 	});
+
+	// FAQPage schema for AEO / AI answer extraction. Emitted only when the guide ships a
+	// `faq` frontmatter array; answers match the visible ## Frequently Asked Questions copy.
+	const faqSchema =
+		data.post.faq && data.post.faq.length > 0
+			? JSON.stringify(getFAQPageSchema(data.post.faq))
+			: null;
+
+	// HowTo schema for step-by-step guides (frontmatter `format: howto`). Steps are the
+	// "Step N:" H3 headings the server already collected; each links to its anchor.
+	const howToSteps =
+		data.post.format === 'howto'
+			? data.headings
+					.filter((h) => (h.level === 2 || h.level === 3) && /^step\s*\d+/i.test(h.text))
+					.map((h) => ({
+						'@type': 'HowToStep',
+						name: h.text.replace(/^step\s*\d+\s*[:.-]?\s*/i, ''),
+						url: `https://scanopy.net/guides/${data.post.slug}#${h.id}`
+					}))
+			: [];
+	const howToSchema =
+		howToSteps.length > 0
+			? JSON.stringify({
+					'@context': 'https://schema.org',
+					'@type': 'HowTo',
+					name: data.post.title,
+					description: data.post.description,
+					step: howToSteps
+				})
+			: null;
 </script>
 
 <svelte:head>
@@ -101,6 +150,12 @@
 	<meta name="twitter:image" content="https://scanopy.net{data.post.image}" />
 
 	{@html `<script type="application/ld+json">${articleSchema}</script>`}
+	{#if faqSchema}
+		{@html `<script type="application/ld+json">${faqSchema}</script>`}
+	{/if}
+	{#if howToSchema}
+		{@html `<script type="application/ld+json">${howToSchema}</script>`}
+	{/if}
 </svelte:head>
 
 <PageHero image={data.post.image} title={data.post.title}>
@@ -152,10 +207,17 @@
 									vendorSlugs={segment.vendorSlugs}
 									columns={segment.columns}
 								/>
+							{:else if segment.type === 'scanopy-demo'}
+								<ScanopyDemo />
 							{/if}
 						{/each}
 					{:else}
 						{@html data.post.content}
+					{/if}
+
+					{#if data.post.faq.length}
+						<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+						<FAQ faqs={data.post.faq} />
 					{/if}
 				</div>
 
@@ -164,7 +226,7 @@
 			</div>
 
 			{#if showToc}
-				<ArticleTOC headings={data.headings} />
+				<ArticleTOC headings={tocHeadings} />
 			{/if}
 		</div>
 	</div>

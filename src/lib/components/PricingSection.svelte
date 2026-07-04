@@ -12,6 +12,7 @@
 	import featuresData from '$lib/fixtures/features.json';
 	import { page } from '$app/state';
 	import { APP, appHref } from '$lib/config/urls';
+	import { analytics } from '$lib/analytics.svelte';
 
 	interface Props {
 		showGithubStars?: boolean;
@@ -159,6 +160,13 @@
 	function handlePlanInquiry(plan: BillingPlan) {
 		selectedPlanType = plan.type;
 		selectedPlanName = billingPlanHelpers.getName(plan.type);
+		// Track the inquiry-modal OPEN (previously only the submit fired an event), so
+		// contact-sales intent is attributable to the pricing widget, not just conversions.
+		analytics.ctaClicked({
+			location: 'pricing_widget',
+			destination: 'contact_modal',
+			text: billingPlanHelpers.getName(plan.type)
+		});
 		showContactModal = true;
 	}
 

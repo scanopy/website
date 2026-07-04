@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { PricingSection, FeaturedIn } from '$lib/components';
 	import FAQ from '$lib/components/FAQ.svelte';
+	import EditionsComparison from '$lib/components/EditionsComparison.svelte';
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { onMount } from 'svelte';
@@ -97,28 +98,39 @@
 			<h1 class="mb-8 text-4xl font-bold text-white lg:text-5xl">
 				Flat-rate pricing. No per-device fees.<br />Scale without surprises.
 			</h1>
-			<div class="mx-auto flex flex-col items-center justify-center gap-4 sm:flex-row">
-				<p class="text-lg font-semibold text-gray-200">
-					Prefer to run Scanopy on your own infrastructure?
-				</p>
-				<div class="flex gap-3">
-					<a
-						href="/community"
-						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-500/10 hover:text-blue-900 dark:text-blue-300 dark:hover:text-blue-200"
-					>
-						Community Edition
-					</a>
-					<a
-						href="/commercial"
-						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-500/10 hover:text-blue-900 dark:text-blue-300 dark:hover:text-blue-200"
-					>
-						Commercial Edition
-					</a>
-				</div>
-			</div>
+			<p class="mt-4 text-sm text-gray-400">
+				Evaluating for your team?
+				<a
+					href="https://cal.com/mferrandiz/scanopy-demo"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-blue-400 hover:text-blue-300"
+					onclick={() =>
+						analytics.ctaClicked({
+							location: 'pricing_top',
+							destination: 'talk_to_sales',
+							text: 'Talk to Sales'
+						})}>Talk to Sales</a
+				>.
+			</p>
 		</div>
 
 		<PricingSection showGithubStars={true} showHosting={true} />
+	</div>
+</section>
+
+<!-- Editions comparison: managed vs self-hosted deployment choice -->
+<section id="editions" class="border-t border-gray-800 py-20">
+	<div class="container mx-auto px-4">
+		<div class="mb-10 text-center">
+			<span class="pill-eyebrow mb-4"> Editions </span>
+			<h2 class="mb-3 text-3xl font-bold text-rose-400 lg:text-4xl">Four ways to run Scanopy</h2>
+			<p class="mx-auto max-w-2xl text-gray-400">
+				Managed in our cloud or self-hosted in your own environment — pick the deployment that fits
+				your team.
+			</p>
+		</div>
+		<EditionsComparison />
 	</div>
 </section>
 

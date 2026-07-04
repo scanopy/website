@@ -4,10 +4,24 @@ description: 'Map your network topology by hand with snmpwalk. Every SNMP MIB an
 keyword: SNMP network topology mapping
 slug: snmp-network-topology-mapping
 date: 2026-06-23
-dateModified: 2026-06-23
+dateModified: 2026-07-03
+format: howto
 tldr: "You can map your whole network topology using nothing but snmpwalk and a terminal. This walks through every SNMP MIB that matters, what the OIDs mean, and how to correlate the data into a map. By the end you'll understand exactly what automated discovery tools do under the hood."
 ctaHeading: Skip the snmpwalk marathon
 ctaDescription: 'Scanopy queries every MIB in this article across your whole network in minutes, then keeps the map current on a schedule. Deploy a daemon and see it automated.'
+faq:
+  - question: How does SNMP map network topology?
+    answer: SNMP topology mapping queries a handful of standard MIBs on managed devices to pull their identity, interface list, IP assignments, and neighbor tables, then correlates the results into a graph. You walk each device with snmpwalk, collect the tables, and stitch them together by matching neighbor names and MAC addresses to ports. It is exactly what automated discovery tools do on every scan.
+  - question: Which SNMP MIBs matter for topology mapping?
+    answer: The System MIB identifies each device, the Interface MIB enumerates its ports, and the IP Address Table maps IPs to interfaces. LLDP and CDP neighbor tables reveal what connects to each port, which is where topology comes from. ARP tables and the Bridge MIB place devices that do not speak those protocols, and the Entity MIB adds serial numbers and models.
+  - question: What is the difference between LLDP and CDP?
+    answer: Both advertise a device's identity out each port so neighbors can learn what is connected. LLDP (IEEE 802.1AB) is vendor-neutral and works across mixed hardware; CDP is Cisco's equivalent and often carries extra detail like the exact platform model. Their SNMP index differs: CDP maps straight to the local ifIndex, while LLDP needs the local port number parsed from the index.
+  - question: How do you discover devices that don't support SNMP?
+    answer: Walk the ARP table on a router or L3 switch. Every entry is a device that communicated recently, giving you its IP and MAC even if it never answers an SNMP query, like a printer or IoT device. To place that device on a physical port, cross-reference its MAC against the switch's Bridge MIB forwarding table, which records which port saw each MAC.
+  - question: Do I need SNMPv3, or is SNMPv2c enough?
+    answer: SNMPv2c sends the community string in cleartext with no real authentication, which is fine for read-only polling on a trusted management network. For anything touching untrusted segments, use SNMPv3, which adds authentication and encryption. The OIDs are identical either way; only the transport and auth flags on the command change, so the mapping process is the same.
+  - question: Should I map topology with SNMP by hand or automate it?
+    answer: Doing it by hand once is worth it to understand the data model and to debug why a tool misses a device. But it is roughly an hour of work for a handful of devices and a snapshot the moment you finish. Automated tools run the same MIBs and correlation across the whole network in minutes and re-walk on a schedule, so the map never goes stale.
 ---
 
 Ever wonder what network discovery tools actually do? They walk SNMP. That's most of it. They query a handful of standard MIBs, pull device identities, interface lists, and neighbor tables, then correlate the results into a graph.
@@ -258,6 +272,6 @@ Everything on that map traces back to an OID you queried by hand. The port label
 
 You can explore a live one yourself:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
+<!-- scanopy-demo -->
 
 The SNMP data you just spent an hour querying by hand is always current, because the daemon re-walks it on every scan. Export the map to SVG, Mermaid, or Confluence markup, or embed it the same way the demo above is embedded, straight into your wiki, your runbook, or your Confluence page. It updates itself as the network changes. For the higher-level view of how automated discovery fits into documentation, see our companion piece on [how automated network documentation actually works](/blog/automated-network-documentation).

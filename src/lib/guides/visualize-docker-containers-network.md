@@ -4,10 +4,23 @@ description: "See Docker containers in network context, not just per host. How S
 keyword: docker network visualization
 slug: visualize-docker-containers-network
 date: 2026-07-01
-dateModified: 2026-07-01
+dateModified: 2026-07-03
 tldr: "Docker tools show you containers one host at a time. They don't show where those containers sit on your network or what they connect to. Scanopy discovers Docker containers and nests them under the host they run on, in the same topology map as the rest of your network."
 ctaHeading: See your containers in context
 ctaDescription: "Scanopy discovers Docker containers and nests them under their host in a live topology map, next to everything else on your network. Deploy a daemon and see it."
+faq:
+  - question: How do I see which host a Docker container runs on across my network?
+    answer: Use a tool that discovers containers as part of a network scan rather than per host. Scanopy reads each host's Docker API during its normal scan and places every container under the host it runs on, in the Workloads view. That view shows the full chain from bare metal to hypervisor to VM to container, so you can see exactly which physical machine a container lives on.
+  - question: What does Scanopy pull from Docker?
+    answer: When the daemon has access to the Docker API over a socket or TLS proxy, it reads each container's image, its published ports, the Docker networks it is attached to, and its labels. It collects this in the same pass that discovers the rest of the network over SNMP, LLDP, CDP, and ARP, so containers land in the same topology as your switches, VMs, and bare-metal hosts.
+  - question: How is this different from Portainer or docker ps?
+    answer: Docker ps and Portainer show containers one host or environment at a time, organized by machine. They answer what is running, not where it sits on the network or what it connects to. Scanopy draws each container on its network, under the host it runs on and alongside the subnet and services around it, which is the view you need when debugging why one service cannot reach another.
+  - question: How do I set up Docker discovery in Scanopy?
+    answer: By default the daemon connects to the local Docker socket on its own host automatically, whenever the socket is accessible; there's no mode to pick or toggle to enable, detection just runs as part of the normal scan. Create a Docker Socket credential only for a non-default socket path. To restrict access or reach containers on another host, run a read-only Docker socket proxy and add a Docker Proxy credential.
+  - question: Can Scanopy discover containers on remote Docker hosts?
+    answer: Yes. Run a Docker socket proxy on the remote host with read-only access, restrict it to the calls Scanopy needs (list and inspect containers, list networks), and the daemon discovers those containers over the network. A mixed setup of Docker on one host and VMs or LXC on others then shows up as one coherent map rather than several disconnected ones.
+  - question: Does Scanopy manage or deploy Docker containers?
+    answer: No. Scanopy is a documentation tool, not a container manager. It will not start, stop, or deploy anything and is not trying to replace Portainer, Komodo, or your orchestrator. It shows where your containers sit on the network and what they connect to. The two work well side by side: manage containers in your container tool, see the topology in Scanopy.
 ---
 
 Docker makes it easy to lose track of where things actually run. `docker ps` tells you what is running on the host you happen to be SSHed into. Portainer gives you a clean dashboard, one environment at a time. Neither one answers the question I keep hitting in my own homelab: which host is this container on, what subnet can reach it, and what does it talk to.
@@ -81,9 +94,9 @@ Because the map redraws on every scan, a container that moves to a different hos
 
 ## Setting it up
 
-By default, the Scanopy daemon discovers containers by connecting to the local Docker socket (`/var/run/docker.sock`) on its own host. During daemon setup you pick **Local Socket** in the Docker mode selector, or flip **Scan local Docker socket** in the discovery settings, and container detection runs as part of the normal scan. One daemon covers the whole network.
+By default, the Scanopy daemon discovers containers by connecting to the local Docker socket (`/var/run/docker.sock`) on its own host. This happens automatically whenever the socket is accessible; there's no mode to pick or toggle to switch on. Container detection just runs as part of the normal scan, and one daemon covers the whole network. (You only create a **Docker Socket** credential if the daemon needs a non-default socket path.)
 
-If you want to lock down what the daemon can touch, or discover containers on a host the daemon does not run on, point it at a [Docker socket proxy](/docs/guides/docker-proxy) instead (Scanopy is tested with Tecnativa's and wollomatic's). You run the proxy with read-only access to the socket, restrict it to the handful of API calls Scanopy needs (list and inspect containers, list networks), and create a Docker Proxy credential in Scanopy pointing at it. The same setup works for remote Docker hosts: run the proxy there, and the daemon discovers those containers over the network.
+If you want to lock down what the daemon can touch, or discover containers on a host the daemon does not run on, point it at a [Docker socket proxy](/docs/guides/integrations/docker/) instead (Scanopy is tested with Tecnativa's and wollomatic's). You run the proxy with read-only access to the socket, restrict it to the handful of API calls Scanopy needs (list and inspect containers, list networks), and create a Docker Proxy credential in Scanopy pointing at it. The same setup works for remote Docker hosts: run the proxy there, and the daemon discovers those containers over the network.
 
 Either way, detection picks up containers wherever they run, so a mixed homelab of Docker on one host and VMs or LXC on others shows up as one coherent map rather than several disconnected ones.
 

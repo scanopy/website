@@ -114,10 +114,56 @@
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
 	import { page } from '$app/state';
 	import { APP, appHref } from '$lib/config/urls';
-	import { getProductFeatures, getServiceCountLabel, getStartingMonthlyPrice } from '$lib/schemas';
+	import {
+		getProductFeatures,
+		getServiceCountLabel,
+		getStartingMonthlyPrice,
+		getFAQPageSchema
+	} from '$lib/schemas';
+	import FAQ from '$lib/components/FAQ.svelte';
 
 	const serviceCount = getServiceCountLabel();
 	const startingPrice = getStartingMonthlyPrice();
+
+	// Homepage FAQ — the product-definitional and positioning questions AI answer engines
+	// ask about Scanopy itself. Deliberately scoped to what isn't already answered in Q&A
+	// form elsewhere: billing specifics link out to /pricing (its own FAQ) and product
+	// matchups link to the comparison, rather than restating them here. Facts reuse the
+	// canonical wording already on the site (the closing summary, the pricing FAQ, and the
+	// comparison FAQs) so a single change keeps them consistent.
+	const homeFaqs = [
+		{
+			question: 'What is Scanopy?',
+			answer:
+				'Scanopy is automated network diagram and documentation software. You deploy one lightweight scanner and it discovers your hosts, maps Layer 2 and Layer 3 topology, and fingerprints the services running on each host — turning your live network into four documentation views that stay current on a schedule, instead of a diagram you redraw by hand.'
+		},
+		{
+			question: 'How does Scanopy discover and document my network?',
+			answer:
+				'You install a single daemon on the network — no agents on individual endpoints. It scans on a schedule, finds every host, subnet, switch, service, and workload, and correlates them into four switchable views: L2 physical, L3 logical, workloads, and applications. Each re-scan refreshes the documentation automatically, so it reflects the network as it is now rather than when someone last updated a diagram by hand.'
+		},
+		{
+			question: 'Does Scanopy replace network monitoring tools like PRTG or Auvik?',
+			answer:
+				'No. Monitoring tools track device health, bandwidth, and alerts over time; Scanopy documents what is on your network and how it is connected. It sits alongside your monitoring stack rather than replacing it — many teams run both. See the <a href="/comparisons/best-automated-network-diagram-tools" class="text-blue-400 hover:text-blue-300">tool comparison</a> for how it stacks up against specific products.'
+		},
+		{
+			question: 'Is Scanopy free or open source?',
+			answer:
+				'Yes. The self-hosted <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is free and open-source under AGPL-3.0, with one network and one seat. Paid <a href="/pricing" class="text-blue-400 hover:text-blue-300">Cloud plans</a> and a <a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial self-hosted license</a> lift those caps and add features like exports, integrations, and more seats.'
+		},
+		{
+			question: 'How often does Scanopy update the network diagram?',
+			answer:
+				'Scanopy runs scheduled scans — typically hourly to daily, depending on how often your network changes — and refreshes the documentation automatically each time. It is scheduled rather than continuous, so it keeps your maps current without polling the network around the clock.'
+		}
+	];
+
+	// FAQPage schema sourced from the same array the page renders (strip inline HTML so the
+	// schema text matches the visible plain-text answer), matching the pricing-page pattern.
+	const faqSchema = getFAQPageSchema(
+		homeFaqs.map((f) => ({ question: f.question, answer: f.answer.replace(/<[^>]+>/g, '') }))
+	);
 
 	interface PageData {
 		softwareApplicationSchema: Record<string, unknown>;
@@ -336,6 +382,7 @@
 		fetchpriority="high"
 	/>
 	{@html `<script type="application/ld+json">${JSON.stringify(data.softwareApplicationSchema)}</script>`}
+	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
 </svelte:head>
 
 <!-- Section backgrounds alternate automatically (see <style> below), so adding,
@@ -393,11 +440,11 @@
 							onclick={() =>
 								analytics.ctaClicked({
 									location: 'hero',
-									destination: 'schedule_demo',
-									text: 'Schedule Demo'
+									destination: 'talk_to_sales',
+									text: 'Talk to Sales'
 								})}
 						>
-							Schedule Demo
+							Talk to Sales
 						</a>
 					</div>
 				</div>
@@ -406,18 +453,18 @@
 				<div class="w-full lg:w-[62%]" use:tiltChild>
 					<ViewSwitcher views={heroViews} defaultTab="l2" autoRotate />
 					<a
-						href="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+						href="https://demo.scanopy.net"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="mt-2 block text-center text-sm text-gray-500 transition-colors hover:text-blue-400"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'hero',
-								destination: 'share_demo',
-								text: 'View live demo'
+								destination: 'live_demo',
+								text: 'View Live Demo'
 							})}
 					>
-						View live demo &rarr;
+						View Live Demo &rarr;
 					</a>
 				</div>
 			</div>
@@ -573,7 +620,7 @@
 			<div class="mb-16 text-center">
 				<span class="pill-eyebrow mb-4"> Who it's for </span>
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-					Built for everyone responsible for network infrastructure
+					Built for the teams that manage infrastructure
 				</h2>
 			</div>
 
@@ -635,16 +682,84 @@
 	<!-- Pricing Section -->
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-2">
-			<div class="mb-12 text-center">
+			<div class="mb-8 text-center">
 				<span class="pill-eyebrow mb-4"> Pricing </span>
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 					Flat-rate pricing. No per-device fees. Scale without surprises.
 				</h2>
+				<div class="mx-auto flex flex-col items-center justify-center gap-4 sm:flex-row">
+					<p class="text-lg font-semibold text-gray-200">
+						Prefer to run Scanopy on your own infrastructure?
+					</p>
+					<a
+						href="/commercial"
+						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-500/10 hover:text-blue-900 dark:text-blue-300 dark:hover:text-blue-200"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'pricing_selfhost',
+								destination: 'commercial',
+								text: 'Commercial Edition'
+							})}
+					>
+						Commercial Edition
+					</a>
+					<a
+						href="/pricing#editions"
+						class="text-sm font-semibold text-blue-400 hover:text-blue-300"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'pricing_selfhost',
+								destination: 'editions',
+								text: 'Compare All Editions'
+							})}
+					>
+						Compare All Editions →
+					</a>
+				</div>
 			</div>
 
 			{#await import('$lib/components/PricingSection.svelte') then { default: PricingSection }}
 				<PricingSection showGithubStars={false} showHosting={true} />
 			{/await}
+		</div>
+	</section>
+
+	<!-- Community Section -->
+	<section class="border-t border-gray-800 py-20">
+		<div class="container mx-auto px-4">
+			<div class="mb-16 text-center">
+				<span class="pill-eyebrow mb-4"> Community </span>
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">What users are saying</h2>
+			</div>
+
+			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+				{#each testimonials as testimonial (testimonial.author)}
+					<div class="card card-static relative p-5">
+						<Quote class="absolute right-3 top-3 h-6 w-6 text-blue-500/20" />
+						<p class="mb-4 text-sm italic text-gray-300">
+							"{testimonial.quote}"
+						</p>
+						<a
+							href={testimonial.url}
+							target="_blank"
+							rel="noopener"
+							class="text-sm font-medium text-gray-400 hover:text-blue-400">{testimonial.author}</a
+						>
+					</div>
+				{/each}
+			</div>
+		</div>
+	</section>
+
+	<section class="border-t border-gray-800 py-20">
+		<div class="container mx-auto max-w-3xl px-4">
+			<div class="mb-12 text-center">
+				<span class="pill-eyebrow mb-4"> FAQ </span>
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
+					Frequently asked questions
+				</h2>
+			</div>
+			<FAQ faqs={homeFaqs} />
 		</div>
 	</section>
 
@@ -715,40 +830,26 @@
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'bottom_cta',
-								destination: 'schedule_demo',
-								text: 'Schedule Demo'
+								destination: 'talk_to_sales',
+								text: 'Talk to Sales'
 							})}
 					>
-						Schedule Demo
+						Talk to Sales
 					</a>
 				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Community Section -->
-	<section class="border-t border-gray-800 py-20">
-		<div class="container mx-auto px-4">
-			<div class="mb-16 text-center">
-				<span class="pill-eyebrow mb-4"> Community </span>
-				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">What users are saying</h2>
-			</div>
-
-			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-				{#each testimonials as testimonial (testimonial.author)}
-					<div class="card card-static relative p-5">
-						<Quote class="absolute right-3 top-3 h-6 w-6 text-blue-500/20" />
-						<p class="mb-4 text-sm italic text-gray-300">
-							"{testimonial.quote}"
-						</p>
-						<a
-							href={testimonial.url}
-							target="_blank"
-							rel="noopener"
-							class="text-sm font-medium text-gray-400 hover:text-blue-400">{testimonial.author}</a
-						>
-					</div>
-				{/each}
+				<p class="mt-6 text-sm text-gray-400">
+					Prefer to self-host? Run the full stack in your own environment with the
+					<a
+						href="/commercial"
+						class="text-blue-400 hover:text-blue-300"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'bottom_cta',
+								destination: 'commercial',
+								text: 'Commercial Edition'
+							})}>Commercial Edition</a
+					>.
+				</p>
 			</div>
 		</div>
 	</section>
@@ -756,7 +857,7 @@
 	<section class="border-t border-gray-800 py-12">
 		<div class="container mx-auto max-w-5xl px-4">
 			<p class="text-sm leading-relaxed text-gray-400">
-				Scanopy is a network documentation platform. A single scanner discovers hosts, maps Layer 2
+				Scanopy is automated network diagram and documentation software. A single scanner discovers hosts, maps Layer 2
 				and Layer 3 topology, and fingerprints <a
 					href="/services"
 					class="text-blue-400 hover:text-blue-300">{serviceCount} services</a
@@ -776,7 +877,7 @@
 					href="/comparisons/best-automated-network-diagram-tools"
 					class="text-blue-400 hover:text-blue-300">best automated network diagram software</a
 				>, or review our
-				<a href="/docs/reference/security" class="text-blue-400 hover:text-blue-300"
+				<a href="/docs/reference/security/" class="text-blue-400 hover:text-blue-300"
 					>security practices</a
 				>.
 			</p>

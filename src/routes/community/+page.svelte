@@ -41,7 +41,7 @@
 		{ name: 'Reddit', url: 'https://reddit.com/r/scanopy', destination: 'reddit' },
 		{
 			name: 'Documentation',
-			url: '/docs/self-hosted-server/server-installation',
+			url: '/docs/self-hosted-server/server-installation/',
 			destination: 'docs'
 		}
 	];
@@ -52,31 +52,31 @@
 </script>
 
 <svelte:head>
-	<title>Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy</title>
+	<title>Community Edition - Free, Self-Hosted Network Documentation | Scanopy</title>
 	<meta
 		name="description"
-		content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
+		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
 	<link rel="canonical" href="https://scanopy.net/community" />
 
 	<meta
 		property="og:title"
-		content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy"
+		content="Community Edition - Free, Self-Hosted Network Documentation | Scanopy"
 	/>
 	<meta
 		property="og:description"
-		content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
+		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
 	<meta property="og:url" content="https://scanopy.net/community" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta
 		name="twitter:title"
-		content="Community Edition - Free, Self-Hosted Infrastructure Documentation | Scanopy"
+		content="Community Edition - Free, Self-Hosted Network Documentation | Scanopy"
 	/>
 	<meta
 		name="twitter:description"
-		content="Free, self-hosted infrastructure documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
+		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
@@ -97,7 +97,7 @@
 			</div>
 
 			<h1 class="mb-4 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
-				Free, self-hosted infrastructure documentation
+				Free, self-hosted network documentation
 			</h1>
 
 			<p class="mx-auto max-w-2xl text-xl text-gray-300">
@@ -113,7 +113,7 @@
 		<p class="text-lg leading-relaxed text-gray-300">
 			Scanopy Community is the free, self-hosted edition of Scanopy - the same automatic discovery
 			engine that powers our cloud plans, running entirely on your infrastructure. It's built for
-			homelabbers, home network enthusiasts, and small teams who want auto-updating infrastructure
+			homelabbers, home network enthusiasts, and small teams who want auto-updating network
 			documentation without sending data to a third party. Deploy with a single Docker command, scan
 			your network, and get four views of your infrastructure in minutes. No account required, no
 			time restrictions.
@@ -153,7 +153,7 @@ docker compose up -d</code
 				class="text-blue-400 hover:text-blue-300">Unraid community app</a
 			>. See the
 			<a
-				href="/docs/self-hosted-server/server-installation"
+				href="/docs/self-hosted-server/server-installation/"
 				class="text-blue-400 hover:text-blue-300">full install docs</a
 			> for more options.
 		</p>
@@ -232,7 +232,7 @@ docker compose up -d</code
 			onclick={() =>
 				analytics.ctaClicked({
 					location: 'community_upsell',
-					destination: '/pricing',
+					destination: 'pricing',
 					text: 'View Plans'
 				})}
 		>
@@ -246,7 +246,7 @@ docker compose up -d</code
 				onclick={() =>
 					analytics.ctaClicked({
 						location: 'community_upsell',
-						destination: '/commercial',
+						destination: 'commercial',
 						text: 'Commercial Edition'
 					})}
 			>

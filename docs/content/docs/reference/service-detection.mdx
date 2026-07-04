@@ -17,7 +17,7 @@ For the complete list of detectable services and their match patterns, see [scan
 
 **Service requires authentication** — If a service returns 401/403 before Scanopy can read the response body, endpoint matching fails. Some services (like Plex) have patterns that account for this, but many don't.
 
-**Docker container not exposed** — Containers on internal bridge networks aren't reachable via network scanning. Enable Docker container discovery (local socket or [Docker Proxy](/guides/docker-proxy/)), which inspects the Docker API directly.
+**Docker container not exposed** — Containers on internal bridge networks aren't reachable via network scanning. Enable Docker container discovery (local socket or [Docker Proxy](/guides/integrations/docker/)), which inspects the Docker API directly.
 
 **Firewall blocking the daemon** — The daemon must be able to connect to the service's port. Check that firewall rules allow the daemon to probe the host.
 

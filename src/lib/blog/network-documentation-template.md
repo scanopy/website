@@ -2,11 +2,24 @@
 title: Network Documentation Template (Free) + Why Templates Fail
 description: Free network documentation template covering device inventory, IP addressing, and VLANs. Download it - then learn why templates always go stale.
 date: 2026-03-04
-dateModified: 2026-03-04
+dateModified: 2026-07-03
 keyword: network documentation template
 slug: network-documentation-template
 tldr: A network documentation template covering device inventory, IP addressing, VLANs, and connections. Templates are a reasonable starting point, but they decay fast - automated discovery keeps documentation accurate without the upkeep.
 ctaDescription: Scanopy is free to start. Deploy a daemon and see your network documented in minutes. No spreadsheets required.
+faq:
+  - question: What should a network documentation template include?
+    answer: At minimum, a device inventory (hostname, IP, MAC, device type, OS or firmware, and services), a network layout showing each subnet, gateway, and DHCP range, and topology notes describing how those segments connect. That covers the essentials most teams need. The hard part is not the structure but keeping the values accurate as the network changes.
+  - question: Why do network documentation templates go stale?
+    answer: A template is a snapshot, but a network changes constantly. Every new VM, access point, or DHCP change makes the template slightly more wrong, and nobody updates it until an outage forces the issue. The person who fills it in already knows the network and does not need it, so maintenance falls to whoever has the least context.
+  - question: Is stale network documentation worse than no documentation?
+    answer: In practice, yes. With no documentation you know you are working blind and proceed carefully. Stale documentation gives you false confidence: you think you have an accurate map, but it describes a network that no longer exists. That mismatch is most dangerous during an outage, exactly when you are relying on the documentation to be correct.
+  - question: What is the alternative to maintaining a network documentation template by hand?
+    answer: Automated discovery. Instead of typing values into a spreadsheet, a tool scans the network and generates the documentation from what actually exists. Scanopy deploys a lightweight daemon that discovers devices and services, maps connections, and produces an interactive topology map that stays current on scheduled scans, so the documentation cannot drift from reality.
+  - question: When is a network documentation template still the right choice?
+    answer: Templates work well for things that do not change constantly: planning and design docs for a network you are about to build, compliance documents that require a specific format, and runbooks or procedures. For a live network inventory that changes weekly, automation is a better fit. Use templates for static information and automated discovery for anything that evolves.
+  - question: Can I export automated network documentation into a spreadsheet or template?
+    answer: Yes. Scanopy exports CSV files and offers an API, so you can feed current, discovered data into a compliance template or spreadsheet instead of retyping it from memory. You get the structured format when you need it, with values that reflect the actual network rather than whatever was last entered by hand.
 ---
 
 I'll give you the template. It's half a scroll away, and it works as a starting point.
@@ -83,7 +96,7 @@ Deploy the daemon, point it at your subnets, and you get a live network map in m
 
 Here's what that looks like in practice - this is a real Scanopy map you can click around in:
 
-<iframe src="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890/embed?theme=dark" width="800px" height="600px" frameborder="0" style="border: 1px solid rgb(var(--c-gray-700)); border-radius: 8px;"></iframe>
+<!-- scanopy-demo -->
 
 Compare that to the markdown tables above and you'll see why I stopped maintaining a spreadsheet. And yes, you can embed your own Scanopy network diagrams anywhere too.
 
@@ -101,5 +114,3 @@ Templates aren't useless. They're the wrong tool for documenting a live network,
 - **Compliance documentation.** Some audits require specific formats. Templates give you the structure, but the data filling them should come from an [automated source](/blog/automated-network-documentation). Scanopy's CSV export and API can feed your compliance templates with current data instead of whatever someone remembered to type in last quarter.
 
 - **Runbooks and procedures.** "When the VPN goes down, do X, Y, Z." Process docs are stable. Network inventory isn't.
-
-Use templates for things that are static. Use automation for things that evolve.

@@ -46,7 +46,7 @@
 			'@type': 'ItemList',
 			name: 'Services detected by Scanopy',
 			numberOfItems: services.length,
-			itemListElement: services.slice(0, 50).map((s, i) => ({
+			itemListElement: services.map((s, i) => ({
 				'@type': 'ListItem',
 				position: i + 1,
 				name: s.name

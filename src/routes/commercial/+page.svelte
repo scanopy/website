@@ -41,7 +41,7 @@
 			icon: FileCheck,
 			title: 'Supports your compliance posture',
 			description:
-				'Keep infrastructure documentation under your own data-residency and retention controls, with audit logs and SSO to fit your internal review and access policies.'
+				'Keep your network documentation under your own data-residency and retention controls, with audit logs and SSO to fit your internal review and access policies.'
 		},
 		{
 			icon: Shield,
@@ -87,7 +87,7 @@
 		analytics.ctaClicked({
 			location,
 			destination: 'contact_modal',
-			text: 'Talk to us about a license'
+			text: 'Request a Quote'
 		});
 		showContactModal = true;
 	}
@@ -137,7 +137,7 @@
 	<div class="container relative z-10 mx-auto px-4">
 		<div class="mx-auto max-w-4xl text-center">
 			<h1 class="mb-4 text-4xl font-bold leading-tight text-rose-400 lg:text-6xl">
-				Self-hosted infrastructure documentation, on your terms
+				Self-hosted network documentation, on your terms
 			</h1>
 
 			<p class="mx-auto mb-8 max-w-2xl text-xl text-gray-300">
@@ -145,14 +145,30 @@
 				features, and support for the teams that keep your infrastructure running.
 			</p>
 
-			<button
-				type="button"
-				class="btn-primary inline-flex items-center gap-2"
-				onclick={() => openContact('commercial_hero')}
-			>
-				Talk to us about a license
-				<ArrowRight class="h-4 w-4" />
-			</button>
+			<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+				<a
+					href="https://cal.com/mferrandiz/scanopy-demo"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="btn-primary inline-flex items-center gap-2"
+					onclick={() =>
+						analytics.ctaClicked({
+							location: 'commercial_hero',
+							destination: 'talk_to_sales',
+							text: 'Talk to Sales'
+						})}
+				>
+					Talk to Sales
+					<ArrowRight class="h-4 w-4" />
+				</a>
+				<button
+					type="button"
+					class="btn-secondary inline-flex items-center gap-2"
+					onclick={() => openContact('commercial_hero')}
+				>
+					Request a Quote
+				</button>
+			</div>
 		</div>
 	</div>
 </section>
@@ -246,14 +262,30 @@
 		<p class="mx-auto mb-6 max-w-xl text-gray-400">
 			Tell us about your environment and we'll put together a Commercial Edition quote.
 		</p>
-		<button
-			type="button"
-			class="btn-primary inline-flex items-center gap-2"
-			onclick={() => openContact('commercial_footer')}
-		>
-			Talk to us about a license
-			<ArrowRight class="h-4 w-4" />
-		</button>
+		<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+			<a
+				href="https://cal.com/mferrandiz/scanopy-demo"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="btn-primary inline-flex items-center gap-2"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'commercial_footer',
+						destination: 'talk_to_sales',
+						text: 'Talk to Sales'
+					})}
+			>
+				Talk to Sales
+				<ArrowRight class="h-4 w-4" />
+			</a>
+			<button
+				type="button"
+				class="btn-secondary inline-flex items-center gap-2"
+				onclick={() => openContact('commercial_footer')}
+			>
+				Request a Quote
+			</button>
+		</div>
 		<p class="mt-4 text-sm text-gray-500">
 			Or email us directly at
 			<a href="mailto:licensing@scanopy.net" class="text-blue-400 hover:text-blue-300"

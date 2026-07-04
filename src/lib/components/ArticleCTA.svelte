@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { APP, appHref } from '$lib/config/urls';
+	import { analytics } from '$lib/analytics.svelte';
 
 	interface Props {
 		heading?: string;
@@ -21,7 +22,13 @@
 			href={appHref(APP.onboarding, page.url.pathname, 'article-cta')}
 			target="_blank"
 			rel="noopener noreferrer"
-			class="btn-primary">Try Scanopy free</a
+			class="btn-primary"
+			onclick={() =>
+				analytics.ctaClicked({
+					location: 'article_cta',
+					destination: 'app_onboarding',
+					text: 'Try Scanopy free'
+				})}>Try Scanopy free</a
 		>
 		<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">View pricing</a>
 		<a href="/commercial" class="text-gray-400 transition-colors hover:text-white"

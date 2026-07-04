@@ -21,6 +21,9 @@
 		orientation?: 'column' | 'row';
 		minWidth?: string;
 		colWidths?: string[];
+		/** Emit citation `[n]` links (they anchor to a `#source-n` list). Turn off on pages
+		 *  that render the table without a sources section (e.g. the blog inline table). */
+		showSources?: boolean;
 	}
 
 	let {
@@ -30,7 +33,8 @@
 		columns,
 		orientation = 'column',
 		minWidth,
-		colWidths
+		colWidths,
+		showSources = true
 	}: Props = $props();
 
 	type Sentiment = 'positive' | 'negative' | 'neutral';
@@ -136,7 +140,7 @@
 				<span class="chip env-tag" title="Discovers {cloud}">{cloud}</span>
 			{/each}
 		</span>
-		{#if vendor.cloudDiscovery?.sources}{@html sourceRefHtml(vendor.cloudDiscovery.sources)}{/if}
+		{#if showSources && vendor.cloudDiscovery?.sources}{@html sourceRefHtml(vendor.cloudDiscovery.sources)}{/if}
 	{:else}
 		<span class="cell-detail" title="No discovery">—</span>
 	{/if}
@@ -155,13 +159,13 @@
 				{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(protocol)}>{protocol}</span>
 			{/each}
 		{/if}
-		{#if vendor.discoverySources}{@html sourceRefHtml(vendor.discoverySources)}{/if}
+		{#if showSources && vendor.discoverySources}{@html sourceRefHtml(vendor.discoverySources)}{/if}
 	{:else if col === 'viewTypes'}
 		{@render viewTags(vendor)}{#if orientation === 'row' && vendor.viewTypes?.note}<div
 				class="cell-detail"
 				style="margin-top: 0.45rem; line-height: 1.4;"
 			>
-				{vendor.viewTypes.note}{@html sourceRefHtml(vendor.viewTypesSources)}
+				{vendor.viewTypes.note}{#if showSources}{@html sourceRefHtml(vendor.viewTypesSources)}{/if}
 			</div>{/if}
 	{:else if col === 'environments'}
 		{@render environmentsCell(vendor)}
@@ -179,7 +183,7 @@
 				>{serviceInfo(vendor.services.level).label}</span
 			>
 		{/if}
-		{#if vendor.services.sources}{@html sourceRefHtml(vendor.services.sources)}{/if}
+		{#if showSources && vendor.services.sources}{@html sourceRefHtml(vendor.services.sources)}{/if}
 	{:else if col === 'autoUpdates'}
 		{#if vendor.autoUpdates}
 			<span class="chip chip-positive">Yes</span>
@@ -205,7 +209,7 @@
 		{:else}
 			{vendor.pricing.text}
 		{/if}
-		{#if vendor.pricing.sources}{@html sourceRefHtml(vendor.pricing.sources)}{/if}
+		{#if showSources && vendor.pricing.sources}{@html sourceRefHtml(vendor.pricing.sources)}{/if}
 	{:else if col === 'alsoIncludes'}
 		{#if vendor.alsoIncludes && vendor.alsoIncludes.length}
 			{#each vendor.alsoIncludes as cap, i}
@@ -214,6 +218,10 @@
 		{:else}
 			<span class="cell-detail">—</span>
 		{/if}
+	{:else if col === 'bestFor'}
+		{vendor.bestFor || ''}
+	{:else if col === 'deployment'}
+		{vendor.deployment?.join(', ') || ''}
 	{/if}
 {/snippet}
 

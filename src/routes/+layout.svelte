@@ -99,7 +99,7 @@
 	// labeled front door. Cloud isn't an "Edition" — it's the default managed product, so
 	// it points at Pricing rather than a dedicated page.
 	const editionLinks = [
-		{ href: '/pricing', label: 'Cloud', destination: 'cloud_pricing' },
+		{ href: '/pricing', label: 'Cloud', destination: 'pricing' },
 		{ href: '/commercial', label: 'Commercial Edition', destination: 'commercial' },
 		{ href: '/community', label: 'Community Edition', destination: 'community' }
 	];
@@ -187,7 +187,7 @@
 		"height": 500
 	},
 	"image": "https://scanopy.net/scanopy-logo.webp",
-	"description": "Infrastructure documentation software. Deploy a lightweight scanner to automatically discover and document network architecture, service dependencies, workload placement, and physical topology.",
+	"description": "Automated network diagram and documentation software. Deploy a lightweight scanner to automatically discover and document your network — architecture, service dependencies, workload placement, and physical topology.",
 	"address": {
 		"@type": "PostalAddress",
 		"streetAddress": "418 Broadway Ste N",
@@ -287,6 +287,21 @@
 										{link.label}
 									</a>
 								{/each}
+								<div class="my-1 border-t border-gray-800"></div>
+								<a
+									href="/pricing#editions"
+									class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"
+									onclick={() => {
+										analytics.ctaClicked({
+											location: 'navbar_product',
+											destination: 'editions',
+											text: 'Compare Editions'
+										});
+										productMenuOpen = false;
+									}}
+								>
+									Compare Editions
+								</a>
 							</div>
 						{/if}
 					</div>
@@ -297,6 +312,12 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'navbar',
+								destination: 'live_demo',
+								text: 'Live Demo'
+							})}
 					>
 						Live Demo
 					</a>
@@ -309,6 +330,20 @@
 							analytics.ctaClicked({ location: 'navbar', destination: 'app_login', text: 'Login' })}
 					>
 						Login
+					</a>
+					<a
+						href="https://cal.com/mferrandiz/scanopy-demo"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-secondary"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'navbar',
+								destination: 'talk_to_sales',
+								text: 'Talk to Sales'
+							})}
+					>
+						Talk to Sales
 					</a>
 					<a
 						href={appHref(APP.onboarding, page.url.pathname, 'navbar', 'nav')}
@@ -374,6 +409,20 @@
 										{link.label}
 									</a>
 								{/each}
+								<a
+									href="/pricing#editions"
+									class="text-sm text-gray-300 transition-colors hover:text-white"
+									onclick={() => {
+										analytics.ctaClicked({
+											location: 'navbar_mobile_product',
+											destination: 'editions',
+											text: 'Compare Editions'
+										});
+										closeMobileMenu();
+									}}
+								>
+									Compare Editions
+								</a>
 							</div>
 						{/if}
 					</div>
@@ -396,7 +445,14 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-gray-400 transition-colors hover:text-white"
-						onclick={closeMobileMenu}
+						onclick={() => {
+							analytics.ctaClicked({
+								location: 'navbar_mobile',
+								destination: 'live_demo',
+								text: 'Live Demo'
+							});
+							closeMobileMenu();
+						}}
 					>
 						Live Demo
 					</a>
@@ -415,6 +471,22 @@
 						}}
 					>
 						Login
+					</a>
+					<a
+						href="https://cal.com/mferrandiz/scanopy-demo"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-secondary text-center"
+						onclick={() => {
+							analytics.ctaClicked({
+								location: 'navbar_mobile',
+								destination: 'talk_to_sales',
+								text: 'Talk to Sales'
+							});
+							closeMobileMenu();
+						}}
+					>
+						Talk to Sales
 					</a>
 					<a
 						href={appHref(APP.onboarding, page.url.pathname, 'navbar-mobile', 'nav')}

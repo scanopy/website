@@ -8,7 +8,7 @@ const v = (name: string) => `rgb(var(--c-${name}) / <alpha-value>)`;
 
 export default {
 	darkMode: 'class',
-	content: ['./src/**/*.{html,js,svelte,ts}', './src/lib/blog/**/*.md'],
+	content: ['./src/**/*.{html,js,svelte,ts}', './src/lib/**/*.md'],
 	theme: {
 		extend: {
 			colors: {
