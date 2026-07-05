@@ -66,18 +66,12 @@ export async function gotoHydrated(page: Page, path: string): Promise<void> {
  * missed, and matches ANY status so a 4xx/5xx produces a status assertion
  * instead of an opaque timeout. Each failure mode gets a distinct message so
  * a red CI run is diagnosable from the assertion text alone.
- *
- * Timeout covers brevo.ts's best-effort reCAPTCHA budget (~10s worst case
- * before the fetch even starts).
  */
 export async function submitAndExpectBrevoSuccess(
 	page: Page,
 	submit: () => Promise<void>,
-	{
-		timeoutMs = 25_000,
-		allowCaptchaRejection = false
-	}: { timeoutMs?: number; allowCaptchaRejection?: boolean } = {}
-): Promise<'accepted' | 'captcha-rejected'> {
+	{ timeoutMs = 25_000 }: { timeoutMs?: number } = {}
+): Promise<void> {
 	const responsePromise = page.waitForResponse(
 		(r) => r.url().includes('sibforms.com/serve') && r.request().method() === 'POST',
 		{ timeout: timeoutMs }
@@ -106,15 +100,6 @@ export async function submitAndExpectBrevoSuccess(
 		throw new Error(`BREVO RESPONSE NOT JSON (status ${response.status()}): ${slice}`);
 	}
 
-	// Brevo's captcha rejection comes back as HTTP 400 {"errors":{"captcha":...}}.
-	// For forms with reCAPTCHA enforcement enabled in Brevo (newsletter), automated
-	// browsers ALWAYS score too low to pass — that rejection proves the whole
-	// pipeline works up to Brevo's bot-protection boundary and is tolerated only
-	// when the caller opts in. See README "Form Monitoring" > newsletter caveat.
-	if (allowCaptchaRejection && json.success !== true && json.errors?.captcha) {
-		return 'captcha-rejected';
-	}
-
 	expect(
 		response.ok(),
 		`BREVO HTTP ERROR ${response.status()} from ${response.url()}. Body: ${slice}`
@@ -122,11 +107,10 @@ export async function submitAndExpectBrevoSuccess(
 
 	expect(
 		json.success,
-		`BREVO REJECTED SUBMISSION: ${slice} — see the README "Form Monitoring" section for ` +
-			`how to interpret Brevo rejection errors.`
+		`BREVO REJECTED SUBMISSION: ${slice} — a captcha error here means reCAPTCHA enforcement ` +
+			`was re-enabled in Brevo, which automated browsers cannot pass; see the README ` +
+			`"Form Monitoring" section.`
 	).toBe(true);
-
-	return 'accepted';
 }
 
 /**

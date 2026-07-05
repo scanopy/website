@@ -20,18 +20,18 @@ The public lead-capture forms are the inbound channel for the highest-value deal
 
 Every form found on the site is listed here. Both forms submit to Brevo (`sibforms.com`) via `src/lib/brevo.ts` — there is no server-side form handling in this repo.
 
-| Form                                                      | Page tested   | Spec                        | Real submission?       |
-| --------------------------------------------------------- | ------------- | --------------------------- | ---------------------- |
-| Contact modal — "Request a Quote" (the June 2026 failure) | `/commercial` | `e2e/contact-modal.spec.ts` | yes                    |
-| Contact modal — Enterprise "Request Information"          | `/pricing`    | `e2e/contact-modal.spec.ts` | yes                    |
-| Contact modal — Self-Hosted "Contact Us"                  | `/` (home)    | `e2e/contact-modal.spec.ts` | yes                    |
-| Newsletter signup (footer, sitewide)                      | `/` (home)    | `e2e/newsletter.spec.ts`    | attempted — see caveat |
+| Form                                                      | Page tested   | Spec                        | Real submission? |
+| --------------------------------------------------------- | ------------- | --------------------------- | ---------------- |
+| Contact modal — "Request a Quote" (the June 2026 failure) | `/commercial` | `e2e/contact-modal.spec.ts` | yes              |
+| Contact modal — Enterprise "Request Information"          | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
+| Contact modal — Self-Hosted "Contact Us"                  | `/` (home)    | `e2e/contact-modal.spec.ts` | yes              |
+| Newsletter signup (footer, sitewide)                      | `/` (home)    | `e2e/newsletter.spec.ts`    | yes              |
 
 The contact modal is one component with three separate page-level trigger wirings; a page-specific JS error can break one page while the others keep working, so each path submits for real.
 
-Each weekly run creates **3 real Brevo contact inquiries and 1 newsletter attempt** (double that in the worst case, since CI retries a failed test once).
+Each weekly run creates **3 real Brevo contact inquiries and 1 newsletter subscription** (double that in the worst case, since CI retries a failed test once).
 
-**Newsletter caveat:** the newsletter form has reCAPTCHA v3 enforcement enabled in Brevo, and automated browsers always score too low to pass — verified July 2026 that this is score-based bot protection, not a config mismatch (Brevo's own hosted form uses the same site key and the same `submit` action as `src/lib/brevo.ts`). The newsletter spec therefore verifies everything up to that boundary: the form renders, clicking Subscribe fires the POST (catching the "click does nothing" failure mode), Brevo receives and parses the submission, and the UI gives the user feedback. It cannot confirm that a real human's subscription is accepted — worth a quick manual subscribe check if the form is ever suspect. If Brevo ever accepts the automated submission, the spec asserts the full success UI as well.
+**reCAPTCHA history:** the forms originally attached reCAPTCHA v3 tokens, and the newsletter form enforced them in Brevo — which blocked this monitor, since automated browsers always score too low to pass v3. Enforcement was turned off in Brevo in July 2026 and the client-side integration was commented out in `src/lib/brevo.ts` (spam protection is now the honeypot field plus newsletter double opt-in). If the newsletter test ever fails with `BREVO REJECTED SUBMISSION` mentioning a captcha error, someone re-enabled enforcement in Brevo — either turn it back off, or accept that the newsletter form can only be monitored up to Brevo's bot-protection boundary (the pre-July-2026 version of `e2e/newsletter.spec.ts` in git history did exactly that).
 
 ### Sentinel convention — keeping test data out of the lead list
 
