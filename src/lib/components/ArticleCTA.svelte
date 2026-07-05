@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { APP, appHref, withUtm, utmFromPath } from '$lib/config/urls';
+	import { withUtm, utmFromPath } from '$lib/config/urls';
 	import { analytics } from '$lib/analytics.svelte';
 
 	interface Props {
@@ -40,19 +40,14 @@
 				})}>Explore the live demo</a
 		>
 		<a
-			href={appHref(APP.onboarding, page.url.pathname, 'article-cta')}
-			target="_blank"
-			rel="noopener noreferrer"
+			href="/pricing"
 			class="text-gray-400 transition-colors hover:text-white"
 			onclick={() =>
 				analytics.ctaClicked({
 					location: 'article_cta',
-					destination: 'app_onboarding',
-					text: 'Try Scanopy free'
-				})}>Try Scanopy free</a
-		>
-		<a href="/pricing" class="text-gray-400 transition-colors hover:text-white"
-			>Pricing &amp; editions</a
+					destination: 'pricing',
+					text: 'Pricing & editions'
+				})}>Pricing &amp; editions</a
 		>
 	</div>
 </div>
