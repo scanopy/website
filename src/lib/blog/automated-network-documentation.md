@@ -128,7 +128,7 @@ Most teams need all three. The mistake is assuming one tool covers the others. M
 
 ## Tools That Automate Network Documentation
 
-Several tools approach automated documentation from different angles. Some are dedicated documentation tools, others bundle mapping into a monitoring or asset management platform:
+Several tools approach automated documentation from different angles. Some are dedicated documentation tools, others bundle mapping into a monitoring or asset management platform (for the full category overview, including open-source options, see our [network documentation software guide](/guides/network-documentation-software)):
 
 <!-- vendor-table:scanopy,auvik,domotz,manageengine-opmanager,netdisco -->
 

@@ -332,7 +332,7 @@
 	<title>Automated Network Diagram & Documentation Software - Scanopy</title>
 	<meta
 		name="description"
-		content="Scanopy discovers your network and builds living diagrams and documentation automatically. Never maintain another network diagram by hand."
+		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
 	/>
 	<link rel="canonical" href="https://scanopy.net/" />
 
@@ -342,7 +342,7 @@
 	/>
 	<meta
 		property="og:description"
-		content="Scanopy discovers your network and builds living diagrams and documentation automatically. Never maintain another network diagram by hand."
+		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
 	/>
 	<meta property="og:url" content="https://scanopy.net/" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
@@ -353,7 +353,7 @@
 	/>
 	<meta
 		name="twitter:description"
-		content="Scanopy discovers your network and builds living diagrams and documentation automatically. Never maintain another network diagram by hand."
+		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
 	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 
@@ -880,6 +880,10 @@
 				<a
 					href="/comparisons/best-automated-network-diagram-tools"
 					class="text-blue-400 hover:text-blue-300">best automated network diagram software</a
+				>, browse the guide to
+				<a
+					href="/guides/network-documentation-software"
+					class="text-blue-400 hover:text-blue-300">network documentation software</a
 				>, or review our
 				<a href="/docs/reference/security/" class="text-blue-400 hover:text-blue-300"
 					>security practices</a
