@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { type CookiePreferences, getGdprPreferences, saveGdprPreferences } from '$lib/cookies';
 	import { optInAnalytics, optOutAnalytics, isPostHogLoaded, getPostHog } from '$lib/posthog';
+	import { chrome } from '$lib/stores/chrome.svelte';
 
 	/**
 	 * Optional callbacks when preferences change.
@@ -77,6 +78,13 @@
 			showBanner = false;
 		}
 	}
+
+	// Expose banner visibility so the article bottom bar can hide while it is open
+	// (avoids two stacked bottom bars). `showBanner` covers both the initial banner
+	// and the settings modal.
+	$effect(() => {
+		chrome.cookieBannerOpen = showBanner;
+	});
 </script>
 
 {#if mounted}
@@ -167,7 +175,13 @@
 			{/if}
 		</div>
 	{:else if hasConsented}
-		<button class="toggle" onclick={openSettings} aria-label="Cookie settings">
+		<button
+			class="toggle"
+			class:raised={chrome.bottomBarVisible}
+			style="--bar-h: {chrome.bottomBarHeight}px"
+			onclick={openSettings}
+			aria-label="Cookie settings"
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="20"
@@ -499,5 +513,22 @@
 	.toggle:hover {
 		background: rgb(var(--c-gray-700));
 		color: rgb(var(--c-white));
+	}
+
+	/* Raise above the full-width bottom bar on mobile so they don't overlap. The
+	   bar publishes its height as --bar-h. On desktop the bar is a centered pill,
+	   so the bottom-right toggle already clears it — keep it in place. */
+	.toggle.raised {
+		bottom: calc(var(--bar-h, 4rem) + 1rem);
+		transition:
+			bottom 200ms,
+			background-color 150ms,
+			color 150ms;
+	}
+
+	@media (min-width: 768px) {
+		.toggle.raised {
+			bottom: 1rem;
+		}
 	}
 </style>

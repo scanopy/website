@@ -142,10 +142,10 @@
 						analytics.ctaClicked({
 							location: 'commercial_hero',
 							destination: 'talk_to_sales',
-							text: 'Talk to Sales'
+							text: 'Book Demo'
 						})}
 				>
-					Talk to Sales
+					Book Demo
 					<ArrowRight class="h-4 w-4" />
 				</a>
 				<button
@@ -254,10 +254,10 @@
 					analytics.ctaClicked({
 						location: 'commercial_footer',
 						destination: 'talk_to_sales',
-						text: 'Talk to Sales'
+						text: 'Book Demo'
 					})}
 			>
-				Talk to Sales
+				Book Demo
 				<ArrowRight class="h-4 w-4" />
 			</a>
 			<button

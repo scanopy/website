@@ -35,6 +35,3 @@ playwright/.cache
 *.njsproj
 *.sln
 *.sw?
-
-# Draft blog post, not ready to publish (needs images)
-src/lib/blog/making-network-topology-readable.md

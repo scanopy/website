@@ -221,7 +221,7 @@
 					{/if}
 				</div>
 
-				<ArticleCTA description={data.post.ctaDescription} />
+				<ArticleCTA />
 
 				{#if data.vendorData?.faqs?.length}
 					<div class="prose prose-invert prose-gray mt-12 max-w-none">

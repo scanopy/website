@@ -35,6 +35,7 @@ function getLastCommitDate(filePath: string): string {
 export async function GET() {
 	const staticPages = [
 		{ loc: '/', src: 'src/routes/+page.svelte' },
+		{ loc: '/product', src: 'src/routes/product/+page.svelte' },
 		{ loc: '/pricing', src: 'src/routes/pricing/+page.svelte' },
 		{ loc: '/services', src: 'src/routes/services/+page.svelte' },
 		{ loc: '/integrations', src: 'src/routes/integrations/+page.svelte' },

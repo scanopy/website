@@ -3,7 +3,7 @@
 	import { browser, dev } from '$app/environment';
 	import { page } from '$app/state';
 	import { Footer } from '$lib/components';
-	import { Menu, X, ChevronDown } from 'lucide-svelte';
+	import { Menu, X } from 'lucide-svelte';
 	import { PUBLIC_BREVO_NEWSLETTER_FORM_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
@@ -27,9 +27,6 @@
 
 	let healthStatus = $state<'loading' | 'healthy' | 'unhealthy'>('loading');
 	let mobileMenuOpen = $state(false);
-	let productMenuOpen = $state(false);
-	let productMobileOpen = $state(false);
-	let productMenuEl = $state<HTMLElement>();
 
 	if (browser) {
 		if ('requestIdleCallback' in window) {
@@ -82,27 +79,7 @@
 
 	function closeMobileMenu() {
 		mobileMenuOpen = false;
-		productMobileOpen = false;
 	}
-
-	// Close the desktop Product dropdown on Escape or any click outside of it.
-	function handleWindowKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape') productMenuOpen = false;
-	}
-	function handleWindowClick(e: MouseEvent) {
-		if (productMenuOpen && productMenuEl && !productMenuEl.contains(e.target as Node)) {
-			productMenuOpen = false;
-		}
-	}
-
-	// The three editions, surfaced together in the navbar so each deployment model has a
-	// labeled front door. Cloud isn't an "Edition" — it's the default managed product, so
-	// it points at Pricing rather than a dedicated page.
-	const editionLinks = [
-		{ href: '/pricing', label: 'Cloud', destination: 'pricing' },
-		{ href: '/commercial', label: 'Commercial Edition', destination: 'commercial' },
-		{ href: '/community', label: 'Community Edition', destination: 'community' }
-	];
 
 	const breadcrumbNameMap: Record<string, string> = {
 		pricing: 'Pricing',
@@ -169,7 +146,6 @@
 	});
 </script>
 
-<svelte:window onkeydown={handleWindowKeydown} onclick={handleWindowClick} />
 
 <svelte:head>
 	{@html `<script type="application/ld+json">
@@ -245,68 +221,8 @@
 
 				<!-- Desktop navigation -->
 				<div class="hidden items-center gap-6 md:flex">
-					<!-- svelte-ignore a11y_no_static_element_interactions -->
-					<div
-						class="relative"
-						bind:this={productMenuEl}
-						onmouseenter={() => (productMenuOpen = true)}
-						onmouseleave={() => (productMenuOpen = false)}
-						onfocusin={() => (productMenuOpen = true)}
-						onfocusout={(e) => {
-							if (!productMenuEl?.contains(e.relatedTarget as Node)) productMenuOpen = false;
-						}}
-					>
-						<button
-							type="button"
-							class="flex items-center gap-1 text-gray-400 transition-colors hover:text-white"
-							aria-haspopup="true"
-							aria-expanded={productMenuOpen}
-						>
-							Product
-							<ChevronDown
-								class="h-4 w-4 transition-transform {productMenuOpen ? 'rotate-180' : ''}"
-							/>
-						</button>
-						{#if productMenuOpen}
-							<div
-								class="absolute left-0 top-full z-50 w-56 rounded-lg border border-gray-800 bg-gray-900 p-2 pt-3 shadow-2xl"
-							>
-								{#each editionLinks as link}
-									<a
-										href={link.href}
-										class="block rounded-md px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
-										onclick={() => {
-											analytics.ctaClicked({
-												location: 'navbar_product',
-												destination: link.destination,
-												text: link.label
-											});
-											productMenuOpen = false;
-										}}
-									>
-										{link.label}
-									</a>
-								{/each}
-								<div class="my-1 border-t border-gray-800"></div>
-								<a
-									href="/pricing"
-									class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"
-									onclick={() => {
-										analytics.ctaClicked({
-											location: 'navbar_product',
-											destination: 'editions',
-											text: 'Compare Editions'
-										});
-										productMenuOpen = false;
-									}}
-								>
-									Compare Editions
-								</a>
-							</div>
-						{/if}
-					</div>
+					<a href="/product" class="text-gray-400 transition-colors hover:text-white">Product</a>
 					<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">Pricing</a>
-					<a href="/docs" class="text-gray-400 transition-colors hover:text-white">Docs</a>
 					<a
 						href="https://demo.scanopy.net"
 						target="_blank"
@@ -322,16 +238,6 @@
 						Live Demo
 					</a>
 					<a
-						href={appHref(APP.login, page.url.pathname, 'navbar', 'nav')}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() =>
-							analytics.ctaClicked({ location: 'navbar', destination: 'app_login', text: 'Login' })}
-					>
-						Login
-					</a>
-					<a
 						href="https://cal.com/mferrandiz/scanopy-demo"
 						target="_blank"
 						rel="noopener noreferrer"
@@ -340,10 +246,10 @@
 							analytics.ctaClicked({
 								location: 'navbar',
 								destination: 'talk_to_sales',
-								text: 'Talk to Sales'
+								text: 'Book Demo'
 							})}
 					>
-						Talk to Sales
+						Book Demo
 					</a>
 					<a
 						href={appHref(APP.onboarding, page.url.pathname, 'navbar', 'nav')}
@@ -379,66 +285,19 @@
 			<!-- Mobile navigation -->
 			{#if mobileMenuOpen}
 				<div class="mt-4 flex flex-col gap-4 border-t border-gray-800 pt-4 md:hidden">
-					<div>
-						<button
-							type="button"
-							class="flex w-full items-center justify-between text-gray-400 transition-colors hover:text-white"
-							aria-expanded={productMobileOpen}
-							onclick={() => (productMobileOpen = !productMobileOpen)}
-						>
-							Product
-							<ChevronDown
-								class="h-4 w-4 transition-transform {productMobileOpen ? 'rotate-180' : ''}"
-							/>
-						</button>
-						{#if productMobileOpen}
-							<div class="mt-3 flex flex-col gap-3 pl-3">
-								{#each editionLinks as link}
-									<a
-										href={link.href}
-										class="text-sm text-gray-400 transition-colors hover:text-white"
-										onclick={() => {
-											analytics.ctaClicked({
-												location: 'navbar_mobile_product',
-												destination: link.destination,
-												text: link.label
-											});
-											closeMobileMenu();
-										}}
-									>
-										{link.label}
-									</a>
-								{/each}
-								<a
-									href="/pricing"
-									class="text-sm text-gray-300 transition-colors hover:text-white"
-									onclick={() => {
-										analytics.ctaClicked({
-											location: 'navbar_mobile_product',
-											destination: 'editions',
-											text: 'Compare Editions'
-										});
-										closeMobileMenu();
-									}}
-								>
-									Compare Editions
-								</a>
-							</div>
-						{/if}
-					</div>
+					<a
+						href="/product"
+						class="text-gray-400 transition-colors hover:text-white"
+						onclick={closeMobileMenu}
+					>
+						Product
+					</a>
 					<a
 						href="/pricing"
 						class="text-gray-400 transition-colors hover:text-white"
 						onclick={closeMobileMenu}
 					>
 						Pricing
-					</a>
-					<a
-						href="/docs"
-						class="text-gray-400 transition-colors hover:text-white"
-						onclick={closeMobileMenu}
-					>
-						Docs
 					</a>
 					<a
 						href="https://demo.scanopy.net"
@@ -457,22 +316,6 @@
 						Live Demo
 					</a>
 					<a
-						href={appHref(APP.login, page.url.pathname, 'navbar-mobile', 'nav')}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-gray-400 transition-colors hover:text-white"
-						onclick={() => {
-							analytics.ctaClicked({
-								location: 'navbar_mobile',
-								destination: 'app_login',
-								text: 'Login'
-							});
-							closeMobileMenu();
-						}}
-					>
-						Login
-					</a>
-					<a
 						href="https://cal.com/mferrandiz/scanopy-demo"
 						target="_blank"
 						rel="noopener noreferrer"
@@ -481,12 +324,12 @@
 							analytics.ctaClicked({
 								location: 'navbar_mobile',
 								destination: 'talk_to_sales',
-								text: 'Talk to Sales'
+								text: 'Book Demo'
 							});
 							closeMobileMenu();
 						}}
 					>
-						Talk to Sales
+						Book Demo
 					</a>
 					<a
 						href={appHref(APP.onboarding, page.url.pathname, 'navbar-mobile', 'nav')}

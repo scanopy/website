@@ -125,8 +125,8 @@
 							analytics.ctaClicked({
 								location: 'pricing_top',
 								destination: 'talk_to_sales',
-								text: 'Talk to Sales'
-							})}>Talk to Sales</a
+								text: 'Book Demo'
+							})}>Book Demo</a
 					>
 				</p>
 			</div>
