@@ -72,7 +72,7 @@ This isn't just a homelab problem. Keith Tokash put it well on [Packet Pushers](
 
 It scales up, too. According to [The Trevi Group](https://www.thetrevigroup.com/new-blog/2025/12/18/why-network-documentation-is-failing-enterprises-and-how-to-fix-it), most IT teams have documentation scattered everywhere - spreadsheets in someone's OneDrive, old Visio diagrams from three network refreshes ago, notes buried in ticketing tools, a wiki page that might be current or might be from 2019.
 
-And here's the thing: [stale documentation is arguably more dangerous than no documentation](https://www.layer8packet.io/home/best-practices-for-network-documentation-a-guide-for-network-engineers). No documentation, you know you're flying blind. Stale documentation, you think you have a map, but it's a map of a network that no longer exists.
+And worse: [stale documentation is arguably more dangerous than no documentation](https://www.layer8packet.io/home/best-practices-for-network-documentation-a-guide-for-network-engineers). No documentation, you know you're flying blind. Stale documentation, you think you have a map, but it's a map of a network that no longer exists.
 
 ## Why Templates Go Stale
 

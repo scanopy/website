@@ -265,6 +265,30 @@
 		scroll-margin-top: 5rem;
 	}
 
+	/* Pull-quote treatment for customer quotes and callouts */
+	:global(.prose blockquote) {
+		border-left: 3px solid rgb(var(--c-blue-500));
+		padding-left: 1.25rem;
+		margin: 2rem 0;
+	}
+
+	:global(.prose blockquote p) {
+		color: rgb(var(--c-gray-200));
+		font-style: italic;
+		font-size: 1.125rem;
+		line-height: 1.7;
+		margin-bottom: 0.5rem;
+	}
+
+	/* When a second paragraph exists (attribution line), style it as the citation */
+	:global(.prose blockquote p:last-child:not(:first-child)) {
+		color: rgb(var(--c-gray-400));
+		font-style: normal;
+		font-size: 0.9rem;
+		margin-top: 0.75rem;
+		margin-bottom: 0;
+	}
+
 	:global(.prose p) {
 		color: rgb(var(--c-gray-300));
 		margin-bottom: 1.25rem;

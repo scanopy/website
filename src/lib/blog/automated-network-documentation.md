@@ -140,5 +140,5 @@ If you're evaluating tools, our [comparison of automated network diagram tools](
 - **Protocol support**: SNMP, LLDP, and CDP at minimum. ARP and MAC table scanning for full topology
 - **Scheduled rescans**: one-time discovery is just a fancier manual diagram. Automation means continuous updates
 - **Shareable output**: your whole team should see the map without per-seat licensing
-- **Export options**: SVG, embeddable iframes, integrations with tools you already use
+- **Export options**: images (PNG, SVG, PDF), diagram markup (Mermaid, Confluence), CSV data, and embeddable iframes
 - **Transparent pricing**: avoid per-device models that scale unpredictably as your network grows
