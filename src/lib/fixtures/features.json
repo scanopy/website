@@ -84,6 +84,30 @@
     }
   },
   {
+    "id": "saml",
+    "name": "SAML",
+    "description": "Connect your SAML 2.0 identity provider for enterprise single sign-on",
+    "category": "Enterprise",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": true,
+      "minimum_plan": "Enterprise"
+    }
+  },
+  {
+    "id": "air_gapped_deployment",
+    "name": "Air-gapped Deployment",
+    "description": "License validated fully offline. Deploy in networks with no outbound internet access",
+    "category": "Enterprise",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Enterprise"
+    }
+  },
+  {
     "id": "managed_deployment",
     "name": "Managed Deployment",
     "description": "We deploy, configure, and manage Scanopy for you on a dedicated instance",
