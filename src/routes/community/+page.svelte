@@ -1,39 +1,7 @@
 <script lang="ts">
 	import GithubStars from '$lib/components/GithubStars.svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { Check, ExternalLink } from 'lucide-svelte';
-	import billingPlansData from '$lib/fixtures/billing-plans.json';
-	import featuresData from '$lib/fixtures/features.json';
-
-	const communityPlan = billingPlansData.find(
-		(p) => p.id === 'Community' && p.metadata.rate === 'Month'
-	)!;
-
-	const supportFeatureIds = new Set([
-		'community_support',
-		'email_support',
-		'live_chat_support',
-		'priority_support',
-		'onboarding_call'
-	]);
-
-	const enabledFeatureIds = Object.entries(communityPlan.metadata.features)
-		.filter(([id, enabled]) => enabled && !supportFeatureIds.has(id))
-		.map(([id]) => id);
-
-	const featuresMap = new Map(featuresData.map((f) => [f.id, f]));
-
-	const features = enabledFeatureIds
-		.map((id) => featuresMap.get(id))
-		.filter((f): f is (typeof featuresData)[number] => f != null);
-
-	// Plan limits, sourced from the billing fixture so they stay in sync with the product.
-	const includedHosts = communityPlan.metadata.included_hosts;
-	const includedNetworks = communityPlan.metadata.included_networks;
-	const includedSeats = communityPlan.metadata.included_seats;
-
-	const pluralize = (n: number | null, word: string) =>
-		n === null ? `unlimited ${word}s` : `${n} ${word}${n === 1 ? '' : 's'}`;
+	import { ExternalLink } from 'lucide-svelte';
 
 	const communityLinks = [
 		{ name: 'GitHub', url: 'https://github.com/scanopy/scanopy', destination: 'github' },
@@ -157,43 +125,6 @@ docker compose up -d</code
 				class="text-blue-400 hover:text-blue-300">full install docs</a
 			> for more options.
 		</p>
-	</div>
-</section>
-
-<!-- What's Included -->
-<section class="border-t border-gray-800 py-20">
-	<div class="container mx-auto px-4">
-		<h2 class="mb-4 text-center text-3xl font-bold text-rose-400 lg:text-4xl">What's Included</h2>
-		<p class="mb-10 text-center text-gray-400 first-letter:uppercase">
-			{pluralize(includedHosts, 'host')}, {pluralize(includedNetworks, 'network')},
-			{pluralize(includedSeats, 'user seat')}, API access - all free.
-		</p>
-		<div class="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-			{#each features as feature}
-				<div class="card card-static p-4">
-					<div class="flex items-start gap-3">
-						<Check class="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" />
-						<div>
-							<p class="font-medium text-white">{feature.name}</p>
-							<p class="text-sm text-gray-400">{feature.description}</p>
-						</div>
-					</div>
-				</div>
-			{/each}
-		</div>
-
-		<div
-			class="mx-auto mt-10 max-w-2xl rounded-lg border border-gray-800 bg-gray-900/50 p-5 text-center"
-		>
-			<p class="text-sm text-gray-400">
-				<span class="font-medium text-white">Free plan limits:</span>
-				{pluralize(includedHosts, 'host')}, {pluralize(includedNetworks, 'network')}, and
-				{pluralize(includedSeats, 'user seat')}. Need more networks, team seats, or a commercial
-				license to self-host in your business? See the
-				<a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial Edition</a>
-				or our <a href="/pricing" class="text-blue-400 hover:text-blue-300">cloud plans</a>.
-			</p>
-		</div>
 	</div>
 </section>
 

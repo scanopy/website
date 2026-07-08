@@ -23,7 +23,7 @@ faq:
     answer: The pricing model matters more than the sticker price. Monitoring-adjacent tools charge per device, which penalizes documenting everything, and documentation's value is completeness. Open-source options like Scanopy Community Edition and NetDisco are free to self-host. Scanopy's commercial editions are priced flat regardless of host count, so documenting your whole network costs the same as documenting part of it.
 ---
 
-Network documentation software keeps an accurate, current record of your network: what devices exist, how they connect, and what runs on them. The category splits into two kinds. One asks you to enter and maintain that record by hand. The other discovers it from the network itself and keeps it current automatically. The difference is the whole ballgame, because the manual kind decays the moment you save it.
+Network documentation software keeps an accurate, current record of your network: what devices exist, how they connect, and what runs on them. The category splits into two kinds. One asks you to enter and maintain that record by hand. The other discovers it from the network itself and keeps it current automatically. The difference is the whole point, because the manual kind decays the moment you save it.
 
 This is a guide to what the category actually does, how the automated tools differ from templates and spreadsheets, which options are open source, and where network documentation stops and monitoring or asset management begins.
 
@@ -83,4 +83,4 @@ That's why Scanopy prices [flat regardless of host count](/pricing). Pricing doc
 
 ## Where Scanopy fits
 
-Scanopy is network documentation software, not a monitoring or asset platform, and it stays in that lane on purpose. A lightweight daemon discovers your hosts, services, interfaces, and topology, then builds an interactive map with four views of the same scan (physical L2, logical L3, workloads, and applications). The map updates on a schedule and exports to SVG, Mermaid, or Confluence, or embeds via iframe. It runs alongside whatever monitoring and ITAM tools you already have.
+Scanopy is network documentation software, not a monitoring or asset platform, and it stays in that lane on purpose. A lightweight daemon discovers your hosts, services, interfaces, and topology, then builds an interactive map with four views of the same scan (physical L2, logical L3, workloads, and applications). The map updates on a schedule and exports as an image (PNG, SVG, PDF), as diagram markup (Mermaid, Confluence), or as CSV data, and embeds via iframe. It runs alongside whatever monitoring and ITAM tools you already have.

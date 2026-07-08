@@ -1,28 +1,16 @@
 <script lang="ts">
-	import { ContactModal } from '$lib/components';
+	import { ContactModal, PricingSection } from '$lib/components';
 	import FAQ from '$lib/components/FAQ.svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { Check, Shield, Server, Lock, FileCheck, ArrowRight } from 'lucide-svelte';
+	import { Shield, Server, Lock, FileCheck, ArrowRight } from 'lucide-svelte';
 	import billingPlansData from '$lib/fixtures/billing-plans.json';
-	import featuresData from '$lib/fixtures/features.json';
 	import { getFAQPageSchema } from '$lib/schemas';
 
-	const commercialPlan = billingPlansData.find(
-		(p) => p.id === 'CommercialSelfHosted' && p.metadata.rate === 'Month'
-	)!;
-
-	// Show the full enabled feature set, including support features — for the Commercial
-	// Edition those (priority support, email support, onboarding call) are a selling point,
-	// so unlike the Community page we don't filter them out.
-	const enabledFeatureIds = Object.entries(commercialPlan.metadata.features)
-		.filter(([, enabled]) => enabled === true)
-		.map(([id]) => id);
-
-	const featuresMap = new Map(featuresData.map((f) => [f.id, f]));
-
-	const features = enabledFeatureIds
-		.map((id) => featuresMap.get(id))
-		.filter((f): f is (typeof featuresData)[number] => f != null);
+	// Published annual price for a self-hosted tier, read from the fixture (not hardcoded).
+	function annualPrice(id: string): string {
+		const p = billingPlansData.find((x) => x.id === id && x.metadata.rate === 'Year');
+		return p ? `$${(p.metadata.base_cents / 100).toLocaleString('en-US')}` : '';
+	}
 
 	const whySelfHost = [
 		{
@@ -55,17 +43,16 @@
 		{
 			question: 'What is the Commercial Edition?',
 			answer:
-				'The Commercial Edition is the full Scanopy stack, self-hosted on your own infrastructure, with a commercial license and support. It adds advanced capabilities — audit logs, custom SSO, Confluence export, webhooks, and priority support — on top of the free Community Edition.'
+				'The Commercial Edition is the full Scanopy stack, self-hosted on your own infrastructure with a commercial license and support. It comes in two published tiers, Self-Hosted Standard and Self-Hosted Plus, that add capabilities like audit logs, webhooks, Confluence export, SAML, and priority support on top of the free Community Edition.'
 		},
 		{
 			question: 'How is it different from the free Community Edition?',
 			answer:
-				'The Community Edition is free and open for self-hosting, limited to one network and one user seat. The Commercial Edition adds a commercial license for business use, unlimited networks and seats, and advanced features (custom SSO, audit logs, Confluence export, webhooks), plus email and priority support.'
+				'The Community Edition is free and open source for self-hosting, limited to one network and one user seat. The Commercial Edition adds a commercial license for business use, higher network and seat limits, multiple organizations per instance, and advanced features (SAML, audit logs, Confluence export, webhooks), plus email and priority support.'
 		},
 		{
 			question: 'How much does it cost?',
-			answer:
-				'Commercial Edition is custom-priced based on your deployment. Tell us about your environment and we will put together a quote.'
+			answer: `Self-Hosted Standard starts at ${annualPrice('SelfHostedStandard') || '$3,000'} per year and Self-Hosted Plus is ${annualPrice('SelfHostedPlus') || '$6,000'} per year, both billed annually with no per-host fees. Larger or custom deployments are priced individually. Tell us about your environment and we will size the right tier or put together a custom quote.`
 		},
 		{
 			question: 'Can I run Scanopy in an air-gapped environment?',
@@ -177,12 +164,12 @@
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto max-w-3xl px-4">
 		<p class="text-lg leading-relaxed text-gray-300">
-			The Commercial Edition is Scanopy's self-hosted edition for business — the same automatic
-			discovery engine that powers our cloud plans, running entirely on your own infrastructure.
-			It's for any organization that prefers to self-host — including regulated industries,
-			air-gapped and on-prem environments, and teams with strict data-residency requirements. You
-			get a commercial license, unlimited networks and seats, advanced features, and support on top
-			of everything in the free Community Edition.
+			The Commercial Edition is Scanopy's self-hosted edition for business. It runs the same
+			automatic discovery engine that powers our cloud plans, entirely on your own infrastructure.
+			It fits any organization that prefers to self-host, including regulated industries, air-gapped
+			and on-prem environments, and teams with strict data-residency requirements. You get a
+			commercial license, published pricing, advanced features, and support on top of everything in
+			the free Community Edition.
 		</p>
 	</div>
 </section>
@@ -206,27 +193,21 @@
 	</div>
 </section>
 
-<!-- What's Included -->
+<!-- Commercial plans -->
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
-		<h2 class="mb-4 text-center text-3xl font-bold text-rose-400 lg:text-4xl">What's Included</h2>
-		<p class="mb-10 text-center text-gray-400">
-			Unlimited hosts, networks, and seats, plus every advanced feature — all on your
-			infrastructure.
-		</p>
-		<div class="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-			{#each features as feature}
-				<div class="card card-static p-4">
-					<div class="flex items-start gap-3">
-						<Check class="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" />
-						<div>
-							<p class="font-medium text-white">{feature.name}</p>
-							<p class="text-sm text-gray-400">{feature.description}</p>
-						</div>
-					</div>
-				</div>
-			{/each}
+		<div class="mb-10 text-center">
+			<h2 class="mb-3 text-3xl font-bold text-rose-400 lg:text-4xl">Commercial plans</h2>
+			<p class="mx-auto max-w-2xl text-gray-400">
+				Published annual pricing, no per-host fees. Compare the two tiers below, or talk to us about a
+				custom deployment.
+			</p>
 		</div>
+		<PricingSection
+			planIds={['SelfHostedStandard', 'SelfHostedPlus']}
+			showHosting={false}
+			showGithubStars={false}
+		/>
 	</div>
 </section>
 
@@ -240,9 +221,10 @@
 			evaluation, and small teams.
 		</p>
 		<p class="text-lg leading-relaxed text-gray-300">
-			Step up to the Commercial Edition when you need a commercial license for business use, no
-			limits on networks or seats, advanced features like custom SSO, audit logs, Confluence export,
-			and webhooks, or email and priority support backing your deployment.
+			Step up to the Commercial Edition when you need a commercial license for business use, higher
+			network and seat limits, multiple organizations per instance, advanced features like SAML,
+			audit logs, Confluence export, and webhooks, or email and priority support backing your
+			deployment.
 		</p>
 	</div>
 </section>
@@ -298,6 +280,6 @@
 <ContactModal
 	open={showContactModal}
 	onClose={() => (showContactModal = false)}
-	planType="CommercialSelfHosted"
+	planType="SelfHostedStandard"
 	planName="Commercial Edition"
 />

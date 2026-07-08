@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { marked } from 'marked';
+import { externalizeLinks } from '$lib/server/externalize-links';
 import { vendors, vendorSources } from '$lib/fixtures/network-diagram-vendors';
 import {
 	parseVsSlug,
@@ -38,14 +39,10 @@ export async function load({ params }) {
 	const takeaway = buildTakeaway(vendor);
 	const title = buildTitle(vendor);
 	const description = buildMetaDescription(vendor);
-	let versusHtml = vendor.versus ? ((await marked.parse(vendor.versus)) as string) : null;
-	if (versusHtml) {
-		// External (http) reference links open in a new tab.
-		versusHtml = versusHtml.replace(
-			/<a href="(https?:\/\/[^"]+)"/g,
-			'<a href="$1" target="_blank" rel="noopener noreferrer"'
-		);
-	}
+	// Off-site reference links open in a new tab; internal scanopy.net links stay same-tab.
+	const versusHtml = vendor.versus
+		? externalizeLinks((await marked.parse(vendor.versus)) as string)
+		: null;
 
 	// Only surface the citations actually referenced on this page (Scanopy + this vendor),
 	// keeping the sources list tight and the [n] anchors resolvable.

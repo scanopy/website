@@ -18,7 +18,9 @@ export type BillingPlanType =
 	| 'Team'
 	| 'Business'
 	| 'Enterprise'
-	| 'CommercialSelfHosted';
+	| 'CommercialSelfHosted'
+	| 'SelfHostedStandard'
+	| 'SelfHostedPlus';
 
 export interface BillingPlan {
 	base_cents: number;
@@ -38,6 +40,8 @@ export interface BillingPlanMetadata {
 	is_commercial: boolean;
 	hosting: string;
 	custom_price: string | null;
+	purchase_flow: string;
+	included_orgs: number | null;
 	incremental_features: string[];
 	previous_tier: string | null;
 }

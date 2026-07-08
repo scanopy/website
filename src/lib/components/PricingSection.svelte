@@ -17,11 +17,14 @@
 	interface Props {
 		showGithubStars?: boolean;
 		showHosting?: boolean;
+		/** Restrict the table to these plan ids (e.g. a Standard+Plus-only table on /commercial). */
+		planIds?: string[];
 	}
 
 	let {
 		showGithubStars = false,
 		showHosting = true,
+		planIds
 	}: Props = $props();
 
 	// ============================================================================
@@ -58,6 +61,8 @@
 			is_commercial: boolean;
 			hosting: string;
 			custom_price: string | null;
+			purchase_flow: string;
+			included_orgs: number | null;
 			incremental_features: string[];
 			previous_tier: string | null;
 		};
@@ -96,7 +101,9 @@
 		trial_days: item.metadata.trial_days,
 		type: item.id
 	}));
-	const plans: BillingPlan[] = allPlans.filter((p) => p.type !== 'Free');
+	const plans: BillingPlan[] = allPlans.filter(
+		(p) => p.type !== 'Free' && (planIds ? planIds.includes(p.type) : true)
+	);
 
 	// ============================================================================
 	// Metadata Helpers Factory
@@ -138,6 +145,8 @@
 			is_commercial: item.metadata.is_commercial,
 			hosting: item.metadata.hosting,
 			custom_price: item.metadata.custom_price,
+			purchase_flow: item.metadata.purchase_flow,
+			included_orgs: item.metadata.included_orgs,
 			incremental_features: item.metadata.incremental_features,
 			previous_tier: item.metadata.previous_tier
 		} as BillingPlanMetadata
@@ -187,6 +196,7 @@
 	onPlanInquiry={handlePlanInquiry}
 	{showGithubStars}
 	{showHosting}
+	showBillingPeriodToggle={!planIds}
 />
 
 <ContactModal

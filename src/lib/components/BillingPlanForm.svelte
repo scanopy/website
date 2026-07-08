@@ -40,6 +40,8 @@
 		onPlanInquiry?: (plan: BillingPlan) => void | Promise<void>;
 		showGithubStars?: boolean;
 		showHosting?: boolean;
+		/** Show the Monthly/Yearly toggle. False for limited single-cadence tables (e.g. /commercial). */
+		showBillingPeriodToggle?: boolean;
 		class?: string;
 		recommendedPlan?: string | null;
 		/** If true, user is a returning customer and should not see trial offers */
@@ -56,6 +58,7 @@
 		showGithubStars = true,
 		class: className = '',
 		showHosting = false,
+		showBillingPeriodToggle = true,
 		recommendedPlan = null,
 		isReturningCustomer = false
 	}: Props = $props();
@@ -79,28 +82,38 @@
 		{ value: 'selfhosted', label: 'Self-Hosted' }
 	];
 
+	// Self-hosted is annual-only (the paid tiers ship yearly), so the Self-Hosted tab
+	// always renders yearly rows and locks the Monthly/Yearly toggle to Yearly (disabled).
+	let selfHostedActive = $derived(showHosting && hostingFilter === 'selfhosted');
+
 	let filteredPlans = $derived.by(() => {
 		let result = plans;
 		if (showHosting) {
 			result = result.filter((plan) => {
 				const hosting = getHosting(plan);
-				if (hostingFilter === 'cloud') return hosting === 'Cloud' || hosting === 'Managed';
-				if (hostingFilter === 'selfhosted') return hosting === 'SelfHosted';
+				// Enterprise is hosting-agnostic ('Any') and tops both ladders.
+				if (hostingFilter === 'cloud')
+					return hosting === 'Cloud' || hosting === 'Managed' || hosting === 'Any';
+				if (hostingFilter === 'selfhosted') return hosting === 'SelfHosted' || hosting === 'Any';
 				return true;
 			});
 		}
+		const period = selfHostedActive ? 'yearly' : billingPeriod;
 		result = result.filter((plan) => {
 			// Free / custom-price plans only have a Month variant; yearly is a duplicate
 			if (hasCustomPrice(plan)) return plan.rate === 'Month';
 			if (plan.type === 'Free') return plan.rate === 'Month';
-			if (billingPeriod === 'monthly') return plan.rate === 'Month';
-			if (billingPeriod === 'yearly') return plan.rate === 'Year';
+			if (period === 'monthly') return plan.rate === 'Month';
+			if (period === 'yearly') return plan.rate === 'Year';
 			return true;
 		});
-		// Sort Free plan first (when visible)
+		// Sort Free first and Enterprise last (Enterprise is hosting-agnostic and tops both
+		// ladders); everything else keeps fixture order (stable sort).
 		result = [...result].sort((a, b) => {
 			if (a.type === 'Free') return -1;
 			if (b.type === 'Free') return 1;
+			if (a.type === 'Enterprise') return 1;
+			if (b.type === 'Enterprise') return -1;
 			return 0;
 		});
 		return result;
@@ -225,9 +238,22 @@
 	// Helper functions
 	// ============================================================================
 
+	// Self-hosted commercial tiers publish a real annual price (custom_price is null,
+	// rate is Year). They're shown annual-first ("$3,000/yr") with a monthly whisper,
+	// unlike Cloud plans which stay monthly-first.
+	function isSelfHostedAnnual(plan: BillingPlan): boolean {
+		const metadata = billingPlanHelpers.getMetadata(plan.type);
+		return metadata?.hosting === 'SelfHosted' && !metadata?.custom_price && plan.rate === 'Year';
+	}
+
+	function formatDollars(cents: number): string {
+		return `$${(cents / 100).toLocaleString('en-US')}`;
+	}
+
 	function formatBasePricing(plan: BillingPlan): string {
 		const metadata = billingPlanHelpers.getMetadata(plan.type);
 		if (metadata?.custom_price) return metadata.custom_price;
+		if (isSelfHostedAnnual(plan)) return formatDollars(plan.base_cents);
 		if (plan.rate === 'Year') return `$${plan.base_cents / 12 / 100}`;
 		return `$${plan.base_cents / 100}`;
 	}
@@ -235,6 +261,7 @@
 	function formatRate(plan: BillingPlan): string {
 		const metadata = billingPlanHelpers.getMetadata(plan.type);
 		if (metadata?.custom_price) return '';
+		if (isSelfHostedAnnual(plan)) return '/yr';
 		if (plan.rate === 'Year') return '/mo, billed yearly';
 		return '/mo';
 	}
@@ -265,6 +292,19 @@
 
 	function getHosting(plan: BillingPlan): string {
 		return billingPlanHelpers.getMetadata(plan.type)?.hosting ?? '';
+	}
+
+	// Feature ids that are enabled (boolean true) on a plan. Used to compute a true feature
+	// diff when a card chains to a neighbor that isn't its backend previous_tier (e.g.
+	// Enterprise chaining to Self-Hosted Plus on the Self-Hosted tab).
+	function enabledFeatureIds(planType: string | null): string[] {
+		const features = billingPlanHelpers.getMetadata(planType)?.features as
+			| Record<string, boolean | string | number | null>
+			| undefined;
+		if (!features) return [];
+		return Object.entries(features)
+			.filter(([, v]) => v === true)
+			.map(([k]) => k);
 	}
 
 	function isCommercial(plan: BillingPlan): boolean {
@@ -360,26 +400,33 @@
 </script>
 
 <div class="space-y-6 {className}">
-	<!-- Header with Toggles -->
-	<div class="flex flex-wrap items-stretch justify-center gap-3 px-4 lg:gap-6 lg:px-10">
-		{#if showGithubStars}
-			<!-- <GithubStars /> -->
-		{/if}
+	{#if showHosting || showBillingPeriodToggle}
+		<!-- Header with Toggles -->
+		<div class="flex flex-wrap items-stretch justify-center gap-3 px-4 lg:gap-6 lg:px-10">
+			{#if showGithubStars}
+				<!-- <GithubStars /> -->
+			{/if}
 
-		<ToggleGroup
-			options={billingPeriodOptions}
-			selected={billingPeriod}
-			onchange={(value) => (billingPeriod = value as BillingPeriod)}
-		/>
+			{#if showBillingPeriodToggle}
+				<!-- Self-hosted paid tiers are annual-only, so the toggle stays visible but
+			     locked to Yearly rather than disappearing when Self-Hosted is selected. -->
+				<ToggleGroup
+					options={billingPeriodOptions}
+					selected={selfHostedActive ? 'yearly' : billingPeriod}
+					onchange={(value) => (billingPeriod = value as BillingPeriod)}
+					disabled={selfHostedActive}
+				/>
+			{/if}
 
-		{#if showHosting}
-			<ToggleGroup
-				options={hostingOptions}
-				selected={hostingFilter}
-				onchange={(value) => (hostingFilter = value as HostingFilter)}
-			/>
-		{/if}
-	</div>
+			{#if showHosting}
+				<ToggleGroup
+					options={hostingOptions}
+					selected={hostingFilter}
+					onchange={(value) => (hostingFilter = value as HostingFilter)}
+				/>
+			{/if}
+		</div>
+	{/if}
 
 	<!-- Plan Cards -->
 	<div class="plan-cards-container px-4 lg:px-6">
@@ -394,17 +441,35 @@
 				{@const trial = hasTrial(plan)}
 				{@const enterprise = isEnterprise(plan)}
 				{@const metadata = billingPlanHelpers.getMetadata(plan.type)}
+				{@const purchaseFlow = metadata?.purchase_flow}
 				{@const incrementalFeatures = metadata?.incremental_features ?? []}
-				{@const prevTier = metadata?.previous_tier}
+				{@const backendPrevTier = metadata?.previous_tier}
+				{@const backendPrevVisible = backendPrevTier
+					? filteredPlans.some((p) => p.type === backendPrevTier)
+					: false}
+				{@const cardIdx = filteredPlans.findIndex(
+					(p) => p.type === plan.type && p.rate === plan.rate
+				)}
+				{@const neighborPrev = cardIdx > 0 ? filteredPlans[cardIdx - 1].type : null}
+				{@const usesNeighbor = !backendPrevVisible && neighborPrev !== null}
+				{@const prevTier = backendPrevVisible
+					? backendPrevTier
+					: usesNeighbor
+						? neighborPrev
+						: backendPrevTier}
 				{@const prevTierVisible = prevTier ? filteredPlans.some((p) => p.type === prevTier) : false}
 				{@const prevTierFeatures =
 					prevTier && !prevTierVisible
 						? (billingPlanHelpers.getMetadata(prevTier)?.incremental_features ?? [])
 						: []}
 				{@const displayFeatures = sortFeaturesByCategory(
-					prevTierFeatures.length > 0
-						? [...new Set([...prevTierFeatures, ...incrementalFeatures])]
-						: incrementalFeatures
+					usesNeighbor
+						? enabledFeatureIds(plan.type).filter(
+								(f) => !enabledFeatureIds(neighborPrev).includes(f)
+							)
+						: prevTierFeatures.length > 0
+							? [...new Set([...prevTierFeatures, ...incrementalFeatures])]
+							: incrementalFeatures
 				)}
 
 				<div
@@ -462,6 +527,13 @@
 								{/if}
 							</div>
 						{/if}
+						{#if selfHostedActive || isSelfHostedAnnual(plan)}
+							<div
+								class={`text-tertiary text-center text-xs ${isSelfHostedAnnual(plan) && !hasExtras(plan) ? 'opacity-100' : 'opacity-0'}`}
+							>
+								that's ~{isSelfHostedAnnual(plan) ? formatCents(plan.base_cents / 12) : '$0'}/mo
+							</div>
+						{/if}
 						<div
 							class={`text-xs font-medium text-success ${hasTrial(plan) && !hasCustomPrice(plan) ? 'opacity-100' : 'opacity-0'}`}
 						>
@@ -487,7 +559,7 @@
 							>
 								Request Information
 							</button>
-						{:else if hosting === 'Cloud'}
+						{:else if purchaseFlow === 'stripe'}
 							<button
 								type="button"
 								onclick={() => handlePlanSelect(plan)}
@@ -503,35 +575,24 @@
 							{#if trial}
 								<p class="text-tertiary mt-2 text-center text-xs">No card required</p>
 							{/if}
-						{:else if hosting === 'SelfHosted'}
-							{#if commercial && onPlanInquiry}
-								<button
-									type="button"
-									onclick={() => onPlanInquiry(plan)}
-									disabled={loadingPlanType !== null}
-									class="btn-primary w-full text-sm"
-								>
-									Contact Us
-								</button>
-							{:else}
-								<a
-									href="https://github.com/scanopy/scanopy"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="btn-secondary inline-block w-full text-center text-sm"
-								>
-									View on GitHub
-								</a>
-							{/if}
-						{:else if commercial && onPlanInquiry}
+						{:else if purchaseFlow === 'contact' && onPlanInquiry}
 							<button
 								type="button"
 								onclick={() => onPlanInquiry(plan)}
 								disabled={loadingPlanType !== null}
 								class="btn-primary w-full text-sm"
 							>
-								Contact Us
+								Get a license
 							</button>
+						{:else}
+							<a
+								href="https://github.com/scanopy/scanopy"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="btn-secondary inline-block w-full text-center text-sm"
+							>
+								View on GitHub
+							</a>
 						{/if}
 					</div>
 
@@ -608,6 +669,18 @@
 								</span>
 							{/if}
 						</div>
+
+						<!-- Organizations (self-hosted concept; not shown on Cloud plans) -->
+						{#if getHosting(plan) !== 'Cloud'}
+							<div class="flex items-center justify-between text-sm">
+								<div class="flex flex-col">
+									<span class="text-secondary">Organizations</span>
+								</div>
+								<span class="text-primary font-medium">
+									{formatIncludedValue(metadata?.included_orgs, plan)}
+								</span>
+							</div>
+						{/if}
 
 						<!-- Hosts -->
 						<div class="flex items-center justify-between text-sm">

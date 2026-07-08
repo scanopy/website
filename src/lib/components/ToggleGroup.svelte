@@ -9,19 +9,22 @@
 		options: ToggleOption[];
 		selected: string;
 		onchange: (value: string) => void;
+		/** Render the group non-interactive (still shows the selected option). */
+		disabled?: boolean;
 	}
 
-	let { options, selected, onchange }: Props = $props();
+	let { options, selected, onchange, disabled = false }: Props = $props();
 </script>
 
-<div class="card inline-flex gap-1 rounded-full p-1">
+<div class="card inline-flex gap-1 rounded-full p-1 {disabled ? 'opacity-50' : ''}">
 	{#each options as option (option.value)}
 		<button
 			type="button"
+			{disabled}
 			onclick={() => onchange(option.value)}
 			class="rounded-full px-3 py-1.5 text-sm font-medium transition-all {selected === option.value
 				? 'bg-gray-700 text-white'
-				: 'text-gray-400 hover:text-gray-300'}"
+				: 'text-gray-400 hover:text-gray-300'} {disabled ? 'cursor-not-allowed' : ''}"
 		>
 			<span>{option.label}</span>
 			{#if option.badge}

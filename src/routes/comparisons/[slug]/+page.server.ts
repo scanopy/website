@@ -1,5 +1,6 @@
 import { marked, Renderer } from 'marked';
 import { error } from '@sveltejs/kit';
+import { externalizeLinks } from '$lib/server/externalize-links';
 import {
 	vendors,
 	tableCategories,
@@ -47,7 +48,10 @@ function parseFrontmatter(content: string): { frontmatter: Record<string, string
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			frontmatter[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
+			frontmatter[key.trim()] = valueParts
+				.join(':')
+				.trim()
+				.replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 
@@ -206,15 +210,13 @@ export async function load({ params }) {
 				return `<h${depth}>${parsed.replace(/&quot;/g, '"').replace(/&#39;/g, "'")}</h${depth}>`;
 			};
 
-			let htmlContent = (await marked.parse(body, { renderer })) as string;
-			// External (http) reference links open in a new tab.
-			htmlContent = htmlContent.replace(
-				/<a href="(https?:\/\/[^"]+)"/g,
-				'<a href="$1" target="_blank" rel="noopener noreferrer"'
-			);
+			// Off-site reference links open in a new tab; internal scanopy.net links stay same-tab.
+			let htmlContent = externalizeLinks((await marked.parse(body, { renderer })) as string);
 
 			// Wrap markdown-rendered tables in scroll containers for mobile
-			htmlContent = htmlContent.replace(/<table>/g, '<div class="table-scroll"><table>').replace(/<\/table>/g, '</table></div>');
+			htmlContent = htmlContent
+				.replace(/<table>/g, '<div class="table-scroll"><table>')
+				.replace(/<\/table>/g, '</table></div>');
 
 			// Replace dynamic markers with vendor-derived content
 			const manualCategory = tableCategories.find((c) => c.id === 'manual');
@@ -228,10 +230,7 @@ export async function load({ params }) {
 				} else {
 					manualList = `${manualNames.slice(0, -1).join(', ')}, and ${manualNames[manualNames.length - 1]}`;
 				}
-				htmlContent = htmlContent.replace(
-					/<!--\s*manual-tools-list\s*-->/,
-					manualList
-				);
+				htmlContent = htmlContent.replace(/<!--\s*manual-tools-list\s*-->/, manualList);
 			}
 
 			let wordCount = htmlContent
@@ -263,7 +262,17 @@ export async function load({ params }) {
 						seen.add(vSlug);
 						const v = vendors[vSlug];
 						if (!v) continue;
-						const text = [v.description, v.discoveryNotes, v.serviceDiscovery, v.diagrams, v.pricingNotes, v.whereItFits, v.tradeOff].filter(Boolean).join(' ');
+						const text = [
+							v.description,
+							v.discoveryNotes,
+							v.serviceDiscovery,
+							v.diagrams,
+							v.pricingNotes,
+							v.whereItFits,
+							v.tradeOff
+						]
+							.filter(Boolean)
+							.join(' ');
 						wordCount += text.split(/\s+/).filter(Boolean).length;
 					}
 				}
@@ -274,7 +283,11 @@ export async function load({ params }) {
 
 				// Add FAQ headings for TOC
 				if (vendorFAQs.length) {
-					mergedHeadings.push({ id: 'frequently-asked-questions', text: 'Frequently Asked Questions', level: 2 });
+					mergedHeadings.push({
+						id: 'frequently-asked-questions',
+						text: 'Frequently Asked Questions',
+						level: 2
+					});
 				}
 
 				const itemListSchema = generateItemListSchema();

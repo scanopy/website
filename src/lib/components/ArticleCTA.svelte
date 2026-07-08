@@ -41,7 +41,7 @@
 		>
 		<a
 			href="/pricing"
-			class="text-gray-400 transition-colors hover:text-white"
+			class="btn-secondary"
 			onclick={() =>
 				analytics.ctaClicked({
 					location: 'article_cta',

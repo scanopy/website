@@ -274,4 +274,4 @@ You can explore a live one yourself:
 
 <!-- scanopy-demo -->
 
-The SNMP data you just spent an hour querying by hand is always current, because the daemon re-walks it on every scan. Export the map to SVG, Mermaid, or Confluence markup, or embed it the same way the demo above is embedded, straight into your wiki, your runbook, or your Confluence page. It updates itself as the network changes. For the higher-level view of how automated discovery fits into documentation, see our companion piece on [how automated network documentation actually works](/blog/automated-network-documentation).
+The SNMP data you just spent an hour querying by hand is always current, because the daemon re-walks it on every scan. Export the map as an image (PNG, SVG, PDF), as Mermaid or Confluence markup, or as CSV data, or embed it the same way the demo above is embedded, straight into your wiki, your runbook, or your Confluence page. It updates itself as the network changes. For the higher-level view of how automated discovery fits into documentation, see our companion piece on [how automated network documentation actually works](/blog/automated-network-documentation).

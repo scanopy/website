@@ -1,6 +1,7 @@
 import { marked, Renderer } from 'marked';
 import { error } from '@sveltejs/kit';
 import { vendors as allVendors } from '$lib/fixtures/network-diagram-vendors';
+import { externalizeLinks } from '$lib/server/externalize-links';
 import type { Vendor } from '$lib/types';
 
 interface Heading {
@@ -40,8 +41,11 @@ const DEFAULT_INLINE_COLUMNS = ['name', 'discovery', 'pricing', 'bestFor'];
 // Splits rendered markdown on inline component markers so they render as Svelte components
 // instead of raw HTML: `<!-- vendor-table:slug,slug [columns:a,b] -->` and `<!-- scanopy-demo -->`
 // (a theme-aware live map embed). Returns null when the post has neither marker.
-function splitBlogSegments(html: string): { segments: ContentSegment[]; vendorSlugs: string[] } | null {
-	const markerRegex = /<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo)\s*-->/g;
+function splitBlogSegments(
+	html: string
+): { segments: ContentSegment[]; vendorSlugs: string[] } | null {
+	const markerRegex =
+		/<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo)\s*-->/g;
 	if (!markerRegex.test(html)) return null;
 
 	const segments: ContentSegment[] = [];
@@ -86,7 +90,10 @@ function parseFrontmatter(content: string): { frontmatter: Record<string, string
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			frontmatter[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
+			frontmatter[key.trim()] = valueParts
+				.join(':')
+				.trim()
+				.replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 
@@ -172,7 +179,7 @@ export async function load({ params }) {
 				return `<h${depth}>${parsed.replace(/&quot;/g, '"').replace(/&#39;/g, "'")}</h${depth}>`;
 			};
 
-			const htmlContent = await marked.parse(body, { renderer });
+			const htmlContent = externalizeLinks(await marked.parse(body, { renderer }));
 
 			const wordCount = htmlContent
 				.replace(/<[^>]*>/g, '')

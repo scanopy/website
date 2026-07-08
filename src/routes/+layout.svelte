@@ -289,7 +289,7 @@
 								{/each}
 								<div class="my-1 border-t border-gray-800"></div>
 								<a
-									href="/pricing#editions"
+									href="/pricing"
 									class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"
 									onclick={() => {
 										analytics.ctaClicked({
@@ -410,7 +410,7 @@
 									</a>
 								{/each}
 								<a
-									href="/pricing#editions"
+									href="/pricing"
 									class="text-sm text-gray-300 transition-colors hover:text-white"
 									onclick={() => {
 										analytics.ctaClicked({

@@ -54,7 +54,10 @@
 	// the TOC list explicitly when the post has FAQ items. Its id matches the rendered <h2>.
 	const tocHeadings = $derived(
 		data.post.faq && data.post.faq.length > 0
-			? [...data.headings, { id: 'frequently-asked-questions', text: 'Frequently Asked Questions', level: 2 }]
+			? [
+					...data.headings,
+					{ id: 'frequently-asked-questions', text: 'Frequently Asked Questions', level: 2 }
+				]
 			: data.headings
 	);
 
@@ -188,14 +191,16 @@
 					{:else}
 						{@html data.post.content}
 					{/if}
-
-					{#if data.post.faq.length}
-						<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-						<FAQ faqs={data.post.faq} />
-					{/if}
 				</div>
 
 				<ArticleCTA description={data.post.ctaDescription} />
+
+				{#if data.post.faq.length}
+					<div class="prose prose-invert prose-gray mt-12 max-w-none">
+						<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+						<FAQ faqs={data.post.faq} />
+					</div>
+				{/if}
 				<AuthorCard />
 			</div>
 

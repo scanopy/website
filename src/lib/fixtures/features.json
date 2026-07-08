@@ -122,12 +122,12 @@
   {
     "id": "whitelabeling",
     "name": "White Labeling",
-    "description": "We deploy Scanopy to a custom domain with your branding",
+    "description": "Deploy Scanopy with your logo and brand colors",
     "category": "Enterprise",
     "icon": "sparkle",
     "color": "Gray",
     "metadata": {
-      "is_coming_soon": false,
+      "is_coming_soon": true,
       "minimum_plan": "Enterprise"
     }
   },

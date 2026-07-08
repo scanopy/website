@@ -219,14 +219,16 @@
 					{:else}
 						{@html data.post.content}
 					{/if}
-
-					{#if data.vendorData?.faqs?.length}
-						<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-						<FAQ faqs={data.vendorData.faqs} />
-					{/if}
 				</div>
 
 				<ArticleCTA description={data.post.ctaDescription} />
+
+				{#if data.vendorData?.faqs?.length}
+					<div class="prose prose-invert prose-gray mt-12 max-w-none">
+						<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+						<FAQ faqs={data.vendorData.faqs} />
+					</div>
+				{/if}
 				<AuthorCard />
 			</div>
 

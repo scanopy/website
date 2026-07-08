@@ -199,10 +199,58 @@ export async function getSoftwareApplicationSchema() {
 }
 
 /**
+ * Individual Offers for the published self-hosted commercial tiers. These are annual-only
+ * (billingDuration P1Y), so they're kept OUT of the Cloud monthly AggregateOffer band and
+ * surfaced as their own Offers instead, keeping the $/mo band clean while still making the
+ * self-hosted prices citable by AI answer engines.
+ */
+function getSelfHostedPaidOffers() {
+	const futureDate = new Date();
+	futureDate.setFullYear(futureDate.getFullYear() + 1);
+	const priceValidUntil = futureDate.toISOString().split('T')[0];
+
+	return billingPlans
+		.filter(
+			(p) =>
+				p.metadata.hosting === 'SelfHosted' &&
+				p.metadata.rate === 'Year' &&
+				p.metadata.base_cents > 0 &&
+				!p.metadata.custom_price
+		)
+		.map((plan) => {
+			const price = (plan.metadata.base_cents / 100).toFixed(2);
+			return {
+				'@type': 'Offer',
+				name: plan.name,
+				description: plan.description,
+				priceCurrency: 'USD',
+				price,
+				priceValidUntil,
+				availability: 'https://schema.org/InStock',
+				url: 'https://scanopy.net/commercial',
+				priceSpecification: {
+					'@type': 'UnitPriceSpecification',
+					price,
+					priceCurrency: 'USD',
+					billingDuration: 'P1Y'
+				},
+				seller: {
+					'@type': 'Organization',
+					name: 'Scanopy'
+				}
+			};
+		});
+}
+
+/**
  * Product schema for pricing page
  * @see https://schema.org/Product
  */
 export function getProductSchema() {
+	const aggregate = generateAggregateOffer();
+	const selfHostedOffers = getSelfHostedPaidOffers();
+	const offers = aggregate ? [aggregate, ...selfHostedOffers] : selfHostedOffers;
+
 	return {
 		'@context': 'https://schema.org',
 		'@type': 'Product',
@@ -214,7 +262,7 @@ export function getProductSchema() {
 			'@type': 'Brand',
 			name: 'Scanopy'
 		},
-		offers: generateAggregateOffer()
+		offers
 	};
 }
 

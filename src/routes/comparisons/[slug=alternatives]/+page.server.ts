@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { marked } from 'marked';
+import { externalizeLinks } from '$lib/server/externalize-links';
 import { vendors, vendorSources } from '$lib/fixtures/network-diagram-vendors';
 import type { Vendor } from '$lib/types';
 import {
@@ -71,11 +72,8 @@ export async function load({ params }) {
 	const sources = vendorSources.filter((s) => usedSourceIds.has(s.id));
 
 	// The hand-written Scanopy-vs-<vendor> prose anchors the page with unique analysis.
-	let versusHtml = (await marked.parse(vendor.versus)) as string;
-	versusHtml = versusHtml.replace(
-		/<a href="(https?:\/\/[^"]+)"/g,
-		'<a href="$1" target="_blank" rel="noopener noreferrer"'
-	);
+	// Off-site reference links open in a new tab; internal scanopy.net links stay same-tab.
+	const versusHtml = externalizeLinks((await marked.parse(vendor.versus)) as string);
 
 	return {
 		vendorSlug,

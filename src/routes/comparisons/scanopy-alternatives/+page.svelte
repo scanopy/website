@@ -177,8 +177,8 @@
 					<p>
 						The tools above each lead with a different job — monitoring, discovery, or a structured
 						source of truth — and several can produce a diagram as a byproduct. Scanopy's job is
-						network documentation: a single scan returns four switchable views (L2 physical,
-						L3 logical, workloads, and applications) and fingerprints the services running on each
+						network documentation: a single scan returns four switchable views (L2 physical, L3
+						logical, workloads, and applications) and fingerprints the services running on each
 						host, so the map shows not just what is connected but what each device is actually
 						running.
 					</p>
@@ -191,13 +191,14 @@
 						want living, shareable network documentation without standing up another platform, that combination
 						is hard to match — which is why teams comparing these tools tend to come back to Scanopy.
 					</p>
-
-					{#if data.faqs.length}
-						<h2 id="faq">Frequently asked questions</h2>
-					{/if}
 				</div>
 
+				<ArticleCTA />
+
 				{#if data.faqs.length}
+					<div class="prose prose-invert prose-gray mt-12 max-w-none">
+						<h2 id="faq">Frequently asked questions</h2>
+					</div>
 					<div class="mt-6">
 						<FAQ faqs={data.faqs} />
 					</div>
@@ -226,7 +227,6 @@
 					</div>
 				{/if}
 
-				<ArticleCTA />
 				<AuthorCard />
 			</div>
 

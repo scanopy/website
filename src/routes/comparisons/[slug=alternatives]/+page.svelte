@@ -217,13 +217,14 @@
 
 					<h2 id="why-scanopy">Why Scanopy is a strong {data.vendorName} alternative</h2>
 					{@html data.versusHtml}
-
-					{#if data.faqs.length}
-						<h2 id="faq">Frequently asked questions</h2>
-					{/if}
 				</div>
 
+				<ArticleCTA />
+
 				{#if data.faqs.length}
+					<div class="prose prose-invert prose-gray mt-12 max-w-none">
+						<h2 id="faq">Frequently asked questions</h2>
+					</div>
 					<div class="mt-6">
 						<FAQ faqs={data.faqs} />
 					</div>
@@ -253,7 +254,6 @@
 					</div>
 				{/if}
 
-				<ArticleCTA />
 				<AuthorCard />
 			</div>
 

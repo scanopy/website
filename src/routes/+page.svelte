@@ -110,7 +110,6 @@
 		Server,
 		ArrowRight
 	} from 'lucide-svelte';
-	import type { Component } from 'svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
 	import { page } from '$app/state';
 	import { APP, appHref } from '$lib/config/urls';
@@ -171,8 +170,10 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// Icon mapping from fixture string names to Svelte components
-	const iconMap: Record<string, Component> = {
+	// Icon mapping from fixture string names to Svelte components. Typed off a concrete
+	// lucide icon (they all share the same component type) rather than svelte's `Component`,
+	// which lucide's legacy class components aren't assignable to.
+	const iconMap: Record<string, typeof Download> = {
 		Download,
 		RefreshCw,
 		Box,
@@ -253,6 +254,13 @@
 			url: 'https://www.reddit.com/r/selfhosted/comments/1ohd1ce/comment/nloqmz8/'
 		}
 	];
+
+	// Named commercial customer, featured above the community quotes. No url (private customer).
+	const featuredTestimonial = {
+		quote:
+			'With over 800 switches in our network, keeping topology documentation up to date by hand is almost impossible. We needed automation, especially with NIS2 raising the documentation requirements. Scanopy keeps it current for us.',
+		attribution: 'IT department, Motala Kommun'
+	};
 
 	// Topology view screenshots come in light and dark variants and swap with the
 	// site theme. width/height are identical across themes (same aspect ratio) to
@@ -599,7 +607,7 @@
 			</div>
 
 			<div
-				class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 md:grid md:snap-none md:gap-6 md:overflow-visible md:pb-0 md:grid-cols-2 lg:grid-cols-3"
+				class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 md:grid md:snap-none md:grid-cols-2 md:gap-6 md:overflow-visible md:pb-0 lg:grid-cols-3"
 			>
 				{#each useCases as useCase (useCase.title)}
 					<div class="card card-static shrink-0 basis-[85%] snap-start p-8 md:basis-auto">
@@ -689,34 +697,22 @@
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
 					Flat-rate pricing. No per-device fees. Scale without surprises.
 				</h2>
-				<div class="mx-auto flex flex-col items-center justify-center gap-4 sm:flex-row">
-					<p class="text-lg font-semibold text-gray-200">
-						Prefer to run Scanopy on your own infrastructure?
+				<div class="mx-auto mt-4 max-w-xl text-sm text-gray-400">
+					<p>
+						Evaluating for your team?
+						<a
+							href="https://cal.com/mferrandiz/scanopy-demo"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="font-semibold text-blue-400 hover:text-blue-300"
+							onclick={() =>
+								analytics.ctaClicked({
+									location: 'pricing_selfhost',
+									destination: 'talk_to_sales',
+									text: 'Talk to Sales'
+								})}>Talk to Sales</a
+						>
 					</p>
-					<a
-						href="/commercial"
-						class="rounded-lg border border-blue-500/40 px-4 py-1.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-500/10 hover:text-blue-900 dark:text-blue-300 dark:hover:text-blue-200"
-						onclick={() =>
-							analytics.ctaClicked({
-								location: 'pricing_selfhost',
-								destination: 'commercial',
-								text: 'Commercial Edition'
-							})}
-					>
-						Commercial Edition
-					</a>
-					<a
-						href="/pricing#editions"
-						class="text-sm font-semibold text-blue-400 hover:text-blue-300"
-						onclick={() =>
-							analytics.ctaClicked({
-								location: 'pricing_selfhost',
-								destination: 'editions',
-								text: 'Compare All Editions'
-							})}
-					>
-						Compare All Editions →
-					</a>
 				</div>
 			</div>
 
@@ -730,12 +726,23 @@
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
-				<span class="pill-eyebrow mb-4"> Community </span>
+				<span class="pill-eyebrow mb-4"> Customers </span>
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">What users are saying</h2>
 			</div>
 
+			<!-- Featured commercial customer -->
+			<figure class="mx-auto mb-16 max-w-3xl text-left">
+				<Quote class="mb-4 h-8 w-8 text-blue-500/30" />
+				<blockquote class="text-xl italic leading-relaxed text-gray-200 lg:text-2xl">
+					"{featuredTestimonial.quote}"
+				</blockquote>
+				<figcaption class="mt-5 text-sm font-medium text-gray-400">
+					{featuredTestimonial.attribution}
+				</figcaption>
+			</figure>
+
 			<div
-				class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 md:grid md:snap-none md:gap-6 md:overflow-visible md:pb-0 md:grid-cols-2 lg:grid-cols-4"
+				class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 md:grid md:snap-none md:grid-cols-2 md:gap-6 md:overflow-visible md:pb-0 lg:grid-cols-4"
 			>
 				{#each testimonials as testimonial (testimonial.author)}
 					<div class="card card-static relative shrink-0 basis-[85%] snap-start p-5 md:basis-auto">
@@ -861,8 +868,8 @@
 	<section class="border-t border-gray-800 py-12">
 		<div class="container mx-auto max-w-5xl px-4">
 			<p class="text-sm leading-relaxed text-gray-400">
-				Scanopy is automated network diagram and documentation software. A single scanner discovers hosts, maps Layer 2
-				and Layer 3 topology, and fingerprints <a
+				Scanopy is automated network diagram and documentation software. A single scanner discovers
+				hosts, maps Layer 2 and Layer 3 topology, and fingerprints <a
 					href="/services"
 					class="text-blue-400 hover:text-blue-300">{serviceCount} services</a
 				>
@@ -881,9 +888,8 @@
 					href="/comparisons/best-automated-network-diagram-tools"
 					class="text-blue-400 hover:text-blue-300">best automated network diagram software</a
 				>, browse the guide to
-				<a
-					href="/guides/network-documentation-software"
-					class="text-blue-400 hover:text-blue-300">network documentation software</a
+				<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
+					>network documentation software</a
 				>, or review our
 				<a href="/docs/reference/security/" class="text-blue-400 hover:text-blue-300"
 					>security practices</a
