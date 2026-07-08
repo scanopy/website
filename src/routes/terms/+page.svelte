@@ -22,7 +22,7 @@
 <div class="container mx-auto max-w-4xl px-4 py-16">
 	<h1 class="mb-8 text-4xl font-bold text-rose-400">Terms of Service</h1>
 
-	<p class="mb-12 text-gray-400">Effective Date: June 18, 2026</p>
+	<p class="mb-12 text-gray-400">Effective Date: July 8, 2026</p>
 
 	<div class="prose prose-invert prose-gray max-w-none space-y-8">
 		<section>
@@ -315,7 +315,30 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">17. Third-Party Integrations</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">17. Publicity</h2>
+			<p class="text-gray-300">
+				Unless you opt out as described below, you grant us a non-exclusive, worldwide,
+				royalty-free license to use your name, logo, and trademarks to identify you as a customer
+				of Scanopy on our website and in our marketing and promotional materials. This license is
+				limited to factually identifying you as a customer; it does not permit us to state or imply
+				your endorsement of Scanopy or its Service without your separate written consent.
+			</p>
+			<p class="mt-4 text-gray-300">
+				We will use your logo in a manner consistent with any written brand or trademark guidelines
+				you provide to us. You may opt out of this use, or request removal of your name and logo
+				from any specific placement, at any time by contacting us at <a
+					href="mailto:legal@scanopy.net"
+					class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
+				>. We will honor any such request within a reasonable period.
+			</p>
+			<p class="mt-4 text-gray-300">
+				Nothing in this section transfers any ownership of your name, logo, or trademarks, each of
+				which remains your property.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">18. Third-Party Integrations</h2>
 			<p class="text-gray-300">
 				The Service may allow you to access, use, or interact with third-party websites, apps,
 				content, and other products and services. When you use third-party services, their terms and
@@ -329,7 +352,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">18. Disclaimer of Warranties</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">19. Disclaimer of Warranties</h2>
 			<p class="uppercase text-gray-300">
 				TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SERVICE IS PROVIDED "AS IS" AND "AS
 				AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT
@@ -341,7 +364,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">19. Limitation of Liability</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">20. Limitation of Liability</h2>
 			<p class="uppercase text-gray-300">
 				TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL SCANOPY BE LIABLE FOR
 				ANY SPECIAL, INCIDENTAL, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER. SOME STATES DO NOT
@@ -351,7 +374,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">20. Indemnification</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">21. Indemnification</h2>
 			<p class="text-gray-300">
 				You agree to indemnify, defend, and hold harmless Scanopy, its officers, directors,
 				employees, agents, and affiliates from and against any and all claims, liabilities, damages,
@@ -364,7 +387,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">21. Governing Law</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">22. Governing Law</h2>
 			<p class="text-gray-300">
 				These Terms shall be governed by and construed in accordance with the laws of the State of
 				New York, without regard to its conflict of law provisions. Our failure to enforce any right
@@ -373,7 +396,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">22. Dispute Resolution</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">23. Dispute Resolution</h2>
 			<p class="text-gray-300">
 				Any disputes arising from these Terms will be resolved through binding arbitration in
 				accordance with the American Arbitration Association rules. You agree to waive any right to
@@ -382,7 +405,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">23. Entire Agreement</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">24. Entire Agreement</h2>
 			<p class="text-gray-300">
 				These Terms, including our Privacy Policy and any other agreements referenced herein,
 				constitute the entire agreement between you and Scanopy regarding your use of our Service
@@ -392,7 +415,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">24. Waiver and Severability</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">25. Waiver and Severability</h2>
 			<p class="text-gray-300">
 				The failure of Scanopy to enforce any right or provision of these Terms will not be deemed a
 				waiver of such right or provision. If any provision of these Terms is found to be invalid or
@@ -401,7 +424,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">25. Assignment</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">26. Assignment</h2>
 			<p class="text-gray-300">
 				These Terms, and any rights and licenses granted hereunder, may not be transferred or
 				assigned by you without the prior written consent of Scanopy, but may be assigned by Scanopy
@@ -410,7 +433,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">26. Termination</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">27. Termination</h2>
 			<p class="mb-4 text-gray-300">
 				We reserve the right to suspend or terminate your access to our Service at our sole
 				discretion, with or without notice, for conduct that we believe violates these Terms or is
@@ -434,7 +457,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">27. Survival</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">28. Survival</h2>
 			<p class="text-gray-300">
 				All provisions of these Terms which by their nature should survive termination shall survive
 				termination, including, without limitation, ownership provisions, warranty disclaimers,
@@ -443,7 +466,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">28. Export Controls</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">29. Export Controls</h2>
 			<p class="text-gray-300">
 				You agree to comply with all applicable export and re-export control laws and regulations,
 				including the Export Administration Regulations maintained by the U.S. Department of
@@ -454,7 +477,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">29. U.S. Government Users</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">30. U.S. Government Users</h2>
 			<p class="text-gray-300">
 				If you are a U.S. government user, the Service is provided as "Commercial Computer Software"
 				and "Commercial Computer Software Documentation" as defined in FAR 12.212 and DFARS
@@ -463,7 +486,7 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">30. Force Majeure</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">31. Force Majeure</h2>
 			<p class="text-gray-300">
 				Scanopy shall not be liable for any delay or failure to perform resulting from causes
 				outside its reasonable control, including but not limited to acts of God, war, terrorism,
@@ -473,14 +496,14 @@
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">31. No Third-Party Beneficiaries</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">32. No Third-Party Beneficiaries</h2>
 			<p class="text-gray-300">
 				These Terms do not confer any third-party beneficiary rights on any person or entity.
 			</p>
 		</section>
 
 		<section>
-			<h2 class="mb-4 text-2xl font-semibold text-rose-400">32. Contact Information</h2>
+			<h2 class="mb-4 text-2xl font-semibold text-rose-400">33. Contact Information</h2>
 			<p class="text-gray-300">
 				If you have any questions about these Terms, please contact us at <a
 					href="mailto:legal@scanopy.net"
@@ -489,7 +512,7 @@
 			</p>
 		</section>
 
-		<p class="mt-8 text-sm text-gray-500">Last Updated: December 11, 2025</p>
+		<p class="mt-8 text-sm text-gray-500">Last Updated: July 8, 2026</p>
 
 		<!-- Regulatory Compliance -->
 		<section class="mt-16 border-t border-gray-800 pt-8">
