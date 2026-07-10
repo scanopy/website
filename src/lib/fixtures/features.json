@@ -310,5 +310,17 @@
       "is_coming_soon": false,
       "minimum_plan": "Starter"
     }
+  },
+  {
+    "id": "license_type",
+    "name": "License",
+    "description": "The license your self-hosted deployment is governed by",
+    "category": "Licensing & Billing",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": null
+    }
   }
 ]

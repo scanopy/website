@@ -433,6 +433,7 @@
 		<div class="plan-cards-grid">
 			{#each filteredPlans as plan (plan.type + plan.rate)}
 				{@const IconComponent = billingPlanHelpers.getIconComponent(plan.type)}
+					{@const license = getFeatureValue(plan.type, 'license_type')}
 				{@const colorHelper = billingPlanHelpers.getColorHelper(plan.type)}
 				{@const isRecommended = recommendedPlan === plan.type}
 				{@const description = billingPlanHelpers.getDescription(plan.type)}
@@ -704,6 +705,16 @@
 								{formatSnapshotRetention(plan)}
 							</span>
 						</div>
+
+						<!-- License (self-hosted plans only; hidden when the plan has none set) -->
+						{#if typeof license === 'string' && license}
+							<div class="flex items-center justify-between text-sm">
+								<div class="flex flex-col">
+									<span class="text-secondary">License</span>
+								</div>
+								<span class="text-primary font-medium">{license}</span>
+							</div>
+						{/if}
 					</div>
 
 					<!-- Incremental Features -->
