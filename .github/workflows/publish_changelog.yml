@@ -66,12 +66,14 @@ jobs:
           CONTRIBUTORS=$(grep '^contributors:' "$CHANGELOG_FILE" | head -1 | sed 's/contributors: *//')
           CATEGORY=$(grep '^category:' "$CHANGELOG_FILE" | head -1 | sed 's/category: *//')
           EMAIL_SUBJECT=$(grep '^email_subject:' "$CHANGELOG_FILE" | head -1 | sed 's/email_subject: *//')
+          PUBLISH_SOCIAL=$(grep '^publish_social:' "$CHANGELOG_FILE" | head -1 | sed 's/publish_social: *//')
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "title=$TITLE" >> $GITHUB_OUTPUT
           echo "contributors=$CONTRIBUTORS" >> $GITHUB_OUTPUT
           echo "category=$CATEGORY" >> $GITHUB_OUTPUT
           echo "email_subject=$EMAIL_SUBJECT" >> $GITHUB_OUTPUT
+          echo "publish_social=$PUBLISH_SOCIAL" >> $GITHUB_OUTPUT
 
           # Handle multiline social_post
           {
@@ -106,7 +108,9 @@ jobs:
           echo "Category: $CATEGORY"
 
       - name: Send Discord notification
-        if: github.event_name != 'workflow_dispatch' || inputs.send_discord
+        if: >-
+          (github.event_name == 'workflow_dispatch' && inputs.send_discord) ||
+          (github.event_name != 'workflow_dispatch' && steps.changelog.outputs.publish_social != 'false')
         env:
           RELEASE_CHANNEL_WEBHOOK: ${{ secrets.RELEASE_CHANNEL_WEBHOOK }}
           VERSION: ${{ steps.changelog.outputs.version }}
@@ -166,7 +170,9 @@ jobs:
           echo "Successfully updated release notes for $RELEASE_TAG"
 
       - name: Post to Twitter/X
-        if: github.event_name != 'workflow_dispatch' || inputs.post_twitter
+        if: >-
+          (github.event_name == 'workflow_dispatch' && inputs.post_twitter) ||
+          (github.event_name != 'workflow_dispatch' && steps.changelog.outputs.publish_social != 'false')
         uses: noweh/post-tweet-v2-action@v1.0
         with:
           message: |
@@ -181,7 +187,9 @@ jobs:
           access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
 
       - name: Post to Bluesky
-        if: github.event_name != 'workflow_dispatch' || inputs.post_bluesky
+        if: >-
+          (github.event_name == 'workflow_dispatch' && inputs.post_bluesky) ||
+          (github.event_name != 'workflow_dispatch' && steps.changelog.outputs.publish_social != 'false')
         uses: myConsciousness/bluesky-post@v5
         with:
           text: |
