@@ -29,7 +29,7 @@ HIPAA is a common reason healthcare IT teams go looking for network documentatio
 
 ## Does HIPAA require a network diagram?
 
-No line in the HIPAA Security Rule requires a network diagram. This is a real difference from PCI-DSS, which names a current network diagram as an explicit control. If you're looking for a citation that says "you must have a diagram," it isn't there.
+No. If you're looking for a citation that says "you must have a diagram," it isn't there.
 
 What is there is the requirement that anchors everything else: the risk analysis. [45 CFR 164.308(a)(1)(ii)(A)](https://www.ecfr.gov/current/title-45/section-164.308) requires every covered entity and business associate to "conduct an accurate and thorough assessment of the potential risks and vulnerabilities to the confidentiality, integrity, and availability" of electronic protected health information. You cannot assess risk to ePHI accurately without knowing what systems exist, where ePHI lives, and how those systems connect. The diagram isn't the requirement. It's how you meet one.
 
