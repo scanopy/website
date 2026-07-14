@@ -1,54 +1,3 @@
-<!--
-	[FOUNDER REVIEW] Resolve these before deploy.
-
-	Claims NOT verified in code (or that need your confirmation):
-	1. Cloud hosting (you confirmed). US-hosted: application server on Hetzner compute (US),
-	   database on managed Neon Postgres (US). Notes:
-	   (a) DONE: Privacy Policy section 8.2 now lists Neon (database) and re-scopes Hetzner to
-	       compute; the /security subprocessor list matches. Consider bumping the Privacy Policy
-	       "Last updated" date on deploy since its subprocessor list changed.
-	   (b) Encryption at rest: the page does NOT assert it. Neon encrypts at rest as a platform
-	       standard; if you want that stated explicitly, confirm and I will add it.
-	   (c) Neon is now a Databricks company: neon.com/privacy-policy currently redirects to the
-	       Databricks privacy notice. Legal may want to reflect Databricks in the subprocessor chain.
-	2. Encryption at rest for server-stored credentials. Server-stored device credentials are kept
-	   in a JSONB column (migration backend/migrations/20260315120000_universal_credentials.sql),
-	   NOT application-encrypted. pgcrypto is only used for key hashing
-	   (backend/migrations/20251213025048_hash-keys.sql). The page therefore does NOT claim
-	   per-field credential encryption; it leans on the file-backed option (secret stays on the
-	   daemon host). Confirm that framing is acceptable.
-	3. Audit logging. Only internal auth-event emission exists
-	   (backend/src/server/shared/api_key_common.rs:214; backend/src/server/auth/middleware/auth.rs:42).
-	   No customer-facing audit-log table exists, and the feature is is_coming_soon in
-	   src/lib/fixtures/features.json. The page describes access/auth controls but does NOT claim a
-	   shipped customer-facing audit log. Confirm before adding any audit-log guarantee.
-	4. Self-hosted telemetry wording. You flagged that a license phone-home is planned (not yet
-	   shipped). The page therefore avoids any blanket "no telemetry" claim; it says only that
-	   self-hosted DISCOVERY data is stored in your database and not transmitted to Scanopy, which
-	   stays true once license phone-home ships. If phone-home will send anything beyond license-key
-	   validation, revisit this line.
-	5. Certifications. Page states no formal certifications (SOC 2 / ISO 27001) yet. Confirm nothing
-	   is in progress you want mentioned.
-	6. DPA split. DONE: the Data Processing Terms were moved out of Terms of Service into a
-	   standalone Data Processing Addendum at /dpa (src/routes/dpa/+page.svelte), Terms now points
-	   to it by reference, and it is linked in the footer under Security & Legal. The cover-page
-	   negotiation variables for a countersigned/customized DPA remain in
-	   scanopy-content/pieces/trust-assets/dpa-cover-draft.md for legal.
-
-	Claims VERIFIED against the dev repo (/Users/maya/dev/scanopy), for your reference:
-	- No packet-payload capture: no pcap/libpcap in backend/src (only scan-technique flags
-	  use_npcap_arp / probe_raw_socket_ports).
-	- Device credentials can be file-backed on the daemon host, read at scan time, never stored on
-	  the Scanopy server: backend/src/server/credentials/impl/mapping.rs:349-403
-	  (ResolvableSecret::FilePath / resolve_to_value).
-	- SNMPv3 privacy uses AES-128/256: backend/src/server/credentials/impl/types/snmp.rs:109-135.
-	- Daemon-to-server TLS validates certs by default (self-signed opt-in only):
-	  backend/src/daemon/shared/api_client.rs:98-105; default false at config.rs:308.
-	- Two daemon connection modes (DaemonPoll default, ServerPoll for DMZ):
-	  backend/src/daemon/runtime/service.rs + the former docs security page.
-	- OIDC SSO config: oidc.toml.example.
-	- SSO/audit plan gating: src/lib/fixtures/features.json, src/lib/fixtures/billing-plans.json.
--->
 <script lang="ts">
 	import LegalPage from '$lib/components/LegalPage.svelte';
 </script>
@@ -224,6 +173,13 @@
 			the CAP_NET_RAW capability on Linux, administrator on macOS and Windows, and optional Docker
 			socket access for container discovery). The server itself runs as a standard, unprivileged
 			user process.
+		</p>
+
+		<h3 class="mb-3 text-xl font-semibold text-white">Logging</h3>
+		<p class="mb-4 text-gray-300">
+			Authentication and access activity is recorded in Scanopy's application logs, including
+			sign-in successes and failures, sign-outs, registrations, password and email changes, SSO link
+			and unlink events, and API key authentication failures and key rotation.
 		</p>
 
 		<h3 class="mb-3 text-xl font-semibold text-white">Reporting a vulnerability</h3>
