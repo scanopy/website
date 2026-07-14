@@ -58,8 +58,11 @@
 /docs/database-schema/ /docs/reference/database-schema/ 301
 /docs/limitations /docs/reference/limitations/ 301
 /docs/limitations/ /docs/reference/limitations/ 301
-/docs/security /docs/reference/security/ 301
-/docs/security/ /docs/reference/security/ 301
+# Security moved from docs to the marketing-site /security page
+/docs/security /security 301
+/docs/security/ /security 301
+/docs/reference/security /security 301
+/docs/reference/security/ /security 301
 /docs/faq /docs/reference/faq/ 301
 /docs/faq/ /docs/reference/faq/ 301
 

@@ -125,7 +125,7 @@
 
 			<!-- Link columns -->
 			<div
-				class="order-first mx-auto grid w-full max-w-4xl grid-cols-2 gap-8 sm:flex sm:justify-between"
+				class="order-first mx-auto grid w-full max-w-5xl grid-cols-2 gap-8 sm:flex sm:justify-between"
 			>
 				<!-- Product -->
 				<div>
@@ -145,11 +145,6 @@
 						<li><a href="/roadmap" class="text-sm text-gray-400 hover:text-white">Roadmap</a></li>
 						<li>
 							<a href="/changelog" class="text-sm text-gray-400 hover:text-white">Changelog</a>
-						</li>
-						<li>
-							<a href="/docs/reference/security/" class="text-sm text-gray-400 hover:text-white"
-								>Security</a
-							>
 						</li>
 					</ul>
 				</div>
@@ -188,12 +183,35 @@
 						<li><a href="/press" class="text-sm text-gray-400 hover:text-white">Press</a></li>
 						<li>
 							<a href="mailto:hello@scanopy.net" class="text-sm text-gray-400 hover:text-white"
-								>hello@scanopy.net</a
+								>Contact</a
 							>
 						</li>
 					</ul>
 				</div>
 
+				<!-- Security & Legal -->
+				<div>
+					<span class="mb-4 block font-semibold text-white">Security &amp; Legal</span>
+					<ul class="space-y-2">
+						<li>
+							<a href="/security" class="text-sm text-gray-400 hover:text-white">Security</a>
+						</li>
+						<li>
+							<a href="/privacy" class="text-sm text-gray-400 hover:text-white">Privacy Policy</a>
+						</li>
+						<li>
+							<a href="/terms" class="text-sm text-gray-400 hover:text-white">Terms of Service</a>
+						</li>
+						<li>
+							<a href="/dpa" class="text-sm text-gray-400 hover:text-white"
+								>Data Processing Addendum</a
+							>
+						</li>
+						<li>
+							<a href="/refund" class="text-sm text-gray-400 hover:text-white">Refund Policy</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 
@@ -241,9 +259,6 @@
 					class="text-sm text-gray-500 hover:text-gray-400"
 					onclick={() => trackExternalLink('app_login', APP.login)}>Log in</a
 				>
-				<a href="/privacy" class="text-sm text-gray-500 hover:text-gray-400">Privacy</a>
-				<a href="/terms" class="text-sm text-gray-500 hover:text-gray-400">Terms</a>
-				<a href="/refund" class="text-sm text-gray-500 hover:text-gray-400">Refund Policy</a>
 			</div>
 		</div>
 	</div>

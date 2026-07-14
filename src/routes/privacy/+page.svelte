@@ -7,12 +7,18 @@
 	<link rel="canonical" href="https://scanopy.net/privacy" />
 
 	<meta property="og:title" content="Privacy Policy - Scanopy" />
-	<meta property="og:description" content="Scanopy Privacy Policy - How we collect, use, and protect your personal information." />
+	<meta
+		property="og:description"
+		content="Scanopy Privacy Policy - How we collect, use, and protect your personal information."
+	/>
 	<meta property="og:url" content="https://scanopy.net/privacy" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Privacy Policy - Scanopy" />
-	<meta name="twitter:description" content="Scanopy Privacy Policy - How we collect, use, and protect your personal information." />
+	<meta
+		name="twitter:description"
+		content="Scanopy Privacy Policy - How we collect, use, and protect your personal information."
+	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
@@ -219,7 +225,7 @@
 			<section>
 				<h2 class="mb-4 text-2xl font-semibold text-rose-400">6. Transfer of Your Personal Data</h2>
 				<p class="mb-4 text-gray-300">
-					Your information, including Personal Data, may be transferred to - and maintained on  - 
+					Your information, including Personal Data, may be transferred to - and maintained on -
 					computers located outside of your state, province, country or other governmental
 					jurisdiction where the data protection laws may differ from those of your jurisdiction.
 				</p>
@@ -304,13 +310,24 @@
 
 				<h3 class="mb-3 text-xl font-semibold text-white">8.2 Cloud Services</h3>
 				<p class="mb-2 text-gray-300">
-					We may use third-party cloud service providers to host our Service and store your data.
+					We use third-party cloud service providers to host our Service and store your data. Our
+					Scanopy Cloud infrastructure is located in the United States.
 				</p>
 				<ul class="mb-6 list-inside list-disc space-y-1 text-gray-300">
 					<li>
-						<strong class="text-white">Hetzner:</strong>
+						<strong class="text-white">Hetzner</strong> (application server and compute hosting):
 						<a
 							href="https://www.hetzner.com/privacy"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-blue-400 hover:text-blue-300">Privacy Policy</a
+						>
+					</li>
+					<li>
+						<strong class="text-white">Neon</strong> (managed database that stores your topology and
+						account data):
+						<a
+							href="https://neon.com/privacy-policy"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="text-blue-400 hover:text-blue-300">Privacy Policy</a

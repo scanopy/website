@@ -432,9 +432,7 @@
 				<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
 					>network documentation software</a
 				>, or review our
-				<a href="/docs/reference/security/" class="text-blue-400 hover:text-blue-300"
-					>security practices</a
-				>.
+				<a href="/security" class="text-blue-400 hover:text-blue-300">security practices</a>.
 			</p>
 		</div>
 	</section>

@@ -10,12 +10,18 @@
 	<link rel="canonical" href="https://scanopy.net/terms" />
 
 	<meta property="og:title" content="Terms of Service - Scanopy" />
-	<meta property="og:description" content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software." />
+	<meta
+		property="og:description"
+		content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software."
+	/>
 	<meta property="og:url" content="https://scanopy.net/terms" />
 	<meta property="og:image" content="https://scanopy.net/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Terms of Service - Scanopy" />
-	<meta name="twitter:description" content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software." />
+	<meta
+		name="twitter:description"
+		content="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software."
+	/>
 	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
 </svelte:head>
 
@@ -31,9 +37,9 @@
 				These Terms of Service ("Terms") govern your access to and use of the Scanopy software
 				service, including any associated websites, networks, applications, and other services
 				provided by Scanopy (collectively, the "Service"). These Terms constitute a legally binding
-				agreement between you and Scanopy LLC, a New York limited liability company ("Scanopy," "we,"
-				"us," or "our"). By accessing or using our Service,
-				you acknowledge that you have read, understood, and agree to be bound by these Terms.
+				agreement between you and Scanopy LLC, a New York limited liability company ("Scanopy,"
+				"we," "us," or "our"). By accessing or using our Service, you acknowledge that you have
+				read, understood, and agree to be bound by these Terms.
 			</p>
 		</section>
 
@@ -138,7 +144,10 @@
 			<p class="mt-4 text-gray-300">
 				You may cancel your Subscription at any time through your account settings or by contacting
 				us. If you cancel, you may continue to use the Service until the end of your current billing
-				period. Refunds are subject to our <a href="/refund" class="text-blue-400 hover:text-blue-300">Refund Policy</a>.
+				period. Refunds are subject to our <a
+					href="/refund"
+					class="text-blue-400 hover:text-blue-300">Refund Policy</a
+				>.
 			</p>
 		</section>
 
@@ -317,11 +326,11 @@
 		<section>
 			<h2 class="mb-4 text-2xl font-semibold text-rose-400">17. Publicity</h2>
 			<p class="text-gray-300">
-				Unless you opt out as described below, you grant us a non-exclusive, worldwide,
-				royalty-free license to use your name, logo, and trademarks to identify you as a customer
-				of Scanopy on our website and in our marketing and promotional materials. This license is
-				limited to factually identifying you as a customer; it does not permit us to state or imply
-				your endorsement of Scanopy or its Service without your separate written consent.
+				Unless you opt out as described below, you grant us a non-exclusive, worldwide, royalty-free
+				license to use your name, logo, and trademarks to identify you as a customer of Scanopy on
+				our website and in our marketing and promotional materials. This license is limited to
+				factually identifying you as a customer; it does not permit us to state or imply your
+				endorsement of Scanopy or its Service without your separate written consent.
 			</p>
 			<p class="mt-4 text-gray-300">
 				We will use your logo in a manner consistent with any written brand or trademark guidelines
@@ -865,102 +874,14 @@
 				</div>
 
 				<div>
-					<h3 class="mb-4 text-xl font-semibold text-rose-400">Data Processing Terms</h3>
-
-					<h4 class="mb-2 text-lg font-semibold text-white">Scope and Roles</h4>
+					<h3 class="mb-4 text-xl font-semibold text-rose-400">Data Processing</h3>
 					<p class="mb-4 text-gray-300">
-						These Data Processing Terms apply when we process personal data on your behalf in the
-						course of providing our Services. For the purpose of these terms, you are the "Data
-						Controller" and we are the "Data Processor" as those terms are defined in applicable
-						data protection laws.
-					</p>
-					<p class="mb-4 text-gray-300">
-						These terms supplement our Terms of Service and form a Data Processing Agreement ("DPA")
-						between you and us. In case of any conflict between these Data Processing Terms and the
-						rest of our Terms of Service, these Data Processing Terms shall prevail with respect to
-						the processing of personal data.
-					</p>
-
-					<h4 class="mb-2 text-lg font-semibold text-white">Processing Obligations</h4>
-					<p class="mb-4 text-gray-300">We will:</p>
-					<ul class="mb-4 list-inside list-disc space-y-2 text-gray-300">
-						<li>
-							Process personal data only on your documented instructions, including with regard to
-							transfers of personal data to a third country or international organization
-						</li>
-						<li>
-							Ensure that persons authorized to process the personal data have committed themselves
-							to confidentiality or are under an appropriate statutory obligation of confidentiality
-						</li>
-						<li>
-							Implement appropriate technical and organizational measures to ensure a level of
-							security appropriate to the risk of processing
-						</li>
-						<li>
-							Assist you, taking into account the nature of processing, in responding to requests
-							from data subjects
-						</li>
-						<li>
-							Assist you in ensuring compliance with security, breach notification, impact
-							assessment, and consultation obligations under applicable data protection laws
-						</li>
-						<li>
-							At your choice, delete or return all personal data to you after the end of the
-							provision of services relating to processing
-						</li>
-						<li>
-							Make available to you all information necessary to demonstrate compliance with these
-							obligations and contribute to audits, including inspections, conducted by you or an
-							auditor mandated by you
-						</li>
-					</ul>
-
-					<h4 class="mb-2 text-lg font-semibold text-white">Subprocessors</h4>
-					<p class="mb-4 text-gray-300">
-						You provide general authorization for us to engage subprocessors to process personal
-						data on your behalf. We will inform you of any intended changes concerning the addition
-						or replacement of subprocessors, giving you the opportunity to object to such changes.
-					</p>
-					<p class="mb-4 text-gray-300">
-						We will impose data protection terms on all subprocessors to provide at least the same
-						level of data protection required by these Data Processing Terms.
-					</p>
-
-					<h4 class="mb-2 text-lg font-semibold text-white">Data Transfers</h4>
-					<p class="mb-4 text-gray-300">
-						We will only transfer personal data to countries outside the European Economic Area
-						(EEA) or other protected jurisdictions where appropriate safeguards are in place. These
-						safeguards may include:
-					</p>
-					<ul class="mb-4 list-inside list-disc space-y-2 text-gray-300">
-						<li>Adequacy decisions by relevant authorities</li>
-						<li>Standard contractual clauses approved by relevant authorities</li>
-						<li>Binding corporate rules</li>
-						<li>Other valid transfer mechanisms</li>
-					</ul>
-
-					<h4 class="mb-2 text-lg font-semibold text-white">Data Breach Notification</h4>
-					<p class="mb-4 text-gray-300">
-						We will notify you without undue delay after becoming aware of a personal data breach
-						affecting the personal data we process on your behalf. Our notification will include, to
-						the extent possible:
-					</p>
-					<ul class="mb-4 list-inside list-disc space-y-2 text-gray-300">
-						<li>The nature of the breach</li>
-						<li>The categories and approximate number of data subjects concerned</li>
-						<li>The categories and approximate number of personal data records concerned</li>
-						<li>The likely consequences of the breach</li>
-						<li>
-							The measures taken or proposed to address the breach and mitigate possible adverse
-							effects
-						</li>
-					</ul>
-
-					<h4 class="mb-2 text-lg font-semibold text-white">Records of Processing</h4>
-					<p class="mb-4 text-gray-300">
-						We will maintain records of our processing activities as required by applicable data
-						protection laws. Upon your reasonable request, we will make these records available to
-						you to demonstrate our compliance with these Data Processing Terms.
+						When we process personal data on your behalf in the course of providing our Services,
+						that processing is governed by our
+						<a href="/dpa" class="text-blue-400 hover:text-blue-300">Data Processing Addendum</a>,
+						which forms part of these Terms and is incorporated by reference. In case of any
+						conflict between the Data Processing Addendum and the rest of these Terms, the Data
+						Processing Addendum prevails with respect to the processing of personal data.
 					</p>
 				</div>
 
@@ -1018,8 +939,10 @@
 
 					<h4 class="mb-2 text-lg font-semibold text-white">Refunds</h4>
 					<p class="mb-4 text-gray-300">
-						Refunds are handled in accordance with our <a href="/refund" class="text-blue-400 hover:text-blue-300">Refund Policy</a>.
-						Any approved refunds will be processed using the original payment method unless
+						Refunds are handled in accordance with our <a
+							href="/refund"
+							class="text-blue-400 hover:text-blue-300">Refund Policy</a
+						>. Any approved refunds will be processed using the original payment method unless
 						otherwise specified.
 					</p>
 
