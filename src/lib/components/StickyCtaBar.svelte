@@ -76,7 +76,7 @@
 
 		let ticking = false;
 		const update = () => {
-			// "Past the first screen" — a hero-shape-agnostic proxy for scroll depth.
+			// "Past the first screen": a hero-shape-agnostic proxy for scroll depth.
 			scrolledPastHero = window.scrollY > window.innerHeight * 0.8;
 			// Target reached once its top scrolls up into (or above) the viewport.
 			targetReached = target
@@ -169,7 +169,7 @@
 		font-size: 1rem;
 	}
 
-	/* Desktop: a compact, centered floating pill — not full width. The centering
+	/* Desktop: a compact, centered floating pill, not full width. The centering
 	   translateX(-50%) is composed with the slide-up translateY so both animate
 	   together without conflict. */
 	@media (min-width: 768px) {

@@ -35,7 +35,7 @@ export function load() {
 	const tableVendors: Record<string, Vendor> = {};
 	for (const slug of tableSlugs) tableVendors[slug] = vendors[slug];
 
-	// Citations: surface only the sources referenced by the table's [n] markers — the
+	// Citations: surface only the sources referenced by the table's [n] markers; the
 	// columns that render refs in column orientation are discovery, services, pricing.
 	const usedSourceIds = new Set<number>();
 	for (const slug of tableSlugs) {

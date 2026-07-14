@@ -59,7 +59,7 @@
 		{
 			question: 'How does pricing work for MSPs?',
 			answer:
-				"Each 'network' in Scanopy maps to one client site, VLAN group, or isolated environment — so your plan scales with the number of clients whose infrastructure you document. Shareable views let you give each client a live map of their own environment without needing a Scanopy account."
+				"Each 'network' in Scanopy maps to one client site, VLAN group, or isolated environment, so your plan scales with the number of clients whose infrastructure you document. Shareable views let you give each client a live map of their own environment without needing a Scanopy account."
 		},
 		{
 			question: 'Can I upgrade or downgrade later?',
@@ -94,14 +94,14 @@
 		content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments."
 	/>
 	<meta property="og:url" content="https://scanopy.net/pricing" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Network Documentation Pricing & Plans - Scanopy" />
 	<meta
 		name="twitter:description"
 		content="Scanopy pricing plans for personal and commercial users. From free self-hosted to enterprise managed deployments."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify(productSchema)}</script>`}
 	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
@@ -143,7 +143,7 @@
 		<p class="text-sm leading-relaxed text-gray-400">
 			Each network in Scanopy maps to one client site, VLAN group, or isolated environment. Your
 			plan scales with the number of clients whose infrastructure you document. Shareable views let
-			you give each client a live map of their own environment — no logins required.
+			you give each client a live map of their own environment, no logins required.
 		</p>
 	</div>
 </section>

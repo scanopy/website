@@ -67,7 +67,7 @@ function joinList(items: string[]): string {
 	return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
 }
 
-/** Strip parenthetical asides, then return the first sentence — used to lift a tight,
+/** Strip parenthetical asides, then return the first sentence. Used to lift a tight,
  *  one-line "main limitation" out of a vendor's longer tradeOff prose. */
 function firstSentence(text: string): string {
 	const cleaned = text
@@ -85,7 +85,7 @@ export function buildAltTitle(vendor: Vendor): string {
 	return `Best ${vendor.name} Alternatives (${REVIEW_YEAR}): ${count} Tools Compared`;
 }
 
-/** Unique meta description per page — leads with the "alternative" framing the query uses
+/** Unique meta description per page: leads with the "alternative" framing the query uses
  *  and positions Scanopy as the top pick. */
 export function buildAltMetaDescription(vendor: Vendor): string {
 	const name = vendorDisplayName(vendor);
@@ -96,8 +96,8 @@ export function buildAltMetaDescription(vendor: Vendor): string {
 	);
 }
 
-/** Data-derived intro: acknowledge what the target is good at, name the limitation that
- *  sends teams looking, then hand off to the list. Unique per vendor via bestFor/tradeOff. */
+/** Data-derived intro: the target's bestFor, then its tradeOff, then the list.
+ *  Unique per vendor via bestFor/tradeOff. */
 export function buildAltIntro(vendor: Vendor): string {
 	const name = vendorDisplayName(vendor);
 	const parts: string[] = [];
@@ -109,7 +109,7 @@ export function buildAltIntro(vendor: Vendor): string {
 	if (vendor.tradeOff) {
 		// Colon form handles both noun-phrase trade-offs ("no native topology visualization")
 		// and full-clause ones ("mapping is secondary to monitoring") without awkward grammar.
-		parts.push(`Its main limitation: ${lowerFirst(firstSentence(vendor.tradeOff))}.`);
+		parts.push(`${name}'s trade-off: ${lowerFirst(firstSentence(vendor.tradeOff))}.`);
 	}
 
 	parts.push(
@@ -147,9 +147,9 @@ export function buildAltFaqs(vendor: Vendor): VendorFAQ[] {
 	faqs.push({
 		question: `What is the best alternative to ${name}?`,
 		answer:
-			`It depends on what you rely on ${name} for. If you want automatic network discovery with living ` +
+			`The right alternative depends on what you use ${name} for. If you want automatic network discovery with living ` +
 			`${SCANOPY_CLAIMS.views} and ${SCANOPY_CLAIMS.serviceDetection}, Scanopy is the closest dedicated ` +
-			`alternative — ${SCANOPY_CLAIMS.flatPricing}, plus ${SCANOPY_CLAIMS.freeCE}.${balance}`
+			`alternative: ${SCANOPY_CLAIMS.flatPricing}, plus ${SCANOPY_CLAIMS.freeCE}.${balance}`
 	});
 
 	// 2. Free / open-source options, computed from the featured tools' actual licenses.
@@ -166,14 +166,14 @@ export function buildAltFaqs(vendor: Vendor): VendorFAQ[] {
 		});
 	}
 
-	// 3. Why teams switch — straight from the target's documented trade-off.
+	// 3. Why teams switch: straight from the target's documented trade-off.
 	if (vendor.tradeOff) {
 		faqs.push({
 			question: `Why do teams look for a ${name} alternative?`,
 			answer:
-				`The most common reason: ${lowerFirst(firstSentence(vendor.tradeOff))}. Teams that need an up-to-date ` +
-				`visual map of what is actually on the network — without standing up additional tooling — tend to compare ` +
-				`dedicated documentation tools like Scanopy alongside ${name}.`
+				`One documented limitation: ${lowerFirst(firstSentence(vendor.tradeOff))}. Scanopy produces an ` +
+				`up-to-date visual map of what is on the network without a separate monitoring platform, which is ` +
+				`why it is compared against ${name}.`
 		});
 	}
 
@@ -182,8 +182,8 @@ export function buildAltFaqs(vendor: Vendor): VendorFAQ[] {
 
 // ---------------------------------------------------------------------------
 // Scanopy's own "alternatives to us" page (`/comparisons/scanopy-alternatives`).
-// Inverted from the competitor pages: Scanopy is the subject, the real competitors are
-// the alternatives, and the framing honestly guides the reader back to Scanopy.
+// Inverted from the competitor pages: Scanopy is the subject and the competitors are
+// the alternatives.
 // ---------------------------------------------------------------------------
 
 // Closeness-to-Scanopy ordering for the competitor list: dedicated diagram tools first,
@@ -191,7 +191,7 @@ export function buildAltFaqs(vendor: Vendor): VendorFAQ[] {
 const CATEGORY_RANK: Record<string, number> = { dedicated: 0, monitoring: 1, discovery: 2 };
 
 /** The competitors to surface as alternatives to Scanopy, ordered by closeness. Scanopy
- *  itself is excluded — these are the alternatives. */
+ *  itself is excluded; these are the alternatives. */
 export function scanopyAlternativeSlugs(): string[] {
 	return [...VS_VENDOR_SLUGS].sort((a, b) => {
 		const ra = CATEGORY_RANK[categoryOf(a) ?? ''] ?? 3;
@@ -209,9 +209,9 @@ const VIEW_LABELS: Record<'l2' | 'l3' | 'workload' | 'application', string> = {
 };
 
 /**
- * One-line "where Scanopy differs" note for a competitor card. Honesty guard: only counts
- * a view as something Scanopy adds when the competitor's support is a DEFINITE `'no'` —
- * never for `'unclear'` (unverified), so we don't overclaim against the tri-state data.
+ * One-line "where Scanopy differs" note for a competitor card. Guard: only count a view as
+ * something Scanopy adds when the competitor's support is a DEFINITE `'no'`, never for
+ * `'unclear'` (unverified), so we don't overclaim against the tri-state data.
  */
 export function scanopyEdge(vendor: Vendor): string {
 	const missing = (['l2', 'l3', 'workload', 'application'] as const)
@@ -227,15 +227,14 @@ export function scanopyEdge(vendor: Vendor): string {
 export const SCANOPY_ALT_TITLE = `Scanopy Alternatives (${REVIEW_YEAR}): Network Mapping Tools Compared`;
 
 export const SCANOPY_ALT_DESCRIPTION =
-	'Comparing alternatives to Scanopy? See the closest network discovery and topology tools — and where ' +
-	`Scanopy's four-view mapping, ${SCANOPY_CLAIMS.serviceDetection}, flat pricing, and free self-hostable edition stand out.`;
+	'Comparing alternatives to Scanopy? See the closest network discovery and topology tools, and where ' +
+	`Scanopy's four-view mapping, ${SCANOPY_CLAIMS.serviceDetection}, flat pricing, and free self-hostable edition differ.`;
 
 export const SCANOPY_ALT_INTRO =
 	'Scanopy is a dedicated tool for automated network discovery and documentation: one scan produces four ' +
-	'switchable topology views — L2 physical, L3 logical, workloads, and applications — with per-host service ' +
-	"detection. If you're weighing it against other options, here are the closest alternatives and where each " +
-	'one fits. Most overlap with only part of what Scanopy does; the table below shows how view coverage, ' +
-	'pricing, and licensing compare.';
+	'switchable topology views (L2 physical, L3 logical, workloads, and applications) with per-host service ' +
+	'detection. Each of the alternatives below covers a subset of those four views, at different pricing and ' +
+	'licensing.';
 
 /** FAQPage items for the Scanopy alternatives page. Open-source names are computed from
  *  the actual licenses so the answer can never drift from the data. */
@@ -248,17 +247,17 @@ export function buildScanopyAltFaqs(): VendorFAQ[] {
 		{
 			question: 'What is the best alternative to Scanopy?',
 			answer:
-				'It depends on what you need most. Auvik and ManageEngine OpManager bundle automatic network maps into a ' +
-				'full monitoring platform; LibreNMS and NetDisco are the leading free, open-source discovery tools; and ' +
-				'NetBox is the standard if you want a structured source of truth rather than a visual map. None of them ' +
-				`combine all four topology views (L2, L3, workloads, applications), ${SCANOPY_CLAIMS.serviceDetection}, flat ` +
-				'pricing, and a free self-hostable edition the way Scanopy does — so the right alternative comes down to ' +
-				'which of those you can do without.'
+				'The right alternative depends on what you need most. Auvik and ManageEngine OpManager bundle automatic ' +
+				'network maps into a full monitoring platform; LibreNMS and NetDisco are OSI-licensed and free to ' +
+				'self-host; NetBox models intended state behind a REST and GraphQL API rather than rendering a visual ' +
+				`map. None of them combine all four topology views (L2, L3, workloads, applications), ${SCANOPY_CLAIMS.serviceDetection}, ` +
+				'flat pricing, and a free self-hostable edition, so the right alternative comes down to which of those ' +
+				'you can do without.'
 		},
 		{
 			question: 'Can Scanopy be self-hosted or deployed on-prem?',
 			answer:
-				'Yes. Scanopy runs as a single daemon — no per-device agents and no inbound firewall rules — so you ' +
+				'Yes. Scanopy runs as a single daemon (no per-device agents and no inbound firewall rules), so you ' +
 				'can self-host it on your own infrastructure or run the managed cloud. Commercial self-hosted ' +
 				'licensing is available for teams that need on-prem deployment across multiple networks and seats.'
 		},
@@ -270,7 +269,7 @@ export function buildScanopyAltFaqs(): VendorFAQ[] {
 				(openNames.length
 					? ` Among the alternatives, ${joinList(openNames)} are also open source; most commercial options are proprietary.`
 					: '') +
-				' Paid plans remove the caps — a commercial license for self-hosting, or managed cloud hosting — with more networks, seats, and support.'
+				' Paid plans remove the caps (a commercial license for self-hosting, or managed cloud hosting) with more networks, seats, and support.'
 		}
 	];
 }

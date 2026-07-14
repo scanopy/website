@@ -15,11 +15,11 @@
 	<meta property="og:title" content="Newsletter Confirmed - Scanopy" />
 	<meta property="og:description" content="Your newsletter subscription has been confirmed. Welcome to Scanopy updates." />
 	<meta property="og:url" content="https://scanopy.net/newsletter-confirmed" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Newsletter Confirmed - Scanopy" />
 	<meta name="twitter:description" content="Your newsletter subscription has been confirmed. Welcome to Scanopy updates." />
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 </svelte:head>
 
 <section class="flex min-h-[60vh] items-center py-20">

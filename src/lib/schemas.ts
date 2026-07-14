@@ -185,8 +185,8 @@ export async function getSoftwareApplicationSchema() {
 		description:
 			'Automated network diagram and documentation software. Deploy a lightweight scanner to discover and document network architecture, service dependencies, workload placement, and physical topology.',
 		url: 'https://scanopy.net',
-		image: 'https://scanopy.net/scanopy-logo.webp',
-		screenshot: 'https://scanopy.net/hero-topology-dark.webp',
+		image: 'https://scanopy.net/brand/scanopy-logo.webp',
+		screenshot: 'https://scanopy.net/og/hero-topology-dark.webp',
 		softwareVersion: version,
 		author: {
 			'@type': 'Organization',
@@ -257,7 +257,7 @@ export function getProductSchema() {
 		name: 'Scanopy',
 		description:
 			'Automated network diagram and documentation software. Automatically discover and document network architecture, service dependencies, workload placement, and physical topology.',
-		image: 'https://scanopy.net/scanopy-logo.webp',
+		image: 'https://scanopy.net/brand/scanopy-logo.webp',
 		brand: {
 			'@type': 'Brand',
 			name: 'Scanopy'

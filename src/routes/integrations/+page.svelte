@@ -46,11 +46,11 @@
 	<meta property="og:title" content="Integrations - Scanopy" />
 	<meta property="og:description" content={description} />
 	<meta property="og:url" content="https://scanopy.net/integrations" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Integrations - Scanopy" />
 	<meta name="twitter:description" content={description} />
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
@@ -160,7 +160,7 @@
 
 		<div class="mx-auto mt-16 max-w-3xl text-center">
 			<p class="mb-4 text-gray-400">
-				Once connected, an integration runs as part of your scheduled scans — no manual exports, no
+				Once connected, an integration runs as part of your scheduled scans, with no manual exports and no
 				stale diagrams. See the
 				<a href="/docs/using-scanopy/discovery/" class="text-blue-400 hover:text-blue-300"
 					>discovery documentation</a

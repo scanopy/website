@@ -60,11 +60,11 @@
 	<meta property="og:title" content="Press & Media - Scanopy" />
 	<meta property="og:description" content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool." />
 	<meta property="og:url" content="https://scanopy.net/press" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Press & Media - Scanopy" />
 	<meta name="twitter:description" content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool." />
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{#each videos as v}
 		{@html `<script type="application/ld+json">${JSON.stringify({

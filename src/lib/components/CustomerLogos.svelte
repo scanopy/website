@@ -45,7 +45,7 @@
 						</div>
 						{#if logo.caption}
 							<p class="mt-3 text-sm text-gray-500">
-								<span class="font-medium text-gray-400">{logo.name}</span> — {logo.caption}
+								<span class="font-medium text-gray-400">{logo.name}</span>, {logo.caption}
 							</p>
 						{/if}
 					</svelte:element>

@@ -122,7 +122,7 @@
 		e.preventDefault();
 
 		// Everything runs inside try/catch so an unexpected error can never leave
-		// the form in a silent no-op state — it always surfaces as a visible error.
+		// the form in a silent no-op state; it always surfaces as a visible error.
 		try {
 			const validationError = validateForm();
 			if (validationError) {

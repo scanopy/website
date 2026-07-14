@@ -6,6 +6,7 @@
 	import VendorComparison from '$lib/components/VendorComparison.svelte';
 	import FAQ from '$lib/components/FAQ.svelte';
 	import ScanopyDemo from '$lib/components/ScanopyDemo.svelte';
+	import CustomerQuote from '$lib/components/CustomerQuote.svelte';
 	import { getFAQPageSchema } from '$lib/schemas';
 	import type { Vendor } from '$lib/types';
 
@@ -39,7 +40,8 @@
 	type ContentSegment =
 		| { type: 'html'; content: string }
 		| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
-		| { type: 'scanopy-demo' };
+		| { type: 'scanopy-demo' }
+		| { type: 'customer-quote'; id: string };
 
 	interface PageData {
 		post: BlogPost;
@@ -186,6 +188,10 @@
 								/>
 							{:else if segment.type === 'scanopy-demo'}
 								<ScanopyDemo />
+							{:else if segment.type === 'customer-quote'}
+								<div class="my-10">
+									<CustomerQuote id={segment.id} card />
+								</div>
 							{/if}
 						{/each}
 					{:else}

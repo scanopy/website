@@ -4,19 +4,19 @@ description: "See Docker containers in network context, not just per host. How S
 keyword: docker network visualization
 slug: visualize-docker-containers-network
 date: 2026-07-01
-dateModified: 2026-07-03
+dateModified: 2026-07-14
 tldr: "Docker tools show you containers one host at a time. They don't show where those containers sit on your network or what they connect to. Scanopy discovers Docker containers and nests them under the host they run on, in the same topology map as the rest of your network."
 ctaHeading: See your containers in context
 ctaDescription: "Scanopy discovers Docker containers and nests them under their host in a live topology map, next to everything else on your network. Deploy a daemon and see it."
 faq:
   - question: How do I see which host a Docker container runs on across my network?
-    answer: Use a tool that discovers containers as part of a network scan rather than per host. Scanopy reads each host's Docker API during its normal scan and places every container under the host it runs on, in the Workloads view. That view shows the full chain from bare metal to hypervisor to VM to container, so you can see exactly which physical machine a container lives on.
+    answer: Use a tool that discovers containers as part of a network scan rather than per host. Scanopy reads each host's Docker API during its normal scan and places every container under the host it runs on, in the Workloads view. That view shows the full chain from bare metal to hypervisor to VM to container, so you can see exactly which physical machine runs a given container.
   - question: What does Scanopy pull from Docker?
     answer: When the daemon has access to the Docker API over a socket or TLS proxy, it reads each container's image, its published ports, the Docker networks it is attached to, and its labels. It collects this in the same pass that discovers the rest of the network over SNMP, LLDP, CDP, and ARP, so containers land in the same topology as your switches, VMs, and bare-metal hosts.
   - question: How is this different from Portainer or docker ps?
     answer: Docker ps and Portainer show containers one host or environment at a time, organized by machine. They answer what is running, not where it sits on the network or what it connects to. Scanopy draws each container on its network, under the host it runs on and alongside the subnet and services around it, which is the view you need when debugging why one service cannot reach another.
   - question: How do I set up Docker discovery in Scanopy?
-    answer: By default the daemon connects to the local Docker socket on its own host automatically, whenever the socket is accessible; there's no mode to pick or toggle to enable, detection just runs as part of the normal scan. Create a Docker Socket credential only for a non-default socket path. To restrict access or reach containers on another host, run a read-only Docker socket proxy and add a Docker Proxy credential.
+    answer: By default the daemon connects to the local Docker socket on its own host automatically, whenever the socket is accessible; there's no mode to pick or toggle to switch on, detection just runs as part of the normal scan. Create a Docker Socket credential only for a non-default socket path. To restrict access or reach containers on another host, run a read-only Docker socket proxy and add a Docker Proxy credential.
   - question: Can Scanopy discover containers on remote Docker hosts?
     answer: Yes. Run a Docker socket proxy on the remote host with read-only access, restrict it to the calls Scanopy needs (list and inspect containers, list networks), and the daemon discovers those containers over the network. A mixed setup of Docker on one host and VMs or LXC on others then shows up as one coherent map rather than several disconnected ones.
   - question: Does Scanopy manage or deploy Docker containers?
@@ -25,15 +25,15 @@ faq:
 
 Docker makes it easy to lose track of where things actually run. `docker ps` tells you what is running on the host you happen to be SSHed into. Portainer gives you a clean dashboard, one environment at a time. Neither one answers the question I keep hitting in my own homelab: which host is this container on, what subnet can reach it, and what does it talk to.
 
-That last question is a network question, and container tools are not built to answer it. This is about seeing your containers as part of your network, not as a list sitting on top of it.
+That last question is a network question, and container tools are not built for it. This is about seeing your containers as part of your network, not as a list sitting on top of it.
 
-## Container tools think per host. Your network doesn't.
+## Docker Tooling Is Scoped to One Host. Your Network Spans Many.
 
-A container is an IP and a set of ports, like anything else on your network. But the tooling around Docker is organized by host: you look at one machine's containers, then another machine's containers, and you stitch the picture together in your head. The moment you are debugging "why can't service A reach service B," that per-host view is the wrong altitude. You want to see the container sitting on its network, under the host it runs on, next to the database it depends on and the switch the whole thing hangs off.
+A container is an IP and a set of ports, like anything else on your network. But the tooling around Docker is organized by host: you look at one machine's containers, then another machine's containers, and you stitch the picture together in your head. The moment you are debugging "why can't service A reach service B," that per-host view is the wrong altitude. What that question needs is the container's position on its network, the host it runs on, the database it depends on, and the switch the whole thing hangs off.
 
-That is the gap. Not "what containers exist" (Docker already tells you that), but "where do they live on my network, and what is around them."
+Docker already reports what containers exist. What it does not report is where they sit on your network and what is around them.
 
-## What Scanopy pulls from Docker
+## What Scanopy Pulls From Docker
 
 When the Scanopy daemon has access to the Docker API (via socket or TLS proxy), it reads each host's containers as part of its normal scan and collects:
 
@@ -44,55 +44,57 @@ When the Scanopy daemon has access to the Docker API (via socket or TLS proxy), 
 
 This happens in the same pass that discovers the rest of your network over SNMP, LLDP, CDP, and ARP (here is [how that automated discovery works](/blog/automated-network-documentation)). So your containers are not a separate inventory you have to reconcile. They land in the same topology as your switches, VMs, and bare-metal hosts.
 
-## The Workloads view
+## The Workloads View Nests Containers From Bare Metal to Hypervisor to VM
 
 Scanopy produces four views from a single scan. The one built for this is the **Workloads view**, which shows the full nesting chain: bare metal, to hypervisor, to VM, to container.
 
-So a Postgres container shows up nested under the Docker host it runs on, which might itself be a VM on a Proxmox node, which is a physical box plugged into a switch port. You see the whole stack in one place. No more holding the layers in your head, no more guessing which physical machine a container actually lives on.
+So a Postgres container shows up nested under the Docker host it runs on, which might itself be a VM on a Proxmox node, which is a physical box plugged into a switch port. You see the whole stack in one place, without holding the layers in your head or guessing which physical machine actually runs a container.
 
 <figure class="my-8">
   <img
     class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/wl-light-960w.webp"
-    srcset="/wl-light-960w.webp 960w, /wl-light-1440w.webp 1440w, /wl-light-2400w.webp 2400w"
+    src="/common/wl-light-960w.webp"
+    srcset="/common/wl-light-960w.webp 960w, /common/wl-light-1440w.webp 1440w, /common/wl-light-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
     alt="Scanopy Workloads view: Docker containers nested under the host they run on, with the host shown as a VM on a hypervisor and the hypervisor on a physical machine, laying out the full bare-metal-to-container stack."
   />
   <img
     class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/wl-960w.webp"
-    srcset="/wl-960w.webp 960w, /wl-1440w.webp 1440w, /wl-2400w.webp 2400w"
+    src="/common/wl-960w.webp"
+    srcset="/common/wl-960w.webp 960w, /common/wl-1440w.webp 1440w, /common/wl-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
     alt="Scanopy Workloads view: Docker containers nested under the host they run on, with the host shown as a VM on a hypervisor and the hypervisor on a physical machine, laying out the full bare-metal-to-container stack."
   />
 </figure>
 
-Containers are not stuck in that one view, either. They also show up in the **L3 (logical) view**, where a Docker stack is drawn alongside the subnet it sits on, so you can see the stack in the context of the network it actually talks on, not just the host it runs on.
+## The L3 View Draws Each Container on Its Subnet
+
+Containers are not stuck in that one view. They also appear in the **L3 (logical) view**, where a Docker stack is drawn alongside the subnet it sits on. That shows the network each container communicates over, not just the host it runs on.
 
 <figure class="my-8">
   <img
     class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/l3-light-960w.webp"
-    srcset="/l3-light-960w.webp 960w, /l3-light-1440w.webp 1440w, /l3-light-2400w.webp 2400w"
+    src="/common/l3-light-960w.webp"
+    srcset="/common/l3-light-960w.webp 960w, /common/l3-light-1440w.webp 1440w, /common/l3-light-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
-    alt="Scanopy L3 logical view: a Docker stack drawn alongside the subnet it sits on, showing the containers in the context of the network they talk on rather than just the host they run on."
+    alt="Scanopy L3 logical view: a Docker stack drawn alongside the subnet it sits on, showing the containers on the network they communicate over rather than just the host they run on."
   />
   <img
     class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/l3-960w.webp"
-    srcset="/l3-960w.webp 960w, /l3-1440w.webp 1440w, /l3-2400w.webp 2400w"
+    src="/common/l3-960w.webp"
+    srcset="/common/l3-960w.webp 960w, /common/l3-1440w.webp 1440w, /common/l3-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
-    alt="Scanopy L3 logical view: a Docker stack drawn alongside the subnet it sits on, showing the containers in the context of the network they talk on rather than just the host they run on."
+    alt="Scanopy L3 logical view: a Docker stack drawn alongside the subnet it sits on, showing the containers on the network they communicate over rather than just the host they run on."
   />
 </figure>
 
 Because the map redraws on every scan, a container that moves to a different host, or one that appears or disappears, is reflected automatically. The view stays current without anyone updating a diagram.
 
-## Setting it up
+## Setting It Up
 
 By default, the Scanopy daemon discovers containers by connecting to the local Docker socket (`/var/run/docker.sock`) on its own host. This happens automatically whenever the socket is accessible; there's no mode to pick or toggle to switch on. Container detection just runs as part of the normal scan, and one daemon covers the whole network. (You only create a **Docker Socket** credential if the daemon needs a non-default socket path.)
 
@@ -100,8 +102,8 @@ If you want to lock down what the daemon can touch, or discover containers on a 
 
 Either way, detection picks up containers wherever they run, so a mixed homelab of Docker on one host and VMs or LXC on others shows up as one coherent map rather than several disconnected ones.
 
-## What this is not
+## Scanopy Does Not Manage or Deploy Containers
 
-Scanopy is not a container manager. It will not start, stop, or deploy anything, and it is not trying to replace Portainer, Komodo, or your orchestrator. Those tools manage containers. Scanopy shows you where your containers sit on the network and what they connect to. They work well side by side: manage in your container tool, see the topology in Scanopy. It is a documentation tool, and it stays in that lane on purpose.
+Scanopy is not a container manager. It will not start, stop, or deploy anything, and it is not trying to replace Portainer, Komodo, or your orchestrator. Those tools manage containers. Scanopy shows you where your containers sit on the network and what they connect to. They work well side by side: manage in your container tool, see the topology in Scanopy.
 
 If you are mapping the rest of your gear too, the same scan that finds your containers also walks your switches and routers over SNMP. Here is the deeper version of that: [exploring your network topology with SNMP](/guides/snmp-network-topology-mapping). And Scanopy fingerprints [the services running on each host](/services), so a host is not just an IP, it is "the box running Postgres, Nginx, and twelve containers."

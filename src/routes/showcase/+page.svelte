@@ -23,7 +23,7 @@
 	/>
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://scanopy.net/showcase" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Community Showcase - Scanopy" />
@@ -31,7 +31,7 @@
 		name="twitter:description"
 		content="See what the Scanopy community is building. Explore infrastructure topologies from homelabs, businesses, and enterprise networks."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 </svelte:head>
 
 <section class="py-20">

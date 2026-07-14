@@ -94,12 +94,12 @@
 	<meta property="og:description" content={data.description} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content={canonical} />
-	<meta property="og:image" content="https://scanopy.net/topology-hero.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/topology-hero.webp" />
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={data.title} />
 	<meta name="twitter:description" content={data.description} />
-	<meta name="twitter:image" content="https://scanopy.net/topology-hero.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/topology-hero.webp" />
 
 	{@html `<script type="application/ld+json">${itemListJson}</script>`}
 	{@html `<script type="application/ld+json">${breadcrumbJson}</script>`}
@@ -108,7 +108,7 @@
 	{/if}
 </svelte:head>
 
-<PageHero image="/topology-hero.webp" title="Scanopy Alternatives" />
+<PageHero image="/og/topology-hero.webp" title="Scanopy Alternatives" />
 
 <article class="py-10 sm:py-20">
 	<div class="container mx-auto px-3 sm:px-4" class:max-w-3xl={!showToc} class:max-w-5xl={showToc}>
@@ -175,8 +175,8 @@
 				<div class="prose prose-invert prose-gray max-w-none">
 					<h2 id="why-scanopy">Why teams choose Scanopy</h2>
 					<p>
-						The tools above each lead with a different job — monitoring, discovery, or a structured
-						source of truth — and several can produce a diagram as a byproduct. Scanopy's job is
+						The tools above each lead with a different job (monitoring, discovery, or a structured
+						source of truth), and several can produce a diagram as a byproduct. Scanopy's job is
 						network documentation: a single scan returns four switchable views (L2 physical, L3
 						logical, workloads, and applications) and fingerprints the services running on each
 						host, so the map shows not just what is connected but what each device is actually
@@ -187,9 +187,9 @@
 						<a href="/pricing">pricing</a> regardless of host count, a free, self-hostable
 						<a href="/community">Community edition</a> under AGPL-3.0 or a
 						<a href="/commercial">commercial license</a> for business self-hosting, and a design that
-						sits alongside whatever monitoring stack you already run rather than replacing it. If you
-						want living, shareable network documentation without standing up another platform, that combination
-						is hard to match — which is why teams comparing these tools tend to come back to Scanopy.
+						runs alongside whatever monitoring stack you already run rather than replacing it. That
+						combination is living, shareable network documentation without standing up another
+						platform.
 					</p>
 				</div>
 

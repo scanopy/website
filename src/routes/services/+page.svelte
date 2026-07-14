@@ -23,14 +23,14 @@
 		content="Scanopy can automatically detect {serviceCount} services including Docker, databases, media servers, and more."
 	/>
 	<meta property="og:url" content="https://scanopy.net/services" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Discoverable Services - Scanopy" />
 	<meta
 		name="twitter:description"
 		content="Scanopy can automatically detect {serviceCount} services including Docker, databases, media servers, and more."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',

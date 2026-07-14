@@ -1,5 +1,5 @@
 <script lang="ts">
-	// Live, interactive Scanopy map embed — the same demo the blog posts and the main
+	// Live, interactive Scanopy map embed, the same demo the blog posts and the main
 	// comparison page (Scanopy detail card) use, so visitors can see the product produce a
 	// real topology map rather than just reading about it. Lazy-loaded to keep it off the
 	// critical path. The embed follows the site theme via the app's ?theme= param.

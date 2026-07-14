@@ -74,7 +74,7 @@
 		}
 		const hue = ((hash % 360) + 360) % 360;
 		// Light text on a translucent tint reads on dark; on light we need the inverse
-		// — a darker, more saturated label on a slightly stronger tint.
+		// a darker, more saturated label on a slightly stronger tint.
 		return theme.resolved === 'dark'
 			? { bg: `hsla(${hue}, 70%, 55%, 0.15)`, fg: `hsl(${hue}, 80%, 75%)` }
 			: { bg: `hsla(${hue}, 70%, 45%, 0.14)`, fg: `hsl(${hue}, 70%, 32%)` };

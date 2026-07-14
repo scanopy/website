@@ -517,7 +517,7 @@
 
 	/* Raise above the full-width bottom bar on mobile so they don't overlap. The
 	   bar publishes its height as --bar-h. On desktop the bar is a centered pill,
-	   so the bottom-right toggle already clears it — keep it in place. */
+	   so the bottom-right toggle already clears it; keep it in place. */
 	.toggle.raised {
 		bottom: calc(var(--bar-h, 4rem) + 1rem);
 		transition:

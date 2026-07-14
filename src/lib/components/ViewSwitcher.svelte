@@ -83,7 +83,7 @@
 		{/each}
 	</div>
 
-	<!-- Browser frame with screenshot — tiltable region -->
+	<!-- Browser frame with screenshot, tiltable region -->
 	<div class="tiltable">
 		<div class="browser-frame">
 			<div class="browser-frame-bar">

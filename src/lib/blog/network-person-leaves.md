@@ -1,17 +1,17 @@
 ---
 title: What Happens When Your Network Person Leaves
-description: 42% of network knowledge lives in one person's head. When they leave, you don't just lose an employee. You lose the map. Here's how to fix that.
+description: Roughly 42% of institutional knowledge sits with individual employees. When your network person leaves, you don't just lose an employee. You lose the map.
 keyword: network documentation best practices
 slug: network-person-leaves
 date: 2026-03-31
-dateModified: 2026-07-03
-tldr: Most network documentation depends on one person's memory and habits. When they leave, the knowledge leaves too. The fix isn't documenting more. It's automating documentation so it survives personnel changes.
+dateModified: 2026-07-14
+tldr: Network documentation that depends on one person's memory does not survive their departure. The fix isn't documenting more. It's automating documentation so it survives personnel changes.
 ctaDescription: Your documentation shouldn't depend on any one person. Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map in minutes. When someone leaves, the map stays current because it was never dependent on them.
 faq:
   - question: What is the bus factor, and why does it matter for networks?
-    answer: The bus factor is how many people would need to leave before critical knowledge is lost, often just one. For networks it is acute because the most valuable knowledge is not the configuration itself, which lives in the devices, but the reasoning behind it. That why accumulates over years in one person's head and can walk out the door in an afternoon.
+    answer: The bus factor is how many people would need to leave before critical knowledge is lost, often just one. For networks it is acute because the most valuable knowledge is not the configuration itself, which is stored in the devices, but the reasoning behind it. That why accumulates over years in one person's head and is gone when they leave.
   - question: Why isn't just document everything enough?
-    answer: Because manual documentation is a second job nobody signed up for, and it decays by default. Surveys show many organizations rarely update their docs even though they change configs weekly, so a gap opens between what changed and what is written down. Telling overworked staff to document more adds a task to an already overloaded list rather than fixing the cause.
+    answer: Because manual documentation is unpaid, unscheduled work, and it goes out of date by default. Surveys show many organizations rarely update their docs even though they change configs weekly, so a gap opens between what changed and what is written down. Telling overworked staff to document more adds a task to an already overloaded list rather than fixing the cause.
   - question: What network knowledge is lost when the network person leaves?
     answer: The configs stay in the devices, but the reasoning leaves: why the OSPF areas are split a certain way, which firewall rules were temporary fixes never removed, why a subnet uses a /23, which vendor's SNMP needs a workaround, and undocumented dependencies between systems. This tribal knowledge accumulates over years and is the hardest part for a replacement to reverse-engineer.
   - question: How do you keep network documentation from depending on one person?
@@ -28,9 +28,9 @@ Everything they know about your network leaves with them. Subnet layouts, firewa
 
 Their replacement starts on Monday. Day one is not productive. Neither is day thirty.
 
-This is the "bus factor" problem, and almost every IT team has it.
+This is the "bus factor" problem.
 
-## The Knowledge That Lives in Someone's Head
+## The Configs Are in the Devices. The Reasoning Behind Them Is Not.
 
 Auvik's [2023 Network IT Management Report](https://www.auvik.com/franklyit/reports/network-it-management-report/) surveyed 4,500 IT professionals and found that 45% of IT teams don't fully know the configuration of their own networks. That's not "we forgot to update the diagram." That's "we don't know what's running."
 
@@ -44,43 +44,35 @@ The configs are in the devices. You can pull them. What you can't pull:
 - Which vendor's SNMP implementation is broken and requires a workaround
 - The undocumented dependency between the print server and a specific VLAN
 
-This is tribal knowledge. It accumulates over years and it walks out the door in an afternoon.
+This is tribal knowledge. It accumulates over years and it is gone when the person leaves.
 
-## What It Actually Costs
+## Replacing a Network Engineer Costs 150-213% of Salary, Before the Reverse-Engineering Time
 
 IT staff turnover [averages about 13% annually](https://future-code.dev/en/blog/employee-retention-rate-in-tech-company-navigating-high-turnover-rates/), higher than the national average across industries. That means roughly one in eight IT roles turns over every year.
 
 The direct cost of replacing a specialized IT role runs [150% to 213% of their annual salary](https://bloomfire.com/blog/cost-of-losing-employee/). For a senior network engineer making $120k, that's $180k to $255k in recruiting, onboarding, and lost productivity.
 
-But the hidden cost is bigger. The replacement doesn't just need to learn the job. They need to reverse-engineer the network. Every undocumented decision becomes a puzzle to solve, and they're solving it while also handling tickets and keeping things running.
+The replacement doesn't just need to learn the job. They need to reverse-engineer the network. Every undocumented decision becomes a puzzle to solve, and they're solving it while also handling tickets and keeping things running.
 
 [Gartner estimates](https://moldstud.com/articles/p-best-practices-for-network-documentation-and-configurations) that 40% of network outages stem from human errors tied to inadequate documentation. When someone new is working from incomplete information, that number gets worse.
 
-## The Inheritance Nightmare
-
-These scenarios show up in sysadmin communities constantly. Not as edge cases. As the default experience.
+## Two Inherited-Network Accounts From Sysadmin Forums
 
 **The cascade departure.** A junior tech [posted on r/Sysadmin_Fr](https://www.reddit.com/r/Sysadmin_Fr/comments/1rvjtb0/) about joining a training organization where the original admin had stepped back, one replacement quit because the lack of processes was unbearable, and another went on sick leave right after getting hired permanently. The junior was now solo on a 400-PC fleet with scattered configs, no procedures, and passwords they couldn't find. They spent an entire morning just getting a FortiClient passphrase. When a remote site's firewall went down, the stored password didn't match. They later found two wall sockets patched together causing a network loop, something spanning tree would have caught if it had been configured. The community recommended NetBox, draw.io, Excel, and pen and paper. Starting from scratch was the only option.
 
-**The fired sysadmin.** A viral thread described a senior admin who was terminated after a new manager pushed him out. During offboarding, his accounts were deleted, which also wiped the documentation tied to those accounts. Manufacturing plants went down. The company begged him to come back. He refused.
-
-**The MSP handoff.** New MSP takes over a client from the previous provider. The first month isn't service delivery. It's discovery. Figuring out what's connected to what, which IPs are in use, which services run where. The client is paying for IT support and getting an archaeology project.
-
-**The part-timer.** Previous admin was a developer doing sysadmin work on the side. No group policy, no patch management, multiple antivirus products installed on the same machines, and documentation that existed mostly as scattered notes.
-
-These aren't worst-case stories. They're Tuesday.
+**The fired sysadmin.** Another thread described a senior admin who was terminated after a new manager pushed him out. During offboarding, his accounts were deleted, which also wiped the documentation tied to those accounts. Manufacturing plants went down. The company begged him to come back. He refused.
 
 ## Why "Just Document Everything" Doesn't Work
 
-The standard advice is "write everything down." The problem: manual documentation is a second job nobody signed up for.
+The standard advice is "write everything down." The problem: manual documentation is unpaid, unscheduled work.
 
 [Auvik's network field report](https://www.auvik.com/franklyit/blog/network-documentation-best-practices/) found that 27% of organizations never or rarely update their network documentation. Another 41.5% update monthly or less, despite 53% making config changes daily or weekly.
 
-There's a gap between "config changed" and "docs updated." That gap is where knowledge loss lives, and it widens every time someone is busy (which is always). Red Hat's sysadmin blog put it well: [poor documentation is not a job insurance strategy](https://www.redhat.com/sysadmin/poor-documentation). But telling overworked IT staff to document more doesn't fix the problem. It adds a task to a list that's already too long.
+There's a gap between "config changed" and "docs updated." Knowledge is lost in that gap. Red Hat's sysadmin blog: [poor documentation is not a job insurance strategy](https://www.redhat.com/sysadmin/poor-documentation). But telling overworked IT staff to document more doesn't fix the problem. It adds a task to a list that's already too long.
 
-Manual documentation decays by default. The person who writes it eventually leaves, and the person who replaces them doesn't trust it because they can't tell what's current.
+Manual documentation goes out of date by default. The person who writes it eventually leaves, and the person who replaces them doesn't trust it because they can't tell what's current.
 
-## Documentation That Survives Personnel Changes
+## Documentation Generated From the Network Survives a Departure. Documentation Kept by Hand Does Not.
 
 The fix isn't discipline. It's removing the human bottleneck.
 

@@ -34,18 +34,20 @@ interface BlogPost {
 type ContentSegment =
 	| { type: 'html'; content: string }
 	| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
-	| { type: 'scanopy-demo' };
+	| { type: 'scanopy-demo' }
+	| { type: 'customer-quote'; id: string };
 
 const DEFAULT_INLINE_COLUMNS = ['name', 'discovery', 'pricing', 'bestFor'];
 
 // Splits rendered markdown on inline component markers so they render as Svelte components
-// instead of raw HTML: `<!-- vendor-table:slug,slug [columns:a,b] -->` and `<!-- scanopy-demo -->`
-// (a theme-aware live map embed). Returns null when the post has neither marker.
+// instead of raw HTML: `<!-- vendor-table:slug,slug [columns:a,b] -->`, `<!-- scanopy-demo -->`
+// (a theme-aware live map embed), and `<!-- quote:id -->` (a customer quote paired with the
+// customer's logo). Returns null when the post has none of these markers.
 function splitBlogSegments(
 	html: string
 ): { segments: ContentSegment[]; vendorSlugs: string[] } | null {
 	const markerRegex =
-		/<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo)\s*-->/g;
+		/<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo|quote:([\w-]+))\s*-->/g;
 	if (!markerRegex.test(html)) return null;
 
 	const segments: ContentSegment[] = [];
@@ -65,6 +67,8 @@ function splitBlogSegments(
 			const columns = match[2] ? match[2].split(',').filter(Boolean) : DEFAULT_INLINE_COLUMNS;
 			allSlugs.push(...vendorSlugs);
 			segments.push({ type: 'vendor-inline-table', vendorSlugs, columns });
+		} else if (match[3]) {
+			segments.push({ type: 'customer-quote', id: match[3] });
 		} else {
 			segments.push({ type: 'scanopy-demo' });
 		}
@@ -193,7 +197,7 @@ export async function load({ params }) {
 				dateModified: frontmatter.dateModified || undefined,
 				keyword: frontmatter.keyword || '',
 				slug,
-				image: frontmatter.image || '/topology-hero.webp',
+				image: frontmatter.image || '/og/topology-hero.webp',
 				tldr: frontmatter.tldr || undefined,
 				ctaDescription: frontmatter.ctaDescription || undefined,
 				format: frontmatter.format || undefined,

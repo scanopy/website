@@ -122,6 +122,14 @@ export interface CustomerLogo {
 	url?: string;
 }
 
+export interface Testimonial {
+	id: string;
+	quote: string;
+	attribution: string;
+	// References a CustomerLogo by id, so the quote renders with that customer's logo.
+	customerId: string;
+}
+
 // Comparison blog post types
 export type DiscoveryMethod =
 	| 'SNMP'

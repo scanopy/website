@@ -21,11 +21,11 @@
 	<meta property="og:title" content="About - Scanopy" />
 	<meta property="og:description" content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you." />
 	<meta property="og:url" content="https://scanopy.net/about" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="About - Scanopy" />
 	<meta name="twitter:description" content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you." />
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',

@@ -245,7 +245,7 @@ export async function load({ params }) {
 				dateModified: frontmatter.dateModified || undefined,
 				keyword: frontmatter.keyword || '',
 				slug,
-				image: frontmatter.image || '/topology-hero.webp',
+				image: frontmatter.image || '/og/topology-hero.webp',
 				tldr: frontmatter.tldr || undefined,
 				ctaDescription: frontmatter.ctaDescription || undefined,
 				style: frontmatter.style || undefined,

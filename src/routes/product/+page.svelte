@@ -132,32 +132,32 @@
 				question: v.question,
 				answer: v.answer,
 				alt: v.alt,
-				src: `/${v.file}${s}-1440w.webp`,
-				srcset: `/${v.file}${s}-960w.webp 960w, /${v.file}${s}-1440w.webp 1440w, /${v.file}${s}-2400w.webp 2400w`,
+				src: `/common/${v.file}${s}-1440w.webp`,
+				srcset: `/common/${v.file}${s}-960w.webp 960w, /common/${v.file}${s}-1440w.webp 1440w, /common/${v.file}${s}-2400w.webp 2400w`,
 				width: 1440,
 				height: v.height
 			};
 		})
 	);
 
-	// Product FAQ — the product-definitional and positioning questions AI answer engines
+	// Product FAQ: the product-definitional and positioning questions AI answer engines
 	// ask about Scanopy itself. Facts reuse the canonical wording already on the site so a
 	// single change keeps them consistent.
 	const productFaqs = [
 		{
 			question: 'What is Scanopy?',
 			answer:
-				'Scanopy is automated network diagram and documentation software. You deploy one lightweight scanner and it discovers your hosts, maps Layer 2 and Layer 3 topology, and fingerprints the services running on each host — turning your live network into four documentation views that stay current on a schedule, instead of a diagram you redraw by hand.'
+				'Scanopy is automated network diagram and documentation software. You deploy one lightweight scanner and it discovers your hosts, maps Layer 2 and Layer 3 topology, and fingerprints the services running on each host, turning your live network into four documentation views that stay current on a schedule, instead of a diagram you redraw by hand.'
 		},
 		{
 			question: 'How does Scanopy discover and document my network?',
 			answer:
-				'You install a single daemon on the network — no agents on individual endpoints. It scans on a schedule, finds every host, subnet, switch, service, and workload, and correlates them into four switchable views: L2 physical, L3 logical, workloads, and applications. Each re-scan refreshes the documentation automatically, so it reflects the network as it is now rather than when someone last updated a diagram by hand.'
+				'You install a single daemon on the network, with no agents on individual endpoints. It scans on a schedule, finds every host, subnet, switch, service, and workload, and correlates them into four switchable views: L2 physical, L3 logical, workloads, and applications. Each re-scan refreshes the documentation automatically, so it reflects the network as it is now rather than when someone last updated a diagram by hand.'
 		},
 		{
 			question: 'Does Scanopy replace network monitoring tools like PRTG or Auvik?',
 			answer:
-				'No. Monitoring tools track device health, bandwidth, and alerts over time; Scanopy documents what is on your network and how it is connected. It sits alongside your monitoring stack rather than replacing it — many teams run both. See the <a href="/comparisons/best-automated-network-diagram-tools" class="text-blue-400 hover:text-blue-300">tool comparison</a> for how it stacks up against specific products.'
+				'No. Monitoring tools track device health, bandwidth, and alerts over time; Scanopy documents what is on your network and how it is connected. It runs alongside your monitoring stack rather than replacing it, and many teams run both. See the <a href="/comparisons/best-automated-network-diagram-tools" class="text-blue-400 hover:text-blue-300">tool comparison</a> for how it stacks up against specific products.'
 		},
 		{
 			question: 'Is Scanopy free or open source?',
@@ -167,7 +167,7 @@
 		{
 			question: 'How often does Scanopy update the network diagram?',
 			answer:
-				'Scanopy runs scheduled scans — typically hourly to daily, depending on how often your network changes — and refreshes the documentation automatically each time. It is scheduled rather than continuous, so it keeps your maps current without polling the network around the clock.'
+				'Scanopy runs scheduled scans (typically hourly to daily, depending on how often your network changes) and refreshes the documentation automatically each time. It is scheduled rather than continuous, so it keeps your maps current without polling the network around the clock.'
 		}
 	];
 
@@ -179,27 +179,27 @@
 </script>
 
 <svelte:head>
-	<title>Product — Automated Network Diagrams & Documentation | Scanopy</title>
+	<title>Product: Automated Network Diagrams & Documentation | Scanopy</title>
 	<meta
 		name="description"
 		content="See how Scanopy documents your whole network: discover every host, map Layer 2 and Layer 3 topology, fingerprint services, and keep four living views current on a schedule."
 	/>
 	<link rel="canonical" href="https://scanopy.net/product" />
 
-	<meta property="og:title" content="Scanopy Product — Automated Network Diagrams & Documentation" />
+	<meta property="og:title" content="Scanopy Product: Automated Network Diagrams & Documentation" />
 	<meta
 		property="og:description"
 		content="Discover every host, map Layer 2 and Layer 3 topology, fingerprint services, and keep four living network views current on a schedule."
 	/>
 	<meta property="og:url" content="https://scanopy.net/product" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:title" content="Scanopy Product — Automated Network Diagrams & Documentation" />
+	<meta property="twitter:title" content="Scanopy Product: Automated Network Diagrams & Documentation" />
 	<meta
 		name="twitter:description"
 		content="Discover every host, map Layer 2 and Layer 3 topology, fingerprint services, and keep four living network views current on a schedule."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
 </svelte:head>
 
@@ -251,7 +251,7 @@
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Visualize your whole network — and everything running on it
+					Visualize your whole network, and everything running on it
 				</h2>
 			</div>
 

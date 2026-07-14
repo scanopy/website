@@ -37,7 +37,7 @@
 	<meta property="og:description" content="Scanopy v{data.entry.version} - {data.entry.title}" />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content="https://scanopy.net/changelog/{data.entry.slug}" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary" />
@@ -55,13 +55,13 @@
 		publisher: {
 			'@type': 'Organization',
 			name: 'Scanopy',
-			logo: { '@type': 'ImageObject', url: 'https://scanopy.net/scanopy-logo.webp' }
+			logo: { '@type': 'ImageObject', url: 'https://scanopy.net/brand/scanopy-logo.webp' }
 		},
 		mainEntityOfPage: {
 			'@type': 'WebPage',
 			'@id': `https://scanopy.net/changelog/${data.entry.slug}`
 		},
-		image: 'https://scanopy.net/social.webp'
+		image: 'https://scanopy.net/og/social.webp'
 	})}</script>`}
 </svelte:head>
 

@@ -101,12 +101,12 @@
 	<meta property="og:description" content={data.description} />
 	<meta property="og:type" content="article" />
 	<meta property="og:url" content={canonical} />
-	<meta property="og:image" content="https://scanopy.net/topology-hero.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/topology-hero.webp" />
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={data.title} />
 	<meta name="twitter:description" content={data.description} />
-	<meta name="twitter:image" content="https://scanopy.net/topology-hero.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/topology-hero.webp" />
 
 	{@html `<script type="application/ld+json">${itemListJson}</script>`}
 	{@html `<script type="application/ld+json">${breadcrumbJson}</script>`}
@@ -115,7 +115,7 @@
 	{/if}
 </svelte:head>
 
-<PageHero image="/topology-hero.webp" title="Best {data.vendorName} Alternatives" />
+<PageHero image="/og/topology-hero.webp" title="Best {data.vendorName} Alternatives" />
 
 <article class="py-10 sm:py-20">
 	<div class="container mx-auto px-3 sm:px-4" class:max-w-3xl={!showToc} class:max-w-5xl={showToc}>

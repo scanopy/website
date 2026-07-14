@@ -48,14 +48,14 @@
 		content="Scanopy changelog and release notes. See what's new in each version of Scanopy."
 	/>
 	<meta property="og:url" content="https://scanopy.net/changelog" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Changelog - Scanopy" />
 	<meta
 		name="twitter:description"
 		content="Scanopy changelog and release notes. See what's new in each version of Scanopy."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 </svelte:head>
 
 <section class="py-20">

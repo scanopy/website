@@ -4,7 +4,7 @@ description: 'Map your network topology by hand with snmpwalk. Every SNMP MIB an
 keyword: SNMP network topology mapping
 slug: snmp-network-topology-mapping
 date: 2026-06-23
-dateModified: 2026-07-03
+dateModified: 2026-07-14
 format: howto
 tldr: "You can map your whole network topology using nothing but snmpwalk and a terminal. This walks through every SNMP MIB that matters, what the OIDs mean, and how to correlate the data into a map. By the end you'll understand exactly what automated discovery tools do under the hood."
 ctaHeading: Skip the snmpwalk marathon
@@ -13,7 +13,7 @@ faq:
   - question: How does SNMP map network topology?
     answer: SNMP topology mapping queries a handful of standard MIBs on managed devices to pull their identity, interface list, IP assignments, and neighbor tables, then correlates the results into a graph. You walk each device with snmpwalk, collect the tables, and stitch them together by matching neighbor names and MAC addresses to ports. It is exactly what automated discovery tools do on every scan.
   - question: Which SNMP MIBs matter for topology mapping?
-    answer: The System MIB identifies each device, the Interface MIB enumerates its ports, and the IP Address Table maps IPs to interfaces. LLDP and CDP neighbor tables reveal what connects to each port, which is where topology comes from. ARP tables and the Bridge MIB place devices that do not speak those protocols, and the Entity MIB adds serial numbers and models.
+    answer: The System MIB identifies each device, the Interface MIB enumerates its ports, and the IP Address Table maps IPs to interfaces. LLDP and CDP neighbor tables list what connects to each port, which is where topology comes from. ARP tables and the Bridge MIB place devices without those protocols, and the Entity MIB adds serial numbers and models.
   - question: What is the difference between LLDP and CDP?
     answer: Both advertise a device's identity out each port so neighbors can learn what is connected. LLDP (IEEE 802.1AB) is vendor-neutral and works across mixed hardware; CDP is Cisco's equivalent and often carries extra detail like the exact platform model. Their SNMP index differs: CDP maps straight to the local ifIndex, while LLDP needs the local port number parsed from the index.
   - question: How do you discover devices that don't support SNMP?
@@ -26,9 +26,9 @@ faq:
 
 Ever wonder what network discovery tools actually do? They walk SNMP. That's most of it. They query a handful of standard MIBs, pull device identities, interface lists, and neighbor tables, then correlate the results into a graph.
 
-You can do the same thing by hand. All you need is `snmpwalk`, a terminal, and managed gear that speaks SNMP. This article walks through every MIB that matters for topology, what each OID tells you, and how to stitch the data together into an actual map.
+You can do the same thing by hand. All you need is `snmpwalk`, a terminal, and managed gear with SNMP enabled. What follows covers every MIB that matters for topology, what each OID means, and how to stitch the data together into a map.
 
-This is useful for more than curiosity. If you ever have to debug why a discovery tool is missing a device, or you want to understand what your tools are really querying, or you just want to map a small network without buying anything, the manual path teaches you the data model. Fair warning: by the end you'll also understand why people automate this. Most of the OIDs below are ones Scanopy queries on every scan. Doing it once by hand makes the case for itself.
+Doing it by hand is worth the time if you have to debug why a discovery tool is missing a device, if you want to know what your tools are really querying, or if you want to map a small network without buying anything. Most of the OIDs below are ones Scanopy queries on every scan.
 
 The examples below all query the same device, at `192.168.7.230` with the community string `netdefault`. Swap in your own addresses and strings as you follow along.
 
@@ -71,7 +71,7 @@ SNMPv2-MIB::sysObjectID.0 = OID: SNMPv2-SMI::enterprises.9.1.1208
 
 `sysObjectID` is the one worth a second look. The Private Enterprise Number (PEN) embedded in it is a reliable vendor identifier, even when `sysDescr` is vague. Here it's `enterprises.9.1.1208`, and the `9` means Cisco, full stop, regardless of what the description string says. That's how discovery tools key off vendor without trying to regex the description text.
 
-Now repeat that for every device on your network. Already tedious? We're just getting started.
+Repeat that for every device on the network.
 
 ## Step 2: Enumerate Interfaces (Interface MIB)
 
@@ -98,7 +98,7 @@ That number after `ifDescr` is the `ifIndex`. It's the join key for everything t
 | `1.3.6.1.2.1.2.2.1.7` | ifAdminStatus | Desired state: up(1), down(2), testing(3).                                                                          |
 | `1.3.6.1.2.1.2.2.1.8` | ifOperStatus  | Actual state. Seven possible values, including dormant and lowerLayerDown.                                          |
 
-The `ifSpeed` cap is a real gotcha. On a 10G or 40G interface, the 32-bit gauge overflows and gives you garbage. The fix lives in the extended interface table (ifXTable):
+Watch the `ifSpeed` cap. On a 10G or 40G interface, the 32-bit gauge overflows and gives you garbage. The fix is in the extended interface table (ifXTable):
 
 | OID                       | Name        | What it tells you                                                |
 | ------------------------- | ----------- | ---------------------------------------------------------------- |
@@ -106,7 +106,7 @@ The `ifSpeed` cap is a real gotcha. On a 10G or 40G interface, the 32-bit gauge 
 | `1.3.6.1.2.1.31.1.1.1.15` | ifHighSpeed | Speed in Mbps. Use this instead of ifSpeed for 10G and up.       |
 | `1.3.6.1.2.1.31.1.1.1.18` | ifAlias     | The description the admin typed into the interface config.       |
 
-`ifAlias` is gold when it's populated. It's whatever the admin wrote in the config (`description Uplink to core`), so it often tells you what a port is for in plain language:
+`ifAlias` is whatever the admin wrote in the config (`description Uplink to core`), so when it's populated it tells you what a port is for in plain language:
 
 ```
 $ snmpwalk -v2c -c netdefault 192.168.7.230 ifAlias
@@ -116,11 +116,11 @@ IF-MIB::ifAlias.3 = STRING: Server port
 IF-MIB::ifAlias.4 = STRING: Management VLAN
 ```
 
-That's the topology starting to leak out before you've even looked at a neighbor table. Port 1 goes to switch-access-01, port 2 to router-gw-01. Walk `ifOperStatus` and `ifHighSpeed` alongside this, line them up by `ifIndex`, and you have a real port inventory: name, purpose, speed, and whether it's actually up.
+The aliases already show part of the topology: port 1 goes to switch-access-01, port 2 to router-gw-01. Walk `ifOperStatus` and `ifHighSpeed` alongside this, line them up by `ifIndex`, and you have a port inventory: name, purpose, speed, and whether it's up.
 
 ## Step 3: Map IPs to Interfaces (IP Address Table)
 
-Now connect interfaces to the IP addresses living on them. The IP Address Table (RFC 4293) does it:
+Now connect interfaces to the IP addresses assigned to them. The IP Address Table (RFC 4293) does it:
 
 ```
 $ snmpwalk -v2c -c netdefault 192.168.7.230 ipAdEntIfIndex
@@ -136,7 +136,7 @@ Look closely at the OID. The IP address is encoded into the OID suffix itself, o
 | `1.3.6.1.2.1.4.20.1.2` | ipAdEntIfIndex | Which interface (ifIndex) the IP belongs to.         |
 | `1.3.6.1.2.1.4.20.1.3` | ipAdEntNetMask | Subnet mask. Combine with the IP to get the network. |
 
-Parsing IPs out of OID suffixes instead of values trips people up the first time. It's worth internalizing because LLDP and ARP do the same kind of suffix encoding, and you'll hit it again in the next two steps.
+Parsing IPs out of OID suffixes instead of values trips people up the first time. LLDP and ARP use the same suffix encoding, so you'll hit it again in the next two steps.
 
 ## Step 4: Discover Neighbors (LLDP and CDP)
 
@@ -162,7 +162,7 @@ Two things to notice. First, the OID prints numerically (`iso.0.8802...`) instea
 | `1.0.8802.1.1.2.1.4.1.1.10` | lldpRemSysDesc   | Remote device description.                                  |
 | `1.0.8802.1.1.2.1.4.2.1.2`  | lldpRemManAddr   | Remote management IP.                                       |
 
-The LLDP remote table index is `timeMark.localPortNum.remIndex`, three numbers tacked onto the OID. In `...1.1.9.0.1.1` above, the `0` is timeMark, the `1` in the middle is the local port number, and the trailing `1` is the remote index. The middle number is the one you care about: it's how you tie a remote neighbor back to a local port. Scanopy pulls the value from position 1 of the suffix to match each neighbor to the right local interface. Parse the wrong position and your edges connect to the wrong ports.
+The LLDP remote table index is `timeMark.localPortNum.remIndex`, three numbers tacked onto the OID. In `...1.1.9.0.1.1` above, the `0` is timeMark, the `1` in the middle is the local port number, and the trailing `1` is the remote index. The middle number ties a remote neighbor back to a local port. Scanopy pulls the value from position 1 of the suffix to match each neighbor to the right local interface. Parse the wrong position and your edges connect to the wrong ports.
 
 So `...9.0.1.1 = switch-access-01` reads as: local port 1 on this device connects to switch-access-01. Pull the remote port too:
 
@@ -188,7 +188,7 @@ Walk LLDP and CDP across your devices and you have edges. You now have the start
 
 ## Step 5: Find Everything Else (ARP Tables)
 
-LLDP and CDP only see devices that speak those protocols, which in practice means switches, routers, and the occasional server. Printers, IoT gear, workstations, anything dumb or locked down, none of it advertises itself. To find those, walk the ARP table on a router or L3 switch:
+LLDP and CDP only cover devices running those protocols, which in practice means switches, routers, and the occasional server. Printers, IoT gear, workstations, anything dumb or locked down, none of it advertises itself. To find those, walk the ARP table on a router or L3 switch:
 
 ```
 $ snmpwalk -v2c -c netdefault 192.168.7.230 ipNetToMediaPhysAddress
@@ -232,7 +232,7 @@ Take stock of what you've collected:
 - **Neighbor relationships** from LLDP and CDP (Step 4)
 - **ARP-discovered hosts and MAC-to-port mappings** from ARP and the Bridge MIB (Step 5)
 
-None of it is a topology yet. It's a pile of tables. The correlation step is the work:
+None of it is a topology yet. It's a pile of tables. Correlating them produces the topology:
 
 1. **Match LLDP neighbor names to discovered devices.** `lldpRemSysName` gives you a hostname; find that device in your Step 1 results and you've confirmed both ends of the link.
 2. **Tie neighbors to local ports.** Use the local port number from the LLDP index (or the `ifIndex` from the CDP index) to attach each edge to a specific interface from Step 2.
@@ -248,13 +248,13 @@ switch-core-01 (192.168.7.230)
   Gi0/3 ── printer-lobby (192.168.7.234, via ARP + forwarding table)
 ```
 
-If you followed along, congratulations. You just did manually what automated discovery tools do on every scan. You also see why [network diagrams go stale so fast](/blog/network-diagrams-wrong): this is an hour of work for a handful of devices, and it's a snapshot the moment you finish. Add a switch tomorrow and the map is wrong until someone re-walks everything. Static templates and [spreadsheets](/blog/network-documentation-template) have the same problem. They capture a moment, and the network moves on without them.
+That is what automated discovery tools do on every scan. It also shows why [network diagrams go stale so fast](/blog/network-diagrams-wrong): this is an hour of work for a handful of devices, and it's a snapshot the moment you finish. Add a switch tomorrow and the map is wrong until someone re-walks everything. Static templates and [spreadsheets](/blog/network-documentation-template) have the same problem. They capture a moment, and the network keeps changing after them.
 
-## Or Just Automate It
+## Scanopy Walks the Same MIBs Across the Whole Network in Minutes
 
 Everything above is what Scanopy does under the hood, every time it runs a scan. Same MIBs, same OIDs, same correlation logic. It finds responsive hosts via ARP, then deep-scans each one as it answers, checking for SNMP on UDP 161 (and 1161) and walking the same MIBs you did by hand (System, Interface, IP, LLDP, CDP, ARP, Bridge) plus a few more like Entity and VLAN membership, then correlating the results into a graph.
 
-Configuring it takes one input the tutorial didn't: your SNMP credentials, so the daemon can query your gear the same way `snmpwalk -c netdefault` just did. You set these up when you configure a daemon to install. A credential is either a community string (SNMPv1 and v2c) or a username with auth and privacy passphrases (SNMPv3), and you give it one of two scopes: a broadcast credential that's tried against every host during a scan, or a per-host credential pinned to specific IP addresses. When a scan runs, Scanopy attempts each credential as configured, and for every host where one succeeds, it persists that credential as the host's assigned credential and reuses it on later discovery runs. The first scan does the trial-and-error you'd otherwise do by hand with `-c`; every scan after that already knows which credential each device answers to. You can also create credentials outside the daemon setup at any time and assign them to hosts or set them network-wide.
+Configuring it takes one input the tutorial didn't: your SNMP credentials, so the daemon can query your gear the same way `snmpwalk -c netdefault` just did. You set these up when you configure a daemon to install. A credential is either a community string (SNMPv1 and v2c) or a username with auth and privacy passphrases (SNMPv3), and you give it one of two scopes: a broadcast credential that's tried against every host during a scan, or a per-host credential pinned to specific IP addresses. When a scan runs, Scanopy attempts each credential as configured, and for every host where one succeeds, it persists that credential as the host's assigned credential and reuses it on later discovery runs. The first scan does the trial-and-error you'd otherwise do by hand with `-c`; every scan after that reuses the credential each device accepted. You can also create credentials outside the daemon setup at any time and assign them to hosts or set them network-wide.
 
 The difference is scale and repetition. Scanopy does this across your entire network in minutes, repeats it on a schedule, and renders the result as an interactive map instead of an ASCII tree. Plenty of tools automate this SNMP walking, and we [compared the best automated network diagram tools](/comparisons/best-automated-network-diagram-tools) on discovery method, live updates, and pricing if you want to see how they stack up.
 
@@ -264,7 +264,7 @@ Start with a single device. Here is the same SNMP data you walked by hand, the s
 
 ![Scanopy interface list for switch-core-01: GigabitEthernet0/1 to 0/3 and Vlan10, with Gi0/1 expanded to show ifName, ifType, speed, admin and operational status, and the alias "Uplink to switch-access-01", the same fields the Interface MIB walk returned in Step 2.](/guides/snmp-network-topology-mapping/host-modal-interfaces.png)
 
-Now the part that took real work in Step 6, correlating neighbors into a topology, done for you across a whole network. This is an L2 (physical) view of a small datacenter:
+Step 6's correlation, neighbors into a topology, done across a whole network. This is an L2 (physical) view of a small datacenter:
 
 ![Scanopy L2 physical topology view: a switch (dc-switch-01) with labeled trunk and VLAN 20 server ports linked to a firewall, a Proxmox hypervisor, a Docker host, and an HAProxy load balancer, each link showing the port speed and MAC address.](/guides/snmp-network-topology-mapping/l2.png)
 

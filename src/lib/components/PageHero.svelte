@@ -11,7 +11,7 @@
 		children?: Snippet;
 	}
 
-	let { image = '/topology-hero.webp', imageLight, title, subtitle, children }: Props = $props();
+	let { image = '/og/topology-hero.webp', imageLight, title, subtitle, children }: Props = $props();
 
 	const resolvedImage = $derived(
 		theme.resolved === 'light' ? (imageLight ?? image.replace(/\.webp$/, '-light.webp')) : image

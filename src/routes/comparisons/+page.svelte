@@ -50,7 +50,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://scanopy.net/comparisons" />
 
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Comparisons - Scanopy" />
@@ -58,7 +58,7 @@
 		name="twitter:description"
 		content="Side-by-side comparisons of network diagram and documentation tools. Pricing, features, and trade-offs."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',

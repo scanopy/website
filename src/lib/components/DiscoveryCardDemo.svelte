@@ -45,7 +45,7 @@
 
 	const estimationText = $derived.by(() => {
 		if (!hostsFound) return 'Scanning for hosts...';
-		return `Found ${hostsFound} hosts — ${formatEstimatedRemaining(remainingSecs)} remaining`;
+		return `Found ${hostsFound} hosts, ${formatEstimatedRemaining(remainingSecs)} remaining`;
 	});
 
 	onMount(() => {

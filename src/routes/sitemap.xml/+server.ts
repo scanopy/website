@@ -167,7 +167,7 @@ export async function GET() {
 		)
 		.join('');
 
-	// Programmatic "Best <vendor> alternatives" listicle pages — same fixture-derived
+	// Programmatic "Best <vendor> alternatives" listicle pages; same fixture-derived
 	// lastmod as the vs pages.
 	const altUrls = allAltPageSlugs()
 		.map(

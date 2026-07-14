@@ -4,7 +4,7 @@ import { vendors } from '$lib/fixtures/network-diagram-vendors';
 // Real competitor vendors we generate "Scanopy vs <vendor>" head-to-head pages for.
 // Excluded by design:
 //  - scanopy / scanopy-ce: comparing Scanopy to itself has no value.
-//  - drawio / lucidchart: manual diagramming tools with no discovery — they are not
+//  - drawio / lucidchart: manual diagramming tools with no discovery; they are not
 //    head-to-head competitors (no auto-topology), so a vs page would be thin/misleading.
 //  - nmap-zenmap: a CLI scanner / discovery layer, not an ongoing-documentation product;
 //    not a real head-to-head and low comparison search value.
@@ -28,7 +28,7 @@ export const SCANOPY_SLUG = 'scanopy';
 // The year stamped into generated comparison titles as a freshness signal. Bump this
 // (deliberately, when you re-verify the vendor data) so every "vs" and "alternatives"
 // title moves together instead of drifting across dozens of hardcoded strings. Not derived
-// from the current date on purpose — the year should claim recency only when the figures
+// from the current date on purpose; the year should claim recency only when the figures
 // were actually re-checked.
 export const REVIEW_YEAR = 2026;
 
@@ -156,15 +156,11 @@ export function buildIntro(vendor: Vendor): string {
 			? rawLabel
 			: `${name}'s ${rawLabel}`;
 		parts.push(
-			`The table below puts the two side by side on discovery, the four topology views, pricing, and licensing, including ${clause}.`
-		);
-	} else if (vendor.whereItFits) {
-		parts.push(
-			`The table below puts the two side by side on discovery, the four topology views, pricing, and licensing, so you can see where ${name} fits and where Scanopy does.`
+			`Discovery, the four topology views, pricing, and licensing are where the two differ, including ${clause}.`
 		);
 	} else {
 		parts.push(
-			`The table below puts the two side by side on discovery, the four topology views, pricing, and licensing.`
+			`Discovery, the four topology views, pricing, and licensing are where the two differ.`
 		);
 	}
 
@@ -172,7 +168,7 @@ export function buildIntro(vendor: Vendor): string {
 }
 
 /**
- * "When to choose which" takeaway, derived from whereItFits / tradeOff. Honest framing:
+ * "When to choose which" takeaway, derived from whereItFits / tradeOff.
  * Scanopy = documentation alongside your stack; the competitor keeps its own strength.
  */
 export function buildTakeaway(vendor: Vendor): { scanopy: string; vendor: string } {
@@ -185,7 +181,7 @@ export function buildTakeaway(vendor: Vendor): { scanopy: string; vendor: string
 		angles.scanopy && angles.vendor
 			? `${lowerPhrase(angles.scanopy)} over ${lowerPhrase(angles.vendor)}`
 			: 'a dedicated, living network-documentation tool';
-	const scanopyLine = `You want ${contrast}: automatic ${SCANOPY_CLAIMS.views}, ${SCANOPY_CLAIMS.serviceDetection}, ${SCANOPY_CLAIMS.flatPricing}, and ${SCANOPY_CLAIMS.freeCE}. ${SCANOPY_CLAIMS.alongside}`;
+	const scanopyLine = `Choose Scanopy for ${contrast}: automatic ${SCANOPY_CLAIMS.views}, ${SCANOPY_CLAIMS.serviceDetection}, ${SCANOPY_CLAIMS.flatPricing}, and ${SCANOPY_CLAIMS.freeCE}. ${SCANOPY_CLAIMS.alongside}`;
 
 	let vendorLine: string;
 	if (vendor.whereItFits) {
@@ -193,7 +189,7 @@ export function buildTakeaway(vendor: Vendor): { scanopy: string; vendor: string
 	} else if (vendor.bestFor) {
 		vendorLine = `${name} is the better fit when you need ${lowerFirst(trimSentence(vendor.bestFor))}.`;
 	} else {
-		vendorLine = `${name} is the better fit when its capabilities beyond diagramming are what you are buying for.`;
+		vendorLine = `${name} adds capabilities beyond diagramming.`;
 	}
 
 	return { scanopy: scanopyLine, vendor: vendorLine };
@@ -256,7 +252,7 @@ export function buildTitle(vendor: Vendor): string {
 	return `Scanopy vs ${name}: ${diff} (${REVIEW_YEAR})`;
 }
 
-/** Unique meta description per matchup — leads with the matchup's differentiator and a
+/** Unique meta description per matchup: leads with the matchup's differentiator and a
  *  vendor-specific fit clause so no two descriptions are the same boilerplate. */
 export function buildMetaDescription(vendor: Vendor): string {
 	const name = vendorDisplayName(vendor);

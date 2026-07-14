@@ -42,7 +42,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://scanopy.net/guides" />
 
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Guides - Scanopy" />
@@ -50,7 +50,7 @@
 		name="twitter:description"
 		content="In-depth guides and reference on network documentation: automated discovery, topology mapping, integrations, and compliance."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',

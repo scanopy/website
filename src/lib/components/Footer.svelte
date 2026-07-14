@@ -83,7 +83,7 @@
 					<div class="space-y-4">
 						<div class="flex items-center gap-2">
 							<img
-								src="/scanopy-logo-64.webp"
+								src="/brand/scanopy-logo-64.webp"
 								alt="Scanopy"
 								class="h-8 w-8"
 								width="32"

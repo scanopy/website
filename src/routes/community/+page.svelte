@@ -36,7 +36,7 @@
 		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
 	<meta property="og:url" content="https://scanopy.net/community" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta
 		name="twitter:title"
@@ -46,14 +46,14 @@
 		name="twitter:description"
 		content="Free, self-hosted network documentation for homelabs, home networks, and small teams. Get started with a single Docker command."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 </svelte:head>
 
 <!-- Hero -->
 <section class="relative overflow-hidden py-16 lg:py-24">
 	<!-- Background image -->
 	<div
-		class="absolute inset-0 bg-[url('/topology-hero-light.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('/topology-hero.webp')]"
+		class="absolute inset-0 bg-[url('/og/topology-hero-light.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('/og/topology-hero.webp')]"
 	></div>
 	<!-- Dark overlay -->
 	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>

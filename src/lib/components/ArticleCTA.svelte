@@ -6,7 +6,7 @@
 
 	// Research-intent readers get the demo first: a real topology map in one
 	// click, no signup. Pricing is the follow-on path. The two CTAs describe
-	// themselves, so there's no heading or prose — just the choice.
+	// themselves, so there's no heading or prose, just the choice.
 	const demoHref = $derived(
 		withUtm('https://demo.scanopy.net', {
 			...utmFromPath(page.url.pathname),

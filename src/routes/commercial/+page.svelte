@@ -17,7 +17,7 @@
 			icon: Lock,
 			title: 'Your data never leaves your network',
 			description:
-				'Scanopy runs entirely on your own infrastructure. Discovery data, topology, and credentials stay inside your perimeter — nothing is sent to a third party.'
+				'Scanopy runs entirely on your own infrastructure. Discovery data, topology, and credentials stay inside your perimeter, and nothing is sent to a third party.'
 		},
 		{
 			icon: Server,
@@ -97,7 +97,7 @@
 		content="Run Scanopy entirely on your own infrastructure with a commercial license and support. Built for businesses that need data control, air-gapped deployment, and compliance."
 	/>
 	<meta property="og:url" content="https://scanopy.net/commercial" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta
 		name="twitter:title"
@@ -107,7 +107,7 @@
 		name="twitter:description"
 		content="Run Scanopy entirely on your own infrastructure with a commercial license and support. Built for businesses that need data control, air-gapped deployment, and compliance."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
 </svelte:head>
@@ -116,7 +116,7 @@
 <section class="relative overflow-hidden py-16 lg:py-24">
 	<!-- Background image -->
 	<div
-		class="absolute inset-0 bg-[url('/topology-hero-light.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('/topology-hero.webp')]"
+		class="absolute inset-0 bg-[url('/og/topology-hero-light.webp')] bg-cover bg-center bg-no-repeat dark:bg-[url('/og/topology-hero.webp')]"
 	></div>
 	<!-- Dark overlay -->
 	<div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[3px]"></div>
@@ -128,7 +128,7 @@
 			</h1>
 
 			<p class="mx-auto mb-8 max-w-2xl text-xl text-gray-300">
-				Run the full Scanopy stack inside your own perimeter — with a commercial license, advanced
+				Run the full Scanopy stack inside your own perimeter, with a commercial license, advanced
 				features, and support for the teams that keep your infrastructure running.
 			</p>
 
@@ -217,7 +217,7 @@
 		<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">Community or Commercial?</h2>
 		<p class="mb-4 text-lg leading-relaxed text-gray-300">
 			The free <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
-			is the best place to start — free to self-host for a single network and user, ideal for homelabs,
+			is the best place to start, free to self-host for a single network and user, ideal for homelabs,
 			evaluation, and small teams.
 		</p>
 		<p class="text-lg leading-relaxed text-gray-300">

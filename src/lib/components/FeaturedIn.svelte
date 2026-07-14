@@ -45,7 +45,7 @@
 							<p class="text-sm italic leading-relaxed text-gray-400">
 								"{mention.quote}"
 							</p>
-							<p class="mt-3 text-xs font-medium text-gray-500">— {mention.name}</p>
+							<p class="mt-3 text-xs font-medium text-gray-500">{mention.name}</p>
 						{/if}
 					</a>
 				{/each}

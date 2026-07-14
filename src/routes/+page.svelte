@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { GithubStars, FeaturedIn, ViewSwitcher } from '$lib/components';
+	import { GithubStars, FeaturedIn, ViewSwitcher, CustomerQuote } from '$lib/components';
 	import { theme } from '$lib/theme.svelte';
 	import { tiltChild } from '$lib/actions/tilt';
 
-	import type { PressMention, CustomerLogo } from '$lib/types';
+	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
-	import customerLogosData from '$lib/fixtures/customer-logos.json';
 	import { Activity, Shield, Briefcase, Monitor, ArrowRight } from 'lucide-svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
 	import { page } from '$app/state';
@@ -54,12 +53,6 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// Named commercial customer, featured as the lead proof point after the hero.
-	const featuredTestimonial = {
-		quote:
-			'With over 800 switches in our network, keeping topology documentation up to date by hand is almost impossible. We needed automation, especially with NIS2 raising the documentation requirements. Scanopy keeps it current for us.',
-		attribution: 'IT department, Motala Kommun (Swedish municipality)'
-	};
 
 	// Topology view screenshots come in light and dark variants and swap with the
 	// site theme. width/height are identical across themes (same aspect ratio) to
@@ -102,8 +95,8 @@
 				id: v.id,
 				label: v.label,
 				alt: v.alt,
-				src: `/${v.file}${s}-1440w.webp`,
-				srcset: `/${v.file}${s}-960w.webp 960w, /${v.file}${s}-1440w.webp 1440w, /${v.file}${s}-2400w.webp 2400w`,
+				src: `/common/${v.file}${s}-1440w.webp`,
+				srcset: `/common/${v.file}${s}-960w.webp 960w, /common/${v.file}${s}-1440w.webp 1440w, /common/${v.file}${s}-2400w.webp 2400w`,
 				width: 1440,
 				height: v.height
 			};
@@ -111,9 +104,6 @@
 	);
 
 	const pressMentions = pressMentionsData as PressMention[];
-	const customerLogos = customerLogosData as CustomerLogo[];
-	// The lead testimonial pairs this customer's logo with the featured quote above.
-	const featuredCustomer = customerLogos[0];
 </script>
 
 <svelte:head>
@@ -133,7 +123,7 @@
 		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
 	/>
 	<meta property="og:url" content="https://scanopy.net/" />
-	<meta property="og:image" content="https://scanopy.net/social.webp" />
+	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta
 		name="twitter:title"
@@ -143,7 +133,7 @@
 		name="twitter:description"
 		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
 	/>
-	<meta name="twitter:image" content="https://scanopy.net/social.webp" />
+	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	<link
 		rel="alternate"
@@ -156,7 +146,7 @@
 		as="image"
 		type="image/webp"
 		media="(prefers-color-scheme: dark)"
-		imagesrcset="/l2-960w.webp 960w, /l2-1440w.webp 1440w, /l2-2400w.webp 2400w"
+		imagesrcset="/common/l2-960w.webp 960w, /common/l2-1440w.webp 1440w, /common/l2-2400w.webp 2400w"
 		imagesizes="(max-width: 1024px) 100vw, 60vw"
 		fetchpriority="high"
 	/>
@@ -165,7 +155,7 @@
 		as="image"
 		type="image/webp"
 		media="(prefers-color-scheme: light)"
-		imagesrcset="/l2-light-960w.webp 960w, /l2-light-1440w.webp 1440w, /l2-light-2400w.webp 2400w"
+		imagesrcset="/common/l2-light-960w.webp 960w, /common/l2-light-1440w.webp 1440w, /common/l2-light-2400w.webp 2400w"
 		imagesizes="(max-width: 1024px) 100vw, 60vw"
 		fetchpriority="high"
 	/>
@@ -199,7 +189,7 @@
 					</h1>
 
 					<p class="mb-8 max-w-xl text-xl text-gray-300">
-						Living network documentation that builds itself — and doesn't stop at the network. Built
+						Living network documentation that builds itself, and doesn't stop at the network. Built
 						for modern teams and agents.
 					</p>
 
@@ -260,31 +250,7 @@
 
 	<!-- Featured customer: one strong named proof point right after the hero -->
 	<section class="border-t border-gray-800 py-16">
-		<figure
-			class="container mx-auto flex max-w-4xl flex-col items-center gap-8 px-4 text-center md:flex-row md:gap-12 md:text-left"
-		>
-			<figcaption class="flex flex-shrink-0 flex-col items-center gap-3">
-				<a
-					href={featuredCustomer.url}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="flex h-16 w-40 items-center justify-center rounded-xl bg-paper px-5 py-3 shadow-sm"
-				>
-					<img
-						src={featuredCustomer.logo}
-						alt={featuredCustomer.name}
-						class="max-h-10 max-w-full object-contain"
-						width="180"
-						height="48"
-						loading="lazy"
-					/>
-				</a>
-				<span class="text-sm font-medium text-gray-400">{featuredTestimonial.attribution}</span>
-			</figcaption>
-			<blockquote class="text-lg italic leading-relaxed text-gray-200 lg:text-xl">
-				"{featuredTestimonial.quote}"
-			</blockquote>
-		</figure>
+		<CustomerQuote id="motala-kommun" />
 	</section>
 
 	<!-- Who it's for Section -->
@@ -414,7 +380,7 @@
 					href="/services"
 					class="text-blue-400 hover:text-blue-300">{serviceCount} services</a
 				>
-				per host — documenting not just the network but the services, dependencies, and workloads running
+				per host, documenting not just the network but the services, dependencies, and workloads running
 				on it, in four views from one scan and keeping them current on a schedule. The
 				<a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
 				is free and open-source (AGPL-3.0); a

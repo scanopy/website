@@ -4,13 +4,13 @@ description: "What NIS2 Article 21 expects around network documentation: the ris
 keyword: network documentation for NIS2
 slug: network-documentation-nis2
 date: 2026-07-08
-dateModified: 2026-07-08
+dateModified: 2026-07-14
 tldr: "NIS2 Article 21 never names a network diagram. But three of its ten required risk-management measures (risk analysis, asset management, and business continuity) assume you have a current, accurate map of your network and assets. Automated network documentation produces that map and keeps it current on its own."
 ctaHeading: Documentation that keeps pace with NIS2
 ctaDescription: "Scanopy discovers your hosts, services, topology, and application dependencies and keeps the map current on a schedule. Self-hosted, so your network data stays on your own infrastructure."
 faq:
   - question: Does NIS2 require a network diagram?
-    answer: Not by name. NIS2 Article 21 is outcomes-based and technology-neutral, so it lists what to achieve, not specific artifacts like a diagram. But three of its ten required measures (risk analysis, asset management, and business continuity) can't be done properly without a current, accurate picture of your network and assets. A network map is how most entities meet that expectation.
+    answer: Not by name. NIS2 Article 21 is outcomes-based and technology-neutral, so it lists what to achieve, not specific artifacts like a diagram. But three of its ten required measures (risk analysis, asset management, and business continuity) can't be done properly without a current, accurate picture of your network and assets. A network map is one way to meet that expectation.
   - question: What does NIS2 Article 21 actually require?
     answer: Article 21(2) sets out ten minimum cybersecurity risk-management measures for essential and important entities, including risk analysis and security policies, incident handling, business continuity and backup, supply chain security, secure network maintenance, cyber hygiene, cryptography, and human resources security, access control, and asset management. The measures must be proportionate to the entity's size and risk exposure.
   - question: How does network documentation support NIS2 asset management?
@@ -25,13 +25,9 @@ faq:
     answer: NIS2 expects risk-management measures to stay effective as the environment changes, which means documentation has to reflect the network as it is now, not as it was at the last review. Article 21(2)(f) specifically covers assessing whether measures remain effective. Automated discovery rescans on a schedule, so the map stays current without anyone maintaining it by hand.
 ---
 
-> "With over 800 switches in our network, keeping topology documentation up to date by hand is almost impossible. We needed automation, especially with NIS2 raising the documentation requirements. Scanopy keeps it current for us."
->
-> — IT department, Motala Kommun
+<!-- quote:motala-kommun -->
 
-That's a Swedish municipality describing exactly the problem NIS2 creates for essential entities: the directive raises what you have to document, while the network keeps changing faster than anyone can redraw a diagram.
-
-This is a guide to what NIS2 actually expects around network documentation, which specific Article 21 measures it supports, and where an automated tool fits (and where it doesn't). It's written for the IT lead who has to satisfy an essential-entity obligation, not for compliance consultants.
+Motala's IT department is describing exactly the problem NIS2 creates for essential entities: the directive raises what you have to document, while the network keeps changing faster than anyone can redraw a diagram.
 
 ## Does NIS2 require a network diagram?
 
@@ -54,25 +50,25 @@ None of these say "diagram." All of them break down if your documentation is a d
 
 ## How discovery covers asset management and risk analysis
 
-Asset management under 21(2)(i) is the clearest fit, because it starts from a question automated discovery answers directly: what is actually on the network? You cannot manage or secure devices you don't know exist, and in a network the size of Motala's (800-plus switches), the answer to "is your inventory complete and current" is usually no if it's maintained by hand.
+Asset management under 21(2)(i) is the clearest fit, because it starts from a question automated discovery resolves directly: what is actually on the network? You cannot manage or secure devices you don't know exist, and at the scale Motala describes (800-plus switches), keeping that inventory complete and current by hand is what their IT department calls "almost impossible."
 
 Scanopy discovers this from the network itself. Its daemon finds hosts, services, interfaces, and network devices, identifies vendors and models over SNMP, and maps the topology through LLDP, CDP, and ARP. That's the asset inventory and the network map, built from live data rather than memory.
 
-For risk analysis under 21(2)(a), the same current-state picture is the input. And the Applications view adds the piece most tools miss: it maps service-to-service dependencies, so you can see which systems interconnect and where data can travel between them, not just that a device exists.
+For risk analysis under 21(2)(a), the same current-state picture is the input. The Applications view maps service-to-service dependencies, so you can see which systems interconnect and where data can travel between them, not just that a device exists.
 
 <figure class="my-8">
   <img
     class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/app-light-960w.webp"
-    srcset="/app-light-960w.webp 960w, /app-light-1440w.webp 1440w, /app-light-2400w.webp 2400w"
+    src="/common/app-light-960w.webp"
+    srcset="/common/app-light-960w.webp 960w, /common/app-light-1440w.webp 1440w, /common/app-light-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
     alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems interconnect and the routes data can travel across the network."
   />
   <img
     class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/app-960w.webp"
-    srcset="/app-960w.webp 960w, /app-1440w.webp 1440w, /app-2400w.webp 2400w"
+    src="/common/app-960w.webp"
+    srcset="/common/app-960w.webp 960w, /common/app-1440w.webp 1440w, /common/app-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
     alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems interconnect and the routes data can travel across the network."
@@ -85,7 +81,7 @@ Here's what the map looks like on a live network. This is an interactive Scanopy
 
 Scanopy documents the network's structure, the devices and how they connect and depend on each other. It doesn't classify data or decide which assets are critical; that judgment is part of your risk analysis. It gives the analysis an accurate map to reason about.
 
-## What supervisory authorities look for
+## Supervisory authorities want documentation that is demonstrable and maintained
 
 NIS2 enforcement runs through national competent authorities, and while the exact evidence varies by country, the recurring theme is demonstrability: you have to show that a measure exists and works, not just assert it. For the documentation-adjacent measures that means:
 
@@ -93,7 +89,7 @@ NIS2 enforcement runs through national competent authorities, and while the exac
 - A network topology that reflects the environment as it is now.
 - Evidence you can produce this on request, and that it's maintained rather than reconstructed for the occasion.
 
-The maintenance point is where manual documentation fails. Automated discovery rescans on a schedule, so "current" is the default state rather than a pre-audit scramble.
+Manual documentation fails on maintenance. Automated discovery rescans on a schedule, so "current" is the default state rather than a pre-audit scramble.
 
 ## How to turn discovery into evidence
 
@@ -102,16 +98,16 @@ Scanopy exports the topology as an image (PNG, SVG, or PDF), as diagram markup f
 <figure class="my-8">
   <img
     class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/l2-light-960w.webp"
-    srcset="/l2-light-960w.webp 960w, /l2-light-1440w.webp 1440w, /l2-light-2400w.webp 2400w"
+    src="/common/l2-light-960w.webp"
+    srcset="/common/l2-light-960w.webp 960w, /common/l2-light-1440w.webp 1440w, /common/l2-light-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
     alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices."
   />
   <img
     class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/l2-960w.webp"
-    srcset="/l2-960w.webp 960w, /l2-1440w.webp 1440w, /l2-2400w.webp 2400w"
+    src="/common/l2-960w.webp"
+    srcset="/common/l2-960w.webp 960w, /common/l2-1440w.webp 1440w, /common/l2-2400w.webp 2400w"
     sizes="(min-width: 1024px) 720px, 100vw"
     loading="lazy"
     alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices."
@@ -129,8 +125,8 @@ Scanopy covers one part of the work. It does not do the rest:
 
 On self-hosting: the Community and commercial self-hosted editions run entirely on your infrastructure, so the discovery data, which describes your internal network, stays in your environment. For a European essential entity, that keeps data-residency questions simple.
 
-## Where Scanopy fits
+## Scanopy keeps the asset inventory and map current. It does not run your risk program.
 
-Scanopy is network documentation software: a lightweight daemon discovers your hosts, services, interfaces, topology, and application dependencies, then builds an interactive map with four views that updates on a schedule and exports for evidence. For an entity under NIS2, its job is narrow and honest. It keeps the asset inventory and network map that the risk-analysis, asset-management, and continuity measures assume you maintain accurate on their own, so producing current documentation stops being manual work. It runs alongside the rest of your risk-management program, not in place of it.
+Scanopy is network documentation software: a lightweight daemon discovers your hosts, services, interfaces, topology, and application dependencies, then builds an interactive map with four views that updates on a schedule and exports for evidence. For an entity under NIS2, its job is narrow: it keeps the asset inventory and network map that the risk-analysis, asset-management, and continuity measures assume you maintain accurate on their own, so producing current documentation stops being manual work. It runs alongside the rest of your risk-management program, not in place of it.
 
 The [Community Edition](/community) is free and self-hosted. The [commercial editions](/commercial) remove the seat and network limits and add support. For the broader category, see the guide to [network documentation software](/guides/network-documentation-software).
