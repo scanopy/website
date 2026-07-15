@@ -51,9 +51,9 @@ The lightweight way to do this is a single scanner that queries the network from
 
 Discovery is only as complete as what your devices advertise, and that is the test to apply to any mapping tool before you trust its picture: ask what it *can't* see.
 
-A scanner learns the network from protocols like SNMP, LLDP, and CDP, plus ARP tables and active probes such as ping sweeps and port scans. That combination is good at finding what responds and what advertises itself, and blind to the rest. A device that answers nothing shows up as little more than an IP that pings, with no identity and no confirmed links; a device that answers nothing at all doesn't appear. An unmanaged switch with no SNMP is the common case: the tool can't see the switch, so the hosts connected through it still show up (they answer ARP), but the map attaches them to the switch upstream of it — placing them a hop away from where they actually sit. And some links are never advertised directly: when a device doesn't speak a neighbor protocol like LLDP, the tool has to deduce its connections from indirect evidence, and a deduced link is a reasonable guess, not something it confirmed. And discovery reads structure, not intent: it can show you that a VLAN exists and what sits on it, but not why it was carved out or what it's supposed to keep apart.
+A scanner learns the network from protocols like SNMP, LLDP, and CDP, plus ARP tables and active probes such as ping sweeps and port scans. That combination is good at finding what responds and what advertises itself, and blind to the rest. A device that answers nothing shows up as little more than an IP that pings, with no identity; a device that answers nothing at all doesn't appear. An unmanaged switch with no SNMP is the common case: the tool can't see the switch itself, so the hosts connected through it still appear (they answer ARP), but they attach to the managed switch upstream, a hop away from where they actually sit. And discovery reads structure, not intent: it can show that a VLAN exists and what sits on it, but not why it was carved out or what it is meant to keep apart. Scheduled scans have a limit of their own: the map is current as of the last scan, not the last cable change.
 
-None of this is a reason to skip mapping. It's the reason the test is worth applying: every discovery-based tool has these blind spots, so the question isn't whether a tool has them, it's whether you know where they fall. Read the map with its limits in mind and you can troubleshoot from it. Assume it's complete and it will eventually send you down the wrong path with full confidence.
+None of this is a reason to skip mapping. It is the reason the test matters: these limits come from how discovery works, not from any one product, so no discovery tool escapes them, this category included. Read a map knowing where its blind spots fall and you can troubleshoot from it. Treat it as the whole truth and it will eventually send you down the wrong path with confidence.
 
 ## One network is several maps: the four views
 
@@ -70,9 +70,9 @@ Most open-source mappers give you one of these, usually the L2 topology, and lea
 
 A diagram in a wiki looks like documentation, and for planning conversations it is fine. The trouble starts the moment you reach for it under pressure, because that is when its three built-in problems surface at once:
 
-- **It's as old as the day it was drawn.** Every change since then — the new switch, the re-homed VLAN, the host that moved racks — is missing, and nothing on the diagram tells you which parts are still true.
+- **It's as old as the day it was drawn.** Every change since then (the new switch, the re-homed VLAN, the host that moved racks) is missing, and nothing on the diagram tells you which parts are still true.
 - **It shows one layer.** Usually the one that was easiest to draw, so the question you actually have is on a layer the picture doesn't contain.
-- **Nobody trusts it mid-incident.** Because of the first two, the diagram becomes a starting hypothesis you re-verify by hand against the live network — the work it was supposed to save you.
+- **Nobody trusts it mid-incident.** Because of the first two, the diagram becomes a starting hypothesis you re-verify by hand against the live network, which is the work it was supposed to save you.
 
 A map built from discovery inverts this. It is current because it rescans, it carries every layer because it was read from the network rather than drawn, and it earns the trust that lets you act on it instead of checking it first. That is the whole reason to prefer a live map over a static one: not that it looks better, but that you can use it when it counts.
 
