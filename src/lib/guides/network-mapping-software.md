@@ -1,5 +1,5 @@
 ---
-title: 'Network Mapping Software & Tools (2026): Automated Discovery'
+title: 'Network Mapping Software & Tools (2026): One Network, Several Maps'
 description: 'How network mapping software turns automatic discovery into a topology map you can read, why one network needs several views, and the open-source options.'
 keyword: network mapping software
 slug: network-mapping-software
