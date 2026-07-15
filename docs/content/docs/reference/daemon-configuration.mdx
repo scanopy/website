@@ -16,7 +16,7 @@ Later sources override earlier ones. For example, an environment variable overri
 
 ## Configuration Methods
 
-**Command-line arguments**:
+**Command-line arguments** (also accepted by `scanopy-daemon install`, which persists them to the config file — see [Running as a Service](/setting-up-daemons/managing-daemons/#running-as-a-service)):
 
 ```bash
 scanopy-daemon --server-url http://192.168.1.100:60072 --api-key YOUR_KEY
@@ -186,22 +186,24 @@ docker logs scanopy-daemon
 docker logs -f scanopy-daemon  # follow/stream logs
 ```
 
-**Linux (systemd)**: The [systemd service file](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon.service) directs output to the journal.
+The daemon installs as a native service via `scanopy-daemon install` — see [Running as a Service](/setting-up-daemons/managing-daemons/#running-as-a-service).
+
+**Linux (systemd)**: output goes to the journal.
 
 ```bash
 journalctl -u scanopy-daemon -f
 ```
 
-**macOS (launchd)**: Logs are written to the paths configured in the plist file. See [Running as a Service](/setting-up-daemons/managing-daemons/#macos-launchd) for setup.
+**macOS (launchd)**: the service writes to `/var/log/scanopy/scanopy-daemon.out.log`; the daemon's own log file is at `~/Library/Logs/scanopy/scanopy-daemon.log`.
 
 ```bash
-tail -f /tmp/scanopy-daemon.stderr.log
+tail -f /var/log/scanopy/scanopy-daemon.out.log
 ```
 
-**Windows (NSSM)**: Logs are written to the paths configured during service installation. See [Running as a Service](/setting-up-daemons/managing-daemons/#windows-nssm) for setup.
+**Windows (service)**: the daemon writes its log file under `%ProgramData%\scanopy\`.
 
 ```powershell
-Get-Content "C:\ProgramData\scanopy\daemon.log" -Wait
+Get-Content "$env:ProgramData\scanopy\scanopy-daemon.log" -Wait
 ```
 
 ### Capturing Logs to a File

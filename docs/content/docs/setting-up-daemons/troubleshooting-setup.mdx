@@ -32,11 +32,12 @@ docker compose up -d scanopy-daemon
 
 Then check logs for your platform:
 
-- **Foreground**: Logs appear in your terminal
-- **Docker**: `docker logs -f scanopy-daemon`
 - **Linux (systemd)**: `journalctl -u scanopy-daemon -f`
-- **macOS (launchd)**: `tail -f /tmp/scanopy-daemon.stderr.log`
-- **Windows (NSSM)**: `Get-Content "C:\ProgramData\scanopy\daemon.log" -Wait`
+- **macOS (launchd)**: `tail -f /var/log/scanopy/scanopy-daemon.out.log` (service output) or `~/Library/Logs/scanopy/scanopy-daemon.log`
+- **Windows (service)**: `Get-Content "$env:ProgramData\scanopy\scanopy-daemon.log" -Wait`
+- **FreeBSD (rc.d)**: `tail -f /var/log/scanopy/scanopy-daemon.log`
+- **Docker**: `docker logs -f scanopy-daemon`
+- **Foreground** (`scanopy-daemon` run directly): logs appear in your terminal
 
 To capture logs to a file for sharing with support:
 
@@ -92,7 +93,7 @@ If you're using a Docker socket proxy and getting permission errors, see [Securi
 
 **Symptoms**: Daemon runs in foreground and stops when SSH session or terminal window ends
 
-**Solution**: Install the daemon as a background service so it runs independently of your terminal session and survives reboots. See [Running as a Service](/setting-up-daemons/managing-daemons/#running-as-a-service).
+**Solution**: Install the daemon as a background service with `sudo scanopy-daemon install …` so it runs independently of your terminal session and survives reboots. See [Running as a Service](/setting-up-daemons/managing-daemons/#running-as-a-service).
 
 ## Podman Pulls Wrong Daemon Version (amd64)
 

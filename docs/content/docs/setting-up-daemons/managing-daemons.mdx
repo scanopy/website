@@ -5,9 +5,12 @@ description: Create, upgrade, and remove daemons.
 
 ## Requirements
 
-- **Linux**: Docker with host networking OR standalone binary
-- **macOS**: Standalone binary only — Docker Desktop doesn't allow access to host interfaces
-- **Windows**: Standalone binary only — Docker Desktop doesn't allow access to host interfaces
+- **Linux**: Docker with host networking OR standalone binary (installable as a systemd service)
+- **macOS**: Standalone binary — Docker Desktop doesn't allow access to host interfaces. Installs as a launchd service.
+- **Windows**: Standalone binary — Docker Desktop doesn't allow access to host interfaces. Installs as a Windows service (native SCM), or via the signed MSI.
+- **FreeBSD**: Standalone binary, installable as an rc.d service.
+
+On Linux, macOS, Windows, and FreeBSD the daemon installs as a native background service — see [Running as a Service](#running-as-a-service).
 
 ## Creating a Daemon
 
@@ -15,44 +18,62 @@ Go to **Discover > Scan > Daemons** and click **Create Daemon**. The wizard walk
 
 1. **Setup** — network, polling mode, and daemon name
 2. **Integrations** — optionally add SNMP, Docker, and Podman credentials, targeting all hosts or specific hosts. These are [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan. See [Credentials](/using-scanopy/credentials/#during-daemon-setup-new-daemons) for details.
-3. **Install** — a ready-to-copy install command with the correct API key, server URL, daemon name, and any `--credential-id` flags
+3. **Install** — a ready-to-copy `scanopy-daemon install` command with the correct API key, server URL, daemon name, and any `--credential-id` flags
 
 For help choosing a polling mode and planning where to place daemons, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
 ## Running as a Service
 
-By default the daemon runs in the foreground and stops when you close the terminal. To keep it running across reboots, install it as a background service.
+The recommended way to install the daemon is the **`scanopy-daemon install`** command. It places the binary, writes the daemon's `config.json`, and registers a native background service — **systemd** on Linux, **launchd** on macOS, the **Service Control Manager** on Windows, and **rc.d** on FreeBSD — that starts immediately and on every reboot. The install command shown on the wizard's **Install** step already includes this; copy and run it on the host.
 
-### Linux (systemd)
+You can also run it yourself with the connection flags (the same flags the daemon accepts):
 
-The install script offers to set up a systemd service automatically. If you skipped that step or installed manually, download the [systemd service file](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon.service) and install it:
+```bash
+sudo scanopy-daemon install --server-url https://scanopy.example.com --daemon-api-key <key>
+```
+
+Everything else — network, interfaces, ports — is read from `config.json`, so no secrets appear in the service definition or process arguments. Re-running `install` is idempotent, and a non-elevated invocation prints the exact `sudo`/administrator command to re-run.
+
+Verify the service and view its logs:
+
+- **Linux**: `systemctl status scanopy-daemon` &middot; logs via `journalctl -u scanopy-daemon -f`
+- **macOS**: `sudo launchctl print system/com.scanopy.daemon` &middot; logs at `/var/log/scanopy/scanopy-daemon.out.log` and `~/Library/Logs/scanopy/scanopy-daemon.log`
+- **Windows**: `Get-Service scanopy-daemon` &middot; logs at `%ProgramData%\scanopy\scanopy-daemon.log`
+- **FreeBSD**: `service scanopy-daemon status`
+
+To stop and remove the service, use `sudo scanopy-daemon uninstall` — see [Removing a Daemon](#removing-a-daemon).
+
+<Callout type="info">
+Prefer to run the daemon in the foreground (e.g. for a quick test)? Run `scanopy-daemon` directly with the same flags — it runs attached to your terminal and stops when the terminal closes. Running multiple daemons on one host? See [Running Multiple Daemons](/guides/networking/multiple-daemons/).
+</Callout>
+
+### Windows MSI
+
+On Windows you can also install with the signed **MSI** — the platform-standard wizard. It installs the binary and registers the same service. For unattended deployment (GPO/Intune), install silently:
+
+```powershell
+msiexec /qn /i scanopy-daemon-windows-amd64.msi SERVERURL="https://scanopy.example.com" APIKEY="<key>"
+```
+
+The MSI also handles upgrades in place and can be removed with `msiexec /qn /x scanopy-daemon-windows-amd64.msi`.
+
+### Manually installed or older daemons
+
+Daemons that predate the `scanopy-daemon install` subcommand, or that you set up by hand, are managed with the platform's native service tools directly. Use these instructions if `scanopy-daemon install` isn't available in your daemon version. (For current versions, prefer `install`/`uninstall` above.)
+
+**Linux (systemd, manual)** — download the [systemd unit](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon.service), set your flags in `ExecStart` (or rely on `config.json`), then enable it:
 
 ```bash
 sudo curl -o /etc/systemd/system/scanopy-daemon.service \
   https://raw.githubusercontent.com/scanopy/scanopy/main/scanopy-daemon.service
 sudo systemctl daemon-reload
-sudo systemctl enable scanopy-daemon
-sudo systemctl start scanopy-daemon
+sudo systemctl enable --now scanopy-daemon
 ```
 
-Verify it's running:
+**macOS (launchd, manual)** — create a launch daemon plist and load it:
 
 ```bash
-sudo systemctl status scanopy-daemon
-```
-
-The service logs to the journal — view logs with `journalctl -u scanopy-daemon -f`.
-
-<Callout type="info">
-If you run multiple daemons on one host, see [Running Multiple Daemons](/guides/networking/multiple-daemons/) for the systemd template unit.
-</Callout>
-
-### macOS (launchd)
-
-Create a launch agent plist:
-
-```bash
-cat > ~/Library/LaunchAgents/com.scanopy.daemon.plist <<EOF
+sudo tee /Library/LaunchDaemons/com.scanopy.daemon.plist > /dev/null <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -68,69 +89,22 @@ cat > ~/Library/LaunchAgents/com.scanopy.daemon.plist <<EOF
     <key>KeepAlive</key>
     <true/>
     <key>StandardOutPath</key>
-    <string>/tmp/scanopy-daemon.stdout.log</string>
+    <string>/var/log/scanopy/scanopy-daemon.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/tmp/scanopy-daemon.stderr.log</string>
+    <string>/var/log/scanopy/scanopy-daemon.out.log</string>
 </dict>
 </plist>
 EOF
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.scanopy.daemon.plist
 ```
 
-Load and start the service:
-
-```bash
-launchctl load ~/Library/LaunchAgents/com.scanopy.daemon.plist
-```
-
-Verify it's running:
-
-```bash
-launchctl list | grep scanopy
-```
-
-To stop and unload:
-
-```bash
-launchctl unload ~/Library/LaunchAgents/com.scanopy.daemon.plist
-```
-
-### Windows (NSSM)
-
-[NSSM](https://nssm.cc/) (Non-Sucking Service Manager) lets you run any executable as a Windows service.
-
-1. Download and install [NSSM](https://nssm.cc/download)
-
-2. Install the daemon as a service:
+**Windows (NSSM, manual)** — older setups used [NSSM](https://nssm.cc/) to run the executable as a service:
 
 ```powershell
 nssm install ScanopyDaemon "C:\Path\To\scanopy-daemon.exe"
-```
-
-3. Configure log output so you can troubleshoot issues:
-
-```powershell
 nssm set ScanopyDaemon AppStdout "C:\ProgramData\scanopy\daemon.log"
 nssm set ScanopyDaemon AppStderr "C:\ProgramData\scanopy\daemon.log"
-nssm set ScanopyDaemon AppRotateFiles 1
-```
-
-4. Start the service:
-
-```powershell
 nssm start ScanopyDaemon
-```
-
-5. Verify it's running:
-
-```powershell
-Get-Service ScanopyDaemon
-```
-
-To stop or remove the service:
-
-```powershell
-nssm stop ScanopyDaemon
-nssm remove ScanopyDaemon confirm
 ```
 
 ## Integrated Daemon (Self-Hosted)
@@ -139,13 +113,13 @@ Self-hosted Docker Compose deployments include an **integrated daemon** that run
 
 ## Upgrading
 
-When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps. Configuration is preserved across upgrades.
+When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps: download the latest binary (or run the latest MSI on Windows), then restart the service (`systemctl restart` / `launchctl kickstart -k` / `sc.exe stop` + `start` / `service … restart`). Configuration is preserved across upgrades.
 
 For upgrading self-hosted server and integrated daemon together, see [Upgrading](/self-hosted-server/upgrading).
 
 ## Updating Daemon Properties
 
-You can update daemon properties after creation by editing the [daemon config file](/reference/daemon-configuration). Restart the daemon for changes to take effect.
+You can update daemon properties after creation by editing the [daemon config file](/reference/daemon-configuration). Restart the daemon's service for changes to take effect — `sudo systemctl restart scanopy-daemon` (Linux), `sudo launchctl kickstart -k system/com.scanopy.daemon` (macOS), `sc.exe stop scanopy-daemon` then `sc.exe start scanopy-daemon` (Windows), or `sudo service scanopy-daemon restart` (FreeBSD). For a foreground daemon, just restart the process.
 
 The daemon's name is the only property that propagates to the server. All other config properties are local to the daemon.
 
@@ -161,7 +135,13 @@ To fully remove a daemon, delete it from the UI and uninstall it from the host.
 Deleting or uninstalling a daemon does not delete discovered data. Hosts, services, subnets, and topology remain on the server until you explicitly delete them.
 </Callout>
 
-**Uninstall from the host**:
+**Uninstall from the host** — for a daemon installed with `scanopy-daemon install`, run:
+
+```bash
+sudo scanopy-daemon uninstall
+```
+
+This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the installed binary, and `--name <name>` to target a specific instance. On Windows, run it from an elevated PowerShell, or uninstall the MSI: `msiexec /qn /x scanopy-daemon-windows-amd64.msi`.
 
 Docker:
 
@@ -170,27 +150,32 @@ docker stop scanopy-daemon
 docker rm scanopy-daemon
 ```
 
-Linux/macOS binary:
+<Callout type="info">
+**Manually installed or older daemons** — if the daemon was set up by hand or predates the `uninstall` subcommand, remove the service and files manually.
+
+Linux / macOS:
 
 ```bash
-# Stop systemd service (if installed)
-sudo systemctl stop scanopy-daemon
-sudo systemctl disable scanopy-daemon
-sudo rm /etc/systemd/system/scanopy-daemon.service
+# systemd (Linux)
+sudo systemctl stop scanopy-daemon && sudo systemctl disable scanopy-daemon
+sudo rm /etc/systemd/system/scanopy-daemon.service && sudo systemctl daemon-reload
 
-# Remove binary
+# launchd (macOS)
+sudo launchctl bootout system /Library/LaunchDaemons/com.scanopy.daemon.plist
+# (older setups: launchctl unload ~/Library/LaunchAgents/com.scanopy.daemon.plist)
+
+# Remove binary and configuration
 sudo rm /usr/local/bin/scanopy-daemon
-
-# Remove configuration
-rm -rf ~/.config/scanopy/  # Linux
-rm -rf ~/Library/Application\ Support/com.scanopy.daemon/  # macOS
+rm -rf ~/.config/scanopy/                                    # Linux
+rm -rf ~/Library/Application\ Support/com.scanopy.daemon/    # macOS
 ```
 
-Windows:
+Windows (NSSM or manual):
 
-1. Stop the daemon process
+1. Stop and remove the service: `nssm stop ScanopyDaemon && nssm remove ScanopyDaemon confirm` (or stop the process)
 2. Delete the executable
 3. Remove configuration from `%APPDATA%\scanopy\daemon\`
+</Callout>
 
 ### Can I migrate a daemon?
 

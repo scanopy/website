@@ -31,10 +31,10 @@ Scanopy monitors daemon health and displays status tags in the UI. A daemon with
 
 **How to resolve**:
 
-1. Verify the daemon process is running on the host
+1. Verify the daemon service is running on the host (`systemctl status scanopy-daemon`, `launchctl print system/com.scanopy.daemon`, `Get-Service scanopy-daemon`, or `service scanopy-daemon status`)
 2. Check that the daemon's configured URL is correct and reachable from the server
 3. Check firewall rules — the server must be able to connect to the daemon
-4. Restart the daemon and retry
+4. Restart the daemon's service and retry
 
 See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for detailed connectivity debugging.
 

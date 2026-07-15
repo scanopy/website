@@ -103,9 +103,9 @@ flowchart TB
 Each instance gets a name and is restricted to specific interfaces so they don't overlap. Since every daemon binds an HTTP server, each instance also needs a unique `--bind-address` and `--daemon-port` to avoid port conflicts:
 
 ```bash
-scanopy-daemon --name production --interfaces eth0 \
+sudo scanopy-daemon install --name production --interfaces eth0 \
   --bind-address 192.168.1.10 --daemon-port 60073
-scanopy-daemon --name iot --interfaces eth1 \
+sudo scanopy-daemon install --name iot --interfaces eth1 \
   --bind-address 10.0.0.10 --daemon-port 60074
 ```
 
