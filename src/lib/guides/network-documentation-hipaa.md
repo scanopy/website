@@ -33,52 +33,37 @@ No. If you're looking for a citation that says "you must have a diagram," it isn
 
 What is there is the requirement that anchors everything else: the risk analysis. [45 CFR 164.308(a)(1)(ii)(A)](https://www.ecfr.gov/current/title-45/section-164.308) requires every covered entity and business associate to "conduct an accurate and thorough assessment of the potential risks and vulnerabilities to the confidentiality, integrity, and availability" of electronic protected health information. You cannot assess risk to ePHI accurately without knowing what systems exist, where ePHI lives, and how those systems connect. The diagram isn't the requirement. It's how you meet one.
 
-## What HIPAA requires that network documentation supports
+## What HIPAA requires, and what Scanopy produces for it
 
 The authoritative guidance on implementing the Security Rule is [NIST SP 800-66 Rev 2](https://csrc.nist.gov/pubs/sp/800/66/r2/final) (February 2024). It tells organizations to "map systems, data flows, and assets that store or process ePHI" as part of assessing their current state. That single sentence names the three things network documentation gives you: systems, data flows, and assets.
 
-Several Security Rule standards lean on that same current-state picture:
+Several Security Rule standards lean on that same current-state picture, and each maps to something Scanopy produces:
 
-| HIPAA requirement | Citation | What it needs from you |
+| HIPAA requirement | Evidence it needs | What Scanopy produces |
 |---|---|---|
-| Risk analysis | 164.308(a)(1)(ii)(A) | An accurate map of systems, assets, and how ePHI flows between them |
-| Evaluation | 164.308(a)(8) | Periodic review against a current baseline as the environment changes |
-| Contingency plan | 164.308(a)(7) | Knowing your infrastructure well enough to restore it |
-| Access control | 164.312(a)(1) | Evidence that systems handling ePHI are appropriately separated |
-| Transmission security | 164.312(e)(1) | Understanding the paths ePHI travels across the network |
+| Risk analysis (164.308(a)(1)(ii)(A)) | An accurate map of systems, assets, and how ePHI flows between them | The topology plus the Applications view (service-to-service data flows) |
+| Evaluation (164.308(a)(8)) | Periodic review against a current baseline as the environment changes | Snapshots: a dated baseline you compare over time |
+| Contingency plan (164.308(a)(7)) | Knowing your infrastructure well enough to restore it | Physical (L2) and Logical (L3) topology |
+| Access control (164.312(a)(1)) | Evidence that systems handling ePHI are appropriately separated | The Logical (L3) view: subnets and segmentation |
+| Transmission security (164.312(e)(1)) | Understanding the paths ePHI travels across the network | The Applications view: service-to-service dependencies |
 
 None of these say "diagram." All of them assume you have a current, accurate model of your network. Automated documentation supplies that current-state model.
 
-## How discovery maps your ePHI data flows
+Data flows are the piece an inventory alone doesn't give you. Knowing you own 400 devices doesn't tell you where ePHI can travel; knowing which systems talk to which does.
 
-NIST's guidance also asks for data flows, which an inventory alone does not give you. Knowing you own 400 devices doesn't tell you where ePHI can travel. Knowing which systems talk to which does.
+Scanopy discovers all of this from the network directly. Its daemon finds hosts, services, interfaces, and network devices and maps the topology, then presents it as four views plus an exportable inventory. The physical and logical views are the systems-and-assets half; the Applications view maps service-to-service dependencies, the closest thing to a data-flow map you can build without manual diagramming, showing which services depend on which others and therefore the routes data can move between them.
 
-Scanopy discovers this from the network directly. Its topology views (physical and logical) show the hosts, subnets, and links, which is the systems-and-assets half. The Applications view maps service-to-service dependencies, which is the closest thing to a data-flow map you can build without manual diagramming: it shows which applications and services depend on which others, and therefore the routes data can move between them.
+The two that carry most of the compliance weight:
 
-<figure class="my-8">
-  <img
-    class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/common/app-light-960w.webp"
-    srcset="/common/app-light-960w.webp 960w, /common/app-light-1440w.webp 1440w, /common/app-light-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems connect to which and the routes data can travel between them."
-  />
-  <img
-    class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/common/app-960w.webp"
-    srcset="/common/app-960w.webp 960w, /common/app-1440w.webp 1440w, /common/app-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems connect to which and the routes data can travel between them."
-  />
-</figure>
+<!-- topology-figure:applications -->
 
-Scanopy maps the connections and dependencies between systems, discovered from the network. It does not read, classify, or track the ePHI itself. It shows the paths ePHI can travel, based on how your systems are wired and which services depend on each other. It is not deep packet inspection and not a data-classification tool. Scanopy gives your risk analysis an accurate map of the structure; deciding where ePHI actually lives is part of the analysis.
+<!-- topology-figure:l3 -->
 
-Here's what the map looks like on a live network. This is an interactive Scanopy map, not a screenshot:
+Explore all four on the live map:
 
 <!-- scanopy-demo -->
+
+Scanopy maps the connections and dependencies between systems, discovered from the network. It does not read, classify, or track the ePHI itself. It shows the paths ePHI can travel, based on how your systems are wired and which services depend on each other. It is not deep packet inspection and not a data-classification tool. Scanopy gives your risk analysis an accurate map of the structure; deciding where ePHI actually lives is part of the analysis.
 
 ## Assessors ask for a current inventory, a topology, and segmentation evidence
 
@@ -93,26 +78,9 @@ OCR investigations and assessors repeatedly flag inventories and diagrams that w
 
 ## How to turn discovery into audit evidence
 
-Documentation only helps if you can hand it to someone. Scanopy exports the topology as an image (PNG, SVG, or PDF), as diagram markup for a wiki (Mermaid or Confluence), or as CSV of the underlying host and service data, and maps embed via iframe, so the current diagram can live in the risk-analysis document or the internal wiki rather than in a tool nobody else can open. Topology snapshots version the network state over time, which gives you a point-in-time record: what the network looked like at the date of the assessment, and what changed since.
+Documentation only helps if you can hand it to someone.
 
-<figure class="my-8">
-  <img
-    class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/common/l2-light-960w.webp"
-    srcset="/common/l2-light-960w.webp 960w, /common/l2-light-1440w.webp 1440w, /common/l2-light-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices that exports for a risk-analysis document."
-  />
-  <img
-    class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/common/l2-960w.webp"
-    srcset="/common/l2-960w.webp 960w, /common/l2-1440w.webp 1440w, /common/l2-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices that exports for a risk-analysis document."
-  />
-</figure>
+<!-- evidence-exports -->
 
 ## What Scanopy does not do for HIPAA
 
@@ -128,6 +96,6 @@ On self-hosting: the Community and commercial self-hosted editions run entirely 
 
 ## Scanopy keeps the risk-analysis map current. It does not do the analysis.
 
-Scanopy is network documentation software: a lightweight daemon discovers your hosts, services, interfaces, topology, and application dependencies, then builds an interactive map with four views (physical, logical, workloads, applications) that updates on a schedule and exports for audit use. For a HIPAA covered entity, its job is narrow: it keeps the systems-and-data-flow map your risk analysis depends on accurate without anyone maintaining it by hand. It runs alongside your monitoring, access control, and risk-management work, not in place of them.
+Scanopy is network documentation software: a lightweight daemon discovers your hosts, services, interfaces, topology, and application dependencies, then builds an interactive map with four views (physical, logical, workloads, applications) that updates on a schedule and exports for audit use. For a HIPAA covered entity, its job is to keep the systems-and-data-flow map your risk analysis depends on accurate without anyone maintaining it by hand. It runs alongside your monitoring, access control, and risk-management work, not in place of them.
 
 The [Community Edition](/community) is free and self-hosted. The [commercial editions](/commercial) remove the seat and network limits and add support. If you want the deeper category overview, see the guide to [network documentation software](/guides/network-documentation-software).

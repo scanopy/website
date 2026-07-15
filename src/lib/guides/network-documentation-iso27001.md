@@ -37,51 +37,34 @@ The diagram requirement is one level down, in the guidance. [ISO 27002](https://
 
 This is a real difference from standards like NIS2, where no diagram is named anywhere. Under ISO 27001 the certifiable control is outcome-based, but the guidance names a network diagram directly and auditors ask for one. The practical answer is yes, you need a current network diagram.
 
-## What ISO 27001 A.8.20 requires that network documentation supports
+## What ISO 27001 A.8.20 requires, and what Scanopy produces for it
 
-A.8.20 doesn't stand alone. A current, accurate model of your network is what several Annex A controls assume you have:
+A.8.20 anchors network documentation in ISO 27001, but it doesn't stand alone. The same current picture of your network is what a handful of neighboring Annex A controls assume, and each maps to something Scanopy produces:
 
-| Control | What it requires | What it needs from you |
+| Annex A control | Evidence it needs | What Scanopy produces |
 |---|---|---|
-| A.8.20 Networks security | Secure, manage, and control networks and network devices | A current, dated diagram of physical and logical topology, plus device records (per ISO 27002 guidance) |
-| A.5.9 Inventory of information and other associated assets | An inventory of assets, including owners, developed and maintained | A complete, current inventory of the hosts, devices, and services on the network |
-| A.8.9 Configuration management | Configurations of hardware, software, services, and networks established, documented, and reviewed | A documented current-state picture of the network to review against |
-| A.8.21 Security of network services | Network services secured across service levels, requirements, and security features | Knowing which services run where |
+| A.8.20 Networks security | A current, dated diagram of physical and logical topology | Physical (L2) and Logical (L3) views, refreshed on a schedule |
+| A.5.9 Inventory of information and other associated assets | A complete, current inventory of the hosts, devices, and services on the network | Discovered host, service, and device inventory, exportable as CSV; the Workloads view |
+| A.8.9 Configuration management | A documented current-state baseline to review against | The discovered topology as that baseline; snapshots record it over time |
+| A.8.21 Security of network services | Knowing which services run where | 200+ service types detected per host, shown across the views |
 
 None of these name a diagram except through the 8.20 guidance. All of them break down if your documentation is a drawing from the last audit. You can't inventory assets you haven't discovered, you can't review a configuration against a baseline that no longer matches reality, and you can't secure network services you don't know are running.
 
-## How discovery produces the diagram and the inventory
-
-The diagram and the asset inventory are the two artifacts A.8.20 and A.5.9 lean on, and both are the kind of thing automated discovery builds directly from the network.
-
 Scanopy discovers this from the network itself. Its daemon finds hosts, services, interfaces, and network devices, identifies vendors and models over SNMP, and maps the topology through LLDP, CDP, ARP, and switch MAC forwarding tables. It presents that in four views: physical (L2) and logical (L3) give the physical and logical topology ISO 27002 asks for, the workloads view shows services and VMs on each host, and the applications view maps service-to-service dependencies. The host and service list, exportable as CSV, is the technical foundation of the A.5.9 inventory.
 
-<figure class="my-8">
-  <img
-    class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/common/app-light-960w.webp"
-    srcset="/common/app-light-960w.webp 960w, /common/app-light-1440w.webp 1440w, /common/app-light-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems interconnect and how services depend on each other across the network."
-  />
-  <img
-    class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/common/app-960w.webp"
-    srcset="/common/app-960w.webp 960w, /common/app-1440w.webp 1440w, /common/app-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems interconnect and how services depend on each other across the network."
-  />
-</figure>
+The two that carry most of the compliance weight:
 
-Here's what the map looks like on a live network. This is an interactive Scanopy map, not a screenshot:
+<!-- topology-figure:applications -->
+
+<!-- topology-figure:l3 -->
+
+Explore all four on the live map:
 
 <!-- scanopy-demo -->
 
 Scanopy discovers the network's structure: the devices, the services they run, and how they connect. It builds the inventory and the diagram. It does not assign asset owners or classify assets, which A.5.9 also requires. That part is yours; Scanopy gives you an accurate, current picture to work from instead of a spreadsheet you maintain by hand.
 
-## Auditors ask for a current physical and logical diagram plus the A.5.9 inventory
+## Auditors ask for a current diagram, inventory, and configuration records
 
 ISO 27001 certification runs through an accredited body, and the Stage 2 audit is where the documentation gets examined. For the network controls, the requests are consistent:
 
@@ -94,32 +77,9 @@ Manual documentation fails on maintenance. A Visio file that was accurate at las
 
 ## How to turn discovery into A.8.20 evidence
 
-Documentation only counts if you can put it in front of an auditor. Scanopy gets the map out three ways, and they're distinct:
+Documentation only counts if you can put it in front of an auditor.
 
-- **Exports** are a frozen snapshot of the map: an image (PNG, SVG, or PDF) or a self-contained HTML page, diagram markup for a wiki (Mermaid or Confluence), or CSV of the underlying host and service data. Good for pasting the current diagram into an ISMS document or risk-treatment record.
-- **Embeds** put the live map inside another page via iframe, so your ISMS wiki, SharePoint, or intranet shows the current topology rather than a stale attached file.
-- **Shared links** hand someone the live map directly, read-only, and it stays current as the network rescans. Useful for giving an auditor a view without exporting anything.
-
-For the version-control the guidance calls for, topology snapshots capture the network state at a point in time, which gives you a dated record of what the network looked like and what changed. Take one at audit time and you have evidence the documentation reflects a real, dated state rather than a diagram drawn for the occasion.
-
-<figure class="my-8">
-  <img
-    class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/common/l2-light-960w.webp"
-    srcset="/common/l2-light-960w.webp 960w, /common/l2-light-1440w.webp 1440w, /common/l2-light-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices that exports for an ISMS document."
-  />
-  <img
-    class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/common/l2-960w.webp"
-    srcset="/common/l2-960w.webp 960w, /common/l2-1440w.webp 1440w, /common/l2-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices that exports for an ISMS document."
-  />
-</figure>
+<!-- evidence-exports -->
 
 ## What Scanopy does not do for ISO 27001
 
@@ -133,7 +93,7 @@ Scanopy covers one part of the work. It does not do the rest:
 
 On self-hosting: the Community and commercial self-hosted editions run entirely on your infrastructure, so the discovery data, which describes your internal network, stays in your environment. When your ISMS scope excludes third-party or cloud tooling, self-hosted keeps the network documentation inside the boundary.
 
-## Scanopy keeps the A.8.20 diagram and A.5.9 inventory current. It does not run your ISMS.
+## Scanopy keeps the network diagram and asset inventory current. It does not run your ISMS.
 
 Scanopy is network documentation software: a lightweight daemon discovers your hosts, services, interfaces, topology, and application dependencies, then builds an interactive map with four views (physical, logical, workloads, applications) that updates on a schedule and exports for evidence. For an organization certifying to ISO 27001, its job is to keep the network diagram and asset inventory that A.8.20 and A.5.9 assume you maintain accurate on their own, so producing current documentation for the auditor stops being manual work. It runs alongside the rest of your ISMS, not in place of it.
 

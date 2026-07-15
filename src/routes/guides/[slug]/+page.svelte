@@ -7,6 +7,8 @@
 	import FAQ from '$lib/components/FAQ.svelte';
 	import ScanopyDemo from '$lib/components/ScanopyDemo.svelte';
 	import CustomerQuote from '$lib/components/CustomerQuote.svelte';
+	import EvidenceExports from '$lib/components/EvidenceExports.svelte';
+	import TopologyFigure from '$lib/components/TopologyFigure.svelte';
 	import { getFAQPageSchema } from '$lib/schemas';
 	import type { Vendor } from '$lib/types';
 
@@ -41,7 +43,9 @@
 		| { type: 'html'; content: string }
 		| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
 		| { type: 'scanopy-demo' }
-		| { type: 'customer-quote'; id: string };
+		| { type: 'customer-quote'; id: string }
+		| { type: 'evidence-exports' }
+		| { type: 'topology-figure'; view: string };
 
 	interface PageData {
 		post: BlogPost;
@@ -218,6 +222,10 @@
 								<div class="my-10">
 									<CustomerQuote id={segment.id} card />
 								</div>
+							{:else if segment.type === 'topology-figure'}
+								<TopologyFigure view={segment.view as 'applications' | 'l3' | 'l2' | 'workloads'} />
+							{:else if segment.type === 'evidence-exports'}
+								<EvidenceExports />
 							{/if}
 						{/each}
 					{:else}

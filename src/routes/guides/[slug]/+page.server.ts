@@ -35,19 +35,23 @@ type ContentSegment =
 	| { type: 'html'; content: string }
 	| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
 	| { type: 'scanopy-demo' }
-	| { type: 'customer-quote'; id: string };
+	| { type: 'customer-quote'; id: string }
+	| { type: 'evidence-exports' }
+	| { type: 'topology-figure'; view: string };
 
 const DEFAULT_INLINE_COLUMNS = ['name', 'discovery', 'pricing', 'bestFor'];
 
 // Splits rendered markdown on inline component markers so they render as Svelte components
 // instead of raw HTML: `<!-- vendor-table:slug,slug [columns:a,b] -->`, `<!-- scanopy-demo -->`
-// (a theme-aware live map embed), and `<!-- quote:id -->` (a customer quote paired with the
-// customer's logo). Returns null when the post has none of these markers.
+// (a theme-aware live map embed), `<!-- quote:id -->` (a customer quote paired with the
+// customer's logo), `<!-- evidence-exports -->` (the shared exports/embed/share block used across
+// the compliance guides), and `<!-- topology-figure:applications|l3|l2|workloads -->` (a shared,
+// captioned topology screenshot). Returns null when the post has none of these markers.
 function splitBlogSegments(
 	html: string
 ): { segments: ContentSegment[]; vendorSlugs: string[] } | null {
 	const markerRegex =
-		/<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo|quote:([\w-]+))\s*-->/g;
+		/<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo|quote:([\w-]+)|evidence-exports|topology-figure:(applications|l3|l2|workloads))\s*-->/g;
 	if (!markerRegex.test(html)) return null;
 
 	const segments: ContentSegment[] = [];
@@ -69,6 +73,10 @@ function splitBlogSegments(
 			segments.push({ type: 'vendor-inline-table', vendorSlugs, columns });
 		} else if (match[3]) {
 			segments.push({ type: 'customer-quote', id: match[3] });
+		} else if (match[4]) {
+			segments.push({ type: 'topology-figure', view: match[4] });
+		} else if (match[0].includes('evidence-exports')) {
+			segments.push({ type: 'evidence-exports' });
 		} else {
 			segments.push({ type: 'scanopy-demo' });
 		}

@@ -35,47 +35,28 @@ No. [NIS2 Article 21](https://eur-lex.europa.eu/eli/dir/2022/2555/oj) does not n
 
 So there's no line to point to that says "keep a diagram." What there is instead is a set of measures that assume you have one.
 
-## What NIS2 requires that network documentation supports
+## What NIS2 requires, and what Scanopy produces for it
 
-Article 21(2) lists ten minimum risk-management measures. Three of them are hard to satisfy without a current, accurate model of your network:
+Article 21(2) lists ten minimum risk-management measures. Three of them are hard to satisfy without a current, accurate model of your network, and each maps to something Scanopy discovers directly:
 
-| NIS2 measure | Article | What it needs from you |
+| NIS2 measure | Evidence it needs | What Scanopy produces |
 |---|---|---|
-| Risk analysis | 21(2)(a) | An accurate picture of the systems and assets you're assessing risk to |
-| Asset management | 21(2)(i) | An inventory of what's on the network, kept current |
-| Business continuity, backup, disaster recovery | 21(2)(c) | Knowing your infrastructure well enough to restore it |
-| Assessing effectiveness of measures | 21(2)(f) | A current baseline to evaluate against |
+| Risk analysis (21(2)(a)) | An accurate picture of the systems and assets you're assessing risk to | The full topology plus the Applications view, which maps how systems interconnect |
+| Asset management (21(2)(i)) | An inventory of what's on the network, kept current | Discovered host, service, and device inventory, exportable as CSV; the Workloads view |
+| Business continuity and recovery (21(2)(c)) | Knowing your infrastructure well enough to restore it | Physical (L2) and Logical (L3) topology |
+| Assessing effectiveness (21(2)(f)) | A current baseline to evaluate against | Snapshots: a dated baseline you compare over time |
 
 None of these say "diagram." All of them break down if your documentation is a drawing from the last audit. You can't analyze risk to assets you haven't inventoried, you can't restore infrastructure you can't describe, and you can't judge whether a control is effective against a baseline that no longer matches reality.
 
-## How discovery covers asset management and risk analysis
+Scanopy discovers all of this from the network itself. Its daemon finds hosts, services, interfaces, and network devices, identifies vendors and models over SNMP, and maps the topology through LLDP, CDP, and ARP, then presents it as four views plus an exportable inventory, built from live data rather than memory. At the scale Motala describes (800-plus switches), keeping that current by hand is what their IT department calls "almost impossible."
 
-Asset management under 21(2)(i) is the clearest fit, because it starts from a question automated discovery resolves directly: what is actually on the network? You cannot manage or secure devices you don't know exist, and at the scale Motala describes (800-plus switches), keeping that inventory complete and current by hand is what their IT department calls "almost impossible."
+The two that carry most of the compliance weight:
 
-Scanopy discovers this from the network itself. Its daemon finds hosts, services, interfaces, and network devices, identifies vendors and models over SNMP, and maps the topology through LLDP, CDP, and ARP. That's the asset inventory and the network map, built from live data rather than memory.
+<!-- topology-figure:applications -->
 
-For risk analysis under 21(2)(a), the same current-state picture is the input. The Applications view maps service-to-service dependencies, so you can see which systems interconnect and where data can travel between them, not just that a device exists.
+<!-- topology-figure:l3 -->
 
-<figure class="my-8">
-  <img
-    class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/common/app-light-960w.webp"
-    srcset="/common/app-light-960w.webp 960w, /common/app-light-1440w.webp 1440w, /common/app-light-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems interconnect and the routes data can travel across the network."
-  />
-  <img
-    class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/common/app-960w.webp"
-    srcset="/common/app-960w.webp 960w, /common/app-1440w.webp 1440w, /common/app-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy Applications view: services grouped by application with the dependencies between them drawn as edges, showing which systems interconnect and the routes data can travel across the network."
-  />
-</figure>
-
-Here's what the map looks like on a live network. This is an interactive Scanopy map, not a screenshot:
+Explore all four on the live map:
 
 <!-- scanopy-demo -->
 
@@ -93,26 +74,7 @@ Manual documentation fails on maintenance. Automated discovery rescans on a sche
 
 ## How to turn discovery into evidence
 
-Scanopy exports the topology as an image (PNG, SVG, or PDF), as diagram markup for a wiki (Mermaid or Confluence), or as CSV of the underlying host and service data, and maps embed via iframe, so the current diagram can live in your risk-management documentation or internal wiki. Topology snapshots version the network state over time, which gives you a dated record of what the network looked like and what changed, useful when an authority or an auditor asks you to show that your documentation is actually maintained.
-
-<figure class="my-8">
-  <img
-    class="block dark:hidden w-full rounded-lg border border-gray-200"
-    src="/common/l2-light-960w.webp"
-    srcset="/common/l2-light-960w.webp 960w, /common/l2-light-1440w.webp 1440w, /common/l2-light-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices."
-  />
-  <img
-    class="hidden dark:block w-full rounded-lg border border-gray-800"
-    src="/common/l2-960w.webp"
-    srcset="/common/l2-960w.webp 960w, /common/l2-1440w.webp 1440w, /common/l2-2400w.webp 2400w"
-    sizes="(min-width: 1024px) 720px, 100vw"
-    loading="lazy"
-    alt="Scanopy physical (L2) view: switches and the hosts connected to them with port speeds and links, an automatically discovered inventory of the network's devices."
-  />
-</figure>
+<!-- evidence-exports -->
 
 ## What Scanopy does not do for NIS2
 
@@ -127,6 +89,6 @@ On self-hosting: the Community and commercial self-hosted editions run entirely 
 
 ## Scanopy keeps the asset inventory and map current. It does not run your risk program.
 
-Scanopy is network documentation software: a lightweight daemon discovers your hosts, services, interfaces, topology, and application dependencies, then builds an interactive map with four views that updates on a schedule and exports for evidence. For an entity under NIS2, its job is narrow: it keeps the asset inventory and network map that the risk-analysis, asset-management, and continuity measures assume you maintain accurate on their own, so producing current documentation stops being manual work. It runs alongside the rest of your risk-management program, not in place of it.
+Scanopy is network documentation software: a lightweight daemon discovers your hosts, services, interfaces, topology, and application dependencies, then builds an interactive map with four views that updates on a schedule and exports for evidence. For an entity under NIS2, its job is to keep the asset inventory and network map that the risk-analysis, asset-management, and continuity measures assume you maintain accurate on their own, so producing current documentation stops being manual work. It runs alongside the rest of your risk-management program, not in place of it.
 
 The [Community Edition](/community) is free and self-hosted. The [commercial editions](/commercial) remove the seat and network limits and add support. For the broader category, see the guide to [network documentation software](/guides/network-documentation-software).
