@@ -4,7 +4,8 @@ description: 'How network mapping software turns automatic discovery into a topo
 keyword: network mapping software
 slug: network-mapping-software
 date: 2026-07-14
-tldr: 'Network mapping software discovers your network and draws it as a topology map you can read, instead of an IP list you have to picture in your head. The useful part is not that it draws one diagram, it is that one network is several maps at once (physical cabling, logical routing, workloads, application dependencies) and good software lets you switch between them. This covers what a network map shows you, how it gets built automatically, why the four views matter, and the open-source options.'
+dateModified: 2026-07-15
+tldr: "The moment you need to see your network is the moment something breaks, and that is exactly when a spreadsheet of IPs or an old diagram fails you: you can only see one layer, and you can't trust that it's current. Network mapping software discovers the network and draws it as a topology map you can read. The useful insight is that one network is several maps at once (physical cabling, logical routing, workloads, application dependencies), and a good tool lets you switch between them instead of inferring the rest from a single picture. This covers what a map answers, how it gets built automatically, what discovery can and can't see, why the four views matter, and the open-source options."
 ctaHeading: A live map, not a diagram you redraw
 ctaDescription: 'Scanopy discovers your network and builds an interactive topology map on a schedule. Four switchable views of the same scan, flat pricing regardless of host count, and it runs alongside whatever monitoring you already have.'
 faq:
@@ -22,16 +23,19 @@ faq:
     answer: No. Mapping software shows the structure of the network, what exists and how it connects; monitoring watches device health and alerts you when something breaks. They answer different questions and most teams run both. A mapping tool complements a monitoring platform, it does not replace it.
 ---
 
-Network mapping software discovers the devices on your network and how they connect, then draws the result as a topology map. The point is not the drawing. It is that you can look at your network instead of holding it in your head. A spreadsheet of IP addresses tells you what exists; a map tells you how it fits together, which is the part you actually need when something breaks or changes.
+A link goes down and traffic between two subnets stops. You open the network diagram someone drew a year ago, and it shows you the cabling, which is not the question. The question is routing, and the routing lives on a layer the diagram never captured. So you start over by hand: SSH into a switch, read a MAC table, check an ARP entry, sketch the path on paper. The record existed. It just couldn't answer the question in front of you, and you couldn't trust it enough to try.
 
-## What a network map shows you
+This is what network mapping software is for. It discovers the devices on your network and how they connect, then draws the result as a topology map you can read. The point is not the drawing. It is that you can look at your network instead of holding it in your head, and look at the right layer of it when something breaks or changes.
 
-A network map turns discovery data into a picture you can read at a glance:
+## The questions a network map answers
 
-- **Devices as nodes.** Each host carries its IP and MAC addresses, hostname, and vendor, and the deeper tools fingerprint the services on it. So a node is not just an IP, it is "the box running Postgres, Nginx, and a stack of containers."
-- **Connections as edges.** The physical links between switches, routers, and hosts, and the logical paths between subnets on top of them. This is the part you cannot get from a list at all, and the part a hand-drawn diagram gets wrong first, because cabling and topology change without anyone redrawing them.
+You don't read a map to admire the topology. You read it to answer a specific question, fast, without grepping through config files or logging into three switches first:
 
-You read a map to answer a specific question, where does this host connect, what sits on this VLAN, what depends on that database, without grepping through config files first.
+- **Where does this host actually connect?** Which switch, which port, behind which uplink.
+- **What sits on this VLAN, and can it reach that one?** Segmentation as it is, not as the last person to touch it remembers it.
+- **What depends on that database?** If it goes down, what stops working with it.
+
+A map answers these because of what it captures. Each device is a node carrying its IP and MAC addresses, hostname, and vendor, and the deeper tools fingerprint the services on it, so a node is not just an IP, it is "the box running Postgres, Nginx, and a stack of containers." The links between those nodes are the edges: the physical connections between switches, routers, and hosts, and the logical paths between subnets on top of them. The edges are the part you cannot get from a list at all, and the part a hand-drawn diagram gets wrong first, because cabling and topology change without anyone redrawing them.
 
 ## How the map gets built automatically
 
@@ -41,11 +45,19 @@ Automatic mapping takes the drawing out of your hands. A scanner queries the net
 - **LLDP and CDP** advertise each device's identity to its directly connected neighbors, which is how the physical layout gets built.
 - **ARP tables and MAC forwarding tables** tie hosts to the switch ports they live behind.
 
-Scanopy runs this from a single lightweight daemon on the network. It does not install an agent on every host, and it rescans on a schedule, so the map reflects the current state rather than the day someone drew it. For a closer look at the discovery mechanics, see [how automated network documentation works](/blog/automated-network-documentation).
+The lightweight way to do this is a single scanner that queries the network from one point on it and rescans on a schedule, rather than an agent installed on every host. The map then reflects the current state instead of the day someone drew it. For a closer look at the discovery mechanics, see [how automated network documentation works](/blog/automated-network-documentation).
+
+## Know what discovery can't see
+
+Discovery is only as complete as what your devices advertise, and that is the test to apply to any mapping tool before you trust its picture: ask what it *can't* see.
+
+A scanner learns the network from SNMP, LLDP, CDP, and ARP. Anything that doesn't announce itself over those protocols stays invisible. An unmanaged switch with no SNMP shows up as a gap where a device should be, with the hosts behind it hanging off whatever port it uplinks from. A link the tool can't read directly, it infers, and an inferred edge is a guess with a line drawn through it. And discovery reads structure, not intent: it can show you that a VLAN exists and what sits on it, but not why it was carved out or what it's supposed to keep apart.
+
+This isn't a reason to skip mapping; it's a reason to prefer a tool that's clear about the difference between what it read and what it inferred. A map that quietly presents guesses as facts is worse than one that shows you the gap, because you'll troubleshoot against the wrong picture and not know it. The blind spots apply to every discovery-based tool, this one included. Knowing where they are is what lets you rely on the rest.
 
 ## One network is several maps: the four views
 
-Physical cabling, IP routing, and application dependencies are different questions, and forcing them onto one diagram produces a tangle that is hard to read. Scanopy renders one scan as four switchable views, so you look at the layer that answers the question in front of you:
+Physical cabling, IP routing, and application dependencies are different questions, and forcing them onto one diagram produces a tangle that is hard to read. This is why a single topology map fails you mid-incident: you're looking at one layer and reasoning about another. The fix is to treat one network as several maps and look at the layer that answers the question in front of you:
 
 - **Physical (L2)** shows switches, their ports, and the cabling between them. Reach for it when you are tracing a dead link, finding which switch port a host is actually on, or checking how your uplinks and stacks are laid out.
 - **Logical (L3)** shows subnets, VLANs, and routing. Reach for it when you are planning or auditing segmentation, or answering "can this VLAN actually reach that one," which the physical map cannot tell you.
@@ -54,15 +66,13 @@ Physical cabling, IP routing, and application dependencies are different questio
 
 Most open-source mappers give you one of these, usually the L2 topology, and leave you to infer the rest. Getting all four from a single scan is the difference between a map you glance at and a map you troubleshoot from. You switch the view instead of guessing the layer.
 
-## A live map beats a static diagram
+## Why a static diagram fails when you need it most
 
-A map is only worth reading if it is current and sits where your team already looks. That rules out the diagram someone exported to a PDF eighteen months ago. Scanopy keeps the map live and gives you three ways to put it in front of people, for two different needs:
+A diagram in a wiki looks like documentation, and for planning conversations it is fine. The trouble starts the moment you reach for it under pressure, because that is when its three built-in problems all surface at once.
 
-- **Embed it** in a wiki, intranet, or dashboard via iframe, so the live map renders inside the page people already open.
-- **Share a read-only link** to the live map. It stays current as the network rescans, so whoever you send it to is never looking at a stale copy.
-- **Export a snapshot** when you need a frozen artifact: as an image (PNG, SVG, PDF, HTML), as diagram markup (Mermaid, Confluence), or as the underlying data (CSV).
+It shows the network as of the day someone drew it. Every change since then, the new switch, the re-homed VLAN, the host that moved racks, is missing, and nothing about the diagram tells you which parts are still true. It shows one layer, usually the one that was easiest to draw, so the question you actually have is on a layer the picture doesn't contain. And because of the first two problems, nobody trusts it mid-incident anyway. The diagram becomes a starting hypothesis you re-verify by hand against the live network, which is the work it was supposed to save you.
 
-The embed and the shared link stay live; the export is a point-in-time copy for when you need the picture to hold still (an audit attachment, a change-request diagram). Pick by whether you want the map to keep updating or to freeze.
+A map built from discovery inverts this. It is current because it rescans, it carries every layer because it was read from the network rather than drawn, and it earns the trust that lets you act on it instead of checking it first. That is the whole reason to prefer a live map over a static one: not that it looks better, but that you can use it when it counts.
 
 ## Network mapping vs monitoring: different pictures
 
@@ -93,6 +103,6 @@ If you need to map a network that cannot phone home, or you want to avoid per-de
 
 ## Scanopy maps the network and runs alongside monitoring
 
-Scanopy is network mapping software, not a monitoring platform. A lightweight daemon discovers your hosts, services, interfaces, and topology, then builds an interactive map with four switchable views of the same scan: physical L2, logical L3, workloads, and applications. The map updates on a schedule. You can embed it via iframe, share a read-only link that stays current as the network rescans, or export a snapshot as an image (PNG, SVG, PDF, HTML), as markup (Mermaid, Confluence), or as CSV data. Pricing is [flat regardless of host count](/pricing), so mapping your whole network costs the same as mapping part of it, and it runs alongside whatever monitoring and asset tools you already have.
+Scanopy is network mapping software, not a monitoring platform. A lightweight daemon discovers your hosts, services, interfaces, and topology, then builds an interactive map with four switchable views of the same scan: physical L2, logical L3, workloads, and applications. The map updates on a schedule. You can embed it in a wiki or intranet via iframe, share a read-only link that stays current as the network rescans, or export a snapshot as an image (PNG, SVG, PDF, HTML), as diagram markup (Mermaid, Confluence), or as CSV data. Pricing is [flat regardless of host count](/pricing), so mapping your whole network costs the same as mapping part of it, and it runs alongside whatever monitoring and asset tools you already have. If you outgrow the Community Edition, the [commercial editions](/commercial) add team features and support without changing the pricing model.
 
 <!-- scanopy-demo -->
