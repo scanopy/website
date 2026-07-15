@@ -15,6 +15,21 @@ First, enable debug logging for more detail:
 scanopy-daemon --log-level debug
 ```
 
+For Docker Compose deployments, set the `SCANOPY_LOG_LEVEL` environment variable on the daemon service instead:
+
+```yaml
+services:
+  scanopy-daemon:
+    environment:
+      - SCANOPY_LOG_LEVEL=debug
+```
+
+Then recreate the container to apply the change:
+
+```bash
+docker compose up -d scanopy-daemon
+```
+
 Then check logs for your platform:
 
 - **Foreground**: Logs appear in your terminal
