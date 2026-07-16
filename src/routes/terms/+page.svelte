@@ -837,18 +837,6 @@
 			</div>
 
 			<div>
-				<h3 class="mb-4 text-xl font-semibold text-rose-400">Data Processing</h3>
-				<p class="mb-4 text-gray-300">
-					When we process personal data on your behalf in the course of providing our Services, that
-					processing is governed by our
-					<a href="/dpa" class="text-blue-400 hover:text-blue-300">Data Processing Addendum</a>,
-					which forms part of these Terms and is incorporated by reference. In case of any conflict
-					between the Data Processing Addendum and the rest of these Terms, the Data Processing
-					Addendum prevails with respect to the processing of personal data.
-				</p>
-			</div>
-
-			<div>
 				<h3 class="mb-4 text-xl font-semibold text-rose-400">Subscription Management</h3>
 
 				<h4 class="mb-2 text-lg font-semibold text-white">Subscription Plans and Billing Cycles</h4>

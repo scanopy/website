@@ -55,7 +55,6 @@ export async function GET() {
 		{ loc: '/security', src: 'src/routes/security/+page.svelte' },
 		{ loc: '/privacy', src: 'src/routes/privacy/+page.svelte' },
 		{ loc: '/terms', src: 'src/routes/terms/+page.svelte' },
-		{ loc: '/dpa', src: 'src/routes/dpa/+page.svelte' },
 		{ loc: '/refund', src: 'src/routes/refund/+page.svelte' }
 	];
 

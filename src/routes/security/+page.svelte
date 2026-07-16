@@ -47,8 +47,7 @@
 		<p class="mb-4 text-gray-300">
 			Scanopy Cloud is hosted in the United States. The application server runs on Hetzner compute,
 			and the database that holds your topology and account data is a managed Neon Postgres
-			instance, both in the United States. A Data Processing Agreement for Scanopy Cloud is
-			available on request (see section 6).
+			instance, both in the United States.
 		</p>
 
 		<h3 class="mb-3 text-xl font-semibold text-white">How the daemon connects</h3>
@@ -208,18 +207,6 @@
 		<h2 class="mb-4 text-2xl font-semibold text-rose-400">5. Certifications</h2>
 		<p class="mb-4 text-gray-300">
 			Scanopy does not currently hold a formal certification such as SOC 2 or ISO 27001.
-		</p>
-	</section>
-
-	<section>
-		<h2 class="mb-4 text-2xl font-semibold text-rose-400">6. Data Processing Agreement</h2>
-		<p class="mb-4 text-gray-300">
-			For Scanopy Cloud, our
-			<a href="/dpa" class="text-blue-400 hover:text-blue-300">Data Processing Addendum</a>
-			is published and forms part of the Terms of Service. If you need a countersigned copy, email
-			<a href="mailto:legal@scanopy.net" class="text-blue-400 hover:text-blue-300"
-				>legal@scanopy.net</a
-			>.
 		</p>
 	</section>
 
