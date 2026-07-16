@@ -203,11 +203,6 @@
 							<a href="/terms" class="text-sm text-gray-400 hover:text-white">Terms of Service</a>
 						</li>
 						<li>
-							<a href="/dpa" class="text-sm text-gray-400 hover:text-white"
-								>Data Processing Addendum</a
-							>
-						</li>
-						<li>
 							<a href="/refund" class="text-sm text-gray-400 hover:text-white">Refund Policy</a>
 						</li>
 					</ul>
