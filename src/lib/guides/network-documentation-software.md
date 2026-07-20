@@ -78,6 +78,7 @@ That's why Scanopy prices [flat regardless of host count](/pricing). Pricing doc
 - **You already have monitoring and just need current documentation:** a dedicated documentation tool that runs alongside it, priced independently.
 - **You need a structured source of truth for automation to consume:** NetBox (its data model feeds Ansible, Nornir, Terraform), with its own NetBox Discovery agent or another feeder keeping it current. Pair it with a visualization tool, since NetBox has no native maps.
 - **You only need a one-time diagram for a presentation:** a manual tool like draw.io. Don't buy documentation software for a single drawing.
+- **An auditor or regulator is the reason you are looking:** start from the control you have to satisfy, since that determines what the documentation has to show. Separate guides map the requirements for [NIS2](/guides/network-documentation-nis2), [ISO 27001](/guides/network-documentation-iso27001), and [HIPAA](/guides/network-documentation-hipaa) to the evidence each one expects.
 
 ## Scanopy documents the network and runs alongside monitoring and ITAM
 
