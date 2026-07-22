@@ -42,7 +42,7 @@ See [Daemon Configuration](/reference/daemon-configuration/) for the full parame
 - **Remove it** if you don't need visibility on that segment.
 - **Docker networks** (e.g. 172.17.0.0/16) should not be scanned over the network. Docker container discovery queries the Docker API directly and takes seconds.
 
-**If the slow subnet is interfaced**: The daemon should already be using ARP. If the subnet is reasonably sized, check `concurrent_scans` — a very low value serializes work across many hosts. See [Concurrent Scans](/reference/daemon-configuration/#concurrent-scans). If the subnet is large (/16 or bigger), see [Large Interfaced Subnets](#large-interfaced-subnets) below.
+**If the slow subnet is interfaced**: The daemon should already be using ARP. If the subnet is reasonably sized, check whether the daemon's scan concurrency has been clamped by a low file descriptor limit — see ["Too Many Open Files"](#too-many-open-files-error). If the subnet is large (/16 or bigger), see [Large Interfaced Subnets](#large-interfaced-subnets) below.
 
 ## Large Interfaced Subnets
 
@@ -67,57 +67,47 @@ Each scan performs up to 3 ARP rounds (1 initial + 2 retries by default). Subseq
 Before increasing `arp_rate_pps`, check whether your switch has Dynamic ARP Inspection (DAI) enabled. High ARP rates can trigger rate limiting or port shutdown on managed switches. See [Switch Rate Limiting (DAI)](/setting-up-daemons/troubleshooting-scans/host-discovery/#switch-rate-limiting-dai).
 </Callout>
 
-## Discovery Fails with "CONCURRENT_SCANS too high"
+## Discovery Finished with Hosts Unscanned
 
-**Symptoms**: Daemon crashes or runs out of memory during scans
+**Symptoms**: A run completes with a warning like `120 hosts not scanned (~35m remaining)`, and those hosts show stale data.
 
-**Solution**: Reduce concurrent scans in daemon configuration:
-
-**Docker:**
-
-```yaml
-environment:
-  - SCANOPY_CONCURRENT_SCANS=10 # Reduce from default
-```
-
-**Binary:**
-
-```bash
-scanopy-daemon --concurrent-scans 10 ...
-```
-
-See [Daemon Configuration](/reference/daemon-configuration/#concurrent-scans) for recommended values.
-
-## "Too Many Open Files" Error
-
-**Symptoms**: `Critical error scanning: Too many open files (os error 24)` in daemon logs
-
-**Causes**: System file descriptor limit is too low for the configured concurrent scans.
+**Cause**: The run hit **Max Discovery Duration** — the hard ceiling on a single discovery run, 6 hours by default. Scanopy completes the run rather than failing it, keeps what it collected, and leaves the rest for the next run.
 
 **Solutions**:
 
-1. **Reduce concurrent scans** (easiest):
+- **Fix the underlying slowness first**. Hitting a 6-hour ceiling usually means something above is wrong — non-interfaced subnets being TCP-probed, oversized targets, or deep scans on a large host count. Work through [Discovery Takes Hours](#discovery-takes-hours) before raising the limit.
+- **Narrow the targets** so a run covers less ground, or **add a daemon** on the slow segment.
+- **Raise the limit** in the discovery's **Detection** tab if your network genuinely needs longer than the default window.
 
-   ```yaml
-   environment:
-     - SCANOPY_CONCURRENT_SCANS=10
-   ```
+If the warning appears on every run, the scan is not keeping up with its schedule and each run is starting from a further-behind position.
 
-2. **Increase system file descriptor limit**:
+## "Too Many Open Files" Error
+
+**Symptoms**: `Critical error scanning: Too many open files (os error 24)` or `CONCURRENT_SCANS is likely too high for this system` in daemon logs, or scans that are far slower than expected because only one host is scanned at a time.
+
+**Cause**: The daemon's file descriptor limit is too low. Deep scanning a single host needs a few hundred descriptors, so a low limit forces concurrency down — sometimes to one host at a time.
+
+On Unix, the daemon raises its own soft limit at startup (up to the hard limit, capped at 10,240), which handles the common case of macOS defaulting to 256. If you still see this, the **hard** limit is what needs raising.
+
+**Solutions**:
+
+1. **Check what the daemon actually has**:
 
    ```bash
-   # Check current limit
-   ulimit -n
+   ulimit -Hn   # hard limit — the ceiling the daemon can raise itself to
+   ulimit -n    # current soft limit
+   ```
 
-   # Increase temporarily
-   ulimit -n 65535
+2. **Raise the hard limit** (add to `/etc/security/limits.conf`, then log out and back in):
 
-   # Increase permanently (add to /etc/security/limits.conf)
+   ```
    * soft nofile 65535
    * hard nofile 65535
    ```
 
-3. **For Docker**: Add to your daemon container:
+   On macOS, raise it with `launchctl limit maxfiles`.
+
+3. **For Docker**, set it on the daemon container:
    ```yaml
    ulimits:
      nofile:

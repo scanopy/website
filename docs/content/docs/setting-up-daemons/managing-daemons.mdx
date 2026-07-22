@@ -7,7 +7,7 @@ description: Create, upgrade, and remove daemons.
 
 - **Linux**: Docker with host networking OR standalone binary (installable as a systemd service)
 - **macOS**: Standalone binary — Docker Desktop doesn't allow access to host interfaces. Installs as a launchd service.
-- **Windows**: Standalone binary — Docker Desktop doesn't allow access to host interfaces. Installs as a Windows service (native SCM), or via the signed MSI.
+- **Windows**: Standalone binary — Docker Desktop doesn't allow access to host interfaces. Installs as a Windows service (native SCM).
 - **FreeBSD**: Standalone binary, installable as an rc.d service.
 
 On Linux, macOS, Windows, and FreeBSD the daemon installs as a native background service — see [Running as a Service](#running-as-a-service).
@@ -18,7 +18,23 @@ Go to **Discover > Scan > Daemons** and click **Create Daemon**. The wizard walk
 
 1. **Setup** — network, polling mode, and daemon name
 2. **Integrations** — optionally add SNMP, Docker, and Podman credentials, targeting all hosts or specific hosts. These are [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan. See [Credentials](/using-scanopy/credentials/#during-daemon-setup-new-daemons) for details.
-3. **Install** — a ready-to-copy `scanopy-daemon install` command with the correct API key, server URL, daemon name, and any `--credential-id` flags
+3. **Install** — pick your platform and install method; the wizard builds the matching artifact for you
+
+Finishing the wizard [provisions](/reference/daemon-identity/) the daemon: the server creates its record and mints an API key bound to it. You don't create a key yourself.
+
+Choose an install method on the final step:
+
+| Method | What you get |
+| ------ | ------------ |
+| **Linux / macOS / FreeBSD** | A command that fetches the daemon binary and installs it as a native service |
+| **Windows** | A PowerShell command that downloads the binary and installs it as a Windows service |
+| **Docker** | A ready-to-run `docker-compose.yml` plus the `SCANOPY_*` environment variables it's configured with |
+
+<Callout type="warn">
+The generated artifact carries the daemon's API key, and the key is shown only here. Copy it before leaving the wizard — you can't retrieve it afterwards. If you lose it before installing, you can mint a replacement from the daemon's management modal; once the daemon has connected, re-keying it is blocked, because a fresh key would cut off the running daemon.
+</Callout>
+
+Any [advanced settings](/reference/daemon-configuration/) you set in the wizard are baked into the artifact, so the installed daemon comes up already configured.
 
 For help choosing a polling mode and planning where to place daemons, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
@@ -26,13 +42,9 @@ For help choosing a polling mode and planning where to place daemons, see [Plann
 
 The recommended way to install the daemon is the **`scanopy-daemon install`** command. It places the binary, writes the daemon's `config.json`, and registers a native background service — **systemd** on Linux, **launchd** on macOS, the **Service Control Manager** on Windows, and **rc.d** on FreeBSD — that starts immediately and on every reboot. The install command shown on the wizard's **Install** step already includes this; copy and run it on the host.
 
-You can also run it yourself with the connection flags (the same flags the daemon accepts):
+`install` accepts the same connection and identity flags as the daemon itself, so you can also invoke it by hand. Get the invocation from the app rather than assembling it yourself — the wizard and the management modal build it against your server's own URL and the daemon's key.
 
-```bash
-sudo scanopy-daemon install --server-url https://scanopy.example.com --daemon-api-key <key>
-```
-
-Everything else — network, interfaces, ports — is read from `config.json`, so no secrets appear in the service definition or process arguments. Re-running `install` is idempotent, and a non-elevated invocation prints the exact `sudo`/administrator command to re-run.
+Everything else — network, interfaces, ports — is read from `config.json`, so no secrets appear in the service definition or process arguments. Re-running `install` is idempotent, and a non-elevated invocation prints the exact `sudo`/administrator command to re-run. On success it prints the config and log paths it settled on.
 
 Verify the service and view its logs:
 
@@ -46,16 +58,6 @@ To stop and remove the service, use `sudo scanopy-daemon uninstall` — see [Rem
 <Callout type="info">
 Prefer to run the daemon in the foreground (e.g. for a quick test)? Run `scanopy-daemon` directly with the same flags — it runs attached to your terminal and stops when the terminal closes. Running multiple daemons on one host? See [Running Multiple Daemons](/guides/networking/multiple-daemons/).
 </Callout>
-
-### Windows MSI
-
-On Windows you can also install with the signed **MSI** — the platform-standard wizard. It installs the binary and registers the same service. For unattended deployment (GPO/Intune), install silently:
-
-```powershell
-msiexec /qn /i scanopy-daemon-windows-amd64.msi SERVERURL="https://scanopy.example.com" APIKEY="<key>"
-```
-
-The MSI also handles upgrades in place and can be removed with `msiexec /qn /x scanopy-daemon-windows-amd64.msi`.
 
 ### Manually installed or older daemons
 
@@ -109,21 +111,42 @@ nssm start ScanopyDaemon
 
 ## Integrated Daemon (Self-Hosted)
 
-Self-hosted Docker Compose deployments include an **integrated daemon** that runs alongside the server. This daemon is managed as part of your Compose stack — it upgrades when you upgrade the server and doesn't need separate installation or API key setup. For upgrading the integrated daemon along with your server, see [Upgrading a Self-Hosted Server](/self-hosted-server/upgrading/).
+Self-hosted Docker Compose deployments include an **integrated daemon** that runs alongside the server. This daemon is managed as part of your Compose stack — it upgrades when you upgrade the server and needs no separate installation. Server setup provisions it and its API key for you, so there is nothing to configure by hand. For upgrading the integrated daemon along with your server, see [Upgrading a Self-Hosted Server](/self-hosted-server/upgrading/).
 
 ## Upgrading
 
-When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps: download the latest binary (or run the latest MSI on Windows), then restart the service (`systemctl restart` / `launchctl kickstart -k` / `sc.exe stop` + `start` / `service … restart`). Configuration is preserved across upgrades.
+When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps: download the latest binary, then restart the service (`systemctl restart` / `launchctl kickstart -k` / `sc.exe stop` + `start` / `service … restart`). Configuration is preserved across upgrades.
 
 For upgrading self-hosted server and integrated daemon together, see [Upgrading](/self-hosted-server/upgrading).
 
 ## Updating Daemon Properties
 
-You can update daemon properties after creation by editing the [daemon config file](/reference/daemon-configuration). Restart the daemon's service for changes to take effect — `sudo systemctl restart scanopy-daemon` (Linux), `sudo launchctl kickstart -k system/com.scanopy.daemon` (macOS), `sc.exe stop scanopy-daemon` then `sc.exe start scanopy-daemon` (Windows), or `sudo service scanopy-daemon restart` (FreeBSD). For a foreground daemon, just restart the process.
+Click the edit icon on a daemon card in **Discover > Scan > Daemons** to open its management modal. The modal has two tabs: **Details** for the daemon record, and **API Key** for its key.
 
-The daemon's name is the only property that propagates to the server. All other config properties are local to the daemon.
+On the **Details** tab you can edit the maintainer, tags, and — for ServerPoll daemons — the URL the server dials. Network, polling mode, and name are shown read-only: they're set when the daemon is [provisioned](/reference/daemon-identity/) and define what the daemon is. A DaemonPoll daemon has no editable URL, because the server never dials it.
+
+Daemon-local settings — interfaces, ports, log level, scan tuning — live in the [daemon config file](/reference/daemon-configuration/) on the host, not on the server record. Change them either by [reconfiguring the daemon](#reconfiguring-a-daemon) from the modal or by editing `config.json` directly. Editing the file requires a service restart to take effect — `sudo systemctl restart scanopy-daemon` (Linux), `sudo launchctl kickstart -k system/com.scanopy.daemon` (macOS), `sc.exe stop scanopy-daemon` then `sc.exe start scanopy-daemon` (Windows), or `sudo service scanopy-daemon restart` (FreeBSD). For a foreground daemon, just restart the process.
 
 Each daemon also reports its **capabilities** to the server: whether it has Docker or Podman socket access (for container discovery) and which subnets it has network interfaces on (for default scan targets). To update capabilities after changing the host's network configuration or Docker access, run a SelfReport discovery.
+
+## Reconfiguring a Daemon
+
+Changing a daemon's advanced settings in the management modal produces a **reconfigure** artifact — the way settings you change in the app reach a daemon that's already installed.
+
+A reconfigure differs from an install: it carries no API key and doesn't re-fetch the binary. It only re-asserts configuration, layering it over the `config.json` already on the host. For a Docker daemon you get just the environment variables that changed, to swap into your existing Compose file rather than replacing it — your own Compose customizations stay intact.
+
+Run the artifact on the daemon host, then restart the service.
+
+## Binding a Key to a Legacy Daemon
+
+Daemons set up before 1:1 provisioning authenticate with a key shared across every daemon on their network. They keep working indefinitely, but a shared key can't be rotated or revoked for one daemon without affecting the rest. Binding gives the daemon a key of its own, keeping its host, discovery jobs, and history.
+
+Open the daemon's management modal, go to the **API Key** tab, and click **Bind a Key**. What happens next depends on the polling mode:
+
+- **DaemonPoll** — the daemon keeps running on its shared key. You get a command to run on the daemon host to switch it over, and can do that whenever it suits you.
+- **ServerPoll** — a hard cutover. The server starts using the new key to connect immediately, so the daemon stops responding until you reconfigure it. Only do this when you can get to the host right away.
+
+Scanopy asks you to confirm before a ServerPoll cutover. See [Daemon Identity](/reference/daemon-identity/) for how the two key models coexist.
 
 ## Removing a Daemon
 
@@ -141,7 +164,9 @@ Deleting or uninstalling a daemon does not delete discovered data. Hosts, servic
 sudo scanopy-daemon uninstall
 ```
 
-This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the installed binary, and `--name <name>` to target a specific instance. On Windows, run it from an elevated PowerShell, or uninstall the MSI: `msiexec /qn /x scanopy-daemon-windows-amd64.msi`.
+This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the installed binary and log files, and `--name <name>` to target a specific instance. On Windows, run it from an elevated PowerShell.
+
+`uninstall` reports what it did for every item it touched — removed, left in place, or not found — so you can see exactly what remains. It's idempotent: uninstalling a daemon that was never installed succeeds and tells you there was nothing to remove.
 
 Docker:
 

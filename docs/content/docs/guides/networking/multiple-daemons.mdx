@@ -82,18 +82,15 @@ SCANOPY_DAEMON_PORT=60073
 
 ## Setting up multiple daemons
 
-Create a separate daemon entry in **Discover > Scan > Daemons** for each instance. Each daemon gets its own API key and can target the same or different networks. During setup, use the **Advanced** tab to configure interface restrictions under Network Discovery. The app provides platform-specific install and run commands with your settings included.
+Create a separate daemon entry in **Discover > Scan > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different networks. During setup, use the **Advanced** tab to set that instance's interface restrictions, bind address, and port under Network Discovery — they're baked into the install artifact the wizard gives you, so you don't have to add them by hand.
 
-Run `scanopy-daemon install --name <name>` for each instance. Each one registers its own background service — named `scanopy-daemon-<name>` — and writes its namespaced config, so it starts immediately and on every reboot:
+Run each instance's artifact on the host, **appending `--name <instance>`** to the `scanopy-daemon install` command:
 
-```bash
-sudo scanopy-daemon install --name eth0 --interfaces eth0 \
-  --bind-address 192.168.1.10 --daemon-port 60073 \
-  --server-url https://scanopy.example.com --daemon-api-key <key-for-eth0>
-sudo scanopy-daemon install --name iot --interfaces eth1 \
-  --bind-address 10.0.0.10 --daemon-port 60074 \
-  --server-url https://scanopy.example.com --daemon-api-key <key-for-iot>
-```
+<Callout type="warn">
+The install command the app generates doesn't include `--name` — a daemon normally learns its name from the server. On a multi-instance host you have to add it yourself. Without it, every instance installs over the same service and the same config file, and only the last one survives.
+</Callout>
+
+Give each instance the name you used for its daemon entry in the app. `install` then registers a per-instance background service — named `scanopy-daemon-<name>` — and writes a namespaced config, so each starts immediately and on every reboot.
 
 Manage each instance by its service name — for example `sudo systemctl restart scanopy-daemon-eth0` (Linux), `sudo launchctl kickstart -k system/com.scanopy.daemon.eth0` (macOS), or `sc.exe stop scanopy-daemon-iot` (Windows). The bind address and port are persisted in each daemon's config file, so re-running `install` or restarting the service doesn't need them again.
 

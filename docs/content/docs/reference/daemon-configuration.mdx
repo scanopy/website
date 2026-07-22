@@ -40,11 +40,15 @@ environment:
 
 **Configuration file**:
 
-The daemon automatically creates a config file at:
+A daemon you run yourself creates its config file under your user profile:
 
 - **Linux**: `~/.config/scanopy/daemon/config.json`
 - **macOS**: `~/Library/Application Support/com.scanopy.daemon/config.json`
 - **Windows**: `%APPDATA%\scanopy\daemon\config.json`
+
+A daemon installed as a service uses a system directory instead. A background service runs under a different profile than whoever installed it, so `install` writes the config to a system location and points the service at it explicitly. The install command prints the config and log paths it settled on — read them off the output rather than guessing.
+
+Use `--config-dir` / `SCANOPY_CONFIG_DIR` to override the directory holding `config.json`.
 
 The config file stores runtime state (daemon ID, host ID) alongside your settings. Command-line and environment variables take priority over the file.
 
@@ -86,68 +90,17 @@ Seeded credentials are applied **only at first registration**. If the daemon is 
 There is no flag for scanning the local Docker or Podman socket. Local sockets are ordinary credentials — create a [Docker Socket](/guides/integrations/docker/) or [Podman Socket](/guides/integrations/podman/) credential and, if seeding it here, reference it with the loopback form above.
 </Callout>
 
-## Deprecated in v0.15.0
+## Deprecated Parameters
 
-<Callout type="warn">
-The following parameters are deprecated and will be removed in v0.16.0. Use [Docker Proxy credentials](/guides/integrations/docker/) instead. See the [migration guide](/guides/operations/unified-discovery-migration/#1-recreate-docker-proxy-configuration-as-a-credential) for steps.
-</Callout>
+The Docker proxy parameters (`--docker-proxy`, `--docker-proxy-ssl-cert`, `--docker-proxy-ssl-key`, `--docker-proxy-ssl-chain`, and their `SCANOPY_*` equivalents) are superseded by [Docker Proxy credentials](/guides/integrations/docker/). See the [migration guide](/guides/operations/unified-discovery-migration/#1-recreate-docker-proxy-configuration-as-a-credential) for steps.
 
-- `--docker-proxy` / `SCANOPY_DOCKER_PROXY`
-- `--docker-proxy-ssl-cert` / `SCANOPY_DOCKER_PROXY_SSL_CERT`
-- `--docker-proxy-ssl-key` / `SCANOPY_DOCKER_PROXY_SSL_KEY`
-- `--docker-proxy-ssl-chain` / `SCANOPY_DOCKER_PROXY_SSL_CHAIN`
+Scan speed settings (`--scan-rate-pps`, `--arp-rate-pps`, and similar) configured at the daemon level are no longer used. Scan speed is configured per-discovery in the **Speed** tab. See the [migration guide](/guides/operations/unified-discovery-migration/#2-re-apply-scan-speed-overrides).
 
-Scan speed settings (`--scan-rate-pps`, `--arp-rate-pps`, etc.) configured at the daemon level are no longer used. Scan speed is now configured per-discovery in the **Speed** tab. See the [migration guide](/guides/operations/unified-discovery-migration/#2-re-apply-scan-speed-overrides).
+## Scan Concurrency
 
-## Concurrent Scans
+The daemon decides how many hosts to scan simultaneously on its own, based on available memory and its file descriptor limit. There is no setting to configure it.
 
-Controls how many hosts the daemon scans simultaneously during network discovery.
-
-**Default behavior**: Auto-detected based on system resources
-
-- Calculates based on available memory
-- Typical range: 10-20 for most systems
-- Adjusts to prevent memory exhaustion
-
-**When to set manually**:
-
-- System crashes during scans
-- Memory errors in logs
-- Very large networks (100+ hosts)
-- Resource-constrained devices (Raspberry Pi)
-
-**Recommended values**:
-
-- **Raspberry Pi 4 (4GB)**: 5-10
-- **Standard desktop**: 15-20
-- **Server**: 20-30+
-- **Low memory**: Start with 5, increase gradually
-
-**Setting**:
-
-```bash
-# CLI
-scanopy-daemon --concurrent-scans 10
-
-# Environment
-export SCANOPY_CONCURRENT_SCANS=10
-
-# Docker
-environment:
-  - SCANOPY_CONCURRENT_SCANS=10
-```
-
-**Symptoms of too high**:
-
-- Daemon crashes during scans
-- "CONCURRENT_SCANS too high for this system" error
-- Out of memory errors
-- System becomes unresponsive
-
-**Impact**:
-
-- Lower value = slower scans, more stable
-- Higher value = faster scans, more memory usage
+If scans are slower than expected because concurrency has been clamped low, the usual cause is a restrictive file descriptor limit — see ["Too Many Open Files"](/setting-up-daemons/troubleshooting-scans/scan-performance/#too-many-open-files-error).
 
 ## Logging
 

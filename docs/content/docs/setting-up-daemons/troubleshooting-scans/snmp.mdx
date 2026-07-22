@@ -56,6 +56,22 @@ For SNMP-specific log messages, enable debug logging and look for these messages
 | `SNMP system info retrieved` with sys_descr/sys_name | Success |
 | `No working SNMP credential found for {ip}` | All credentials tried, none worked |
 
+## Interfaces missing or incomplete
+
+**Symptoms**: A device's **ifEntry** tab shows fewer interfaces than the device has, or interfaces appear without their neighbor, VLAN, or learned-MAC data.
+
+**Cause**: The interface table walk was cut short. Scanopy caps a single table walk at 10,000 rows and bounds each query at 30 seconds, so a very large table — or a device that stalls partway through returning one — yields a partial result.
+
+Truncation is reported as a warning on the discovery session itself, so check the run in **Discover > Scan > Sessions** rather than only the daemon logs.
+
+Interfaces are saved as soon as the interface table is read, before the neighbor and VLAN queries run. So a device that hangs later in collection keeps its interface list but loses the enrichment — bare interfaces with no LLDP/CDP neighbor are the signature of that.
+
+**What to check**:
+
+- Whether the device responds to a full `snmpwalk` of the interface table from the daemon host, and how long it takes
+- Whether the device is under load or rate-limiting SNMP
+- Whether the interface count is genuinely near the 10,000-row cap (stacked chassis and large modular switches can be)
+
 ## Check host SNMP data
 
 Open the host edit modal to inspect what SNMP has collected:

@@ -13,13 +13,19 @@ docker compose up -d
 ```
 
 <Callout type="info">
-**Podman users**: If you pull the daemon image by tag (e.g., `podman pull …/daemon:v0.15.2`), add `--platform linux/amd64` (or `linux/arm64`) to avoid pulling the wrong architecture. See [Troubleshooting — Podman Pulls Wrong Daemon Version](/setting-up-daemons/troubleshooting-setup/#podman-pulls-wrong-daemon-version-amd64).
+	**Podman users**: If you pull the daemon image by tag (e.g., `podman pull …/daemon:v0.15.2`), add
+	`--platform linux/amd64` (or `linux/arm64`) to avoid pulling the wrong architecture. See
+	[Troubleshooting — Podman Pulls Wrong Daemon
+	Version](/setting-up-daemons/troubleshooting-setup/#podman-pulls-wrong-daemon-version-amd64).
 </Callout>
 
 This upgrades both the server and any daemons defined in your compose file. Volumes are preserved, so no re-registration or reconfiguration is needed.
 
 <Callout type="warn">
-If you use the integrated daemon, do not delete the `daemon-config` volume during upgrades — it stores the daemon's identity (ID, API key, and network assignment). Only delete it if you need to re-register the daemon from scratch.
+	If you use the integrated daemon, do not delete the `daemon-config` volume during upgrades — it
+	stores the daemon's identity (ID, API key, and network assignment). That identity is [provisioned
+	once at server setup](/reference/daemon-identity/) and cannot be re-derived, so deleting the
+	volume means provisioning the daemon again from scratch.
 </Callout>
 
 After restarting, the daemon reports its new version to the server and the version status should immediately show **Current** in the UI.

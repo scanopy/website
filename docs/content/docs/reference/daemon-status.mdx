@@ -3,17 +3,34 @@ title: Daemon Status
 description: What each daemon status tag means and how to resolve issues.
 ---
 
-Scanopy monitors daemon health and displays status tags in the UI. A daemon with no issues shows no tag. When problems are detected, a colored tag appears next to the daemon name indicating the most important issue.
+Scanopy monitors daemon health and displays a status tag next to each daemon name in the UI. Every daemon carries exactly one tag, showing the most important condition that currently applies.
 
 ## Status Reference
 
 | Status | Meaning |
 | ------ | ------- |
 | <StatusTag status="Healthy" /> | Running current version, communicating normally |
+| <StatusTag status="Awaiting Connection" /> | Provisioned, but the daemon has never contacted the server |
 | <StatusTag status="Standby" /> | No discovery session in the last 30 days |
 | <StatusTag status="Unreachable" /> | Server cannot reach the daemon |
 | <StatusTag status="Deprecated" /> | Daemon version is no longer supported |
 | <StatusTag status="Outdated" /> | Newer daemon version available |
+
+## Awaiting Connection
+
+**Blue tag**. The daemon record exists but the daemon has never checked in.
+
+Every daemon passes through this state. Creating a daemon [provisions](/reference/daemon-identity/) its record on the server before the daemon itself exists, so the tag appears as soon as you finish the wizard and clears on first contact.
+
+**How to resolve**:
+
+1. Run the install artifact from the wizard on the daemon host — until you do, there is nothing to connect
+2. Confirm the daemon process or service is running (`systemctl status scanopy-daemon`, `launchctl print system/com.scanopy.daemon`, `Get-Service scanopy-daemon`, or `service scanopy-daemon status`)
+3. **DaemonPoll**: check the daemon can reach the server on port 60072
+4. **ServerPoll**: check the daemon's URL is correct and the server can reach it on port 60073
+5. Check the daemon logs for registration errors — `daemon_not_provisioned` means a 0.17.5+ daemon tried to register itself against a record that doesn't exist, which happens when it was installed by hand with a legacy shared key instead of from a provisioned daemon's install artifact
+
+If the tag persists, see [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup).
 
 ## Standby
 
@@ -56,13 +73,13 @@ See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for deta
 
 ## Healthy
 
-No tag is shown. The daemon is running a current version and communicating with the server normally.
+**Green tag**. The daemon is running a current version and communicating with the server normally.
 
 ## Status Priority
 
-When multiple statuses apply, the UI shows the highest-priority one:
+When multiple conditions apply, the UI shows the highest-priority one:
 
-**Standby > Unreachable > Deprecated > Outdated**
+**Unreachable > Standby > Awaiting Connection > Deprecated > Outdated > Healthy**
 
 The Home tab shows all active statuses across your daemons.
 

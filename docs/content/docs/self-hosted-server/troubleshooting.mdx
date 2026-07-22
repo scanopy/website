@@ -71,7 +71,7 @@ docker exec scanopy-daemon curl http://scanopy-server:60072/api/health
 
 2. **Update compose file**: If gateway isn't `172.17.0.1`, update `SCANOPY_INTEGRATED_DAEMON_URL`
 
-3. **Check API key**: Ensure the integrated daemon has a valid API key in the database
+3. **Check the daemon record**: Server setup [provisions](/reference/daemon-identity/) the integrated daemon and its API key. Confirm the daemon appears in **Discover > Scan > Daemons** and that its `daemon-config` volume still holds the key — a wiped volume leaves the daemon with no identity to present.
 
 ## Database Issues
 

@@ -113,7 +113,7 @@ sudo scanopy-daemon install --name iot --interfaces eth1 \
   Both `--bind-address` and `--daemon-port` are required when running multiple daemons on one host. Without them, the second instance will fail with a port binding error. See [Configuring ports and bind addresses](/guides/networking/multiple-daemons/#configuring-ports-and-bind-addresses) for details.
 </Callout>
 
-Create a separate daemon entry in **Discover > Daemons** for each instance. Each gets its own API key and can target the same or different Scanopy networks.
+Create a separate daemon entry in **Discover > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different Scanopy networks.
 
 This gives you Layer 2 discovery on each segment without needing a separate physical host per VLAN. See [Scanning Isolated Networks from One Host](/guides/networking/multiple-daemons/) for the full setup guide, including config namespacing, systemd templates, and Docker configuration.
 
@@ -152,7 +152,7 @@ Each daemon uses a polling mode that determines which side initiates the connect
 |---|---|---|
 | **Connection direction** | Daemon → Server | Server → Daemon |
 | **Firewall requirements** | Daemon needs outbound access to server | Server needs inbound access to daemon (port 60073) |
-| **Setup** | Daemon self-registers with an API key | Admin provisions the daemon in the UI and configures its URL |
+| **Setup** | Create the daemon in the UI, then run its install artifact on the host | Same, plus a reachable URL for the server to dial |
 | **Best for** | Most deployments — works behind NAT and firewalls | DMZ or restricted environments where the daemon cannot make outbound connections |
 
 **Use DaemonPoll unless your daemon cannot reach the server.** It's simpler to set up and requires no inbound firewall rules on the daemon host.
