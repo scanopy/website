@@ -2,6 +2,7 @@ import { marked, Renderer } from 'marked';
 import { error } from '@sveltejs/kit';
 import { vendors as allVendors } from '$lib/fixtures/network-diagram-vendors';
 import { externalizeLinks } from '$lib/server/externalize-links';
+import { splitContentSegments } from '$lib/content/contentSegments';
 import type { Vendor } from '$lib/types';
 
 interface Heading {
@@ -29,59 +30,6 @@ interface BlogPost {
 	faq: FaqItem[];
 	content: string;
 	wordCount: number;
-}
-
-type ContentSegment =
-	| { type: 'html'; content: string }
-	| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
-	| { type: 'scanopy-demo' }
-	| { type: 'customer-quote'; id: string };
-
-const DEFAULT_INLINE_COLUMNS = ['name', 'discovery', 'pricing', 'bestFor'];
-
-// Splits rendered markdown on inline component markers so they render as Svelte components
-// instead of raw HTML: `<!-- vendor-table:slug,slug [columns:a,b] -->`, `<!-- scanopy-demo -->`
-// (a theme-aware live map embed), and `<!-- quote:id -->` (a customer quote paired with the
-// customer's logo). Returns null when the post has none of these markers.
-function splitBlogSegments(
-	html: string
-): { segments: ContentSegment[]; vendorSlugs: string[] } | null {
-	const markerRegex =
-		/<!--\s*(?:vendor-table:([\w,-]+)(?:\s+columns:([\w,]+))?|scanopy-demo|quote:([\w-]+))\s*-->/g;
-	if (!markerRegex.test(html)) return null;
-
-	const segments: ContentSegment[] = [];
-	const allSlugs: string[] = [];
-	let lastIndex = 0;
-	markerRegex.lastIndex = 0;
-	let match: RegExpExecArray | null;
-
-	while ((match = markerRegex.exec(html)) !== null) {
-		const before = html.slice(lastIndex, match.index).trim();
-		if (before) {
-			segments.push({ type: 'html', content: before });
-		}
-
-		if (match[1]) {
-			const vendorSlugs = match[1].split(',').filter(Boolean);
-			const columns = match[2] ? match[2].split(',').filter(Boolean) : DEFAULT_INLINE_COLUMNS;
-			allSlugs.push(...vendorSlugs);
-			segments.push({ type: 'vendor-inline-table', vendorSlugs, columns });
-		} else if (match[3]) {
-			segments.push({ type: 'customer-quote', id: match[3] });
-		} else {
-			segments.push({ type: 'scanopy-demo' });
-		}
-
-		lastIndex = match.index + match[0].length;
-	}
-
-	const remaining = html.slice(lastIndex).trim();
-	if (remaining) {
-		segments.push({ type: 'html', content: remaining });
-	}
-
-	return { segments, vendorSlugs: [...new Set(allSlugs)] };
 }
 
 function parseFrontmatter(content: string): { frontmatter: Record<string, string>; body: string } {
@@ -206,7 +154,7 @@ export async function load({ params }) {
 				wordCount
 			};
 
-			const parsed = splitBlogSegments(htmlContent);
+			const parsed = splitContentSegments(htmlContent);
 			if (parsed) {
 				const filteredVendors: Record<string, Vendor> = {};
 				for (const vs of parsed.vendorSlugs) {

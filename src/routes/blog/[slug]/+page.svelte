@@ -9,6 +9,7 @@
 	import CustomerQuote from '$lib/components/CustomerQuote.svelte';
 	import { getFAQPageSchema } from '$lib/schemas';
 	import type { Vendor } from '$lib/types';
+	import type { ContentSegment } from '$lib/content/contentSegments';
 
 	interface Heading {
 		id: string;
@@ -36,12 +37,6 @@
 		content: string;
 		wordCount: number;
 	}
-
-	type ContentSegment =
-		| { type: 'html'; content: string }
-		| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
-		| { type: 'scanopy-demo' }
-		| { type: 'customer-quote'; id: string };
 
 	interface PageData {
 		post: BlogPost;

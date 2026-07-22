@@ -51,6 +51,7 @@ export async function GET() {
 		},
 		{ loc: '/community', src: 'src/routes/community/+page.svelte' },
 		{ loc: '/commercial', src: 'src/routes/commercial/+page.svelte' },
+		{ loc: '/compliance', src: 'src/routes/compliance/+page.svelte' },
 		{ loc: '/press', src: 'src/routes/press/+page.svelte' },
 		{ loc: '/security', src: 'src/routes/security/+page.svelte' },
 		{ loc: '/privacy', src: 'src/routes/privacy/+page.svelte' },

@@ -162,7 +162,7 @@ function generateItemListSchema() {
 	return {
 		'@context': 'https://schema.org',
 		'@type': 'ItemList',
-		name: 'Best Automated Network Diagram Tools (2026)',
+		name: 'Best Network Documentation Tools (2026)',
 		numberOfItems: items.length,
 		itemListElement: items.map((item, i) => ({
 			'@type': 'ListItem',

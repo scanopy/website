@@ -11,6 +11,7 @@
 	import TopologyFigure from '$lib/components/TopologyFigure.svelte';
 	import { getFAQPageSchema } from '$lib/schemas';
 	import type { Vendor } from '$lib/types';
+	import type { ContentSegment } from '$lib/content/contentSegments';
 
 	interface Heading {
 		id: string;
@@ -38,14 +39,6 @@
 		content: string;
 		wordCount: number;
 	}
-
-	type ContentSegment =
-		| { type: 'html'; content: string }
-		| { type: 'vendor-inline-table'; vendorSlugs: string[]; columns: string[] }
-		| { type: 'scanopy-demo' }
-		| { type: 'customer-quote'; id: string }
-		| { type: 'evidence-exports' }
-		| { type: 'topology-figure'; view: string };
 
 	interface PageData {
 		post: BlogPost;

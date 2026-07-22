@@ -69,7 +69,7 @@
 
 	const breadcrumbSchema = getBreadcrumbListSchema([
 		{ name: 'Comparisons', url: 'https://scanopy.net/comparisons' },
-		{ name: 'Best automated network diagram tools', url: mainComparison },
+		{ name: 'Network documentation tools', url: mainComparison },
 		{ name: data.title, url: canonical }
 	]);
 
@@ -236,7 +236,7 @@
 							>Scanopy vs {data.vendorName} head-to-head</a
 						>. For all 13 tools side by side, see the
 						<a href="/comparisons/best-automated-network-diagram-tools"
-							>full comparison of automated network diagram tools</a
+							>full network documentation tools comparison</a
 						>.
 					</p>
 				</div>

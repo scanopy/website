@@ -72,7 +72,7 @@ What to look for:
 - **Intuitive visualization**: Not just a device list. An interactive map showing how things connect, that anyone can quickly get up to speed on.
 - **Shareable output**: The whole team should benefit without everyone needing a login or a license.
 
-If you want to see how the options stack up on those criteria, we put together a [comparison of automated network diagram tools](/comparisons/best-automated-network-diagram-tools) covering discovery method, live updates, and list pricing.
+If you want to see how the options stack up on those criteria, we put together a [network documentation tools comparison](/comparisons/best-automated-network-diagram-tools) covering discovery method, live updates, and list pricing.
 
 We built [Scanopy](/) because we had this exact problem. Deploy a lightweight daemon on your network, point it at your subnets, and it discovers devices, maps connections via SNMP, and generates a topology map that updates itself on every scan. It detects [over 200 services](/services) automatically. New device shows up? It's on the next map.
 

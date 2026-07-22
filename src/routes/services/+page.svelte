@@ -108,7 +108,7 @@
 				field compares in our
 				<a
 					href="/comparisons/best-automated-network-diagram-tools"
-					class="text-blue-400 hover:text-blue-300">comparison of automated network diagram tools</a
+					class="text-blue-400 hover:text-blue-300">network documentation tools comparison</a
 				>. Want to <a href="/pricing" class="text-blue-400 hover:text-blue-300">compare plans</a>?
 				You can <a href="/community" class="text-blue-400 hover:text-blue-300">self-host free</a> or
 				get a

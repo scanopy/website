@@ -222,5 +222,10 @@
 /topology-hero-light.webp /og/topology-hero-light.webp 301
 /hero-topology-dark.webp /og/hero-topology-dark.webp 301
 
+# Guide consolidation (Jul 2026): network-documentation-software merged into the
+# network documentation tools comparison, which now owns that category.
+/guides/network-documentation-software /comparisons/best-automated-network-diagram-tools 301
+/guides/network-documentation-software/ /comparisons/best-automated-network-diagram-tools 301
+
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404

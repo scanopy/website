@@ -94,8 +94,8 @@
 		},
 		about: {
 			'@type': 'Thing',
-			name: 'Automated network diagram tools',
-			description: 'Software that discovers network topology and generates diagrams automatically'
+			name: 'Network documentation tools',
+			description: 'Software that discovers a network and keeps its documentation and topology current automatically'
 		},
 		image: `https://scanopy.net${data.post.image}`
 	};
