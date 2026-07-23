@@ -91,11 +91,11 @@
 <svelte:head>
 	<title>{title}</title>
 	<meta name="description" content={description} />
-	<link rel="canonical" href="https://scanopy.net/compliance" />
+	<link rel="canonical" href="https://scanopy.net/solutions/compliance" />
 
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
-	<meta property="og:url" content="https://scanopy.net/compliance" />
+	<meta property="og:url" content="https://scanopy.net/solutions/compliance" />
 	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={title} />
@@ -107,7 +107,7 @@
 		'@type': 'WebPage',
 		name: title,
 		description,
-		url: 'https://scanopy.net/compliance'
+		url: 'https://scanopy.net/solutions/compliance'
 	})}</script>`}
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
@@ -117,8 +117,14 @@
 			{
 				'@type': 'ListItem',
 				position: 2,
+				name: 'Solutions',
+				item: 'https://scanopy.net/solutions'
+			},
+			{
+				'@type': 'ListItem',
+				position: 3,
 				name: 'Compliance',
-				item: 'https://scanopy.net/compliance'
+				item: 'https://scanopy.net/solutions/compliance'
 			}
 		]
 	})}</script>`}

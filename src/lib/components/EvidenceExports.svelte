@@ -7,7 +7,7 @@
 	// are always described together; snapshots is the distinct over-time record.
 	//
 	// One data source, two layouts: `prose` (default) for the guides' evidence sections, `cards` for
-	// the /compliance landing page.
+	// the /solutions/compliance landing page.
 
 	let { layout = 'prose' }: { layout?: 'prose' | 'cards' } = $props();
 

@@ -227,5 +227,9 @@
 /guides/network-documentation-software /comparisons/best-automated-network-diagram-tools 301
 /guides/network-documentation-software/ /comparisons/best-automated-network-diagram-tools 301
 
+# Compliance moved under the solutions hub (Jul 2026).
+/compliance /solutions/compliance 301
+/compliance/ /solutions/compliance 301
+
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404
