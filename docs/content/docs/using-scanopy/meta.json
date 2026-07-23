@@ -1,5 +1,5 @@
 {
   "title": "Using Scanopy",
   "defaultOpen": true,
-  "pages": ["discovery", "credentials", "topology", "organization", "network-data", "dependencies"]
+  "pages": ["discovery", "credentials", "topology", "organization", "network-data", "staleness", "dependencies"]
 }

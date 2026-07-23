@@ -17,6 +17,17 @@ This is the default perspective and the most general-purpose view of your networ
 
 The L3 view is built from your discovered subnets and the IP addresses found on each host's interfaces. No manual setup is required — it appears as soon as discovery runs. [Dependencies](/using-scanopy/dependencies) configured with port-level detail surface as overlay connections on top of the structural layout.
 
+## Containers
+
+Container hosts (Docker, Podman) attach their containers to one or more bridge networks, and each bridge network is a subnet on this view. A container that joins several bridges appears in **each** of those subnets, so you can see everywhere it's attached rather than in just one place.
+
+Two overlays make container structure legible:
+
+- **Container Runtime** connects each bridge subnet back to its host, showing which host runs the containers on that bridge.
+- **Same Container** links the addresses of a single container that spans multiple bridge subnets, so a multi-attached container reads as one thing rather than as unrelated cards in separate subnet boxes. It's hidden by default — toggle it on when you need it.
+
+The **Container Bridges** grouping rule collapses a host's bridge subnets into a single group when they'd otherwise clutter the view. See [Customizing Views](/using-scanopy/topology/customizing-views/) for grouping rules and edge overlays.
+
 ## When to use it
 
 - General-purpose situational awareness of the network

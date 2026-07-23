@@ -181,6 +181,8 @@ Scanopy primarily identifies duplicate hosts by comparing network interfaces. Tw
 
 MAC addresses are available when the daemon is directly connected to the subnet being scanned (via ARP) or from Docker container network configuration. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3) for details on when MAC addresses are collected.
 
+**Floating virtual IPs (CARP/VRRP).** A high-availability virtual IP has no hardware of its own — its only identity is the address it floats on, carried by a shared virtual-router MAC. Scanopy matches such an address on IP + subnet when it has no physical identity to match on, so a floating VIP is recognized as the same entity across scans instead of being recreated each time. The shared virtual MAC is never used to match, so the HA peers that host the VIP stay distinct rather than merging into one host.
+
 ### Docker Host Matching
 
 Docker container discovery is local-only — it discovers containers on the daemon's own host (or on the host targeted by a Docker Proxy credential), not arbitrary remote machines. All discovered services are assigned to that host.

@@ -5,25 +5,30 @@ description: How to run multiple Scanopy daemon instances on a single machine, e
 
 This guide walks through running multiple daemon instances on a single host, each scanning different interfaces or network segments. For help deciding whether this is the right approach for your network, see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
-## How config namespacing works
+## How multiple daemons coexist
 
-Every daemon instance has a name. The default is `scanopy-daemon`. When you pass `--name`, the daemon stores its configuration in a subdirectory named after that value:
+Each `scanopy-daemon install` on a host takes its own **slot** — an independent install with its own config file, service, and log file. The first install takes the default slot (`scanopy-daemon`); each additional install takes the next number (`scanopy-daemon-2`, `scanopy-daemon-3`, …). The installer allocates the slot for you — you don't name it.
 
-| Name | Config path (Linux) |
-| --- | --- |
-| _(default)_ | `~/.config/scanopy/daemon/config.json` |
-| `--name eth0` | `~/.config/scanopy/daemon/eth0/config.json` |
-| `--name iot` | `~/.config/scanopy/daemon/iot/config.json` |
+| Slot | Service | Config (Linux) |
+| --- | --- | --- |
+| `scanopy-daemon` | `scanopy-daemon` | `/etc/scanopy/daemon/scanopy-daemon/config.json` |
+| `scanopy-daemon-2` | `scanopy-daemon-2` | `/etc/scanopy/daemon/scanopy-daemon-2/config.json` |
+| `scanopy-daemon-3` | `scanopy-daemon-3` | `/etc/scanopy/daemon/scanopy-daemon-3/config.json` |
 
-Each named daemon gets its own config file with its own daemon ID, API key, server URL, and runtime state. They are fully independent — starting, stopping, or reconfiguring one does not affect the others.
+Each slot's config holds its own daemon ID, API key, server URL, and runtime state. Slots are fully independent — starting, stopping, or reconfiguring one does not affect the others. A slot is not the daemon's *name*: the name is assigned by the server and shown in the app, and can be changed there without moving the slot.
 
-**Platform paths:**
+<Callout type="info">
+A daemon's display name comes from the server, so you never pass it at install time. Run `scanopy-daemon list` on the host to see each installed slot, its service, and its config path.
+</Callout>
+
+**System config locations by platform** (service installs):
 
 | Platform | Base directory |
 | --- | --- |
-| Linux | `~/.config/scanopy/daemon/` |
-| macOS | `~/Library/Application Support/com.scanopy.daemon/` |
-| Windows | `%APPDATA%\scanopy\daemon\` |
+| Linux | `/etc/scanopy/daemon/` |
+| macOS | `/Library/Application Support/Scanopy/daemon/` |
+| Windows | `%ProgramData%\Scanopy\daemon\` |
+| FreeBSD | `/usr/local/etc/scanopy/daemon/` |
 
 ## Restricting daemons to specific interfaces
 
@@ -31,10 +36,10 @@ Use `--interfaces` to limit which network interfaces a daemon scans. Without it,
 
 ```bash
 # Scan only eth0
-sudo scanopy-daemon install --name eth0 --interfaces eth0
+sudo scanopy-daemon install --interfaces eth0
 
 # Scan two interfaces
-sudo scanopy-daemon install --name production --interfaces eth0,eth1
+sudo scanopy-daemon install --interfaces eth0,eth1
 ```
 
 The same setting works as an environment variable or in the config file:
@@ -49,20 +54,16 @@ SCANOPY_INTERFACES=eth0,eth1
 
 When `--interfaces` is set, the daemon only reports and scans subnets attached to those interfaces. This prevents overlap between daemon instances sharing the same host.
 
-## Configuring ports and bind addresses
+## Ports and bind addresses
 
-Every daemon instance runs an HTTP server that binds to `0.0.0.0:60073` by default. Because `0.0.0.0` binds all interfaces, the first daemon claims port 60073 on every address — subsequent instances on the same host will fail with a port conflict.
+Every daemon instance runs an HTTP server, bound to `0.0.0.0:60073` by default. Because `0.0.0.0` binds all interfaces, the first daemon claims port 60073 on every address — a second daemon can't reuse it.
 
-To fix this, give each instance a unique `--bind-address` (the IP of its specific interface) and a unique `--daemon-port`:
+The installer handles this for you: when you install another daemon and don't ask for a specific port, it picks the next free one (60074, 60075, …) so the new instance doesn't collide with one already on the host. You only need to set `--daemon-port` when you want a *specific* port — most importantly for a **ServerPoll** daemon, where the port is the one the server dials, so the install command already carries it and the installer leaves it alone.
+
+To pin a daemon's listener to one interface, give it that interface's IP with `--bind-address`:
 
 ```bash
-# Daemon on eth0 (192.168.1.10) — uses default port
-sudo scanopy-daemon install --name eth0 --interfaces eth0 \
-  --bind-address 192.168.1.10 --daemon-port 60073
-
-# Daemon on eth1 (10.0.0.10) — different port
-sudo scanopy-daemon install --name eth1 --interfaces eth1 \
-  --bind-address 10.0.0.10 --daemon-port 60074
+sudo scanopy-daemon install --interfaces eth0 --bind-address 192.168.1.10
 ```
 
 The same settings work as environment variables or in the config file:
@@ -76,28 +77,30 @@ SCANOPY_DAEMON_PORT=60073
 { "bind_address": "192.168.1.10", "daemon_port": 60073 }
 ```
 
-<Callout type="warn">
-  Both `--bind-address` and `--daemon-port` are required when running multiple daemons on one host. Even if each daemon uses a different bind address, using the same port on `0.0.0.0` will cause a conflict.
-</Callout>
-
 ## Setting up multiple daemons
 
 Create a separate daemon entry in **Discover > Scan > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different networks. During setup, use the **Advanced** tab to set that instance's interface restrictions, bind address, and port under Network Discovery — they're baked into the install artifact the wizard gives you, so you don't have to add them by hand.
 
-Run each instance's artifact on the host, **appending `--name <instance>`** to the `scanopy-daemon install` command:
+Run each daemon's own install artifact on the host. Each run takes a fresh slot, so you can install several without them overwriting each other — no per-instance flags to remember:
 
-<Callout type="warn">
-The install command the app generates doesn't include `--name` — a daemon normally learns its name from the server. On a multi-instance host you have to add it yourself. Without it, every instance installs over the same service and the same config file, and only the last one survives.
+```bash
+# First daemon — takes the scanopy-daemon slot
+sudo scanopy-daemon install --interfaces eth0
+
+# Second daemon — takes the scanopy-daemon-2 slot automatically
+sudo scanopy-daemon install --interfaces eth1
+```
+
+Each `install` registers a per-slot background service that starts immediately and on every reboot, and writes that slot's config. Manage each by its service — for example `sudo systemctl restart scanopy-daemon-2` (Linux) or `sc.exe stop scanopy-daemon-2` (Windows), where the service id matches the slot. On macOS the launchd label is `com.scanopy.daemon.<slot>` (for example `sudo launchctl kickstart -k system/com.scanopy.daemon.scanopy-daemon-2`). Run `scanopy-daemon list` to see each slot's exact service id. Interface, bind address, and port are persisted in each slot's config, so restarting or re-running `install` doesn't need them again.
+
+<Callout type="info">
+To re-run against an *existing* slot — reconfigure it, or re-key it after rebuilding the host — pass `--instance <selector>`, where the selector is the daemon's name, its slot, its service id, or its daemon id (all shown by `scanopy-daemon list`). Without a selector on a multi-daemon host, a non-interactive install allocates a new slot rather than guessing which one you meant, and an interactive one asks. The reconfigure command the app generates already includes the right `--instance`.
 </Callout>
-
-Give each instance the name you used for its daemon entry in the app. `install` then registers a per-instance background service — named `scanopy-daemon-<name>` — and writes a namespaced config, so each starts immediately and on every reboot.
-
-Manage each instance by its service name — for example `sudo systemctl restart scanopy-daemon-eth0` (Linux), `sudo launchctl kickstart -k system/com.scanopy.daemon.eth0` (macOS), or `sc.exe stop scanopy-daemon-iot` (Windows). The bind address and port are persisted in each daemon's config file, so re-running `install` or restarting the service doesn't need them again.
 
 ### systemd template (Linux, manual)
 
 <Callout type="info">
-Prefer `scanopy-daemon install --name <name>` above — it registers a per-instance service for you. The systemd template below is the manual alternative, kept for older daemons or hand-managed setups.
+Prefer `scanopy-daemon install` above — it registers a per-slot service for you. The systemd template below is the manual alternative, kept for older daemons or hand-managed setups.
 </Callout>
 
 Scanopy provides a [systemd template unit](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon%40.service) for running multiple instances. Download and install it:
@@ -108,10 +111,10 @@ sudo curl -o /etc/systemd/system/scanopy-daemon@.service \
 sudo systemctl daemon-reload
 ```
 
-The template uses the instance identifier as both `--name` and `--interfaces`. Each instance needs its own bind address and port — set these via environment overrides:
+The template uses the instance identifier as `--interfaces`. Each instance needs its own bind address and port — set these via environment overrides:
 
 ```ini
-ExecStart=/usr/local/bin/scanopy-daemon --name=%i --interfaces=%i
+ExecStart=/usr/local/bin/scanopy-daemon --interfaces=%i
 SyslogIdentifier=scanopy-daemon-%i
 ```
 
@@ -152,41 +155,34 @@ journalctl -u scanopy-daemon@eth1
 ```
 
 <Callout type="info">
-  The template ties the instance name to a single interface. If a daemon needs multiple interfaces, create a custom service file that passes `--interfaces eth0,eth1` and a descriptive `--name`.
+  The template ties the instance name to a single interface. If a daemon needs multiple interfaces, create a custom service file that passes `--interfaces eth0,eth1`.
 </Callout>
 
-## Listing existing daemon configs
+## Listing installed daemons
 
-To see which named daemons are configured on a host, list the config directory:
+To see which daemons are installed on a host — their slots, services, config paths, and IDs — run:
 
 ```bash
-# Linux
-ls ~/.config/scanopy/daemon/
-
-# macOS
-ls ~/Library/Application\ Support/com.scanopy.daemon/
-
-# Windows
-dir %APPDATA%\scanopy\daemon\
+scanopy-daemon list
 ```
 
-Each subdirectory corresponds to a named daemon instance. A `config.json` at the top level is the default (unnamed) daemon.
+Each line is one installed slot. Use any of the values it prints as the `--instance` selector for `install` or the `--name` selector for `uninstall`.
 
 ## Upgrading and restarting
 
-All daemon instances share the same binary. Download the latest binary once (the app's **Update** button provides the command), then restart each instance's service:
+All daemon slots share the same binary. Download the latest binary once (the app's **Update** button provides the command), then restart each slot's service:
 
 ```bash
-# Instances installed with `scanopy-daemon install` (services named scanopy-daemon-<name>)
-sudo systemctl restart scanopy-daemon-eth0
-sudo systemctl restart scanopy-daemon-iot
+# Slots installed with `scanopy-daemon install`
+sudo systemctl restart scanopy-daemon
+sudo systemctl restart scanopy-daemon-2
 
 # Legacy systemd-template instances (scanopy-daemon@<name>): stop, replace the binary, start
 sudo systemctl stop scanopy-daemon@eth0 scanopy-daemon@eth1
 sudo systemctl start scanopy-daemon@eth0 scanopy-daemon@eth1
 ```
 
-Configuration is preserved across upgrades — each daemon reads its settings from its own config file on startup.
+Configuration is preserved across upgrades — each slot reads its settings from its own config file on startup.
 
 ## Docker
 

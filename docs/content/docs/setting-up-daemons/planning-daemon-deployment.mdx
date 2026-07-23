@@ -100,22 +100,20 @@ flowchart TB
     d2 -- "L2" --> vlan2["VLAN 2 - IoT<br/>192.168.2.0/24"]
 `} />
 
-Each instance gets a name and is restricted to specific interfaces so they don't overlap. Since every daemon binds an HTTP server, each instance also needs a unique `--bind-address` and `--daemon-port` to avoid port conflicts:
+Restrict each instance to specific interfaces so they don't overlap. Each `install` takes its own slot automatically, so you don't pass any per-instance identity — and since every daemon binds an HTTP server, the installer picks a non-conflicting port for each after the first:
 
 ```bash
-sudo scanopy-daemon install --name production --interfaces eth0 \
-  --bind-address 192.168.1.10 --daemon-port 60073
-sudo scanopy-daemon install --name iot --interfaces eth1 \
-  --bind-address 10.0.0.10 --daemon-port 60074
+sudo scanopy-daemon install --interfaces eth0
+sudo scanopy-daemon install --interfaces eth1
 ```
 
 <Callout type="info">
-  Both `--bind-address` and `--daemon-port` are required when running multiple daemons on one host. Without them, the second instance will fail with a port binding error. See [Configuring ports and bind addresses](/guides/networking/multiple-daemons/#configuring-ports-and-bind-addresses) for details.
+  Set `--bind-address` only to pin a daemon's listener to one interface, and `--daemon-port` only when you need a specific port (for a ServerPoll daemon it's already in the install command). See [Ports and bind addresses](/guides/networking/multiple-daemons/#ports-and-bind-addresses) for details.
 </Callout>
 
 Create a separate daemon entry in **Discover > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different Scanopy networks.
 
-This gives you Layer 2 discovery on each segment without needing a separate physical host per VLAN. See [Scanning Isolated Networks from One Host](/guides/networking/multiple-daemons/) for the full setup guide, including config namespacing, systemd templates, and Docker configuration.
+This gives you Layer 2 discovery on each segment without needing a separate physical host per VLAN. See [Scanning Isolated Networks from One Host](/guides/networking/multiple-daemons/) for the full setup guide, including how slots work, systemd templates, and Docker configuration.
 
 **Best for:** Hypervisors, routers, or multi-NIC servers bridging isolated VLANs where deploying separate hosts isn't practical.
 

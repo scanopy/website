@@ -56,8 +56,10 @@ Verify the service and view its logs:
 To stop and remove the service, use `sudo scanopy-daemon uninstall` — see [Removing a Daemon](#removing-a-daemon).
 
 <Callout type="info">
-Prefer to run the daemon in the foreground (e.g. for a quick test)? Run `scanopy-daemon` directly with the same flags — it runs attached to your terminal and stops when the terminal closes. Running multiple daemons on one host? See [Running Multiple Daemons](/guides/networking/multiple-daemons/).
+Prefer to run the daemon in the foreground (e.g. for a quick test)? Run `scanopy-daemon` directly with the same flags — it runs attached to your terminal and stops when the terminal closes.
 </Callout>
+
+Running several daemons on one host? Each `install` takes its own numbered **slot** (`scanopy-daemon`, `scanopy-daemon-2`, …) automatically, so installs don't overwrite each other. Run `scanopy-daemon list` to see what's installed. See [Scanning Isolated Networks from One Host](/guides/networking/multiple-daemons/) for the full workflow.
 
 ### Manually installed or older daemons
 
@@ -164,7 +166,7 @@ Deleting or uninstalling a daemon does not delete discovered data. Hosts, servic
 sudo scanopy-daemon uninstall
 ```
 
-This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the installed binary and log files, and `--name <name>` to target a specific instance. On Windows, run it from an elevated PowerShell.
+This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the installed binary and log files. On a host running several daemons, target one with `--name <selector>` — the daemon's name, its slot, or its service id, all shown by `scanopy-daemon list` — or remove every one with `--all`. On Windows, run it from an elevated PowerShell.
 
 `uninstall` reports what it did for every item it touched — removed, left in place, or not found — so you can see exactly what remains. It's idempotent: uninstalling a daemon that was never installed succeeds and tells you there was nothing to remove.
 
