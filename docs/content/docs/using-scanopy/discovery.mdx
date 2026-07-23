@@ -138,6 +138,14 @@ Factors affecting speed:
 
 If scan time is longer than expected, see [discovery takes hours](/setting-up-daemons/troubleshooting-scans/scan-performance/#discovery-takes-hours).
 
+### Time limit
+
+A single discovery run has a hard ceiling, set by **Max Discovery Duration** in the discovery's **Detection** settings. The default is 21,600 seconds (6 hours).
+
+When a run hits the ceiling it completes rather than failing. Hosts still queued are left unscanned and picked up by the next run, and the finished run carries a warning naming how many hosts were skipped and roughly how much time they needed. Data already collected is kept.
+
+Raise the limit for large networks that legitimately need a longer window. If a run is hitting the ceiling unexpectedly, the scan is slower than it should be — see [discovery finished with hosts unscanned](/setting-up-daemons/troubleshooting-scans/scan-performance/#discovery-finished-with-hosts-unscanned).
+
 ## Host Naming
 
 When a host is discovered, Scanopy determines its name using this priority:
@@ -172,6 +180,8 @@ Scanopy primarily identifies duplicate hosts by comparing network interfaces. Tw
 | **Same MAC Address** | Useful when IPs change (DHCP) but MAC stays constant. Both interfaces must have a MAC address set. |
 
 MAC addresses are available when the daemon is directly connected to the subnet being scanned (via ARP) or from Docker container network configuration. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3) for details on when MAC addresses are collected.
+
+**Floating virtual IPs (CARP/VRRP).** A high-availability virtual IP has no hardware of its own — its only identity is the address it floats on, carried by a shared virtual-router MAC. Scanopy matches such an address on IP + subnet when it has no physical identity to match on, so a floating VIP is recognized as the same entity across scans instead of being recreated each time. The shared virtual MAC is never used to match, so the HA peers that host the VIP stay distinct rather than merging into one host.
 
 ### Docker Host Matching
 

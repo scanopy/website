@@ -80,12 +80,12 @@ export const vendors: Record<string, Vendor> = {
 		discoveryNotes:
 			'Scan-on-demand (not continuous). Supports scheduled scans. Also discovers VMware and Hyper-V environments.',
 		diagrams:
-			'Multiple diagram types from a single scan (Layer 2, Layer 3, physical). Exports to Visio with auto-populated SmartShapes. Auto-layout with manual override.',
+			'Multiple diagram types from a single scan (Layer 2, Layer 3, physical). Exports to Visio with auto-populated SmartShapes, plus PNG, PDF, and the SolarWinds Orion Network Atlas format. No SVG, no Mermaid, no embeddable or iframe output, and no API access to the map data. NTM is a standalone product that cannot be installed on the same server as the SolarWinds Platform, and its Network Atlas export is one-way.',
 		pricingNotes: 'SolarWinds moved to subscription-only licensing across its product line in 2025. Renewal prices have reportedly increased significantly post-acquisition by Turn/River Capital.',
 		whereItFits:
 			'Enterprise teams that need compliance-ready documentation with Visio exports. The Visio export alone makes it the default choice in organizations that standardize on Microsoft tools.',
 		tradeOff:
-			'Requires Windows (.NET 3.5 and 4.8). No web-based access, no embeddable maps, no API. NTM has received only maintenance updates since roughly 2016, with no new discovery or mapping features. SolarWinds staff confirmed in 2017 that there is no product roadmap. The product still works, but active development has shifted to SolarWinds Observability. SolarWinds disclosed a supply-chain compromise in 2020, though NTM is a separate, much simpler product.',
+			'Requires Windows (.NET 3.5 and 4.8). No web-based access, no embeddable maps, no API. NTM has received only maintenance updates since roughly 2016, with no new discovery or mapping features. SolarWinds staff confirmed in 2017 that there is no product roadmap, and [NTM 2.2.x reaches full end-of-life in September 2026](https://documentation.solarwinds.com/en/success_center/ntm/content/release_notes/release_history.htm). Active development has shifted to SolarWinds Observability, whose NPM module carries its own topology views. NTM holds a [4.1 out of 5 on G2](https://www.g2.com/products/solarwinds-network-topology-mapper/reviews), where the most common request is exactly this integration; the product still works, but reviewers cite the lack of new features as the reason they look elsewhere. SolarWinds disclosed a supply-chain compromise in 2020, though NTM is a separate, much simpler product.',
 		tradeOffLabel: 'Trade-offs',
 		deployment: ['Desktop'],
 		deploymentNotes:
@@ -923,6 +923,14 @@ export const vendorSources: VendorSource[] = [
 ];
 
 export const vendorFAQs: VendorFAQ[] = [
+	{
+		question: 'What are network documentation tools?',
+		answer: 'Network documentation tools keep a current, accurate record of your network: the devices on it, how they connect, and the services running on them. The automated kind discovers this directly from the network over protocols like SNMP, LLDP, and ARP and updates it on a schedule, instead of relying on someone to maintain a spreadsheet or diagram by hand. The output is usually a topology map plus a searchable inventory.'
+	},
+	{
+		question: 'Do network documentation tools replace IT asset management or monitoring?',
+		answer: 'No. Documentation tools record what exists and how it connects. Monitoring watches device health and alerts on problems, and IT asset management tracks ownership, licensing, and procurement. The three overlap on the device inventory but answer different questions, and most teams run them alongside each other rather than one instead of another.'
+	},
 	{
 		question: 'What is the difference between a network diagram tool and a network monitoring tool?',
 		answer: 'A network diagram tool discovers devices and connections, then produces a visual topology map. A monitoring tool tracks device health, bandwidth, and alerts over time. Some monitoring platforms (Auvik, PRTG, Domotz, ManageEngine) include basic mapping as a feature. Dedicated diagram tools (Scanopy, SolarWinds NTM, NetBrain) focus entirely on producing accurate, shareable maps without bundling monitoring.'

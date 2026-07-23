@@ -32,6 +32,10 @@ Networks are the primary organizational unit. Each network represents a distinct
 - One network per physical location
 - Distinct networks for different security zones
 
+### Network Settings
+
+Open a network from **Assets > Networks** to edit its settings. Alongside its name and type, each network has a **Consider entities stale after** window — how long discovery can go without seeing a host, service, or subnet before it's flagged as [stale](/using-scanopy/staleness/). Enter it as days and hours, set it to comfortably exceed the network's scan interval, and leave it blank to use the default (28 days).
+
 ### Network Access
 
 Users can be restricted to specific networks within an organization. When inviting a user, select which networks they may access — all data queries are filtered to those networks. This allows granting a contractor or external partner visibility into only the networks relevant to them while keeping other environments hidden.
@@ -44,7 +48,11 @@ Manage credentials via **Assets > Credentials**. See [Credentials](/using-scanop
 
 ## API Keys
 
-Each daemon requires its own API key. Create keys via **Platform > API Keys** or during daemon setup. Use one key per daemon — don't share keys between daemons.
+Each daemon gets its own API key, minted and bound to it automatically when you create the daemon. You don't create daemon keys by hand.
+
+**Platform > API Keys** lists them. Any key marked legacy predates 1:1 binding and is shared across a network's daemons; see [Daemon Identity](/reference/daemon-identity/) for how those behave and how to give a daemon a key of its own.
+
+User API keys, for programmatic access to the API, are created here too — see the [API reference](/api/).
 
 ## Tags
 

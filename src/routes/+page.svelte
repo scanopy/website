@@ -390,13 +390,14 @@
 				start at {startingPrice}/month. Read
 				<a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300"
 					>how automated network documentation works</a
-				>, compare the
+				>, compare
 				<a
 					href="/comparisons/best-automated-network-diagram-tools"
-					class="text-blue-400 hover:text-blue-300">best automated network diagram software</a
-				>, browse the guide to
-				<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
-					>network documentation software</a
+					class="text-blue-400 hover:text-blue-300">network documentation tools</a
+				>, browse the
+				<a
+					href="/guides/open-source-network-documentation"
+					class="text-blue-400 hover:text-blue-300">open-source options</a
 				>, or review our
 				<a href="/security" class="text-blue-400 hover:text-blue-300">security practices</a>.
 			</p>

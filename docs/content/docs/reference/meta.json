@@ -2,6 +2,7 @@
 	"title": "Reference",
 	"defaultOpen": true,
 	"pages": [
+		"daemon-identity",
 		"daemon-configuration",
 		"daemon-status",
 		"server-configuration",

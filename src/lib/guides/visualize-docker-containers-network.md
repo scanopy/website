@@ -107,3 +107,5 @@ Either way, detection picks up containers wherever they run, so a mixed homelab 
 Scanopy is not a container manager. It will not start, stop, or deploy anything, and it is not trying to replace Portainer, Komodo, or your orchestrator. Those tools manage containers. Scanopy shows you where your containers sit on the network and what they connect to. They work well side by side: manage in your container tool, see the topology in Scanopy.
 
 If you are mapping the rest of your gear too, the same scan that finds your containers also walks your switches and routers over SNMP. Here is the deeper version of that: [exploring your network topology with SNMP](/guides/snmp-network-topology-mapping). And Scanopy fingerprints [the services running on each host](/services), so a host is not just an IP, it is "the box running Postgres, Nginx, and twelve containers."
+
+Running Podman instead of, or alongside, Docker? Discovery works the same way, but pods change how ports and networks are reported. The guide to [visualizing Podman containers and pods](/guides/visualize-podman-containers-network) covers what is different.

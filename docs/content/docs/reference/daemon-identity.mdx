@@ -1,0 +1,84 @@
+---
+title: Daemon Identity
+description: How daemons are provisioned, how API keys bind to them, and how legacy shared keys behave.
+---
+
+Every daemon has a server-side record and an API key bound to it. This page describes how that
+binding is established and enforced. For the settings a daemon reads at runtime, see
+[Daemon Configuration](/reference/daemon-configuration/). For creating and managing daemons, see
+[Managing Daemons](/setting-up-daemons/managing-daemons/).
+
+## Provisioning
+
+Creating a daemon in **Discover > Scan > Daemons** provisions it:
+
+1. The server creates the daemon record.
+2. The server mints an API key and binds it to that record.
+3. The wizard emits an install artifact carrying the key.
+
+The key's plaintext is available only at the moment it is minted. It appears in the install
+artifact the wizard shows you and is not retrievable afterwards.
+
+You do not create daemon API keys yourself. The **Platform > API Keys** daemon tab lists keys but
+no longer creates them.
+
+## Key binding
+
+A provisioned key belongs to exactly one daemon, and a daemon has exactly one key.
+
+| Property              | Behavior                                                                                                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Binding**           | One key, one daemon. Enforced by the server, not by convention.                                                                                                                 |
+| **Re-provisioning**   | Minting a new key for a daemon deletes the key it replaces. The old key stops authenticating immediately.                                                                       |
+| **Plaintext storage** | ServerPoll only. The server holds the plaintext because it presents the key when it dials the daemon. DaemonPoll daemons carry their own key and the server stores only a hash. |
+
+## How the server identifies a daemon
+
+| Key type                | Identity comes from | `X-Daemon-ID` header                                                                              |
+| ----------------------- | ------------------- | ------------------------------------------------------------------------------------------------- |
+| Bound (1:1)             | The key itself      | Optional. If present and it doesn't match the key's daemon, the request is rejected as key reuse. |
+| Legacy (network-shared) | The header          | Required. Without it the daemon is unidentifiable and the request is rejected.                    |
+
+## Version floor
+
+Server-provisioned identity requires **daemon version 0.17.5 or later**. A 0.17.5+ daemon starts
+with no identity of its own and learns which daemon it is from the key during its first handshake
+with the server.
+
+Daemons below 0.17.5 self-register against a network-shared key and identify themselves with the
+`X-Daemon-ID` header. Both models are accepted concurrently — which one applies is determined by
+the shape of the key presented, not by the daemon's version.
+
+## Legacy network-shared keys
+
+Keys minted before 1:1 provisioning are not bound to any daemon. A single such key is shared by
+every daemon on its network.
+
+- They continue to authenticate. Nothing expires them.
+- They cannot be created anymore.
+- They are marked as legacy in **Platform > API Keys**.
+- A daemon using one can be given a key of its own without losing its host, discovery jobs, or
+  history — see
+  [Binding a key to a legacy daemon](/setting-up-daemons/managing-daemons/#binding-a-key-to-a-legacy-daemon).
+
+## Fixed and editable properties
+
+Provisioning fixes the properties that define what a daemon _is_. The rest can be edited on the
+daemon record afterwards.
+
+| Property             |                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| Network              | Fixed at provision time                                                                  |
+| Polling mode         | Fixed at provision time                                                                  |
+| Name                 | Fixed at provision time                                                                  |
+| Host                 | Created at provision time                                                                |
+| Key binding          | Maintained by provisioning                                                               |
+| Version              | Self-reported by the daemon on each handshake                                            |
+| Liveness and standby | Server-managed                                                                           |
+| URL                  | Editable, ServerPoll only — a DaemonPoll daemon is never dialed, so it has no URL to set |
+| Maintainer, tags     | Editable                                                                                 |
+
+<Callout type="info">
+A daemon's identity is tied to the machine it runs on, so there is no way to move one to a
+different host. See [Can I migrate a daemon?](/setting-up-daemons/managing-daemons/#can-i-migrate-a-daemon).
+</Callout>

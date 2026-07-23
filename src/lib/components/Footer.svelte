@@ -172,6 +172,9 @@
 						<li>
 							<a href="/comparisons" class="text-sm text-gray-400 hover:text-white">Comparisons</a>
 						</li>
+						<li>
+							<a href="/compliance" class="text-sm text-gray-400 hover:text-white">Compliance</a>
+						</li>
 					</ul>
 				</div>
 

@@ -71,7 +71,7 @@ Test-NetConnection -ComputerName your-server-hostname -Port 443
 **Solutions**:
 
 1. **Verify server URL**: Ensure `SCANOPY_SERVER_URL` is correct and reachable from the daemon host
-2. **Check API key**: Verify the API key is valid and not expired in **Platform > API Keys**
+2. **Check the API key**: Confirm the daemon's `config.json` holds the key from its install artifact. A daemon rejected with `daemon_not_provisioned` was installed by hand against a record that doesn't exist — create it in the UI and use the artifact that produces. See [Daemon Identity](/reference/daemon-identity/).
 3. **Firewall rules**: Ensure outbound HTTPS (port 443) is allowed from the daemon host. On Windows, verify the daemon executable is allowed through **Windows Defender Firewall > Allow an app through firewall**.
 
 ## Permission Denied Errors (Linux)
@@ -110,7 +110,8 @@ podman pull --platform linux/amd64 ghcr.io/scanopy/scanopy/daemon:v0.15.2
 For ARM hosts, use `--platform linux/arm64` instead.
 
 <Callout type="info">
-This only affects the daemon image. The server image uses explicit manifest creation and is not affected.
+	This only affects the daemon image. The server image uses explicit manifest creation and is not
+	affected.
 </Callout>
 
 ## Getting Help

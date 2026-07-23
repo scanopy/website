@@ -42,11 +42,16 @@ A successful SNMP run against a host populates the following entities in Scanopy
 
 | Parameter | Default | Description |
 | --------- | ------- | ----------- |
-| **Request timeout** | 5s | Timeout for a single SNMP GET or GETNEXT request |
+| **Probe timeout** | 2s | Liveness probe per credential, used to pick a working credential before collection |
+| **Request timeout** | 5s | Timeout for a single SNMP request |
 | **Session timeout** | 5s | Timeout for establishing the UDP session |
-| **Walk timeout** | 30s | Maximum time for a full SNMP walk of a MIB table |
+| **Query timeout** | 30s | Ceiling on any single query, including a full walk of a MIB table |
 | **Max entries** | 10,000 | Maximum rows returned from a single table walk |
 | **Integration timeout** | 5m | Wall-clock budget for a full SNMP integration run against a single host (probe + all queries) |
+
+Candidate credentials are probed concurrently, so a host with several assigned credentials doesn't pay for each one in sequence.
+
+Every query is individually bounded, so a device that stops responding mid-collection costs 30 seconds rather than the whole 5-minute integration budget.
 
 ## Credential resolution order
 
@@ -57,3 +62,5 @@ When querying a host, the daemon resolves the SNMP credential (community string 
 3. **Fallback** — community string `public` (v2c)
 
 If all credentials fail on both UDP 161 and 1161, the host is discovered without SNMP-sourced data. Individual query failures within a successful session are logged and skipped — they do not abort the rest of the collection.
+
+Partial results are kept. Interfaces are saved as soon as the interface table is read, before the neighbor, forwarding-table, and VLAN queries run, so a device that hangs partway through still yields its interface list rather than nothing.

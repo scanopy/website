@@ -102,6 +102,11 @@ export function buildAltIntro(vendor: Vendor): string {
 	const name = vendorDisplayName(vendor);
 	const parts: string[] = [];
 
+	// Lead with the singular "alternative" framing so the page covers both the singular
+	// query ("librenms alternative") and the plural one ("librenms alternatives"); the
+	// title, H1, and H2 already carry the plural.
+	parts.push(`Looking for a ${name} alternative?`);
+
 	if (vendor.bestFor) {
 		parts.push(`${name} is built for ${lowerFirst(trimSentence(vendor.bestFor))}.`);
 	}

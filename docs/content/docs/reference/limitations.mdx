@@ -62,7 +62,7 @@ See [Service Detection](/reference/service-detection/) for how detection works a
 
 ## SNMP
 
-- **SNMPv3 is AuthPriv only** — authentication *and* privacy are required. AuthNoPriv and NoAuthNoPriv modes are not supported, and MD5 authentication is not available (use SHA-1 or SHA-256). SNMPv1 and SNMPv2c (community string) are also supported.
+- **SNMPv3 is AuthPriv only** — authentication _and_ privacy are required. AuthNoPriv and NoAuthNoPriv modes are not supported, and MD5 authentication is not available (use SHA-1 or SHA-256). SNMPv1 and SNMPv2c (community string) are also supported.
 - **No trap/inform handling** — SNMP data is collected during discovery scans only (poll-based). Scanopy does not listen for SNMP traps or informs.
 - **No custom MIB loading** — only a fixed set of standard MIBs are queried. See [SNMP reference](/reference/snmp/#queried-mibs) for the full list.
 
@@ -76,7 +76,7 @@ The Application perspective requires manual setup — you need to define applica
 
 ### Docker on macOS/Windows
 
-Docker Desktop on macOS and Windows doesn't support host networking — the container can't see your actual network. Install the daemon as a native service instead (`scanopy-daemon install`, or the signed MSI on Windows).
+Docker Desktop on macOS and Windows doesn't support host networking — the container can't see your actual network. Install the daemon as a native service instead (`scanopy-daemon install`).
 
 ## Requesting Features
 

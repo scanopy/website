@@ -1,4 +1,5 @@
 const statusStyles: Record<string, { bg: string; text: string }> = {
+  'Awaiting Connection': { bg: 'rgba(59, 130, 246, 0.15)', text: '#3b82f6' },
   Standby: { bg: 'rgba(168, 85, 247, 0.15)', text: '#a855f7' },
   Unreachable: { bg: 'rgba(239, 68, 68, 0.15)', text: '#ef4444' },
   Deprecated: { bg: 'rgba(249, 115, 22, 0.15)', text: '#f97316' },

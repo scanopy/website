@@ -33,6 +33,14 @@ Grouping rules change how things are organized in your topology. Use the **Group
 
 Each perspective shows different connection types. Use the edge filter controls to toggle connection types on or off. Some connections are shown by default and others are available as overlays — toggle them on when you need the extra detail.
 
+Overlays available depend on the perspective. On L3 Logical, for example, **Same Container** links the addresses of a container attached to several bridge subnets (hidden by default), and **Container Runtime** connects each bridge subnet to its host.
+
+Clicking a connection highlights what it relates: for a relationship edge — such as Same Host or Same Container — the whole set of nodes it ties together lights up, while a point-to-point edge highlights only its own segment.
+
+## Metadata Filtering
+
+Beyond tags, some perspectives offer metadata filter groups that fade everything except the elements you're interested in. The **By staleness** group (Current / Stale) narrows the view to entities discovery hasn't seen within their network's window — see [Staleness](/using-scanopy/staleness/). Other groups include service category and, on Workloads, virtualization type. A filter group only appears when the entities in view actually differ on that dimension.
+
 ## Tag-Based Filtering
 
 Filter your topology by tags to focus on what matters. Filtered elements fade to reduced opacity instead of disappearing, so the overall layout stays stable while your focus area stands out.

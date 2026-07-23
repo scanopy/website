@@ -76,7 +76,7 @@
 			{
 				'@type': 'ListItem',
 				position: 2,
-				name: `Best automated network diagram tools`,
+				name: `Network documentation tools`,
 				item: mainComparison
 			},
 			{ '@type': 'ListItem', position: 3, name: data.title, item: canonical }
@@ -177,7 +177,7 @@
 							<a href={altHref}>best {data.vendorName} alternatives</a>.{/if} For all 13 tools side by
 						side, see the
 						<a href="/comparisons/best-automated-network-diagram-tools"
-							>full comparison of automated network diagram tools</a
+							>full network documentation tools comparison</a
 						>.
 					</p>
 

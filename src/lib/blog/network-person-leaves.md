@@ -98,7 +98,7 @@ You don't need a month-long documentation initiative. Start with these:
 
 2. **List the undocumented decisions.** Not the configs (those are in the devices) but the _why_ behind the configs. Why is the network segmented this way? Why does that rule exist? Write down the reasoning, not just the settings.
 
-3. **Run an automated discovery scan.** Even a single scan gives the next person a starting point. They'll know what's on the network without having to trace cables. If you're picking a tool, our [comparison of automated network diagram tools](/comparisons/best-automated-network-diagram-tools) breaks down discovery method and pricing across the main options.
+3. **Run an automated discovery scan.** Even a single scan gives the next person a starting point. They'll know what's on the network without having to trace cables. If you're picking a tool, our [network documentation tools comparison](/comparisons/best-automated-network-diagram-tools) breaks down discovery method and pricing across the main options.
 
 4. **Export your current network state.** If your network topology lives in someone's head, get it out. A rough diagram is better than no diagram. An [auto-generated one](/blog/network-diagrams-wrong) is better than both.
 
