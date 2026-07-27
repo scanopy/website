@@ -9,9 +9,13 @@ import {
 
 /**
  * Contact/quote modal (Brevo) — ContactModal.svelte. One component, but three
- * separate page-level trigger wirings; a page-specific JS error can break one
- * page while the others keep working (the June 2026 silent failure was on
- * /commercial), so each trigger path gets a full real submission.
+ * separate trigger wirings across two pages and two modal instances:
+ * /commercial's own <ContactModal> (commercial/+page.svelte), and the one
+ * PricingSection renders for itself, reached via two different CTA branches
+ * (Enterprise "Request Information" and the contact-flow "Get a license").
+ * A page- or branch-specific JS error can break one while the others keep
+ * working (the June 2026 silent failure was on /commercial), so each trigger
+ * path gets a full real submission.
  *
  * NOTE: each test submits a real (sentinel) inquiry to production Brevo.
  */
@@ -48,13 +52,15 @@ test('/pricing Enterprise "Request Information" form submits to Brevo and shows 
 	await openFillAndSubmit(page);
 });
 
-test('home page Self-Hosted "Contact Us" form submits to Brevo and shows success state', async ({
+test('/pricing Self-Hosted "Get a license" form submits to Brevo and shows success state', async ({
 	page
 }) => {
-	// Same PricingSection as /pricing, but exercises the home page's wiring and
-	// the Self-Hosted tab path (planType CommercialSelfHosted via the widget).
-	await gotoHydrated(page, '/');
+	// The widget's contact-flow CTA (purchase_flow 'contact') — a different branch from
+	// Enterprise's "Request Information", and a self-hosted planType. It sits behind the
+	// hosting toggle, so this exercises the toggle too. Two cards render on that tab
+	// (SelfHostedStandard, SelfHostedPlus), hence .first().
+	await gotoHydrated(page, '/pricing');
 	await page.getByRole('button', { name: 'Self-Hosted' }).click();
-	await page.getByRole('button', { name: 'Contact Us' }).click();
+	await page.getByRole('button', { name: 'Get a license' }).first().click();
 	await openFillAndSubmit(page);
 });

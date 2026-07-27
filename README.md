@@ -24,10 +24,10 @@ Every form found on the site is listed here. Both forms submit to Brevo (`sibfor
 | --------------------------------------------------------- | ------------- | --------------------------- | ---------------- |
 | Contact modal — "Request a Quote" (the June 2026 failure) | `/commercial` | `e2e/contact-modal.spec.ts` | yes              |
 | Contact modal — Enterprise "Request Information"          | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
-| Contact modal — Self-Hosted "Contact Us"                  | `/` (home)    | `e2e/contact-modal.spec.ts` | yes              |
+| Contact modal — Self-Hosted "Get a license"               | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
 | Newsletter signup (footer, sitewide)                      | `/` (home)    | `e2e/newsletter.spec.ts`    | yes              |
 
-The contact modal is one component with three separate page-level trigger wirings; a page-specific JS error can break one page while the others keep working, so each path submits for real.
+The contact modal is one component with three separate trigger wirings across two pages and two modal instances: `/commercial` renders its own `<ContactModal>` for the page-level "Request a Quote" buttons, and `PricingSection` renders another for the pricing widget, reached via two different CTA branches ("Request Information" on Enterprise, "Get a license" on the self-hosted tiers). A page- or branch-specific JS error can break one while the others keep working, so each path submits for real. The home page no longer carries a pricing widget or any contact CTA, so nothing is left unmonitored by not testing `/` here — its footer newsletter form is still covered by the newsletter row.
 
 Each weekly run creates **3 real Brevo contact inquiries and 1 newsletter subscription** (double that in the worst case, since CI retries a failed test once).
 
