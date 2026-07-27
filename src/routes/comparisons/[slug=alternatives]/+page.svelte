@@ -8,7 +8,8 @@
 	import ScanopyDemo from '$lib/components/ScanopyDemo.svelte';
 	import { getFAQPageSchema, getBreadcrumbListSchema } from '$lib/schemas';
 	import { page } from '$app/state';
-	import { APP, appHref } from '$lib/config/urls';
+	import { withUtm, utmFromPath } from '$lib/config/urls';
+	import { analytics } from '$lib/analytics.svelte';
 	import type { Vendor, VendorFAQ, VendorSource } from '$lib/types';
 
 	interface AltCard {
@@ -44,6 +45,15 @@
 	function abs(href: string): string {
 		return href.startsWith('http') ? href : `https://scanopy.net${href}`;
 	}
+
+	// The Scanopy card carries the same two CTAs as the footer box (ArticleCTA): demo
+	// first for research-intent readers, pricing second.
+	const demoHref = $derived(
+		withUtm('https://demo.scanopy.net', {
+			...utmFromPath(page.url.pathname),
+			content: 'alternatives-card'
+		})
+	);
 
 	// Schema: each featured tool as a SoftwareApplication inside an ItemList (the ranked
 	// list of alternatives), plus a BreadcrumbList and the FAQPage.
@@ -149,7 +159,7 @@
 							<div class="flex items-baseline gap-3">
 								<span
 									class="flex h-7 w-7 flex-none items-center justify-center rounded-full text-sm font-bold {alt.isScanopy
-										? 'bg-blue-500 text-white'
+										? 'bg-blue-500 text-paper'
 										: 'bg-gray-800 text-gray-300'}"
 								>
 									{i + 1}
@@ -174,19 +184,26 @@
 							{#if alt.isScanopy}
 								<div class="mt-4 flex flex-wrap items-center gap-4 text-sm">
 									<a
-										href={appHref(APP.onboarding, page.url.pathname, 'alternatives-card')}
+										href={demoHref}
 										target="_blank"
 										rel="noopener noreferrer"
-										class="btn-primary">Try Scanopy free</a
+										class="btn-primary"
+										onclick={() =>
+											analytics.ctaClicked({
+												location: 'alternatives_card',
+												destination: 'demo',
+												text: 'Explore Live Demo'
+											})}>Explore Live Demo</a
 									>
-									<a href="/pricing" class="text-gray-400 transition-colors hover:text-white"
-										>See pricing</a
-									>
-									<a href="/commercial" class="text-gray-400 transition-colors hover:text-white"
-										>Commercial edition</a
-									>
-									<a href="/community" class="text-gray-400 transition-colors hover:text-white"
-										>Community edition</a
+									<a
+										href="/pricing"
+										class="btn-secondary"
+										onclick={() =>
+											analytics.ctaClicked({
+												location: 'alternatives_card',
+												destination: 'pricing',
+												text: 'View Pricing'
+											})}>View Pricing</a
 									>
 								</div>
 							{:else if alt.vsHref}

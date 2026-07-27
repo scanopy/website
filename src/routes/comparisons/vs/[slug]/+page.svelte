@@ -172,7 +172,7 @@
 					<p><strong>Choose {data.vendorName} when:</strong> {data.takeaway.vendor}</p>
 
 					<p>
-						This is a focused, two-tool comparison.{#if altHref}
+						This is a focused, two-tool comparison. {#if altHref}
 							Weighing other options too? See the
 							<a href={altHref}>best {data.vendorName} alternatives</a>.{/if} For all 13 tools side by
 						side, see the
