@@ -5,6 +5,7 @@
 		"daemon-identity",
 		"daemon-configuration",
 		"daemon-status",
+		"daemon-support-lifecycle",
 		"server-configuration",
 		"service-detection",
 		"snmp",

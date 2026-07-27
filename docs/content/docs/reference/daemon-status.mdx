@@ -13,8 +13,10 @@ Scanopy monitors daemon health and displays a status tag next to each daemon nam
 | <StatusTag status="Awaiting Connection" /> | Provisioned, but the daemon has never contacted the server |
 | <StatusTag status="Standby" /> | No discovery session in the last 30 days |
 | <StatusTag status="Unreachable" /> | Server cannot reach the daemon |
-| <StatusTag status="Deprecated" /> | Daemon version is no longer supported |
+| <StatusTag status="Deprecated" /> | Version has a scheduled sunset date; still works until then |
+| <StatusTag status="Unsupported" /> | Past its sunset date; the server rejects it |
 | <StatusTag status="Outdated" /> | Newer daemon version available |
+| <StatusTag status="Unknown" /> | The server has no recorded version for this daemon |
 
 ## Awaiting Connection
 
@@ -57,11 +59,19 @@ See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for deta
 
 ## Deprecated
 
-**Orange tag**. The daemon is running a version that is no longer supported. A deprecated daemon will not be allowed to connect to the server or run discovery.
+**Orange tag**. The daemon is running a version with a **scheduled sunset date**. It still connects and runs discovery normally until that date, after which it becomes [Unsupported](#unsupported). The daemon card and upgrade dialog show the exact date and a countdown, and the org owner and each daemon's maintainer receive an email when a sunset is announced.
 
 **How to resolve**:
 
-- Upgrade the daemon to the latest version immediately — see [Managing Daemons](/setting-up-daemons/managing-daemons) for installation steps
+- Upgrade the daemon before the sunset date — see [Managing Daemons](/setting-up-daemons/managing-daemons) for installation steps. See [Daemon Support Lifecycle](/reference/daemon-support-lifecycle) for how sunset dates are set.
+
+## Unsupported
+
+**Red tag**. The daemon's version is past its sunset date. The server **rejects every request** from it, so it can no longer connect or run discovery. The daemon exits and, under a service manager configured to restart it, will keep restarting and failing until it is updated.
+
+**How to resolve**:
+
+- Upgrade the daemon to the latest version — see [Managing Daemons](/setting-up-daemons/managing-daemons). Once updated it reconnects automatically.
 
 ## Outdated
 
@@ -71,6 +81,14 @@ See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for deta
 
 - Upgrade the daemon at your convenience — see [Managing Daemons](/setting-up-daemons/managing-daemons) for installation steps
 
+## Unknown
+
+**Gray tag**. The server has no recorded version for this daemon — it has not yet reported one, or predates version reporting. Once a support floor is enforced, a daemon whose version cannot be confirmed is treated as unsupported.
+
+**How to resolve**:
+
+- Confirm the daemon is running a current release and has connected at least once. If it persists on a recent daemon, check the daemon logs for registration errors.
+
 ## Healthy
 
 **Green tag**. The daemon is running a current version and communicating with the server normally.
@@ -79,7 +97,7 @@ See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for deta
 
 When multiple conditions apply, the UI shows the highest-priority one:
 
-**Unreachable > Standby > Awaiting Connection > Deprecated > Outdated > Healthy**
+**Unsupported > Unreachable > Standby > Awaiting Connection > Deprecated > Outdated > Unknown > Healthy**
 
 The Home tab shows all active statuses across your daemons.
 

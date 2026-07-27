@@ -119,6 +119,8 @@ Self-hosted Docker Compose deployments include an **integrated daemon** that run
 
 When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps: download the latest binary, then restart the service (`systemctl restart` / `launchctl kickstart -k` / `sc.exe stop` + `start` / `service … restart`). Configuration is preserved across upgrades.
 
+If a daemon is **Deprecated**, its version has a scheduled sunset date — the upgrade dialog shows the date and a countdown, and you receive an email. Upgrade before that date; after it, the daemon becomes **Unsupported** and is rejected until updated. See [Daemon Support Lifecycle](/reference/daemon-support-lifecycle) for how the support window works.
+
 For upgrading self-hosted server and integrated daemon together, see [Upgrading](/self-hosted-server/upgrading).
 
 ## Updating Daemon Properties
