@@ -9,11 +9,7 @@
 		compact?: boolean;
 	}
 
-	let {
-		formUrl,
-		class: className = '',
-		compact = false
-	}: Props = $props();
+	let { formUrl, class: className = '', compact = false }: Props = $props();
 
 	let email = $state('');
 	let loading = $state(false);

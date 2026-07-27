@@ -63,11 +63,16 @@
 		{#each viewOrder as view}
 			{@const support = col.viewTypes ? col.viewTypes[view.key] : 'no'}
 			{#if support === 'yes'}
-				<span class="chip chip-positive view-tag" title="{view.label}: supported">{view.label}</span>
+				<span class="chip chip-positive view-tag" title="{view.label}: supported">{view.label}</span
+				>
 			{:else if support === 'unclear'}
-				<span class="chip chip-unclear view-tag" title="{view.label}: unverified">{view.label} ?</span>
+				<span class="chip chip-unclear view-tag" title="{view.label}: unverified"
+					>{view.label} ?</span
+				>
 			{:else}
-				<span class="chip view-tag view-tag-no" title="{view.label}: not supported">{view.label}</span>
+				<span class="chip view-tag view-tag-no" title="{view.label}: not supported"
+					>{view.label}</span
+				>
 			{/if}
 		{/each}
 	</span>
@@ -85,7 +90,9 @@
 				<th></th>
 				<th><a href={scanopy.href}>{scanopy.name}</a></th>
 				<th>
-					<a href={vendor.href} {...vendor.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {}}
+					<a
+						href={vendor.href}
+						{...vendor.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {}}
 						>{vendor.fullName || vendor.name}</a
 					>
 				</th>
@@ -94,14 +101,19 @@
 		<tbody>
 			<!-- Discovery -->
 			<tr>
-				<th scope="row" class="tooltip-header" use:tooltip>Discovery<span class="tooltip-content">Protocols used to find devices and map connections</span></th>
+				<th scope="row" class="tooltip-header" use:tooltip
+					>Discovery<span class="tooltip-content"
+						>Protocols used to find devices and map connections</span
+					></th
+				>
 				{#each [scanopy, vendor] as col}
 					<td>
 						{#if col.discovery.length === 0}
 							<span class="chip chip-negative">None</span>
 						{:else}
 							{#each col.discovery as protocol, i}
-								{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(protocol)}>{protocol}</span>
+								{#if i > 0}{' '}{/if}<span class="chip" style={chipStyle(protocol)}>{protocol}</span
+								>
 							{/each}
 						{/if}
 						{@html sourceRefHtml(col.discoverySources)}
@@ -111,7 +123,12 @@
 
 			<!-- Service detection -->
 			<tr>
-				<th scope="row" class="tooltip-header" use:tooltip>Service detection<span class="tooltip-content">Whether the tool fingerprints services per host (databases, web servers, containers) beyond simple port detection</span></th>
+				<th scope="row" class="tooltip-header" use:tooltip
+					>Service detection<span class="tooltip-content"
+						>Whether the tool fingerprints services per host (databases, web servers, containers)
+						beyond simple port detection</span
+					></th
+				>
 				{#each [scanopy, vendor] as col}
 					<td>
 						<span class={sentimentClass(serviceLevels[col.services.level].sentiment)}
@@ -127,17 +144,39 @@
 
 			<!-- Network views: one row, four per-view tags per column -->
 			<tr>
-				<th scope="row" class="tooltip-header" use:tooltip>Network Views<span class="tooltip-content">Which topology views the tool produces from discovery.<br><span class="chip chip-positive">L2</span> Physical switch ports and links<br><span class="chip chip-positive">L3</span> Subnets, VLANs, routing<br><span class="chip chip-positive">Workload</span> VM/container host nesting<br><span class="chip chip-positive">Application</span> Service-dependency / app grouping<br><br><span class="chip chip-positive">Yes</span> supported<br><span class="chip chip-unclear">Tag ?</span> unverified<br><span class="chip view-tag-no">Greyed</span> not supported</span></th>
+				<th scope="row" class="tooltip-header" use:tooltip
+					>Network Views<span class="tooltip-content"
+						>Which topology views the tool produces from discovery.<br /><span
+							class="chip chip-positive">L2</span
+						>
+						Physical switch ports and links<br /><span class="chip chip-positive">L3</span> Subnets,
+						VLANs, routing<br /><span class="chip chip-positive">Workload</span> VM/container host
+						nesting<br /><span class="chip chip-positive">Application</span> Service-dependency /
+						app grouping<br /><br /><span class="chip chip-positive">Yes</span> supported<br /><span
+							class="chip chip-unclear">Tag ?</span
+						>
+						unverified<br /><span class="chip view-tag-no">Greyed</span> not supported</span
+					></th
+				>
 				{#each [scanopy, vendor] as col}
 					<td class="view-cell">
-						{@render viewTags(col)}{#if col.viewTypes?.note}<div class="cell-detail" style="margin-top: 0.45rem; line-height: 1.4;">{col.viewTypes.note}{@html sourceRefHtml(col.viewTypesSources)}</div>{/if}
+						{@render viewTags(col)}{#if col.viewTypes?.note}<div
+								class="cell-detail"
+								style="margin-top: 0.45rem; line-height: 1.4;"
+							>
+								{col.viewTypes.note}{@html sourceRefHtml(col.viewTypesSources)}
+							</div>{/if}
 					</td>
 				{/each}
 			</tr>
 
 			<!-- Live updates -->
 			<tr>
-				<th scope="row" class="tooltip-header" use:tooltip>Live updates<span class="tooltip-content">Whether the map updates automatically after the initial scan</span></th>
+				<th scope="row" class="tooltip-header" use:tooltip
+					>Live updates<span class="tooltip-content"
+						>Whether the map updates automatically after the initial scan</span
+					></th
+				>
 				{#each [scanopy, vendor] as col}
 					<td>
 						{#if col.autoUpdates}
@@ -151,7 +190,12 @@
 
 			<!-- Open source -->
 			<tr>
-				<th scope="row" class="tooltip-header" use:tooltip>Open source<span class="tooltip-content">OSI means an OSI-approved open-source license; Source available means restricted; No means proprietary</span></th>
+				<th scope="row" class="tooltip-header" use:tooltip
+					>Open source<span class="tooltip-content"
+						>OSI means an OSI-approved open-source license; Source available means restricted; No
+						means proprietary</span
+					></th
+				>
 				{#each [scanopy, vendor] as col}
 					<td>
 						{#if col.openSource.href}
@@ -174,7 +218,9 @@
 
 			<!-- Pricing -->
 			<tr>
-				<th scope="row" class="tooltip-header" use:tooltip>Pricing<span class="tooltip-content">Starting price or pricing model</span></th>
+				<th scope="row" class="tooltip-header" use:tooltip
+					>Pricing<span class="tooltip-content">Starting price or pricing model</span></th
+				>
 				{#each [scanopy, vendor] as col}
 					<td>
 						{#if col.pricing.href}
@@ -189,7 +235,10 @@
 
 			<!-- Also includes -->
 			<tr>
-				<th scope="row" class="tooltip-header" use:tooltip>Also includes<span class="tooltip-content">Capabilities beyond network diagramming</span></th>
+				<th scope="row" class="tooltip-header" use:tooltip
+					>Also includes<span class="tooltip-content">Capabilities beyond network diagramming</span
+					></th
+				>
 				{#each [scanopy, vendor] as col}
 					<td>
 						{#if col.alsoIncludes && col.alsoIncludes.length}

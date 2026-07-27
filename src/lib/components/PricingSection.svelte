@@ -21,11 +21,7 @@
 		planIds?: string[];
 	}
 
-	let {
-		showGithubStars = false,
-		showHosting = true,
-		planIds
-	}: Props = $props();
+	let { showGithubStars = false, showHosting = true, planIds }: Props = $props();
 
 	// ============================================================================
 	// Fixture Types

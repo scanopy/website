@@ -199,8 +199,8 @@
 		<div class="mb-10 text-center">
 			<h2 class="mb-3 text-3xl font-bold text-rose-400 lg:text-4xl">Commercial plans</h2>
 			<p class="mx-auto max-w-2xl text-gray-400">
-				Published annual pricing, no per-host fees. Compare the two tiers below, or talk to us about a
-				custom deployment.
+				Published annual pricing, no per-host fees. Compare the two tiers below, or talk to us about
+				a custom deployment.
 			</p>
 		</div>
 		<PricingSection

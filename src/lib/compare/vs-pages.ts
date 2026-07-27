@@ -39,7 +39,8 @@ export const REVIEW_YEAR = 2026;
 // pricing") for length; these constants drive the body prose.
 export const SCANOPY_CLAIMS = {
 	views: 'L2, L3, workload, and application views',
-	viewsParenthetical: 'four switchable views (L2 physical, L3 logical, workloads, and applications)',
+	viewsParenthetical:
+		'four switchable views (L2 physical, L3 logical, workloads, and applications)',
 	serviceDetection: 'per-host service detection',
 	flatPricing: 'flat pricing regardless of host count',
 	freeCE: 'a free, self-hostable Community edition',
@@ -113,7 +114,10 @@ function differentiatorAngles(vendor: Vendor): { scanopy: string | null; vendor:
 // can be spliced into the data-derived intro without reading like marketing copy.
 // Exported so the alternatives-page generator can reuse the same normalization.
 export function trimSentence(text: string): string {
-	return text.trim().replace(/\s+/g, ' ').replace(/[.\s]+$/, '');
+	return text
+		.trim()
+		.replace(/\s+/g, ' ')
+		.replace(/[.\s]+$/, '');
 }
 
 // Lowercase the first letter only when it isn't the start of an acronym (e.g. keep
@@ -152,9 +156,7 @@ export function buildIntro(vendor: Vendor): string {
 		const rawLabel = (vendor.tradeOffLabel || 'trade-offs').toLowerCase();
 		// "What Scanopy doesn't do"-style labels are full clauses; others ("Trade-off",
 		// "Trade-offs", "The catch") read as "<Vendor>'s <label>".
-		const clause = rawLabel.startsWith('what')
-			? rawLabel
-			: `${name}'s ${rawLabel}`;
+		const clause = rawLabel.startsWith('what') ? rawLabel : `${name}'s ${rawLabel}`;
 		parts.push(
 			`Discovery, the four topology views, pricing, and licensing are where the two differ, including ${clause}.`
 		);

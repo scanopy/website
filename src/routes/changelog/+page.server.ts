@@ -18,7 +18,10 @@ function parseFrontmatter(content: string): { frontmatter: Record<string, string
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			frontmatter[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
+			frontmatter[key.trim()] = valueParts
+				.join(':')
+				.trim()
+				.replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 

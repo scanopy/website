@@ -3,34 +3,34 @@ import Image from 'next/image';
 import { APP, withUtm } from '@/lib/urls';
 
 export function baseOptions(): BaseLayoutProps {
-  return {
-    nav: {
-      title: (
-        <>
-          <Image
-            src="/docs/scanopy-logo.png"
-            alt="Scanopy"
-            width={32}
-            height={32}
-            className="size-8"
-          />
-          <span className="font-bold">Scanopy</span>
-        </>
-      ),
-      url: 'https://scanopy.net',
-    },
-    links: [
-      {
-        text: 'Demo',
-        url: 'https://demo.scanopy.net',
-        external: true,
-      },
-      {
-        text: 'Login',
-        url: withUtm(APP.login, { medium: 'docs', campaign: 'docs-nav', content: 'nav-login' }),
-        external: true,
-      },
-    ],
-    githubUrl: 'https://github.com/scanopy/scanopy',
-  };
+	return {
+		nav: {
+			title: (
+				<>
+					<Image
+						src="/docs/scanopy-logo.png"
+						alt="Scanopy"
+						width={32}
+						height={32}
+						className="size-8"
+					/>
+					<span className="font-bold">Scanopy</span>
+				</>
+			),
+			url: 'https://scanopy.net'
+		},
+		links: [
+			{
+				text: 'Demo',
+				url: 'https://demo.scanopy.net',
+				external: true
+			},
+			{
+				text: 'Login',
+				url: withUtm(APP.login, { medium: 'docs', campaign: 'docs-nav', content: 'nav-login' }),
+				external: true
+			}
+		],
+		githubUrl: 'https://github.com/scanopy/scanopy'
+	};
 }

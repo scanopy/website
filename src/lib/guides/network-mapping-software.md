@@ -49,7 +49,7 @@ The lightweight way to do this is a single scanner that queries the network from
 
 ## Know what discovery can't see
 
-Discovery is only as complete as what your devices advertise, and that is the test to apply to any mapping tool before you trust its picture: ask what it *can't* see.
+Discovery is only as complete as what your devices advertise, and that is the test to apply to any mapping tool before you trust its picture: ask what it _can't_ see.
 
 A scanner learns the network from protocols like SNMP, LLDP, and CDP, plus ARP tables and active probes such as ping sweeps and port scans. That combination is good at finding what responds and what advertises itself, and blind to the rest. A device that answers nothing shows up as little more than an IP that pings, with no identity; a device that answers nothing at all doesn't appear. An unmanaged switch with no SNMP is the common case: the tool can't see the switch itself, so the hosts connected through it still appear (they answer ARP), but they attach to the managed switch upstream, a hop away from where they actually sit. And discovery reads structure, not intent: it can show that a VLAN exists and what sits on it, but not why it was carved out or what it is meant to keep apart. Scheduled scans have a limit of their own: the map is current as of the last scan, not the last cable change.
 

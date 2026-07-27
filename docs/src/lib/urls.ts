@@ -12,26 +12,26 @@
 export const APP_BASE = 'https://app.scanopy.net';
 
 export const APP = {
-  onboarding: `${APP_BASE}/onboarding`,
-  login: `${APP_BASE}/login`,
-  app: APP_BASE,
+	onboarding: `${APP_BASE}/onboarding`,
+	login: `${APP_BASE}/login`,
+	app: APP_BASE
 } as const;
 
 export const UTM_SOURCE = 'scanopy_site';
 
 export interface Utm {
-  medium: string;
-  campaign: string;
-  content: string;
-  source?: string;
+	medium: string;
+	campaign: string;
+	content: string;
+	source?: string;
 }
 
 /** Append `utm_*` params to a URL, preserving any existing query string. */
 export function withUtm(url: string, utm: Utm): string {
-  const u = new URL(url);
-  u.searchParams.set('utm_source', utm.source ?? UTM_SOURCE);
-  u.searchParams.set('utm_medium', utm.medium);
-  u.searchParams.set('utm_campaign', utm.campaign);
-  u.searchParams.set('utm_content', utm.content);
-  return u.toString();
+	const u = new URL(url);
+	u.searchParams.set('utm_source', utm.source ?? UTM_SOURCE);
+	u.searchParams.set('utm_medium', utm.medium);
+	u.searchParams.set('utm_campaign', utm.campaign);
+	u.searchParams.set('utm_content', utm.content);
+	return u.toString();
 }

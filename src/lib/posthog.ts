@@ -41,7 +41,7 @@ export async function initPostHog(config: PostHogConfig): Promise<void> {
 		capture_pageview: true,
 		capture_pageleave: true,
 
-		person_profiles: 'identified_only',
+		person_profiles: 'identified_only'
 	});
 
 	initialized = true;

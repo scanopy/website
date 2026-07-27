@@ -39,13 +39,13 @@ The authoritative guidance on implementing the Security Rule is [NIST SP 800-66 
 
 Several Security Rule standards lean on that same current-state picture, and each maps to something Scanopy produces:
 
-| HIPAA requirement | Evidence it needs | What Scanopy produces |
-|---|---|---|
-| Risk analysis (164.308(a)(1)(ii)(A)) | An accurate map of systems, assets, and how ePHI flows between them | The topology plus the Applications view (service-to-service data flows) |
-| Evaluation (164.308(a)(8)) | Periodic review against a current baseline as the environment changes | Snapshots: a dated baseline you compare over time |
-| Contingency plan (164.308(a)(7)) | Knowing your infrastructure well enough to restore it | Physical (L2) and Logical (L3) topology |
-| Access control (164.312(a)(1)) | Evidence that systems handling ePHI are appropriately separated | The Logical (L3) view: subnets and segmentation |
-| Transmission security (164.312(e)(1)) | Understanding the paths ePHI travels across the network | The Applications view: service-to-service dependencies |
+| HIPAA requirement                     | Evidence it needs                                                     | What Scanopy produces                                                   |
+| ------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Risk analysis (164.308(a)(1)(ii)(A))  | An accurate map of systems, assets, and how ePHI flows between them   | The topology plus the Applications view (service-to-service data flows) |
+| Evaluation (164.308(a)(8))            | Periodic review against a current baseline as the environment changes | Snapshots: a dated baseline you compare over time                       |
+| Contingency plan (164.308(a)(7))      | Knowing your infrastructure well enough to restore it                 | Physical (L2) and Logical (L3) topology                                 |
+| Access control (164.312(a)(1))        | Evidence that systems handling ePHI are appropriately separated       | The Logical (L3) view: subnets and segmentation                         |
+| Transmission security (164.312(e)(1)) | Understanding the paths ePHI travels across the network               | The Applications view: service-to-service dependencies                  |
 
 None of these say "diagram." All of them assume you have a current, accurate model of your network. Automated documentation supplies that current-state model.
 

@@ -174,8 +174,8 @@
 						</li>
 						<li>
 							<a href="/solutions/compliance" class="text-sm text-gray-400 hover:text-white"
-							>Compliance</a
-						>
+								>Compliance</a
+							>
 						</li>
 					</ul>
 				</div>

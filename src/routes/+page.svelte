@@ -53,7 +53,6 @@
 
 	let { data }: { data: PageData } = $props();
 
-
 	// Topology view screenshots come in light and dark variants and swap with the
 	// site theme. width/height are identical across themes (same aspect ratio) to
 	// avoid layout shift when the theme changes.

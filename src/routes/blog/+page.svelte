@@ -56,7 +56,8 @@
 		'@context': 'https://schema.org',
 		'@type': 'CollectionPage',
 		name: 'Blog - Scanopy',
-		description: 'Technical articles on network documentation, automated discovery, and IT infrastructure management.',
+		description:
+			'Technical articles on network documentation, automated discovery, and IT infrastructure management.',
 		url: 'https://scanopy.net/blog',
 		isPartOf: {
 			'@type': 'WebSite',

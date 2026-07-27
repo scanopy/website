@@ -160,7 +160,13 @@ export interface ViewTypes {
 	// Optional short note shown in the detail summary (e.g. "user-defined grouping, not auto-inferred").
 	note?: string;
 }
-export type VendorCapability = 'Monitoring' | 'Automation' | 'Traffic Analysis' | 'RMM' | 'Docker Visualization' | 'Dependency Mapping';
+export type VendorCapability =
+	| 'Monitoring'
+	| 'Automation'
+	| 'Traffic Analysis'
+	| 'RMM'
+	| 'Docker Visualization'
+	| 'Dependency Mapping';
 export type DeploymentType = 'Cloud' | 'Self-hosted' | 'Desktop' | 'Browser' | 'CLI';
 
 export interface SourceRef {

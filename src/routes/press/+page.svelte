@@ -58,12 +58,18 @@
 	<link rel="canonical" href="https://scanopy.net/press" />
 
 	<meta property="og:title" content="Press & Media - Scanopy" />
-	<meta property="og:description" content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool." />
+	<meta
+		property="og:description"
+		content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool."
+	/>
 	<meta property="og:url" content="https://scanopy.net/press" />
 	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Press & Media - Scanopy" />
-	<meta name="twitter:description" content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool." />
+	<meta
+		name="twitter:description"
+		content="Read what the press and tech community are saying about Scanopy, the automated network documentation and topology mapping tool."
+	/>
 	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{#each videos as v}
@@ -86,9 +92,7 @@
 <section class="py-16 lg:py-24">
 	<div class="container mx-auto px-4">
 		<div class="mx-auto max-w-3xl text-center">
-			<h1 class="mb-4 text-4xl font-bold leading-tight text-rose-400 lg:text-5xl">
-				Press & Media
-			</h1>
+			<h1 class="mb-4 text-4xl font-bold leading-tight text-rose-400 lg:text-5xl">Press & Media</h1>
 			<p class="mx-auto max-w-2xl text-lg text-gray-300">
 				See what publications and tech blogs are saying about Scanopy. From in-depth reviews to
 				installation guides, the community is covering automated network documentation across the
@@ -120,7 +124,9 @@
 						/>
 						<div class="flex items-center gap-2">
 							<span
-								class="rounded-full px-2.5 py-0.5 text-xs font-medium capitalize {badgeColors[mention.articleType] ?? 'bg-gray-500/20 text-gray-400'}"
+								class="rounded-full px-2.5 py-0.5 text-xs font-medium capitalize {badgeColors[
+									mention.articleType
+								] ?? 'bg-gray-500/20 text-gray-400'}"
 							>
 								{mention.articleType}
 							</span>
@@ -190,13 +196,8 @@
 <!-- Press Inquiry CTA -->
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto px-4 text-center">
-		<p class="mb-3 text-gray-400">
-			Writing about Scanopy or interested in covering us?
-		</p>
-		<a
-			href="mailto:press@scanopy.net"
-			class="text-blue-400 hover:text-blue-300"
-		>
+		<p class="mb-3 text-gray-400">Writing about Scanopy or interested in covering us?</p>
+		<a href="mailto:press@scanopy.net" class="text-blue-400 hover:text-blue-300">
 			Reach out at press@scanopy.net &rarr;
 		</a>
 	</div>

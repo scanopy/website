@@ -80,8 +80,8 @@
 		<div class="mb-12 text-center">
 			<h1 class="mb-4 text-4xl font-bold text-white lg:text-5xl">Integrations</h1>
 			<p class="mx-auto max-w-2xl text-xl text-gray-400">
-				Connect Scanopy to the platforms you already run. Each integration discovers what's there and
-				keeps your network documentation current. More are added regularly.
+				Connect Scanopy to the platforms you already run. Each integration discovers what's there
+				and keeps your network documentation current. More are added regularly.
 			</p>
 		</div>
 
@@ -126,7 +126,9 @@
 								</div>
 
 								<div class="mt-5 border-t border-gray-700/70 pt-4">
-									<span class="mb-3 block text-xs font-semibold uppercase tracking-wide text-gray-500">
+									<span
+										class="mb-3 block text-xs font-semibold uppercase tracking-wide text-gray-500"
+									>
 										Connection methods
 									</span>
 									<ul class="space-y-3">
@@ -160,8 +162,8 @@
 
 		<div class="mx-auto mt-16 max-w-3xl text-center">
 			<p class="mb-4 text-gray-400">
-				Once connected, an integration runs as part of your scheduled scans, with no manual exports and no
-				stale diagrams. See the
+				Once connected, an integration runs as part of your scheduled scans, with no manual exports
+				and no stale diagrams. See the
 				<a href="/docs/using-scanopy/discovery/" class="text-blue-400 hover:text-blue-300"
 					>discovery documentation</a
 				>
@@ -171,7 +173,8 @@
 			</p>
 			<p class="text-gray-400">
 				Want to <a href="/pricing" class="text-blue-400 hover:text-blue-300">compare plans</a>? You
-				can <a href="/community" class="text-blue-400 hover:text-blue-300">self-host free</a> or get a
+				can <a href="/community" class="text-blue-400 hover:text-blue-300">self-host free</a> or get
+				a
 				<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial license</a>.
 			</p>
 		</div>

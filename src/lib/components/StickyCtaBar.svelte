@@ -25,12 +25,7 @@
 		ariaLabel?: string;
 	}
 
-	let {
-		ctas,
-		target,
-		desktop = true,
-		ariaLabel = 'Get started with Scanopy'
-	}: Props = $props();
+	let { ctas, target, desktop = true, ariaLabel = 'Get started with Scanopy' }: Props = $props();
 
 	// Shown once the reader is past the hero, hidden again when the target CTA is
 	// reached or while the cookie banner is open. On mobile-only bars (desktop =

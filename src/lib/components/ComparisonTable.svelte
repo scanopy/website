@@ -140,7 +140,9 @@
 				<span class="chip env-tag" title="Discovers {cloud}">{cloud}</span>
 			{/each}
 		</span>
-		{#if showSources && vendor.cloudDiscovery?.sources}{@html sourceRefHtml(vendor.cloudDiscovery.sources)}{/if}
+		{#if showSources && vendor.cloudDiscovery?.sources}{@html sourceRefHtml(
+				vendor.cloudDiscovery.sources
+			)}{/if}
 	{:else}
 		<span class="cell-detail" title="No discovery">—</span>
 	{/if}

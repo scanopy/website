@@ -3,5 +3,5 @@
 import { defineClientConfig } from 'fumadocs-openapi/ui/client';
 
 export default defineClientConfig({
-  // Client-side configuration for API playground
+	// Client-side configuration for API playground
 });

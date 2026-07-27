@@ -76,7 +76,10 @@ const SECTION_MEDIUM: Record<string, string> = {
  * with no per-page tagging.
  */
 export function utmFromPath(pathname: string): { medium: string; campaign: string } {
-	const segments = pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
+	const segments = pathname
+		.replace(/^\/+|\/+$/g, '')
+		.split('/')
+		.filter(Boolean);
 
 	if (segments.length === 0) {
 		return { medium: 'home', campaign: 'homepage' };

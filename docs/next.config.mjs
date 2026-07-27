@@ -8,30 +8,30 @@ const withMDX = createMDX();
 
 /** @type {import('next').NextConfig} */
 const config = {
-  env: {
-    NEXT_PUBLIC_POSTHOG_KEY: process.env.PUBLIC_POSTHOG_KEY,
-  },
-  reactStrictMode: true,
-  output: 'export',
-  basePath: '/docs',
-  trailingSlash: true,
-  images: {
-    unoptimized: true,
-  },
-  turbopack: {
-    rules: {
-      '*.mermaid': {
-        loaders: ['raw-loader'],
-        as: '*.js',
-      },
-    },
-  },
-  webpack: (config) => {
-    config.resolve.alias['$lib'] = path.resolve(__dirname, '../src/lib');
-    return config;
-  },
-  // Transpile shared lib from parent project
-  transpilePackages: [],
+	env: {
+		NEXT_PUBLIC_POSTHOG_KEY: process.env.PUBLIC_POSTHOG_KEY
+	},
+	reactStrictMode: true,
+	output: 'export',
+	basePath: '/docs',
+	trailingSlash: true,
+	images: {
+		unoptimized: true
+	},
+	turbopack: {
+		rules: {
+			'*.mermaid': {
+				loaders: ['raw-loader'],
+				as: '*.js'
+			}
+		}
+	},
+	webpack: (config) => {
+		config.resolve.alias['$lib'] = path.resolve(__dirname, '../src/lib');
+		return config;
+	},
+	// Transpile shared lib from parent project
+	transpilePackages: []
 };
 
 export default withMDX(config);

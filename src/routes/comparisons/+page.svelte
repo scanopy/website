@@ -64,7 +64,8 @@
 		'@context': 'https://schema.org',
 		'@type': 'CollectionPage',
 		name: 'Comparisons - Scanopy',
-		description: 'Side-by-side comparisons of network diagram and documentation tools. Pricing, features, and trade-offs.',
+		description:
+			'Side-by-side comparisons of network diagram and documentation tools. Pricing, features, and trade-offs.',
 		url: 'https://scanopy.net/comparisons',
 		isPartOf: {
 			'@type': 'WebSite',
@@ -131,8 +132,8 @@
 			<div class="mt-16 border-t border-gray-800 pt-12">
 				<h2 class="mb-3 text-2xl font-bold text-white">Scanopy head-to-head comparisons</h2>
 				<p class="mb-6 text-gray-400">
-					Comparing Scanopy against one specific tool? These focused two-tool pages put Scanopy
-					side by side with each competitor on discovery, the four topology views, pricing, and
+					Comparing Scanopy against one specific tool? These focused two-tool pages put Scanopy side
+					by side with each competitor on discovery, the four topology views, pricing, and
 					licensing.
 				</p>
 				<ul class="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
@@ -149,11 +150,16 @@
 
 		{#if data.altLinks.length}
 			<div class="mt-16 border-t border-gray-800 pt-12">
-				<h2 class="mb-3 text-2xl font-bold text-white">Looking for an alternative to a specific tool?</h2>
+				<h2 class="mb-3 text-2xl font-bold text-white">
+					Looking for an alternative to a specific tool?
+				</h2>
 				<p class="mb-6 text-gray-400">
 					Shopping for a replacement? These roundups list the best alternatives to each tool,
 					compared on discovery, the four topology views, pricing, and licensing. Comparing Scanopy
-					itself? See <a href="/comparisons/scanopy-alternatives" class="text-blue-400 hover:text-blue-300">Scanopy alternatives</a>.
+					itself? See <a
+						href="/comparisons/scanopy-alternatives"
+						class="text-blue-400 hover:text-blue-300">Scanopy alternatives</a
+					>.
 				</p>
 				<ul class="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
 					{#each data.altLinks as link (link.href)}

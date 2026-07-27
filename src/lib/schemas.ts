@@ -76,8 +76,7 @@ function generateOffers() {
 	return getUniqueMonthlyPlans()
 		.filter((plan) => !plan.metadata.custom_price || plan.metadata.custom_price === 'Free')
 		.map((plan) => {
-			const priceCents =
-				getYearlyMonthlyEquivalentCents(plan.id) ?? plan.metadata.base_cents;
+			const priceCents = getYearlyMonthlyEquivalentCents(plan.id) ?? plan.metadata.base_cents;
 			const price = plan.metadata.custom_price === 'Free' ? '0' : (priceCents / 100).toFixed(2);
 
 			return {
@@ -137,7 +136,10 @@ function parseFrontmatter(content: string): Record<string, string> {
 	match[1].split('\n').forEach((line) => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
-			fm[key.trim()] = valueParts.join(':').trim().replace(/^["'](.*)["']$/, '$1');
+			fm[key.trim()] = valueParts
+				.join(':')
+				.trim()
+				.replace(/^["'](.*)["']$/, '$1');
 		}
 	});
 	return fm;

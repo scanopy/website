@@ -10,17 +10,17 @@ import { SectionCards } from '@/components/section-cards';
 import { StatusTag } from '@/components/status-tag';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
-  return {
-    ...defaultMdxComponents,
-    APIPage,
-    CredentialTypesTable,
-    DaemonConfigTable,
-    EntityCoreTables,
-    Mermaid,
-    SchemaERDiagram,
-    SchemaFullDiagram,
-    SectionCards,
-    StatusTag,
-    ...components,
-  };
+	return {
+		...defaultMdxComponents,
+		APIPage,
+		CredentialTypesTable,
+		DaemonConfigTable,
+		EntityCoreTables,
+		Mermaid,
+		SchemaERDiagram,
+		SchemaFullDiagram,
+		SectionCards,
+		StatusTag,
+		...components
+	};
 }

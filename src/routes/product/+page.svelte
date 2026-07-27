@@ -194,7 +194,10 @@
 	<meta property="og:url" content="https://scanopy.net/product" />
 	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:title" content="Scanopy Product: Automated Network Diagrams & Documentation" />
+	<meta
+		property="twitter:title"
+		content="Scanopy Product: Automated Network Diagrams & Documentation"
+	/>
 	<meta
 		name="twitter:description"
 		content="Discover every host, map Layer 2 and Layer 3 topology, fingerprint services, and keep four living network views current on a schedule."
@@ -316,7 +319,9 @@
 			>
 				{#each useCases as useCase (useCase.title)}
 					<div class="card card-static shrink-0 basis-[85%] snap-start p-8 md:basis-auto">
-						<div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10">
+						<div
+							class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/10"
+						>
 							<useCase.icon class="h-7 w-7 text-blue-400" />
 						</div>
 						<h3 class="mb-3 text-xl font-semibold text-white">{useCase.title}</h3>
@@ -332,8 +337,8 @@
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
-						Deploy once. Scanopy does the rest.
-					</h2>
+					Deploy once. Scanopy does the rest.
+				</h2>
 			</div>
 
 			<div class="flex flex-col items-center gap-12 lg:flex-row lg:gap-16">
@@ -368,10 +373,7 @@
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-3xl text-center">
-				<h2
-					class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl"
-					style="text-wrap: balance;"
-				>
+				<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
 					Your living network documentation is minutes away.
 				</h2>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
@@ -427,7 +429,9 @@
 		<div class="container mx-auto max-w-3xl px-4">
 			<div class="mb-12 text-center">
 				<span class="pill-eyebrow mb-4"> FAQ </span>
-				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">Frequently asked questions</h2>
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">
+					Frequently asked questions
+				</h2>
 			</div>
 			<FAQ faqs={productFaqs} />
 		</div>

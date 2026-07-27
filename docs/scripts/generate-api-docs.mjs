@@ -5,399 +5,393 @@ import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync } from 'fs
 
 // Preprocess spec to convert text/plain to application/json (fumadocs doesn't support text/plain)
 function preprocessSpec() {
-  const specPath = resolve('./openapi.json');
-  const spec = JSON.parse(readFileSync(specPath, 'utf-8'));
+	const specPath = resolve('./openapi.json');
+	const spec = JSON.parse(readFileSync(specPath, 'utf-8'));
 
-  function convertMediaTypes(obj) {
-    if (obj && typeof obj === 'object') {
-      if (obj['text/plain'] && !obj['application/json']) {
-        obj['application/json'] = obj['text/plain'];
-        delete obj['text/plain'];
-      }
-      for (const key of Object.keys(obj)) {
-        convertMediaTypes(obj[key]);
-      }
-    }
-  }
+	function convertMediaTypes(obj) {
+		if (obj && typeof obj === 'object') {
+			if (obj['text/plain'] && !obj['application/json']) {
+				obj['application/json'] = obj['text/plain'];
+				delete obj['text/plain'];
+			}
+			for (const key of Object.keys(obj)) {
+				convertMediaTypes(obj[key]);
+			}
+		}
+	}
 
-  convertMediaTypes(spec);
+	convertMediaTypes(spec);
 
-  // Flatten allOf schemas to merge required arrays (fumadocs doesn't handle nested required well)
-  flattenAllOfSchemas(spec);
+	// Flatten allOf schemas to merge required arrays (fumadocs doesn't handle nested required well)
+	flattenAllOfSchemas(spec);
 
-  // Sort properties with required fields first
-  sortPropertiesRequiredFirst(spec);
+	// Sort properties with required fields first
+	sortPropertiesRequiredFirst(spec);
 
-  // Strip newlines from operation summaries to keep MDX titles single-line
-  // (multi-line titles produce YAML block scalars that break the icon regex)
-  if (spec.paths) {
-    for (const pathItem of Object.values(spec.paths)) {
-      for (const operation of Object.values(pathItem)) {
-        if (typeof operation !== 'object' || !operation.summary) continue;
-        operation.summary = operation.summary.split('\n')[0].trim();
-      }
-    }
-  }
+	// Strip newlines from operation summaries to keep MDX titles single-line
+	// (multi-line titles produce YAML block scalars that break the icon regex)
+	if (spec.paths) {
+		for (const pathItem of Object.values(spec.paths)) {
+			for (const operation of Object.values(pathItem)) {
+				if (typeof operation !== 'object' || !operation.summary) continue;
+				operation.summary = operation.summary.split('\n')[0].trim();
+			}
+		}
+	}
 
-  // Hide specific API sections from the docs
-  const hiddenTags = ['SNMP Credentials', 'Discoveries'];
+	// Hide specific API sections from the docs
+	const hiddenTags = ['SNMP Credentials', 'Discoveries'];
 
-  if (spec.tags) {
-    spec.tags = spec.tags.filter(t => !hiddenTags.includes(t.name));
-  }
+	if (spec.tags) {
+		spec.tags = spec.tags.filter((t) => !hiddenTags.includes(t.name));
+	}
 
-  if (spec.paths) {
-    for (const [path, pathItem] of Object.entries(spec.paths)) {
-      for (const [method, operation] of Object.entries(pathItem)) {
-        if (typeof operation !== 'object' || !operation.tags) continue;
-        if (operation.tags.some(t => hiddenTags.includes(t))) {
-          delete pathItem[method];
-        }
-      }
-      // Remove path entirely if no operations remain
-      if (Object.keys(pathItem).every(k => k === 'parameters')) {
-        delete spec.paths[path];
-      }
-    }
-  }
+	if (spec.paths) {
+		for (const [path, pathItem] of Object.entries(spec.paths)) {
+			for (const [method, operation] of Object.entries(pathItem)) {
+				if (typeof operation !== 'object' || !operation.tags) continue;
+				if (operation.tags.some((t) => hiddenTags.includes(t))) {
+					delete pathItem[method];
+				}
+			}
+			// Remove path entirely if no operations remain
+			if (Object.keys(pathItem).every((k) => k === 'parameters')) {
+				delete spec.paths[path];
+			}
+		}
+	}
 
-  const processedPath = resolve('./openapi-processed.json');
-  writeFileSync(processedPath, JSON.stringify(spec, null, 2));
-  return { spec, processedPath };
+	const processedPath = resolve('./openapi-processed.json');
+	writeFileSync(processedPath, JSON.stringify(spec, null, 2));
+	return { spec, processedPath };
 }
 
 // Recursively resolve a $ref to its target schema
 function resolveRef(spec, ref) {
-  if (!ref || !ref.startsWith('#/')) return null;
-  const parts = ref.slice(2).split('/');
-  let current = spec;
-  for (const part of parts) {
-    current = current?.[part];
-  }
-  return current;
+	if (!ref || !ref.startsWith('#/')) return null;
+	const parts = ref.slice(2).split('/');
+	let current = spec;
+	for (const part of parts) {
+		current = current?.[part];
+	}
+	return current;
 }
 
 // Flatten allOf schemas by merging properties and required arrays
 function flattenAllOfSchemas(spec) {
-  const schemas = spec.components?.schemas;
-  if (!schemas) return;
+	const schemas = spec.components?.schemas;
+	if (!schemas) return;
 
-  for (const [name, schema] of Object.entries(schemas)) {
-    if (schema.allOf) {
-      flattenAllOf(spec, schema);
-    }
-  }
+	for (const [name, schema] of Object.entries(schemas)) {
+		if (schema.allOf) {
+			flattenAllOf(spec, schema);
+		}
+	}
 }
 
 function flattenAllOf(spec, schema) {
-  if (!schema.allOf) return;
+	if (!schema.allOf) return;
 
-  const mergedProperties = {};
-  const mergedRequired = new Set();
-  let description = schema.description;
-  let oneOf = null;
+	const mergedProperties = {};
+	const mergedRequired = new Set();
+	let description = schema.description;
+	let oneOf = null;
 
-  for (const member of schema.allOf) {
-    let resolved = member;
+	for (const member of schema.allOf) {
+		let resolved = member;
 
-    // Resolve $ref if present
-    if (member.$ref) {
-      resolved = resolveRef(spec, member.$ref);
-      if (!resolved) continue;
+		// Resolve $ref if present
+		if (member.$ref) {
+			resolved = resolveRef(spec, member.$ref);
+			if (!resolved) continue;
 
-      // Recursively flatten nested allOf first
-      if (resolved.allOf) {
-        flattenAllOf(spec, resolved);
-      }
-    }
+			// Recursively flatten nested allOf first
+			if (resolved.allOf) {
+				flattenAllOf(spec, resolved);
+			}
+		}
 
-    // Capture oneOf (we'll handle it specially)
-    if (resolved.oneOf) {
-      oneOf = resolved.oneOf;
-    }
+		// Capture oneOf (we'll handle it specially)
+		if (resolved.oneOf) {
+			oneOf = resolved.oneOf;
+		}
 
-    // Merge properties
-    if (resolved.properties) {
-      Object.assign(mergedProperties, resolved.properties);
-    }
+		// Merge properties
+		if (resolved.properties) {
+			Object.assign(mergedProperties, resolved.properties);
+		}
 
-    // Merge required arrays
-    if (resolved.required) {
-      for (const field of resolved.required) {
-        mergedRequired.add(field);
-      }
-    }
-  }
+		// Merge required arrays
+		if (resolved.required) {
+			for (const field of resolved.required) {
+				mergedRequired.add(field);
+			}
+		}
+	}
 
-  // Replace allOf with flattened structure
-  delete schema.allOf;
-  schema.type = 'object';
+	// Replace allOf with flattened structure
+	delete schema.allOf;
+	schema.type = 'object';
 
-  if (Object.keys(mergedProperties).length > 0) {
-    schema.properties = mergedProperties;
-  }
-  if (mergedRequired.size > 0) {
-    schema.required = [...mergedRequired];
-  }
-  if (description) {
-    schema.description = description;
-  }
+	if (Object.keys(mergedProperties).length > 0) {
+		schema.properties = mergedProperties;
+	}
+	if (mergedRequired.size > 0) {
+		schema.required = [...mergedRequired];
+	}
+	if (description) {
+		schema.description = description;
+	}
 
-  // If there was a oneOf, we need to distribute the common properties/required into each variant
-  if (oneOf) {
-    schema.oneOf = oneOf.map(variant => {
-      const merged = {
-        ...variant,
-        properties: { ...mergedProperties, ...variant.properties },
-      };
-      // Merge required arrays for each variant
-      const variantRequired = new Set(mergedRequired);
-      if (variant.required) {
-        for (const field of variant.required) {
-          variantRequired.add(field);
-        }
-      }
-      merged.required = [...variantRequired];
-      return merged;
-    });
-    // Remove top-level properties/required since they're now in oneOf variants
-    delete schema.properties;
-    delete schema.required;
-    delete schema.type;
-  }
+	// If there was a oneOf, we need to distribute the common properties/required into each variant
+	if (oneOf) {
+		schema.oneOf = oneOf.map((variant) => {
+			const merged = {
+				...variant,
+				properties: { ...mergedProperties, ...variant.properties }
+			};
+			// Merge required arrays for each variant
+			const variantRequired = new Set(mergedRequired);
+			if (variant.required) {
+				for (const field of variant.required) {
+					variantRequired.add(field);
+				}
+			}
+			merged.required = [...variantRequired];
+			return merged;
+		});
+		// Remove top-level properties/required since they're now in oneOf variants
+		delete schema.properties;
+		delete schema.required;
+		delete schema.type;
+	}
 }
 
 // Sort properties so required fields come first, then alphabetically
 function sortPropertiesRequiredFirst(spec) {
-  function sortSchema(schema) {
-    if (!schema || typeof schema !== 'object') return;
+	function sortSchema(schema) {
+		if (!schema || typeof schema !== 'object') return;
 
-    // Sort properties if this schema has them
-    if (schema.properties && typeof schema.properties === 'object') {
-      const required = new Set(schema.required || []);
-      const entries = Object.entries(schema.properties);
+		// Sort properties if this schema has them
+		if (schema.properties && typeof schema.properties === 'object') {
+			const required = new Set(schema.required || []);
+			const entries = Object.entries(schema.properties);
 
-      // Sort: required first (alphabetically), then optional (alphabetically)
-      entries.sort(([keyA], [keyB]) => {
-        const aRequired = required.has(keyA);
-        const bRequired = required.has(keyB);
-        if (aRequired && !bRequired) return -1;
-        if (!aRequired && bRequired) return 1;
-        return keyA.localeCompare(keyB);
-      });
+			// Sort: required first (alphabetically), then optional (alphabetically)
+			entries.sort(([keyA], [keyB]) => {
+				const aRequired = required.has(keyA);
+				const bRequired = required.has(keyB);
+				if (aRequired && !bRequired) return -1;
+				if (!aRequired && bRequired) return 1;
+				return keyA.localeCompare(keyB);
+			});
 
-      schema.properties = Object.fromEntries(entries);
+			schema.properties = Object.fromEntries(entries);
 
-      // Recursively sort nested schemas
-      for (const prop of Object.values(schema.properties)) {
-        sortSchema(prop);
-      }
-    }
+			// Recursively sort nested schemas
+			for (const prop of Object.values(schema.properties)) {
+				sortSchema(prop);
+			}
+		}
 
-    // Handle oneOf/anyOf/allOf
-    for (const key of ['oneOf', 'anyOf', 'allOf']) {
-      if (Array.isArray(schema[key])) {
-        for (const variant of schema[key]) {
-          sortSchema(variant);
-        }
-      }
-    }
+		// Handle oneOf/anyOf/allOf
+		for (const key of ['oneOf', 'anyOf', 'allOf']) {
+			if (Array.isArray(schema[key])) {
+				for (const variant of schema[key]) {
+					sortSchema(variant);
+				}
+			}
+		}
 
-    // Handle items (for arrays)
-    if (schema.items) {
-      sortSchema(schema.items);
-    }
+		// Handle items (for arrays)
+		if (schema.items) {
+			sortSchema(schema.items);
+		}
 
-    // Handle additionalProperties
-    if (schema.additionalProperties && typeof schema.additionalProperties === 'object') {
-      sortSchema(schema.additionalProperties);
-    }
-  }
+		// Handle additionalProperties
+		if (schema.additionalProperties && typeof schema.additionalProperties === 'object') {
+			sortSchema(schema.additionalProperties);
+		}
+	}
 
-  // Sort all component schemas
-  if (spec.components?.schemas) {
-    for (const schema of Object.values(spec.components.schemas)) {
-      sortSchema(schema);
-    }
-  }
+	// Sort all component schemas
+	if (spec.components?.schemas) {
+		for (const schema of Object.values(spec.components.schemas)) {
+			sortSchema(schema);
+		}
+	}
 
-  // Sort schemas in request/response bodies throughout paths
-  if (spec.paths) {
-    for (const pathItem of Object.values(spec.paths)) {
-      for (const operation of Object.values(pathItem)) {
-        if (typeof operation !== 'object') continue;
+	// Sort schemas in request/response bodies throughout paths
+	if (spec.paths) {
+		for (const pathItem of Object.values(spec.paths)) {
+			for (const operation of Object.values(pathItem)) {
+				if (typeof operation !== 'object') continue;
 
-        // Request body schemas
-        const requestContent = operation.requestBody?.content;
-        if (requestContent) {
-          for (const mediaType of Object.values(requestContent)) {
-            if (mediaType.schema) sortSchema(mediaType.schema);
-          }
-        }
+				// Request body schemas
+				const requestContent = operation.requestBody?.content;
+				if (requestContent) {
+					for (const mediaType of Object.values(requestContent)) {
+						if (mediaType.schema) sortSchema(mediaType.schema);
+					}
+				}
 
-        // Response schemas
-        if (operation.responses) {
-          for (const response of Object.values(operation.responses)) {
-            const responseContent = response.content;
-            if (responseContent) {
-              for (const mediaType of Object.values(responseContent)) {
-                if (mediaType.schema) sortSchema(mediaType.schema);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+				// Response schemas
+				if (operation.responses) {
+					for (const response of Object.values(operation.responses)) {
+						const responseContent = response.content;
+						if (responseContent) {
+							for (const mediaType of Object.values(responseContent)) {
+								if (mediaType.schema) sortSchema(mediaType.schema);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 // Add HTTP method prefix to MDX file titles
 function addMethodToTitles(apiDir) {
-  const folders = readdirSync(apiDir, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => d.name);
+	const folders = readdirSync(apiDir, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name);
 
-  for (const folder of folders) {
-    const folderPath = resolve(apiDir, folder);
-    const files = readdirSync(folderPath).filter(f => f.endsWith('.mdx'));
+	for (const folder of folders) {
+		const folderPath = resolve(apiDir, folder);
+		const files = readdirSync(folderPath).filter((f) => f.endsWith('.mdx'));
 
-    for (const file of files) {
-      const filePath = resolve(folderPath, file);
-      let content = readFileSync(filePath, 'utf-8');
+		for (const file of files) {
+			const filePath = resolve(folderPath, file);
+			let content = readFileSync(filePath, 'utf-8');
 
-      // Extract method from _openapi.method
-      const methodMatch = content.match(/_openapi:\s*\n\s*method:\s*(\w+)/);
-      if (!methodMatch) continue;
+			// Extract method from _openapi.method
+			const methodMatch = content.match(/_openapi:\s*\n\s*method:\s*(\w+)/);
+			if (!methodMatch) continue;
 
-      const method = methodMatch[1].toUpperCase();
+			const method = methodMatch[1].toUpperCase();
 
-      // Add icon field for the method badge (no need to add method to title since icon shows it)
-      if (!content.includes('icon:')) {
-        content = content.replace(
-          /^(---\s*\ntitle:.+\n)/m,
-          `$1icon: ${method}\n`
-        );
-      }
+			// Add icon field for the method badge (no need to add method to title since icon shows it)
+			if (!content.includes('icon:')) {
+				content = content.replace(/^(---\s*\ntitle:.+\n)/m, `$1icon: ${method}\n`);
+			}
 
-      writeFileSync(filePath, content);
-    }
-  }
-  console.log('Added method prefixes to API page titles');
+			writeFileSync(filePath, content);
+		}
+	}
+	console.log('Added method prefixes to API page titles');
 }
 
 // Convert a tag name to the kebab-case folder name that fumadocs generates
 function tagNameToFolderName(tagName) {
-  return tagName.toLowerCase().replace(/\s+/g, '-');
+	return tagName.toLowerCase().replace(/\s+/g, '-');
 }
 
 // Build a map from folder names to original tag names
 function buildFolderToTagMap(spec) {
-  const map = {};
-  if (spec.tags) {
-    for (const tag of spec.tags) {
-      const folderName = tagNameToFolderName(tag.name);
-      map[folderName] = tag.name;
-    }
-  }
-  return map;
+	const map = {};
+	if (spec.tags) {
+		for (const tag of spec.tags) {
+			const folderName = tagNameToFolderName(tag.name);
+			map[folderName] = tag.name;
+		}
+	}
+	return map;
 }
 
 // Generate index.mdx files for each API tag folder with tag descriptions
 function generateIndexPages(spec, apiDir) {
-  // Build a map of tag name -> description from the spec
-  const tagDescriptions = {};
-  if (spec.tags) {
-    for (const tag of spec.tags) {
-      tagDescriptions[tag.name] = tag.description || '';
-    }
-  }
+	// Build a map of tag name -> description from the spec
+	const tagDescriptions = {};
+	if (spec.tags) {
+		for (const tag of spec.tags) {
+			tagDescriptions[tag.name] = tag.description || '';
+		}
+	}
 
-  // Build folder name -> tag name mapping
-  const folderToTag = buildFolderToTagMap(spec);
+	// Build folder name -> tag name mapping
+	const folderToTag = buildFolderToTagMap(spec);
 
-  // Get all folders in the API directory
-  const folders = readdirSync(apiDir, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => d.name);
+	// Get all folders in the API directory
+	const folders = readdirSync(apiDir, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name);
 
-  for (const folder of folders) {
-    const folderPath = resolve(apiDir, folder);
-    const tagName = folderToTag[folder];
-    const description = tagName ? tagDescriptions[tagName] : null;
+	for (const folder of folders) {
+		const folderPath = resolve(apiDir, folder);
+		const tagName = folderToTag[folder];
+		const description = tagName ? tagDescriptions[tagName] : null;
 
-    // Skip folders without a description
-    if (!description) {
-      console.log(`Skipped index.mdx for ${folder} (no description)`);
-      continue;
-    }
+		// Skip folders without a description
+		if (!description) {
+			console.log(`Skipped index.mdx for ${folder} (no description)`);
+			continue;
+		}
 
-    // Strip leading whitespace from each line (OpenAPI descriptions are often indented)
-    const bodyContent = description.replace(/^[ \t]+/gm, '').trim();
+		// Strip leading whitespace from each line (OpenAPI descriptions are often indented)
+		const bodyContent = description.replace(/^[ \t]+/gm, '').trim();
 
-    const indexContent = `---
+		const indexContent = `---
 title: Overview
 ---
 
 ${bodyContent}
 `;
 
-    writeFileSync(resolve(folderPath, 'index.mdx'), indexContent);
-    console.log(`Generated index.mdx for ${folder}`);
-  }
+		writeFileSync(resolve(folderPath, 'index.mdx'), indexContent);
+		console.log(`Generated index.mdx for ${folder}`);
+	}
 }
 
 // Generate meta.json files for each API tag folder
 function generateMetaFiles(spec, apiDir) {
-  // Method sort order
-  const methodOrder = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+	// Method sort order
+	const methodOrder = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
-  // Build folder name -> tag name mapping
-  const folderToTag = buildFolderToTagMap(spec);
+	// Build folder name -> tag name mapping
+	const folderToTag = buildFolderToTagMap(spec);
 
-  // Get all folders in the API directory
-  const folders = readdirSync(apiDir, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => d.name);
+	// Get all folders in the API directory
+	const folders = readdirSync(apiDir, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name);
 
-  for (const folder of folders) {
-    const folderPath = resolve(apiDir, folder);
+	for (const folder of folders) {
+		const folderPath = resolve(apiDir, folder);
 
-    // Check if index.mdx exists
-    const hasIndex = existsSync(resolve(folderPath, 'index.mdx'));
+		// Check if index.mdx exists
+		const hasIndex = existsSync(resolve(folderPath, 'index.mdx'));
 
-    // Get all .mdx files with their methods for sorting (exclude index)
-    const files = readdirSync(folderPath)
-      .filter(f => f.endsWith('.mdx') && f !== 'index.mdx')
-      .map(f => {
-        const name = f.replace('.mdx', '');
-        const content = readFileSync(resolve(folderPath, f), 'utf-8');
-        const methodMatch = content.match(/_openapi:\s*\n\s*method:\s*(\w+)/);
-        const method = methodMatch ? methodMatch[1].toUpperCase() : 'GET';
-        return { name, method };
-      })
-      // Sort by method order, then alphabetically by name
-      .sort((a, b) => {
-        const orderA = methodOrder.indexOf(a.method);
-        const orderB = methodOrder.indexOf(b.method);
-        if (orderA !== orderB) return orderA - orderB;
-        return a.name.localeCompare(b.name);
-      })
-      .map(f => f.name);
+		// Get all .mdx files with their methods for sorting (exclude index)
+		const files = readdirSync(folderPath)
+			.filter((f) => f.endsWith('.mdx') && f !== 'index.mdx')
+			.map((f) => {
+				const name = f.replace('.mdx', '');
+				const content = readFileSync(resolve(folderPath, f), 'utf-8');
+				const methodMatch = content.match(/_openapi:\s*\n\s*method:\s*(\w+)/);
+				const method = methodMatch ? methodMatch[1].toUpperCase() : 'GET';
+				return { name, method };
+			})
+			// Sort by method order, then alphabetically by name
+			.sort((a, b) => {
+				const orderA = methodOrder.indexOf(a.method);
+				const orderB = methodOrder.indexOf(b.method);
+				if (orderA !== orderB) return orderA - orderB;
+				return a.name.localeCompare(b.name);
+			})
+			.map((f) => f.name);
 
-    // Use the original tag name from the OpenAPI spec, or fall back to folder name
-    const title = folderToTag[folder] || folder;
+		// Use the original tag name from the OpenAPI spec, or fall back to folder name
+		const title = folderToTag[folder] || folder;
 
-    const meta = {
-      title,
-      pages: hasIndex ? ['index', ...files] : files,
-    };
+		const meta = {
+			title,
+			pages: hasIndex ? ['index', ...files] : files
+		};
 
-    writeFileSync(
-      resolve(folderPath, 'meta.json'),
-      JSON.stringify(meta, null, 2)
-    );
-    console.log(`Generated meta.json for ${folder}`);
-  }
+		writeFileSync(resolve(folderPath, 'meta.json'), JSON.stringify(meta, null, 2));
+		console.log(`Generated meta.json for ${folder}`);
+	}
 }
 
 const { spec, processedPath } = preprocessSpec();
@@ -405,98 +399,98 @@ console.log('Preprocessed OpenAPI spec (converted text/plain to application/json
 
 // Use relative path for OpenAPI config so it works in any environment (local, CI, etc.)
 const openapi = createOpenAPI({
-  input: ['./openapi-processed.json'],
+	input: ['./openapi-processed.json']
 });
 
 async function main() {
-  const apiDir = './content/docs/api';
+	const apiDir = './content/docs/api';
 
-  // Clean output to prevent stale files (avoids duplicates from case-sensitive filesystems)
-  if (existsSync(apiDir)) {
-    rmSync(apiDir, { recursive: true });
-  }
+	// Clean output to prevent stale files (avoids duplicates from case-sensitive filesystems)
+	if (existsSync(apiDir)) {
+		rmSync(apiDir, { recursive: true });
+	}
 
-  await generateFiles({
-    input: openapi,
-    output: apiDir,
-    per: 'operation',
-    groupBy: 'tag',
-  });
+	await generateFiles({
+		input: openapi,
+		output: apiDir,
+		per: 'operation',
+		groupBy: 'tag'
+	});
 
-  console.log('API docs generated successfully');
+	console.log('API docs generated successfully');
 
-  // Add method prefixes to page titles
-  addMethodToTitles(apiDir);
+	// Add method prefixes to page titles
+	addMethodToTitles(apiDir);
 
-  // Generate root API index page
-  generateRootApiIndex(spec, apiDir);
+	// Generate root API index page
+	generateRootApiIndex(spec, apiDir);
 
-  // Generate index pages with tag descriptions
-  generateIndexPages(spec, apiDir);
-  console.log('Index pages generated successfully');
+	// Generate index pages with tag descriptions
+	generateIndexPages(spec, apiDir);
+	console.log('Index pages generated successfully');
 
-  // Generate meta.json files for each tag folder
-  generateMetaFiles(spec, apiDir);
-  console.log('Meta files generated successfully');
+	// Generate meta.json files for each tag folder
+	generateMetaFiles(spec, apiDir);
+	console.log('Meta files generated successfully');
 
-  // Update root meta.json with API folders
-  updateRootMeta(apiDir);
-  console.log('Root meta.json updated with API folders');
+	// Update root meta.json with API folders
+	updateRootMeta(apiDir);
+	console.log('Root meta.json updated with API folders');
 }
 
 // Generate root API index page from OpenAPI info
 function generateRootApiIndex(spec, apiDir) {
-  const title = spec.info?.title || 'API Reference';
-  const description = spec.info?.description || '';
+	const title = spec.info?.title || 'API Reference';
+	const description = spec.info?.description || '';
 
-  // Strip leading whitespace from each line
-  const bodyContent = description.replace(/^[ \t]+/gm, '').trim();
+	// Strip leading whitespace from each line
+	const bodyContent = description.replace(/^[ \t]+/gm, '').trim();
 
-  const indexContent = `---
+	const indexContent = `---
 title: ${title}
 ---
 
 ${bodyContent}
 `;
 
-  writeFileSync(resolve(apiDir, 'index.mdx'), indexContent);
-  console.log('Generated root API index.mdx');
+	writeFileSync(resolve(apiDir, 'index.mdx'), indexContent);
+	console.log('Generated root API index.mdx');
 
-  // Generate meta.json for api folder with index first, then all tag folders
-  const tagFolders = readdirSync(apiDir, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => d.name)
-    .sort();
+	// Generate meta.json for api folder with index first, then all tag folders
+	const tagFolders = readdirSync(apiDir, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name)
+		.sort();
 
-  const meta = {
-    pages: ['index', ...tagFolders],
-  };
+	const meta = {
+		pages: ['index', ...tagFolders]
+	};
 
-  writeFileSync(resolve(apiDir, 'meta.json'), JSON.stringify(meta, null, 2));
-  console.log('Generated root API meta.json');
+	writeFileSync(resolve(apiDir, 'meta.json'), JSON.stringify(meta, null, 2));
+	console.log('Generated root API meta.json');
 }
 
 // Update the root meta.json to list API pages directly (avoids collapsible folder)
 function updateRootMeta(apiDir) {
-  const rootMetaPath = './content/docs/meta.json';
-  const rootMeta = JSON.parse(readFileSync(rootMetaPath, 'utf-8'));
+	const rootMetaPath = './content/docs/meta.json';
+	const rootMeta = JSON.parse(readFileSync(rootMetaPath, 'utf-8'));
 
-  // Get all API folders and prepend with api/
-  const apiPages = [
-    'api/index',
-    ...readdirSync(apiDir, { withFileTypes: true })
-      .filter(d => d.isDirectory())
-      .map(d => `api/${d.name}`)
-      .sort()
-  ];
+	// Get all API folders and prepend with api/
+	const apiPages = [
+		'api/index',
+		...readdirSync(apiDir, { withFileTypes: true })
+			.filter((d) => d.isDirectory())
+			.map((d) => `api/${d.name}`)
+			.sort()
+	];
 
-  // Find the API Reference separator and replace everything after it
-  const apiIndex = rootMeta.pages.indexOf('---API Reference---');
-  if (apiIndex !== -1) {
-    rootMeta.pages = [...rootMeta.pages.slice(0, apiIndex + 1), ...apiPages];
-  }
+	// Find the API Reference separator and replace everything after it
+	const apiIndex = rootMeta.pages.indexOf('---API Reference---');
+	if (apiIndex !== -1) {
+		rootMeta.pages = [...rootMeta.pages.slice(0, apiIndex + 1), ...apiPages];
+	}
 
-  writeFileSync(rootMetaPath, JSON.stringify(rootMeta, null, 2) + '\n');
+	writeFileSync(rootMetaPath, JSON.stringify(rootMeta, null, 2) + '\n');
 }
 
 main().catch(console.error);

@@ -6,46 +6,46 @@ import { CookieConsent } from '@/components/CookieConsent';
 import { MethodColors } from '@/components/method-colors';
 
 const inter = Inter({
-  subsets: ['latin'],
+	subsets: ['latin']
 });
 
 export const metadata = {
-  metadataBase: new URL('https://scanopy.net/docs'),
-  title: {
-    default: 'Scanopy Docs',
-    template: '%s | Scanopy Docs',
-  },
-  description: 'Documentation for Scanopy - Network discovery and visualization',
-  icons: {
-    icon: '/docs/scanopy-logo.png',
-  },
+	metadataBase: new URL('https://scanopy.net/docs'),
+	title: {
+		default: 'Scanopy Docs',
+		template: '%s | Scanopy Docs'
+	},
+	description: 'Documentation for Scanopy - Network discovery and visualization',
+	icons: {
+		icon: '/docs/scanopy-logo.png'
+	}
 };
 
 export default function Layout({ children }: LayoutProps<'/'>) {
-  return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen">
-        <RootProvider
-          search={{
-            options: {
-              type: 'static',
-              api: '/docs/api/search',
-            },
-          }}
-          theme={{
-            defaultTheme: 'system',
-            enableSystem: true,
-            // Share the main site's preference key so the theme carries across
-            // scanopy.net and scanopy.net/docs (values: system | light | dark).
-            storageKey: 'scanopy-theme',
-          }}
-        >
-          {children}
-          <Analytics />
-          <CookieConsent />
-          <MethodColors />
-        </RootProvider>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en" className={inter.className} suppressHydrationWarning>
+			<body className="flex min-h-screen flex-col">
+				<RootProvider
+					search={{
+						options: {
+							type: 'static',
+							api: '/docs/api/search'
+						}
+					}}
+					theme={{
+						defaultTheme: 'system',
+						enableSystem: true,
+						// Share the main site's preference key so the theme carries across
+						// scanopy.net and scanopy.net/docs (values: system | light | dark).
+						storageKey: 'scanopy-theme'
+					}}
+				>
+					{children}
+					<Analytics />
+					<CookieConsent />
+					<MethodColors />
+				</RootProvider>
+			</body>
+		</html>
+	);
 }

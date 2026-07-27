@@ -187,9 +187,8 @@
 						<a href="/pricing">pricing</a> regardless of host count, a free, self-hostable
 						<a href="/community">Community edition</a> under AGPL-3.0 or a
 						<a href="/commercial">commercial license</a> for business self-hosting, and a design that
-						runs alongside whatever monitoring stack you already run rather than replacing it. That
-						combination is living, shareable network documentation without standing up another
-						platform.
+						runs alongside whatever monitoring stack you already run rather than replacing it. That combination
+						is living, shareable network documentation without standing up another platform.
 					</p>
 				</div>
 

@@ -200,4 +200,3 @@ jobs:
             https://scanopy.net/changelog/v${{ steps.changelog.outputs.version }}?utm_source=bluesky&utm_medium=social&utm_campaign=release_v${{ steps.changelog.outputs.version }}
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
-

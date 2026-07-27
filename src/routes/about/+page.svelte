@@ -19,19 +19,26 @@
 	<link rel="canonical" href="https://scanopy.net/about" />
 
 	<meta property="og:title" content="About - Scanopy" />
-	<meta property="og:description" content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you." />
+	<meta
+		property="og:description"
+		content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you."
+	/>
 	<meta property="og:url" content="https://scanopy.net/about" />
 	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="About - Scanopy" />
-	<meta name="twitter:description" content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you." />
+	<meta
+		name="twitter:description"
+		content="Scanopy exists because keeping network documentation accurate is tedious, thankless work. We built a tool that does it for you."
+	/>
 	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'Person',
 		name: 'Maya',
-		description: 'Founder of Scanopy. A homelabber and builder who got tired of network diagrams that go stale the moment you finish drawing them, and built a tool that scans your network and generates living documentation automatically.',
+		description:
+			'Founder of Scanopy. A homelabber and builder who got tired of network diagrams that go stale the moment you finish drawing them, and built a tool that scans your network and generates living documentation automatically.',
 		url: 'https://github.com/mayanayza',
 		jobTitle: 'Founder',
 		worksFor: {
@@ -39,7 +46,12 @@
 			name: 'Scanopy',
 			url: 'https://scanopy.net'
 		},
-		knowsAbout: ['network documentation', 'network topology', 'automated discovery', 'service dependency mapping'],
+		knowsAbout: [
+			'network documentation',
+			'network topology',
+			'automated discovery',
+			'service dependency mapping'
+		],
 		sameAs: ['https://github.com/mayanayza']
 	})}</script>`}
 </svelte:head>
@@ -53,16 +65,16 @@
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto max-w-3xl px-4">
 		<h2 class="mb-8 text-3xl font-bold text-rose-400 lg:text-4xl">How it started</h2>
-		<div class="space-y-5 text-gray-300 leading-relaxed">
+		<div class="space-y-5 leading-relaxed text-gray-300">
 			<p>
-				If you've spent any time on r/homelab or r/selfhosted, you've seen the posts. Someone
-				shares a beautifully detailed network diagram - color-coded VLANs, labeled switches,
-				the works - and the comments light up. <em>"How did you make this?"</em>
+				If you've spent any time on r/homelab or r/selfhosted, you've seen the posts. Someone shares
+				a beautifully detailed network diagram - color-coded VLANs, labeled switches, the works -
+				and the comments light up. <em>"How did you make this?"</em>
 				<em>"What tool is that?"</em> <em>"I need to do this for my network."</em>
 			</p>
 			<p>
-				I was one of those commenters. I always wanted a proper network diagram. I just never
-				wanted to actually <em>make</em> one.
+				I was one of those commenters. I always wanted a proper network diagram. I just never wanted
+				to actually <em>make</em> one.
 			</p>
 			<p>
 				The process is always the same: you open draw.io or Visio, spend a few hours dragging boxes
@@ -70,8 +82,17 @@
 				changes, the diagram doesn't, and six months later it's fiction.
 			</p>
 			<p>
-				So I took the technical overkill route and built a tool that <a href="/services" class="text-blue-400 hover:text-blue-300">scans your network</a> and
-				<a href="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">generates the diagram automatically</a>. That became Scanopy.
+				So I took the technical overkill route and built a tool that <a
+					href="/services"
+					class="text-blue-400 hover:text-blue-300">scans your network</a
+				>
+				and
+				<a
+					href="https://demo.scanopy.net/share/a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-blue-400 hover:text-blue-300">generates the diagram automatically</a
+				>. That became Scanopy.
 			</p>
 		</div>
 	</div>
@@ -86,12 +107,12 @@
 				<h3 class="mb-3 text-xl font-semibold text-white">
 					Documentation should be derived from infrastructure, not maintained alongside it.
 				</h3>
-				<p class="text-gray-400 leading-relaxed">
-					Think of it like OpenAPI specs annotated inline in the codebase - the
-					documentation isn't fully automatic, but it's heavily derived from the technical system
-					it describes. That's the only way it stays accurate. Scanopy works the same way: it
-					pulls directly from your actual network to generate documentation, so the diagram
-					reflects reality instead of someone's memory of reality from three months ago.
+				<p class="leading-relaxed text-gray-400">
+					Think of it like OpenAPI specs annotated inline in the codebase - the documentation isn't
+					fully automatic, but it's heavily derived from the technical system it describes. That's
+					the only way it stays accurate. Scanopy works the same way: it pulls directly from your
+					actual network to generate documentation, so the diagram reflects reality instead of
+					someone's memory of reality from three months ago.
 				</p>
 			</div>
 
@@ -99,10 +120,13 @@
 				<h3 class="mb-3 text-xl font-semibold text-white">
 					A documentation tool shouldn't pretend to be an ITAM platform.
 				</h3>
-				<p class="text-gray-400 leading-relaxed">
+				<p class="leading-relaxed text-gray-400">
 					Scanopy doesn't do asset lifecycle management, procurement tracking, or compliance
-					workflows. It does network documentation. That's a feature, not a gap. You don't need
-					a $15/device/month platform when what you actually need is an accurate network map - and our <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing model is aligned</a> to this, so you don't pay per device with Scanopy.
+					workflows. It does network documentation. That's a feature, not a gap. You don't need a
+					$15/device/month platform when what you actually need is an accurate network map - and our <a
+						href="/pricing"
+						class="text-blue-400 hover:text-blue-300">pricing model is aligned</a
+					> to this, so you don't pay per device with Scanopy.
 				</p>
 			</div>
 
@@ -110,10 +134,10 @@
 				<h3 class="mb-3 text-xl font-semibold text-white">
 					IT buyers don't need hype. They need to verify.
 				</h3>
-				<p class="text-gray-400 leading-relaxed">
+				<p class="leading-relaxed text-gray-400">
 					We publish our pricing. We name competitors directly. We show real screenshots, not
-					mockups. We make demos and self-hostability as accessible as possible. If Scanopy isn't the right fit, we'd rather you find out before you deploy
-					it - not after.
+					mockups. We make demos and self-hostability as accessible as possible. If Scanopy isn't
+					the right fit, we'd rather you find out before you deploy it - not after.
 				</p>
 			</div>
 
@@ -121,10 +145,10 @@
 				<h3 class="mb-3 text-xl font-semibold text-white">
 					The person who set up the network shouldn't be a single point of failure.
 				</h3>
-				<p class="text-gray-400 leading-relaxed">
-					Every team has someone who "just knows" how the network is set up. When that person
-					goes on vacation - or leaves - everyone else is guessing. Living
-					documentation fixes the bus factor.
+				<p class="leading-relaxed text-gray-400">
+					Every team has someone who "just knows" how the network is set up. When that person goes
+					on vacation - or leaves - everyone else is guessing. Living documentation fixes the bus
+					factor.
 				</p>
 			</div>
 		</div>
@@ -165,17 +189,23 @@
 				Maya, Founder
 			</a>
 		</h2>
-		<div class="space-y-5 text-gray-300 leading-relaxed">
+		<div class="space-y-5 leading-relaxed text-gray-300">
 			<p>
-				I'm a developer and homelabber with over 10 years in tech, spanning B2B SaaS, cybersecurity, privacy, and compliance. I built Scanopy because my own network documentation
-				lived entirely in my head - and I knew I'd never maintain a manual diagram.
+				I'm a developer and homelabber with over 10 years in tech, spanning B2B SaaS, cybersecurity,
+				privacy, and compliance. I built Scanopy because my own network documentation lived entirely
+				in my head - and I knew I'd never maintain a manual diagram.
 			</p>
 			<p>
-				What started as a side project to scratch my own itch pulled me deeper into the networking world than I expected - SNMP MIBs, Layer 3 topology mapping, ARP tables, service fingerprinting. Turns out a lot of sysadmins,
-				MSPs, and network engineers had the same itch, and building for them keeps pushing me further into the protocols and standards that make networks work.
+				What started as a side project to scratch my own itch pulled me deeper into the networking
+				world than I expected - SNMP MIBs, Layer 3 topology mapping, ARP tables, service
+				fingerprinting. Turns out a lot of sysadmins, MSPs, and network engineers had the same itch,
+				and building for them keeps pushing me further into the protocols and standards that make
+				networks work.
 			</p>
 			<p>
-				I'm not an enterprise IT veteran. I came in through the homelab door and I'm learning the enterprise side by building the tool. That perspective shapes Scanopy - it's designed to be simple enough for a homelab but capable enough for production networks.
+				I'm not an enterprise IT veteran. I came in through the homelab door and I'm learning the
+				enterprise side by building the tool. That perspective shapes Scanopy - it's designed to be
+				simple enough for a homelab but capable enough for production networks.
 			</p>
 		</div>
 	</div>
@@ -185,9 +215,7 @@
 <section class="border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mx-auto max-w-3xl text-center">
-			<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl">
-				See it for yourself
-			</h2>
+			<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl">See it for yourself</h2>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
 					href={appHref(APP.onboarding, page.url.pathname, 'about-cta')}

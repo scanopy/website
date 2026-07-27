@@ -67,7 +67,6 @@
 		{ value: 'exploring', label: 'Just exploring' }
 	];
 
-
 	function validateEmail(email: string): boolean {
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 	}
@@ -245,7 +244,9 @@
 							bind:value={email}
 							oninput={() => clearError('email')}
 							disabled={loading}
-							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.email ? 'border-red-500' : 'border-gray-700'}"
+							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.email
+								? 'border-red-500'
+								: 'border-gray-700'}"
 						/>
 						{#if fieldErrors.email}<p class="mt-1 text-xs text-red-400">{fieldErrors.email}</p>{/if}
 					</div>
@@ -262,9 +263,13 @@
 								bind:value={firstName}
 								oninput={() => clearError('firstName')}
 								disabled={loading}
-								class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.firstName ? 'border-red-500' : 'border-gray-700'}"
+								class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.firstName
+									? 'border-red-500'
+									: 'border-gray-700'}"
 							/>
-							{#if fieldErrors.firstName}<p class="mt-1 text-xs text-red-400">{fieldErrors.firstName}</p>{/if}
+							{#if fieldErrors.firstName}<p class="mt-1 text-xs text-red-400">
+									{fieldErrors.firstName}
+								</p>{/if}
 						</div>
 						<div>
 							<label for="contact-lastname" class="mb-1 block text-sm font-medium text-gray-300">
@@ -277,9 +282,13 @@
 								bind:value={lastName}
 								oninput={() => clearError('lastName')}
 								disabled={loading}
-								class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.lastName ? 'border-red-500' : 'border-gray-700'}"
+								class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.lastName
+									? 'border-red-500'
+									: 'border-gray-700'}"
 							/>
-							{#if fieldErrors.lastName}<p class="mt-1 text-xs text-red-400">{fieldErrors.lastName}</p>{/if}
+							{#if fieldErrors.lastName}<p class="mt-1 text-xs text-red-400">
+									{fieldErrors.lastName}
+								</p>{/if}
 						</div>
 					</div>
 
@@ -294,9 +303,13 @@
 							bind:value={company}
 							oninput={() => clearError('company')}
 							disabled={loading}
-							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.company ? 'border-red-500' : 'border-gray-700'}"
+							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.company
+								? 'border-red-500'
+								: 'border-gray-700'}"
 						/>
-						{#if fieldErrors.company}<p class="mt-1 text-xs text-red-400">{fieldErrors.company}</p>{/if}
+						{#if fieldErrors.company}<p class="mt-1 text-xs text-red-400">
+								{fieldErrors.company}
+							</p>{/if}
 					</div>
 
 					<div>
@@ -308,14 +321,18 @@
 							bind:value={teamSize}
 							onchange={() => clearError('teamSize')}
 							disabled={loading}
-							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.teamSize ? 'border-red-500' : 'border-gray-700'}"
+							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.teamSize
+								? 'border-red-500'
+								: 'border-gray-700'}"
 						>
 							<option value="" disabled>Select company size</option>
 							{#each teamSizeOptions as option (option.value)}
 								<option value={option.value}>{option.label}</option>
 							{/each}
 						</select>
-						{#if fieldErrors.teamSize}<p class="mt-1 text-xs text-red-400">{fieldErrors.teamSize}</p>{/if}
+						{#if fieldErrors.teamSize}<p class="mt-1 text-xs text-red-400">
+								{fieldErrors.teamSize}
+							</p>{/if}
 					</div>
 
 					<div>
@@ -327,14 +344,18 @@
 							bind:value={urgency}
 							onchange={() => clearError('urgency')}
 							disabled={loading}
-							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.urgency ? 'border-red-500' : 'border-gray-700'}"
+							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.urgency
+								? 'border-red-500'
+								: 'border-gray-700'}"
 						>
 							<option value="">Select timeline</option>
 							{#each urgencyOptions as option (option.value)}
 								<option value={option.value}>{option.label}</option>
 							{/each}
 						</select>
-						{#if fieldErrors.urgency}<p class="mt-1 text-xs text-red-400">{fieldErrors.urgency}</p>{/if}
+						{#if fieldErrors.urgency}<p class="mt-1 text-xs text-red-400">
+								{fieldErrors.urgency}
+							</p>{/if}
 					</div>
 
 					<div>
@@ -349,9 +370,13 @@
 							bind:value={networkCount}
 							oninput={() => clearError('networkCount')}
 							disabled={loading}
-							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.networkCount ? 'border-red-500' : 'border-gray-700'}"
+							class="w-full rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.networkCount
+								? 'border-red-500'
+								: 'border-gray-700'}"
 						/>
-						{#if fieldErrors.networkCount}<p class="mt-1 text-xs text-red-400">{fieldErrors.networkCount}</p>{/if}
+						{#if fieldErrors.networkCount}<p class="mt-1 text-xs text-red-400">
+								{fieldErrors.networkCount}
+							</p>{/if}
 					</div>
 
 					<div>
@@ -365,9 +390,13 @@
 							oninput={() => clearError('useCase')}
 							disabled={loading}
 							rows={3}
-							class="w-full resize-none rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.useCase ? 'border-red-500' : 'border-gray-700'}"
+							class="w-full resize-none rounded-lg border bg-gray-800/50 px-4 py-2 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 {fieldErrors.useCase
+								? 'border-red-500'
+								: 'border-gray-700'}"
 						></textarea>
-						{#if fieldErrors.useCase}<p class="mt-1 text-xs text-red-400">{fieldErrors.useCase}</p>{/if}
+						{#if fieldErrors.useCase}<p class="mt-1 text-xs text-red-400">
+								{fieldErrors.useCase}
+							</p>{/if}
 					</div>
 
 					{#if status === 'error' && errorMessage}

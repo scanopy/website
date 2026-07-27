@@ -5,7 +5,7 @@ keyword: network topology visualization
 slug: making-network-topology-readable
 date: 2026-07-10
 dateModified: 2026-07-14
-tldr: "Network topology gets unreadable as it grows, because one diagram is asked to answer four structural questions at once. The fix is to separate them: each view answers one question (physical wiring, L3 segmentation, workloads, or application dependencies) and hides the rest, with C4-style zoom that falls out of expand and collapse."
+tldr: 'Network topology gets unreadable as it grows, because one diagram is asked to answer four structural questions at once. The fix is to separate them: each view answers one question (physical wiring, L3 segmentation, workloads, or application dependencies) and hides the rest, with C4-style zoom that falls out of expand and collapse.'
 ctaHeading: See all four views on your own network
 ctaDescription: Scanopy discovers your network over SNMP, LLDP, and ARP, then builds physical, logical, workload, and application views from one scan. The Community Edition is free and self-hosted.
 faq:
@@ -68,7 +68,7 @@ Two findings from the graph-drawing literature drove the redesign.
 
 **Edge crossings are what make a graph hard to read, so minimize them.** [Purchase (2002)](https://doi.org/10.1006/jvlc.2002.0232) found that minimizing edge crossings is the strongest single aesthetic factor in graph readability, ahead of angular resolution or edge-length uniformity; [Huang, Hong, and Eades (2006)](https://www.semanticscholar.org/paper/Predicting-graph-reading-performance:-a-cognitive-Huang-Hong/e2269dc14bd1a866d29b09d2d09f22be13371f88) found crossings are the strongest predictor of reading errors. People don't just find cluttered graphs ugly; they read them wrong. What we did with it: give each view a single structural edge type to lay out, so there are fewer edges to cross, and run a crossing-reducing layout (the Sugiyama method, below).
 
-**A display has a limited budget of visual channels, so don't overload one view.** Colin Ware's book [*Information Visualization: Perception for Design*](https://books.google.com/books/about/Information_Visualization.html?id=qFmS95vf6H8C) makes the point that line style, color, thickness, and direction can only carry so much before they interfere. What we did with it: rather than stack physical links, subnet membership, and service dependencies in one view at equal weight, we split them across views and made secondary edges opt-in overlays.
+**A display has a limited budget of visual channels, so don't overload one view.** Colin Ware's book [_Information Visualization: Perception for Design_](https://books.google.com/books/about/Information_Visualization.html?id=qFmS95vf6H8C) makes the point that line style, color, thickness, and direction can only carry so much before they interfere. What we did with it: rather than stack physical links, subnet membership, and service dependencies in one view at equal weight, we split them across views and made secondary edges opt-in overlays.
 
 The established tools separate these views too. [NetBox](/comparisons/vs/netbox) models physical cabling (DCIM) separately from IP and VLAN structure (IPAM), and leaves topology rendering to plugins. [SolarWinds](/comparisons/vs/solarwinds-ntm) ships separate L2 and L3 mapping modes from a single scan. [LibreNMS](/comparisons/vs/librenms) builds its L2 map from CDP/LLDP and ARP.
 
@@ -80,16 +80,16 @@ Simon Brown's [C4 model](https://c4model.com/) solves a parallel problem for sof
 
 Networks map onto it cleanly:
 
-| C4 level | Software meaning | Zoom level in any view |
-|---|---|---|
-| Context | Systems and users | Every top-level container collapsed to a single node with a count badge. The whole network in one screen. |
-| Container | Deployable units | Containers expanded, their members visible inside. |
-| Component | Parts inside a container | Individual leaf entities: hosts with their ports, services, addresses. |
-| Code | Class-level detail | Everything about one entity, in a side panel. |
+| C4 level  | Software meaning         | Zoom level in any view                                                                                    |
+| --------- | ------------------------ | --------------------------------------------------------------------------------------------------------- |
+| Context   | Systems and users        | Every top-level container collapsed to a single node with a count badge. The whole network in one screen. |
+| Container | Deployable units         | Containers expanded, their members visible inside.                                                        |
+| Component | Parts inside a container | Individual leaf entities: hosts with their ports, services, addresses.                                    |
+| Code      | Class-level detail       | Everything about one entity, in a side panel.                                                             |
 
 What a "container" actually is depends on the view: a host in the L2 view, a subnet in the L3 view, an application group in the applications view. The zoom level controls how much is expanded, not what the nodes represent.
 
-Zoom level and view type are orthogonal. A view (physical, logical, workloads, applications) decides *what* the nodes and containers represent; the C4 level decides *how much* is expanded. Any view can be read at any level.
+Zoom level and view type are orthogonal. A view (physical, logical, workloads, applications) decides _what_ the nodes and containers represent; the C4 level decides _how much_ is expanded. Any view can be read at any level.
 
 This needed almost no new UI. We didn't build a "C4 mode". We built three composable features that produce all four levels:
 
@@ -107,12 +107,12 @@ Every edge type in Scanopy is classified per view. Some edges drive layout: the 
 
 How each view contains its entities, and which edges drive its layout:
 
-| View | How entities are contained | Edges that drive layout | Edges available, but not driving layout |
-|---|---|---|---|
-| Physical (L2) | Interfaces nested in their host | Physical links (LLDP/CDP neighbors) | - |
-| Logical (L3) | IP addresses nested in their subnet | Same-host and container-runtime links | Physical links (hidden), dependency flows (dashed) |
-| Workloads | Services and VMs nested in their host | None | Physical and dependency links (hidden) |
-| Applications | Services grouped into application groups | Dependency edges, within a group only | - |
+| View          | How entities are contained               | Edges that drive layout               | Edges available, but not driving layout            |
+| ------------- | ---------------------------------------- | ------------------------------------- | -------------------------------------------------- |
+| Physical (L2) | Interfaces nested in their host          | Physical links (LLDP/CDP neighbors)   | -                                                  |
+| Logical (L3)  | IP addresses nested in their subnet      | Same-host and container-runtime links | Physical links (hidden), dependency flows (dashed) |
+| Workloads     | Services and VMs nested in their host    | None                                  | Physical and dependency links (hidden)             |
+| Applications  | Services grouped into application groups | Dependency edges, within a group only | -                                                  |
 
 The layout-driving edge types are kept to the minimum each view needs (a single physical-link type in L2, none at all in workloads), because crossing count grows with edge density. A second structural edge type means more edges competing in one layout, and more crossings, which is what the crossing research ties to misreads. Optimizing placement for one structural question at a time keeps each layout tuned to that question instead of compromising between two.
 
@@ -136,13 +136,13 @@ Scanopy runs [ELK](https://github.com/kieler/elkjs) (the Eclipse Layout Kernel, 
 
 The L3 and workloads views render nested containers (subnets and hosts with their members inside), so the layout has to handle compound (nested) graphs. The options, by capability:
 
-| Library | Compound nodes | Layered | Deterministic | Notes |
-|---|---|---|---|---|
-| elkjs | yes | yes | yes | What we use for view layout (layered + rectpacking). ~1.5MB. |
-| dagre | no | yes | yes | Good Sugiyama, but no compound/container support. |
-| d3-hierarchy | no | tree only | yes | Tree layouts only, not a layered graph layout. |
-| d3-force | no | no | no | What we use for the fully collapsed overview only. |
-| cytoscape-fcose | yes | no | no | Compound force option, no layered guarantees. |
+| Library         | Compound nodes | Layered   | Deterministic | Notes                                                        |
+| --------------- | -------------- | --------- | ------------- | ------------------------------------------------------------ |
+| elkjs           | yes            | yes       | yes           | What we use for view layout (layered + rectpacking). ~1.5MB. |
+| dagre           | no             | yes       | yes           | Good Sugiyama, but no compound/container support.            |
+| d3-hierarchy    | no             | tree only | yes           | Tree layouts only, not a layered graph layout.               |
+| d3-force        | no             | no        | no            | What we use for the fully collapsed overview only.           |
+| cytoscape-fcose | yes            | no        | no            | Compound force option, no layered guarantees.                |
 
 elkjs is what we use for view layout; of these options it's the only one that does compound (nested-container) layered layout. The bundle is large for a frontend dependency (about 1.5 MB, roughly 450 KB gzipped); it's lazily imported (dynamic `import()`), so first paint doesn't pay for it. Determinism was a hard requirement: ELK runs with a fixed seed and node ordering is stable, so the same network produces the same diagram every scan. Without that, users lose their mental map between scans and snapshot comparisons become meaningless.
 

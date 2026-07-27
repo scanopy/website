@@ -5,6 +5,22 @@ yarn.lock
 bun.lock
 bun.lockb
 
+# Machine-written files. These are synced from the app repo or rewritten by a
+# workflow, always with 2-space JSON, so formatting them here just makes the
+# next sync (or the post_gallery commit) fail `prettier --check`.
+src/lib/fixtures/
+docs/openapi.json
+docs/openapi-processed.json
+docs/next-env.d.ts
+.github/gallery-posted.json
+
+# MDX content (fumadocs). Prettier's markdown printer re-indents component
+# closing tags into the preceding list item, which breaks the MDX parse:
+# managing-daemons.mdx got `</Callout>` pulled into a numbered list and the
+# docs build failed with "Expected the closing tag </Callout> either after the
+# end of listItem". Format these by hand.
+docs/content/
+
 # Build/Generated
 .svelte-kit/
 docs/.astro/

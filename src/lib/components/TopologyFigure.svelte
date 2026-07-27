@@ -39,7 +39,7 @@
 {#if fig}
 	<figure class="my-8">
 		<img
-			class="block dark:hidden w-full rounded-lg border border-gray-200"
+			class="block w-full rounded-lg border border-gray-200 dark:hidden"
 			src="/common/{fig.base}-light-960w.webp"
 			srcset="/common/{fig.base}-light-960w.webp 960w, /common/{fig.base}-light-1440w.webp 1440w, /common/{fig.base}-light-2400w.webp 2400w"
 			sizes="(min-width: 1024px) 720px, 100vw"
@@ -47,7 +47,7 @@
 			alt={fig.alt}
 		/>
 		<img
-			class="hidden dark:block w-full rounded-lg border border-gray-800"
+			class="hidden w-full rounded-lg border border-gray-800 dark:block"
 			src="/common/{fig.base}-960w.webp"
 			srcset="/common/{fig.base}-960w.webp 960w, /common/{fig.base}-1440w.webp 1440w, /common/{fig.base}-2400w.webp 2400w"
 			sizes="(min-width: 1024px) 720px, 100vw"

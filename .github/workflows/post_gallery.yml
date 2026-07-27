@@ -213,7 +213,7 @@ jobs:
 
             ${{ steps.gallery.outputs.tags }} #Scanopy #NetworkDiagram #Homelab
           media: gallery-image-bsky.jpg
-          media-alt: "Network diagram: ${{ steps.gallery.outputs.title }} by ${{ steps.gallery.outputs.author_name }}"
+          media-alt: 'Network diagram: ${{ steps.gallery.outputs.title }} by ${{ steps.gallery.outputs.author_name }}'
           identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
           password: ${{ secrets.BLUESKY_PASSWORD }}
 

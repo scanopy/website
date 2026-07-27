@@ -95,7 +95,8 @@
 		about: {
 			'@type': 'Thing',
 			name: 'Network documentation tools',
-			description: 'Software that discovers a network and keeps its documentation and topology current automatically'
+			description:
+				'Software that discovers a network and keeps its documentation and topology current automatically'
 		},
 		image: `https://scanopy.net${data.post.image}`
 	};

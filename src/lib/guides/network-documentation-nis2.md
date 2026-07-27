@@ -39,12 +39,12 @@ So there's no line to point to that says "keep a diagram." What there is instead
 
 Article 21(2) lists ten minimum risk-management measures. Three of them are hard to satisfy without a current, accurate model of your network, and each maps to something Scanopy discovers directly:
 
-| NIS2 measure | Evidence it needs | What Scanopy produces |
-|---|---|---|
-| Risk analysis (21(2)(a)) | An accurate picture of the systems and assets you're assessing risk to | The full topology plus the Applications view, which maps how systems interconnect |
-| Asset management (21(2)(i)) | An inventory of what's on the network, kept current | Discovered host, service, and device inventory, exportable as CSV; the Workloads view |
-| Business continuity and recovery (21(2)(c)) | Knowing your infrastructure well enough to restore it | Physical (L2) and Logical (L3) topology |
-| Assessing effectiveness (21(2)(f)) | A current baseline to evaluate against | Snapshots: a dated baseline you compare over time |
+| NIS2 measure                                | Evidence it needs                                                      | What Scanopy produces                                                                 |
+| ------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Risk analysis (21(2)(a))                    | An accurate picture of the systems and assets you're assessing risk to | The full topology plus the Applications view, which maps how systems interconnect     |
+| Asset management (21(2)(i))                 | An inventory of what's on the network, kept current                    | Discovered host, service, and device inventory, exportable as CSV; the Workloads view |
+| Business continuity and recovery (21(2)(c)) | Knowing your infrastructure well enough to restore it                  | Physical (L2) and Logical (L3) topology                                               |
+| Assessing effectiveness (21(2)(f))          | A current baseline to evaluate against                                 | Snapshots: a dated baseline you compare over time                                     |
 
 None of these say "diagram." All of them break down if your documentation is a drawing from the last audit. You can't analyze risk to assets you haven't inventoried, you can't restore infrastructure you can't describe, and you can't judge whether a control is effective against a baseline that no longer matches reality.
 

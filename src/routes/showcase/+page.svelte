@@ -43,10 +43,10 @@
 				explore real topologies created by our users.
 			</p>
 			<p class="mx-auto mt-4 max-w-2xl text-gray-500">
-				Every topology below was generated automatically by Scanopy's discovery engine.
-				No manual drawing, no drag-and-drop. Just deploy the scanner and let it map your
-				infrastructure. From single-subnet homelabs to multi-VLAN production networks, these
-				topologies update themselves as your infrastructure changes.
+				Every topology below was generated automatically by Scanopy's discovery engine. No manual
+				drawing, no drag-and-drop. Just deploy the scanner and let it map your infrastructure. From
+				single-subnet homelabs to multi-VLAN production networks, these topologies update themselves
+				as your infrastructure changes.
 			</p>
 		</div>
 
@@ -56,7 +56,9 @@
 			<h2 class="mb-2 text-xl font-semibold text-white">Built something cool?</h2>
 			<p class="mb-6 text-gray-400">
 				Share your network topology with the community. We'd love to feature your setup!
-				<a href="/community" class="text-blue-400 hover:text-blue-300">Join the community on Discord and GitHub</a>.
+				<a href="/community" class="text-blue-400 hover:text-blue-300"
+					>Join the community on Discord and GitHub</a
+				>.
 			</p>
 			<a
 				href="https://tally.so/r/lbqLAv"

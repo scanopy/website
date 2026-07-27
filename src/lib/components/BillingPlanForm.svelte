@@ -433,7 +433,7 @@
 		<div class="plan-cards-grid">
 			{#each filteredPlans as plan (plan.type + plan.rate)}
 				{@const IconComponent = billingPlanHelpers.getIconComponent(plan.type)}
-					{@const license = getFeatureValue(plan.type, 'license_type')}
+				{@const license = getFeatureValue(plan.type, 'license_type')}
 				{@const colorHelper = billingPlanHelpers.getColorHelper(plan.type)}
 				{@const isRecommended = recommendedPlan === plan.type}
 				{@const description = billingPlanHelpers.getDescription(plan.type)}

@@ -41,12 +41,12 @@ This is a real difference from standards like NIS2, where no diagram is named an
 
 A.8.20 anchors network documentation in ISO 27001, but it doesn't stand alone. The same current picture of your network is what a handful of neighboring Annex A controls assume, and each maps to something Scanopy produces:
 
-| Annex A control | Evidence it needs | What Scanopy produces |
-|---|---|---|
-| A.8.20 Networks security | A current, dated diagram of physical and logical topology | Physical (L2) and Logical (L3) views, refreshed on a schedule |
+| Annex A control                                            | Evidence it needs                                                                | What Scanopy produces                                                                 |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| A.8.20 Networks security                                   | A current, dated diagram of physical and logical topology                        | Physical (L2) and Logical (L3) views, refreshed on a schedule                         |
 | A.5.9 Inventory of information and other associated assets | A complete, current inventory of the hosts, devices, and services on the network | Discovered host, service, and device inventory, exportable as CSV; the Workloads view |
-| A.8.9 Configuration management | A documented current-state baseline to review against | The discovered topology as that baseline; snapshots record it over time |
-| A.8.21 Security of network services | Knowing which services run where | 200+ service types detected per host, shown across the views |
+| A.8.9 Configuration management                             | A documented current-state baseline to review against                            | The discovered topology as that baseline; snapshots record it over time               |
+| A.8.21 Security of network services                        | Knowing which services run where                                                 | 200+ service types detected per host, shown across the views                          |
 
 None of these name a diagram except through the 8.20 guidance. All of them break down if your documentation is a drawing from the last audit. You can't inventory assets you haven't discovered, you can't review a configuration against a baseline that no longer matches reality, and you can't secure network services you don't know are running.
 
