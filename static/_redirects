@@ -112,6 +112,18 @@
 /blog/visualize-docker-containers-network /guides/visualize-docker-containers-network 301
 /blog/visualize-docker-containers-network/ /guides/visualize-docker-containers-network 301
 
+# Guide consolidation (Jul 2026): network-documentation-software merged into the
+# network documentation tools comparison, which now owns that category.
+# Kept high in the file: when these two rules sat in the tail (after the image
+# redirects) they returned 404 at the edge instead of redirecting, while every
+# earlier rule worked. Verified live 2026-07-27. Re-probe after any reshuffle.
+/guides/network-documentation-software /comparisons/best-automated-network-diagram-tools 301
+/guides/network-documentation-software/ /comparisons/best-automated-network-diagram-tools 301
+
+# Compliance moved under the solutions hub (Jul 2026). Same tail-position problem.
+/compliance /solutions/compliance 301
+/compliance/ /solutions/compliance 301
+
 # Trailing slash fix
 /blog/ /blog 301
 
@@ -221,15 +233,6 @@
 /topology-hero.webp /og/topology-hero.webp 301
 /topology-hero-light.webp /og/topology-hero-light.webp 301
 /hero-topology-dark.webp /og/hero-topology-dark.webp 301
-
-# Guide consolidation (Jul 2026): network-documentation-software merged into the
-# network documentation tools comparison, which now owns that category.
-/guides/network-documentation-software /comparisons/best-automated-network-diagram-tools 301
-/guides/network-documentation-software/ /comparisons/best-automated-network-diagram-tools 301
-
-# Compliance moved under the solutions hub (Jul 2026).
-/compliance /solutions/compliance 301
-/compliance/ /solutions/compliance 301
 
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404

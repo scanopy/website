@@ -243,34 +243,38 @@ On the application view, Faddom infers the dependency map from observed traffic 
 		services: { level: 'no' },
 		autoUpdates: true,
 		openSource: { status: 'no' },
-		pricing: { text: 'Free up to 100 sensors then tiered', sources: [{ id: 4 }] },
+		pricing: { text: 'Free to 100 sensors, then $200-$1,642/mo', sources: [{ id: 4 }] },
 		alsoIncludes: ['Monitoring', 'Traffic Analysis'],
 		viewTypes: {
 			l2: 'no',
 			l3: 'no',
 			workload: 'unclear',
 			application: 'no',
-			note: 'No native auto L2/L3; automatic L2 maps require the third-party UVexplorer add-on.'
+			note: 'No native automatic L2/L3 topology. Automatic L2 mapping comes from PRTG UVexplorer, listed as a separate product in the PRTG family.'
 		},
-		viewTypesSources: [{ id: 32 }],
+		viewTypesSources: [{ id: 32 }, { id: 45 }, { id: 46 }],
 		bestFor:
-			'Teams already invested in the Paessler ecosystem who want built-in topology mapping alongside monitoring',
+			'Teams already running Paessler for monitoring who want status dashboards alongside their sensor data',
 		description:
-			'Best for teams already running Paessler for monitoring who want built-in mapping. PRTG is a full monitoring stack with auto-discovery and interactive maps, released in 2003 and with a large installed base. PRTG counts sensors, not devices: [most users average 10 sensors per device](https://www.paessler.com/prtg/requirements), so a 1,000-sensor license typically covers around 100 devices.',
-		discoveryNotes: 'NetFlow and packet sniffing for traffic analysis. Self-hosted on Windows.',
-		diagrams: '2D and 3D maps generated from discovery data.',
-		pricingNotes: 'Not 100 devices - a single device can use multiple sensors.',
+			'Best for teams already running Paessler for monitoring who want dashboards next to their sensor data. PRTG is a full monitoring stack with network auto-discovery, released in 2003 and with a large installed base. It licenses by sensor rather than by device: [most users average 10 sensors per device](https://www.paessler.com/prtg/requirements), so a 1,000-sensor license typically covers around 100 devices.',
+		discoveryNotes:
+			'Auto-discovery scans IP ranges over SNMP, WMI, and ICMP and creates sensors from what it finds. NetFlow and packet sniffing for traffic analysis. Self-hosted on Windows. Paessler notes that ["unmanaged switches cannot really be discovered by PRTG since most of them don\'t have an IP address"](https://helpdesk.paessler.com/en/support/solutions/articles/76000082169-layer-network-map).',
+		diagrams:
+			'Maps in PRTG are dashboards you compose, not diagrams generated from discovery. Paessler documents the Maps feature as a way to "create dashboards with monitoring information in a customizable layout", assembled in a drag-and-drop Map Designer from device icons, sensor status objects, graphs, tables, and geographic maps, where ["a map is a common HTML web page"](https://www.paessler.com/manuals/prtg/maps) that can be published at its own URL. For switch-to-switch topology, Paessler support states that ["PRTG has no way of knowing which switch is connected to which so creating an automatic graph is not possible"](https://helpdesk.paessler.com/en/support/solutions/articles/76000082169-layer-network-map). Automatic Layer 2 mapping comes from [PRTG UVexplorer](https://www.paessler.com/products), a separate product in the PRTG family.',
+		pricingNotes:
+			'Licensed by sensor, not by device, so cost tracks the number of monitored aspects rather than the size of the network. Subscription tiers run from [$200/mo for 500 sensors to $1,642/mo for 10,000](https://www.paessler.com/prtg/pricing), where 10,000 sensors covers roughly 1,000 devices. The freeware edition allows 100 sensors, about 10 devices. One license key per server, and licenses cannot be combined.',
 		whereItFits:
-			'If you already use PRTG for monitoring and want basic topology visibility, the built-in maps avoid adding another tool. The maps show what PRTG discovers, which is thorough.',
+			'If you already run PRTG for monitoring and want a status dashboard on a floor plan, a network operations center view, or a top-10 sensor list, the Maps feature covers it without adding a tool. The device and sensor inventory behind it is thorough.',
 		tradeOff:
-			'Mapping is secondary to monitoring. The diagram feature exists to visualize what PRTG monitors, not to produce shareable documentation.',
+			'Maps are dashboards you lay out by hand, so there is no automatic switch-to-switch topology graph. Paessler support states that ["PRTG has no way of knowing which switch is connected to which so creating an automatic graph is not possible"](https://helpdesk.paessler.com/en/support/solutions/articles/76000082169-layer-network-map), and automatic Layer 2 mapping comes from [PRTG UVexplorer](https://www.paessler.com/products), a separate product in the PRTG family. Sensor-based licensing means the bill tracks monitoring scope rather than the number of devices you want documented. Unmanaged switches, which have no IP address of their own, sit outside what PRTG discovers.',
+		tradeOffLabel: 'Trade-offs',
 		deployment: ['Self-hosted', 'Cloud'],
 		deploymentNotes:
 			'Self-hosted on [Windows Server 2016+](https://www.paessler.com/prtg/requirements). [PRTG Hosted Monitor](https://www.paessler.com/prtg-hosted-monitor) available as cloud alternative. Core server with optional remote probes for distributed monitoring.',
 		deploymentSources: [{ id: 13 }],
-		versus: `PRTG and Scanopy both discover a network and draw maps, but they're built for different jobs. PRTG is a mature, sensor-based monitoring platform released in 2003 with a large installed base; its maps exist to visualize what it monitors. It has no native automatic Layer 2/3 topology mapping. Paessler's knowledge base documents that ["PRTG has no way of knowing which switch is connected to which so creating an automatic graph is not possible"](https://helpdesk.paessler.com/en/support/solutions/articles/76000082169-layer-network-map), and the documented fix is the third-party UVexplorer add-on. Scanopy's entire job is automatic topology: one daemon produces four switchable views (L2, L3, workloads, applications) plus per-host service fingerprinting, with no add-on.
+		versus: `PRTG and Scanopy both discover a network, but they produce different artifacts. PRTG is a mature, sensor-based monitoring platform released in 2003 with a large installed base, and its Maps feature builds dashboards: you assemble device icons, sensor status objects, graphs, tables, and geographic maps in a [drag-and-drop Map Designer](https://www.paessler.com/manuals/prtg/maps), and the result is an HTML page you can publish at its own URL. It has no native automatic Layer 2 or Layer 3 topology mapping. Paessler's knowledge base documents that ["PRTG has no way of knowing which switch is connected to which so creating an automatic graph is not possible"](https://helpdesk.paessler.com/en/support/solutions/articles/76000082169-layer-network-map), and automatic Layer 2 mapping comes from [PRTG UVexplorer](https://www.paessler.com/products), a separate product in the PRTG family. Scanopy's job is that topology: one daemon produces four switchable views (L2, L3, workloads, applications) and identifies the services on each host, with nothing else to buy.
 
-So the trade-off is monitoring-first with bolt-on mapping versus mapping-first as the product. If you already run PRTG and mainly want monitoring, alerting, and traffic analysis, with maps as a secondary view, staying in PRTG (and adding UVexplorer if you need automatic L2 maps) avoids another tool. If accurate, automatic, shareable, multi-view documentation is the goal, Scanopy is built for that and doesn't need a separate discovery engine to produce a topology. Scanopy is [flat monthly with unlimited hosts](/pricing), self-hostable under a [commercial license](/commercial), or free under [AGPL-3.0](/community), and it runs alongside PRTG rather than replacing your monitoring.
+The licensing models divide along the same line. PRTG charges by sensor, so cost scales with how many aspects you monitor rather than with the size of the network you want documented: subscriptions run [$200/mo for 500 sensors up to $1,642/mo for 10,000](https://www.paessler.com/prtg/pricing), and the freeware edition covers 100 sensors, about 10 devices. If you already run PRTG and mainly want monitoring, alerting, and traffic analysis, with dashboards as a secondary view, staying in PRTG (and adding UVexplorer for automatic L2 maps) avoids another tool. Scanopy is [flat monthly with unlimited hosts](/pricing), self-hostable under a [commercial license](/commercial), or free under [AGPL-3.0](/community), and it runs alongside PRTG rather than replacing your monitoring.
 
 PRTG's sensor library and monitoring feature set exceed Scanopy's, and Scanopy does no monitoring at all. This comparison is only about which tool draws the network map automatically.`
 	},
@@ -929,6 +933,16 @@ export const vendorSources: VendorSource[] = [
 		id: 44,
 		label: 'SolarWinds NTM - Pricing (TrustRadius)',
 		url: 'https://www.trustradius.com/products/solarwinds-network-topology-mapper/pricing'
+	},
+	{
+		id: 45,
+		label: 'Paessler - PRTG Maps are customizable dashboards (manual)',
+		url: 'https://www.paessler.com/manuals/prtg/maps'
+	},
+	{
+		id: 46,
+		label: 'Paessler - PRTG UVexplorer listed as a separate product',
+		url: 'https://www.paessler.com/products'
 	}
 ];
 
