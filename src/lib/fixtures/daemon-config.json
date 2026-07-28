@@ -138,15 +138,5 @@
     "default": "30",
     "description": "Seconds between heartbeat updates to the server",
     "docsOnly": false
-  },
-  {
-    "id": "config_dir",
-    "label": "Config Directory",
-    "cliFlag": "--config-dir",
-    "envVar": "SCANOPY_CONFIG_DIR",
-    "configFileKey": "config_dir",
-    "default": null,
-    "description": "Directory holding this daemon's config.json. Defaults to the per-user platform location; installing as a service sets it to a system directory.",
-    "docsOnly": false
   }
 ]
