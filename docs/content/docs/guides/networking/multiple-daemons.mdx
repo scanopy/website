@@ -96,7 +96,7 @@ sudo scanopy-daemon install --interfaces eth1
 Each `install` registers a per-slot background service that starts immediately and on every reboot, and writes that slot's config. Manage each by its service — for example `sudo systemctl restart scanopy-daemon-2` (Linux) or `sc.exe stop scanopy-daemon-2` (Windows), where the service id matches the slot. On macOS the launchd label is `com.scanopy.daemon.<slot>` (for example `sudo launchctl kickstart -k system/com.scanopy.daemon.scanopy-daemon-2`). Run `scanopy-daemon list` to see each slot's exact service id. Interface, bind address, and port are persisted in each slot's config, so restarting or re-running `install` doesn't need them again.
 
 <Callout type="info">
-To re-run against an *existing* slot — reconfigure it, or re-key it after rebuilding the host — pass `--instance <selector>`, where the selector is the daemon's name, its slot, its service id, or its daemon id (all shown by `scanopy-daemon list`). Without a selector on a multi-daemon host, a non-interactive install allocates a new slot rather than guessing which one you meant, and an interactive one asks. The reconfigure command the app generates already includes the right `--instance`.
+To re-run against an *existing* slot — reconfigure it, or re-key it after rebuilding the host — pass `--instance <selector>`, where the selector is the daemon's name, its slot, its service id, or its daemon id (all shown by `scanopy-daemon list`). Without a selector on a multi-daemon host, a non-interactive install allocates a new slot, and an interactive one asks which to use. The reconfigure command the app generates already includes the right `--instance`.
 </Callout>
 
 ### systemd template (Linux, manual)

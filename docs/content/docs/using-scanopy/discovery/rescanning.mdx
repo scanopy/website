@@ -9,7 +9,7 @@ A rescan checks only that host's known addresses. Alongside the standard discove
 
 ## Which daemon runs it
 
-The daemon that last discovered the host — evidence it can reach the address, rather than a guess from subnet membership. If that daemon can no longer reach it, the rescan is refused rather than run at lower fidelity from somewhere else.
+The daemon that last discovered the host, since that daemon has demonstrably reached the address before. If it can no longer reach the host, the rescan is refused — see [When it is refused](#when-it-is-refused).
 
 ## Where it shows up
 

@@ -84,6 +84,12 @@ content spread across **four**, and the per-platform log commands duplicated bet
 - **Evergreen.** Describe the current state, never the transition from a previous one. "The tab
   lists keys but no longer creates them" only parses if you remember that it once did. Same for
   "predates version reporting" and "once a support floor is enforced".
+- **Don't define behavior by contrast with a design that doesn't exist.** "The daemon that last
+  discovered the host — evidence it can reach the address, rather than a guess from subnet
+  membership" describes a road not taken; the reader never imagined the alternative and now has
+  to. Same shape: "enforced by the server, not by convention", "targeted retries rather than
+  simple broadcast flooding". Contrasting two things the reader can actually observe is fine —
+  "the run completes rather than failing", "one cable rather than two".
 - **Don't explain one integration by reference to another.** A reader on the UniFi page is there
   for UniFi. If a distinction between integrations needs explaining, it belongs in
   `using-scanopy/credentials.mdx`.

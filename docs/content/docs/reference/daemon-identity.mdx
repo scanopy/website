@@ -28,7 +28,7 @@ A provisioned key belongs to exactly one daemon, and a daemon has exactly one ke
 
 | Property              | Behavior                                                                                                                                                                        |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Binding**           | One key, one daemon. Enforced by the server, not by convention.                                                                                                                 |
+| **Binding**           | One key, one daemon, enforced by the server.                                                                                                                                    |
 | **Re-provisioning**   | Minting a new key for a daemon deletes the key it replaces. The old key stops authenticating immediately.                                                                       |
 | **Plaintext storage** | ServerPoll only. The server holds the plaintext because it presents the key when it dials the daemon. DaemonPoll daemons carry their own key and the server stores only a hash. |
 

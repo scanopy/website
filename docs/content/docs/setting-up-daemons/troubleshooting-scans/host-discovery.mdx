@@ -61,7 +61,7 @@ If your switch has DAI enabled and Scanopy sends ARP faster than the limit allow
 
 ### How Retries Work
 
-Scanopy uses **targeted retries** rather than simple broadcast flooding:
+Retries are targeted — each round narrows to the addresses that haven't answered:
 
 1. **Round 1**: Send ARP request to all target IPs at the configured rate
 2. **Wait**: Collect responses for 3 seconds
