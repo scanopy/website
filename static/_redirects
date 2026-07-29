@@ -179,8 +179,8 @@
 /guides/sharing-topology/ /docs/guides/operations/sharing-topology/ 301
 /guides/snmp-credentials /docs/guides/integrations/snmp/ 301
 /guides/snmp-credentials/ /docs/guides/integrations/snmp/ 301
-/guides/unified-discovery-migration /docs/guides/operations/unified-discovery-migration/ 301
-/guides/unified-discovery-migration/ /docs/guides/operations/unified-discovery-migration/ 301
+/guides/unified-discovery-migration /docs/using-scanopy/discovery/ 301
+/guides/unified-discovery-migration/ /docs/using-scanopy/discovery/ 301
 /reference /docs/reference/ 301
 /reference/ /docs/reference/ 301
 /reference/* /docs/reference/:splat/ 301
@@ -222,8 +222,8 @@
 /docs/guides/prometheus-setup/ /docs/guides/operations/prometheus-setup/ 301
 /docs/guides/sharing-topology /docs/guides/operations/sharing-topology/ 301
 /docs/guides/sharing-topology/ /docs/guides/operations/sharing-topology/ 301
-/docs/guides/unified-discovery-migration /docs/guides/operations/unified-discovery-migration/ 301
-/docs/guides/unified-discovery-migration/ /docs/guides/operations/unified-discovery-migration/ 301
+/docs/guides/unified-discovery-migration /docs/using-scanopy/discovery/ 301
+/docs/guides/unified-discovery-migration/ /docs/using-scanopy/discovery/ 301
 
 # Static asset reorg (2026-07-14): logos -> /brand, share/OG images -> /og
 /scanopy-logo.webp /brand/scanopy-logo.webp 301
@@ -233,6 +233,17 @@
 /topology-hero.webp /og/topology-hero.webp 301
 /topology-hero-light.webp /og/topology-hero-light.webp 301
 /hero-topology-dark.webp /og/hero-topology-dark.webp 301
+
+# Docs consolidation (2026-07-29): pages removed after their content moved
+# - the v0.15.0 migration guide described flags removed in v0.16.0
+# - daemon support lifecycle merged into daemon status
+# - SNMP scan troubleshooting moved into the SNMP integration guide
+/docs/guides/operations/unified-discovery-migration /docs/using-scanopy/discovery/ 301
+/docs/guides/operations/unified-discovery-migration/ /docs/using-scanopy/discovery/ 301
+/docs/reference/daemon-support-lifecycle /docs/reference/daemon-status/ 301
+/docs/reference/daemon-support-lifecycle/ /docs/reference/daemon-status/ 301
+/docs/setting-up-daemons/troubleshooting-scans/snmp /docs/guides/integrations/snmp/ 301
+/docs/setting-up-daemons/troubleshooting-scans/snmp/ /docs/guides/integrations/snmp/ 301
 
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404

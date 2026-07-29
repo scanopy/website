@@ -7,53 +7,28 @@ Daemons scan your network to discover hosts and services, then report findings t
 
 ## How Discovery Works
 
-Each daemon runs a single discovery that combines network scanning, Docker container discovery, and self-reporting into one flow. When a discovery runs, the daemon:
+Each daemon runs a single discovery. Every run does two things unconditionally: it scans the subnets it has been given, and it reports its own reachable subnets and capabilities back to the server.
 
-1. Scans configured subnets to find hosts via IP, port, and ARP scanning
-2. Queries SNMP on discovered hosts (if [credentials are configured](/using-scanopy/credentials/))
-3. Discovers Docker and Podman containers via the local socket or a [proxy credential](/guides/integrations/docker/) (local or remote)
-4. Reads the inventory of any network controller it has a credential for
-5. Reports its own capabilities and reachable subnets to the server
+### Network scanning
 
-### Network Scanning
-
-Scans IP addresses on configured subnets to find hosts and services.
+Scanning IP addresses on the configured subnets is what finds hosts in the first place. It:
 
 - Detects open TCP and UDP ports
 - Identifies services via [pattern matching](/reference/service-detection/)
 - Performs reverse DNS lookups
-- Collects MAC addresses (for directly connected subnets only)
-- Queries SNMP for device details, interfaces, and neighbors (if [credentials are configured](/using-scanopy/credentials/))
+- Collects MAC addresses, on directly connected subnets only
 
-**Key principle**: The daemon can scan any subnet it can route to. If the daemon's host can reach an IP address, the daemon can scan it.
+The daemon can scan any subnet it can route to — if its host can reach an address, it can scan it. What differs is depth. On a subnet the daemon has an interface on, it gets Layer 2: MAC addresses via ARP, and every responsive host. On a remote subnet it is limited to Layer 3, finding only hosts with an open port. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3).
 
-**Configuring subnets to scan**: Edit the discovery and add subnets to the scan list in the **Targets** tab. You can add any subnet — including ones the daemon doesn't have a direct interface on.
+On very large interfaced subnets the daemon caps how many addresses it ARP scans, governed by the **ARP Scan Cutoff** [scan setting](#scan-settings).
 
-**Layer 2 vs Layer 3**: When the daemon has a network interface on the subnet being scanned, you get full Layer 2 access (MAC addresses via ARP, better host discovery). When scanning remote subnets, you're limited to Layer 3 — only hosts with open ports will be discovered. See [limitations](/reference/limitations/#layer-2-vs-layer-3) for details.
+### What credentials add
 
-**Large interfaced subnets**: For very large subnets (larger than /15 by default), the daemon caps the number of IPs it ARP scans to prevent excessive memory use and scan times. You can adjust this via the `arp_scan_cutoff` scan setting — see [Scan Performance](/setting-up-daemons/troubleshooting-scans/scan-performance/#large-interfaced-subnets) for details.
+Everything beyond ports, names and addresses comes from a credential. Each one unlocks a different source:
 
-### Container Discovery
+<DiscoverySources />
 
-Discovers containers via the Docker or Podman API.
-
-- Lists running containers with names and metadata
-- Maps container networks and port bindings
-- Identifies containerized services
-- Creates container bridge subnets automatically
-
-The daemon can reach a container runtime in two ways:
-
-- **Local socket** — the daemon connects directly to the Docker or Podman socket on its own host. This happens automatically when the socket is accessible; create a **Docker Socket** or **Podman Socket** credential only to point at a non-default socket path.
-- **Proxy credential** — the daemon connects to a Docker or Podman API proxy, which can be local or remote. See [Set up Docker discovery](/guides/integrations/docker/) or [Set up Podman discovery](/guides/integrations/podman/) for configuration.
-
-### Controller Discovery
-
-Most credentials describe how to reach one host. A network controller credential is different: it describes one API endpoint that reports on many devices at once.
-
-When a daemon has such a credential, it reads the controller's device inventory and turns it into hosts, their ports into interfaces, and the neighbor tables the controller holds into physical links. That data joins the same ingestion and neighbor-resolution path SNMP feeds, so a device the controller reports and the same device found by a subnet scan are recognized as one host rather than two.
-
-This matters most for gear that collects neighbor data internally but doesn't publish it over SNMP, where the controller is the only source for it. See [Set up UniFi discovery](/guides/integrations/unifi/).
+A host reached through more than one source is still one host — everything flows into the same ingestion and matching path, so a device a controller reports and the same device found by a subnet scan are recognized as one.
 
 ## Scanning Lifecycle
 
@@ -84,40 +59,6 @@ You can also force a deep scan at any time from the discovery session controls.
 Everything that governs how a discovery scans, configured per-discovery rather than per-daemon, so one daemon can scan different networks at different rates:
 
 <ScanSettingsTable />
-
-## SNMP
-
-SNMP enriches discovered hosts with device metadata that isn't available from port scanning alone.
-
-### What SNMP adds
-
-Without SNMP, hosts have only what port scanning and DNS provide — IP addresses, open ports, detected services, and reverse DNS hostnames. With SNMP credentials configured, discovery also collects:
-
-- **System identity** — sysName, sysDescr, sysLocation, sysContact
-- **Interface table** — all network interfaces with names, speeds, MAC addresses, IP assignments, and operational status
-- **LLDP/CDP neighbors** — directly connected devices reported by the host itself, enabling accurate physical topology mapping
-
-<Callout type="info">
-Creating a credential alone doesn't activate SNMP collection — you must assign it to a network or to specific hosts. Which credential a given host ends up using follows the usual [resolution order](/using-scanopy/credentials/#credential-resolution), with the community string `public` as the final fallback. See the [SNMP discovery guide](/guides/integrations/snmp/) for setup steps.
-</Callout>
-
-### What gets queried
-
-| MIB | Data collected |
-| --- | -------------- |
-| **System MIB** (RFC 3418) | sysName, sysDescr, sysLocation, sysContact, sysObjectID, uptime |
-| **IF-MIB** (RFC 2863) | Interface names, types, speeds, MAC addresses, operational/admin status |
-| **IP-MIB** (RFC 4293) | IP addresses and subnet masks assigned to each interface |
-| **LLDP-MIB** (IEEE 802.1AB) | Directly connected neighbors — remote device name, port, chassis ID |
-| **CDP-MIB** (Cisco) | Cisco neighbor discovery — device ID, platform, port, IP address |
-
-### Limitations
-
-- **SNMP v1, v2c, and v3 supported** — v3 uses AuthPriv (SHA-1/SHA-256 auth, AES-128/256 privacy)
-- **No trap handling** — SNMP data is collected during discovery scans only (poll-based)
-- **No custom MIBs** — only the standard MIBs listed above are queried
-
-See [SNMP reference](/reference/snmp/) for protocol details, timeouts, and the full list of collected OIDs.
 
 ## Rescanning a single host
 
@@ -179,9 +120,7 @@ When a host is discovered, Scanopy determines its name using this priority:
    - _IP_: Uses the host's IP address
 3. **Remaining fallback** — whichever option wasn't selected in step 2
 
-Configure naming strategy in the discovery settings.
-
-Manage discoveries via **Discover > Scan > Scheduled** and monitor progress via **Discover > Scan > Sessions**.
+A name you set yourself is never overwritten by a later scan.
 
 ## Host Deduplication
 
@@ -206,16 +145,11 @@ MAC addresses are available when the daemon is directly connected to the subnet 
 
 **Floating virtual IPs (CARP/VRRP).** A high-availability virtual IP has no hardware of its own — its only identity is the address it floats on, carried by a shared virtual-router MAC. Scanopy matches such an address on IP + subnet when it has no physical identity to match on, so a floating VIP is recognized as the same entity across scans instead of being recreated each time. The shared virtual MAC is never used to match, so the HA peers that host the VIP stay distinct rather than merging into one host.
 
-### Docker Host Matching
+### Container Host Matching
 
-Docker container discovery is local-only — it discovers containers on the daemon's own host (or on the host targeted by a Docker Proxy credential), not arbitrary remote machines. All discovered services are assigned to that host.
+Container discovery reports on exactly one host — the daemon's own, or the one a proxy credential points at — so there is nothing to deduplicate across hosts. What it does change is *which* host the containers land on: a proxy pointing at a remote machine attributes them there, not to the daemon's host.
 
-This has two implications:
-
-- **No cross-host deduplication**: Since Docker discovery only sees one host, there's nothing to deduplicate
-- **Docker proxies change the target**: When using a [Docker Proxy credential](/guides/integrations/docker/) pointing to a remote host, services are assigned to the remote host, not the daemon's host
-
-For accurate Docker discovery without a proxy, run the daemon on the same machine as Docker.
+Container names appear in a host's virtualization metadata, not as its hostname.
 
 ### Upsert Behavior
 
@@ -246,18 +180,6 @@ Ports, interfaces, and services discovered on the duplicate will be reconciled a
 - **Credential assignments** — When hosts are consolidated, credential assignments are preserved using broadest-scope-wins merging
 
 This means discovery enriches existing hosts without overwriting user customizations.
-
-### Network Scanning vs Docker Scanning
-
-Both scanning methods use the same deduplication logic. The differences are in what data they provide:
-
-| Aspect | Network Scanning | Docker Scanning |
-| ------ | ---------------- | --------------- |
-| **MAC availability** | Only on directly connected subnets | Always available from Docker API |
-| **Hostname source** | Reverse DNS lookup | None (uses naming fallback) |
-| **Port detection** | Full TCP/UDP scan (1-65535) | Container port mappings + endpoint probing |
-
-Container names appear in the virtualization metadata, not as the host's hostname.
 
 ### Manual Consolidation
 

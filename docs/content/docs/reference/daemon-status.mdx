@@ -59,11 +59,13 @@ See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for deta
 
 ## Deprecated
 
-**Orange tag**. The daemon is running a version with a **scheduled sunset date**. It still connects and runs discovery normally until that date, after which it becomes [Unsupported](#unsupported). The daemon card and upgrade dialog show the exact date and a countdown, and the org owner and each daemon's maintainer receive an email when a sunset is announced.
+**Orange tag**. The daemon is running a version with a **scheduled sunset date**. It still connects and runs discovery normally until that date, after which it becomes [Unsupported](#unsupported). The daemon card and upgrade dialog show the exact date and a countdown, and a banner appears on the Daemons view while any daemon needs updating.
+
+When a sunset is announced, the organization owner and each affected daemon's maintainer receive **one** email listing every affected daemon and the date. You are not emailed again about the same sunset.
 
 **How to resolve**:
 
-- Upgrade the daemon before the sunset date — see [Managing Daemons](/setting-up-daemons/managing-daemons) for installation steps. See [Daemon Support Lifecycle](/reference/daemon-support-lifecycle) for how sunset dates are set.
+- Upgrade the daemon before the sunset date — see [Managing Daemons](/setting-up-daemons/managing-daemons) for installation steps. Upgrading preserves all configuration.
 
 ## Unsupported
 

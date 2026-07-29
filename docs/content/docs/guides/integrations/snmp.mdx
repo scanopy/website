@@ -78,16 +78,57 @@ You can confirm a network-wide assignment from **Discover > Daemons** — hover 
 
 ## Troubleshooting
 
+The usual symptom is a scan that completes and detects port 161, but leaves the host's **SNMP** and **ifEntry** tabs empty.
+
 ### No SNMP data on any host
 
 The credential exists but isn't assigned. Creating a credential doesn't activate SNMP — see [Where a credential applies](/using-scanopy/credentials/#where-a-credential-applies).
 
 ### No SNMP data on one host
 
-Check that the device answers on UDP 161 from the daemon's host, and that it isn't using a different community string from the network default. A per-host credential overrides the network one.
+Test the device directly from the daemon's host to separate a credential problem from a device problem:
+
+```bash
+# v1 / v2c — try the default community, then yours
+snmpwalk -v2c -c public DEVICE_IP 1.3.6.1.2.1.2.2.1.2
+snmpwalk -v2c -c YOUR_COMMUNITY_STRING DEVICE_IP 1.3.6.1.2.1.2.2.1.2
+
+# v3
+snmpwalk -v3 -l authPriv -u SECURITY_NAME \
+  -a SHA -A AUTH_PASSWORD -x AES -X PRIV_PASSWORD \
+  DEVICE_IP 1.3.6.1.2.1.2.2.1.2
+```
+
+If `public` works but your own string doesn't, the credential is wrong or isn't reaching this host — a per-host credential overrides the network default. If neither works, SNMP isn't enabled on the device or it refuses that version.
+
+A device that enforces v3 will not answer a community string at all. Note that Scanopy's v3 is AuthPriv only, so a device configured for AuthNoPriv won't connect either.
 
 ### System data appears but no neighbors
 
 The device isn't reporting an LLDP or CDP neighbor table. Some managed switches collect neighbor data internally without exposing the LLDP MIB over SNMP, in which case a walk returns nothing and the neighbors have to come from that vendor's own management API instead.
 
-For protocol-level issues, see [SNMP troubleshooting](/setting-up-daemons/troubleshooting-scans/snmp/). For diagnosing credential loading and assignment from daemon logs, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).
+### Interfaces missing or incomplete
+
+An **ifEntry** tab showing fewer interfaces than the device has — or interfaces with no neighbor, VLAN or learned-MAC data — means the table walk was cut short. A single walk is capped at 10,000 rows and each query is bounded at 30 seconds, so a very large table, or a device that stalls partway through returning one, yields a partial result.
+
+Truncation is reported as a warning on the discovery session, so check the run in the Scans tab rather than only the daemon logs.
+
+Interfaces are saved as soon as the interface table is read, before the neighbor and VLAN queries run. Bare interfaces with no neighbor data are the signature of a device that hung later in collection.
+
+Worth checking: how long a full `snmpwalk` of the interface table takes from the daemon host, whether the device is rate-limiting SNMP, and whether its interface count is genuinely near the 10,000-row cap — stacked chassis and large modular switches can be.
+
+### Reading the daemon logs
+
+With debug logging enabled, these messages appear during a scan of the target host:
+
+| Log message | Meaning |
+| ----------- | ------- |
+| `Creating SNMP community session` | Attempting v1/v2c |
+| `Creating SNMPv3 session` | Attempting v3 |
+| `SNMP session created successfully` | UDP socket opened |
+| `SNMP GET {name} failed from {ip}` | OID query failed — auth or protocol error |
+| `SNMP GET {name} timeout from {ip}` | Device didn't respond in time |
+| `SNMP system info retrieved` with sys_descr/sys_name | Success |
+| `No working SNMP credential found for {ip}` | Every credential was tried and none worked |
+
+For credential loading problems — unreadable files, PEM errors, and the per-session assignment summary — see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).

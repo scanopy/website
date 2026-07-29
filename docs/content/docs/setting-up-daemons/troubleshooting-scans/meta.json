@@ -1,5 +1,5 @@
 {
   "title": "Troubleshooting Scans",
   "defaultOpen": true,
-  "pages": ["index", "host-discovery", "scan-performance", "snmp", "credentials", "auto-pause"]
+  "pages": ["index", "host-discovery", "scan-performance", "credentials"]
 }

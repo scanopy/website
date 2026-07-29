@@ -1,0 +1,36 @@
+---
+title: Tags
+description: Organization-wide labels for categorizing and filtering entities, and the application tags that drive the Application perspective.
+---
+
+Tags are organization-wide labels you apply to hosts, services, subnets, networks, groups, and daemons. They're defined once for the organization, shared by every user, and usable across all networks — deleting one removes it from every entity that carried it.
+
+There are two kinds, and they behave differently.
+
+## Standard tags
+
+Free-form labels. An entity can carry as many as you like, and they're used for filtering — in entity lists, and in the topology, where filtered elements fade rather than disappear so the layout stays stable.
+
+Common schemes:
+
+- **Environment** — production, staging, development
+- **Criticality** — critical, high, medium, low
+- **Ownership** — which team runs it
+- **Lifecycle** — deprecated, migrating, new
+- **Compliance** — pci-scope, hipaa, gdpr, internal-only
+
+Combining two axes is usually more useful than one long list. `production` + `critical` identifies core infrastructure in a way that neither tag does alone.
+
+## Application tags
+
+An application tag answers "what is this part of?" rather than "what is this like", so the rules are stricter:
+
+- A host or service carries **at most one**.
+- A service **inherits its host's** application tag. A host tagged `billing` lends that to every service on it, without tagging each one.
+- Tagging a service directly **overrides** what it inherited. Use this for the service on a shared host that belongs to something else.
+
+This inheritance is what the [Application perspective](/using-scanopy/topology/application/) groups on — each application tag becomes a container, and services fall into it by their own tag or their host's. A host running one thing needs a single tag; only the exceptions need tagging individually.
+
+## Managing tags
+
+Tags live under **Platform > Tags**, and can also be created inline while editing any entity. Renaming one updates it everywhere it's applied.

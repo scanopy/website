@@ -3,7 +3,7 @@ title: SNMP
 description: SNMP protocol support, queried MIBs, timeouts, and credential resolution.
 ---
 
-Technical reference for Scanopy's SNMP implementation. For setup instructions, see the [SNMP discovery guide](/guides/integrations/snmp/). For how SNMP fits into the discovery flow, see [Discovery — SNMP](/using-scanopy/discovery/#snmp). For how credential assignment and resolution works, see [Credentials](/using-scanopy/credentials/).
+Technical reference for Scanopy's SNMP implementation. For setup instructions, see the [SNMP discovery guide](/guides/integrations/snmp/). For how credential assignment and resolution works, see [Credentials](/using-scanopy/credentials/).
 
 ## Protocol support
 
@@ -53,14 +53,10 @@ Candidate credentials are probed concurrently, so a host with several assigned c
 
 Every query is individually bounded, so a device that stops responding mid-collection costs 30 seconds rather than the whole 5-minute integration budget.
 
-## Credential resolution order
+## Credential behavior
 
-When querying a host, the daemon resolves the SNMP credential (community string for v1/v2c, or USM parameters for v3) in this order:
+Which credential a host is queried with follows the standard [resolution order](/using-scanopy/credentials/#credential-resolution). SNMP adds one step of its own: the community string `public` is tried as a last resort, so a device left on the default responds without any credential configured.
 
-1. **Host-specific override** — credential assigned directly to the host
-2. **Network default** — credential assigned to the host's network
-3. **Fallback** — community string `public` (v2c)
-
-If all credentials fail on both UDP 161 and 1161, the host is discovered without SNMP-sourced data. Individual query failures within a successful session are logged and skipped — they do not abort the rest of the collection.
+If every credential fails on both UDP 161 and 1161, the host is discovered without SNMP-sourced data. Individual query failures within a successful session are logged and skipped — they do not abort the rest of the collection.
 
 Partial results are kept. Interfaces are saved as soon as the interface table is read, before the neighbor, forwarding-table, and VLAN queries run, so a device that hangs partway through still yields its interface list rather than nothing.

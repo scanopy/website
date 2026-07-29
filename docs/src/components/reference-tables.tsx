@@ -2,8 +2,10 @@ import elementRuleTypes from '$lib/fixtures/element-rule-types.json';
 import permissions from '$lib/fixtures/permissions.json';
 import scanSettings from '$lib/fixtures/scan-settings.json';
 import views from '$lib/fixtures/views.json';
+import Link from 'next/link';
 import { FieldsTable } from '@/components/field-table';
-import type { FieldDefinition } from '@/lib/integrations';
+import { allIntegrations, type FieldDefinition } from '@/lib/integrations';
+import { source } from '@/lib/source';
 
 /**
  * Tables generated from fixtures the Scanopy repo already emits
@@ -94,6 +96,56 @@ export function ElementRulesTable() {
 				</tbody>
 			</table>
 		</div>
+	);
+}
+
+/**
+ * Every source of data a credential unlocks, grouped by integration category.
+ *
+ * Replaces a hand-written list ("queries SNMP, discovers Docker and Podman
+ * containers, reads controller inventories") that had to be edited for every new
+ * integration and was wrong between edits. Categories carry the real distinction —
+ * polling a host, reading a container runtime, reading a controller that reports
+ * on other devices — so a new integration slots itself in, and a new *category*
+ * appears on its own.
+ *
+ * Guide links are resolved from each guide's `integration` frontmatter rather
+ * than a mapping kept here, so an integration whose guide is missing that field
+ * renders as plain text instead of linking somewhere wrong.
+ */
+export function DiscoverySources() {
+	const guideUrls = new Map(
+		source
+			.getPages()
+			.filter((p) => p.data.integration)
+			.map((p) => [p.data.integration as string, p.url])
+	);
+
+	const categories = [...new Set(allIntegrations.map((i) => i.category))];
+
+	return (
+		<>
+			{categories.map((category) => (
+				<div key={category}>
+					<p>
+						<strong>{category}</strong>
+					</p>
+					<ul>
+						{allIntegrations
+							.filter((i) => i.category === category)
+							.map((integration) => {
+								const url = guideUrls.get(integration.id);
+								return (
+									<li key={integration.id}>
+										{url ? <Link href={url}>{integration.name}</Link> : integration.name} —{' '}
+										{integration.discovers}
+									</li>
+								);
+							})}
+					</ul>
+				</div>
+			))}
+		</>
 	);
 }
 

@@ -60,7 +60,7 @@ The config file stores runtime state (daemon ID, host ID) alongside your setting
 
 ### `--credential-id` / `SCANOPY_CREDENTIAL_IDS`
 
-Seeds one or more credentials for the daemon to use on its first scan — so it can gather SNMP, Docker, or Podman data before you assign credentials in the UI. Provide credentials as a repeatable `--credential-id` flag or as a comma-separated `SCANOPY_CREDENTIAL_IDS` environment variable.
+Seeds one or more credentials for the daemon to use on its first scan, so it collects everything a [credential unlocks](/using-scanopy/discovery/#what-credentials-add) before you assign anything in the UI. Provide them as a repeatable `--credential-id` flag or as a comma-separated `SCANOPY_CREDENTIAL_IDS` environment variable.
 
 Each entry is a credential ID, optionally targeted at specific IP addresses:
 
