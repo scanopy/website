@@ -3,13 +3,14 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"prebuild": "cp ../src/lib/fixtures/openapi.json ./openapi.json && node scripts/generate-api-docs.mjs",
+		"prebuild": "cp ../src/lib/fixtures/openapi.json ./openapi.json && node scripts/generate-api-docs.mjs && node scripts/check-integration-guides.mjs",
 		"build": "next build",
 		"dev": "next dev",
 		"start": "next start",
 		"types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
 		"postinstall": "fumadocs-mdx",
-		"lint": "eslint"
+		"lint": "eslint",
+		"check:guides": "node scripts/check-integration-guides.mjs"
 	},
 	"dependencies": {
 		"flatted": "^3.4.2",

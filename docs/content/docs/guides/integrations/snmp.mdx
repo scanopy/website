@@ -1,66 +1,93 @@
 ---
 title: Set up SNMP discovery
 description: Configure SNMP credentials to enrich discovered hosts with device details, interfaces, and neighbor data.
+integration: SNMP
 ---
 
-For background on how credentials work — types, scope models, resolution order, and auto-assignment — see [Credentials](/using-scanopy/credentials/).
+Without SNMP, a discovered host has only what port scanning and DNS provide — addresses, open ports, detected services, and a reverse DNS name. SNMP adds what the device says about itself.
+
+<IntegrationBeta id="SNMP" />
+
+<CredentialBasics id="SNMP" />
+
+## What gets discovered
+
+- **System identity** — sysName, sysDescr, sysLocation, sysContact
+- **Interface table** — every interface with its name, speed, MAC address, IP assignments, and operational status
+- **LLDP/CDP neighbors** — the directly connected devices the host itself reports
+
+Neighbor data is what makes accurate physical topology possible: it's the source for the links drawn in [L2 Physical](/using-scanopy/topology/l2-physical/). Interface and IP data also improve host deduplication, since a MAC address gives Scanopy a second way to recognize a device whose address has changed.
+
+For the full list of queried MIBs and OIDs, see the [SNMP reference](/reference/snmp/).
 
 ## Prerequisites
 
-- SNMP enabled on target devices (v1, v2c, or v3)
-- UDP port 161 reachable from the daemon host to target devices
-- Community strings for SNMPv1/v2c (often `public` for read-only access), or USM credentials for SNMPv3
+- SNMP enabled on the target devices
+- UDP port 161 reachable from the daemon host to those devices
+- A community string for v1/v2c, or USM credentials for v3
 
 <Callout type="warn">
-SNMPv1 and SNMPv2c send community strings in cleartext on the wire. Use dedicated read-only community strings for Scanopy, and consider network segmentation to limit exposure. For devices that support it, prefer **SNMPv3 (AuthPriv)**, which authenticates and encrypts traffic on the wire. Scanopy encrypts all credentials at rest and redacts them in API responses regardless of version.
+SNMPv1 and SNMPv2c send community strings in cleartext on the wire. Use dedicated read-only community strings for Scanopy, and consider network segmentation to limit exposure. For devices that support it, prefer SNMPv3, which authenticates and encrypts on the wire.
 </Callout>
 
-## Creating a credential
+## Choosing a credential type
 
-1. Go to **Assets > Credentials**
-2. Click **Create Credential**
-3. Select **SNMP** as the credential type
-4. Enter a name (e.g. "Core switches" or "Default read-only")
-5. Choose the SNMP version and fill in its fields:
-   - **v1 / v2c** — enter the community string
-   - **v3** — enter the **security name**, choose an **authentication protocol** (SHA-1 or SHA-256) and its password, choose a **privacy protocol** (AES-128 or AES-256) and its password, and optionally a **context name**. SNMPv3 always uses AuthPriv (authentication and privacy together)
-6. Click **Save**
+Each SNMP version is its own credential type. Pick the highest one your devices support.
 
-Community strings and SNMPv3 passwords are encrypted at rest and will not be shown again in the UI or API responses.
+<IntegrationTransports id="SNMP" />
 
-## Assigning to a network
+| Situation | Use |
+| --------- | --- |
+| The device supports v3 | **SNMP v3** |
+| The device is v2c-era gear, or you need a shared read-only community | **SNMP v2c** |
+| The device supports nothing newer than v1 | **SNMP v1** |
+| The device is still on the default `public` community | Nothing — `public` is always tried as a last resort |
 
-Creating a credential alone doesn't activate SNMP — you must assign it to a network or specific hosts.
+Versions can be mixed freely across a network. Each host resolves its own credential, so v3 on the core switches alongside v2c on older access gear works fine.
 
-1. Go to **Assets > Networks**
-2. Select the network
-3. In the network settings, set the **SNMP Credential**
-4. Click **Save**
+## SNMP v1
 
-This activates SNMP for all hosts on the network. On the next discovery scan, the daemon will query every discovered host using this credential.
+A single shared community string, sent in cleartext. Use this only for devices that support nothing newer — v2c takes the same field and is otherwise identical from Scanopy's side.
 
-You can verify the assignment from **Discover > Daemons** — hover the Network chip to see whether an SNMP credential is configured.
+<IntegrationFields id="SNMP" transport="SnmpV1" />
 
-## Overriding credentials for specific hosts
+## SNMP v2c
 
-In mixed environments where different devices use different community strings, you can override the network-level credential on individual hosts.
+A single shared community string, sent in cleartext. The common choice for gear that predates v3.
 
-1. Open the host edit modal (click the host, then **Edit**)
-2. Go to the **SNMP** tab
-3. Select a different SNMP credential
-4. Click **Save**
+<IntegrationFields id="SNMP" transport="SnmpV2c" />
 
-Host-level overrides take priority over the network default. See [credential resolution order](/using-scanopy/discovery/#how-credentials-are-resolved) for the full priority chain.
+## SNMP v3
 
-## Verifying SNMP is working
+Authenticated and encrypted on the wire, and the version to prefer wherever a device supports it. Scanopy always uses AuthPriv — authentication *and* privacy together — which is why both protocol pairs are required rather than optional. AuthNoPriv and NoAuthNoPriv are not supported, and MD5 authentication is not available.
 
-After assigning credentials, run a discovery scan and check the results:
+Leave **Context Name** blank unless your device puts interface and LLDP data in a named context; the default context is what almost every device uses.
 
-1. Go to **Discover > Scan > Scheduled** and run a discovery (or wait for the next scheduled run)
+<IntegrationFields id="SNMP" transport="SnmpV3" />
+
+## Verifying it works
+
+1. Go to **Discover > Scan > Scheduled** and run a discovery, or wait for the next scheduled run
 2. Open a host that should have SNMP data
 3. Check for:
-   - **sysName** and **sysDescr** in the host details (SNMP tab)
-   - **Interfaces** in the ifEntry tab — interface names, speeds, and IP assignments
-   - **LLDP/CDP neighbors** in the topology view
+   - **sysName** and **sysDescr** in the host's SNMP tab
+   - **Interfaces** in the ifEntry tab — names, speeds, and IP assignments
+   - **Neighbors** in the [L2 Physical](/using-scanopy/topology/l2-physical/) topology
 
-If SNMP data isn't appearing, see [SNMP troubleshooting](/setting-up-daemons/troubleshooting-scans/snmp/) for protocol-specific issues, or [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/) for diagnosing credential loading and assignment using daemon logs.
+You can confirm a network-wide assignment from **Discover > Daemons** — hover the Network chip to see whether an SNMP credential is configured.
+
+## Troubleshooting
+
+### No SNMP data on any host
+
+The credential exists but isn't assigned. Creating a credential doesn't activate SNMP — see [Where a credential applies](/using-scanopy/credentials/#where-a-credential-applies).
+
+### No SNMP data on one host
+
+Check that the device answers on UDP 161 from the daemon's host, and that it isn't using a different community string from the network default. A per-host credential overrides the network one.
+
+### System data appears but no neighbors
+
+The device isn't reporting an LLDP or CDP neighbor table. Some managed switches collect neighbor data internally without exposing the LLDP MIB over SNMP, in which case a walk returns nothing and the neighbors have to come from that vendor's own management API instead.
+
+For protocol-level issues, see [SNMP troubleshooting](/setting-up-daemons/troubleshooting-scans/snmp/). For diagnosing credential loading and assignment from daemon logs, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).

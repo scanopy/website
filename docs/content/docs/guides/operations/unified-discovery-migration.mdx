@@ -24,9 +24,9 @@ When a daemon running v0.15.0 or later connects, the server:
 1. Go to **Assets > Credentials**
 2. Click **Create Credential**
 3. Select **Docker Proxy** as the type
-4. Enter the proxy port (default: 2376), optional path, and SSL certificates if applicable
+4. Enter the proxy port (default: 2375, or 2376 for TLS), optional path, and SSL certificates if applicable
 5. Save the credential
-6. [Assign it to the target host](/guides/integrations/docker/#assigning-to-a-host) from the host edit modal (**Credentials** tab)
+6. [Assign it to the target host](/using-scanopy/credentials/#assigning-a-credential-to-a-host) from the host edit modal (**Credentials** tab)
 
 The daemon config flags (`--docker-proxy`, `--docker-proxy-ssl-cert`, `--docker-proxy-ssl-key`, `--docker-proxy-ssl-chain`) still work in v0.15.0 but log deprecation warnings. They will be removed in v0.16.0.
 

@@ -13,22 +13,95 @@
       {
         "id": "DockerProxy",
         "name": "Proxy",
+        "display_name": "Docker Proxy",
         "description": "Connects over TCP, optionally with TLS.",
         "requires_config": true,
         "single_endpoint_per_host": true,
         "targets": [
           "DaemonHost",
           "Hosts"
+        ],
+        "stability": "Stable",
+        "minimum_daemon_version": "0.16.2",
+        "fields": [
+          {
+            "id": "port",
+            "label": "Docker API Port",
+            "field_type": "string",
+            "placeholder": "2375",
+            "secret": false,
+            "optional": true,
+            "help_text": "Docker API port. Use 2375 for non-TLS proxies (Tecnativa, HAProxy) or 2376 for TLS.",
+            "default_value": "2375",
+            "group": "Connection"
+          },
+          {
+            "id": "path",
+            "label": "URL Path Prefix",
+            "field_type": "string",
+            "placeholder": "/",
+            "secret": false,
+            "optional": true,
+            "help_text": "Optional URL path prefix appended after the port",
+            "group": "Connection"
+          },
+          {
+            "id": "ssl_cert",
+            "label": "SSL Certificate",
+            "field_type": "pathorinline",
+            "placeholder": "-----BEGIN CERTIFICATE-----",
+            "secret": false,
+            "optional": true,
+            "help_text": "PEM-encoded client certificate. All three TLS fields (cert, key, CA chain) must be provided together.",
+            "inline_format": "pemcertificate",
+            "group": "TLS"
+          },
+          {
+            "id": "ssl_key",
+            "label": "SSL Private Key",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": true,
+            "help_text": "PEM private key. All three TLS fields must be provided together.",
+            "inline_format": "pemprivatekey",
+            "group": "TLS"
+          },
+          {
+            "id": "ssl_chain",
+            "label": "SSL CA Chain",
+            "field_type": "pathorinline",
+            "placeholder": "-----BEGIN CERTIFICATE-----",
+            "secret": false,
+            "optional": true,
+            "help_text": "PEM-encoded CA certificate chain. All three TLS fields must be provided together.",
+            "inline_format": "pemcertificate",
+            "group": "TLS"
+          }
         ]
       },
       {
         "id": "DockerSocket",
         "name": "Socket",
+        "display_name": "Docker Socket",
         "description": "Connects via the daemon's local socket.",
         "requires_config": true,
         "single_endpoint_per_host": true,
         "targets": [
           "DaemonHost"
+        ],
+        "stability": "Stable",
+        "minimum_daemon_version": "0.16.2",
+        "fields": [
+          {
+            "id": "socket_path",
+            "label": "Socket Path",
+            "field_type": "string",
+            "placeholder": "/var/run/docker.sock",
+            "secret": false,
+            "optional": true,
+            "help_text": "Path to the Docker Unix socket. Leave blank to auto-detect (DOCKER_HOST or /var/run/docker.sock).",
+            "group": "Connection"
+          }
         ]
       }
     ]
@@ -47,22 +120,95 @@
       {
         "id": "PodmanProxy",
         "name": "Proxy",
+        "display_name": "Podman Proxy",
         "description": "Connects over TCP, optionally with TLS.",
         "requires_config": true,
         "single_endpoint_per_host": true,
         "targets": [
           "DaemonHost",
           "Hosts"
+        ],
+        "stability": "Stable",
+        "minimum_daemon_version": "0.17.2",
+        "fields": [
+          {
+            "id": "port",
+            "label": "Podman API Port",
+            "field_type": "string",
+            "placeholder": "2375",
+            "secret": false,
+            "optional": true,
+            "help_text": "Podman API port. Point at a TCP-exposed Podman service (e.g. `podman system service tcp:`) directly or behind a TLS proxy.",
+            "default_value": "2375",
+            "group": "Connection"
+          },
+          {
+            "id": "path",
+            "label": "URL Path Prefix",
+            "field_type": "string",
+            "placeholder": "/",
+            "secret": false,
+            "optional": true,
+            "help_text": "Optional URL path prefix appended after the port",
+            "group": "Connection"
+          },
+          {
+            "id": "ssl_cert",
+            "label": "SSL Certificate",
+            "field_type": "pathorinline",
+            "placeholder": "-----BEGIN CERTIFICATE-----",
+            "secret": false,
+            "optional": true,
+            "help_text": "PEM-encoded client certificate. All three TLS fields (cert, key, CA chain) must be provided together.",
+            "inline_format": "pemcertificate",
+            "group": "TLS"
+          },
+          {
+            "id": "ssl_key",
+            "label": "SSL Private Key",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": true,
+            "help_text": "PEM private key. All three TLS fields must be provided together.",
+            "inline_format": "pemprivatekey",
+            "group": "TLS"
+          },
+          {
+            "id": "ssl_chain",
+            "label": "SSL CA Chain",
+            "field_type": "pathorinline",
+            "placeholder": "-----BEGIN CERTIFICATE-----",
+            "secret": false,
+            "optional": true,
+            "help_text": "PEM-encoded CA certificate chain. All three TLS fields must be provided together.",
+            "inline_format": "pemcertificate",
+            "group": "TLS"
+          }
         ]
       },
       {
         "id": "PodmanSocket",
         "name": "Socket",
+        "display_name": "Podman Socket",
         "description": "Connects via the daemon's local socket.",
         "requires_config": true,
         "single_endpoint_per_host": true,
         "targets": [
           "DaemonHost"
+        ],
+        "stability": "Stable",
+        "minimum_daemon_version": "0.17.2",
+        "fields": [
+          {
+            "id": "socket_path",
+            "label": "Socket Path",
+            "field_type": "string",
+            "placeholder": "/run/podman/podman.sock",
+            "secret": false,
+            "optional": true,
+            "help_text": "Path to the Podman Unix socket. Leave blank to auto-detect (rootful /run/podman/podman.sock or the rootless $XDG_RUNTIME_DIR/podman/podman.sock).",
+            "group": "Connection"
+          }
         ]
       }
     ]
@@ -81,6 +227,7 @@
       {
         "id": "SnmpV1",
         "name": "v1",
+        "display_name": "SNMP v1",
         "description": "Uses SNMPv1.",
         "requires_config": true,
         "single_endpoint_per_host": false,
@@ -88,11 +235,26 @@
           "DaemonHost",
           "Hosts",
           "Network"
+        ],
+        "stability": "Stable",
+        "minimum_daemon_version": "0.17.0",
+        "fields": [
+          {
+            "id": "community",
+            "label": "Community String",
+            "field_type": "secretpathorinline",
+            "placeholder": "custom-community-string",
+            "secret": true,
+            "optional": false,
+            "help_text": "Custom SNMP community string. The default 'public' community is always tried automatically during scans.",
+            "inline_format": "plain"
+          }
         ]
       },
       {
         "id": "SnmpV2c",
         "name": "v2c",
+        "display_name": "SNMP v2c",
         "description": "Uses SNMPv2c.",
         "requires_config": true,
         "single_endpoint_per_host": false,
@@ -100,11 +262,26 @@
           "DaemonHost",
           "Hosts",
           "Network"
+        ],
+        "stability": "Stable",
+        "minimum_daemon_version": "0.16.2",
+        "fields": [
+          {
+            "id": "community",
+            "label": "Community String",
+            "field_type": "secretpathorinline",
+            "placeholder": "custom-community-string",
+            "secret": true,
+            "optional": false,
+            "help_text": "Custom SNMP community string. The default 'public' community is always tried automatically during scans.",
+            "inline_format": "plain"
+          }
         ]
       },
       {
         "id": "SnmpV3",
         "name": "v3",
+        "display_name": "SNMP v3",
         "description": "Uses SNMPv3.",
         "requires_config": true,
         "single_endpoint_per_host": false,
@@ -112,6 +289,89 @@
           "DaemonHost",
           "Hosts",
           "Network"
+        ],
+        "stability": "Stable",
+        "minimum_daemon_version": "0.17.0",
+        "fields": [
+          {
+            "id": "security_name",
+            "label": "Security Name",
+            "field_type": "string",
+            "placeholder": "snmp-user",
+            "secret": false,
+            "optional": false,
+            "help_text": "SNMPv3 USM user name (security name).",
+            "group": "Authentication"
+          },
+          {
+            "id": "auth_protocol",
+            "label": "Auth Protocol",
+            "field_type": "select",
+            "secret": false,
+            "optional": false,
+            "help_text": "Authentication hash algorithm.",
+            "options": [
+              {
+                "value": "Sha1",
+                "label": "SHA-1"
+              },
+              {
+                "value": "Sha256",
+                "label": "SHA-256"
+              }
+            ],
+            "default_value": "Sha256",
+            "group": "Authentication"
+          },
+          {
+            "id": "auth_password",
+            "label": "Auth Password",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Authentication password (minimum 8 characters).",
+            "inline_format": "plain",
+            "group": "Authentication"
+          },
+          {
+            "id": "priv_protocol",
+            "label": "Privacy Protocol",
+            "field_type": "select",
+            "secret": false,
+            "optional": false,
+            "help_text": "Privacy (encryption) algorithm.",
+            "options": [
+              {
+                "value": "Aes128",
+                "label": "AES-128"
+              },
+              {
+                "value": "Aes256",
+                "label": "AES-256"
+              }
+            ],
+            "default_value": "Aes128",
+            "group": "Privacy"
+          },
+          {
+            "id": "priv_password",
+            "label": "Privacy Password",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Privacy (encryption) password (minimum 8 characters).",
+            "inline_format": "plain",
+            "group": "Privacy"
+          },
+          {
+            "id": "context_name",
+            "label": "Context Name",
+            "field_type": "string",
+            "placeholder": "(default)",
+            "secret": false,
+            "optional": true,
+            "help_text": "Optional SNMPv3 context name. Leave blank for the default context (used by interface and LLDP data)."
+          }
         ]
       }
     ]
@@ -130,23 +390,106 @@
       {
         "id": "UnifiApiKey",
         "name": "API Key",
+        "display_name": "UniFi API Key",
         "description": "Connects with a controller API key. Requires UniFi OS; the legacy self-hosted Network Application does not support API keys.",
         "requires_config": true,
         "single_endpoint_per_host": true,
         "targets": [
           "DaemonHost",
           "Hosts"
+        ],
+        "stability": "Beta",
+        "minimum_daemon_version": "0.17.7",
+        "fields": [
+          {
+            "id": "port",
+            "label": "Controller Port",
+            "field_type": "string",
+            "placeholder": "443",
+            "secret": false,
+            "optional": true,
+            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
+            "default_value": "443",
+            "group": "Connection"
+          },
+          {
+            "id": "site",
+            "label": "Site",
+            "field_type": "string",
+            "placeholder": "default",
+            "secret": false,
+            "optional": true,
+            "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
+            "default_value": "default",
+            "group": "Connection"
+          },
+          {
+            "id": "api_key",
+            "label": "API Key",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Network Application API key (Settings → Control Plane → Integrations → Create API Key). Requires UniFi OS; the legacy self-hosted Network Application on 8443 has no API keys — use a UniFi Local Admin credential there instead.",
+            "inline_format": "plain",
+            "group": "Authentication"
+          }
         ]
       },
       {
         "id": "UnifiLocalAdmin",
         "name": "Local Admin",
+        "display_name": "UniFi Local Admin",
         "description": "Connects with a local admin account. Works with every controller, including the legacy self-hosted Network Application.",
         "requires_config": true,
         "single_endpoint_per_host": true,
         "targets": [
           "DaemonHost",
           "Hosts"
+        ],
+        "stability": "Beta",
+        "minimum_daemon_version": "0.17.7",
+        "fields": [
+          {
+            "id": "port",
+            "label": "Controller Port",
+            "field_type": "string",
+            "placeholder": "443",
+            "secret": false,
+            "optional": true,
+            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
+            "default_value": "443",
+            "group": "Connection"
+          },
+          {
+            "id": "site",
+            "label": "Site",
+            "field_type": "string",
+            "placeholder": "default",
+            "secret": false,
+            "optional": true,
+            "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
+            "default_value": "default",
+            "group": "Connection"
+          },
+          {
+            "id": "username",
+            "label": "Username",
+            "field_type": "string",
+            "secret": false,
+            "optional": false,
+            "help_text": "Controller admin username. Use a local-only admin account so multi-factor authentication does not block the login.",
+            "group": "Authentication"
+          },
+          {
+            "id": "password",
+            "label": "Password",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Password for the local admin account.",
+            "inline_format": "plain",
+            "group": "Authentication"
+          }
         ]
       }
     ]

@@ -1,66 +1,12 @@
-import integrations from '$lib/fixtures/integrations.json';
+import { StabilityTag, TargetTags } from '@/components/integration-tables';
+import { allIntegrations } from '@/lib/integrations';
 
-interface Transport {
-	id: string;
-	name: string;
-	description: string;
-	targets: string[];
-}
-
-interface Integration {
-	id: string;
-	name: string;
-	category: string;
-	discovers: string;
-	transports: Transport[];
-}
-
-// Fixture target keys → the label + tag color used in the Scanopy app
-// (see getTargetTagProps in ui/src/lib/features/credentials/types/base.ts:
-// Network → Cyan, DaemonHost → Blue, Hosts → Purple). Full literal class
-// strings so Tailwind picks them up.
-const TARGET_TAGS: Record<string, { label: string; className: string }> = {
-	Network: {
-		label: 'Network',
-		className: 'bg-cyan-200 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400'
-	},
-	DaemonHost: {
-		label: 'Daemon host',
-		className: 'bg-blue-200 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400'
-	},
-	Hosts: {
-		label: 'Remote hosts',
-		className: 'bg-purple-200 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400'
-	}
-};
-
-// Broad → narrow, so every row lists targets in the same order.
-const TARGET_ORDER = ['Network', 'DaemonHost', 'Hosts'];
-
-function TargetTags({ targets }: { targets: string[] }) {
-	return (
-		<span className="inline-flex flex-wrap gap-1">
-			{TARGET_ORDER.filter((t) => targets.includes(t)).map((t) => {
-				const tag = TARGET_TAGS[t] ?? {
-					label: t,
-					className: 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
-				};
-				return (
-					<span
-						key={t}
-						className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium ${tag.className}`}
-					>
-						{tag.label}
-					</span>
-				);
-			})}
-		</span>
-	);
-}
-
+/**
+ * Every credential type across every integration — the cross-integration overview
+ * for the Credentials concept page. A single integration's own guide uses
+ * `IntegrationTransports` instead, which adds the per-transport daemon floor.
+ */
 export function CredentialTypesTable() {
-	const data = integrations as Integration[];
-
 	return (
 		<div className="overflow-x-auto">
 			<table>
@@ -73,15 +19,22 @@ export function CredentialTypesTable() {
 					</tr>
 				</thead>
 				<tbody>
-					{data.flatMap((integration) =>
+					{allIntegrations.flatMap((integration) =>
 						integration.transports.map((transport, i) => (
 							<tr key={transport.id}>
 								{i === 0 && (
-									<td rowSpan={integration.transports.length}>
+									<td rowSpan={integration.transports.length} className="whitespace-nowrap">
 										<strong>{integration.name}</strong>
 									</td>
 								)}
-								<td>{`${integration.name} ${transport.name}`}</td>
+								{/* The fixture's own name for the type. Composing it as
+								    `${integration.name} ${transport.name}` used to name a type
+								    that does not exist: the service is "UniFi Controller" but
+								    the credential is "UniFi API Key". */}
+								<td className="whitespace-nowrap">
+									{transport.display_name}
+									<StabilityTag stability={transport.stability} />
+								</td>
 								{i === 0 && (
 									<td rowSpan={integration.transports.length}>{integration.discovers}</td>
 								)}

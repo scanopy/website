@@ -1,0 +1,102 @@
+---
+title: Set up UniFi discovery
+description: Connect a UniFi Network Application controller so Scanopy can discover the switches, access points and gateways it manages, along with their ports and LLDP neighbors.
+integration: UniFi Controller
+---
+
+A UniFi controller holds an inventory of every device it has adopted, including neighbor data its switches collect internally but do not publish over SNMP. Pointing Scanopy at the controller is how that inventory becomes hosts, interfaces, and physical links.
+
+<IntegrationBeta id="UniFi Controller">
+	The per-device tables this integration reads — switch ports, LLDP neighbors, and bridge
+	forwarding entries — have not yet been confirmed against a broad range of UniFi hardware.
+</IntegrationBeta>
+
+<CredentialBasics id="UniFi Controller" />
+
+One credential describes one controller, which then reports on many devices, so it is pointed at the single host running that controller — or at the daemon host, when the daemon runs on the controller itself.
+
+## What gets discovered
+
+On each scan, the daemon reads the controller's device inventory for the configured site:
+
+| From the controller | Becomes |
+| ------------------- | ------- |
+| Adopted devices (switches, APs, gateways) | Hosts, matched against existing hosts by IP |
+| Each device's port table | Interfaces, with names, speeds and MAC addresses |
+| LLDP neighbor and uplink tables | Physical links in [L2 Physical](/using-scanopy/topology/l2-physical/) |
+| Device class (`usw`, `uap`, …) | A **UniFi Switch** or **UniFi Gateway** service |
+
+Neighbor data lands in the same resolution path that directly polled devices use, so a link the controller reports and the same link reported by the device at its other end describe one cable rather than two.
+
+Devices whose management IP is missing, unparseable, or outside every subnet Scanopy knows about are skipped — an address is what identifies a host, and creating one without a resolvable IP would mint a duplicate on every scan.
+
+## Prerequisites
+
+- The controller is reachable from the daemon host on its HTTPS port
+- You know the controller's **internal** site name — the `<name>` in `/manage/site/<name>` from the controller URL, not the display name shown in the site switcher. The two are identical on a default install and diverge the moment a site is renamed
+- The daemon has **Probe with invalid certificates** enabled in its scan settings. UniFi controllers ship self-signed certificates, and without this the connection fails before it can authenticate
+
+Every credential type needs the right **Controller Port**, which identifies the product rather than being a preference:
+
+| Controller | Port |
+| ---------- | ---- |
+| UniFi OS console — Dream Machine, Cloud Key, Cloud Gateway | 443 |
+| Self-hosted UniFi OS Server | 11443 |
+| Legacy self-hosted Network Application | 8443 |
+
+Read it off the URL you use to reach the controller. The API layout differs between these products, so a wrong port fails to connect rather than failing to authenticate.
+
+## Choosing a credential type
+
+Both types reach the same API and discover the same things. The deciding factor is which controller you run.
+
+<IntegrationTransports id="UniFi Controller" />
+
+| Situation | Use |
+| --------- | --- |
+| UniFi OS console or self-hosted UniFi OS Server | Either — **UniFi API Key** is simpler |
+| Legacy self-hosted Network Application on 8443 | **UniFi Local Admin** — Ubiquiti does not support API keys there |
+| The controller account has multi-factor authentication enabled | **UniFi API Key**, or create a local-only admin account |
+
+## UniFi API Key
+
+The daemon authenticates with a controller API key sent as a request header. Stateless, and nothing expires on a session timeout — but UniFi OS only, since the legacy Network Application has no API keys at all.
+
+Create the key first: in the controller, go to **Settings → Control Plane → Integrations → Create API Key**.
+
+<IntegrationFields id="UniFi Controller" transport="UnifiApiKey" />
+
+## UniFi Local Admin
+
+The daemon logs in with a controller admin account and holds the resulting session. Works on every controller type, including the legacy self-hosted Network Application.
+
+Use a **local-only** admin account. A cloud-linked Ubiquiti SSO account with multi-factor authentication enabled cannot complete the login, and the daemon has no way to answer the challenge.
+
+<IntegrationFields id="UniFi Controller" transport="UnifiLocalAdmin" />
+
+## Verifying it works
+
+1. Run a discovery from **Discover > Scan > Scheduled**
+2. Open the scan session — the credential appears in the session's credential summary
+3. Check **Assets > Hosts** for the controller's adopted devices
+4. Open [L2 Physical](/using-scanopy/topology/l2-physical/) and confirm the switches now show their neighbors
+
+## Troubleshooting
+
+### The credential connects but no devices appear
+
+The site name is the usual cause: an unknown site returns an empty device list rather than an error. Confirm the value against `/manage/site/<name>` in your controller URL.
+
+### Connection fails on a UniFi OS console
+
+Check the port against the table above. A UniFi OS console serves the Network Application behind a proxy path on 443, while the legacy self-hosted application serves it at the root on 8443.
+
+### Authentication fails with a correct password
+
+Multi-factor authentication on the account blocks the login. Create a local-only admin account on the controller and use that instead.
+
+### Certificate errors
+
+Enable **Probe with invalid certificates** in the daemon's scan settings. Controllers ship self-signed certificates by default.
+
+For diagnosing credential loading and assignment from daemon logs, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).
