@@ -17,7 +17,7 @@ On Linux, macOS, Windows, and FreeBSD the daemon installs as a native background
 Go to **Discover > Scan > Daemons** and click **Create Daemon**. The wizard walks you through:
 
 1. **Setup** — network, polling mode, and daemon name
-2. **Integrations** — optionally add SNMP, Docker, and Podman credentials, targeting all hosts or specific hosts. These are [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan. See [Credentials](/using-scanopy/credentials/#attaching-a-credential) for details.
+2. **Integrations** — optionally add [credentials](/using-scanopy/credentials/#attaching-a-credential), targeting all hosts or specific ones. They're [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan.
 3. **Install** — pick your platform and install method; the wizard builds the matching artifact for you
 
 Finishing the wizard [provisions](/reference/daemon-identity/) the daemon: the server creates its record and mints an API key bound to it. You don't create a key yourself.

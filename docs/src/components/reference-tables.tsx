@@ -100,6 +100,21 @@ export function ElementRulesTable() {
 }
 
 /**
+ * Integration id to the URL of the guide documenting it, taken from each guide's
+ * `integration` frontmatter rather than a mapping kept here — so an integration
+ * whose guide is missing that field is rendered as plain text rather than linked
+ * somewhere wrong.
+ */
+function guideUrls(): Map<string, string> {
+	return new Map(
+		source
+			.getPages()
+			.filter((p) => p.data.integration)
+			.map((p) => [p.data.integration as string, p.url])
+	);
+}
+
+/**
  * Every source of data a credential unlocks, grouped by integration category.
  *
  * Replaces a hand-written list ("queries SNMP, discovers Docker and Podman
@@ -108,19 +123,9 @@ export function ElementRulesTable() {
  * polling a host, reading a container runtime, reading a controller that reports
  * on other devices — so a new integration slots itself in, and a new *category*
  * appears on its own.
- *
- * Guide links are resolved from each guide's `integration` frontmatter rather
- * than a mapping kept here, so an integration whose guide is missing that field
- * renders as plain text instead of linking somewhere wrong.
  */
 export function DiscoverySources() {
-	const guideUrls = new Map(
-		source
-			.getPages()
-			.filter((p) => p.data.integration)
-			.map((p) => [p.data.integration as string, p.url])
-	);
-
+	const urls = guideUrls();
 	const categories = [...new Set(allIntegrations.map((i) => i.category))];
 
 	return (
@@ -134,7 +139,7 @@ export function DiscoverySources() {
 						{allIntegrations
 							.filter((i) => i.category === category)
 							.map((integration) => {
-								const url = guideUrls.get(integration.id);
+								const url = urls.get(integration.id);
 								return (
 									<li key={integration.id}>
 										{url ? <Link href={url}>{integration.name}</Link> : integration.name} —{' '}
@@ -144,6 +149,32 @@ export function DiscoverySources() {
 							})}
 					</ul>
 				</div>
+			))}
+		</>
+	);
+}
+
+/**
+ * Inline, comma-separated links to every integration guide.
+ *
+ * For sentences that would otherwise carry a hand-kept list of integration
+ * names. Resolved the same way as `DiscoverySources` — from each guide's
+ * `integration` frontmatter — so adding an integration extends the sentence and
+ * removing one can't leave a dead link behind.
+ */
+export function IntegrationGuideLinks() {
+	const urls = guideUrls();
+	const links = allIntegrations
+		.map((i) => ({ name: i.name, url: urls.get(i.id) }))
+		.filter((l): l is { name: string; url: string } => Boolean(l.url));
+
+	return (
+		<>
+			{links.map((l, i) => (
+				<span key={l.url}>
+					{i > 0 && (i === links.length - 1 ? ', and ' : ', ')}
+					<Link href={l.url}>{l.name}</Link>
+				</span>
 			))}
 		</>
 	);

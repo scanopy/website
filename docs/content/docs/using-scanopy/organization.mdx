@@ -29,7 +29,7 @@ Networks are the primary organizational unit. Each network represents a distinct
 
 ### Network Settings
 
-Open a network from **Assets > Networks** to edit its settings. Alongside its name and type, each network has a **Consider entities stale after** window — how long discovery can go without seeing a host, service, or subnet before it's flagged as [stale](/using-scanopy/staleness/). Enter it as days and hours, set it to comfortably exceed the network's scan interval, and leave it blank to use the default (28 days).
+Open a network from **Assets > Networks** to edit its name, type, and its **Consider entities stale after** window — see [Staleness](/using-scanopy/staleness/#the-staleness-window).
 
 ### Network Access
 
@@ -37,9 +37,7 @@ Users can be restricted to specific networks within an organization. When inviti
 
 ## Credentials
 
-Credentials store authentication details (SNMP community strings, Docker Proxy certificates) that daemons use to gather data during discovery. Credentials are organization-scoped — they can be assigned to any network or host within the organization.
-
-Manage credentials via **Assets > Credentials**. See [Credentials](/using-scanopy/credentials/) for types, scopes, and assignment.
+Credentials are organization-scoped: managed under **Assets > Credentials**, and assignable to any network or host in the organization. See [Credentials](/using-scanopy/credentials/) for types, targets, and assignment.
 
 ## API Keys
 

@@ -14,6 +14,7 @@ import { Mermaid } from '@/components/mermaid';
 import {
 	DiscoverySources,
 	ElementRulesTable,
+	IntegrationGuideLinks,
 	RolesTable,
 	ScanSettingsTable
 } from '@/components/reference-tables';
@@ -33,6 +34,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		EntityCoreTables,
 		IntegrationBeta,
 		IntegrationFields,
+		IntegrationGuideLinks,
 		IntegrationTransports,
 		Mermaid,
 		RolesTable,
