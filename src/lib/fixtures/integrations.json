@@ -115,5 +115,40 @@
         ]
       }
     ]
+  },
+  {
+    "id": "UniFi Controller",
+    "name": "UniFi Controller",
+    "category": "Network Controllers",
+    "has_logo": true,
+    "logo_ext": "svg",
+    "logo_slug": "unifi-controller",
+    "logo_needs_white_background": false,
+    "discovers": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees.",
+    "summary": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees. Supports api key and local admin.",
+    "transports": [
+      {
+        "id": "UnifiApiKey",
+        "name": "API Key",
+        "description": "Connects with a controller API key. Requires UniFi OS; the legacy self-hosted Network Application does not support API keys.",
+        "requires_config": true,
+        "single_endpoint_per_host": true,
+        "targets": [
+          "DaemonHost",
+          "Hosts"
+        ]
+      },
+      {
+        "id": "UnifiLocalAdmin",
+        "name": "Local Admin",
+        "description": "Connects with a local admin account. Works with every controller, including the legacy self-hosted Network Application.",
+        "requires_config": true,
+        "single_endpoint_per_host": true,
+        "targets": [
+          "DaemonHost",
+          "Hosts"
+        ]
+      }
+    ]
   }
 ]
