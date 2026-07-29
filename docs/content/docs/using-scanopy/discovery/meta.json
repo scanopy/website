@@ -1,0 +1,5 @@
+{
+  "title": "Discovery",
+  "defaultOpen": true,
+  "pages": ["index", "scans", "rescanning", "naming-and-deduplication"]
+}

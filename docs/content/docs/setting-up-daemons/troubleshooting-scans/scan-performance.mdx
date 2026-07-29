@@ -29,7 +29,7 @@ See [Daemon Configuration](/reference/daemon-configuration/) for the full parame
 
 **Cause**: Two common reasons:
 
-1. **Deep scanning**: Deep scans perform a full 65,535-port TCP scan on every host, which takes significantly longer than light scans. By default, every third scan is deep. If your network has many active hosts, deep scans can take hours. See [Light vs Deep Scanning](/using-scanopy/discovery/#deep-scans) for how scan intervals work and how to adjust or disable deep scans.
+1. **Deep scanning**: Deep scans perform a full 65,535-port TCP scan on every host, which takes significantly longer than light scans. By default, every third scan is deep. If your network has many active hosts, deep scans can take hours. See [Light vs Deep Scanning](/using-scanopy/discovery/scans/#deep-scans) for how scan intervals work and how to adjust or disable deep scans.
 
 2. **Non-interfaced subnets**: Scanning subnets the daemon doesn't have a network interface on is orders of magnitude slower. On interfaced subnets, the daemon uses fast ARP scanning (seconds for a /24). On non-interfaced subnets, it falls back to TCP probing — scanning each IP individually. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3).
 

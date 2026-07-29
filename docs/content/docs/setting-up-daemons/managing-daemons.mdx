@@ -131,7 +131,7 @@ On the **Details** tab you can edit the maintainer, tags, and — for ServerPoll
 
 Daemon-local settings — interfaces, ports, log level, scan tuning — live in the [daemon config file](/reference/daemon-configuration/) on the host, not on the server record. Change them either by [reconfiguring the daemon](#reconfiguring-a-daemon) from the modal or by editing `config.json` directly. Editing the file requires a service restart to take effect — `sudo systemctl restart scanopy-daemon` (Linux), `sudo launchctl kickstart -k system/com.scanopy.daemon` (macOS), `sc.exe stop scanopy-daemon` then `sc.exe start scanopy-daemon` (Windows), or `sudo service scanopy-daemon restart` (FreeBSD). For a foreground daemon, just restart the process.
 
-Each daemon also reports its **capabilities** to the server: which subnets it has network interfaces on, used as its default scan targets, and which integrations it can reach locally. Capabilities refresh on the daemon's next discovery, so re-run one after changing the host's network configuration or what the daemon has access to.
+Each daemon also reports which subnets it has network interfaces on, which is where its default scan targets come from. That list refreshes on the daemon's next discovery, so re-run one after changing the host's network configuration.
 
 ## Reconfiguring a Daemon
 

@@ -1,0 +1,63 @@
+---
+title: Scans and Settings
+description: Scan depth, intervals, duration limits, and the settings that govern how a discovery runs.
+---
+
+## Scanning Lifecycle
+
+Discovery alternates between two scan depths on a configurable interval.
+
+### Light scans
+
+Light scans focus on host and service discovery using a targeted port set — the ports defined in the discovery's port configuration plus any credential-specific ports (e.g., SNMP port 161). This is faster and sufficient for detecting new hosts and tracking port changes.
+
+### Deep scans
+
+Deep scans perform a full 65,535-port TCP scan on each host. This catches open ports that aren't covered by the light scan's targeted port set.
+
+### Scan interval
+
+The **Full Scan Interval** setting controls how often deep scans run — a value of 3 means every third scan is deep, with light scans in between:
+
+| Setting | Behavior |
+| ------- | -------- |
+| `1` | Every scan is deep |
+| `3` | Light, light, deep, light, light, deep, ... |
+| `0` | Never deep scan (light scans only) |
+
+You can also force a deep scan at any time from the discovery session controls.
+
+## Scan Settings
+
+Everything that governs how a discovery scans, configured per-discovery rather than per-daemon, so one daemon can scan different networks at different rates:
+
+<ScanSettingsTable />
+
+## Run Types
+
+| Type          | Behavior                                               |
+| ------------- | ------------------------------------------------------ |
+| **Scheduled** | Runs automatically on a cron schedule (default: daily) |
+| **AdHoc**     | Manual execution only, for testing or one-time scans   |
+
+## Discovery Duration
+
+Duration depends primarily on the number of active hosts on the network, and will be estimated by the daemon during initial scan setup. You can view the estimated duration in **Scans > Sessions**
+
+Factors affecting speed:
+
+- Number of active hosts — more hosts means more deep scanning work
+- Scan depth — deep scans take longer than light scans
+- Network latency and host responsiveness
+- Network prefix size — only a limiting factor without a Layer 2 interface, since the daemon must probe every IP individually via TCP
+
+If scan time is longer than expected, see [discovery takes hours](/setting-up-daemons/troubleshooting-scans/scan-performance/#discovery-takes-hours).
+
+### Time limit
+
+A single discovery run has a hard ceiling, set by **Max Discovery Duration** in [Scan Settings](#scan-settings).
+
+When a run hits the ceiling it completes rather than failing. Hosts still queued are left unscanned and picked up by the next run, and the finished run carries a warning naming how many hosts were skipped and roughly how much time they needed. Data already collected is kept.
+
+Raise the limit for large networks that legitimately need a longer window. If a run is hitting the ceiling unexpectedly, the scan is slower than it should be — see [discovery finished with hosts unscanned](/setting-up-daemons/troubleshooting-scans/scan-performance/#discovery-finished-with-hosts-unscanned).
+

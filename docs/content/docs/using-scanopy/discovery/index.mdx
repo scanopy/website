@@ -1,0 +1,37 @@
+---
+title: Overview
+description: How Scanopy discovers hosts and services on your network.
+---
+
+Daemons scan your network to discover hosts and services, then report their findings to the server.
+
+## How Discovery Works
+
+Each daemon runs a single discovery. Every run does two things unconditionally: it scans the subnets it has been given, and it reports back which subnets it has interfaces on.
+
+### Network scanning
+
+Scanning IP addresses on the configured subnets is what finds hosts in the first place. It:
+
+- Detects open TCP and UDP ports
+- Identifies services via [pattern matching](/reference/service-detection/)
+- Performs reverse DNS lookups
+- Collects MAC addresses, on directly connected subnets only
+
+The daemon can scan any subnet it can route to — if its host can reach an address, it can scan it. What differs is depth. On a subnet the daemon has an interface on, it gets Layer 2: MAC addresses via ARP, and every responsive host. On a remote subnet it is limited to Layer 3, finding only hosts with an open port. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3).
+
+On very large interfaced subnets the daemon caps how many addresses it ARP scans, governed by the **ARP Scan Cutoff** [scan setting](/using-scanopy/discovery/scans/#scan-settings).
+
+### What credentials add
+
+Everything beyond ports, names and addresses comes from a credential. Each one unlocks a different source:
+
+<DiscoverySources />
+
+A host reached through more than one source is still one host — everything flows into the same ingestion and matching path, so a device a controller reports and the same device found by a subnet scan are recognized as one.
+
+## In this section
+
+- **[Scans and Settings](/using-scanopy/discovery/scans/)** — how often a scan runs, how deep it goes, and every setting that governs it
+- **[Rescanning a Host](/using-scanopy/discovery/rescanning/)** — re-checking one host without sweeping its subnet
+- **[Naming and Deduplication](/using-scanopy/discovery/naming-and-deduplication/)** — how a discovered host gets its name, and how Scanopy avoids creating it twice

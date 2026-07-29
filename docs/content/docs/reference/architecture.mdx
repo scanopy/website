@@ -40,8 +40,8 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Scan IPv4 addresses on configured subnets
 - Detect open TCP ports
 - Identify services via pattern matching
-- Connect to Docker socket for container discovery
-- Report host interfaces and capabilities
+- Connect to integrations it holds credentials for
+- Report the subnets it has interfaces on
 - Maintain server connection via periodic polling (each poll implicitly updates the daemon's health status)
 - Execute scheduled discovery tasks
 
@@ -216,7 +216,7 @@ flowchart TD
     subgraph step4["4. Daemon executes discovery"]
         scan1["Network scanning:<br/>Scans IP range, detects ports/services"]
         scan2["Docker scanning:<br/>Queries Docker API for containers"]
-        scan3["Self-report:<br/>Reports own capabilities"]
+        scan3["Self-report:<br/>Reports interfaced subnets"]
     end
 
     step3 --> step4

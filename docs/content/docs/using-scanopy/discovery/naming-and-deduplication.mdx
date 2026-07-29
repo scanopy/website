@@ -1,0 +1,81 @@
+---
+title: Naming and Deduplication
+description: How a discovered host gets its name, and how Scanopy recognizes a host it has already seen.
+---
+
+## Host Naming
+
+When a host is discovered, Scanopy determines its name using this priority:
+
+1. **Reverse DNS** — hostname from PTR record, if available
+2. **Best Service** or **IP** — configurable fallback per discovery:
+   - _Best Service_: Uses the first named service found on the host
+   - _IP_: Uses the host's IP address
+3. **Remaining fallback** — whichever option wasn't selected in step 2
+
+A name you set yourself is never overwritten by a later scan.
+
+## Host Deduplication
+
+When a daemon discovers a host, Scanopy checks if it already exists before creating a new entry. This prevents duplicate hosts when:
+
+- The same host is discovered by multiple daemons
+- A host is rediscovered across multiple scan sessions
+- Docker and network scanning both find the same machine
+
+Host deduplication is only applied to hosts on the same [Network](/using-scanopy/organization/#networks). If two hosts on different Networks meet the criteria below, they will not be deduplicated.
+
+### Interface Matching
+
+Scanopy primarily identifies duplicate hosts by comparing network interfaces. Two interfaces are considered the same if **any** of these conditions are true:
+
+| Condition | When it applies |
+| --------- | --------------- |
+| **Same IP + Same Subnet** | Most common. If a host has `192.168.1.50` on subnet `192.168.1.0/24`, any discovery finding that same IP on that subnet matches. |
+| **Same MAC Address** | Useful when IPs change (DHCP) but MAC stays constant. Both interfaces must have a MAC address set. |
+
+MAC addresses are available when the daemon is directly connected to the subnet being scanned (via ARP) or from Docker container network configuration. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3) for details on when MAC addresses are collected.
+
+**Floating virtual IPs (CARP/VRRP).** A high-availability virtual IP has no hardware of its own — its only identity is the address it floats on, carried by a shared virtual-router MAC. Scanopy matches such an address on IP + subnet when it has no physical identity to match on, so a floating VIP is recognized as the same entity across scans instead of being recreated each time. The shared virtual MAC is never used to match, so the HA peers that host the VIP stay distinct rather than merging into one host.
+
+### Container Host Matching
+
+Container discovery reports on exactly one host — the daemon's own, or the one a proxy credential points at — so there is nothing to deduplicate across hosts. What it does change is *which* host the containers land on: a proxy pointing at a remote machine attributes them there, not to the daemon's host.
+
+Container names appear in a host's virtualization metadata, not as its hostname.
+
+### Upsert Behavior
+
+When a duplicate is found, Scanopy merges the new discovery data into the existing host rather than creating a duplicate:
+
+**Entities merged**
+
+Ports, interfaces, and services discovered on the duplicate will be reconciled against the existing host and deduplicated.
+
+- **Ports**: Must have same number and protocol to be considered a duplicate
+- **Interfaces**: As described above, must have same IP + subnet OR same MAC address to be considered a duplicate
+- **Services**: Follow complex deduplication logic that depends on the type of service detected. Refer to `backend/src/server/services/impl/base.rs -> impl PartialEq` if you are curious.
+
+**Fields merged (only if not already set):**
+
+- **Hostname** — DNS-discovered hostname fills in if the existing host has none
+
+**Fields preserved (never overwritten):**
+
+- **Name** — User-assigned name stays intact
+- **Hidden status** — Visibility preference preserved
+- **Tags** — User tags unchanged
+- **Description** — User-provided description unchanged
+
+**Always merged:**
+
+- **Discovery metadata** — Each discovery source is recorded, so you can see which daemons and discovery methods found the host
+- **Credential assignments** — When hosts are consolidated, credential assignments are preserved using broadest-scope-wins merging
+
+This means discovery enriches existing hosts without overwriting user customizations.
+
+### Manual Consolidation
+
+Automatic deduplication handles most cases, but sometimes hosts slip through as duplicates — for example, when a server has interfaces on multiple VLANs that were scanned by different daemons before the interfaces could be matched.
+
+Use manual consolidation to merge these. See [Consolidating Duplicate Hosts](/using-scanopy/network-data/#consolidating-duplicate-hosts).
