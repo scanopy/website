@@ -13,7 +13,14 @@ The L2 Physical perspective shows the cable-level shape of your network — whic
 
 ## What drives it
 
-LLDP and CDP run on managed network gear. When Scanopy queries a device with valid SNMP credentials, it pulls the neighbor table and uses it to draw links between interfaces. Devices that don't report neighbor data simply don't appear here — that's expected for unmanaged switches and most endpoints.
+LLDP and CDP run on managed network gear. Scanopy reads those neighbor tables from two places:
+
+- **The device itself**, over SNMP. When a host is queried with valid SNMP credentials, its neighbor table is pulled and used to draw links between interfaces.
+- **A network controller**, over its API. Some managed switches collect neighbor data internally but don't publish it over SNMP — a walk of the LLDP MIB returns nothing no matter what credentials you use. Where the vendor's controller holds that data, reading the controller recovers it. See [Set up UniFi discovery](/guides/integrations/unifi/).
+
+Both sources feed the same resolution, so a link reported by a controller and the same link reported by the device at its other end are recognized as one cable rather than two.
+
+Devices that don't report neighbor data from either source simply don't appear here — that's expected for unmanaged switches and most endpoints.
 
 ## When to use it
 

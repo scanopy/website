@@ -40,8 +40,11 @@ Each service has a **detection pattern** that specifies what to look for. Patter
 | **Header**     | Does an HTTP header contain a value?              |
 | **MAC Vendor** | Does the device's MAC address belong to a vendor? |
 | **Gateway**    | Is this IP in the daemon's routing table?         |
+| **Managed Device** | Does a network controller report this device as a given type? |
 
 Patterns can be combined with **AllOf** (all must match) or **AnyOf** (any can match).
+
+**Managed Device** is the one check that doesn't come from probing the device. When a daemon reads a [network controller's inventory](/using-scanopy/discovery/#controller-discovery), the controller states what each adopted device is, and that statement is matched like any other evidence — which is how **UniFi Switch** and **UniFi Gateway** are identified.
 
 ### Example: Pi-hole
 

@@ -12,7 +12,8 @@ Each daemon runs a single discovery that combines network scanning, Docker conta
 1. Scans configured subnets to find hosts via IP, port, and ARP scanning
 2. Queries SNMP on discovered hosts (if [credentials are configured](/using-scanopy/credentials/))
 3. Discovers Docker and Podman containers via the local socket or a [proxy credential](/guides/integrations/docker/) (local or remote)
-4. Reports its own capabilities and reachable subnets to the server
+4. Reads the inventory of any network controller it has a credential for
+5. Reports its own capabilities and reachable subnets to the server
 
 <Callout type="info">
 In versions before v0.15.0, these were separate discovery types (Network Scan, Docker, Self-Report). They have been consolidated into a single discovery. See the [migration guide](/guides/operations/unified-discovery-migration/) if you're upgrading.
@@ -49,6 +50,14 @@ The daemon can reach a container runtime in two ways:
 
 - **Local socket** — the daemon connects directly to the Docker or Podman socket on its own host. This happens automatically when the socket is accessible; create a **Docker Socket** or **Podman Socket** credential only to point at a non-default socket path.
 - **Proxy credential** — the daemon connects to a Docker or Podman API proxy, which can be local or remote. See [Set up Docker discovery](/guides/integrations/docker/) or [Set up Podman discovery](/guides/integrations/podman/) for configuration.
+
+### Controller Discovery
+
+Most credentials describe how to reach one host. A network controller credential is different: it describes one API endpoint that reports on many devices at once.
+
+When a daemon has such a credential, it reads the controller's device inventory and turns it into hosts, their ports into interfaces, and the neighbor tables the controller holds into physical links. That data joins the same ingestion and neighbor-resolution path SNMP feeds, so a device the controller reports and the same device found by a subnet scan are recognized as one host rather than two.
+
+This matters most for gear that collects neighbor data internally but doesn't publish it over SNMP, where the controller is the only source for it. See [Set up UniFi discovery](/guides/integrations/unifi/).
 
 ## Scanning Lifecycle
 
@@ -115,8 +124,31 @@ Creating a credential alone doesn't activate SNMP collection — you must assign
 - **SNMP v1, v2c, and v3 supported** — v3 uses AuthPriv (SHA-1/SHA-256 auth, AES-128/256 privacy)
 - **No trap handling** — SNMP data is collected during discovery scans only (poll-based)
 - **No custom MIBs** — only the standard MIBs listed above are queried
+- **Not every device publishes LLDP over SNMP** — some managed switches collect neighbor data internally without exposing the LLDP MIB, so a walk returns nothing however valid the credential is. Where the vendor's controller holds that data, [controller discovery](#controller-discovery) is the way to get it
 
 See [SNMP reference](/reference/snmp/) for protocol details, timeouts, and the full list of collected OIDs.
+
+## Rescanning a single host
+
+A full discovery sweeps every configured subnet. When the question is narrower — is this one host still there, and is what we know about it current? — use **Rescan** from a host's menu in **Assets > Hosts**.
+
+A rescan checks only that host's known addresses. Alongside the standard discovery port set it re-checks the ports already recorded on the host, so it both confirms what was there and surfaces services that have opened since.
+
+**Which daemon runs it.** The daemon that last discovered the host — evidence it can reach the address, rather than a guess from subnet membership. That daemon must still exist, still be on the host's network, and still have an interface on a subnet holding one of the host's addresses.
+
+**Where it shows up.** In the Scans tab as an AdHoc run, with the same progress and cancel controls as any other scan. Edit, Run and Toggle are suppressed on it, since it isn't a configuration you can re-run. A `Queued` phase means the daemon is busy and will start when its current scan finishes.
+
+**How thorough it is.** Where the daemon's interface has a MAC address, it ARPs the target — which sees a live host even when every port is firewalled. On an interface without one, such as a point-to-point VPN tunnel, it falls back to a TCP probe, which cannot tell a firewalled host from an absent one. Loopback addresses aren't scannable and are excluded.
+
+Rescan is refused, with the specific reason, when:
+
+| Reason | What to do |
+| ------ | ---------- |
+| The host has never been scanned, or the scan that found it is no longer on record | Run a discovery first |
+| The daemon that last scanned it no longer exists | Run a discovery from another daemon to refresh the host |
+| That daemon has moved to a different network | Scan the host from a daemon on its network |
+| That daemon is older than 0.17.7 | [Upgrade the daemon](/setting-up-daemons/managing-daemons/) |
+| That daemon has no interface on a subnet holding any of the host's scannable addresses | Deploy a daemon that does — see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/) |
 
 ## Run Types
 
@@ -124,6 +156,8 @@ See [SNMP reference](/reference/snmp/) for protocol details, timeouts, and the f
 | ------------- | ------------------------------------------------------ |
 | **Scheduled** | Runs automatically on a cron schedule (default: daily) |
 | **AdHoc**     | Manual execution only, for testing or one-time scans   |
+
+A rescan is recorded as an AdHoc run.
 
 ## Discovery Duration
 

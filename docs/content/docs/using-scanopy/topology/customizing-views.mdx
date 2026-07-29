@@ -45,6 +45,15 @@ Beyond tags, some perspectives offer metadata filter groups that fade everything
 
 Filter your topology by tags to focus on what matters. Filtered elements fade to reduced opacity instead of disappearing, so the overall layout stays stable while your focus area stands out.
 
+## Large topologies
+
+Above a few hundred elements, a perspective changes how it opens so it stays usable:
+
+- **Containers start collapsed.** Rather than opening a wall of cards too small to read at the zoom needed to see them all, containers begin closed and you expand what you're interested in. A container you expand stays expanded — the view never re-collapses it behind you.
+- **Off-screen nodes aren't drawn while you pan.** Only what's in the viewport is rendered, which is what keeps panning smooth at that size.
+
+Neither affects the diagram itself. Layout and export both work from the whole graph, so an exported image is never cropped to what happened to be on screen. Below those sizes nothing changes — small topologies open exactly as they always have.
+
 ## Positioning and Layout
 
 - **Drag nodes** to reposition hosts and services (requires Edit Mode)

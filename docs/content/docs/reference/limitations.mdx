@@ -66,6 +66,23 @@ See [Service Detection](/reference/service-detection/) for how detection works a
 - **No trap/inform handling** — SNMP data is collected during discovery scans only (poll-based). Scanopy does not listen for SNMP traps or informs.
 - **No custom MIB loading** — only a fixed set of standard MIBs are queried. See [SNMP reference](/reference/snmp/#queried-mibs) for the full list.
 
+## Network Controllers
+
+- **UniFi is in beta** — data collection may be incomplete and the credential's fields may change in a future release. The per-device tables it reads (switch ports, LLDP neighbors, bridge forwarding entries) have not been confirmed against a broad range of UniFi hardware.
+- **API keys require UniFi OS** — the legacy self-hosted Network Application on port 8443 has no API keys; it needs a local admin account instead.
+- **One credential, one site** — a credential names a single site on a single controller. Additional sites need additional credentials.
+- **Devices need a resolvable address** — a device whose management IP is missing, unparseable, or outside every subnet Scanopy knows about is skipped, because an address is what identifies a host.
+- **The controller must be reachable from the daemon**, and its self-signed certificate accepted (**Probe with invalid certificates**).
+
+## Rescan
+
+Rescanning a single host ([Discovery](/using-scanopy/discovery/#rescanning-a-single-host)) has narrower conditions than a full scan:
+
+- **Requires daemon 0.17.7 or later.**
+- **Runs only on the daemon that last discovered the host** — and only while that daemon is on the host's network with an interface on a subnet holding one of its addresses. There is no fallback to a different daemon.
+- **Loopback addresses are excluded** — they are not scannable, so a host reachable only at `127.0.0.1` cannot be rescanned.
+- **Lower fidelity on MAC-less interfaces** — over a point-to-point tunnel the daemon can only TCP-probe, so a live but fully firewalled host reads as unresponsive. Where ARP is available it does not.
+
 ## Topology
 
 ### Application Perspective
