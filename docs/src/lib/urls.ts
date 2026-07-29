@@ -11,6 +11,33 @@
 
 export const APP_BASE = 'https://app.scanopy.net';
 
+/**
+ * Canonical origin of the docs site. Next applies `basePath: '/docs'` to `<Link>`
+ * and to metadata automatically, but not to plain strings we write into a Response
+ * body (llms.txt, llms-full.txt) or a sitemap entry — those must carry it themselves.
+ */
+export const DOCS_BASE = 'https://scanopy.net/docs';
+
+/** Absolute, trailing-slashed URL for a page's slugs (the app sets `trailingSlash: true`). */
+export function docsUrl(slugs: string[]): string {
+	return slugs.length === 0 ? `${DOCS_BASE}/` : `${DOCS_BASE}/${slugs.join('/')}/`;
+}
+
+/**
+ * Rewrite root-relative markdown links to absolute docs URLs.
+ *
+ * Content links are authored relative to the fumadocs source (`/quick-start/`) and
+ * only resolve because Next prepends the basePath when rendering a page. Plain-text
+ * output gets no such rewriting, so those links 404 for anything reading the file.
+ * Anchors, external and protocol-relative URLs are left alone.
+ */
+export function absolutizeDocsLinks(markdown: string): string {
+	return markdown.replace(
+		/\]\((\/(?!\/)[^)\s]*)\)/g,
+		(_full, path: string) => `](${DOCS_BASE}${path})`
+	);
+}
+
 export const APP = {
 	onboarding: `${APP_BASE}/onboarding`,
 	login: `${APP_BASE}/login`,

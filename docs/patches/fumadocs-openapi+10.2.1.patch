@@ -1,0 +1,17 @@
+diff --git a/node_modules/fumadocs-openapi/dist/ui/schema/client.js b/node_modules/fumadocs-openapi/dist/ui/schema/client.js
+index ef25643..dbc320e 100644
+--- a/node_modules/fumadocs-openapi/dist/ui/schema/client.js
++++ b/node_modules/fumadocs-openapi/dist/ui/schema/client.js
+@@ -38,6 +38,12 @@ function SchemaUIContent({ $type }) {
+     const { refs } = useData();
+     const schema = refs[$type];
+     let child = null;
++    if (schema.type === 'primitive') {
++        // Without this branch a primitive renders nothing, so an array of primitives
++        // (e.g. a bulk-delete body of UUIDs) opens its "Array Item" disclosure onto an
++        // empty box. Mirrors how SchemaUIProperty presents type, description and tags.
++        child = (_jsxs(_Fragment, { children: [child, _jsxs("div", { className: "my-2", children: [_jsx("span", { className: "text-sm text-fd-muted-foreground font-mono", children: schema.typeName }), schema.description, schema.infoTags && schema.infoTags.length > 0 && (_jsx("div", { className: "flex flex-row gap-2 flex-wrap my-2 not-prose empty:hidden", children: schema.infoTags.map((tag, i) => (_jsx(Fragment, { children: tag }, i))) }))] })] }));
++    }
+     if (schema.type === 'or' && schema.items.length > 0) {
+         child = (_jsxs(_Fragment, { children: [child, _jsxs(Tabs, { defaultValue: schema.items[0].$type, children: [_jsx(TabsList, { children: schema.items.map((item) => (_jsx(TabsTrigger, { value: item.$type, children: item.name }, item.$type))) }), schema.items.map((item) => (_jsx(TabsContent, { value: item.$type, forceMount: undefined, className: "py-0", children: _jsx(SchemaUIContent, { ...item }) }, item.$type)))] })] }));
+     }

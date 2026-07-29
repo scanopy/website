@@ -2,6 +2,7 @@ import { docs } from 'fumadocs-mdx:collections/server';
 import { type InferPageType, loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { GET, POST, PUT, PATCH, DELETE } from '@/components/method-badge';
+import { absolutizeDocsLinks, docsUrl } from '@/lib/urls';
 
 // Custom icon handler for HTTP method badges
 const methodIcons: Record<string, () => React.ReactNode> = {
@@ -31,7 +32,7 @@ export function getPageImage(page: InferPageType<typeof source>) {
 
 	return {
 		segments,
-		url: `/og/docs/${segments.join('/')}`
+		url: `/og/${segments.join('/')}`
 	};
 }
 
@@ -39,6 +40,7 @@ export async function getLLMText(page: InferPageType<typeof source>) {
 	const processed = await page.data.getText('processed');
 
 	return `# ${page.data.title}
+Source: ${docsUrl(page.slugs)}
 
-${processed}`;
+${absolutizeDocsLinks(processed)}`;
 }

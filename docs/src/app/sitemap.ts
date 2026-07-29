@@ -1,4 +1,5 @@
 import { source } from '@/lib/source';
+import { docsUrl } from '@/lib/urls';
 import type { MetadataRoute } from 'next';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -6,7 +7,6 @@ import path from 'node:path';
 
 export const dynamic = 'force-static';
 
-const baseUrl = 'https://scanopy.net/docs';
 const contentDir = path.resolve(process.cwd(), 'content/docs');
 
 function getGitLastModified(filePath: string): Date | undefined {
@@ -52,7 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 	return pages
 		.filter((page) => !(page.slugs[0] === 'api' && page.slugs.length >= 3))
 		.map((page) => ({
-			url: page.slugs.length === 0 ? `${baseUrl}/` : `${baseUrl}/${page.slugs.join('/')}/`,
+			url: docsUrl(page.slugs),
 			lastModified: getLastModified(page.slugs)
 		}));
 }

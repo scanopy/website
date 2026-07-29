@@ -3,6 +3,65 @@ import { createOpenAPI } from 'fumadocs-openapi/server';
 import { resolve } from 'path';
 import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync } from 'fs';
 
+const DEFAULT_SERVERS = [
+	{ url: 'https://app.scanopy.net', description: 'Scanopy Cloud' },
+	{
+		url: '{scheme}://{host}',
+		description: 'Self-hosted server',
+		variables: {
+			scheme: { default: 'https', enum: ['https', 'http'] },
+			host: { default: 'scanopy.example.com', description: 'Your Scanopy server host' }
+		}
+	}
+];
+
+/**
+ * Give every `oneOf` member a `title`.
+ *
+ * fumadocs labels union members from `schema.title`, falling back to the `$ref` name and
+ * finally to `schema.type` — so an inline, untitled variant renders as the useless label
+ * "object". Serde-tagged enums always carry a single-value string enum on their tag
+ * property, which is exactly the variant name, so it can be recovered without annotation.
+ * Purely additive: an explicit title from the backend always wins.
+ */
+function inferOneOfTitles(spec) {
+	// The tag can sit directly on the variant, or inside an `allOf` member when the
+	// variant also flattens a shared struct (BillingPlan, NodeType).
+	function titleFromTag(variant, depth = 0) {
+		if (!variant || typeof variant !== 'object' || depth > 4) return null;
+		for (const prop of Object.values(variant.properties ?? {})) {
+			if (prop?.type === 'string' && Array.isArray(prop.enum) && prop.enum.length === 1) {
+				return prop.enum[0];
+			}
+		}
+		for (const member of variant.allOf ?? []) {
+			const resolved = member.$ref ? resolveRef(spec, member.$ref) : member;
+			const title = titleFromTag(resolved, depth + 1);
+			if (title) return title;
+		}
+		return null;
+	}
+
+	function walk(node) {
+		if (!node || typeof node !== 'object') return;
+		if (Array.isArray(node)) {
+			node.forEach(walk);
+			return;
+		}
+		for (const key of ['oneOf', 'anyOf']) {
+			if (!Array.isArray(node[key])) continue;
+			for (const variant of node[key]) {
+				if (!variant || typeof variant !== 'object' || variant.title) continue;
+				const title = titleFromTag(variant);
+				if (title) variant.title = title;
+			}
+		}
+		for (const value of Object.values(node)) walk(value);
+	}
+
+	walk(spec);
+}
+
 // Preprocess spec to convert text/plain to application/json (fumadocs doesn't support text/plain)
 function preprocessSpec() {
 	const specPath = resolve('./openapi.json');
@@ -21,6 +80,17 @@ function preprocessSpec() {
 	}
 
 	convertMediaTypes(spec);
+
+	// Without `servers`, fumadocs server-renders the placeholder host `https://loading`
+	// and swaps in the real origin on the client. That mismatch throws a React hydration
+	// error on every operation page, which intermittently swallows sidebar navigations.
+	// The backend declares `servers` itself; this only covers specs synced before that.
+	if (!Array.isArray(spec.servers) || spec.servers.length === 0) {
+		spec.servers = DEFAULT_SERVERS;
+	}
+
+	// Label tagged-union variants before allOf flattening redistributes them
+	inferOneOfTitles(spec);
 
 	// Flatten allOf schemas to merge required arrays (fumadocs doesn't handle nested required well)
 	flattenAllOfSchemas(spec);

@@ -1,4 +1,5 @@
 import { source } from '@/lib/source';
+import { DOCS_BASE, docsUrl } from '@/lib/urls';
 
 export const revalidate = false;
 
@@ -29,7 +30,7 @@ export async function GET() {
 	// Add non-API pages first
 	for (const page of pages) {
 		if (page.slugs[0] === 'api') continue;
-		const url = `/${page.slugs.join('/')}`;
+		const url = docsUrl(page.slugs);
 		const title = page.data.title || page.slugs.join('/');
 		const description = page.data.description ? `: ${page.data.description}` : '';
 		lines.push(`- [${title}](${url})${description}`);
@@ -39,14 +40,14 @@ export async function GET() {
 	lines.push('', '## API Reference', '');
 	for (const page of pages) {
 		if (page.slugs[0] !== 'api') continue;
-		const url = `/${page.slugs.join('/')}`;
+		const url = docsUrl(page.slugs);
 		const title = page.data.title || page.slugs.join('/');
 		lines.push(`- [${title}](${url})`);
 	}
 
 	// Add link to full text
 	lines.push('', '## Full Documentation', '');
-	lines.push('- [Complete documentation text](/llms-full.txt)');
+	lines.push(`- [Complete documentation text](${DOCS_BASE}/llms-full.txt)`);
 
 	return new Response(lines.join('\n'));
 }

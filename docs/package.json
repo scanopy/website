@@ -8,7 +8,7 @@
 		"dev": "next dev",
 		"start": "next start",
 		"types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
-		"postinstall": "fumadocs-mdx",
+		"postinstall": "patch-package && fumadocs-mdx",
 		"lint": "eslint",
 		"check:guides": "node scripts/check-integration-guides.mjs"
 	},
@@ -36,6 +36,7 @@
 		"@types/react-dom": "^19.2.3",
 		"eslint": "^9.39.2",
 		"eslint-config-next": "16.0.10",
+		"patch-package": "^8.0.1",
 		"postcss": "^8.5.6",
 		"raw-loader": "^4.0.2",
 		"tailwindcss": "^4.1.18",
