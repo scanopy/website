@@ -62,24 +62,14 @@ function inferOneOfTitles(spec) {
 	walk(spec);
 }
 
-// Preprocess spec to convert text/plain to application/json (fumadocs doesn't support text/plain)
 function preprocessSpec() {
 	const specPath = resolve('./openapi.json');
 	const spec = JSON.parse(readFileSync(specPath, 'utf-8'));
 
-	function convertMediaTypes(obj) {
-		if (obj && typeof obj === 'object') {
-			if (obj['text/plain'] && !obj['application/json']) {
-				obj['application/json'] = obj['text/plain'];
-				delete obj['text/plain'];
-			}
-			for (const key of Object.keys(obj)) {
-				convertMediaTypes(obj[key]);
-			}
-		}
-	}
-
-	convertMediaTypes(spec);
+	// `text/plain` used to be rewritten to `application/json` here, because fumadocs
+	// throws on media types it has no adapter for. That misreported the Mermaid and
+	// Confluence exports, which really do return plain text. A `text/plain` adapter is
+	// registered in `src/lib/media-adapters.ts` instead, so the spec stays truthful.
 
 	// Without `servers`, fumadocs server-renders the placeholder host `https://loading`
 	// and swaps in the real origin on the client. That mismatch throws a React hydration
