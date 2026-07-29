@@ -34,9 +34,9 @@ Scanopy primarily identifies duplicate hosts by comparing network interfaces. Tw
 | **Same IP + Same Subnet** | Most common. If a host has `192.168.1.50` on subnet `192.168.1.0/24`, any discovery finding that same IP on that subnet matches. |
 | **Same MAC Address** | Useful when IPs change (DHCP) but MAC stays constant. Both interfaces must have a MAC address set. |
 
-MAC addresses are available when the daemon is directly connected to the subnet being scanned (via ARP) or from Docker container network configuration. See [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3) for details on when MAC addresses are collected.
+MAC addresses come from ARP on directly connected subnets, or from container network configuration — see [Layer 2 vs Layer 3](/reference/limitations/#layer-2-vs-layer-3).
 
-**Floating virtual IPs (CARP/VRRP).** A high-availability virtual IP has no hardware of its own — its only identity is the address it floats on, carried by a shared virtual-router MAC. Scanopy matches such an address on IP + subnet when it has no physical identity to match on, so a floating VIP is recognized as the same entity across scans instead of being recreated each time. The shared virtual MAC is never used to match, so the HA peers that host the VIP stay distinct rather than merging into one host.
+**Floating virtual IPs (CARP/VRRP).** A high-availability VIP has no hardware of its own — its only identity is the address it floats on, carried by a shared virtual-router MAC. Scanopy matches it on IP + subnet, so the VIP is recognized across scans rather than recreated each time. The shared virtual MAC is never matched on, which keeps the HA peers hosting it distinct instead of merging them into one host.
 
 ### Container Host Matching
 

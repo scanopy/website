@@ -48,11 +48,9 @@ The rest of the flow — verifying the containers are running and accessing the 
 
 ## The integrated daemon
 
-The compose stack includes an integrated daemon that runs alongside the server. The server auto-initializes it on first start, and it immediately begins scanning your local network: Layer 2 and Layer 3 host discovery, port and service detection, and Docker container discovery via the mounted Docker socket.
+The compose stack includes an integrated daemon, initialized on first start with nothing to configure. It immediately scans your local network: Layer 2 and Layer 3 host discovery, port and service detection, and container discovery through the mounted socket.
 
-You don't need to configure anything for the integrated daemon to work. If you'd rather not run a daemon in the same stack as the server — for example, you plan to run dedicated daemons elsewhere — remove the `daemon` service from the compose file and clear the `SCANOPY_INTEGRATED_DAEMON_URL` environment variable on the `server` service.
-
-You can then point one or more standalone daemons at your server. See [Setting Up Daemons](/setting-up-daemons/) or the [Quick Start](/quick-start/) for deploying a daemon.
+To run daemons elsewhere instead, remove the `daemon` service from the compose file and clear `SCANOPY_INTEGRATED_DAEMON_URL` on the `server` service, then point standalone daemons at your server — see [Setting Up Daemons](/setting-up-daemons/).
 
 ## Recommended: configure SMTP
 

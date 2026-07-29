@@ -109,13 +109,11 @@ The device isn't reporting an LLDP or CDP neighbor table. Some managed switches 
 
 ### Interfaces missing or incomplete
 
-An **ifEntry** tab showing fewer interfaces than the device has — or interfaces with no neighbor, VLAN or learned-MAC data — means the table walk was cut short. A single walk is capped at 10,000 rows and each query is bounded at 30 seconds, so a very large table, or a device that stalls partway through returning one, yields a partial result.
+Fewer interfaces than the device has — or interfaces with no neighbor, VLAN or learned-MAC data — means the table walk was cut short. A walk is capped at 10,000 rows and each query at 30 seconds, so a very large table or a device that stalls partway through returns a partial result. Truncation is reported as a warning on the discovery session, not just in the daemon logs.
 
-Truncation is reported as a warning on the discovery session, so check the run in the Scans tab rather than only the daemon logs.
+Interfaces are saved before the neighbor and VLAN queries run, so bare interfaces with no neighbor data mean the device hung later in collection.
 
-Interfaces are saved as soon as the interface table is read, before the neighbor and VLAN queries run. Bare interfaces with no neighbor data are the signature of a device that hung later in collection.
-
-Worth checking: how long a full `snmpwalk` of the interface table takes from the daemon host, whether the device is rate-limiting SNMP, and whether its interface count is genuinely near the 10,000-row cap — stacked chassis and large modular switches can be.
+Check how long a full `snmpwalk` of the interface table takes from the daemon host, whether the device is rate-limiting SNMP, and whether its interface count is genuinely near the cap — stacked chassis and large modular switches can be.
 
 ### Reading the daemon logs
 

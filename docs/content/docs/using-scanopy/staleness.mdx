@@ -3,28 +3,27 @@ title: Staleness
 description: How Scanopy flags hosts, services, and subnets that discovery hasn't seen recently.
 ---
 
-Scanopy marks an entity **Stale** when discovery hasn't observed it within its network's staleness window. Staleness is a signal that something may have gone quiet — a device powered off, a container removed, a host that moved — surfaced without deleting anything, so you decide what to do about it.
+Scanopy marks an entity **Stale** when discovery hasn't observed it within its network's staleness window — a device powered off, a container removed, a host that moved. Nothing is deleted.
 
-Stale does **not** mean removed. A stale host might simply be switched off, on the road, or briefly unreachable during a scan. Scanopy never asserts that an entity is gone; it only reports how long it's been since discovery last saw it.
+Stale does not mean gone. A stale host might be switched off, on the road, or briefly unreachable during a scan. Scanopy reports only how long it's been since discovery last saw it.
 
 ## The staleness window
 
-Each network has its own window — how long an entity can go unobserved before it's flagged. Staleness is only meaningful relative to how often a network is scanned: a segment swept every 15 minutes and one swept monthly need very different thresholds, so the window lives on the network, not the whole organization.
+Each network has its own window, because staleness is only meaningful relative to how often that network is scanned — a segment swept every 15 minutes and one swept monthly need very different thresholds.
 
-The default window is **28 days**. Set a network's own window in the network edit modal (**Assets > Networks** → select the network → **Consider entities stale after**), entered as days and hours. Set it to comfortably exceed the network's scan interval so a normal gap between scans never trips it. Leave it blank to use the default.
+The default is **28 days**. Set a network's own in the network edit modal (**Assets > Networks** → select the network → **Consider entities stale after**), as days and hours; leave it blank for the default. Set it comfortably above the network's scan interval so a normal gap between scans never trips it.
 
 See [Networks](/using-scanopy/organization/#networks) for where this fits among a network's settings.
 
 ## What can go stale
 
-Only entities that discovery manages can go stale — hosts, services, and subnets that discovery found and keeps re-observing. Anything you created by hand never goes stale, because Scanopy has no scan timestamp to judge it against and won't flag your own curated records.
+Only what discovery manages: hosts, services, and subnets it found and keeps re-observing. Anything you created by hand never goes stale, since there's no scan timestamp to judge it against.
 
-Every entity is judged on **its own** last-seen time, independently of its parent. A service on a host that's gone quiet is only stale if that service itself hasn't been seen within the window — a recently observed service on an otherwise-dark host reads as current, and vice versa. This keeps a badge from ever contradicting its own "last seen" detail.
+Every entity is judged on **its own** last-seen time, independently of its parent. A service on a host that's gone quiet is stale only if that service hasn't been seen within the window — a recently observed service on an otherwise-dark host reads as current, and vice versa.
 
 ## Where it shows up
 
-**Lists.** Hosts, services, and subnets each carry a **Stale** badge on rows past their window, and a **Stale only** filter to narrow the list to them. You can also sort by last-seen to bring the longest-unobserved entities to the top.
+- **Lists** — hosts, services, and subnets carry a **Stale** badge past their window, with a **Stale only** filter and sorting by last-seen.
+- **Topology** — stale nodes carry a **Stale** tag and a "last seen" detail. A **By staleness** filter (Current / Stale) fades everything else. See [Customizing Views](/using-scanopy/topology/customizing-views/).
 
-**Topology.** Stale nodes carry a **Stale** tag on their card, with a "last seen" detail naming the entity and how long ago. A **By staleness** filter (Current / Stale) is available on the perspectives that show these entities, letting you fade everything except what's fallen behind. See [Customizing Views](/using-scanopy/topology/customizing-views/).
-
-The tag is **amber**, not red — matching the daemon status convention where red means broken and amber means behind. A stale entity may be perfectly healthy and simply unobserved, so the tag reads as "worth a look", not "error".
+The tag is amber rather than red, matching the daemon status convention where red means broken and amber means behind.

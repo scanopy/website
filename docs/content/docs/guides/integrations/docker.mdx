@@ -39,9 +39,9 @@ Discovery is local to one host: the daemon sees the containers on its own machin
 
 ## Docker Proxy
 
-A socket proxy sits in front of the Docker socket and allows only the API operations you permit. The same credential type covers both reasons to use one — restricting access on the local host, and reaching Docker on a remote host — because the only thing that changes is the address you point it at.
+A socket proxy sits in front of the Docker socket and allows only the API operations you permit. One credential type covers both reasons to use one — restricting local access, and reaching Docker on another machine — since only the address changes.
 
-To discover containers on a machine that runs no daemon: deploy a proxy there, create a Docker Proxy credential with that proxy's port, and assign it to the remote host. Containers are then reported as services on the remote host rather than on the daemon's host.
+To discover containers on a machine with no daemon: deploy a proxy there, create a Docker Proxy credential with its port, and assign it to that host. Containers are then reported as services on the remote host.
 
 <IntegrationFields id="Docker" transport="DockerProxy" />
 

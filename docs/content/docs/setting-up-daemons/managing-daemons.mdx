@@ -40,11 +40,11 @@ For help choosing a polling mode and planning where to place daemons, see [Plann
 
 ## Running as a Service
 
-The recommended way to install the daemon is the **`scanopy-daemon install`** command. It places the binary, writes the daemon's `config.json`, and registers a native background service — **systemd** on Linux, **launchd** on macOS, the **Service Control Manager** on Windows, and **rc.d** on FreeBSD — that starts immediately and on every reboot. The install command shown on the wizard's **Install** step already includes this; copy and run it on the host.
+**`scanopy-daemon install`** places the binary, writes the daemon's `config.json`, and registers a native background service that starts immediately and on every reboot — systemd on Linux, launchd on macOS, the Service Control Manager on Windows, rc.d on FreeBSD.
 
-`install` accepts the same connection and identity flags as the daemon itself, so you can also invoke it by hand. Get the invocation from the app rather than assembling it yourself — the wizard and the management modal build it against your server's own URL and the daemon's key.
+The command on the wizard's **Install** step already does this. Copy it from there rather than assembling one: the wizard and the management modal build it against your server's URL and the daemon's key.
 
-Everything else — network, interfaces, ports — is read from `config.json`, so no secrets appear in the service definition or process arguments. Re-running `install` is idempotent, and a non-elevated invocation prints the exact `sudo`/administrator command to re-run. On success it prints the config and log paths it settled on.
+Everything except the connection flags is read from `config.json`, so no secrets appear in the service definition or process arguments. Re-running `install` is idempotent. A non-elevated invocation prints the exact `sudo`/administrator command to re-run, and on success it prints the config and log paths it settled on.
 
 Verify the service and view its logs:
 
@@ -113,25 +113,32 @@ nssm start ScanopyDaemon
 
 ## Integrated Daemon (Self-Hosted)
 
-Self-hosted Docker Compose deployments include an **integrated daemon** that runs alongside the server. This daemon is managed as part of your Compose stack — it upgrades when you upgrade the server and needs no separate installation. Server setup provisions it and its API key for you, so there is nothing to configure by hand. For upgrading the integrated daemon along with your server, see [Upgrading a Self-Hosted Server](/self-hosted-server/upgrading/).
+Self-hosted Docker Compose deployments include an **integrated daemon** managed as part of the stack: server setup provisions it and its API key, and it upgrades with the server. Nothing to install or configure — see [Upgrading a Self-Hosted Server](/self-hosted-server/upgrading/).
 
 ## Upgrading
 
-When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button. Click it to see platform-specific upgrade steps: download the latest binary, then restart the service (`systemctl restart` / `launchctl kickstart -k` / `sc.exe stop` + `start` / `service … restart`). Configuration is preserved across upgrades.
+When an update is available, the daemon card in **Discover > Scan > Daemons** shows an **Update** button, with the steps for your platform: download the latest binary, then restart the service. Configuration is preserved.
 
-If a daemon is **Deprecated**, its version has a scheduled sunset date — the upgrade dialog shows the date and a countdown, and you receive an email. Upgrade before that date; after it, the daemon becomes **Unsupported** and is rejected until updated. See [Daemon Status](/reference/daemon-status) for what each stage means.
+A **Deprecated** daemon has a scheduled sunset date, shown in the upgrade dialog with a countdown. Past that date it becomes **Unsupported** and is rejected until updated — see [Daemon Status](/reference/daemon-status).
 
 For upgrading self-hosted server and integrated daemon together, see [Upgrading](/self-hosted-server/upgrading).
 
 ## Updating Daemon Properties
 
-Click the edit icon on a daemon card in **Discover > Scan > Daemons** to open its management modal. The modal has two tabs: **Details** for the daemon record, and **API Key** for its key.
+Click the edit icon on a daemon card in **Discover > Scan > Daemons** to open its management modal, which has two tabs: **Details** for the daemon record, and **API Key** for its key.
 
-On the **Details** tab you can edit the maintainer, tags, and — for ServerPoll daemons — the URL the server dials. Network, polling mode, and name are shown read-only: they're set when the daemon is [provisioned](/reference/daemon-identity/) and define what the daemon is. A DaemonPoll daemon has no editable URL, because the server never dials it.
+The **Details** tab edits the maintainer, tags, and — for ServerPoll daemons — the URL the server dials. Network, polling mode, and name are read-only: they're set at [provisioning](/reference/daemon-identity/) and define what the daemon is. A DaemonPoll daemon has no URL to edit, since the server never dials it.
 
-Daemon-local settings — interfaces, ports, log level, scan tuning — live in the [daemon config file](/reference/daemon-configuration/) on the host, not on the server record. Change them either by [reconfiguring the daemon](#reconfiguring-a-daemon) from the modal or by editing `config.json` directly. Editing the file requires a service restart to take effect — `sudo systemctl restart scanopy-daemon` (Linux), `sudo launchctl kickstart -k system/com.scanopy.daemon` (macOS), `sc.exe stop scanopy-daemon` then `sc.exe start scanopy-daemon` (Windows), or `sudo service scanopy-daemon restart` (FreeBSD). For a foreground daemon, just restart the process.
+Daemon-local settings — interfaces, ports, log level, scan tuning — live in the [daemon config file](/reference/daemon-configuration/) on the host, not on the server record. Change them by [reconfiguring the daemon](#reconfiguring-a-daemon) from the modal, or by editing `config.json` and restarting the service:
 
-Each daemon also reports which subnets it has network interfaces on, which is where its default scan targets come from. That list refreshes on the daemon's next discovery, so re-run one after changing the host's network configuration.
+- **Linux**: `sudo systemctl restart scanopy-daemon`
+- **macOS**: `sudo launchctl kickstart -k system/com.scanopy.daemon`
+- **Windows**: `sc.exe stop scanopy-daemon` then `sc.exe start scanopy-daemon`
+- **FreeBSD**: `sudo service scanopy-daemon restart`
+
+A foreground daemon just needs the process restarted.
+
+Each daemon also reports which subnets it has network interfaces on, which is where its default scan targets come from. That list refreshes on its next discovery, so re-run one after changing the host's network configuration.
 
 ## Reconfiguring a Daemon
 
@@ -168,9 +175,11 @@ Deleting or uninstalling a daemon does not delete discovered data. Hosts, servic
 sudo scanopy-daemon uninstall
 ```
 
-This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the installed binary and log files. On a host running several daemons, target one with `--name <selector>` — the daemon's name, its slot, or its service id, all shown by `scanopy-daemon list` — or remove every one with `--all`. On Windows, run it from an elevated PowerShell.
+This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the binary and log files. On Windows, run it from an elevated PowerShell.
 
-`uninstall` reports what it did for every item it touched — removed, left in place, or not found — so you can see exactly what remains. It's idempotent: uninstalling a daemon that was never installed succeeds and tells you there was nothing to remove.
+On a host running several daemons, target one with `--name <selector>` — its name, slot, or service id, all shown by `scanopy-daemon list` — or remove all of them with `--all`.
+
+`uninstall` reports what it did with every item it touched, and is idempotent: uninstalling something that was never installed succeeds and says so.
 
 Docker:
 

@@ -55,8 +55,8 @@ Every query is individually bounded, so a device that stops responding mid-colle
 
 ## Credential behavior
 
-Which credential a host is queried with follows the standard [resolution order](/using-scanopy/credentials/#credential-resolution). SNMP adds one step of its own: the community string `public` is tried as a last resort, so a device left on the default responds without any credential configured.
+Which credential a host is queried with follows the standard [resolution order](/using-scanopy/credentials/#credential-resolution), with one SNMP-specific addition: `public` is tried as a last resort, so a device left on the default needs no credential.
 
-If every credential fails on both UDP 161 and 1161, the host is discovered without SNMP-sourced data. Individual query failures within a successful session are logged and skipped — they do not abort the rest of the collection.
+If every credential fails on both UDP 161 and 1161, the host is discovered without SNMP data. A query that fails inside an otherwise working session is logged and skipped rather than aborting the rest.
 
-Partial results are kept. Interfaces are saved as soon as the interface table is read, before the neighbor, forwarding-table, and VLAN queries run, so a device that hangs partway through still yields its interface list rather than nothing.
+Partial results are kept: interfaces are saved as soon as the interface table is read, before the neighbor, forwarding-table and VLAN queries run.

@@ -9,19 +9,15 @@ For the complete list of detectable services and their match patterns, see [scan
 
 ## Why Wasn't My Service Detected?
 
-**First**: Check if the service is in Scanopy's detection list at [scanopy.net/services](https://scanopy.net/services). If it's not listed, you can [request it](#requesting-new-service-detection).
+First check whether the service is in the detection list at [scanopy.net/services](https://scanopy.net/services). If it isn't, [request it](#requesting-new-service-detection). If it is, one of these usually explains it:
 
-**If the service is supported but wasn't detected:**
-
-**Service on non-standard port** — Grafana on port 8080 instead of 3000? Scanopy won't probe port 8080 for Grafana's endpoint pattern. Move to the default port or manually add the service.
-
-**Service requires authentication** — If a service returns 401/403 before Scanopy can read the response body, endpoint matching fails. Some services (like Plex) have patterns that account for this, but many don't.
-
-**Docker container not exposed** — Containers on internal bridge networks aren't reachable via network scanning. Enable Docker container discovery (local socket or [Docker Proxy](/guides/integrations/docker/)), which inspects the Docker API directly.
-
-**Firewall blocking the daemon** — The daemon must be able to connect to the service's port. Check that firewall rules allow the daemon to probe the host.
-
-**Service on a raw socket port (9100-9107)** — Ports 9100-9107 are skipped by default to prevent ghost printing on JetDirect printers, since these ports interpret any TCP data as print input. This affects Prometheus Node Exporter (port 9100) and JetDirect printers. Enable **Probe Raw Socket Ports** in your discovery's scan settings to include these ports.
+| Cause | What to do |
+| ----- | ---------- |
+| **Non-standard port** — patterns are written for the default port, so Grafana on 8080 is never probed for Grafana's endpoint | Move it to the default port, or add the service by hand |
+| **Service requires authentication** — a 401/403 before the response body is readable defeats endpoint matching | Nothing, for most services. Some (Plex) have patterns that work around it |
+| **Container doesn't publish a port** — containers on internal bridge networks aren't reachable by scanning | Enable [container discovery](/using-scanopy/discovery/#what-credentials-add), which reads the API directly |
+| **Firewall blocking the daemon** | Allow the daemon to reach the service's port |
+| **Raw socket port (9100-9107)** — skipped by default, because these ports treat any TCP data as print input and probing them ghost-prints on JetDirect printers | Enable **Probe Raw Socket Ports** in [scan settings](/using-scanopy/discovery/scans/#scan-settings). Affects Prometheus Node Exporter on 9100 |
 
 ## How Detection Works
 

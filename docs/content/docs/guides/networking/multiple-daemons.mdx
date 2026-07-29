@@ -58,7 +58,9 @@ When `--interfaces` is set, the daemon only reports and scans subnets attached t
 
 Every daemon instance runs an HTTP server, bound to `0.0.0.0:60073` by default. Because `0.0.0.0` binds all interfaces, the first daemon claims port 60073 on every address — a second daemon can't reuse it.
 
-The installer handles this for you: when you install another daemon and don't ask for a specific port, it picks the next free one (60074, 60075, …) so the new instance doesn't collide with one already on the host. You only need to set `--daemon-port` when you want a *specific* port — most importantly for a **ServerPoll** daemon, where the port is the one the server dials, so the install command already carries it and the installer leaves it alone.
+The installer handles this. Install another daemon without asking for a specific port and it takes the next free one — 60074, 60075, and so on.
+
+Set `--daemon-port` only when you need a *specific* port. A **ServerPoll** daemon is the case that matters: its port is the one the server dials, so the install command already carries it and the installer leaves it alone.
 
 To pin a daemon's listener to one interface, give it that interface's IP with `--bind-address`:
 
