@@ -124,7 +124,6 @@ Creating a credential alone doesn't activate SNMP collection — you must assign
 - **SNMP v1, v2c, and v3 supported** — v3 uses AuthPriv (SHA-1/SHA-256 auth, AES-128/256 privacy)
 - **No trap handling** — SNMP data is collected during discovery scans only (poll-based)
 - **No custom MIBs** — only the standard MIBs listed above are queried
-- **Not every device publishes LLDP over SNMP** — some managed switches collect neighbor data internally without exposing the LLDP MIB, so a walk returns nothing however valid the credential is. Where the vendor's controller holds that data, [controller discovery](#controller-discovery) is the way to get it
 
 See [SNMP reference](/reference/snmp/) for protocol details, timeouts, and the full list of collected OIDs.
 
@@ -134,11 +133,11 @@ A full discovery sweeps every configured subnet. When the question is narrower �
 
 A rescan checks only that host's known addresses. Alongside the standard discovery port set it re-checks the ports already recorded on the host, so it both confirms what was there and surfaces services that have opened since.
 
-**Which daemon runs it.** The daemon that last discovered the host — evidence it can reach the address, rather than a guess from subnet membership. That daemon must still exist, still be on the host's network, and still have an interface on a subnet holding one of the host's addresses.
+**Which daemon runs it.** The daemon that last discovered the host — evidence it can reach the address, rather than a guess from subnet membership. If that daemon can no longer reach it, the rescan is refused rather than run at lower fidelity from somewhere else.
 
-**Where it shows up.** In the Scans tab as an AdHoc run, with the same progress and cancel controls as any other scan. Edit, Run and Toggle are suppressed on it, since it isn't a configuration you can re-run. A `Queued` phase means the daemon is busy and will start when its current scan finishes.
+**Where it shows up.** In the Scans tab as an AdHoc run, with the same progress and cancel controls as any other scan. A `Queued` phase means the daemon is busy and will start when its current scan finishes.
 
-**How thorough it is.** Where the daemon's interface has a MAC address, it ARPs the target — which sees a live host even when every port is firewalled. On an interface without one, such as a point-to-point VPN tunnel, it falls back to a TCP probe, which cannot tell a firewalled host from an absent one. Loopback addresses aren't scannable and are excluded.
+**How to read the result.** Where the daemon's interface has a MAC address, it ARPs the target, which sees a live host even when every port is firewalled. On an interface without one — a point-to-point VPN tunnel, say — it falls back to a TCP probe, which cannot tell a firewalled host from an absent one.
 
 Rescan is refused, with the specific reason, when:
 
@@ -156,8 +155,6 @@ Rescan is refused, with the specific reason, when:
 | ------------- | ------------------------------------------------------ |
 | **Scheduled** | Runs automatically on a cron schedule (default: daily) |
 | **AdHoc**     | Manual execution only, for testing or one-time scans   |
-
-A rescan is recorded as an AdHoc run.
 
 ## Discovery Duration
 
