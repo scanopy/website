@@ -15,10 +15,6 @@ Each daemon runs a single discovery that combines network scanning, Docker conta
 4. Reads the inventory of any network controller it has a credential for
 5. Reports its own capabilities and reachable subnets to the server
 
-<Callout type="info">
-In versions before v0.15.0, these were separate discovery types (Network Scan, Docker, Self-Report). They have been consolidated into a single discovery. See the [migration guide](/guides/operations/unified-discovery-migration/) if you're upgrading.
-</Callout>
-
 ### Network Scanning
 
 Scans IP addresses on configured subnets to find hosts and services.
@@ -97,16 +93,8 @@ Without SNMP, hosts have only what port scanning and DNS provide — IP addresse
 - **Interface table** — all network interfaces with names, speeds, MAC addresses, IP assignments, and operational status
 - **LLDP/CDP neighbors** — directly connected devices reported by the host itself, enabling accurate physical topology mapping
 
-### How credentials are resolved
-
-When the daemon queries a host via SNMP, it resolves which community string to use in this order:
-
-1. **Host-specific assignment** — a credential assigned directly to the host
-2. **Network default** — a credential targeted at the host's whole network (the **Network** target)
-3. **Fallback** — the community string `public`
-
 <Callout type="info">
-Creating a credential alone doesn't activate SNMP collection — you must assign it to a network or to specific hosts. See the [SNMP discovery guide](/guides/integrations/snmp/) for setup steps, or [Credentials](/using-scanopy/credentials/) for how assignment works.
+Creating a credential alone doesn't activate SNMP collection — you must assign it to a network or to specific hosts. Which credential a given host ends up using follows the usual [resolution order](/using-scanopy/credentials/#credential-resolution), with the community string `public` as the final fallback. See the [SNMP discovery guide](/guides/integrations/snmp/) for setup steps.
 </Callout>
 
 ### What gets queried

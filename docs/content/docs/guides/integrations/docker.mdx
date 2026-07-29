@@ -116,10 +116,6 @@ Whatever proxy you use, allow these endpoints:
 
 **Why exec?** Scanopy uses `exec` to probe HTTP endpoints from inside containers that don't publish ports to the host. Without exec access, containers are still discovered but service detection is less accurate.
 
-<Callout type="warn">
-**Migrating from daemon config?** If you previously configured a proxy via `--docker-proxy`, `SCANOPY_DOCKER_PROXY`, or the config file, recreate it as a Docker Proxy credential. The daemon config flags were deprecated in v0.15.0 and removed in v0.16.0. See the [migration guide](/guides/operations/unified-discovery-migration/).
-</Callout>
-
 ## Docker Socket
 
 The daemon connects directly to `/var/run/docker.sock` on its own host. This needs no credential and no toggle — the daemon uses the socket whenever it's accessible.

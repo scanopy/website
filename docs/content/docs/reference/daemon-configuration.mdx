@@ -90,11 +90,9 @@ Seeded credentials are applied **only at first registration**. If the daemon is 
 There is no flag for scanning the local Docker or Podman socket. Local sockets are ordinary credentials — create a [Docker Socket](/guides/integrations/docker/) or [Podman Socket](/guides/integrations/podman/) credential and, if seeding it here, reference it with the loopback form above.
 </Callout>
 
-## Deprecated Parameters
+## Scan Speed
 
-The Docker proxy parameters (`--docker-proxy`, `--docker-proxy-ssl-cert`, `--docker-proxy-ssl-key`, `--docker-proxy-ssl-chain`, and their `SCANOPY_*` equivalents) are superseded by [Docker Proxy credentials](/guides/integrations/docker/). See the [migration guide](/guides/operations/unified-discovery-migration/#1-recreate-docker-proxy-configuration-as-a-credential) for steps.
-
-Scan speed settings (`--scan-rate-pps`, `--arp-rate-pps`, and similar) configured at the daemon level are no longer used. Scan speed is configured per-discovery in the **Speed** tab. See the [migration guide](/guides/operations/unified-discovery-migration/#2-re-apply-scan-speed-overrides).
+Scan speed is not a daemon parameter. It is set per-discovery, in the discovery's **Speed** tab, so one daemon can scan different networks at different rates.
 
 ## Scan Concurrency
 
