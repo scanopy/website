@@ -86,27 +86,9 @@ After the first scan, seeded credentials are [auto-assigned](/using-scanopy/cred
 Seeded credentials are applied **only at first registration**. If the daemon is already registered, they are ignored and the daemon logs a reminder to manage its credentials in the Scanopy UI instead.
 </Callout>
 
-<Callout type="info">
-There is no flag for scanning the local Docker or Podman socket. Local sockets are ordinary credentials — create a [Docker Socket](/guides/integrations/docker/) or [Podman Socket](/guides/integrations/podman/) credential and, if seeding it here, reference it with the loopback form above.
-</Callout>
-
-## Scan Speed
-
-Scan speed is not a daemon parameter. It is set per-discovery, in the discovery's **Speed** tab, so one daemon can scan different networks at different rates.
-
-## Scan Concurrency
-
-The daemon decides how many hosts to scan simultaneously on its own, based on available memory and its file descriptor limit. There is no setting to configure it.
-
-If scans are slower than expected because concurrency has been clamped low, the usual cause is a restrictive file descriptor limit — see ["Too Many Open Files"](/setting-up-daemons/troubleshooting-scans/scan-performance/#too-many-open-files-error).
-
 ## Logging
 
-### Output Destination
-
-The daemon logs to stdout and stderr on all platforms. Where those logs end up depends on how you run the daemon.
-
-### Log Levels
+The daemon logs to stdout and stderr on all platforms; where that output lands depends on how you run it. For reading logs on each platform and capturing them to a file, see [Checking Daemon Logs](/setting-up-daemons/troubleshooting-setup/#checking-daemon-logs).
 
 Set the log level with `--log-level` or `SCANOPY_LOG_LEVEL`:
 
@@ -124,51 +106,4 @@ scanopy-daemon --log-level debug
 
 # Environment
 export SCANOPY_LOG_LEVEL=debug
-```
-
-### Viewing Logs by Platform
-
-**Foreground (all platforms)**: Logs appear directly in the terminal where you started the daemon.
-
-**Docker**:
-
-```bash
-docker logs scanopy-daemon
-docker logs -f scanopy-daemon  # follow/stream logs
-```
-
-The daemon installs as a native service via `scanopy-daemon install` — see [Running as a Service](/setting-up-daemons/managing-daemons/#running-as-a-service).
-
-**Linux (systemd)**: output goes to the journal.
-
-```bash
-journalctl -u scanopy-daemon -f
-```
-
-**macOS (launchd)**: the service writes to `/var/log/scanopy/scanopy-daemon.out.log`; the daemon's own log file is at `~/Library/Logs/scanopy/scanopy-daemon.log`.
-
-```bash
-tail -f /var/log/scanopy/scanopy-daemon.out.log
-```
-
-**Windows (service)**: the daemon writes its log file under `%ProgramData%\scanopy\`.
-
-```powershell
-Get-Content "$env:ProgramData\scanopy\scanopy-daemon.log" -Wait
-```
-
-### Capturing Logs to a File
-
-When running in the foreground, you can capture logs to a file for sharing with support:
-
-**Linux / macOS**:
-
-```bash
-./scanopy-daemon 2>&1 | tee ~/scanopy-daemon.log
-```
-
-**Windows (PowerShell)**:
-
-```powershell
-.\scanopy-daemon.exe 2>&1 | Tee-Object -FilePath "$env:USERPROFILE\scanopy-daemon.log"
 ```

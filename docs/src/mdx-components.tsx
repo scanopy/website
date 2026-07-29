@@ -11,6 +11,7 @@ import {
 	IntegrationTransports
 } from '@/components/integration-tables';
 import { Mermaid } from '@/components/mermaid';
+import { ElementRulesTable, RolesTable, ScanSettingsTable } from '@/components/reference-tables';
 import { SchemaERDiagram, SchemaFullDiagram } from '@/components/schema-diagrams';
 import { SectionCards } from '@/components/section-cards';
 import { StatusTag } from '@/components/status-tag';
@@ -22,11 +23,14 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		CredentialBasics,
 		CredentialTypesTable,
 		DaemonConfigTable,
+		ElementRulesTable,
 		EntityCoreTables,
 		IntegrationBeta,
 		IntegrationFields,
 		IntegrationTransports,
 		Mermaid,
+		RolesTable,
+		ScanSettingsTable,
 		SchemaERDiagram,
 		SchemaFullDiagram,
 		SectionCards,

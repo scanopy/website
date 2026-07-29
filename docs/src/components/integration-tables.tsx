@@ -1,7 +1,8 @@
 import { Callout } from 'fumadocs-ui/components/callout';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { getIntegration, getTransports, type FieldDefinition } from '@/lib/integrations';
+import { FieldsTable, TAG_BASE } from '@/components/field-table';
+import { getIntegration, getTransports } from '@/lib/integrations';
 
 // Fixture target keys → the label + tag color used in the Scanopy app
 // (see getTargetTagProps in ui/src/lib/features/credentials/types/base.ts:
@@ -24,8 +25,6 @@ const TARGET_TAGS: Record<string, { label: string; className: string }> = {
 
 // Broad → narrow, so every row lists targets in the same order.
 const TARGET_ORDER = ['Network', 'DaemonHost', 'Hosts'];
-
-const TAG_BASE = 'inline-flex items-center rounded px-2 py-0.5 text-xs font-medium';
 
 export function TargetTags({ targets }: { targets: string[] }) {
 	return (
@@ -174,82 +173,6 @@ export function CredentialBasics({ id }: { id: string }) {
 				guide covers only what is specific to {integration.name}.
 			</p>
 		</Callout>
-	);
-}
-
-function fieldDescription(field: FieldDefinition) {
-	if (!field.options?.length) return field.help_text ?? null;
-	const choices = field.options.map((o) => o.label).join(', ');
-	return [field.help_text, `One of: ${choices}.`].filter(Boolean).join(' ');
-}
-
-/**
- * A select field's `default_value` is the wire value (`Sha256`), which is not what
- * the form shows or what a reader should type. Resolve it through the field's own
- * options to the display label (`SHA-256`), falling back to the raw value for
- * fields that have no options.
- */
-function defaultLabel(field: FieldDefinition) {
-	if (!field.default_value) return null;
-	const match = field.options?.find((o) => o.value === field.default_value);
-	return match?.label ?? field.default_value;
-}
-
-function FieldsTable({ fields }: { fields: FieldDefinition[] }) {
-	// Group headers only earn their row when there is more than one group to tell
-	// apart — a lone "Connection" banner is noise.
-	const groups = [...new Set(fields.map((f) => f.group ?? ''))];
-	const showGroups = groups.filter(Boolean).length > 1;
-
-	return (
-		<div className="overflow-x-auto">
-			<table>
-				<thead>
-					<tr>
-						<th>Field</th>
-						<th>Required</th>
-						<th>Default</th>
-						<th>Description</th>
-					</tr>
-				</thead>
-				<tbody>
-					{groups.flatMap((group) => {
-						const rows = fields.filter((f) => (f.group ?? '') === group);
-						const header =
-							showGroups && group ? (
-								<tr key={`group-${group}`}>
-									<td colSpan={4} className="text-fd-muted-foreground text-sm font-semibold">
-										{group}
-									</td>
-								</tr>
-							) : null;
-
-						return [
-							header,
-							...rows.map((field) => (
-								<tr key={field.id}>
-									<td className="whitespace-nowrap">
-										<strong>{field.label}</strong>
-										{field.secret && (
-											<span
-												className={`${TAG_BASE} ml-2 bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300`}
-											>
-												Secret
-											</span>
-										)}
-									</td>
-									<td>{field.optional ? 'Optional' : 'Required'}</td>
-									<td>
-										{defaultLabel(field) ? <code>{defaultLabel(field)}</code> : <em>None</em>}
-									</td>
-									<td>{fieldDescription(field)}</td>
-								</tr>
-							))
-						];
-					})}
-				</tbody>
-			</table>
-		</div>
 	);
 }
 
