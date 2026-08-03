@@ -24,19 +24,9 @@ There are three categories of network documentation tools: **monitoring platform
 | Budget monitoring + mapping                    | [Domotz](#domotz) ($1.50/device/mo) or [ManageEngine](#manageengine-opmanager) ($95/yr)                                                                                                                                                                                                                                   |
 | Free and self-hosted                           | [LibreNMS](#librenms) for monitoring with basic maps. [NetDisco](#netdisco) for Layer 2 topology discovery. [Scanopy Community Edition](/community) for documentation-focused mapping. [draw.io](#drawio) for manual diagrams. All free.                                                                                  |
 
-## A Network Documentation Tool Answers Three Questions and Keeps the Answers Current
-
-Good network documentation software keeps the answers to three questions accurate as the network changes:
-
-- **What is on the network?** Hosts, their IP and MAC addresses, hostnames, and vendors. The deeper tools also fingerprint the services running on each host, so a box isn't just an IP, it's "the machine running Postgres, Nginx, and a stack of containers."
-- **How is it connected?** Physical links between switches, routers, and hosts, plus the logical layer of subnets and VLANs. This is the part manual diagrams get wrong first, because cabling and topology change without anyone updating the drawing.
-- **What changed?** A record you can trust over time, not a file someone last touched eighteen months ago.
-
-The output is usually a topology map plus a searchable inventory. A documentation tool derives that data from discovery; a drawing tool derives it from memory.
-
 ## "Automated" Means the Tool Discovers the Network and Documents It for You
 
-"Automated" means the tool discovers your network and produces the documentation without you drawing anything. Most tools on this list do that. <!-- manual-tools-list --> don't. They're manual diagramming tools, included because they are commonly recommended for this query. ([Here's a deeper look at how automated network documentation works](/blog/automated-network-documentation), and for the free, self-hosted options specifically, the [open-source network documentation guide](/guides/open-source-network-documentation).)
+"Automated" means the tool discovers your network and produces the documentation without you drawing anything. Most tools on this list do that. <!-- manual-tools-list --> don't. They're manual diagramming tools, included because they are commonly recommended for this query. ([Here's a deeper look at how automated network documentation works](/blog/automated-network-documentation). For what the category covers beyond this comparison, see the [network documentation software guide](/guides/network-documentation-software); for the free, self-hosted options specifically, the [open-source network documentation guide](/guides/open-source-network-documentation).)
 
 <dl>
 <dt><strong>SNMP (Simple Network Management Protocol)</strong></dt>
@@ -55,17 +45,9 @@ The output is usually a topology map plus a searchable inventory. A documentatio
 <dd>Identifying what software or services (web servers, databases, DNS) are running on each host, beyond just detecting that the host exists. Nmap and Scanopy perform deep service fingerprinting; most other tools on this list do not.</dd>
 </dl>
 
-## Documentation, Monitoring, and ITAM Are Not the Same Thing
+## Several Tools on This List Are Monitoring Platforms With a Map Feature
 
-This category gets muddy because three different kinds of tools all touch your device inventory. They are not substitutes, and several tools on this list are really monitoring platforms with a map feature.
-
-| Tool type                  | Core job                                                              | Priced for                   |
-| -------------------------- | --------------------------------------------------------------------- | ---------------------------- |
-| Network documentation      | Keep an accurate map and inventory of what exists and how it connects | Completeness (whole network) |
-| Network monitoring         | Watch device health, alert on problems, track performance over time   | Per-device attention         |
-| IT asset management (ITAM) | Track ownership, lifecycle, licensing, and procurement of assets      | Asset records                |
-
-Most teams need more than one of these. Documentation software tells you the network's shape; monitoring tells you when part of it is on fire; ITAM tells you who owns the laptop and when its warranty ends. The right setup runs them alongside each other, not one instead of another.
+Documentation, monitoring, and IT asset management all touch your device inventory, and they are not substitutes. That matters when reading the table below, because several entries are monitoring platforms whose mapping is one feature among many, priced accordingly. The [network documentation software guide](/guides/network-documentation-software) covers where the three categories divide.
 
 ## Per-Device Pricing Makes Complete Documentation the Most Expensive Option
 

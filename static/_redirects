@@ -112,13 +112,16 @@
 /blog/visualize-docker-containers-network /guides/visualize-docker-containers-network 301
 /blog/visualize-docker-containers-network/ /guides/visualize-docker-containers-network 301
 
-# Guide consolidation (Jul 2026): network-documentation-software merged into the
-# network documentation tools comparison, which now owns that category.
-# Kept high in the file: when these two rules sat in the tail (after the image
-# redirects) they returned 404 at the edge instead of redirecting, while every
-# earlier rule worked. Verified live 2026-07-27. Re-probe after any reshuffle.
-/guides/network-documentation-software /comparisons/best-automated-network-diagram-tools 301
-/guides/network-documentation-software/ /comparisons/best-automated-network-diagram-tools 301
+# NOTE (2026-08-03): the Jul 2026 consolidation that 301'd
+# /guides/network-documentation-software into the comparison has been reverted. The
+# guide is a standalone page again, so those two rules were removed. Do not re-add
+# them without checking GSC: the merge moved "network documentation software" from
+# pos 13.3 to 27.4.
+#
+# Rules affecting /guides and /compliance must stay HIGH in this file: when they sat
+# in the tail (after the image redirects) they returned 404 at the edge instead of
+# redirecting, while every earlier rule worked. Verified live 2026-07-27.
+# Re-probe after any reshuffle.
 
 # Compliance moved under the solutions hub (Jul 2026). Same tail-position problem.
 /compliance /solutions/compliance 301

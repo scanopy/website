@@ -86,7 +86,7 @@ Mapping and monitoring get confused because both touch your devices, but they dr
 | Network monitoring  | The state: device health, metrics, alerts      | Something is down and you need to know first  |
 | Manual diagram tool | Whatever you draw on the canvas                | You need a one-off picture for a slide        |
 
-Mapping shows you the shape of the network; monitoring tells you when part of that shape is on fire. Most teams need both, run alongside each other. A mapping tool that also tries to be your monitoring platform usually does neither part well. If your problem is less "I need to see how this connects" and more "we have no reliable record of what we have," that is the record-keeping angle, and the [network documentation tools comparison](/comparisons/best-automated-network-diagram-tools) covers the tools built for it.
+Mapping shows you the shape of the network; monitoring tells you when part of that shape is on fire. Most teams need both, run alongside each other. A mapping tool that also tries to be your monitoring platform usually does neither part well. If your problem is less "I need to see how this connects" and more "we have no reliable record of what we have," that is the record-keeping angle, covered in the [network documentation software guide](/guides/network-documentation-software).
 
 ## Open-source network mapping tools
 
