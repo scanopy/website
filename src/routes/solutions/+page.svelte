@@ -6,8 +6,14 @@
 		'How teams that manage infrastructure use Scanopy. Each solution starts from the same network map and inventory, kept current on a schedule, and puts it to work for a specific job.';
 
 	// The hub grows as solution pages ship. Each entry is a job the network map does,
-	// not a feature. Compliance is the first; more follow.
+	// not a feature.
 	const solutions = [
+		{
+			name: 'Network documentation',
+			href: '/solutions/network-documentation',
+			blurb:
+				'Discovery reads the hosts, services, interfaces, and topology off the network itself, and rescans on a schedule. Nothing to draw, no spreadsheet to maintain.'
+		},
 		{
 			name: 'Compliance',
 			href: '/solutions/compliance',
