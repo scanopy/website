@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ViewSwitcher, CustomerQuote } from '$lib/components';
 	import EvidenceExports from '$lib/components/EvidenceExports.svelte';
+	import FAQ from '$lib/components/FAQ.svelte';
 	import { getFAQPageSchema } from '$lib/schemas';
 	import { theme } from '$lib/theme.svelte';
 	import { analytics } from '$lib/analytics.svelte';
@@ -17,36 +18,12 @@
 	// (what documentation software is, how it differs from monitoring and ITAM) lives in
 	// /guides/network-documentation-software and is deliberately not repeated here.
 	const discovers = [
-		{
-			name: 'Hosts',
-			blurb:
-				'IP addresses, MAC addresses, hostnames, and vendor identification for everything answering on the network.'
-		},
-		{
-			name: 'Services',
-			blurb:
-				'Scanopy identifies hundreds of service types per host, so an entry is not just an IP but the machine running Postgres, Nginx, and a stack of containers.'
-		},
-		{
-			name: 'Interfaces',
-			blurb:
-				'Port numbers, port speeds, interface types, and admin and operational status, read over SNMP.'
-		},
-		{
-			name: 'Topology',
-			blurb:
-				'Physical and logical connections between devices, from LLDP, CDP, ARP tables, and MAC forwarding tables.'
-		},
-		{
-			name: 'Device details',
-			blurb:
-				'System descriptions, uptime, location, serial numbers, and hardware models from SNMP-managed devices.'
-		},
-		{
-			name: 'Containers',
-			blurb:
-				'Docker images, ports, networks, and labels, where the daemon has access to the container socket.'
-		}
+		{ name: 'Hosts', blurb: 'IP and MAC addresses, hostnames, and vendor.' },
+		{ name: 'Services', blurb: 'Hundreds of service types per host, not just an open port.' },
+		{ name: 'Interfaces', blurb: 'Port numbers, speeds, types, and status, over SNMP.' },
+		{ name: 'Topology', blurb: 'Links between devices, from LLDP, CDP, ARP, and forwarding tables.' },
+		{ name: 'Device details', blurb: 'System description, uptime, location, serial, and model.' },
+		{ name: 'Containers', blurb: 'Docker images, ports, networks, and labels.' }
 	];
 
 	const VIEW_META = [
@@ -169,11 +146,11 @@
 	<section class="py-20">
 		<div class="container mx-auto max-w-3xl px-4 text-center">
 			<h1 class="text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-				Network documentation software<span class="block">that stays current on its own.</span>
+				Network documentation software<span class="block">that keeps the map current.</span>
 			</h1>
 			<p class="mx-auto mt-6 max-w-2xl text-lg text-gray-300">
-				A lightweight daemon discovers your hosts, services, interfaces, and topology, then keeps
-				the map and inventory current on a schedule. Nothing to draw, no spreadsheet to maintain.
+				A lightweight daemon discovers your hosts, services, interfaces, and topology, and rescans
+				on a schedule. Nothing to draw, no spreadsheet to maintain.
 			</p>
 			<div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
 				<a
@@ -201,17 +178,31 @@
 		</div>
 	</section>
 
+	<!-- Four views. Leads the page: the map is the product, so show it before describing it. -->
+	<section class="border-t border-gray-800 py-20">
+		<div class="container mx-auto px-4">
+			<div class="mb-16 text-center">
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
+					One scan produces four views of the same network
+				</h2>
+				<p class="mx-auto max-w-2xl text-gray-400">
+					The physical cabling, the subnets and what sits on them, the VMs and containers, and the
+					services that make up an application.
+				</p>
+			</div>
+			<div class="mx-auto max-w-4xl">
+				<ViewSwitcher {views} defaultTab="l2" autoRotate />
+			</div>
+		</div>
+	</section>
+
 	<!-- What discovery returns -->
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Scanopy reads the documentation off the network itself
+					Every field comes from a scan, not from someone typing it in
 				</h2>
-				<p class="mx-auto max-w-2xl text-gray-400">
-					Every field below comes from a scan, not from someone typing it in. That is the difference
-					between documentation that is accurate today and a diagram that was accurate once.
-				</p>
 			</div>
 			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 				{#each discovers as d (d.name)}
@@ -224,34 +215,15 @@
 		</div>
 	</section>
 
-	<!-- Four views -->
-	<section class="border-t border-gray-800 py-20">
-		<div class="container mx-auto px-4">
-			<div class="mb-16 text-center">
-				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					One scan produces four views of the same network
-				</h2>
-				<p class="mx-auto max-w-2xl text-gray-400">
-					A network is several maps at once. Switch between the physical cabling, the subnets and
-					what sits on them, the VMs and containers, and the services that make up an application.
-				</p>
-			</div>
-			<div class="mx-auto max-w-4xl">
-				<ViewSwitcher {views} defaultTab="l2" autoRotate />
-			</div>
-		</div>
-	</section>
-
 	<!-- Getting the map out -->
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Put the map where your team already looks
+					Nobody has to come to you for the current diagram
 				</h2>
 				<p class="mx-auto max-w-2xl text-gray-400">
-					Documentation nobody opens does no work. Export a snapshot, embed the live map in a page
-					you already use, or hand someone a link.
+					The map goes where people already look, in the form each one needs.
 				</p>
 			</div>
 			<EvidenceExports layout="cards" context="product" />
@@ -262,19 +234,17 @@
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto max-w-3xl px-4 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-				Scanopy documents the network and runs alongside your monitoring and asset tools
+				Change monitoring platforms without losing your maps
 			</h2>
 			<p class="mx-auto max-w-2xl text-gray-400">
-				Scanopy does one job. It does not do monitoring, alerting, traffic analysis, patch
-				management, or configuration backup, and it is priced independently of them, so you can
-				change monitoring platforms later without losing your maps. For where the three categories
-				divide, and the open-source options in each, see the
+				Scanopy documents the network and is priced independently of the tools it sits beside. More
+				on the category in the
 				<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
-					>network documentation software guide</a
-				>. For how Scanopy compares to specific products on discovery method and pricing, the
+					>guide</a
+				>, and on specific products in the
 				<a
 					href="/comparisons/best-automated-network-diagram-tools"
-					class="text-blue-400 hover:text-blue-300">network documentation tools comparison</a
+					class="text-blue-400 hover:text-blue-300">comparison</a
 				>.
 			</p>
 		</div>
@@ -284,13 +254,11 @@
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto max-w-3xl px-4 text-center">
 			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-				Self-hosted keeps the network data on your own infrastructure
+				Your network data never leaves your infrastructure
 			</h2>
 			<p class="mx-auto max-w-2xl text-gray-400">
-				Run Scanopy self-hosted and the discovery data, topology, and credentials stay inside your
-				perimeter. It runs in air-gapped and on-premise environments with no outbound internet
-				access. How Scanopy handles data in each deployment model, with subprocessors and security
-				practices, is on the
+				Self-hosted, Scanopy runs with no outbound internet access at all, including air-gapped.
+				Deployment models and subprocessors are on the
 				<a href="/security" class="text-blue-400 hover:text-blue-300">security page</a>.
 			</p>
 		</div>
@@ -308,16 +276,11 @@
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Questions about running Scanopy
+					Frequently Asked Questions
 				</h2>
 			</div>
-			<div class="mx-auto max-w-3xl space-y-8">
-				{#each faqs as f (f.question)}
-					<div>
-						<h3 class="text-lg font-semibold text-white">{f.question}</h3>
-						<p class="mt-2 leading-relaxed text-gray-400">{f.answer}</p>
-					</div>
-				{/each}
+			<div class="mx-auto max-w-3xl">
+				<FAQ {faqs} />
 			</div>
 		</div>
 	</section>
