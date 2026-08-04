@@ -22,30 +22,30 @@
 	// "what am I committing to."
 	const commitments = [
 		{
-			name: 'Self-hosted',
+			name: 'Cloud or self-hosted',
 			blurb:
-				'The discovery data, topology, and credentials stay inside your perimeter. Scanopy runs with no outbound internet access at all, including air-gapped.',
+				'Run it managed by us, or entirely on your own infrastructure, where the discovery data and credentials stay inside your perimeter with no outbound internet access at all.',
 			href: '/security',
 			linkText: 'Security and subprocessors'
 		},
 		{
-			name: 'Priced apart from monitoring',
+			name: 'Billed on its own',
 			blurb:
-				'Scanopy documents the network and is billed separately from the tools it sits beside, so you can change monitoring platforms without losing your maps.',
+				'Scanopy is priced separately from the tools it sits beside, so your documentation is not bundled into a monitoring or asset contract.',
 			href: '/comparisons/best-automated-network-diagram-tools',
 			linkText: 'Compare tools'
 		},
 		{
-			name: 'Flat, whatever the host count',
+			name: 'The price does not move with host count',
 			blurb:
-				'Documentation is only worth having when it covers everything, so the bill does not grow as you document more of the network.',
+				'Discovering more hosts does not raise the bill, so documenting the whole network costs the same as documenting part of it.',
 			href: '/pricing',
 			linkText: 'Pricing'
 		},
 		{
-			name: 'Open source available',
+			name: 'Open source core',
 			blurb:
-				'Scanopy Community Edition is AGPL-3.0 and self-hosted, capped at one seat and one network.',
+				'Community Edition is AGPL-3.0, so you can read the code before you run it on your network. Free, capped at one seat and one network.',
 			href: '/community',
 			linkText: 'Community Edition'
 		}
@@ -241,7 +241,7 @@
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					No per-device bill, no lock-in, no data leaving your network
+					No per-device bill, no lock-in, and you choose where it runs
 				</h2>
 			</div>
 			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
