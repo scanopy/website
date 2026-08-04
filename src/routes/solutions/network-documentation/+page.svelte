@@ -31,7 +31,9 @@
 		{
 			name: 'Priced apart from monitoring',
 			blurb:
-				'Scanopy documents the network and is billed separately from the tools it sits beside, so you can change monitoring platforms without losing your maps.'
+				'Scanopy documents the network and is billed separately from the tools it sits beside, so you can change monitoring platforms without losing your maps.',
+			href: '/comparisons/best-automated-network-diagram-tools',
+			linkText: 'Compare tools'
 		},
 		{
 			name: 'Flat, whatever the host count',
@@ -227,7 +229,7 @@
 					Nobody has to come to you for the current diagram
 				</h2>
 				<p class="mx-auto max-w-2xl text-gray-400">
-					The map goes where people already look, in the form each one needs.
+					Three ways to get the current map out, and a dated record of how it changed.
 				</p>
 			</div>
 			<EvidenceExports layout="cards" context="product" />
@@ -241,16 +243,6 @@
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
 					No per-device bill, no lock-in, no data leaving your network
 				</h2>
-				<p class="mx-auto max-w-2xl text-gray-400">
-					More on the category in the
-					<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
-						>guide</a
-					>, and on specific products in the
-					<a
-						href="/comparisons/best-automated-network-diagram-tools"
-						class="text-blue-400 hover:text-blue-300">comparison</a
-					>.
-				</p>
 			</div>
 			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
 				{#each commitments as c (c.name)}
@@ -327,6 +319,12 @@
 			</div>
 			<div class="mx-auto max-w-3xl">
 				<FAQ {faqs} />
+				<p class="mt-8 text-center text-sm text-gray-400">
+					For what the category covers beyond Scanopy, see the
+					<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
+						>network documentation software guide</a
+					>.
+				</p>
 			</div>
 		</div>
 	</section>
