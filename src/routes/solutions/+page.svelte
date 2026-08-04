@@ -12,7 +12,7 @@
 			name: 'Network documentation',
 			href: '/solutions/network-documentation',
 			blurb:
-				'Discovery reads the hosts, services, interfaces, and topology off the network itself, and rescans on a schedule. Nothing to draw, no spreadsheet to maintain.'
+				'Scanopy discovers your hosts, services, interfaces, and topology, and rescans on a schedule. Nothing to draw, no spreadsheet to maintain.'
 		},
 		{
 			name: 'Compliance',
