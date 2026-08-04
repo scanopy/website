@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ViewSwitcher, CustomerQuote } from '$lib/components';
+	import { ViewSwitcher, CustomerQuote, CommercialTerms } from '$lib/components';
 	import EvidenceExports from '$lib/components/EvidenceExports.svelte';
 	import { theme } from '$lib/theme.svelte';
 	import { analytics } from '$lib/analytics.svelte';
@@ -228,17 +228,16 @@
 		</div>
 	</section>
 
-	<!-- Self-hosted callout -->
+	<!-- Commercial terms. Shared with /solutions/network-documentation: procurement asks the same
+	     four questions whether or not the driver is an audit. -->
 	<section class="border-t border-gray-800 py-20">
-		<div class="container mx-auto max-w-3xl px-4 text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-				Self-hosted keeps the data on your infrastructure
-			</h2>
-			<p class="mx-auto max-w-2xl text-gray-400">
-				Run Scanopy fully self-hosted and the network data never leaves your infrastructure. How
-				Scanopy handles data in each deployment model, with subprocessors and security practices, is
-				on the <a href="/security" class="text-blue-400 hover:text-blue-300">security page</a>.
-			</p>
+		<div class="container mx-auto px-4">
+			<div class="mb-16 text-center">
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
+					No per-device bill, no lock-in, and you choose where it runs
+				</h2>
+			</div>
+			<CommercialTerms />
 		</div>
 	</section>
 

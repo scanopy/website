@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ViewSwitcher, CustomerQuote } from '$lib/components';
+	import { ViewSwitcher, CustomerQuote, CommercialTerms } from '$lib/components';
 	import EvidenceExports from '$lib/components/EvidenceExports.svelte';
 	import FAQ from '$lib/components/FAQ.svelte';
 	import { getFAQPageSchema } from '$lib/schemas';
@@ -20,37 +20,6 @@
 	// The buyer objections, as cards. Each of these was briefly its own section, which gave a
 	// one-sentence point a full band of the page. They belong together: all four are answers to
 	// "what am I committing to."
-	const commitments = [
-		{
-			name: 'Cloud or self-hosted',
-			blurb:
-				'Run it managed by us, or entirely on your own infrastructure, where the discovery data and credentials stay inside your perimeter with no outbound internet access at all.',
-			href: '/security',
-			linkText: 'Security and subprocessors'
-		},
-		{
-			name: 'Billed on its own',
-			blurb:
-				'Scanopy is priced separately from the tools it sits beside, so your documentation is not bundled into a monitoring or asset contract.',
-			href: '/comparisons/best-automated-network-diagram-tools',
-			linkText: 'Compare tools'
-		},
-		{
-			name: 'The price does not move with host count',
-			blurb:
-				'Discovering more hosts does not raise the bill, so documenting the whole network costs the same as documenting part of it.',
-			href: '/pricing',
-			linkText: 'Pricing'
-		},
-		{
-			name: 'Open source core',
-			blurb:
-				'Community Edition is AGPL-3.0, so you can read the code before you run it on your network. Free, capped at one seat and one network.',
-			href: '/community',
-			linkText: 'Community Edition'
-		}
-	];
-
 	const VIEW_META = [
 		{
 			id: 'l2',
@@ -244,21 +213,7 @@
 					No per-device bill, no lock-in, and you choose where it runs
 				</h2>
 			</div>
-			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-				{#each commitments as c (c.name)}
-					<div class="card flex flex-col p-6">
-						<span class="text-lg font-semibold text-white">{c.name}</span>
-						<span class="mt-3 leading-relaxed text-gray-400">{c.blurb}</span>
-						{#if c.href}
-							<a
-								href={c.href}
-								class="mt-4 text-sm font-semibold text-blue-400 hover:text-blue-300"
-								>{c.linkText} &rarr;</a
-							>
-						{/if}
-					</div>
-				{/each}
-			</div>
+			<CommercialTerms />
 		</div>
 	</section>
 

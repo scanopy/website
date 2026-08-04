@@ -1,5 +1,6 @@
 export { default as BillingPlanForm } from './BillingPlanForm.svelte';
 export { default as ContactModal } from './ContactModal.svelte';
+export { default as CommercialTerms } from './CommercialTerms.svelte';
 export { default as CorrectionCallout } from './CorrectionCallout.svelte';
 export { default as CustomerLogos } from './CustomerLogos.svelte';
 export { default as CustomerQuote } from './CustomerQuote.svelte';
