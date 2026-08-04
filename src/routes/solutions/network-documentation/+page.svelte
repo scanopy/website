@@ -308,8 +308,10 @@
 					>
 				</div>
 				<p class="mt-6 text-sm text-gray-400">
-					The <a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial editions</a>
-					remove the seat and network limits and add support.
+					Prefer to self-host? The
+					<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial editions</a>
+					run in your own environment with support, and
+					<a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing</a> covers the tiers.
 				</p>
 			</div>
 		</div>
