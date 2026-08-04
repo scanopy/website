@@ -18,7 +18,11 @@ export const VS_VENDOR_SLUGS = [
 	'librenms',
 	'netdisco',
 	'faddom',
-	'netbox'
+	'netbox',
+	'phpipam',
+	'observium',
+	'opennms',
+	'zabbix'
 ] as const;
 
 export type VsVendorSlug = (typeof VS_VENDOR_SLUGS)[number];

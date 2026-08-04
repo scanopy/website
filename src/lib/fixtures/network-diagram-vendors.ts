@@ -640,6 +640,217 @@ On Layer 2 the two land in the same place: switch, port, MAC, IP. The choice is 
 Both can discover the network. NetBox Labs ships [NetBox Discovery](https://netboxlabs.com/blog/announcing-netbox-discovery-infrastructure-design-operational-reality/), an open-source agent that actively scans for hosts and services and captures device configs and operational state, then validates that reality against the intended design. So on the discovery layer, NetBox and Scanopy overlap. Scanopy is not a full DCIM/IPAM source of truth, though: it does not model intended state, racks, circuits, or power.
 
 Where they clearly differ is the output. NetBox Discovery feeds NetBox's data model and flags drift; it does not produce topology maps, and NetBox's visualization is plugin-based ([netbox-topology-views](https://github.com/netbox-community/netbox-topology-views)). Scanopy's core output is the interactive, living map itself. So the decision: if you want a structured source of truth that automation consumes and that continuously validates against intended design, NetBox (with Discovery) is the platform. If you want an automatic, up-to-date visual map of what is actually on your network, Scanopy is built for that and is not trying to be your data model. The two can also work together, with Scanopy as one way to keep NetBox populated.`
+	},
+	phpipam: {
+		name: 'phpIPAM',
+		fullName: 'phpIPAM',
+		slug: 'phpipam',
+		href: 'https://phpipam.com/',
+
+		discovery: ['SNMP', 'ICMP'],
+		discoverySources: [{ id: 47 }],
+		services: { level: 'no' },
+		autoUpdates: false,
+		openSource: { status: 'osi', license: 'GPL-3.0' },
+		pricing: { text: 'Free' },
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'Records subnets and hosts as tables; there is no rendered topology map.'
+		},
+		viewTypesSources: [{ id: 48 }],
+		bestFor:
+			'Teams that need a governed record of IP address space rather than a picture of the topology',
+		description:
+			'An open-source IP address management application. phpIPAM records subnets, IP allocations, VLANs, and devices in a structured database behind a web UI and an API, and can populate that record from the network itself. Written in PHP and self-hosted, under [GPL-3.0](https://phpipam.com/).',
+		discoveryNotes:
+			'Subnet discovery reads routing tables. Host discovery runs from scan agents configured per subnet, using ping, DNS resolution, and SNMP.',
+		diagrams:
+			'There is no native topology diagram. Network drawings and location maps are long-standing feature requests ([diagram module](https://github.com/phpipam/phpipam/issues/4445), [location map](https://github.com/phpipam/phpipam/issues/2044)) rather than shipped features. The output is tabular: subnet listings, IP allocations, and device records.',
+		whereItFits:
+			'Environments where address space is the contested resource and someone needs to know which addresses are allocated, to what, and in which subnet, with an API behind that record.',
+		tradeOff:
+			'It is an address-management tool, so it covers what an address is rather than how the network connects. No topology map, and host detail is limited to what the scan agents return.',
+		deployment: ['Self-hosted'],
+		deploymentNotes:
+			'Self-hosted on a PHP and MySQL/MariaDB stack. Docker images are available. Scan agents can run remotely to reach subnets the main server cannot.',
+		versus: `phpIPAM and Scanopy both keep a record of what is on the network, and they build it from different directions. phpIPAM is IP address management: subnets, allocations, VLANs, and device records in a structured database, populated from routing tables and from scan agents that ping, resolve DNS, and query SNMP. It is the place to look up what an address is and who holds it. Scanopy discovers hosts, services, interfaces, and topology on a schedule and renders four views of the same scan: physical (L2), logical (L3), workloads, and applications.
+
+The difference is what each one produces. phpIPAM produces tables, and a network drawing is [not part of it](https://github.com/phpipam/phpipam/issues/4445); requests for one are open feature requests rather than shipped features. Scanopy produces an interactive map, with the underlying host and service data available as CSV. Both are free to self-host: phpIPAM under GPL-3.0, Scanopy under [AGPL-3.0](/community), with [flat pricing regardless of host count](/pricing) and [commercial self-hosted editions](/commercial) when you outgrow the caps.
+
+They overlap less than the category name suggests, which is why teams run both. phpIPAM is the system of record for address space, maintained deliberately by the people who assign it. Scanopy is the discovered picture of what is actually connected, maintained on a schedule. If the job is governing IP allocation, phpIPAM is built for it. If the job is seeing how the network fits together, that is what Scanopy is built for.`
+	},
+	observium: {
+		name: 'Observium',
+		fullName: 'Observium',
+		slug: 'observium',
+		href: 'https://www.observium.org/',
+
+		discovery: ['SNMP', 'CDP', 'LLDP'],
+		discoverySources: [{ id: 50 }],
+		services: { level: 'no' },
+		autoUpdates: true,
+		openSource: { status: 'osi', license: 'QPL' },
+		pricing: {
+			text: 'Free (Community); Professional subscription',
+			href: 'https://www.observium.org/subscribe/',
+			sources: [{ id: 51 }]
+		},
+		alsoIncludes: ['Monitoring'],
+		viewTypes: {
+			l2: 'yes',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'Per-device neighbour view, one hop out. A whole-network topology drawing comes from a community generator, not from Observium.'
+		},
+		viewTypesSources: [{ id: 50 }],
+		bestFor:
+			'Teams that want autodiscovering SNMP monitoring across mixed vendors and can treat mapping as a per-device view',
+		description:
+			'An autodiscovering SNMP monitoring platform covering Cisco, Juniper, Dell, HP, Linux, and Windows. Observium walks the network by following device neighbours, and is the project [LibreNMS forked from](https://www.librenms.org/). It ships in two editions: a free Community edition on 6-monthly source releases, and a paid Professional subscription.',
+		discoveryNotes:
+			'Autodiscovery follows neighbours over CDP, LLDP, FDP, and EDP, and picks up OSPF routing neighbours, continuing until it has walked the reachable network.',
+		diagrams:
+			'Mapping is per-device rather than whole-network. Each device has a neighbours view, and an interface has a Map sub-tab showing one level of connections. A full topology drawing comes from a community LLDP map generator built against the Observium database.',
+		whereItFits:
+			'Teams already committed to SNMP polling across a mixed-vendor estate who want device health, interface graphs, and neighbour data in one place, with Linux administration in-house.',
+		tradeOff:
+			'Mapping is a device-level view, so seeing the whole network means reaching for a community generator. The Community edition ships on a 6-monthly release cycle and is positioned by the project for small non-critical deployments, home use, evaluation, or lab; threshold monitoring and traffic accounting are Professional features.',
+		deployment: ['Self-hosted'],
+		deploymentNotes:
+			'Self-hosted on Linux with PHP and MySQL. A central poller queries devices over SNMP, with no per-device agents. Community ships as 6-monthly `.tar.gz` releases; Professional adds daily updates and is [licensed for one production install plus two test or development installs](https://www.observium.org/subscribe/), and is free to registered charities and open-source projects.',
+		deploymentSources: [{ id: 49 }, { id: 51 }],
+		versus: `Observium and Scanopy both discover devices over SNMP and read CDP and LLDP neighbour data, and both are self-hosted. Observium is a monitoring platform: it polls device health and interface counters, graphs them over time, and autodiscovers by following neighbours until it has walked the reachable network. Scanopy is a documentation tool: one scan produces four views of the same network (physical L2, logical L3, workloads, and applications) plus per-host service detection, and it rescans on a schedule.
+
+The mapping is where the two diverge. Observium's topology is a per-device view: a neighbours page, and a Map sub-tab on an interface showing one level of connections. Drawing the whole network from that data means running a community LLDP map generator against the Observium database. Scanopy renders the whole network as an interactive map, and gets it out three ways: [export](/pricing) as an image, self-contained HTML, wiki markup, or CSV; embed the live map in a wiki or intranet via iframe; or share a read-only link that stays current as the network rescans.
+
+Editions differ too. Observium Community is [QPL-licensed](https://docs.observium.org/licenses/) and ships on a 6-monthly release cycle, with threshold monitoring and traffic accounting in the paid Professional subscription. Scanopy is [free under AGPL-3.0](/community), or [flat monthly with unlimited hosts](/pricing) and [commercially self-hostable](/commercial). If you want SNMP monitoring with device-level neighbour views, Observium does that and has done for years. If you want the whole network drawn, kept current, and exportable, Scanopy is built for that, and it runs alongside monitoring rather than replacing it.`
+	},
+	opennms: {
+		name: 'OpenNMS',
+		fullName: 'OpenNMS Horizon / Meridian',
+		slug: 'opennms',
+		href: 'https://www.opennms.com/',
+
+		discovery: ['SNMP', 'CDP', 'LLDP', 'ICMP'],
+		discoverySources: [{ id: 52 }],
+		services: { level: 'basic' },
+		autoUpdates: true,
+		openSource: { status: 'osi', license: 'AGPL-3.0' },
+		pricing: {
+			text: 'Free (Horizon); Meridian subscription',
+			href: 'https://www.opennms.com/pricing/',
+			sources: [{ id: 55 }]
+		},
+		alsoIncludes: ['Monitoring'],
+		viewTypes: {
+			l2: 'yes',
+			l3: 'yes',
+			workload: 'no',
+			application: 'no',
+			note: 'Enlinkd builds Layer 2 links from Bridge, CDP, and LLDP, and routing topology from OSPF and IS-IS.'
+		},
+		viewTypesSources: [{ id: 52 }, { id: 53 }],
+		bestFor:
+			'Larger networks that want protocol-level topology discovery inside a full monitoring platform',
+		description:
+			'An enterprise network management platform with first-class topology discovery. Its Enhanced Linkd (Enlinkd) daemon discovers physical and routing links using five protocols, all enabled by default. It ships as Horizon, free and on a rapid release cycle, and Meridian, a subscription release line with a longer stable cycle.',
+		discoveryNotes:
+			'Enlinkd runs five link-discovery methods by default: Bridge, CDP, IS-IS, LLDP, and OSPF. CDP and LLDP edges are drawn only where the adjacency is bidirectional, so a link appears when both devices report each other. Enlinkd updaters then correlate the collected data into a network-wide topology layout.',
+		diagrams:
+			'A topology map generated from discovered links rather than placed by hand, with Layer 2 adjacency from Bridge, CDP, and LLDP, and routing topology from OSPF and IS-IS.',
+		whereItFits:
+			'Networks large enough to justify a full NMS, where the team wants alerting, performance collection, and protocol-derived topology from a single platform and has the capacity to operate it.',
+		tradeOff:
+			'A full monitoring platform, so the topology arrives with alerting, performance collection, and provisioning to configure and run. Documentation output is a view inside the platform rather than an exportable artifact, and there are no workload or application-dependency views.',
+		deployment: ['Self-hosted'],
+		deploymentNotes:
+			'Self-hosted on Linux with PostgreSQL and a JVM. Horizon and Meridian are [both AGPLv3](https://www.opennms.com/faq/), and Meridian is also available under a proprietary licence. Meridian is priced as a flat yearly fee per management server.',
+		deploymentSources: [{ id: 54 }],
+		versus: `OpenNMS is the closest tool on this list to Scanopy on discovery. Its Enhanced Linkd (Enlinkd) daemon runs [five link-discovery methods by default](https://docs.opennms.com/meridian/2021/operation/topology/enlinkd/introduction.html): Bridge, CDP, IS-IS, LLDP, and OSPF, and it draws a CDP or LLDP edge only where [both devices report each other](https://docs.opennms.com/meridian/2024/operation/deep-dive/topology/enlinkd/layer-2/lldp-discovery.html). That is real protocol-level topology discovery, not a hand-placed diagram, and it covers routing topology as well as Layer 2. Scanopy discovers over the same family of protocols and adds ARP and MAC forwarding tables.
+
+The difference is scope on both sides. OpenNMS is a full network management platform: alerting, performance collection, provisioning, and event correlation, with topology as one view inside it. Scanopy does documentation only, and covers two things OpenNMS does not: per-host service detection across hundreds of service types, and workload and application views showing VMs and containers nested in their hosts and services grouped by the application they make up. It also gets the map out, as [exports](/pricing) (image, self-contained HTML, wiki markup, CSV), an embedded live map in a wiki or intranet, or a read-only link that stays current.
+
+Both are AGPL-3.0 and self-hostable, so licence is not the deciding factor. Choose OpenNMS if you want topology inside a platform that also monitors, and you have the capacity to run it. Choose Scanopy if you want documentation that stands on its own, covers workloads and applications alongside L2 and L3, and can be handed to someone as a map. Scanopy runs alongside a monitoring platform rather than replacing one, so running both is a coherent setup.`
+	},
+	zabbix: {
+		name: 'Zabbix',
+		fullName: 'Zabbix',
+		slug: 'zabbix',
+		href: 'https://www.zabbix.com/',
+
+		discovery: ['SNMP', 'ICMP'],
+		services: { level: 'no' },
+		autoUpdates: false,
+		openSource: { status: 'osi', license: 'AGPL-3.0' },
+		pricing: { text: 'Free' },
+		alsoIncludes: ['Monitoring'],
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'Maps are laid out by hand. Automatic Layer 2 topology comes from community modules.'
+		},
+		viewTypesSources: [{ id: 57 }],
+		bestFor:
+			'Teams that want one free monitoring platform across servers, applications, and network devices',
+		description:
+			'A long-established open-source monitoring platform covering servers, applications, cloud, and network devices, with agents, SNMP, and agentless checks. Released under [AGPLv3 from version 7.0 onward](https://www.zabbix.com/license), and under GPLv2 or later before that.',
+		discoveryNotes:
+			'Network discovery scans IP ranges and low-level discovery enumerates SNMP tables such as interfaces, creating items and triggers automatically. This populates what is monitored; it does not derive a topology.',
+		diagrams:
+			'Maps are dashboards you lay out by hand, placing icons and links yourself. Deriving a Layer 2 map from LLDP data automatically requires a community add-on, such as the L2 Discovery Module for LLDP on Zabbix Share or the [snmp_lldp](https://github.com/zabbix-book/snmp_lldp) and [zabbix-map](https://github.com/TiggyWiggler/zabbix-map) projects.',
+		whereItFits:
+			'Teams consolidating server, application, and network monitoring into one free platform, with the in-house capacity to template and maintain it.',
+		tradeOff:
+			'Mapping is a manual dashboard feature. New devices do not appear on a map on their own, and automatic topology means adding and maintaining a community module.',
+		deployment: ['Self-hosted'],
+		deploymentNotes:
+			'Self-hosted on Linux with a MySQL, PostgreSQL, or equivalent database. Packages, containers, and appliances are published by the project.'
+	},
+	nagios: {
+		name: 'Nagios',
+		fullName: 'Nagios Core / Nagios XI',
+		slug: 'nagios',
+		href: 'https://www.nagios.org/',
+
+		discovery: [],
+		services: { level: 'no' },
+		autoUpdates: false,
+		openSource: { status: 'osi', license: 'GPL-2.0' },
+		pricing: {
+			text: 'Free (Core); XI from $2,595 per 100 nodes',
+			href: 'https://www.nagios.com/pricing-plans/',
+			sources: [{ id: 60 }]
+		},
+		alsoIncludes: ['Monitoring'],
+		viewTypes: {
+			l2: 'no',
+			l3: 'no',
+			workload: 'no',
+			application: 'no',
+			note: 'The network map renders parent/child relationships written by hand in host definitions, not discovered links.'
+		},
+		viewTypesSources: [{ id: 59 }],
+		bestFor:
+			'Teams with an existing Nagios deployment who need host and service state, not a discovered map',
+		description:
+			'The long-running open-source monitoring engine. Nagios Core checks hosts and services defined in configuration files and is [free under GPLv2](https://www.nagios.org/faq/); Nagios XI wraps the same engine in a web interface with configuration wizards and is sold per monitored node.',
+		discoveryNotes:
+			'Nagios Core has no network discovery. Hosts and services are defined in configuration files, and the topology it displays is the hierarchy you declare. Nagios XI adds a configuration wizard for populating hosts.',
+		diagrams:
+			'The Network Status Map is drawn from the `parents` directive in host definitions, which an administrator writes by hand to describe the path from the monitoring server to each host. It reflects the hierarchy as declared, so it is accurate only while someone maintains it.',
+		whereItFits:
+			'Established Nagios estates where the configuration and plugin ecosystem are already in place and the goal is host and service state rather than network documentation.',
+		tradeOff:
+			'No discovery, so the map is only as current as the configuration behind it. Maintaining parent/child relationships by hand is the same effort as maintaining a diagram by hand.',
+		deployment: ['Self-hosted'],
+		deploymentNotes:
+			'Self-hosted on Linux. Core is configuration-file driven; XI adds a web configuration layer over the same engine.'
 	}
 };
 
@@ -708,7 +919,7 @@ export const detailSections: VendorCategory[] = [
 ];
 
 export const honorableMentions =
-	"**Graphviz / D3.js.** Rendering engines, not discovery tools. If you've already got network data from another source (Nmap scans, SNMP polls, API calls), Graphviz and D3 can turn it into a diagram. This is the DIY path. Extremely flexible, significant engineering effort required.";
+	"**Graphviz / D3.js.** Rendering engines, not discovery tools. If you've already got network data from another source (Nmap scans, SNMP polls, API calls), Graphviz and D3 can turn it into a diagram. This is the DIY path. Extremely flexible, significant engineering effort required.\n\n**Icinga.** A Nagios fork, backward compatible with Nagios configuration, plugins, and addons. Its [map module](https://github.com/nbuchwitz/icingaweb2-module-map) plots host and service state geographically on OpenStreetMap rather than drawing network topology; topology maps come through the NagVis integration, where the layout is placed by hand.";
 
 export const vendorSources: VendorSource[] = [
 	{
@@ -943,6 +1154,76 @@ export const vendorSources: VendorSource[] = [
 		id: 46,
 		label: 'Paessler - PRTG UVexplorer listed as a separate product',
 		url: 'https://www.paessler.com/products'
+	},
+	{
+		id: 47,
+		label: 'phpIPAM - Open source IP address management (GPL-3.0)',
+		url: 'https://phpipam.com/'
+	},
+	{
+		id: 48,
+		label: 'phpIPAM - Network diagram module is an open feature request',
+		url: 'https://github.com/phpipam/phpipam/issues/4445'
+	},
+	{
+		id: 49,
+		label: 'Observium - Licenses (Community under QPL)',
+		url: 'https://docs.observium.org/licenses/'
+	},
+	{
+		id: 50,
+		label: 'Observium - Autodiscovery via CDP, LLDP, FDP, EDP and OSPF neighbours',
+		url: 'https://docs.observium.org/autodiscovery/'
+	},
+	{
+		id: 51,
+		label: 'Observium - Subscribe: Community vs Professional editions',
+		url: 'https://www.observium.org/subscribe/'
+	},
+	{
+		id: 52,
+		label: 'OpenNMS - Enhanced Linkd (Enlinkd): five link-discovery methods enabled by default',
+		url: 'https://docs.opennms.com/meridian/2021/operation/topology/enlinkd/introduction.html'
+	},
+	{
+		id: 53,
+		label: 'OpenNMS - LLDP discovery requires bidirectional adjacency for an edge',
+		url: 'https://docs.opennms.com/meridian/2024/operation/deep-dive/topology/enlinkd/layer-2/lldp-discovery.html'
+	},
+	{
+		id: 54,
+		label: 'OpenNMS - Difference between Horizon and Meridian (both AGPLv3)',
+		url: 'https://www.opennms.com/faq/'
+	},
+	{
+		id: 55,
+		label: 'OpenNMS - Meridian subscription pricing',
+		url: 'https://www.opennms.com/pricing/'
+	},
+	{
+		id: 56,
+		label: 'Zabbix - 7.0 released under AGPLv3 (previously GPLv2 or later)',
+		url: 'https://blog.zabbix.com/striking-the-right-balance-zabbix-7-0-to-be-released-under-agplv3-license/27596/'
+	},
+	{
+		id: 57,
+		label: 'Zabbix - SNMP LLDP topology discovery is a community module',
+		url: 'https://github.com/zabbix-book/snmp_lldp'
+	},
+	{
+		id: 58,
+		label: 'Nagios - FAQ: Nagios Core is free under GPLv2',
+		url: 'https://www.nagios.org/faq/'
+	},
+	{
+		id: 59,
+		label: 'Nagios Core - Host parent/child relationships are defined by hand and drive the network map',
+		url: 'https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/dependencies.html'
+	},
+	{
+		id: 60,
+		label: 'Nagios - XI pricing plans',
+		url: 'https://www.nagios.com/pricing-plans/'
 	}
 ];
 
