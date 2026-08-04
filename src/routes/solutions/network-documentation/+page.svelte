@@ -24,7 +24,7 @@
 		{
 			name: 'Self-hosted',
 			blurb:
-				'The discovery data, topology, and credentials stay inside your perimeter. Runs with no outbound internet access at all, including air-gapped.',
+				'The discovery data, topology, and credentials stay inside your perimeter. Scanopy runs with no outbound internet access at all, including air-gapped.',
 			href: '/security',
 			linkText: 'Security and subprocessors'
 		},
@@ -211,8 +211,8 @@
 					One scan produces four views of the same network
 				</h2>
 				<p class="mx-auto max-w-2xl text-gray-400">
-					Hosts, services, interfaces, topology, SNMP device details, and containers. Every field
-					read from the network, not typed in by hand.
+					Hosts, services, interfaces, topology, SNMP device details, and containers, rendered as
+					physical cabling, subnets, workloads, and application dependencies.
 				</p>
 			</div>
 			<div class="mx-auto max-w-4xl">
