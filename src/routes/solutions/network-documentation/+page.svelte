@@ -17,13 +17,36 @@
 	// What the daemon collects. Kept to what discovery actually returns; the category explainer
 	// (what documentation software is, how it differs from monitoring and ITAM) lives in
 	// /guides/network-documentation-software and is deliberately not repeated here.
-	const discovers = [
-		{ name: 'Hosts', blurb: 'IP and MAC addresses, hostnames, and vendor.' },
-		{ name: 'Services', blurb: 'Hundreds of service types per host, not just an open port.' },
-		{ name: 'Interfaces', blurb: 'Port numbers, speeds, types, and status, over SNMP.' },
-		{ name: 'Topology', blurb: 'Links between devices, from LLDP, CDP, ARP, and forwarding tables.' },
-		{ name: 'Device details', blurb: 'System description, uptime, location, serial, and model.' },
-		{ name: 'Containers', blurb: 'Docker images, ports, networks, and labels.' }
+	// The buyer objections, as cards. Each of these was briefly its own section, which gave a
+	// one-sentence point a full band of the page. They belong together: all four are answers to
+	// "what am I committing to."
+	const commitments = [
+		{
+			name: 'Self-hosted',
+			blurb:
+				'The discovery data, topology, and credentials stay inside your perimeter. Runs with no outbound internet access at all, including air-gapped.',
+			href: '/security',
+			linkText: 'Security and subprocessors'
+		},
+		{
+			name: 'Priced apart from monitoring',
+			blurb:
+				'Scanopy documents the network and is billed separately from the tools it sits beside, so you can change monitoring platforms without losing your maps.'
+		},
+		{
+			name: 'Flat, whatever the host count',
+			blurb:
+				'Documentation is only worth having when it covers everything, so the bill does not grow as you document more of the network.',
+			href: '/pricing',
+			linkText: 'Pricing'
+		},
+		{
+			name: 'Open source available',
+			blurb:
+				'Scanopy Community Edition is AGPL-3.0 and self-hosted, capped at one seat and one network.',
+			href: '/community',
+			linkText: 'Community Edition'
+		}
 	];
 
 	const VIEW_META = [
@@ -186,31 +209,12 @@
 					One scan produces four views of the same network
 				</h2>
 				<p class="mx-auto max-w-2xl text-gray-400">
-					The physical cabling, the subnets and what sits on them, the VMs and containers, and the
-					services that make up an application.
+					Hosts, services, interfaces, topology, SNMP device details, and containers. Every field
+					read from the network, not typed in by hand.
 				</p>
 			</div>
 			<div class="mx-auto max-w-4xl">
 				<ViewSwitcher {views} defaultTab="l2" autoRotate />
-			</div>
-		</div>
-	</section>
-
-	<!-- What discovery returns -->
-	<section class="border-t border-gray-800 py-20">
-		<div class="container mx-auto px-4">
-			<div class="mb-16 text-center">
-				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Every field comes from a scan, not from someone typing it in
-				</h2>
-			</div>
-			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-				{#each discovers as d (d.name)}
-					<div class="card flex flex-col p-6">
-						<span class="text-lg font-semibold text-white">{d.name}</span>
-						<span class="mt-3 leading-relaxed text-gray-400">{d.blurb}</span>
-					</div>
-				{/each}
 			</div>
 		</div>
 	</section>
@@ -230,37 +234,39 @@
 		</div>
 	</section>
 
-	<!-- Positioning -->
+	<!-- What you are committing to -->
 	<section class="border-t border-gray-800 py-20">
-		<div class="container mx-auto max-w-3xl px-4 text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-				Change monitoring platforms without losing your maps
-			</h2>
-			<p class="mx-auto max-w-2xl text-gray-400">
-				Scanopy documents the network and is priced independently of the tools it sits beside. More
-				on the category in the
-				<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
-					>guide</a
-				>, and on specific products in the
-				<a
-					href="/comparisons/best-automated-network-diagram-tools"
-					class="text-blue-400 hover:text-blue-300">comparison</a
-				>.
-			</p>
-		</div>
-	</section>
-
-	<!-- Self-hosted -->
-	<section class="border-t border-gray-800 py-20">
-		<div class="container mx-auto max-w-3xl px-4 text-center">
-			<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-				Your network data never leaves your infrastructure
-			</h2>
-			<p class="mx-auto max-w-2xl text-gray-400">
-				Self-hosted, Scanopy runs with no outbound internet access at all, including air-gapped.
-				Deployment models and subprocessors are on the
-				<a href="/security" class="text-blue-400 hover:text-blue-300">security page</a>.
-			</p>
+		<div class="container mx-auto px-4">
+			<div class="mb-16 text-center">
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
+					No per-device bill, no lock-in, no data leaving your network
+				</h2>
+				<p class="mx-auto max-w-2xl text-gray-400">
+					More on the category in the
+					<a href="/guides/network-documentation-software" class="text-blue-400 hover:text-blue-300"
+						>guide</a
+					>, and on specific products in the
+					<a
+						href="/comparisons/best-automated-network-diagram-tools"
+						class="text-blue-400 hover:text-blue-300">comparison</a
+					>.
+				</p>
+			</div>
+			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+				{#each commitments as c (c.name)}
+					<div class="card flex flex-col p-6">
+						<span class="text-lg font-semibold text-white">{c.name}</span>
+						<span class="mt-3 leading-relaxed text-gray-400">{c.blurb}</span>
+						{#if c.href}
+							<a
+								href={c.href}
+								class="mt-4 text-sm font-semibold text-blue-400 hover:text-blue-300"
+								>{c.linkText} &rarr;</a
+							>
+						{/if}
+					</div>
+				{/each}
+			</div>
 		</div>
 	</section>
 
@@ -268,20 +274,6 @@
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">
 			<CustomerQuote id="motala-kommun" />
-		</div>
-	</section>
-
-	<!-- FAQ -->
-	<section class="border-t border-gray-800 py-20">
-		<div class="container mx-auto px-4">
-			<div class="mb-16 text-center">
-				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Frequently Asked Questions
-				</h2>
-			</div>
-			<div class="mx-auto max-w-3xl">
-				<FAQ {faqs} />
-			</div>
 		</div>
 	</section>
 
@@ -316,12 +308,23 @@
 					>
 				</div>
 				<p class="mt-6 text-sm text-gray-400">
-					The <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is
-					free and self-hosted. The
-					<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial editions</a>
-					remove the seat and network limits and add support, and
-					<a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing</a> covers the tiers.
+					The <a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial editions</a>
+					remove the seat and network limits and add support.
 				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ. After the CTA: the buttons should meet the reader before the objection handling. -->
+	<section class="border-t border-gray-800 py-20">
+		<div class="container mx-auto px-4">
+			<div class="mb-16 text-center">
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
+					Frequently Asked Questions
+				</h2>
+			</div>
+			<div class="mx-auto max-w-3xl">
+				<FAQ {faqs} />
 			</div>
 		</div>
 	</section>
