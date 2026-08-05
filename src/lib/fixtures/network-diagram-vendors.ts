@@ -662,7 +662,7 @@ Where they clearly differ is the output. NetBox Discovery feeds NetBox's data mo
 		},
 		viewTypesSources: [{ id: 48 }],
 		bestFor:
-			'Teams that need a governed record of IP address space rather than a picture of the topology',
+			'Teams that plan and assign address space, including ranges reserved before anything is deployed',
 		description:
 			'An open-source IP address management application. phpIPAM records subnets, IP allocations, VLANs, and devices in a structured database behind a web UI and an API, and can populate that record from the network itself. Written in PHP and self-hosted, under [GPL-3.0](https://phpipam.com/).',
 		discoveryNotes:
@@ -670,17 +670,17 @@ Where they clearly differ is the output. NetBox Discovery feeds NetBox's data mo
 		diagrams:
 			'There is no native topology diagram. Network drawings and location maps are long-standing feature requests ([diagram module](https://github.com/phpipam/phpipam/issues/4445), [location map](https://github.com/phpipam/phpipam/issues/2044)) rather than shipped features. The output is tabular: subnet listings, IP allocations, and device records.',
 		whereItFits:
-			'Environments where address space is the contested resource and someone needs to know which addresses are allocated, to what, and in which subnet, with an API behind that record.',
+			'Teams that assign address space rather than only observe it: reserving ranges before anything is deployed, splitting subnets as they plan them, and recording VLAN and VRF allocation as intent, including addresses that are not live yet.',
 		tradeOff:
-			'It is an address-management tool, so it covers what an address is rather than how the network connects. No topology map, and host detail is limited to what the scan agents return.',
+			'It records the plan for address space rather than the shape of the network, so what it holds is what someone entered or scanned into it. No topology map, and host detail is limited to what the scan agents return.',
 		deployment: ['Self-hosted'],
 		deploymentNotes:
 			'Self-hosted on a PHP and MySQL/MariaDB stack. Docker images are available. Scan agents can run remotely to reach subnets the main server cannot.',
-		versus: `phpIPAM and Scanopy both keep a record of what is on the network, and they build it from different directions. phpIPAM is IP address management: subnets, allocations, VLANs, and device records in a structured database, populated from routing tables and from scan agents that ping, resolve DNS, and query SNMP. It is the place to look up what an address is and who holds it. Scanopy discovers hosts, services, interfaces, and topology on a schedule and renders four views of the same scan: physical (L2), logical (L3), workloads, and applications.
+		versus: `phpIPAM and Scanopy both keep a record of what is on the network, and they build it from different directions. phpIPAM is IP address management: subnets, allocations, VLANs, and device records in a structured database, populated from routing tables and from scan agents that ping, resolve DNS, and query SNMP. Its distinctive job is recording intent: ranges reserved before anything is deployed, subnets split as they are planned, VLAN and VRF assignment written down. Scanopy discovers hosts, services, interfaces, and topology on a schedule and renders four views of the same scan: physical (L2), logical (L3), workloads, and applications, with the host, service, and subnet data behind them available through the API and as CSV.
 
 The difference is what each one produces. phpIPAM produces tables, and a network drawing is [not part of it](https://github.com/phpipam/phpipam/issues/4445); requests for one are open feature requests rather than shipped features. Scanopy produces an interactive map, with the underlying host and service data available as CSV. Both are free to self-host: phpIPAM under GPL-3.0, Scanopy under [AGPL-3.0](/community), with [flat pricing regardless of host count](/pricing) and [commercial self-hosted editions](/commercial) when you outgrow the caps.
 
-They overlap less than the category name suggests, which is why teams run both. phpIPAM is the system of record for address space, maintained deliberately by the people who assign it. Scanopy is the discovered picture of what is actually connected, maintained on a schedule. If the job is governing IP allocation, phpIPAM is built for it. If the job is seeing how the network fits together, that is what Scanopy is built for.`
+The split is intent against observation, which is why teams run both. phpIPAM holds what address space is meant to look like, including the parts nobody has deployed yet, and that is the one thing discovery cannot produce. Scanopy holds what is actually on the network and how it connects, without anyone maintaining it. If the job is planning and assigning address space, phpIPAM is built for it. If the job is seeing what is really there and how it fits together, that is what Scanopy is built for.`
 	},
 	observium: {
 		name: 'Observium',
