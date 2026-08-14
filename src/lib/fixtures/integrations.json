@@ -398,7 +398,7 @@
           "DaemonHost",
           "Hosts"
         ],
-        "stability": "Beta",
+        "stability": "Stable",
         "minimum_daemon_version": "0.17.7",
         "fields": [
           {
@@ -446,7 +446,7 @@
           "DaemonHost",
           "Hosts"
         ],
-        "stability": "Beta",
+        "stability": "Stable",
         "minimum_daemon_version": "0.17.7",
         "fields": [
           {
