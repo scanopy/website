@@ -39,6 +39,12 @@ export interface Transport {
 	single_endpoint_per_host: boolean;
 	targets: string[];
 	stability: 'Stable' | 'Beta';
+	/**
+	 * Whether the vendor publishes the API this transport talks to. Independent of `stability`:
+	 * a transport can be fully validated and still ride an endpoint the vendor never documented,
+	 * which is true of both UniFi transports.
+	 */
+	upstream_support: 'Vendor' | 'Undocumented';
 	minimum_daemon_version: string;
 	fields: FieldDefinition[];
 }

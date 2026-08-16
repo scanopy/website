@@ -143,6 +143,39 @@ export function IntegrationBeta({ id, children }: { id: string; children?: React
 }
 
 /**
+ * Unofficial-API notice, rendered only when the fixture says at least one of this integration's
+ * transports talks to an API its vendor does not publish.
+ *
+ * Deliberately separate from {@link IntegrationBeta}: beta is about how far *we* have validated an
+ * integration and disappears when it is promoted, while an undocumented upstream is a standing
+ * property of the vendor's API. An integration can show both notices, one, or neither — UniFi is
+ * stable and undocumented, Instant On is currently both.
+ */
+export function IntegrationUnofficialApi({ id, children }: { id: string; children?: ReactNode }) {
+	const integration = getIntegration(id);
+	const undocumented = integration.transports.filter((t) => t.upstream_support === 'Undocumented');
+	if (undocumented.length === 0) return null;
+
+	const whole = undocumented.length === integration.transports.length;
+
+	return (
+		<Callout type="info" title="Unofficial API">
+			<p>
+				{whole
+					? `${integration.name} has no published API.`
+					: `The ${oxford(undocumented.map((t) => t.display_name))} credential ${
+							undocumented.length > 1 ? 'types use' : 'type uses'
+						} an API the vendor does not publish.`}{' '}
+				Scanopy reads the same endpoints the vendor&apos;s own application uses. They are
+				unsupported and can change or stop working without notice, so Scanopy tracks them on a
+				best-effort basis. Nothing here modifies your devices — it only reads.
+			</p>
+			{children}
+		</Callout>
+	);
+}
+
+/**
  * The standard "this part isn't integration-specific" block every integration
  * guide opens with.
  *

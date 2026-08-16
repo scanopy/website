@@ -8,6 +8,7 @@ import {
 	CredentialBasics,
 	IntegrationBeta,
 	IntegrationFields,
+	IntegrationUnofficialApi,
 	IntegrationTransports
 } from '@/components/integration-tables';
 import { Mermaid } from '@/components/mermaid';
@@ -34,6 +35,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		EntityCoreTables,
 		IntegrationBeta,
 		IntegrationFields,
+		IntegrationUnofficialApi,
 		IntegrationGuideLinks,
 		IntegrationTransports,
 		Mermaid,

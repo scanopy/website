@@ -1,0 +1,87 @@
+---
+title: Set up Instant On discovery
+description: Connect an HPE Networking Instant On site so Scanopy can discover the switches and access points it manages, along with their ports and the links between them — without turning on SNMP.
+integration: Instant On
+---
+
+Instant On switches only speak SNMP in local management mode, and switching to it means giving up the cloud portal you bought them for. That leaves a cloud-managed site with no on-device source of port or neighbor data at all: a scan finds the switch, and nothing behind it.
+
+The portal has that data. Instant On works out which device is plugged into which port itself, so pointing Scanopy at your site produces physical links even though nothing on the network is running LLDP.
+
+<IntegrationBeta id="Instant On" />
+
+<IntegrationUnofficialApi id="Instant On" />
+
+<CredentialBasics id="Instant On" />
+
+One credential covers a whole site, so assign it to **one** of the Instant On devices on that site — a switch is the natural choice. That device is the anchor: Scanopy reads the site through it and creates the rest of the devices from what the site reports.
+
+## What gets discovered
+
+On each scan, the daemon reads the site's inventory and client list:
+
+| From the portal | Becomes |
+| --------------- | ------- |
+| Site inventory (switches, access points, gateways) | Hosts, matched against existing hosts by IP |
+| Each device's ports | Interfaces, with names, speeds and link state |
+| Uplinks between devices | Physical links in [L2 Physical](/using-scanopy/topology/l2-physical/) |
+| Device class (`SWITCH`, `ACCESS_POINT`, …) | An **Instant On Switch** or **Instant On Access Point** service |
+| Wired clients | The MAC on the port it is connected to |
+
+Neighbor data lands in the same resolution path directly polled devices use, so a link the portal reports and the same link reported by a switch at its other end describe one cable rather than two.
+
+Wired clients become MACs on a port rather than hosts of their own. Scanopy identifies hosts by IP address, and the portal's client records frequently carry no IP — recording them as hosts would create duplicates on every scan. Once another scan finds that machine properly, the port MAC resolves onto it.
+
+Devices whose management IP is missing, unparseable, or outside every subnet Scanopy knows about are skipped, and the scan says how many. An address is what identifies a host.
+
+### Stacked switches
+
+A stack is one device with one management IP, so it appears as a single host. Its ports keep the member-qualified names the portal shows them under (`1/1/1`, `2/1/1`), which is what keeps each member's ports distinct. Nothing needs configuring for this.
+
+## Prerequisites
+
+- The daemon host can reach `portal.instant-on.hpe.com` and `sso.arubainstanton.com` over HTTPS. The devices themselves are not contacted for this data
+- At least one Instant On device on the site has already been discovered by an ordinary scan, so there is a host to assign the credential to
+- A portal account with **multi-factor authentication disabled** — see below
+
+## Creating an account for Scanopy
+
+Do not use your own administrator login. Instant On lets a site have up to five accounts, so add one for Scanopy with the read-only **Viewer** role:
+
+1. In the Instant On app or portal, open the site and go to **Site management → Accounts managing this site**
+2. Choose **Add account**, enter an email address for the Scanopy account, and assign the **Viewer** role
+3. Complete the invitation from that mailbox to activate the account
+4. Make sure multi-factor authentication is **not** enabled on it
+
+The MFA requirement is not a preference. Scanopy signs in the way the portal's own web application does, by submitting the account credentials directly, and there is nowhere for it to answer a second-factor challenge. The Viewer role keeps the account read-only, so it cannot change your network even if the credential leaks.
+
+<IntegrationFields id="Instant On" transport="InstantOnAccount" />
+
+Leave **Site** blank to read every site the account can see, which is what an MSP managing several customer sites from one login usually wants. Setting it restricts the fetch to one site.
+
+## Verifying it works
+
+1. Run a discovery from **Discover > Scan > Scheduled**
+2. Open the scan session — the credential appears in the session's credential summary
+3. Check **Assets > Hosts** for the site's other devices, each carrying its model, serial and firmware
+4. Open [L2 Physical](/using-scanopy/topology/l2-physical/) and confirm the switches now show what they connect to
+
+## Troubleshooting
+
+### Sign-in fails with the right password
+
+Multi-factor authentication on the account blocks it. Scanopy submits the credentials directly and cannot answer a challenge. Create a dedicated Viewer account with MFA disabled and use that.
+
+### The scan reports that the host is not in any site this account manages
+
+The credential is assigned to a host that is not one of the site's Instant On devices. Reassign it to a switch or access point the portal lists.
+
+### Devices appear but have no ports
+
+Access points report no port table — only switches do. If a *switch* shows no ports, the portal may have changed the shape of its response; please [report it](https://github.com/scanopy/scanopy/issues/new).
+
+### Duplicate work on a large site
+
+Each host the credential is assigned to fetches the whole site independently. Assign it to one device per site.
+
+For diagnosing credential loading and assignment from daemon logs, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).

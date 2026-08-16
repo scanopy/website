@@ -1,5 +1,5 @@
 {
   "title": "Integrations",
   "defaultOpen": true,
-  "pages": ["snmp", "unifi", "docker", "podman"]
+  "pages": ["snmp", "unifi", "instant-on", "docker", "podman"]
 }
