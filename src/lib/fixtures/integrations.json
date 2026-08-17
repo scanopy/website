@@ -22,6 +22,7 @@
           "Hosts"
         ],
         "stability": "Stable",
+        "upstream_support": "Vendor",
         "minimum_daemon_version": "0.16.2",
         "fields": [
           {
@@ -90,6 +91,7 @@
           "DaemonHost"
         ],
         "stability": "Stable",
+        "upstream_support": "Vendor",
         "minimum_daemon_version": "0.16.2",
         "fields": [
           {
@@ -101,6 +103,65 @@
             "optional": true,
             "help_text": "Path to the Docker Unix socket. Leave blank to auto-detect (DOCKER_HOST or /var/run/docker.sock).",
             "group": "Connection"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Instant On",
+    "name": "Instant On",
+    "category": "Network Controllers",
+    "has_logo": true,
+    "logo_ext": "svg",
+    "logo_slug": "instant-on",
+    "logo_needs_white_background": false,
+    "discovers": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port.",
+    "summary": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port. Supports portal account.",
+    "transports": [
+      {
+        "id": "InstantOnAccount",
+        "name": "Portal Account",
+        "display_name": "Instant On Portal Account",
+        "description": "Connects to the Instant On cloud portal with a site account.",
+        "requires_config": true,
+        "single_endpoint_per_host": true,
+        "targets": [
+          "Hosts"
+        ],
+        "stability": "Beta",
+        "upstream_support": "Undocumented",
+        "minimum_daemon_version": "0.17.11",
+        "fields": [
+          {
+            "id": "username",
+            "label": "Portal Account",
+            "field_type": "string",
+            "placeholder": "scanopy@example.com",
+            "secret": false,
+            "optional": false,
+            "help_text": "Email address of an Instant On portal account with access to the site. Add a dedicated account with the read-only Viewer role (Site management → Accounts managing this site) rather than using your own administrator login, and make sure multi-factor authentication is disabled on it — the sign-in cannot answer an MFA prompt.",
+            "group": "Authentication"
+          },
+          {
+            "id": "password",
+            "label": "Password",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Password for that portal account.",
+            "inline_format": "plain",
+            "group": "Authentication"
+          },
+          {
+            "id": "site",
+            "label": "Site",
+            "field_type": "string",
+            "placeholder": "(all sites)",
+            "secret": false,
+            "optional": true,
+            "help_text": "Limit the fetch to one Instant On site by name. Leave blank to read every site this account can see. Assign this credential to a single switch — each host it is assigned to fetches the whole site again.",
+            "group": "Scope"
           }
         ]
       }
@@ -129,6 +190,7 @@
           "Hosts"
         ],
         "stability": "Stable",
+        "upstream_support": "Vendor",
         "minimum_daemon_version": "0.17.2",
         "fields": [
           {
@@ -197,6 +259,7 @@
           "DaemonHost"
         ],
         "stability": "Stable",
+        "upstream_support": "Vendor",
         "minimum_daemon_version": "0.17.2",
         "fields": [
           {
@@ -237,6 +300,7 @@
           "Network"
         ],
         "stability": "Stable",
+        "upstream_support": "Vendor",
         "minimum_daemon_version": "0.17.0",
         "fields": [
           {
@@ -264,6 +328,7 @@
           "Network"
         ],
         "stability": "Stable",
+        "upstream_support": "Vendor",
         "minimum_daemon_version": "0.16.2",
         "fields": [
           {
@@ -291,6 +356,7 @@
           "Network"
         ],
         "stability": "Stable",
+        "upstream_support": "Vendor",
         "minimum_daemon_version": "0.17.0",
         "fields": [
           {
@@ -399,6 +465,7 @@
           "Hosts"
         ],
         "stability": "Stable",
+        "upstream_support": "Undocumented",
         "minimum_daemon_version": "0.17.7",
         "fields": [
           {
@@ -447,6 +514,7 @@
           "Hosts"
         ],
         "stability": "Stable",
+        "upstream_support": "Undocumented",
         "minimum_daemon_version": "0.17.7",
         "fields": [
           {
