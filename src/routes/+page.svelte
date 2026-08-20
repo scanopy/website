@@ -1,9 +1,16 @@
 <script lang="ts">
-	import { GithubStars, FeaturedIn, ViewSwitcher, CustomerQuote } from '$lib/components';
+	import {
+		GithubStars,
+		FeaturedIn,
+		ViewSwitcher,
+		CustomerQuote,
+		CustomerLogos
+	} from '$lib/components';
 	import { theme } from '$lib/theme.svelte';
 	import { tiltChild } from '$lib/actions/tilt';
 
-	import type { PressMention } from '$lib/types';
+	import type { CustomerLogo, PressMention } from '$lib/types';
+	import customerLogosData from '$lib/fixtures/customer-logos.json';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { Activity, Shield, Briefcase, Monitor, ArrowRight } from 'lucide-svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
@@ -103,6 +110,7 @@
 	);
 
 	const pressMentions = pressMentionsData as PressMention[];
+	const customerLogos = customerLogosData as CustomerLogo[];
 </script>
 
 <svelte:head>
@@ -247,10 +255,8 @@
 		</div>
 	</section>
 
-	<!-- Featured customer: one strong named proof point right after the hero -->
-	<section class="border-t border-gray-800 py-16">
-		<CustomerQuote id="motala-kommun" />
-	</section>
+	<!-- Customer logos: an untitled band of named proof directly under the hero -->
+	<CustomerLogos logos={customerLogos} />
 
 	<!-- Who it's for Section -->
 	<section class="border-t border-gray-800 py-20">
@@ -313,8 +319,13 @@
 		</div>
 	</section>
 
-	<!-- Featured In (press): a final credibility band just before the CTA -->
+	<!-- Featured In (press) -->
 	<FeaturedIn mentions={pressMentions} />
+
+	<!-- Featured customer: the named proof point in depth, last word before the CTA -->
+	<section class="border-t border-gray-800 py-16">
+		<CustomerQuote id="motala-kommun" />
+	</section>
 
 	<!-- CTA Section -->
 	<section bind:this={bottomCta} class="border-t border-gray-800 py-20">

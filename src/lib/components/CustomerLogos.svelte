@@ -7,19 +7,19 @@
 		sectionClass?: string;
 	}
 
-	let {
-		logos,
-		title = 'Trusted by teams that manage real infrastructure',
-		sectionClass = ''
-	}: Props = $props();
+	// `title` is optional: without one the band renders as a bare row of logos,
+	// which is how both the homepage and pricing use it.
+	let { logos, title, sectionClass = '' }: Props = $props();
 </script>
 
 {#if logos.length > 0}
 	<section class="border-t border-gray-800 py-16 {sectionClass}">
 		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="text-3xl font-bold text-rose-400 lg:text-4xl">{title}</h2>
-			</div>
+			{#if title}
+				<div class="mb-12 text-center">
+					<h2 class="text-3xl font-bold text-rose-400 lg:text-4xl">{title}</h2>
+				</div>
+			{/if}
 
 			<div class="mx-auto flex flex-wrap items-start justify-center gap-8">
 				{#each logos as logo (logo.id)}

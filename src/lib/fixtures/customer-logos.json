@@ -3,7 +3,14 @@
 		"id": "motala-kommun",
 		"name": "Motala Kommun",
 		"logo": "/logos/customers/motala-kommun-360w.webp",
-		"caption": "Municipal IT, Sweden",
+		"caption": "Municipality, Sweden",
 		"url": "https://www.motala.se"
+	},
+	{
+		"id": "steel-dynamics",
+		"name": "Steel Dynamics",
+		"logo": "/logos/customers/steel-dynamics-304w.webp",
+		"caption": "Manufacturing, USA",
+		"url": "https://www.steeldynamics.com"
 	}
 ]
