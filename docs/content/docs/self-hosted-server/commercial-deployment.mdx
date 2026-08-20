@@ -1,24 +1,19 @@
 ---
 title: Deploying the Commercial Edition
-description: Run Scanopy's commercial server build with a license key, the integrated daemon, and email.
+description: Run Scanopy's commercial edition with a license key, the integrated daemon, and email.
 ---
 
 <Callout type="info">
 Interested in running the commercial edition? Reach out to [licensing@scanopy.net](mailto:licensing@scanopy.net) to get a license key. You can review what the commercial self-hosted edition includes on the [pricing page](https://scanopy.net/pricing).
 </Callout>
 
-The commercial edition of Scanopy is a license-gated server build for customers on a commercial plan. This guide covers only what differs from the standard self-hosted install — see [Installing Scanopy (Self-Hosted)](/self-hosted-server/server-installation/) for requirements, verifying the install, and accessing the UI.
+The commercial edition of Scanopy is the standard server, unlocked by a license key, for customers on a commercial plan. This guide covers only what differs from the standard self-hosted install — see [Installing Scanopy (Self-Hosted)](/self-hosted-server/server-installation/) for requirements, verifying the install, and accessing the UI.
 
 ## What's different
 
-The commercial deployment is identical to the community deployment except for two things on the `server` service:
+The commercial deployment is identical to the community deployment except for one thing: the `server` service sets `SCANOPY_LICENSE_KEY`. Both editions run the same image, `ghcr.io/scanopy/scanopy/server:latest`; the key is what enables commercial mode at startup.
 
-| | Community | Commercial |
-| --- | --- | --- |
-| **Server image** | `ghcr.io/scanopy/scanopy/server:latest` | `ghcr.io/scanopy/scanopy/server-commercial:latest` |
-| **License key** | Not used | `SCANOPY_LICENSE_KEY` is **required** |
-
-Without a valid license key, the commercial server starts in a locked state. The bundled `docker-compose.commercial.yml` fails fast at startup if `SCANOPY_LICENSE_KEY` is unset, so you'll see a clear error rather than a silently locked server.
+A key that is expired or fails verification puts the server into a read-only locked state until it is replaced. The bundled `docker-compose.commercial.yml` fails fast if `SCANOPY_LICENSE_KEY` is unset, so a missing key gives you a clear error at startup rather than a server that quietly runs as the community edition.
 
 ## 1. Download the compose file
 
