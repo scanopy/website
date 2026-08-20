@@ -129,6 +129,33 @@ performance, credentials).
 - **No first-hand testing claims.** Comparison pages and integration docs draw on public
   documentation and community reports.
 - **No unverifiable security claims** — "encrypted at rest" and similar.
+- **Every sentence traces to a source you can point at**: the code, the fixture, the vendor's
+  own documentation, or the UI. If it came from inference while writing, cut it. This is the
+  rule the ones below are specific cases of.
+- **No vendor facts you didn't read.** "Instant On lets a site have up to five accounts" was
+  invented. Quantities, limits, role names, and menu paths are checkable — check, or omit.
+- **No guessing at the reader.** Not their setup ("the cloud portal you bought them for",
+  "nothing on the network is running LLDP"), not their motive, and not a persona: "which is
+  what an MSP managing several customer sites usually wants" speaks for a reader who may not
+  exist and tells everyone else the sentence isn't for them. Describe what the setting does
+  and let them decide.
+- **No prerequisite you haven't confirmed is required.** A guide claimed a device must already
+  be discovered before its credential could be assigned. Credentials can be seeded and targeted
+  to an IP first, so the guide invented a step. Verify against the code, or leave it out.
+
+### An integration guide documents the integration
+
+Its job is getting that integration set up. That scopes it tightly:
+
+- **General Scanopy behavior belongs on the page that owns it**, per _One fact, one home_. How
+  hosts are identified, when a device is skipped, how deduplication works — link, don't restate.
+  A restatement in a guide is a second copy that drifts, and it's usually where invented
+  rationale ("recording them as hosts would create duplicates on every scan") sneaks in.
+- **No vendor mechanics for their own sake.** How the vendor's product works internally isn't
+  the subject; what the reader must do to connect it is.
+- **Nothing the reader takes no action on.** A section ending in "nothing needs configuring for
+  this" has told the reader they can skip it — so delete it. Under-the-hood behavior is not
+  documentation.
 
 ### Deleting or moving a page
 

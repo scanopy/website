@@ -25,17 +25,15 @@ On each scan, the daemon reads the controller's device inventory for the configu
 | LLDP neighbor and uplink tables | Physical links in [L2 Physical](/using-scanopy/topology/l2-physical/) |
 | Device class (`usw`, `uap`, …) | A **UniFi Switch** or **UniFi Gateway** service |
 
-Neighbor data lands in the same resolution path that directly polled devices use, so a link the controller reports and the same link reported by the device at its other end describe one cable rather than two.
-
-Devices whose management IP is missing, unparseable, or outside every subnet Scanopy knows about are skipped — an address is what identifies a host, and creating one without a resolvable IP would mint a duplicate on every scan.
+A link the controller reports and the same link reported by the device at its other end describe one cable rather than two.
 
 ## Prerequisites
 
 - The controller is reachable from the daemon host on its HTTPS port
-- You know the controller's **internal** site name — the `<name>` in `/manage/site/<name>` from the controller URL, not the display name shown in the site switcher. The two are identical on a default install and diverge the moment a site is renamed
+- You know the controller's **internal** site name — the `<name>` in `/manage/site/<name>` from the controller URL, not the display name shown in the site switcher. The two are identical on a default install and diverge when a site is renamed
 - The daemon has **Probe with invalid certificates** enabled in its scan settings. UniFi controllers ship self-signed certificates, and without this the connection fails before it can authenticate
 
-Every credential type needs the right **Controller Port**, which identifies the product rather than being a preference:
+Every credential type needs the right **Controller Port**:
 
 | Controller | Port |
 | ---------- | ---- |
