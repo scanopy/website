@@ -44,7 +44,17 @@ A stack is one device with one management IP, so it appears as a single host. It
 - At least one Instant On device on the site has already been discovered by an ordinary scan, so there is a host to assign the credential to
 - A portal account with **multi-factor authentication disabled** — see below
 
-## Creating an account for Scanopy
+## Choosing a credential type
+
+Instant On has one credential type, so there is nothing to weigh up.
+
+<IntegrationTransports id="Instant On" />
+
+## Instant On Portal Account
+
+The daemon signs in to the cloud portal as a site account and reads the site's inventory through it.
+
+### Creating an account for Scanopy
 
 Do not use your own administrator login. Instant On lets a site have up to five accounts, so add one for Scanopy with the read-only **Viewer** role:
 
