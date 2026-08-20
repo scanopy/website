@@ -11,9 +11,13 @@ The commercial edition of Scanopy is the standard server, unlocked by a license 
 
 ## What's different
 
-The commercial deployment is identical to the community deployment except for one thing: the `server` service sets `SCANOPY_LICENSE_KEY`. Both editions run the same image, `ghcr.io/scanopy/scanopy/server:latest`; the key is what enables commercial mode at startup.
+The commercial deployment is identical to the community deployment except for one thing: the server process reads a license key from the `SCANOPY_LICENSE_KEY` environment variable. Both editions run the same image, `ghcr.io/scanopy/scanopy/server:latest`; the key is what enables commercial mode at startup.
+
+There is no license file to create or place anywhere. The key is a signed token verified offline at startup — nothing to import, and no outbound call to a licensing server. Anywhere you can set an environment variable for the server process — Docker Compose, a systemd unit, your shell — is a valid place to put it.
 
 A key that is expired or fails verification puts the server into a read-only locked state until it is replaced. The bundled `docker-compose.commercial.yml` fails fast if `SCANOPY_LICENSE_KEY` is unset, so a missing key gives you a clear error at startup rather than a server that quietly runs as the community edition.
+
+The steps below cover the Docker Compose deployment. Running the server natively instead? Skip to [Without Docker](#without-docker).
 
 ## 1. Download the compose file
 
@@ -40,6 +44,39 @@ docker compose -f docker-compose.commercial.yml up -d
 ```
 
 The rest of the flow — verifying the containers are running and accessing the UI — is the same as the [standard install](/self-hosted-server/server-installation/#4-verify-installation).
+
+## Without Docker
+
+If you run the server natively — a binary under systemd rather than a container — nothing about licensing changes. Set `SCANOPY_LICENSE_KEY` in the environment of the server process, exactly as you set `SCANOPY_DATABASE_URL`. See [Running Without Docker](/self-hosted-server/server-installation/#running-without-docker) for the full native install.
+
+The recommended place is the `EnvironmentFile` your unit already reads, so the key stays out of the unit file and off the process command line:
+
+```bash
+# /etc/scanopy/server.env
+SCANOPY_LICENSE_KEY=your-license-key-here
+SCANOPY_DATABASE_URL=postgresql://scanopy:your-password@localhost:5432/scanopy
+SCANOPY_WEB_EXTERNAL_PATH=/opt/scanopy/static
+```
+
+```bash
+sudo chmod 600 /etc/scanopy/server.env
+sudo systemctl restart scanopy-server
+```
+
+The server also loads a `.env` file from its working directory at startup, so `/opt/scanopy/.env` works too. `EnvironmentFile=` is the better default: it doesn't depend on which directory the service happens to start in.
+
+The fail-fast check on a missing key belongs to the compose file, not the server. A native server started without `SCANOPY_LICENSE_KEY` runs as the free community edition rather than refusing to start — so verify after any change to the unit.
+
+## Verify the license is active
+
+The public config endpoint reports the deployment type and license state, on Docker and native installs alike:
+
+```bash
+curl -s http://localhost:60072/api/config | jq '.data | {deployment_type, license_status, license_expiry}'
+```
+
+A licensed server returns `"deployment_type": "commercial"` and `"license_status": "valid"`. `"community"` means the key never reached the process — check the environment of the running service. `"expired"` or `"invalid"` means it did reach the process but failed verification; the server is locked read-only until the key is replaced.
+
 
 ## The integrated daemon
 

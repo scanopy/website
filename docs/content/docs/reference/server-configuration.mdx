@@ -7,19 +7,50 @@ Configuration reference for self-hosted Scanopy server deployments.
 
 ## Configuration Methods
 
-**Environment variables in docker-compose**:
+Every setting is an environment variable prefixed with `SCANOPY_`. That is the primary interface, and it works the same however you run the server. Some settings also accept a command-line flag; the flag wins when both are set.
+
+Sources are layered, later ones overriding earlier:
+
+1. Built-in defaults
+2. A `.env` file in the server's working directory (or any parent directory)
+3. `SCANOPY_*` environment variables
+4. Command-line flags
+
+**Docker Compose** — set them on the `server` service, or point it at a `.env` file:
 
 ```yaml
 environment:
   - SCANOPY_SERVER_PORT=60072
-  - DATABASE_URL=postgresql://postgres:password@db:5432/scanopy
+  - SCANOPY_DATABASE_URL=postgresql://postgres:password@db:5432/scanopy
 ```
+
+**systemd** (for [native installs](/self-hosted-server/server-installation/#running-without-docker)) — keep them in an `EnvironmentFile` so secrets stay out of the unit file:
+
+```ini
+[Service]
+WorkingDirectory=/opt/scanopy
+EnvironmentFile=/etc/scanopy/server.env
+ExecStart=/opt/scanopy/scanopy-server
+```
+
+```bash
+# /etc/scanopy/server.env — chmod 600
+SCANOPY_DATABASE_URL=postgresql://scanopy:password@localhost:5432/scanopy
+SCANOPY_WEB_EXTERNAL_PATH=/opt/scanopy/static
+```
+
+Reload after editing: `sudo systemctl restart scanopy-server`.
 
 **Command-line** (for binary builds):
 
 ```bash
-./scanopy-server --port 60072 --database-url postgresql://...
+./scanopy-server --server-port 60072 --database-url postgresql://...
 ```
+
+<Callout type="info">
+Not every setting has a CLI flag — `SCANOPY_LICENSE_KEY` and `SCANOPY_WEB_EXTERNAL_PATH`, among others, are environment-only. The table below lists `N/A` where no flag exists.
+</Callout>
+
 
 ## Parameter Reference
 
@@ -41,6 +72,7 @@ environment:
 | **Metrics Token**         | `--metrics-token`              | `SCANOPY_METRICS_TOKEN`              | -                         | Bearer token for Prometheus metrics endpoint authentication        |
 | **Prometheus Allowed IPs**| N/A                            | `SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS` | -            | Comma-separated IPs/CIDRs allowed to access metrics endpoint       |
 | **Snapshot Retention**    | N/A                            | `SCANOPY_SNAPSHOT_RETENTION_DAYS_OVERRIDE` | `90`                | Days to retain topology [snapshots](/using-scanopy/topology/snapshots/) before automatic pruning |
+| **License Key**           | N/A                            | `SCANOPY_LICENSE_KEY`                | -                         | Signed key that enables the [commercial edition](/self-hosted-server/commercial-deployment/). Omit for the free community edition |
 
 ## Integrated Daemon URL
 
@@ -172,3 +204,5 @@ services:
       - .env
     # ... rest of config
 ```
+
+**Running without Docker**: the server loads a `.env` file from its working directory (or a parent) automatically, so dropping one next to the binary works with no extra wiring. For a systemd service, prefer `EnvironmentFile=` — it doesn't depend on the working directory and keeps the file's permissions explicit.

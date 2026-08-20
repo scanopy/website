@@ -12,7 +12,7 @@ description: Deploy the Scanopy server on your own infrastructure with Docker Co
 - Docker Engine 20.10 or later
 - Docker Compose V2
 
-**Building from Source**
+**Running Without Docker** (see [below](#running-without-docker))
 
 - Rust 1.90 or later
 - Node.js 20 or later
@@ -89,9 +89,84 @@ If running in an LXC, you may need to change `SCANOPY_INTEGRATED_DAEMON_URL` to 
 
 See [issue #87](https://github.com/scanopy/scanopy/issues/87) for more details.
 
-## Building from Source
+## Running Without Docker
 
-Refer to [contributing](https://github.com/scanopy/scanopy/blob/main/contributing.md) for details on getting your dev environment set up to build from source.
+The server is a single binary and runs fine on a plain Linux host under systemd. The steps below assume you have a `scanopy-server` binary and a `scanopy` service account to run it as.
+
+<Callout type="info">
+Prebuilt server binaries are coming soon. Until then the GitHub release assets carry daemon binaries only, so a native server install means building the server yourself — see [contributing](https://github.com/scanopy/scanopy/blob/main/contributing.md) for toolchain setup and build steps.
+</Callout>
+
+A server built today also needs two directories on disk: it reads migrations from `./migrations` relative to its working directory, and serves the UI from whatever path `SCANOPY_WEB_EXTERNAL_PATH` points at. Put the binary, `backend/migrations`, and the built UI together in one directory — `/opt/scanopy` in the examples below. Both directories go away when the self-contained binary ships.
+
+### 1. Create the database
+
+Scanopy needs a PostgreSQL 17 database. On Debian:
+
+```bash
+sudo apt install postgresql
+sudo -u postgres createuser --pwprompt scanopy
+sudo -u postgres createdb --owner=scanopy scanopy
+```
+
+The server creates its own schema on first start and applies pending migrations on every start, so there is no manual schema step — on install or on upgrade.
+
+### 2. Configure the server
+
+Every setting is a `SCANOPY_*` [environment variable](/reference/server-configuration/). There is no config file, and nothing is Docker-specific: the same variables that appear in a compose file work identically here. Set them however your setup allows — a systemd `EnvironmentFile` (recommended below), a `.env` file in the server's working directory, or a plain shell export.
+
+Only `SCANOPY_DATABASE_URL` is strictly required. `SCANOPY_WEB_EXTERNAL_PATH` is what makes the server serve the UI rather than running API-only, and `SCANOPY_PUBLIC_URL` is used in invite and password-reset links, so both are effectively required for a normal deployment.
+
+```bash
+sudo mkdir -p /etc/scanopy
+sudo tee /etc/scanopy/server.env >/dev/null <<'EOF'
+SCANOPY_DATABASE_URL=postgresql://scanopy:your-password@localhost:5432/scanopy
+SCANOPY_WEB_EXTERNAL_PATH=/opt/scanopy/static
+SCANOPY_PUBLIC_URL=http://your-server:60072
+SCANOPY_LOG_LEVEL=info
+EOF
+sudo chown scanopy:scanopy /etc/scanopy/server.env
+sudo chmod 600 /etc/scanopy/server.env
+```
+
+Commercial plans add `SCANOPY_LICENSE_KEY` to that same file — see [Deploying the Commercial Edition](/self-hosted-server/commercial-deployment/#without-docker).
+
+### 3. Run it under systemd
+
+Create `/etc/systemd/system/scanopy-server.service`:
+
+```ini
+[Unit]
+Description=Scanopy Server
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=scanopy
+WorkingDirectory=/opt/scanopy
+EnvironmentFile=/etc/scanopy/server.env
+ExecStart=/opt/scanopy/scanopy-server
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+`WorkingDirectory` is what makes `./migrations` resolve — don't omit it. `EnvironmentFile` is preferred over a `.env` file for the same reason: it doesn't depend on which directory the service happens to start in.
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now scanopy-server
+sudo systemctl status scanopy-server
+```
+
+Then access the UI at `http://<your-server-ip>:60072`, same as the Docker install. Reload configuration changes with `sudo systemctl restart scanopy-server`.
+
+### 4. Add a daemon
+
+Nothing is bundled with a native server, so install a daemon separately: download the release binary for your platform and enrol it against the server. See [Setting Up Daemons](/setting-up-daemons/).
+
+To reproduce the Docker stack's zero-config integrated daemon, start a daemon on the same host listening on port 60073 **before** you register the first user, and set `SCANOPY_INTEGRATED_DAEMON_URL=http://127.0.0.1:60073`. The server provisions that daemon during first-user registration — setting the variable later has no effect on a deployment that already has an account. Leave it unset otherwise.
 
 ## Uninstalling
 
@@ -107,6 +182,18 @@ docker compose down -v
 # Remove images
 docker rmi ghcr.io/scanopy/scanopy/server:latest
 docker rmi ghcr.io/scanopy/scanopy/daemon:latest
+```
+
+### Native Installation
+
+```bash
+sudo systemctl disable --now scanopy-server
+sudo rm /etc/systemd/system/scanopy-server.service
+sudo systemctl daemon-reload
+sudo rm -rf /opt/scanopy /etc/scanopy
+
+# Drop the database (deletes all data)
+sudo -u postgres dropdb scanopy
 ```
 
 ## Next Steps
