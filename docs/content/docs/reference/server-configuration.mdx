@@ -36,7 +36,7 @@ ExecStart=/opt/scanopy/scanopy-server
 ```bash
 # /etc/scanopy/server.env — chmod 600
 SCANOPY_DATABASE_URL=postgresql://scanopy:password@localhost:5432/scanopy
-SCANOPY_WEB_EXTERNAL_PATH=/opt/scanopy/static
+SCANOPY_PUBLIC_URL=http://your-server:60072
 ```
 
 Reload after editing: `sudo systemctl restart scanopy-server`.
@@ -59,7 +59,7 @@ Not every setting has a CLI flag — `SCANOPY_LICENSE_KEY` and `SCANOPY_WEB_EXTE
 | **Server Public URL**     | `--public-url`                 | `SCANOPY_PUBLIC_URL`                 | `http://localhost:60072`  | Public URL for webhooks, email links, etc                          |
 | **Server Port**           | `--server-port`                | `SCANOPY_SERVER_PORT`                | `60072`                   | Port for server to listen on                                       |
 | **Database URL**          | `--database-url`               | `SCANOPY_DATABASE_URL`               | _Required_                | PostgreSQL connection string                                       |
-| **Web External Path**     | N/A                            | `SCANOPY_WEB_EXTERNAL_PATH`          | `/app/static`             | Location from which to serve server static files
+| **Web External Path**     | N/A                            | `SCANOPY_WEB_EXTERNAL_PATH`          | _Embedded UI_             | Serve the web UI from this directory instead of the copy compiled into the binary. Set to `/app/static` in the Docker image; unset elsewhere unless you are replacing the bundled UI |
 | **Log Level**             | `--log-level`                  | `SCANOPY_LOG_LEVEL`                  | `info`                    | Logging verbosity: `trace`, `debug`, `info`, `warn`, `error`       |
 | **Secure Cookies**        | `--use-secure-session-cookies` | `SCANOPY_USE_SECURE_SESSION_COOKIES` | `false`                   | Enable HTTPS-only cookies                                          |
 | **Integrated Daemon URL** | `--integrated-daemon-url`      | `SCANOPY_INTEGRATED_DAEMON_URL`      | `http://172.17.0.1:60073` | URL to reach daemon in default docker compose                      |

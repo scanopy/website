@@ -14,11 +14,12 @@ description: Deploy the Scanopy server on your own infrastructure with Docker Co
 
 **Running Without Docker** (see [below](#running-without-docker))
 
-- Rust 1.90 or later
-- Node.js 20 or later
+- Linux on x86_64 or arm64
 - PostgreSQL 17
 - 4GB RAM minimum
 - 20GB disk space
+
+No Rust or Node toolchain is needed — the server binary is prebuilt and self-contained.
 
 ## Docker Installation (Recommended)
 
@@ -91,15 +92,24 @@ See [issue #87](https://github.com/scanopy/scanopy/issues/87) for more details.
 
 ## Running Without Docker
 
-The server is a single binary and runs fine on a plain Linux host under systemd. The steps below assume you have a `scanopy-server` binary and a `scanopy` service account to run it as.
+The server ships as a single self-contained binary: migrations and the web UI are compiled in, so there is nothing to place beside it and no build step. Postgres is the only thing it needs.
 
-<Callout type="info">
-Prebuilt server binaries are coming soon. Until then the GitHub release assets carry daemon binaries only, so a native server install means building the server yourself — see [contributing](https://github.com/scanopy/scanopy/blob/main/contributing.md) for toolchain setup and build steps.
-</Callout>
+### 1. Download the binary
 
-A server built today also needs two directories on disk: it reads migrations from `./migrations` relative to its working directory, and serves the UI from whatever path `SCANOPY_WEB_EXTERNAL_PATH` points at. Put the binary, `backend/migrations`, and the built UI together in one directory — `/opt/scanopy` in the examples below. Both directories go away when the self-contained binary ships.
+```bash
+sudo useradd --system --home /opt/scanopy --shell /usr/sbin/nologin scanopy
+sudo mkdir -p /opt/scanopy
 
-### 1. Create the database
+# Use scanopy-server-linux-arm64 on arm64 hosts
+sudo curl -L -o /opt/scanopy/scanopy-server \
+  https://github.com/scanopy/scanopy/releases/latest/download/scanopy-server-linux-amd64
+sudo chmod +x /opt/scanopy/scanopy-server
+sudo chown -R scanopy:scanopy /opt/scanopy
+```
+
+The binaries are statically linked against musl, so they run on any glibc or musl distribution — Debian, RHEL, Alpine — with no runtime dependencies to install.
+
+### 2. Create the database
 
 Scanopy needs a PostgreSQL 17 database. On Debian:
 
@@ -111,17 +121,16 @@ sudo -u postgres createdb --owner=scanopy scanopy
 
 The server creates its own schema on first start and applies pending migrations on every start, so there is no manual schema step — on install or on upgrade.
 
-### 2. Configure the server
+### 3. Configure the server
 
 Every setting is a `SCANOPY_*` [environment variable](/reference/server-configuration/). There is no config file, and nothing is Docker-specific: the same variables that appear in a compose file work identically here. Set them however your setup allows — a systemd `EnvironmentFile` (recommended below), a `.env` file in the server's working directory, or a plain shell export.
 
-Only `SCANOPY_DATABASE_URL` is strictly required. `SCANOPY_WEB_EXTERNAL_PATH` is what makes the server serve the UI rather than running API-only, and `SCANOPY_PUBLIC_URL` is used in invite and password-reset links, so both are effectively required for a normal deployment.
+Only `SCANOPY_DATABASE_URL` is strictly required. `SCANOPY_PUBLIC_URL` is used in invite and password-reset links, so set it to the address your users reach the server at.
 
 ```bash
 sudo mkdir -p /etc/scanopy
 sudo tee /etc/scanopy/server.env >/dev/null <<'EOF'
 SCANOPY_DATABASE_URL=postgresql://scanopy:your-password@localhost:5432/scanopy
-SCANOPY_WEB_EXTERNAL_PATH=/opt/scanopy/static
 SCANOPY_PUBLIC_URL=http://your-server:60072
 SCANOPY_LOG_LEVEL=info
 EOF
@@ -131,7 +140,7 @@ sudo chmod 600 /etc/scanopy/server.env
 
 Commercial plans add `SCANOPY_LICENSE_KEY` to that same file — see [Deploying the Commercial Edition](/self-hosted-server/commercial-deployment/#without-docker).
 
-### 3. Run it under systemd
+### 4. Run it under systemd
 
 Create `/etc/systemd/system/scanopy-server.service`:
 
@@ -152,7 +161,7 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 
-`WorkingDirectory` is what makes `./migrations` resolve — don't omit it. `EnvironmentFile` is preferred over a `.env` file for the same reason: it doesn't depend on which directory the service happens to start in.
+`EnvironmentFile` is preferred over a `.env` file because it does not depend on which directory the service happens to start in.
 
 ```bash
 sudo systemctl daemon-reload
@@ -162,9 +171,9 @@ sudo systemctl status scanopy-server
 
 Then access the UI at `http://<your-server-ip>:60072`, same as the Docker install. Reload configuration changes with `sudo systemctl restart scanopy-server`.
 
-### 4. Add a daemon
+### 5. Add a daemon
 
-Nothing is bundled with a native server, so install a daemon separately: download the release binary for your platform and enrol it against the server. See [Setting Up Daemons](/setting-up-daemons/).
+No daemon is bundled with the server binary, so install one separately: download the daemon release binary for your platform and enrol it against the server. See [Setting Up Daemons](/setting-up-daemons/).
 
 To reproduce the Docker stack's zero-config integrated daemon, start a daemon on the same host listening on port 60073 **before** you register the first user, and set `SCANOPY_INTEGRATED_DAEMON_URL=http://127.0.0.1:60073`. The server provisions that daemon during first-user registration — setting the variable later has no effect on a deployment that already has an account. Leave it unset otherwise.
 

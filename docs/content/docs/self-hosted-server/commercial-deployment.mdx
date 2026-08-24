@@ -47,7 +47,7 @@ The rest of the flow — verifying the containers are running and accessing the 
 
 ## Without Docker
 
-If you run the server natively — a binary under systemd rather than a container — nothing about licensing changes. Set `SCANOPY_LICENSE_KEY` in the environment of the server process, exactly as you set `SCANOPY_DATABASE_URL`. See [Running Without Docker](/self-hosted-server/server-installation/#running-without-docker) for the full native install.
+If you run the server natively — the self-contained binary under systemd rather than a container — nothing about licensing changes. Set `SCANOPY_LICENSE_KEY` in the environment of the server process, exactly as you set `SCANOPY_DATABASE_URL`. See [Running Without Docker](/self-hosted-server/server-installation/#running-without-docker) for the full native install.
 
 The recommended place is the `EnvironmentFile` your unit already reads, so the key stays out of the unit file and off the process command line:
 
@@ -55,7 +55,6 @@ The recommended place is the `EnvironmentFile` your unit already reads, so the k
 # /etc/scanopy/server.env
 SCANOPY_LICENSE_KEY=your-license-key-here
 SCANOPY_DATABASE_URL=postgresql://scanopy:your-password@localhost:5432/scanopy
-SCANOPY_WEB_EXTERNAL_PATH=/opt/scanopy/static
 ```
 
 ```bash

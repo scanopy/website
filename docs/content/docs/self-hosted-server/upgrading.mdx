@@ -1,6 +1,6 @@
 ---
 title: Upgrading a Self-Hosted Server
-description: How to upgrade a self-hosted Scanopy server and daemon using Docker Compose.
+description: How to upgrade a self-hosted Scanopy server and daemon, with Docker Compose or a native binary install.
 ---
 
 ## Upgrading with Docker Compose
@@ -31,6 +31,29 @@ This upgrades both the server and any daemons defined in your compose file. Volu
 After restarting, the daemon reports its new version to the server and the version status should immediately show **Current** in the UI.
 
 If you run standalone daemons on separate hosts, you'll need to upgrade those independently — see [Managing Daemons](/setting-up-daemons/managing-daemons).
+
+## Upgrading a native install
+
+Replace the binary and restart the service:
+
+```bash
+sudo systemctl stop scanopy-server
+sudo curl -L -o /opt/scanopy/scanopy-server \
+  https://github.com/scanopy/scanopy/releases/latest/download/scanopy-server-linux-amd64
+sudo chmod +x /opt/scanopy/scanopy-server
+sudo chown scanopy:scanopy /opt/scanopy/scanopy-server
+sudo systemctl start scanopy-server
+```
+
+Migrations ship inside the binary and apply automatically on start, so there is no separate migration step. Your configuration lives in the environment file, which the new binary picks up unchanged.
+
+Check that it came back up before walking away:
+
+```bash
+systemctl status scanopy-server
+curl -s http://localhost:60072/api/health
+```
+
 
 ## Daemon still shows Outdated after upgrading
 
