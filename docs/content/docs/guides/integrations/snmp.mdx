@@ -57,11 +57,28 @@ A single shared community string, sent in cleartext. The common choice for gear 
 
 <IntegrationFields id="SNMP" transport="SnmpV2c" />
 
+### Reading a per-VLAN MAC-address table
+
+Cisco switches keep a separate forwarding database for each VLAN and expose it by **indexing the community string** — you append `@` and a VLAN id, and the switch answers from that VLAN's table. Scanopy sends the community exactly as you type it, so this works without any extra setting:
+
+| Community you enter | What the switch returns |
+| --- | --- |
+| `readonly` | The default context — often almost no MAC entries |
+| `readonly@20` | VLAN 20's MAC-address table |
+
+If a switch reports a full set of interfaces but only one or two learned MACs, this is usually why. Add a second credential with the indexed form and assign it to that switch. Other vendors expose the same data through an SNMPv3 context name instead — see below.
+
 ## SNMP v3
 
 Authenticated and encrypted on the wire, and the version to prefer wherever a device supports it. Scanopy always uses AuthPriv — authentication *and* privacy together — which is why both protocol pairs are required rather than optional. AuthNoPriv and NoAuthNoPriv are not supported, and MD5 authentication is not available.
 
-Leave **Context Name** blank unless your device puts interface and LLDP data in a named context; the default context is what almost every device uses.
+Leave **Context Name** blank unless the device keeps its **MAC-address table in a named context**, which some switches do to separate it per VLAN. Naming the context here reads that table instead of the default one, which on such devices holds almost nothing.
+
+The context applies to the bridge and VLAN queries only. Interfaces, LLDP neighbours and ARP entries are always read from the default context, because that is where devices serve them — so setting this field cannot cost you the rest of a switch's data.
+
+<Callout type="info">
+  Sending the context name requires a daemon on **0.17.12 or newer**. Earlier daemons accept the field and store it, but always query the default context.
+</Callout>
 
 <IntegrationFields id="SNMP" transport="SnmpV3" />
 
