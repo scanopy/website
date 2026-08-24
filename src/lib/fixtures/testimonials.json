@@ -2,7 +2,7 @@
 	{
 		"id": "motala-kommun",
 		"quote": "With over 800 switches in our network, keeping topology documentation up to date by hand is almost impossible. We needed automation, especially with NIS2 raising the documentation requirements. Scanopy keeps it current for us.",
-		"attribution": "IT department, Motala Kommun (Swedish municipality)",
+		"role": "IT department",
 		"customerId": "motala-kommun"
 	}
 ]

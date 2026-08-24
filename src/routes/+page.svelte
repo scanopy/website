@@ -9,8 +9,7 @@
 	import { theme } from '$lib/theme.svelte';
 	import { tiltChild } from '$lib/actions/tilt';
 
-	import type { CustomerLogo, PressMention } from '$lib/types';
-	import customerLogosData from '$lib/fixtures/customer-logos.json';
+	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { Activity, Shield, Briefcase, Monitor, ArrowRight } from 'lucide-svelte';
 	import { analytics, featureFlags } from '$lib/analytics.svelte';
@@ -110,7 +109,6 @@
 	);
 
 	const pressMentions = pressMentionsData as PressMention[];
-	const customerLogos = customerLogosData as CustomerLogo[];
 </script>
 
 <svelte:head>
@@ -256,7 +254,7 @@
 	</section>
 
 	<!-- Customer logos: an untitled band of named proof directly under the hero -->
-	<CustomerLogos logos={customerLogos} />
+	<CustomerLogos />
 
 	<!-- Who it's for Section -->
 	<section class="border-t border-gray-800 py-20">

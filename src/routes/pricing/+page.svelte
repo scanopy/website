@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { PricingSection, FeaturedIn, CustomerLogos } from '$lib/components';
 	import FAQ from '$lib/components/FAQ.svelte';
-	import type { CustomerLogo, PressMention } from '$lib/types';
-	import customerLogosData from '$lib/fixtures/customer-logos.json';
+	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import billingPlansData from '$lib/fixtures/billing-plans.json';
 	import { onMount } from 'svelte';
@@ -16,7 +15,6 @@
 	const productSchema = getProductSchema();
 	const startingPrice = getStartingMonthlyPrice();
 	const pressMentions = pressMentionsData as PressMention[];
-	const customerLogos = customerLogosData as CustomerLogo[];
 
 	// Cheapest published self-hosted commercial tier, read from the fixture (not hardcoded).
 	const selfHostedFrom = (() => {
@@ -138,7 +136,7 @@
 	</div>
 </section>
 
-<CustomerLogos logos={customerLogos} />
+<CustomerLogos />
 
 <!-- For MSPs: one network = one client site -->
 <section class="border-t border-gray-800 py-8">

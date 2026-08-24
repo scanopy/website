@@ -1,24 +1,21 @@
 <script lang="ts">
-	import type { Testimonial, CustomerLogo } from '$lib/types';
+	import type { Testimonial } from '$lib/types';
 	import testimonialsData from '$lib/fixtures/testimonials.json';
-	import customerLogosData from '$lib/fixtures/customer-logos.json';
+	import { getCustomer, customerDescriptor } from '$lib/customers';
 
 	// Pairs a customer quote with that customer's logo, the same treatment used for the
-	// lead testimonial on the homepage. Pass the testimonial `id`; the quote text and the
-	// customer logo are resolved from the fixtures so callers (homepage, guides, blog) stay
-	// in sync. Set `card` to render it inside a bordered card (used inline in articles);
-	// leave it off for the full-width homepage treatment. `not-prose` keeps article
+	// lead testimonial on the homepage. Pass the testimonial `id`; the logo and the customer
+	// descriptor are resolved from `$lib/customers`, so the attribution here reads exactly as
+	// it does in the logo band. Set `card` to render it inside a bordered card (used inline in
+	// articles); leave it off for the full-width homepage treatment. `not-prose` keeps article
 	// typography styles off the blockquote when this renders inside a markdown `.prose`
 	// container.
 	let { id, card = false }: { id: string; card?: boolean } = $props();
 
 	const testimonials = testimonialsData as Testimonial[];
-	const customerLogos = customerLogosData as CustomerLogo[];
 
 	const testimonial = $derived(testimonials.find((t) => t.id === id));
-	const customer = $derived(
-		testimonial ? customerLogos.find((c) => c.id === testimonial.customerId) : undefined
-	);
+	const customer = $derived(testimonial ? getCustomer(testimonial.customerId) : undefined);
 </script>
 
 {#if testimonial}
@@ -45,9 +42,10 @@
 						loading="lazy"
 					/>
 				</svelte:element>
-				<span class="max-w-[12rem] text-center text-sm font-medium text-gray-400"
-					>{testimonial.attribution}</span
-				>
+				<div class="max-w-[12rem] text-center text-sm">
+					<p class="font-medium text-gray-400">{testimonial.role}</p>
+					<p class="text-gray-500">{customerDescriptor(customer)}</p>
+				</div>
 			</figcaption>
 		{/if}
 		<blockquote class="text-lg italic leading-relaxed text-gray-200 lg:text-xl">

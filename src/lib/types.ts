@@ -114,19 +114,23 @@ export interface PressMention {
 	logo: string;
 }
 
-export interface CustomerLogo {
+// The single source of truth for company reference data. Anywhere a customer is named —
+// the logo band, a quote attribution — renders from this record, so the two cannot drift.
+export interface Customer {
 	id: string;
 	name: string;
 	logo: string;
-	caption?: string;
+	sector: string;
+	country: string;
 	url?: string;
 }
 
 export interface Testimonial {
 	id: string;
 	quote: string;
-	attribution: string;
-	// References a CustomerLogo by id, so the quote renders with that customer's logo.
+	// Who at the customer said it. The customer itself is not repeated here; it comes from
+	// the Customer record via `customerId`.
+	role: string;
 	customerId: string;
 }
 

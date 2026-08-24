@@ -3,14 +3,24 @@
 		"id": "motala-kommun",
 		"name": "Motala Kommun",
 		"logo": "/logos/customers/motala-kommun-360w.webp",
-		"caption": "Municipality, Sweden",
+		"sector": "Municipality",
+		"country": "Sweden",
 		"url": "https://www.motala.se"
 	},
 	{
 		"id": "steel-dynamics",
 		"name": "Steel Dynamics",
 		"logo": "/logos/customers/steel-dynamics-304w.webp",
-		"caption": "Manufacturing, USA",
+		"sector": "Manufacturing",
+		"country": "USA",
 		"url": "https://www.steeldynamics.com"
+	},
+	{
+		"id": "new-mexico-tech",
+		"name": "New Mexico Tech",
+		"logo": "/logos/customers/new-mexico-tech-304w.webp",
+		"sector": "University",
+		"country": "USA",
+		"url": "https://www.nmt.edu"
 	}
 ]
