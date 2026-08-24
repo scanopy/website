@@ -68,6 +68,7 @@ Not every setting has a CLI flag — `SCANOPY_LICENSE_KEY` and `SCANOPY_WEB_EXTE
 | **SMTP Password**         | `--smtp-password`              | `SCANOPY_SMTP_PASSWORD`              | -                         | SMTP password for email authentication                             |
 | **SMTP Relay**            | `--smtp-relay`                 | `SCANOPY_SMTP_RELAY`                 | -                         | SMTP server address (e.g., `smtp.gmail.com`)                       |
 | **SMTP Email**            | `--smtp-email`                 | `SCANOPY_SMTP_EMAIL`                 | -                         | Sender email address for outgoing emails                           |
+| **SMTP Port**             | `--smtp-port`                  | `SCANOPY_SMTP_PORT`                  | `465`                     | Port for the SMTP relay. Selects the encryption mode: `465` is implicit TLS, any other port uses STARTTLS |
 | **Client IP Source**      | `--client-ip-source`           | `SCANOPY_CLIENT_IP_SOURCE`           | -                         | Source of IP address from request headers for reverse proxy setups |
 | **Metrics Token**         | `--metrics-token`              | `SCANOPY_METRICS_TOKEN`              | -                         | Bearer token for Prometheus metrics endpoint authentication        |
 | **Prometheus Allowed IPs**| N/A                            | `SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS` | -            | Comma-separated IPs/CIDRs allowed to access metrics endpoint       |
@@ -95,7 +96,11 @@ environment:
 
 SMTP settings enable email-based features such as password reset.
 
-**All SMTP parameters are optional.** If not configured, email features will be disabled.
+**All SMTP parameters are optional.** If not configured, email features will be disabled. Relay, username, password and email must all be set together — with any of them missing, email stays disabled.
+
+Every SMTP connection is encrypted, and there is no setting to turn encryption on or off. `SCANOPY_SMTP_PORT` selects which kind: the default of `465` is implicit TLS, and any other port uses STARTTLS, which is what submission ports such as 587 and 25 expect. STARTTLS is required rather than opportunistic — if the upgrade fails, the message is not sent.
+
+Set `SCANOPY_SMTP_EMAIL` to the same mailbox as `SCANOPY_SMTP_USERNAME` unless that account has been granted permission to send as another address. Most providers reject a mismatch.
 
 **Configuration**:
 
@@ -105,7 +110,35 @@ environment:
   - SCANOPY_SMTP_USERNAME=your-email@gmail.com
   - SCANOPY_SMTP_PASSWORD=your-app-password
   - SCANOPY_SMTP_EMAIL=scanopy@yourdomain.com
+  - SCANOPY_SMTP_PORT=587
 ```
+
+### Microsoft 365
+
+Microsoft 365 accepts authenticated SMTP only on port 587 with STARTTLS; it does not listen on 465, so the default port fails to connect.
+
+```yaml
+environment:
+  - SCANOPY_SMTP_RELAY=smtp.office365.com
+  - SCANOPY_SMTP_PORT=587
+  - SCANOPY_SMTP_USERNAME=scanopy@yourdomain.com
+  - SCANOPY_SMTP_PASSWORD=your-password
+  - SCANOPY_SMTP_EMAIL=scanopy@yourdomain.com
+```
+
+Microsoft 365 also requires tenant-side configuration that Scanopy cannot perform:
+
+- **SMTP AUTH** must be enabled for the mailbox. Microsoft disables it by default for organizations created after January 2020.
+- **Security defaults** must be off, and the account must not require multi-factor authentication. Microsoft documents both as incompatible with SMTP AUTH.
+- The mailbox needs a Microsoft 365 license.
+
+Microsoft is [retiring basic authentication for SMTP AUTH](https://techcommunity.microsoft.com/blog/exchange/exchange-online-to-retire-basic-auth-for-client-submission-smtp-auth/4114750). It is disabled by default for existing tenants from the end of December 2026, though an administrator can re-enable it, and it is unavailable to tenants created after that date. Scanopy authenticates with a username and password; OAuth is not supported.
+
+See [Microsoft's SMTP AUTH documentation](https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) for the tenant-side steps.
+
+<Callout type="info">
+When a message cannot be sent, the mail server's reply is recorded in the server log. It names the specific reason — a rejected password, a tenant policy, or a sender the account may not send as — which the failure alone does not tell you.
+</Callout>
 
 ## UI Configuration
 
@@ -185,6 +218,7 @@ SCANOPY_SMTP_RELAY=smtp.gmail.com
 SCANOPY_SMTP_USERNAME=your-email@gmail.com
 SCANOPY_SMTP_PASSWORD=your-app-password
 SCANOPY_SMTP_EMAIL=scanopy@yourdomain.com
+SCANOPY_SMTP_PORT=587
 
 # Daemon
 SCANOPY_INTEGRATED_DAEMON_URL=http://172.17.0.1:60073
