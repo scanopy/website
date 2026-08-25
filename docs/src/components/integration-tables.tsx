@@ -1,48 +1,10 @@
 import { Callout } from 'fumadocs-ui/components/callout';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { FieldsTable, TAG_BASE } from '@/components/field-table';
+import { CredentialScopes } from '@/components/credential-scopes';
+import { FieldsTable } from '@/components/field-table';
+import { Tag } from '@/components/tag';
 import { getIntegration, getTransports } from '@/lib/integrations';
-
-// Fixture target keys → the label + tag color used in the Scanopy app
-// (see getTargetTagProps in ui/src/lib/features/credentials/types/base.ts:
-// Network → Cyan, DaemonHost → Blue, Hosts → Purple). Full literal class
-// strings so Tailwind picks them up.
-const TARGET_TAGS: Record<string, { label: string; className: string }> = {
-	Network: {
-		label: 'Network',
-		className: 'bg-cyan-200 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400'
-	},
-	DaemonHost: {
-		label: 'Daemon host',
-		className: 'bg-blue-200 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400'
-	},
-	Hosts: {
-		label: 'Remote hosts',
-		className: 'bg-purple-200 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400'
-	}
-};
-
-// Broad → narrow, so every row lists targets in the same order.
-const TARGET_ORDER = ['Network', 'DaemonHost', 'Hosts'];
-
-export function TargetTags({ targets }: { targets: string[] }) {
-	return (
-		<span className="inline-flex flex-wrap gap-1">
-			{TARGET_ORDER.filter((t) => targets.includes(t)).map((t) => {
-				const tag = TARGET_TAGS[t] ?? {
-					label: t,
-					className: 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
-				};
-				return (
-					<span key={t} className={`${TAG_BASE} ${tag.className}`}>
-						{tag.label}
-					</span>
-				);
-			})}
-		</span>
-	);
-}
 
 /**
  * Renders only for Beta. Stable is the norm, and tagging every stable row would
@@ -51,11 +13,33 @@ export function TargetTags({ targets }: { targets: string[] }) {
 export function StabilityTag({ stability }: { stability: string }) {
 	if (stability !== 'Beta') return null;
 	return (
-		<span
-			className={`${TAG_BASE} ml-2 bg-amber-200 text-amber-700 dark:bg-amber-900/50 dark:text-amber-400`}
-		>
-			Beta
-		</span>
+		<Tag
+			color="Amber"
+			label="Beta"
+			title="This integration is in beta. Please report any issues you encounter. Its settings may change in a future release."
+			className="ml-2"
+		/>
+	);
+}
+
+/**
+ * Marks a credential type whose vendor does not publish the API behind it. Like
+ * {@link StabilityTag} it renders only for the exceptional case, and the two are
+ * independent — a type can carry both, either, or neither.
+ *
+ * Gray rather than amber, as in the app: this is a standing property of the
+ * vendor's API, not a warning about how far Scanopy has validated the
+ * integration. `IntegrationUnofficialApi` says the same thing at length on the
+ * guide that owns it; the chip is what carries it into a table of many types.
+ */
+export function UnofficialApiTag({ upstreamSupport }: { upstreamSupport: string }) {
+	if (upstreamSupport !== 'Undocumented') return null;
+	return (
+		<Tag
+			label="Unofficial API"
+			title="The vendor does not publish or support this API. It can change or stop working without notice, and Scanopy tracks it on a best-effort basis."
+			className="ml-2"
+		/>
 	);
 }
 
@@ -86,10 +70,11 @@ export function IntegrationTransports({ id }: { id: string }) {
 							<td className="whitespace-nowrap">
 								<strong>{transport.display_name}</strong>
 								<StabilityTag stability={transport.stability} />
+								<UnofficialApiTag upstreamSupport={transport.upstream_support} />
 							</td>
 							<td>{transport.description}</td>
 							<td>
-								<TargetTags targets={transport.targets} />
+								<CredentialScopes targets={transport.targets} />
 							</td>
 							<td className="whitespace-nowrap">
 								<code>{transport.minimum_daemon_version}</code> or later
@@ -143,13 +128,18 @@ export function IntegrationBeta({ id, children }: { id: string; children?: React
 }
 
 /**
- * Unofficial-API notice, rendered only when the fixture says at least one of this integration's
- * transports talks to an API its vendor does not publish.
+ * Unofficial-API notice, rendered when the fixture marks at least one of this integration's
+ * transports `upstream_support: Undocumented`.
+ *
+ * The copy defines what an unofficial API is and what follows from it, and stops there. It makes
+ * no claim about any vendor's API programme — whether one is published, and why Scanopy uses this
+ * interface instead, are per-vendor facts a shared component cannot know. An earlier version
+ * asserted that UniFi "has no published API", which is untrue.
  *
  * Deliberately separate from {@link IntegrationBeta}: beta is about how far *we* have validated an
- * integration and disappears when it is promoted, while an undocumented upstream is a standing
- * property of the vendor's API. An integration can show both notices, one, or neither — UniFi is
- * stable and undocumented, Instant On is currently both.
+ * integration and disappears when it is promoted, while an unofficial interface is a standing
+ * property of the integration. An integration can show both notices, one, or neither — UniFi is
+ * stable and unofficial, Instant On is currently both.
  */
 export function IntegrationUnofficialApi({ id, children }: { id: string; children?: ReactNode }) {
 	const integration = getIntegration(id);
@@ -162,13 +152,14 @@ export function IntegrationUnofficialApi({ id, children }: { id: string; childre
 		<Callout type="info" title="Unofficial API">
 			<p>
 				{whole
-					? `${integration.name} has no published API.`
+					? `The ${integration.name} integration uses an unofficial API.`
 					: `The ${oxford(undocumented.map((t) => t.display_name))} credential ${
 							undocumented.length > 1 ? 'types use' : 'type uses'
-						} an API the vendor does not publish.`}{' '}
-				Scanopy reads the same endpoints the vendor&apos;s own application uses. They are
-				unsupported and can change or stop working without notice, so Scanopy tracks them on a
-				best-effort basis. Nothing here modifies your devices — it only reads.
+						} an unofficial API.`}{' '}
+				An unofficial API is one that isn&apos;t documented for use outside the vendor&apos;s own
+				application — Scanopy reads it the same way that application does. It can change at any
+				time, so Scanopy follows it on a best-effort basis and this integration can stop returning
+				data until a release catches up. Nothing here modifies your devices — it only reads.
 			</p>
 			{children}
 		</Callout>
@@ -193,7 +184,7 @@ export function CredentialBasics({ id }: { id: string }) {
 		<Callout type="info" title="Before you start">
 			<p>
 				{integration.name} credentials are created under <strong>Assets &gt; Credentials</strong>{' '}
-				and can be pointed at <TargetTags targets={targets} />.
+				and can be pointed at <CredentialScopes targets={targets} />.
 			</p>
 			<p>
 				Creating a credential, assigning it, and overriding it on an individual host work the same
@@ -233,6 +224,7 @@ export function IntegrationFields({ id, transport }: { id: string; transport?: s
 						<p>
 							<strong>{t.display_name}</strong>
 							<StabilityTag stability={t.stability} />
+							<UnofficialApiTag upstreamSupport={t.upstream_support} />
 						</p>
 					)}
 					<FieldsTable fields={t.fields} />

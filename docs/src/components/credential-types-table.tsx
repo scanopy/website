@@ -1,4 +1,5 @@
-import { StabilityTag, TargetTags } from '@/components/integration-tables';
+import { CredentialScopes } from '@/components/credential-scopes';
+import { StabilityTag, UnofficialApiTag } from '@/components/integration-tables';
 import { allIntegrations } from '@/lib/integrations';
 
 /**
@@ -34,12 +35,13 @@ export function CredentialTypesTable() {
 								<td className="whitespace-nowrap">
 									{transport.display_name}
 									<StabilityTag stability={transport.stability} />
+									<UnofficialApiTag upstreamSupport={transport.upstream_support} />
 								</td>
 								{i === 0 && (
 									<td rowSpan={integration.transports.length}>{integration.discovers}</td>
 								)}
 								<td>
-									<TargetTags targets={transport.targets} />
+									<CredentialScopes targets={transport.targets} />
 								</td>
 							</tr>
 						))

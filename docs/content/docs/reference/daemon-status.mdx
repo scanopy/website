@@ -20,7 +20,7 @@ Scanopy monitors daemon health and displays a status tag next to each daemon nam
 
 ## Awaiting Connection
 
-**Blue tag**. The daemon record exists but the daemon has never checked in.
+<StatusTag status="Awaiting Connection" /> The daemon record exists but the daemon has never checked in.
 
 Every daemon passes through this state. Creating a daemon [provisions](/reference/daemon-identity/) its record on the server before the daemon itself exists, so the tag appears as soon as you finish the wizard and clears on first contact.
 
@@ -36,7 +36,7 @@ If the tag persists, see [Daemon Troubleshooting](/setting-up-daemons/troublesho
 
 ## Standby
 
-**Purple tag**. The daemon is registered but hasn't run a discovery session in over 30 days.
+<StatusTag status="Standby" /> The daemon is registered but hasn't run a discovery session in over 30 days.
 
 **How to resolve**:
 
@@ -46,7 +46,7 @@ If the tag persists, see [Daemon Troubleshooting](/setting-up-daemons/troublesho
 
 ## Unreachable
 
-**Red tag**. The server cannot reach a ServerPoll daemon at its configured URL.
+<StatusTag status="Unreachable" /> The server cannot reach a ServerPoll daemon at its configured URL.
 
 **How to resolve**:
 
@@ -59,7 +59,7 @@ See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for deta
 
 ## Deprecated
 
-**Orange tag**. The daemon is running a version with a **scheduled sunset date**. It still connects and runs discovery normally until that date, after which it becomes [Unsupported](#unsupported). The daemon card and upgrade dialog show the exact date and a countdown, and a banner appears on the Daemons view while any daemon needs updating.
+<StatusTag status="Deprecated" /> The daemon is running a version with a **scheduled sunset date**. It still connects and runs discovery normally until that date, after which it becomes [Unsupported](#unsupported). The daemon card and upgrade dialog show the exact date and a countdown, and a banner appears on the Daemons view while any daemon needs updating.
 
 When a sunset is announced, the organization owner and each affected daemon's maintainer receive **one** email listing every affected daemon and the date. You are not emailed again about the same sunset.
 
@@ -69,7 +69,7 @@ When a sunset is announced, the organization owner and each affected daemon's ma
 
 ## Unsupported
 
-**Red tag**. The daemon's version is past its sunset date. The server **rejects every request** from it, so it can no longer connect or run discovery. The daemon exits and, under a service manager configured to restart it, will keep restarting and failing until it is updated.
+<StatusTag status="Unsupported" /> The daemon's version is past its sunset date. The server **rejects every request** from it, so it can no longer connect or run discovery. The daemon exits and, under a service manager configured to restart it, will keep restarting and failing until it is updated.
 
 **How to resolve**:
 
@@ -77,7 +77,7 @@ When a sunset is announced, the organization owner and each affected daemon's ma
 
 ## Outdated
 
-**Yellow tag**. A newer daemon version is available. The current version still works but may be missing features or fixes.
+<StatusTag status="Outdated" /> A newer daemon version is available. The current version still works but may be missing features or fixes.
 
 **How to resolve**:
 
@@ -85,7 +85,7 @@ When a sunset is announced, the organization owner and each affected daemon's ma
 
 ## Unknown
 
-**Gray tag**. The server has no version on record for this daemon, because the daemon has not reported one. A version the server cannot confirm is treated as unsupported wherever a support floor applies.
+<StatusTag status="Unknown" /> The server has no version on record for this daemon, because the daemon has not reported one. A version the server cannot confirm is treated as unsupported wherever a support floor applies.
 
 **How to resolve**:
 
@@ -93,13 +93,13 @@ When a sunset is announced, the organization owner and each affected daemon's ma
 
 ## Healthy
 
-**Green tag**. The daemon is running a current version and communicating with the server normally.
+<StatusTag status="Healthy" /> The daemon is running a current version and communicating with the server normally.
 
 ## Status Priority
 
 When multiple conditions apply, the UI shows the highest-priority one:
 
-**Unsupported > Unreachable > Standby > Awaiting Connection > Deprecated > Outdated > Unknown > Healthy**
+<StatusTag status="Unsupported" /> > <StatusTag status="Unreachable" /> > <StatusTag status="Standby" /> > <StatusTag status="Awaiting Connection" /> > <StatusTag status="Deprecated" /> > <StatusTag status="Outdated" /> > <StatusTag status="Unknown" /> > <StatusTag status="Healthy" />
 
 The Home tab shows all active statuses across your daemons.
 

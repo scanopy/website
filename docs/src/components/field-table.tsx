@@ -1,3 +1,4 @@
+import { Tag } from '@/components/tag';
 import type { FieldDefinition } from '@/lib/integrations';
 
 /**
@@ -8,8 +9,6 @@ import type { FieldDefinition } from '@/lib/integrations';
  * Both come from the metadata the app builds its own forms from, so a documented
  * label, default or help string cannot drift from the product.
  */
-
-export const TAG_BASE = 'inline-flex items-center rounded px-2 py-0.5 text-xs font-medium';
 
 function fieldDescription(field: FieldDefinition) {
 	if (!field.options?.length) return field.help_text ?? null;
@@ -71,13 +70,7 @@ export function FieldsTable({
 								<tr key={field.id}>
 									<td className="whitespace-nowrap">
 										<strong>{field.label}</strong>
-										{field.secret && (
-											<span
-												className={`${TAG_BASE} ml-2 bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300`}
-											>
-												Secret
-											</span>
-										)}
+										{field.secret && <Tag label="Secret" className="ml-2" />}
 									</td>
 									<td>{field.optional ? 'Optional' : 'Required'}</td>
 									<td>
