@@ -24,8 +24,12 @@ On each scan, the daemon reads the controller's device inventory for the configu
 | Each device's port table | Interfaces, with names, speeds and MAC addresses |
 | LLDP neighbor and uplink tables | Physical links in [L2 Physical](/using-scanopy/topology/l2-physical/) |
 | Device class (`usw`, `uap`, …) | A **UniFi Switch** or **UniFi Gateway** service |
+| The name given to each device | The host's name — see [Host Naming](/using-scanopy/discovery/naming-and-deduplication/#host-naming) |
+| Connected clients | Hosts, matched against existing hosts by IP and MAC |
 
 A link the controller reports and the same link reported by the device at its other end describe one cable rather than two.
+
+A client is only created as a host when its address falls inside a subnet Scanopy knows, so clients on subnets no daemon scans do not appear. If the controller does not return its client list, its adopted devices are still discovered.
 
 ## Prerequisites
 

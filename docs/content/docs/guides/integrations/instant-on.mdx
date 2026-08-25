@@ -24,9 +24,12 @@ On each scan, the daemon reads the site's inventory and client list:
 | Each device's ports | Interfaces, with names, speeds and link state |
 | Uplinks between devices | Physical links in [L2 Physical](/using-scanopy/topology/l2-physical/) |
 | Device class (`SWITCH`, `ACCESS_POINT`, …) | An **Instant On Switch** or **Instant On Access Point** service |
-| Wired clients | The MAC on the port it is connected to |
+| The name given to each device | The host's name — see [Host Naming](/using-scanopy/discovery/naming-and-deduplication/#host-naming) |
+| Wired clients | The MAC on the port it is connected to, and a host carrying the name the portal holds for it |
 
 A link the portal reports and the same link reported by a switch at its other end describe one cable rather than two.
+
+A client is only created as a host when its address falls inside a subnet Scanopy knows, so clients on subnets no daemon scans do not appear.
 
 ## Prerequisites
 

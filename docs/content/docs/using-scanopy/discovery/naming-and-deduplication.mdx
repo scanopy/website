@@ -5,15 +5,26 @@ description: How a discovered host gets its name, and how Scanopy recognizes a h
 
 ## Host Naming
 
-When a host is discovered, Scanopy determines its name using this priority:
+A host takes its name from the strongest source Scanopy has for it. Sources rank like this, weakest first:
 
-1. **Reverse DNS** — hostname from PTR record, if available
-2. **Best Service** or **IP** — configurable fallback per discovery:
-   - _Best Service_: Uses the first named service found on the host
-   - _IP_: Uses the host's IP address
-3. **Remaining fallback** — whichever option wasn't selected in step 2
+| Source | Where the name comes from |
+| ------ | ------------------------- |
+| **IP address** | The host's own address, used when nothing better is known |
+| **Detected service** | The first named service found on the host |
+| **Hostname** | Reverse DNS, a hostname the host reported, or SNMP sysName |
+| **Controller name** | A name assigned in a device's controller, where an [integration](/guides/) reads that controller |
+| **Your own name** | A name you type into Scanopy. Nothing outranks it |
 
-A name you set yourself is never overwritten by a later scan.
+A stronger source replaces a weaker one, so a host first named for its IP address takes its controller's name once that integration runs. Each source also refreshes its own rank: rename a device in its controller and the new name reaches Scanopy on the next sync. A name you typed is replaced only by another name you type.
+
+### Choosing the scan fallback
+
+A network scan on its own reaches the bottom three ranks, and each discovery chooses which of the lower two it prefers when no hostname is available:
+
+- **Best Service** — the first named service found on the host, or the IP address if no service was detected.
+- **IP** — the host's IP address.
+
+A hostname takes precedence over both wherever one is available.
 
 ## Host Deduplication
 
@@ -62,7 +73,7 @@ Ports, interfaces, and services discovered on the duplicate will be reconciled a
 
 **Fields preserved (never overwritten):**
 
-- **Name** — User-assigned name stays intact
+- **Name** — A name you typed stays intact. A derived name is replaced only when a stronger source appears, following the ranks under [Host Naming](#host-naming)
 - **Hidden status** — Visibility preference preserved
 - **Tags** — User tags unchanged
 - **Description** — User-provided description unchanged

@@ -3,7 +3,7 @@ title: Staleness
 description: How Scanopy flags hosts, services, and subnets that discovery hasn't seen recently.
 ---
 
-Scanopy marks an entity **Stale** when discovery hasn't observed it within its network's staleness window — a device powered off, a container removed, a host that moved. Nothing is deleted.
+Scanopy marks an entity <StaleTag /> when discovery hasn't observed it within its network's staleness window — a device powered off, a container removed, a host that moved. Nothing is deleted.
 
 Stale does not mean gone. A stale host might be switched off, on the road, or briefly unreachable during a scan. Scanopy reports only how long it's been since discovery last saw it.
 
@@ -17,13 +17,14 @@ See [Networks](/using-scanopy/organization/#networks) for where this fits among 
 
 ## What can go stale
 
-Only what discovery manages: hosts, services, and subnets it found and keeps re-observing. Anything you created by hand never goes stale, since there's no scan timestamp to judge it against.
+Only what discovery manages: hosts, services, and subnets it found and keeps re-observing, along with the physical links between interfaces. Anything you created by hand never goes stale, since there's no scan timestamp to judge it against.
 
 Every entity is judged on **its own** last-seen time, independently of its parent. A service on a host that's gone quiet is stale only if that service hasn't been seen within the window — a recently observed service on an otherwise-dark host reads as current, and vice versa.
 
+A physical link is judged on when the neighbor report behind it last arrived, not on when its ports were last seen. The two come apart once a device stops reporting a neighbor: every scan still finds the ports at both ends, so only the neighbor report shows that the link itself is no longer being evidenced.
+
 ## Where it shows up
 
-- **Lists** — hosts, services, and subnets carry a **Stale** badge past their window, with a **Stale only** filter and sorting by last-seen.
-- **Topology** — stale nodes carry a **Stale** tag and a "last seen" detail. A **By staleness** filter (Current / Stale) fades everything else. See [Customizing Views](/using-scanopy/topology/customizing-views/).
-
-The tag is amber rather than red, matching the daemon status convention where red means broken and amber means behind.
+- **Lists** — hosts, services, and subnets carry a <StaleTag /> badge past their window, with a **Stale only** filter and sorting by last-seen.
+- **Topology** — stale nodes carry a <StaleTag /> tag and a "last seen" detail. A **By staleness** filter (Current / Stale) fades everything else. See [Customizing Views](/using-scanopy/topology/customizing-views/).
+- **Physical links** — a stale link carries a <StaleTag /> tag beside its label in [L2 Physical](/using-scanopy/topology/l2-physical/). Selecting it shows a **Neighbor report** detail with how long ago that report last arrived.

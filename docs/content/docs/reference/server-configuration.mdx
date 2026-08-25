@@ -16,7 +16,7 @@ Sources are layered, later ones overriding earlier:
 3. `SCANOPY_*` environment variables
 4. Command-line flags
 
-**Docker Compose** — set them on the `server` service, or point it at a `.env` file:
+**Docker Compose** — the published `docker-compose.yml` reads a `.env` file placed beside it and passes everything in it to the server, so most settings need no change to the compose file. The file is optional; Compose starts without one. To set a variable in the compose file itself, add it to the `server` service:
 
 ```yaml
 environment:
@@ -228,14 +228,15 @@ SCANOPY_METRICS_TOKEN=your-secure-metrics-token
 SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS=192.168.1.0/24
 ```
 
-**Reference in docker-compose.yml**:
+**Reference in docker-compose.yml**: the published compose file already does this, so a `.env` beside it is picked up as it is. In a compose file of your own:
 
 ```yaml
 services:
   scanopy-server:
     image: ghcr.io/scanopy/scanopy/server:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
     # ... rest of config
 ```
 
