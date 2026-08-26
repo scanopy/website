@@ -150,7 +150,7 @@
 									</div>
 								</div>
 
-								<div class="mt-5 border-t border-gray-700/70 pt-4">
+								<div class="mb-5 mt-5 border-t border-gray-700/70 pt-4">
 									<span
 										class="mb-3 block text-xs font-semibold uppercase tracking-wide text-gray-500"
 									>
@@ -174,12 +174,18 @@
 									</ul>
 								</div>
 
-								<div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-gray-700/70 pt-4">
-									<a href={integration.docs_path} class="text-sm text-blue-400 hover:text-blue-300">
+								<!-- One link per row, not wrapped: a guide title long enough to wrap put the two
+								     links on one line in some cards and two in others. mt-auto pins the block to the
+								     bottom so it lines up across cards with different numbers of transports. -->
+								<div class="mt-auto flex flex-col gap-2 border-t border-gray-700/70 pt-4">
+									<a
+										href={integration.docs_path}
+										class="w-fit text-sm text-blue-400 hover:text-blue-300"
+									>
 										Setup guide
 									</a>
 									{#if guide}
-										<a href={guide.href} class="text-sm text-blue-400 hover:text-blue-300">
+										<a href={guide.href} class="w-fit text-sm text-blue-400 hover:text-blue-300">
 											{guide.title}
 										</a>
 									{/if}

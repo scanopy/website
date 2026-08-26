@@ -2,7 +2,6 @@
 title: Map Network Topology with SNMP (The Manual Way)
 description: 'Map your network topology by hand with snmpwalk. Every SNMP MIB and OID that matters for discovery, what they mean, and how to correlate them into a map.'
 keyword: SNMP network topology mapping
-integration: SNMP
 slug: snmp-network-topology-mapping
 date: 2026-06-23
 dateModified: 2026-07-14
