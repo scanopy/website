@@ -62,13 +62,51 @@ export interface ServiceDefinition {
 	logo_needs_white_background?: boolean;
 }
 
+/**
+ * Types for the `integrations.json` fixture, generated in the Scanopy repo
+ * (`backend/src/server/credentials/impl/integrations.rs`) and copied here on release. Declared
+ * once, here: the docs sub-site re-exports these rather than keeping a second copy, which is how
+ * the two drifted apart before — each was missing fields the other had.
+ */
+export interface IntegrationSelectOption {
+	value: string;
+	label: string;
+}
+
+export interface IntegrationFieldDefinition {
+	id: string;
+	label: string;
+	field_type: string;
+	placeholder?: string;
+	secret: boolean;
+	optional: boolean;
+	help_text?: string;
+	options?: IntegrationSelectOption[];
+	default_value?: string;
+	inline_format?: string;
+	/** Form section the field belongs to ("Connection", "Authentication", …). */
+	group?: string;
+}
+
 export interface IntegrationTransport {
 	id: string;
+	/** Short label ("Socket", "Proxy", "v2c"). */
 	name: string;
+	/** Full credential-type name as the app shows it ("UniFi API Key"). */
+	display_name: string;
 	description: string;
 	requires_config: boolean;
 	single_endpoint_per_host: boolean;
 	targets: string[];
+	stability: 'Stable' | 'Beta';
+	/**
+	 * Whether the vendor publishes the API this transport talks to. Independent of `stability`:
+	 * a transport can be fully validated and still ride an endpoint the vendor never documented,
+	 * which is true of both UniFi transports.
+	 */
+	upstream_support: 'Vendor' | 'Undocumented';
+	minimum_daemon_version: string;
+	fields: IntegrationFieldDefinition[];
 }
 
 export interface Integration {
@@ -80,6 +118,8 @@ export interface Integration {
 	logo_slug: string;
 	logo_needs_white_background: boolean;
 	discovers: string;
+	/** Guide for this integration, root-relative and trailing-slashed. */
+	docs_path: string;
 	summary: string;
 	transports: IntegrationTransport[];
 }

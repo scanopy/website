@@ -6,6 +6,7 @@
 import billingPlansData from '$lib/fixtures/billing-plans.json';
 import productFeaturesData from '$lib/fixtures/product-features.json';
 import servicesData from '$lib/fixtures/services.json';
+import integrations from '$lib/fixtures/integrations.json';
 
 interface BillingPlan {
 	id: string;
@@ -325,6 +326,19 @@ export function getServiceCountLabel(): string {
 	const count = (servicesData as unknown[]).length;
 	const rounded = Math.floor(count / 10) * 10;
 	return `${rounded}+`;
+}
+
+/**
+ * The integrations Scanopy ships, named from the fixture the app generates. Read it rather than
+ * writing the list out: every hand-kept copy of this list has been wrong by the time anyone
+ * looked, and a new integration should reach the comparison pages on the release that ships it.
+ */
+export function getIntegrationsLabel(): string {
+	const names = (integrations as { name: string }[]).map((i) => i.name);
+	if (names.length === 0) return '';
+	if (names.length === 1) return names[0];
+	if (names.length === 2) return `${names[0]} and ${names[1]}`;
+	return `${names.slice(0, -1).join(', ')}, and ${names[names.length - 1]}`;
 }
 
 /**

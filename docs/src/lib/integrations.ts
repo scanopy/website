@@ -1,62 +1,22 @@
 import integrations from '$lib/fixtures/integrations.json';
+import type {
+	Integration,
+	IntegrationFieldDefinition,
+	IntegrationSelectOption,
+	IntegrationTransport
+} from '$lib/types';
 
 /**
- * Types for the `integrations.json` fixture, which is generated in the Scanopy
- * repo (`backend/src/server/credentials/impl/integrations.rs`) and copied here on
- * release. Keep these in sync with `Integration` / `IntegrationTransport` /
- * `FieldDefinition` there — this file is the only place the shape is declared, so
- * a mismatch surfaces in one spot rather than in every component.
+ * Access to the `integrations.json` fixture, which is generated in the Scanopy repo
+ * (`backend/src/server/credentials/impl/integrations.rs`) and copied here on release.
+ *
+ * The shape is declared once, in `src/lib/types.ts` alongside the fixture it describes. These
+ * aliases keep the names this sub-site's components already use.
  */
-
-export interface SelectOption {
-	value: string;
-	label: string;
-}
-
-export interface FieldDefinition {
-	id: string;
-	label: string;
-	field_type: string;
-	placeholder?: string;
-	secret: boolean;
-	optional: boolean;
-	help_text?: string;
-	options?: SelectOption[];
-	default_value?: string;
-	inline_format?: string;
-	/** Form section the field belongs to ("Connection", "Authentication", …). */
-	group?: string;
-}
-
-export interface Transport {
-	id: string;
-	/** Short label ("Socket", "Proxy", "v2c"). */
-	name: string;
-	/** Full credential-type name as the app shows it ("UniFi API Key"). */
-	display_name: string;
-	description: string;
-	requires_config: boolean;
-	single_endpoint_per_host: boolean;
-	targets: string[];
-	stability: 'Stable' | 'Beta';
-	/**
-	 * Whether the vendor publishes the API this transport talks to. Independent of `stability`:
-	 * a transport can be fully validated and still ride an endpoint the vendor never documented,
-	 * which is true of both UniFi transports.
-	 */
-	upstream_support: 'Vendor' | 'Undocumented';
-	minimum_daemon_version: string;
-	fields: FieldDefinition[];
-}
-
-export interface Integration {
-	id: string;
-	name: string;
-	category: string;
-	discovers: string;
-	summary: string;
-	transports: Transport[];
-}
+export type SelectOption = IntegrationSelectOption;
+export type FieldDefinition = IntegrationFieldDefinition;
+export type Transport = IntegrationTransport;
+export type { Integration };
 
 export const allIntegrations = integrations as Integration[];
 

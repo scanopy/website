@@ -54,6 +54,9 @@ function sections(source) {
 	return [...body.matchAll(/^## (.+)$/gm)].map((m) => m[1].trim());
 }
 
+/** integration id -> the URL of the guide whose frontmatter claims it. */
+const guideUrlById = new Map();
+
 for (const file of readdirSync(GUIDE_DIR).filter((f) => f.endsWith('.mdx'))) {
 	const path = join(GUIDE_DIR, file);
 	const source = readFileSync(path, 'utf8');
@@ -76,6 +79,8 @@ for (const file of readdirSync(GUIDE_DIR).filter((f) => f.endsWith('.mdx'))) {
 		);
 		continue;
 	}
+
+	guideUrlById.set(id, `/docs/guides/integrations/${file.replace(/\.mdx$/, '')}/`);
 
 	// One section per transport, named exactly as the app names the credential type,
 	// in the fixture's order — so the sections and the generated comparison table
@@ -118,6 +123,26 @@ for (const file of readdirSync(GUIDE_DIR).filter((f) => f.endsWith('.mdx'))) {
 					`${transport.display_name} section.`
 			);
 		}
+	}
+}
+
+// The other direction: the fixture declares each integration's guide (`docs_path`, generated in
+// the Scanopy repo), and the app links it for every credential type. Assert it names the guide
+// that claims this integration, so a guide that moves without a fixture update — or a fixture path
+// pointing at nothing — fails here rather than 404ing in the app and on the marketing site.
+for (const integration of integrations) {
+	if (!integration.docs_path) continue;
+	const actual = guideUrlById.get(integration.id);
+	if (!actual) {
+		errors.push(
+			`integrations.json: "${integration.id}" declares docs_path ${integration.docs_path}, ` +
+				'but no guide names it in `integration:` frontmatter.'
+		);
+	} else if (actual !== integration.docs_path) {
+		errors.push(
+			`integrations.json: "${integration.id}" declares docs_path ${integration.docs_path}, ` +
+				`but its guide is at ${actual}.`
+		);
 	}
 }
 

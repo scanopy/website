@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Integration } from '$lib/types';
-	import integrationsData from '$lib/fixtures/integrations.json';
+	import type { Integration, IntegrationTransport } from '$lib/types';
+	import { Tag } from '$lib/components';
 	import { analytics } from '$lib/analytics.svelte';
 
-	const integrations: Integration[] = integrationsData;
+	let { data } = $props();
+	const integrations: Integration[] = data.integrations;
 
 	// Logos are shared with the service catalog under /static/logos/services/services/*
 	const logoGlob = import.meta.glob('/static/logos/services/services/*', {
@@ -21,6 +22,24 @@
 	function logoUrl(integration: Integration): string | null {
 		if (!integration.has_logo) return null;
 		return logoBySlug.get(integration.logo_slug) ?? null;
+	}
+
+	// Both tags mark the exception, never the norm — a "Stable" chip on nine of ten transports
+	// would bury the one that isn't. They are separate axes: beta is how far we have validated the
+	// integration and goes away on promotion, while an undocumented upstream is a standing
+	// property of the vendor's API.
+	function isBeta(transport: IntegrationTransport): boolean {
+		return transport.stability === 'Beta';
+	}
+
+	function isUndocumented(transport: IntegrationTransport): boolean {
+		return transport.upstream_support === 'Undocumented';
+	}
+
+	// Card-level only when the whole integration is beta. Where just some transports are, the
+	// per-transport tags say which, and a card-level tag would overstate it.
+	function integrationIsBeta(integration: Integration): boolean {
+		return integration.transports.every(isBeta);
 	}
 
 	const categories = [...new Set(integrations.map((i) => i.category))].sort((a, b) =>
@@ -95,6 +114,7 @@
 					<div class="grid gap-6 md:grid-cols-2">
 						{#each byCategory(category) as integration (integration.id)}
 							{@const logo = logoUrl(integration)}
+							{@const guide = data.guides[integration.id]}
 							<div
 								class="flex flex-col rounded-xl border border-gray-700 bg-gray-800/50 p-6 transition-colors hover:border-gray-600 hover:bg-gray-800"
 							>
@@ -120,7 +140,12 @@
 									</div>
 
 									<div class="min-w-0 flex-1">
-										<h3 class="text-lg font-semibold text-white">{integration.name}</h3>
+										<div class="flex flex-wrap items-center gap-2">
+											<h3 class="text-lg font-semibold text-white">{integration.name}</h3>
+											{#if integrationIsBeta(integration)}
+												<Tag label="Beta" color="amber" />
+											{/if}
+										</div>
 										<p class="mt-1 text-sm text-gray-400">{integration.discovers}</p>
 									</div>
 								</div>
@@ -133,12 +158,31 @@
 									</span>
 									<ul class="space-y-3">
 										{#each integration.transports as transport (transport.id)}
-											<li class="flex items-baseline gap-2">
-												<span class="font-medium text-white">{transport.name}</span>
+											<li>
+												<div class="flex flex-wrap items-center gap-2">
+													<span class="font-medium text-white">{transport.display_name}</span>
+													{#if !integrationIsBeta(integration) && isBeta(transport)}
+														<Tag label="Beta" color="amber" />
+													{/if}
+													{#if isUndocumented(transport)}
+														<Tag label="Unofficial API" color="gray" />
+													{/if}
+												</div>
 												<span class="text-sm text-gray-400">{transport.description}</span>
 											</li>
 										{/each}
 									</ul>
+								</div>
+
+								<div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-gray-700/70 pt-4">
+									<a href={integration.docs_path} class="text-sm text-blue-400 hover:text-blue-300">
+										Setup guide
+									</a>
+									{#if guide}
+										<a href={guide.href} class="text-sm text-blue-400 hover:text-blue-300">
+											{guide.title}
+										</a>
+									{/if}
 								</div>
 							</div>
 						{/each}

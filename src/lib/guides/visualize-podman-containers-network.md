@@ -2,6 +2,7 @@
 title: How to Visualize Podman Containers and Pods on Your Network
 description: "See Podman containers and pods in network context, not just per host. How Scanopy discovers your Podman containers, resolves pods, and maps them under the host they run on, alongside the rest of your network."
 keyword: podman network visualization
+integration: Podman
 slug: visualize-podman-containers-network
 date: 2026-07-14
 dateModified: 2026-07-14

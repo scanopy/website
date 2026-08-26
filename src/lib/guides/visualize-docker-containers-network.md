@@ -2,6 +2,7 @@
 title: How to Visualize Docker Containers on Your Network
 description: "See Docker containers in network context, not just per host. How Scanopy discovers your containers and maps them under the host they run on, alongside the rest of your network."
 keyword: docker network visualization
+integration: Docker
 slug: visualize-docker-containers-network
 date: 2026-07-01
 dateModified: 2026-07-14

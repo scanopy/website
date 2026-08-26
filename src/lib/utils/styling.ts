@@ -55,6 +55,16 @@ export const COLOR_MAP: Record<string, ColorStyle> = {
 		stroke: 'stroke-orange-400',
 		rgb: 'rgb(251, 146, 60)'
 	},
+	amber: {
+		string: 'amber',
+		text: 'text-amber-700 dark:text-amber-400',
+		bg: 'bg-amber-100 border-amber-300 dark:bg-amber-900/50 dark:border-amber-600',
+		border: 'border-amber-600',
+		icon: 'text-amber-600 dark:text-amber-400',
+		ring: 'ring-amber-400',
+		stroke: 'stroke-amber-400',
+		rgb: 'rgb(251, 191, 36)'
+	},
 	yellow: {
 		string: 'yellow',
 		text: 'text-yellow-700 dark:text-yellow-400',

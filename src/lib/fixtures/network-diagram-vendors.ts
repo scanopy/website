@@ -1,8 +1,9 @@
 import type { Vendor, VendorCategory, VendorSource, VendorFAQ } from '$lib/types';
-import { getServiceCountLabel, getStartingMonthlyPrice } from '$lib/schemas';
+import { getIntegrationsLabel, getServiceCountLabel, getStartingMonthlyPrice } from '$lib/schemas';
 
 const serviceCount = getServiceCountLabel();
 const startingPrice = getStartingMonthlyPrice();
+const integrationList = getIntegrationsLabel();
 
 export const disclosureText =
 	"Scanopy is our product. Vendor details are sourced from official documentation, published pricing, and community reports as of June 2026. Features, pricing, and capabilities may have changed since publication. Check each vendor's website for the latest information.";
@@ -13,7 +14,7 @@ export const vendors: Record<string, Vendor> = {
 		slug: 'scanopy',
 		href: '/',
 
-		discovery: ['SNMP', 'LLDP', 'CDP', 'ARP', 'TCP/UDP'],
+		discovery: ['SNMP', 'LLDP', 'CDP', 'ARP', 'ICMP', 'mDNS', 'TCP/UDP'],
 		services: { level: 'yes', detail: `${serviceCount} types`, detailHref: '/services' },
 		autoUpdates: true,
 		openSource: { status: 'osi', license: 'AGPL-3.0', href: '/community' },
@@ -32,6 +33,7 @@ export const vendors: Record<string, Vendor> = {
 			'Scanopy is our product. It is an [automated network documentation](/blog/automated-network-documentation) tool built for IT teams that need living network maps that work alongside their monitoring platform. It deploys a lightweight daemon that discovers your network and builds an interactive topology map that updates on a schedule. A single scan produces four views you can switch between: L2 physical, L3 logical, workloads, and applications.',
 		discoveryNotes:
 			'One daemon per network. No agents on endpoints, no SSH credentials. SNMPv1, v2c, and v3 (AuthPriv) are all supported, with credentials applied network-wide or pinned per host.',
+		integrations: `Connects to ${integrationList}. Each runs as part of the scheduled scan, so what it finds lands in the same map as everything else. [All integrations](/integrations).`,
 		serviceDiscovery: `Beyond mapping devices and connections, Scanopy fingerprints [${serviceCount} service types](/services) per host: databases, web servers, DNS, DHCP, Docker containers, print services, and more. Most network mapping tools report only that a host is reachable at an IP address. Scanopy reports the services running on it. When you click a host on the topology map, you see every detected service, not just the host itself.`,
 		diagrams:
 			'One scan produces four interactive views you can switch between: L2 physical (switch ports and links), L3 logical (subnets and routing), workloads (Docker containers and what they run), and applications (services grouped into the apps they belong to). Topology snapshots version your network state over time, so you can see what changed between scans. Shareable via a read-only link that stays current as the network rescans (no per-seat licensing). Embeddable via iframe. Exportable as PNG, SVG, PDF, HTML, Mermaid, Confluence, and CSV.',
@@ -563,7 +565,7 @@ On Layer 2 the two land in the same place: switch, port, MAC, IP. The choice is 
 		slug: 'scanopy-ce',
 		href: '/community',
 
-		discovery: ['SNMP', 'LLDP', 'CDP', 'ARP'],
+		discovery: ['SNMP', 'LLDP', 'CDP', 'ARP', 'ICMP', 'mDNS', 'TCP/UDP'],
 		services: { level: 'yes' },
 		autoUpdates: true,
 		openSource: { status: 'osi', license: 'AGPL-3.0', href: '/community' },
@@ -579,8 +581,9 @@ On Layer 2 the two land in the same place: switch, port, MAC, IP. The choice is 
 		bestFor:
 			'Teams that want automated network documentation on their own infrastructure with no SaaS dependency',
 		description:
-			'The best free self-hosted option for automated network documentation. Scanopy CE is the free, self-hosted edition with the same discovery engine as the paid product (SNMP, LLDP, CDP, ARP), an interactive topology map, and service detection. Open source and runs on your own hardware.',
+			'The best free self-hosted option for automated network documentation. Scanopy CE is the free, self-hosted edition with the same discovery engine as the paid product, an interactive topology map, and service detection. Open source and runs on your own hardware.',
 		discoveryNotes: 'One daemon, no per-device agents.',
+		integrations: `Same integrations as the paid edition: ${integrationList}. [All integrations](/integrations).`,
 		diagrams:
 			'Interactive topology map with service and interface detail. Shareable by read-only link, embeddable via iframe, and exportable as PNG, SVG, PDF, HTML, Mermaid, Confluence, and CSV.',
 		pricingNotes:
