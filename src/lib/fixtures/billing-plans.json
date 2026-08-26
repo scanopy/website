@@ -44,11 +44,11 @@
       "included_orgs": null,
       "included_seats": 1,
       "incremental_features": [
-        "svg_export",
         "share_views",
+        "email_support",
+        "svg_export",
         "scheduled_discovery",
-        "remove_created_with",
-        "email_support"
+        "remove_created_with"
       ],
       "is_commercial": false,
       "is_demo": false,
@@ -108,11 +108,11 @@
       "included_orgs": null,
       "included_seats": 1,
       "incremental_features": [
+        "api_access",
         "embeds",
         "html_export",
-        "api_access",
-        "pdf_export",
-        "mermaid_export"
+        "mermaid_export",
+        "pdf_export"
       ],
       "is_commercial": true,
       "is_demo": false,
@@ -172,11 +172,11 @@
       "included_orgs": null,
       "included_seats": 5,
       "incremental_features": [
-        "onboarding_call",
-        "audit_logs",
-        "priority_support",
+        "confluence_export",
         "webhooks",
-        "confluence_export"
+        "priority_support",
+        "onboarding_call",
+        "audit_logs"
       ],
       "is_commercial": true,
       "is_demo": false,
@@ -236,11 +236,11 @@
       "included_orgs": null,
       "included_seats": 1,
       "incremental_features": [
-        "remove_created_with",
         "email_support",
         "svg_export",
-        "share_views",
-        "scheduled_discovery"
+        "remove_created_with",
+        "scheduled_discovery",
+        "share_views"
       ],
       "is_commercial": false,
       "is_demo": false,
@@ -300,11 +300,11 @@
       "included_orgs": null,
       "included_seats": 1,
       "incremental_features": [
-        "mermaid_export",
-        "pdf_export",
         "api_access",
         "embeds",
-        "html_export"
+        "mermaid_export",
+        "html_export",
+        "pdf_export"
       ],
       "is_commercial": true,
       "is_demo": false,
@@ -366,9 +366,9 @@
       "incremental_features": [
         "priority_support",
         "confluence_export",
-        "webhooks",
         "onboarding_call",
-        "audit_logs"
+        "audit_logs",
+        "webhooks"
       ],
       "is_commercial": true,
       "is_demo": false,
@@ -430,8 +430,8 @@
       "incremental_features": [
         "png_export",
         "csv_export",
-        "network_mapping",
-        "discovery_integrations"
+        "discovery_integrations",
+        "network_mapping"
       ],
       "is_commercial": false,
       "is_demo": false,
@@ -491,12 +491,12 @@
       "included_orgs": null,
       "included_seats": null,
       "incremental_features": [
-        "custom_sso",
-        "air_gapped_deployment",
-        "managed_deployment",
+        "live_chat_support",
         "whitelabeling",
+        "custom_sso",
         "saml",
-        "live_chat_support"
+        "air_gapped_deployment",
+        "managed_deployment"
       ],
       "is_commercial": true,
       "is_demo": false,
@@ -556,15 +556,15 @@
       "included_orgs": 1,
       "included_seats": 1,
       "incremental_features": [
-        "svg_export",
         "custom_sso",
-        "scheduled_discovery",
-        "mermaid_export",
+        "pdf_export",
         "api_access",
-        "html_export",
         "embeds",
+        "html_export",
+        "scheduled_discovery",
         "share_views",
-        "pdf_export"
+        "svg_export",
+        "mermaid_export"
       ],
       "is_commercial": false,
       "is_demo": false,
@@ -624,12 +624,12 @@
       "included_orgs": null,
       "included_seats": null,
       "incremental_features": [
-        "saml",
-        "live_chat_support",
-        "managed_deployment",
+        "whitelabeling",
         "custom_sso",
+        "live_chat_support",
+        "saml",
         "air_gapped_deployment",
-        "whitelabeling"
+        "managed_deployment"
       ],
       "is_commercial": true,
       "is_demo": false,
@@ -689,15 +689,15 @@
       "included_orgs": 1,
       "included_seats": 1,
       "incremental_features": [
-        "html_export",
-        "scheduled_discovery",
-        "share_views",
         "mermaid_export",
-        "svg_export",
         "api_access",
-        "embeds",
         "custom_sso",
-        "pdf_export"
+        "html_export",
+        "embeds",
+        "scheduled_discovery",
+        "pdf_export",
+        "share_views",
+        "svg_export"
       ],
       "is_commercial": false,
       "is_demo": false,
@@ -757,9 +757,9 @@
       "included_orgs": null,
       "included_seats": 1,
       "incremental_features": [
+        "png_export",
         "discovery_integrations",
         "network_mapping",
-        "png_export",
         "csv_export"
       ],
       "is_commercial": false,
@@ -822,10 +822,10 @@
       "incremental_features": [
         "audit_logs",
         "saml",
-        "email_support",
-        "confluence_export",
         "webhooks",
-        "remove_created_with"
+        "remove_created_with",
+        "email_support",
+        "confluence_export"
       ],
       "is_commercial": true,
       "is_demo": false,
