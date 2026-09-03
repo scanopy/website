@@ -41,6 +41,15 @@
 			language: 'French',
 			uploadDate: '2026-01-22',
 			duration: 'PT23M48S'
+		},
+		{
+			id: 'yJd2bCAso04',
+			title:
+				'Scanopy: Diagramas de Red Automáticos en Proxmox y Docker (¡Adiós al trabajo manual!)',
+			channel: 'Manuel Cabrera Caballero',
+			language: 'Spanish',
+			uploadDate: '2026-08-09',
+			duration: 'PT31M12S'
 		}
 	];
 
