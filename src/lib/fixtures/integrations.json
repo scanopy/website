@@ -8,6 +8,7 @@
     "logo_slug": "docker",
     "logo_needs_white_background": false,
     "discovers": "Discover Docker containers and the services they expose.",
+    "docs_path": "/docs/guides/integrations/docker/",
     "summary": "Discover Docker containers and the services they expose. Supports proxy and socket.",
     "transports": [
       {
@@ -28,7 +29,7 @@
           {
             "id": "port",
             "label": "Docker API Port",
-            "field_type": "string",
+            "field_type": "port",
             "placeholder": "2375",
             "secret": false,
             "optional": true,
@@ -117,6 +118,7 @@
     "logo_slug": "instant-on",
     "logo_needs_white_background": false,
     "discovers": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port.",
+    "docs_path": "/docs/guides/integrations/instant-on/",
     "summary": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port. Supports portal account.",
     "transports": [
       {
@@ -176,6 +178,7 @@
     "logo_slug": "podman",
     "logo_needs_white_background": false,
     "discovers": "Discover Podman containers and the services they expose.",
+    "docs_path": "/docs/guides/integrations/podman/",
     "summary": "Discover Podman containers and the services they expose. Supports proxy and socket.",
     "transports": [
       {
@@ -196,7 +199,7 @@
           {
             "id": "port",
             "label": "Podman API Port",
-            "field_type": "string",
+            "field_type": "port",
             "placeholder": "2375",
             "secret": false,
             "optional": true,
@@ -285,6 +288,7 @@
     "logo_slug": "snmp",
     "logo_needs_white_background": false,
     "discovers": "Discover a host's interfaces, system details, and CDP/LLDP neighbors.",
+    "docs_path": "/docs/guides/integrations/snmp/",
     "summary": "Discover a host's interfaces, system details, and CDP/LLDP neighbors. Supports v1, v2c, and v3.",
     "transports": [
       {
@@ -451,6 +455,7 @@
     "logo_slug": "unifi-controller",
     "logo_needs_white_background": false,
     "discovers": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees.",
+    "docs_path": "/docs/guides/integrations/unifi/",
     "summary": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees. Supports api key and local admin.",
     "transports": [
       {
@@ -471,7 +476,7 @@
           {
             "id": "port",
             "label": "Controller Port",
-            "field_type": "string",
+            "field_type": "port",
             "placeholder": "443",
             "secret": false,
             "optional": true,
@@ -520,7 +525,7 @@
           {
             "id": "port",
             "label": "Controller Port",
-            "field_type": "string",
+            "field_type": "port",
             "placeholder": "443",
             "secret": false,
             "optional": true,
