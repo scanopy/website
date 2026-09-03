@@ -181,18 +181,12 @@
 /guides/multiple-daemons/ /docs/guides/networking/multiple-daemons/ 301
 /guides/oidc /docs/guides/operations/oidc/ 301
 /guides/oidc/ /docs/guides/operations/oidc/ 301
-/guides/prometheus-setup /docs/guides/operations/prometheus-setup/ 301
-/guides/prometheus-setup/ /docs/guides/operations/prometheus-setup/ 301
-/guides/scanning-remote-subnets /docs/guides/networking/scanning-remote-subnets/ 301
-/guides/scanning-remote-subnets/ /docs/guides/networking/scanning-remote-subnets/ 301
-/guides/scanning-vpn-networks /docs/guides/networking/scanning-vpn-networks/ 301
-/guides/scanning-vpn-networks/ /docs/guides/networking/scanning-vpn-networks/ 301
-/guides/sharing-topology /docs/guides/operations/sharing-topology/ 301
-/guides/sharing-topology/ /docs/guides/operations/sharing-topology/ 301
-/guides/snmp-credentials /docs/guides/integrations/snmp/ 301
-/guides/snmp-credentials/ /docs/guides/integrations/snmp/ 301
-/guides/unified-discovery-migration /docs/using-scanopy/discovery/ 301
-/guides/unified-discovery-migration/ /docs/using-scanopy/discovery/ 301
+/guides/prometheus-setup* /docs/guides/operations/prometheus-setup/ 301
+/guides/scanning-remote-subnets* /docs/guides/networking/scanning-remote-subnets/ 301
+/guides/scanning-vpn-networks* /docs/guides/networking/scanning-vpn-networks/ 301
+/guides/sharing-topology* /docs/guides/operations/sharing-topology/ 301
+/guides/snmp-credentials* /docs/guides/integrations/snmp/ 301
+/guides/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
 /reference /docs/reference/ 301
 /reference/ /docs/reference/ 301
 /reference/* /docs/reference/:splat/ 301
@@ -212,30 +206,19 @@
 
 # Guide slug renames + Integrations folder (Jul 2026): clearer discovery-integration
 # names, grouped under /guides/integrations/. Old flat slugs → new nested paths.
-/docs/guides/docker-proxy /docs/guides/integrations/docker/ 301
-/docs/guides/docker-proxy/ /docs/guides/integrations/docker/ 301
-/docs/guides/snmp-credentials /docs/guides/integrations/snmp/ 301
-/docs/guides/snmp-credentials/ /docs/guides/integrations/snmp/ 301
-/docs/guides/podman /docs/guides/integrations/podman/ 301
-/docs/guides/podman/ /docs/guides/integrations/podman/ 301
+/docs/guides/docker-proxy* /docs/guides/integrations/docker/ 301
+/docs/guides/snmp-credentials* /docs/guides/integrations/snmp/ 301
+/docs/guides/podman* /docs/guides/integrations/podman/ 301
 
 # Guides reorg into Integrations / Networking / Access & Operations folders (Jul 2026)
-/docs/guides/multiple-daemons /docs/guides/networking/multiple-daemons/ 301
-/docs/guides/multiple-daemons/ /docs/guides/networking/multiple-daemons/ 301
-/docs/guides/scanning-remote-subnets /docs/guides/networking/scanning-remote-subnets/ 301
-/docs/guides/scanning-remote-subnets/ /docs/guides/networking/scanning-remote-subnets/ 301
-/docs/guides/scanning-vpn-networks /docs/guides/networking/scanning-vpn-networks/ 301
-/docs/guides/scanning-vpn-networks/ /docs/guides/networking/scanning-vpn-networks/ 301
-/docs/guides/macvlan-setup /docs/guides/networking/macvlan-setup/ 301
-/docs/guides/macvlan-setup/ /docs/guides/networking/macvlan-setup/ 301
-/docs/guides/oidc /docs/guides/operations/oidc/ 301
-/docs/guides/oidc/ /docs/guides/operations/oidc/ 301
-/docs/guides/prometheus-setup /docs/guides/operations/prometheus-setup/ 301
-/docs/guides/prometheus-setup/ /docs/guides/operations/prometheus-setup/ 301
-/docs/guides/sharing-topology /docs/guides/operations/sharing-topology/ 301
-/docs/guides/sharing-topology/ /docs/guides/operations/sharing-topology/ 301
-/docs/guides/unified-discovery-migration /docs/using-scanopy/discovery/ 301
-/docs/guides/unified-discovery-migration/ /docs/using-scanopy/discovery/ 301
+/docs/guides/multiple-daemons* /docs/guides/networking/multiple-daemons/ 301
+/docs/guides/scanning-remote-subnets* /docs/guides/networking/scanning-remote-subnets/ 301
+/docs/guides/scanning-vpn-networks* /docs/guides/networking/scanning-vpn-networks/ 301
+/docs/guides/macvlan-setup* /docs/guides/networking/macvlan-setup/ 301
+/docs/guides/oidc* /docs/guides/operations/oidc/ 301
+/docs/guides/prometheus-setup* /docs/guides/operations/prometheus-setup/ 301
+/docs/guides/sharing-topology* /docs/guides/operations/sharing-topology/ 301
+/docs/guides/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
 
 # Static asset reorg (2026-07-14): logos -> /brand, share/OG images -> /og
 /scanopy-logo.webp /brand/scanopy-logo.webp 301
@@ -250,18 +233,19 @@
 # - the v0.15.0 migration guide described flags removed in v0.16.0
 # - daemon support lifecycle merged into daemon status
 # - SNMP scan troubleshooting moved into the SNMP integration guide
-/docs/guides/operations/unified-discovery-migration /docs/using-scanopy/discovery/ 301
-/docs/guides/operations/unified-discovery-migration/ /docs/using-scanopy/discovery/ 301
-/docs/reference/daemon-support-lifecycle /docs/reference/daemon-status/ 301
-/docs/reference/daemon-support-lifecycle/ /docs/reference/daemon-status/ 301
-/docs/setting-up-daemons/troubleshooting-scans/snmp /docs/guides/integrations/snmp/ 301
-/docs/setting-up-daemons/troubleshooting-scans/snmp/ /docs/guides/integrations/snmp/ 301
+/docs/guides/operations/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
+/docs/reference/daemon-support-lifecycle* /docs/reference/daemon-status/ 301
+/docs/setting-up-daemons/troubleshooting-scans/snmp* /docs/guides/integrations/snmp/ 301
 
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404
 
-# WARNING (verified 2026-09-03 against production): only roughly the first 178 rules in
-# this file are applied. /social.webp (rule 178) redirects; /topology-hero.webp (rule 179)
-# and everything after it returns 404, including the 2026-07-14 asset reorg tail and the
-# 2026-07-29 docs consolidation block. Check the Cloudflare Pages build log, which reports
-# how many redirects it accepted and which it ignored. Do not add new rules at the bottom.
+# REDIRECT LIMIT (verified against production 2026-09-03)
+# Only about the first 178 rules in this file are applied. /social.webp at rule 178
+# redirected; /topology-hero.webp at rule 179 and everything after it returned 404,
+# which silently killed the 2026-07-14 asset tail and the 2026-07-29 docs block for
+# weeks. The file is now 170 rules, under that ceiling.
+#
+# Cloudflare Pages does NOT normalise trailing slashes: a rule for /x does not catch
+# /x/. The 20 rules nearest the end are written as /x* to cover both in one rule.
+# Do not append new rules at the bottom without re-checking the count.
