@@ -1,5 +1,11 @@
 {
   "title": "Troubleshooting Scans",
   "defaultOpen": true,
-  "pages": ["index", "host-discovery", "scan-performance", "credentials"]
+  "pages": [
+    "index",
+    "host-discovery",
+    "phantom-hosts",
+    "scan-performance",
+    "credentials"
+  ]
 }

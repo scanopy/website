@@ -1,0 +1,55 @@
+---
+title: Phantom Hosts
+description: Hosts recorded at addresses that hold no device, or missing from addresses that do, on subnets a daemon reaches through a router.
+---
+
+**Symptoms**: On a subnet the daemon reaches through a router, one of the following:
+
+- A host is recorded at nearly every address in the range. None has a MAC address, and they all carry the same one or two services.
+- No host is recorded at addresses that do hold devices, and the scan session raises **Handshakes with nothing behind them**.
+
+Both come from the same cause.
+
+**Cause**: Something between the daemon and that subnet completes the TCP handshake on behalf of addresses, whether or not anything is listening there. Firewall session helpers, load balancers and DDoS scrubbing appliances all do this. On FortiOS the relevant configuration is `config system session-helper`, which ships with entries for SIP, FTP, RTSP, H.323, MGCP and TFTP.
+
+A completed handshake is the only evidence available on a routed subnet, because ARP does not cross a router. When a device in the path answers on behalf of an empty address, that address is indistinguishable from a real host by the handshake alone.
+
+## Confirming it
+
+From the daemon host, open a TCP connection to an address in the range that you know holds no device — the subnet's own network address is a reliable choice, since nothing can be assigned to it:
+
+```
+timeout 4 bash -c "echo > /dev/tcp/<network-address>/5060" && echo "answered" || echo "no answer"
+```
+
+Repeat with a port outside the intercepted set, such as 8080. A device in the path is answering if the first connection completes and the second does not.
+
+Some appliances answer only for addresses their routing table has a route to, so an address in the middle of the range may answer where the network address does not. Try several.
+
+A packet capture on the destination subnet settles it: if nothing arrives there while the daemon reports the connection as open, the answer came from the path.
+
+## How to resolve
+
+### Scan the subnet from a daemon with an interface on it
+
+The most complete fix. A daemon on the segment discovers hosts by ARP, which resolves only for addresses that hold a device, so nothing in the path can answer on their behalf. Hostnames and MAC addresses become available at the same time.
+
+See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
+
+### Stop the device in the path from answering
+
+On FortiOS, remove or disable the `config system session-helper` entries for the ports involved. The equivalent on other platforms is the application-layer gateway, protocol inspection or fixup configuration for those protocols. Check the vendor's documentation for the platform in the path.
+
+This affects traffic other than scanning, so treat it as a change to the firewall rather than a scan setting.
+
+### Leave it
+
+A host is recorded on a routed subnet only when something answered its own protocol — a probe that got a protocol reply, an endpoint that responded, or a credential that authenticated. Addresses that answered a handshake and nothing else are declined. If the addresses really are empty, nothing needs fixing and the warning is describing the network accurately.
+
+### Record hosts from an open port alone
+
+If the addresses do hold devices and none of them runs anything Scanopy can interrogate — a bespoke TCP service and nothing else — enable **Trust Port-Only Detections** in the discovery's scan settings. An open port then counts as evidence of a host again on subnets reached through a router.
+
+This is off by default. With it on, a device in the path that answers for empty addresses will record a host at each one.
+
+Subnets a daemon has an interface on are unaffected either way: ARP answers first there, and an address that ARP resolved is a host regardless of this setting.
