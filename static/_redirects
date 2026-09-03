@@ -99,9 +99,6 @@
 
 # Catch-all for old docs structure patterns
 # Targets keep a trailing slash so the docs app doesn't add a second 308 hop.
-/docs/getting-started/* /docs/:splat/ 301
-/docs/daemons/* /docs/:splat/ 301
-/docs/self-hosted/* /docs/:splat/ 301
 
 # Root-level paths missing /docs/ prefix
 /multi-vlan /docs/setting-up-daemons/planning-daemon-deployment/ 301
@@ -181,24 +178,14 @@
 /guides/multiple-daemons/ /docs/guides/networking/multiple-daemons/ 301
 /guides/oidc /docs/guides/operations/oidc/ 301
 /guides/oidc/ /docs/guides/operations/oidc/ 301
-/guides/prometheus-setup* /docs/guides/operations/prometheus-setup/ 301
-/guides/scanning-remote-subnets* /docs/guides/networking/scanning-remote-subnets/ 301
-/guides/scanning-vpn-networks* /docs/guides/networking/scanning-vpn-networks/ 301
-/guides/sharing-topology* /docs/guides/operations/sharing-topology/ 301
-/guides/snmp-credentials* /docs/guides/integrations/snmp/ 301
-/guides/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
 /reference /docs/reference/ 301
 /reference/ /docs/reference/ 301
-/reference/* /docs/reference/:splat/ 301
 /using-scanopy /docs/using-scanopy/ 301
 /using-scanopy/ /docs/using-scanopy/ 301
-/using-scanopy/* /docs/using-scanopy/:splat/ 301
 /setting-up-daemons /docs/setting-up-daemons/ 301
 /setting-up-daemons/ /docs/setting-up-daemons/ 301
-/setting-up-daemons/* /docs/setting-up-daemons/:splat/ 301
 /self-hosted-server /docs/self-hosted-server/ 301
 /self-hosted-server/ /docs/self-hosted-server/ 301
-/self-hosted-server/* /docs/self-hosted-server/:splat/ 301
 
 # Bare old docs index that predates the troubleshooting split
 /docs/troubleshooting /docs/setting-up-daemons/troubleshooting-scans/ 301
@@ -206,19 +193,8 @@
 
 # Guide slug renames + Integrations folder (Jul 2026): clearer discovery-integration
 # names, grouped under /guides/integrations/. Old flat slugs → new nested paths.
-/docs/guides/docker-proxy* /docs/guides/integrations/docker/ 301
-/docs/guides/snmp-credentials* /docs/guides/integrations/snmp/ 301
-/docs/guides/podman* /docs/guides/integrations/podman/ 301
 
 # Guides reorg into Integrations / Networking / Access & Operations folders (Jul 2026)
-/docs/guides/multiple-daemons* /docs/guides/networking/multiple-daemons/ 301
-/docs/guides/scanning-remote-subnets* /docs/guides/networking/scanning-remote-subnets/ 301
-/docs/guides/scanning-vpn-networks* /docs/guides/networking/scanning-vpn-networks/ 301
-/docs/guides/macvlan-setup* /docs/guides/networking/macvlan-setup/ 301
-/docs/guides/oidc* /docs/guides/operations/oidc/ 301
-/docs/guides/prometheus-setup* /docs/guides/operations/prometheus-setup/ 301
-/docs/guides/sharing-topology* /docs/guides/operations/sharing-topology/ 301
-/docs/guides/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
 
 # Static asset reorg (2026-07-14): logos -> /brand, share/OG images -> /og
 /scanopy-logo.webp /brand/scanopy-logo.webp 301
@@ -233,12 +209,8 @@
 # - the v0.15.0 migration guide described flags removed in v0.16.0
 # - daemon support lifecycle merged into daemon status
 # - SNMP scan troubleshooting moved into the SNMP integration guide
-/docs/guides/operations/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
-/docs/reference/daemon-support-lifecycle* /docs/reference/daemon-status/ 301
-/docs/setting-up-daemons/troubleshooting-scans/snmp* /docs/guides/integrations/snmp/ 301
 
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
-/* /404.html 404
 
 # REDIRECT LIMIT (verified against production 2026-09-03)
 # Only about the first 178 rules in this file are applied. /social.webp at rule 178
@@ -249,3 +221,46 @@
 # Cloudflare Pages does NOT normalise trailing slashes: a rule for /x does not catch
 # /x/. The 20 rules nearest the end are written as /x* to cover both in one rule.
 # Do not append new rules at the bottom without re-checking the count.
+
+
+# --- Dynamic rules last ---------------------------------------------------
+# Cloudflare Pages treats every rule that FOLLOWS a splat or placeholder as a
+# dynamic rule, and dynamic rules are capped far lower than static ones. With
+# the splats at rule #81 the tail of this file was silently dropped: 11 rules
+# returned 404 in production for weeks (verified 2026-09-03). Keeping every
+# literal rule above the splats keeps them static, and clears the 62 'could be
+# made more performant' hints Cloudflare logged.
+#
+# Also note: Pages does NOT normalise trailing slashes. A rule for /x will not
+# catch /x/. Pairs near the end of this file are written as /x* to cover both.
+#
+# Removed: `/* /404.html 404`. Pages rejects it ("Valid status codes are 200,
+# 301, 302, 303, 307, or 308. Got 404"), so it never applied. Unmatched paths
+# already return 404 natively, verified in production.
+/docs/getting-started/* /docs/:splat/ 301
+/docs/daemons/* /docs/:splat/ 301
+/docs/self-hosted/* /docs/:splat/ 301
+/guides/prometheus-setup* /docs/guides/operations/prometheus-setup/ 301
+/guides/scanning-remote-subnets* /docs/guides/networking/scanning-remote-subnets/ 301
+/guides/scanning-vpn-networks* /docs/guides/networking/scanning-vpn-networks/ 301
+/guides/sharing-topology* /docs/guides/operations/sharing-topology/ 301
+/guides/snmp-credentials* /docs/guides/integrations/snmp/ 301
+/guides/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
+/reference/* /docs/reference/:splat/ 301
+/using-scanopy/* /docs/using-scanopy/:splat/ 301
+/setting-up-daemons/* /docs/setting-up-daemons/:splat/ 301
+/self-hosted-server/* /docs/self-hosted-server/:splat/ 301
+/docs/guides/docker-proxy* /docs/guides/integrations/docker/ 301
+/docs/guides/snmp-credentials* /docs/guides/integrations/snmp/ 301
+/docs/guides/podman* /docs/guides/integrations/podman/ 301
+/docs/guides/multiple-daemons* /docs/guides/networking/multiple-daemons/ 301
+/docs/guides/scanning-remote-subnets* /docs/guides/networking/scanning-remote-subnets/ 301
+/docs/guides/scanning-vpn-networks* /docs/guides/networking/scanning-vpn-networks/ 301
+/docs/guides/macvlan-setup* /docs/guides/networking/macvlan-setup/ 301
+/docs/guides/oidc* /docs/guides/operations/oidc/ 301
+/docs/guides/prometheus-setup* /docs/guides/operations/prometheus-setup/ 301
+/docs/guides/sharing-topology* /docs/guides/operations/sharing-topology/ 301
+/docs/guides/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
+/docs/guides/operations/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
+/docs/reference/daemon-support-lifecycle* /docs/reference/daemon-status/ 301
+/docs/setting-up-daemons/troubleshooting-scans/snmp* /docs/guides/integrations/snmp/ 301
