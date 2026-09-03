@@ -49,6 +49,12 @@ MAC addresses come from ARP on directly connected subnets, or from container net
 
 **Floating virtual IPs (CARP/VRRP).** A high-availability VIP has no hardware of its own — its only identity is the address it floats on, carried by a shared virtual-router MAC. Scanopy matches it on IP + subnet, so the VIP is recognized across scans rather than recreated each time. The shared virtual MAC is never matched on, which keeps the HA peers hosting it distinct instead of merging them into one host.
 
+### Matching a Host With No Address
+
+A device with no IP address has nothing to match on above, so Scanopy falls back to its MAC address alone — the same tier also catches a device whose address moved, so it isn't recreated under the new one. Only a strong, vendor-assigned MAC is used for this; a locally administered address or one shared by a virtual router or group (the kind CARP/VRRP relies on) is not, since it doesn't identify a single device. Creating a new address-less host this way additionally requires the MAC to have been observed directly rather than only reported by another device, so a third party's unverified claim never invents a host.
+
+A host with no address has no Rescan action, since a rescan targets an address, and it isn't placed in the Layer 3 topology view, which positions hosts by address.
+
 ### Container Host Matching
 
 Container discovery reports on exactly one host — the daemon's own, or the one a proxy credential points at — so there is nothing to deduplicate across hosts. What it does change is *which* host the containers land on: a proxy pointing at a remote machine attributes them there, not to the daemon's host.
