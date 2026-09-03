@@ -228,7 +228,7 @@
 		</div>
 	</section>
 
-	<!-- Commercial terms. Shared with /solutions/network-documentation: procurement asks the same
+	<!-- Commercial terms. Shared with /guides/network-documentation-software: procurement asks the same
 	     four questions whether or not the driver is an audit. -->
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">

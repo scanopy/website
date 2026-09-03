@@ -1,18 +1,18 @@
 ---
-title: 'Network Documentation Tools 2026: 13 Compared (Real Pricing)'
-description: '13 network documentation tools compared on discovery method, live updates, and real pricing, including free and open-source options. Updated for 2026.'
-keyword: network documentation tools
+title: 'Network Diagram Tools 2026: 13 Compared (Real Pricing)'
+description: '13 network diagram software tools compared on discovery method, live updates, and real pricing, including free and open-source options. Updated for 2026.'
+keyword: network diagram tools
 slug: best-automated-network-diagram-tools
 date: 2026-04-01
-dateModified: 2026-07-21
+dateModified: 2026-09-03
 style: comparison
-tldr: "The best network documentation tool for most IT teams combines automatic discovery with an exportable, shareable map, not a monitoring dashboard with a map tab bolted on. Most tools marketed as 'automated' are either monitoring platforms that include mapping as a feature, or manual drawing tools with no discovery. Here's what each of the 13 tools does, what it costs, and which one fits your network."
+tldr: "The best network diagram tool for most IT teams combines automatic discovery with an exportable, shareable map, not a monitoring dashboard with a map tab bolted on. Most tools marketed as 'automated' are either monitoring platforms that include mapping as a feature, or manual drawing tools with no discovery. Here's what each of the 13 tools does, what it costs, and which one fits your network."
 ctaDescription: Scanopy deploys a lightweight daemon that discovers your network and builds a live topology map. No per-device fees, unlimited hosts. It pairs with whatever monitoring tool you already use.
 ---
 
-## Network Documentation Tools Fall Into Three Categories: Monitoring Platforms, Dedicated Tools, and Manual Drawing Tools
+## Network Diagram Tools Fall Into Three Categories: Monitoring Platforms, Dedicated Tools, and Manual Drawing Tools
 
-There are three categories of network documentation tools: **monitoring platforms** that include mapping as a feature, **dedicated documentation tools** that focus only on documenting the network, and **manual diagramming tools** where you draw everything yourself. The right choice depends on whether you need monitoring bundled in, how often the documentation needs to update, and your budget. If you think of this as building a live map rather than a static diagram, see our [network mapping software](/guides/network-mapping-software) guide.
+There are three categories of network diagram tools: **monitoring platforms** that include mapping as a feature, **dedicated documentation tools** that focus only on documenting the network, and **manual diagramming tools** where you draw everything yourself. The right choice depends on whether you need monitoring bundled in, how often the documentation needs to update, and your budget. If you think of this as building a live map rather than a static diagram, see our [network mapping software](/guides/network-mapping-software) guide.
 
 | Scenario                                       | Recommendation                                                                                                                                                                                                                                                                                                            |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

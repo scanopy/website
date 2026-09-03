@@ -248,5 +248,12 @@
 /docs/setting-up-daemons/troubleshooting-scans/snmp /docs/guides/integrations/snmp/ 301
 /docs/setting-up-daemons/troubleshooting-scans/snmp/ /docs/guides/integrations/snmp/ 301
 
+# Head-term consolidation (2026-09-03): three URLs carried "network documentation
+# software" in their titles and the head term lost position with all three indexed.
+# The guide keeps documentation intent; /comparisons/best-automated-network-diagram-tools
+# is retargeted back to diagram intent. This page ranked 37th and returned 1 click in 28 days.
+/solutions/network-documentation /guides/network-documentation-software 301
+/solutions/network-documentation/ /guides/network-documentation-software 301
+
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 /* /404.html 404

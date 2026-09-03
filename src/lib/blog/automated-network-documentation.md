@@ -128,13 +128,13 @@ Most teams need all three, and one tool does not cover the others. Monitoring to
 
 ## Tools That Automate Network Documentation
 
-Several tools approach automated documentation from different angles. Some are dedicated documentation tools, others bundle mapping into a monitoring or asset management platform (for the full comparison, including pricing, see the [network documentation tools comparison](/comparisons/best-automated-network-diagram-tools), and for the free options, the [open-source network documentation guide](/guides/open-source-network-documentation)):
+Several tools approach automated documentation from different angles. Some are dedicated documentation tools, others bundle mapping into a monitoring or asset management platform (for the full comparison, including pricing, see the [network diagram tools comparison](/comparisons/best-automated-network-diagram-tools), and for the free options, the [open-source network documentation guide](/guides/open-source-network-documentation)):
 
 <!-- vendor-table:scanopy,auvik,domotz,manageengine-opmanager,netdisco -->
 
 ## What to Look for in an Automated Documentation Tool
 
-If you're evaluating tools, our [network documentation tools comparison](/comparisons/best-automated-network-diagram-tools) covers specific products, pricing, and trade-offs. Six criteria:
+If you're evaluating tools, our [network diagram tools comparison](/comparisons/best-automated-network-diagram-tools) covers specific products, pricing, and trade-offs. Six criteria:
 
 - **Lightweight deployment**: one scanner per network, not an agent on every device. You're solving a complexity problem; don't add more complexity
 - **Protocol support**: SNMP, LLDP, and CDP at minimum. ARP and MAC table scanning for full topology

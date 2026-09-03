@@ -231,7 +231,7 @@
 	<p style="font-size: 0.8125rem; color: rgb(var(--c-gray-400));">
 		For a detailed comparison of these and other tools, see our <a
 			href="/comparisons/best-automated-network-diagram-tools"
-			>full network documentation tools comparison</a
+			>full network diagram tools comparison</a
 		>.
 	</p>
 {/if}

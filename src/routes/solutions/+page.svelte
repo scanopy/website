@@ -9,12 +9,6 @@
 	// not a feature.
 	const solutions = [
 		{
-			name: 'Network documentation',
-			href: '/solutions/network-documentation',
-			blurb:
-				'Scanopy discovers your hosts, services, interfaces, and topology, and rescans on a schedule. Nothing to draw, no spreadsheet to maintain.'
-		},
-		{
 			name: 'Compliance',
 			href: '/solutions/compliance',
 			blurb:

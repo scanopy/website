@@ -401,7 +401,7 @@
 				>, compare
 				<a
 					href="/comparisons/best-automated-network-diagram-tools"
-					class="text-blue-400 hover:text-blue-300">network documentation tools</a
+					class="text-blue-400 hover:text-blue-300">network diagram tools</a
 				>, browse the
 				<a
 					href="/guides/open-source-network-documentation"

@@ -207,7 +207,7 @@
 					<p>
 						For all 13 tools side by side, see the
 						<a href="/comparisons/best-automated-network-diagram-tools"
-							>full network documentation tools comparison</a
+							>full network diagram tools comparison</a
 						>, or browse the
 						<a href="/comparisons">head-to-head and alternatives comparisons</a>.
 					</p>

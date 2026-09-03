@@ -177,7 +177,7 @@
 							<a href={altHref}>best {data.vendorName} alternatives</a>.{/if} For all 13 tools side by
 						side, see the
 						<a href="/comparisons/best-automated-network-diagram-tools"
-							>full network documentation tools comparison</a
+							>full network diagram tools comparison</a
 						>.
 					</p>
 
