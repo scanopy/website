@@ -69,7 +69,7 @@ Before increasing `arp_rate_pps`, check whether your switch has Dynamic ARP Insp
 
 ## Discovery Finished with Hosts Unscanned
 
-**Symptoms**: A run completes with a warning like `120 hosts not scanned (~35m remaining)`, and those hosts show stale data.
+**Symptoms**: A run completes with a [warning](/reference/scan-warnings/) like `Scan hit its time limit (6h) — 120 host(s) not scanned. Raise Max Discovery Duration or rescan.`, and those hosts show stale data.
 
 **Cause**: The run hit **Max Discovery Duration** — the hard ceiling on a single discovery run, 6 hours by default. Scanopy completes the run rather than failing it, keeps what it collected, and leaves the rest for the next run.
 

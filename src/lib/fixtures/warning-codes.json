@@ -1,0 +1,659 @@
+[
+  {
+    "id": "InterfaceSetCutShort",
+    "name": "Interface list cut short",
+    "description": "{addresses} stopped responding partway through the SNMP interface list, so some interfaces are missing.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses"
+      ]
+    }
+  },
+  {
+    "id": "InterfaceDetailsCutShort",
+    "name": "Interface details cut short",
+    "description": "{addresses} returned every SNMP interface but stopped while reading their details, so some descriptions or speeds may be blank.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "info",
+    "color": "Gray",
+    "metadata": {
+      "slots": [
+        "addresses"
+      ]
+    }
+  },
+  {
+    "id": "SnmpWalkEntryCap",
+    "name": "Table larger than one scan reads",
+    "description": "{addresses} has more {groups} than one scan reads — collection stops at {limit} entries per table, so the rest were not read. The data recorded is correct as far as it goes.",
+    "category": "NothingToDo",
+    "icon": "info",
+    "color": "Gray",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "groups",
+        "limit"
+      ]
+    }
+  },
+  {
+    "id": "SnmpWalkUnsupported",
+    "name": "Not implemented over SNMP",
+    "description": "{addresses} does not implement {groups} over SNMP, so it cannot be read from the device at all. Previously discovered values were kept.",
+    "category": "NothingToDo",
+    "icon": "info",
+    "color": "Gray",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "groups"
+      ]
+    }
+  },
+  {
+    "id": "SnmpWalkDesynchronised",
+    "name": "Agent answered out of step",
+    "description": "{addresses} answered out of step with what was asked for {groups}, which usually means the agent is under load. Previously discovered values were kept and refresh on the next complete scan.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "groups"
+      ]
+    }
+  },
+  {
+    "id": "SnmpWalkPartialDiscarded",
+    "name": "Partial read discarded",
+    "description": "{addresses} did not finish reporting {groups}, so what it did answer was not recorded — a partial read cannot tell a value that has gone from one that was not reached. Previously discovered values were kept, and refresh on the next complete scan.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "groups"
+      ]
+    }
+  },
+  {
+    "id": "SnmpWalkPartialRecorded",
+    "name": "Partial read recorded",
+    "description": "{addresses} did not finish reporting {groups}, so what it read was recorded and the rest refreshes on the next complete scan.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "groups"
+      ]
+    }
+  },
+  {
+    "id": "SnmpWalkBridgeMibAbsent",
+    "name": "Bridge MIB not served",
+    "description": "{addresses} did not answer for {groups}, which these switches commonly do not implement. Their MAC-address-table and VLAN membership cannot be read over SNMP; a UniFi controller integration reports the same data where one manages the device.",
+    "category": "NothingToDo",
+    "icon": "info",
+    "color": "Gray",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "groups"
+      ]
+    }
+  },
+  {
+    "id": "SnmpWalkNoAnswer",
+    "name": "No answer for a table",
+    "description": "{addresses} returned no {groups} data at all — the device stopped answering rather than reporting that it has none. Previously discovered values were kept rather than overwritten and refresh on the next complete scan.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "groups"
+      ]
+    }
+  },
+  {
+    "id": "ClaimedCountReadCutShort",
+    "name": "Claimed count, read cut short",
+    "description": "{addresses} reported {source} as {expected}, and the read ended at {observed} without finishing. That is how much of the table is missing — the incomplete-walk line for each device says why it ended. What was read is recorded.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "source",
+        "expected",
+        "observed"
+      ]
+    }
+  },
+  {
+    "id": "ClaimedCountUnderRead",
+    "name": "Fewer rows than the device claims",
+    "description": "{addresses} reported {source} as {expected}, but only {observed} could be read. What was read is recorded; a device may be misreporting its own count, or may be declining to serve the rest of the table to this credential.",
+    "category": "CheckTheDevice",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "source",
+        "expected",
+        "observed"
+      ]
+    }
+  },
+  {
+    "id": "ClaimedCapabilityReadCutShort",
+    "name": "Claimed capability, read cut short",
+    "description": "{addresses} advertised {source}, and the read of that {group} ended without returning any. The incomplete-walk line for each device says why it ended; what a device advertises is why this is worth reading again rather than treating as empty.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "source",
+        "group"
+      ]
+    }
+  },
+  {
+    "id": "ClaimedCapabilityEmpty",
+    "name": "Claimed capability, nothing served",
+    "description": "{addresses} advertised {source}, but returned no {group} at all. A device that says it does this and then reports none of it is usually restricting what the credential may see — an SNMP view, or a VLAN context the query has to name.",
+    "category": "CheckTheDevice",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "source",
+        "group"
+      ]
+    }
+  },
+  {
+    "id": "LldpLocalPortDropped",
+    "name": "LLDP neighbours discarded",
+    "description": "{addresses} reported LLDP neighbours on a local port that matches no interface on the device ({dropped} of {total}), so they are discarded and draw no links — those devices will look as though they have no LLDP neighbours. This usually means the switch numbers its LLDP ports separately from its interfaces, or did not answer for its LLDP port table.",
+    "category": "NothingToDo",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "dropped",
+        "total"
+      ]
+    }
+  },
+  {
+    "id": "LldpLocalPortDroppedReadCutShort",
+    "name": "LLDP port table read cut short",
+    "description": "{addresses} reported LLDP neighbours on a local port that matches no interface on the device ({dropped} of {total}), so they are discarded and draw no links — those devices will look as though they have no LLDP neighbours. The read of their own port numbering did not finish, so the numbering could not be matched up; the incomplete-walk line for each device says which table stopped and why. A complete scan may place these neighbours.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "dropped",
+        "total"
+      ]
+    }
+  },
+  {
+    "id": "LldpLocalPortMisplaced",
+    "name": "LLDP neighbours possibly misplaced",
+    "description": "{addresses} reported LLDP neighbours whose local port could not be identified but does match an interface number ({misplaced} in total), so they are drawn against a port that may not be the right one.",
+    "category": "NothingToDo",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "misplaced"
+      ]
+    }
+  },
+  {
+    "id": "MalformedNeighboursWalkCutShort",
+    "name": "Neighbour identifiers cut short",
+    "description": "{addresses} reported neighbour records without the identifier needed to match the far end ({discarded} in total), so {consequence}. The read of the column identifying the far end stopped before its end, so these records may come back on the next complete scan.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "discarded",
+        "consequence"
+      ]
+    }
+  },
+  {
+    "id": "MalformedNeighboursGhostRows",
+    "name": "Neighbour rows without identifiers",
+    "description": "{addresses} reported neighbour records without the identifier needed to match the far end ({discarded} in total), so {consequence}. The rows appeared only in the columns describing each neighbour, never in the one identifying it, so there was no identifier to lose. Rescanning will not change this.",
+    "category": "NothingToDo",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "discarded",
+        "consequence"
+      ]
+    }
+  },
+  {
+    "id": "MalformedNeighboursIncompleteRecords",
+    "name": "Neighbours listed without identifiers",
+    "description": "{addresses} reported neighbour records without the identifier needed to match the far end ({discarded} in total), so {consequence}. These neighbours were listed and then no identifier was supplied for them. The read finished, so rescanning will not change this.",
+    "category": "NothingToDo",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "discarded",
+        "consequence"
+      ]
+    }
+  },
+  {
+    "id": "MalformedNeighboursUnexpectedType",
+    "name": "Neighbour identifier of the wrong type",
+    "description": "{addresses} reported neighbour records without the identifier needed to match the far end ({discarded} in total), so {consequence}. The identifying column came back with a value of a type it cannot hold. Rescanning will not change this.",
+    "category": "NothingToDo",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "discarded",
+        "consequence"
+      ]
+    }
+  },
+  {
+    "id": "MalformedNeighboursUnreadableIndex",
+    "name": "Neighbour position unreadable",
+    "description": "{addresses} reported neighbour records without the identifier needed to match the far end ({discarded} in total), so {consequence}. Their position in the neighbour table could not be read, so they could not be tied to a local port. Rescanning will not change this.",
+    "category": "NothingToDo",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses",
+        "discarded",
+        "consequence"
+      ]
+    }
+  },
+  {
+    "id": "SnmpCollectedNothing",
+    "name": "SNMP answered but returned nothing",
+    "description": "{addresses} answered SNMP but returned no interfaces, neighbours, addresses or forwarding data at all. The credential is working, so this is either a device that implements nothing beyond its system description, or one whose tables could not be read — the daemon log records which for each table.",
+    "category": "CheckTheDevice",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "addresses"
+      ]
+    }
+  },
+  {
+    "id": "VlanRecordingFailed",
+    "name": "VLANs could not be saved",
+    "description": "The VLANs reported by {addresses} could not be saved, so VLAN membership is missing from their interfaces. The devices answered correctly — this is a failure recording the result, and the daemon log has the underlying error.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "addresses"
+      ]
+    }
+  },
+  {
+    "id": "CredentialTargetNotScanned",
+    "name": "Credential target outside the scan",
+    "description": "The {credential} credential for {addresses} was never contacted, because no subnet this scan covers reaches there — add the subnet to the discovery, or move the credential to a host inside it.",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses"
+      ]
+    }
+  },
+  {
+    "id": "CredentialTargetNotResponding",
+    "name": "Credential target did not respond",
+    "description": "The {credential} credential for {addresses} was not tried, because nothing answered there during the scan — check the address is right and the host is online.",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses"
+      ]
+    }
+  },
+  {
+    "id": "CredentialGateClosed",
+    "name": "Credential port not open",
+    "description": "The {credential} credential for {addresses} was not tried, because port {ports} was not open there — check the port configured on the credential.",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "ports"
+      ]
+    }
+  },
+  {
+    "id": "CredentialRejected",
+    "name": "Credential refused",
+    "description": "The {credential} credential for {addresses} was refused — check the username, password or community string. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "CredentialMalformed",
+    "name": "Credential incomplete",
+    "description": "The {credential} credential for {addresses} is incomplete and could not be used — re-enter it. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "CredentialTlsFailed",
+    "name": "TLS negotiation failed",
+    "description": "The {credential} credential for {addresses} could not negotiate TLS — if the appliance serves a self-signed certificate, turn on \"accept invalid certificates\" in the daemon's scan settings. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "CredentialNotThisService",
+    "name": "Not the expected service",
+    "description": "The {credential} credential for {addresses} reached something that is not the expected service — check the port on the credential. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "CredentialCollectionFailed",
+    "name": "Collection failed after authenticating",
+    "description": "The {credential} credential for {addresses} authenticated and then failed while collecting, so that data is missing rather than out of date. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "CredentialCollectionTimedOut",
+    "name": "Collection timed out after authenticating",
+    "description": "The {credential} credential for {addresses} authenticated and then ran out of time before it finished collecting — rescan separately, or narrow what the scan covers. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "CredentialUnreachable",
+    "name": "Credential target unreachable",
+    "description": "The {credential} credential for {addresses} could not be reached — check the address, port and that the service is listening. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "CredentialTimedOut",
+    "name": "Credential attempt timed out",
+    "description": "The {credential} credential for {addresses} timed out before anything answered — check the address and port, and that the service is listening rather than dropping the connection. ({detail})",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "credential",
+        "addresses",
+        "detail"
+      ]
+    }
+  },
+  {
+    "id": "ConnectionsWithoutProtocolResponse",
+    "name": "Handshakes with nothing behind them",
+    "description": "{declined} address(es) in {cidr} completed a TCP connection on {ports} and then answered nothing, so no host was recorded at any of them. Something in the path — a firewall session helper, a load balancer, a scrubbing appliance — answers for addresses that hold no device, and a bare handshake cannot tell one from the other. If those addresses really do hold devices, scan the subnet from a daemon with an interface on it; if they are empty, nothing here needs fixing.",
+    "category": "FixInScanopy",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "cidr",
+        "declined",
+        "ports"
+      ]
+    }
+  },
+  {
+    "id": "ScanTimeLimitWithEstimate",
+    "name": "Scan hit its time limit",
+    "description": "Scan hit its time limit ({hours}h) — {hosts_not_scanned} host(s) not scanned (~{minutes_remaining} min of estimated work remaining). Raise Max Discovery Duration or rescan.",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "hours",
+        "hosts_not_scanned",
+        "minutes_remaining"
+      ]
+    }
+  },
+  {
+    "id": "ScanTimeLimit",
+    "name": "Scan hit its time limit",
+    "description": "Scan hit its time limit ({hours}h) — {hosts_not_scanned} host(s) not scanned. Raise Max Discovery Duration or rescan.",
+    "category": "FixInScanopy",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "hours",
+        "hosts_not_scanned"
+      ]
+    }
+  },
+  {
+    "id": "LldpNeighbourNotFound",
+    "name": "Neighbour device not discovered",
+    "description": "LLDP/CDP neighbours name devices this network has not discovered ({count} in total), so they draw no links. This is expected where the far end is an endpoint or unmanaged device; a device that should have been scanned means the identifier it advertises is not one this network holds.",
+    "category": "NothingToDo",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "count"
+      ]
+    }
+  },
+  {
+    "id": "LldpNeighbourAmbiguous",
+    "name": "Neighbour device identifier not unique",
+    "description": "LLDP/CDP neighbours advertise an identifier that several hosts on this network hold ({count} in total), so none of them can be picked and no link is drawn. This is usually duplicate records for one device rather than a device that was missed — consolidate the duplicates and the link resolves.",
+    "category": "FixInScanopy",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "count"
+      ]
+    }
+  },
+  {
+    "id": "LldpPortNoStrategy",
+    "name": "No lookup for the advertised port id",
+    "description": "LLDP/CDP neighbours resolved to a device but advertise a port id of a subtype there is no lookup for ({count} in total), so Physical Topology draws a dashed device-level link instead of a port-to-port one.",
+    "category": "NothingToDo",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "count"
+      ]
+    }
+  },
+  {
+    "id": "LldpPortNotFound",
+    "name": "Advertised port not found",
+    "description": "LLDP/CDP neighbours resolved to a device but no port on it matches the advertised port id ({count} in total), so Physical Topology draws a dashed device-level link instead of a port-to-port one.",
+    "category": "NothingToDo",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "count"
+      ]
+    }
+  },
+  {
+    "id": "LldpPortAmbiguous",
+    "name": "Advertised port not unique",
+    "description": "LLDP/CDP neighbours resolved to a device but several of its ports match the advertised port id ({count} in total), so it identifies none and Physical Topology draws a dashed device-level link instead of a port-to-port one.",
+    "category": "NothingToDo",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "count"
+      ]
+    }
+  },
+  {
+    "id": "ProvisionalSubnetInferred",
+    "name": "Address range assumed, please confirm",
+    "description": "{count} subnet(s) on this network have a range Scanopy assumed rather than read, because devices reported addresses in them that nothing scanned holds. Nothing advertises a netmask, so the range around an address is a convention — confirm or correct it on the subnet. No daemon has an interface on these ranges, and they are reported on every scan until confirmed.",
+    "category": "FixInScanopy",
+    "icon": "info",
+    "color": "Gray",
+    "metadata": {
+      "slots": [
+        "count"
+      ]
+    }
+  },
+  {
+    "id": "NeighbourResolutionIncomplete",
+    "name": "Link resolution did not finish",
+    "description": "Matching LLDP/CDP neighbours to the devices and ports they name was stopped after {budget_seconds}s, with {neighbours} interface(s) advertising a neighbour on this network. Physical Topology is missing links this scan would otherwise have drawn; the next scan retries from scratch. Narrow what the scan covers, or split the network across daemons, if it keeps happening.",
+    "category": "FixInScanopy",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "budget_seconds",
+        "neighbours"
+      ]
+    }
+  },
+  {
+    "id": "WarningsTruncated",
+    "name": "Some warnings not recorded",
+    "description": "{elided} further warnings from this scan were not recorded, because it produced more than the scan record holds. Narrow what the scan covers to see the rest.",
+    "category": "FixInScanopy",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "elided"
+      ]
+    }
+  },
+  {
+    "id": "Unknown",
+    "name": "Warning from another version",
+    "description": "{detail}",
+    "category": "NothingToDo",
+    "icon": "info",
+    "color": "Gray",
+    "metadata": {
+      "slots": [
+        "detail"
+      ]
+    }
+  }
+]

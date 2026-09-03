@@ -8,6 +8,7 @@
 		"server-configuration",
 		"service-detection",
 		"snmp",
+		"scan-warnings",
 		"architecture",
 		"database-schema",
 		"limitations",

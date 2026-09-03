@@ -7,7 +7,7 @@ export interface TypeMetadata<TMetadata = Record<string, unknown>> {
 	category: string | null;
 	icon: string | null;
 	color: string | null;
-	metadata: TMetadata;
+	metadata: TMetadata | null;
 }
 
 export type BillingPlanType =

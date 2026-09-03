@@ -1,0 +1,38 @@
+[
+  {
+    "id": "FixInScanopy",
+    "name": "Fix in Scanopy",
+    "description": "A credential or a scan setting has to change. The next scan reads what this one could not.",
+    "category": null,
+    "icon": "wrench",
+    "color": "Gray",
+    "metadata": null
+  },
+  {
+    "id": "CheckTheDevice",
+    "name": "Check the device",
+    "description": "The device answered, but served less than it says it holds. Nothing in Scanopy changes that — the agent's SNMP view or VLAN context has to.",
+    "category": null,
+    "icon": "scan-search",
+    "color": "Gray",
+    "metadata": null
+  },
+  {
+    "id": "ClearsOnTheNextScan",
+    "name": "Should clear on the next full scan",
+    "description": "A read stopped before it finished. Previously discovered values were kept, and a complete scan should replace these.",
+    "category": null,
+    "icon": "refresh-cw",
+    "color": "Gray",
+    "metadata": null
+  },
+  {
+    "id": "NothingToDo",
+    "name": "Nothing to do",
+    "description": "True of the device, or of the data it returned. Rescanning will not change it.",
+    "category": null,
+    "icon": "info",
+    "color": "Gray",
+    "metadata": null
+  }
+]
