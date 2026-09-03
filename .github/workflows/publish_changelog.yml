@@ -59,14 +59,45 @@ jobs:
           echo "file=$CHANGELOG_FILE" >> $GITHUB_OUTPUT
           echo "Processing: $CHANGELOG_FILE"
 
+          # Undo the YAML quoting the changelog generator applies.
+          #
+          # scanopy's promote_to_latest emits every model-authored field as a
+          # single-quoted scalar, and both halves of that are deliberate: unquoted,
+          # a title containing ": " corrupts the frontmatter, and single quotes
+          # (unlike double) keep the social post's literal \n from expanding at
+          # parse time. Nothing here undid it, so from v0.17.8 the quotes reached
+          # the published post, the email subject and the announcement title.
+          #
+          # Strips one matching pair, then unescapes the doubled single quote YAML
+          # uses for a literal apostrophe. Fields the generator writes bare
+          # (version, category, publish_social) are left alone.
+          yaml_unquote() {
+            local v="$1"
+            local sq="'"
+            local dq='"'
+            case "$v" in
+              "$sq"*"$sq") v="${v#$sq}"; v="${v%$sq}"; v="${v//$sq$sq/$sq}" ;;
+              "$dq"*"$dq") v="${v#$dq}"; v="${v%$dq}" ;;
+            esac
+            printf '%s' "$v"
+          }
+
+          field() {
+            grep "^$1:" "$CHANGELOG_FILE" | head -1 | sed "s/$1: *//"
+          }
+
           # Extract frontmatter fields
-          VERSION=$(grep '^version:' "$CHANGELOG_FILE" | head -1 | sed 's/version: *//')
-          TITLE=$(grep '^title:' "$CHANGELOG_FILE" | head -1 | sed 's/title: *//')
-          SOCIAL_POST=$(grep '^social_post:' "$CHANGELOG_FILE" | head -1 | sed 's/social_post: *//' | sed 's/^"//;s/"$//' | sed 's/\\n/\n/g')
-          CONTRIBUTORS=$(grep '^contributors:' "$CHANGELOG_FILE" | head -1 | sed 's/contributors: *//')
-          CATEGORY=$(grep '^category:' "$CHANGELOG_FILE" | head -1 | sed 's/category: *//')
-          EMAIL_SUBJECT=$(grep '^email_subject:' "$CHANGELOG_FILE" | head -1 | sed 's/email_subject: *//')
-          PUBLISH_SOCIAL=$(grep '^publish_social:' "$CHANGELOG_FILE" | head -1 | sed 's/publish_social: *//')
+          VERSION=$(field version)
+          TITLE=$(yaml_unquote "$(field title)")
+          CONTRIBUTORS=$(yaml_unquote "$(field contributors)")
+          CATEGORY=$(field category)
+          EMAIL_SUBJECT=$(yaml_unquote "$(field email_subject)")
+          PUBLISH_SOCIAL=$(field publish_social)
+
+          # Unquote before expanding \n, or the trailing quote survives as part of
+          # the last bullet.
+          SOCIAL_POST=$(yaml_unquote "$(field social_post)")
+          SOCIAL_POST=$(printf '%s' "$SOCIAL_POST" | sed 's/\\n/\n/g')
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "title=$TITLE" >> $GITHUB_OUTPUT

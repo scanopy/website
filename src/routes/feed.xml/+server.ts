@@ -23,7 +23,10 @@ function parseFrontmatter(content: string): { frontmatter: Record<string, string
 			frontmatter[key.trim()] = valueParts
 				.join(':')
 				.trim()
-				.replace(/^["'](.*)["']$/, '$1');
+				// A single-quoted YAML scalar doubles a literal apostrophe. The changelog
+				// generator quotes every model-authored field, so undo both halves.
+				.replace(/^'(.*)'$/, (_m, inner) => inner.replace(/''/g, "'"))
+				.replace(/^"(.*)"$/, '$1');
 		}
 	});
 
