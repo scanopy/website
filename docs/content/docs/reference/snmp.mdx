@@ -24,7 +24,7 @@ Technical reference for Scanopy's SNMP implementation. For setup instructions, s
 | **IP-MIB** | RFC 4293 | `1.3.6.1.2.1.4` | ipAdEntAddr, ipAdEntIfIndex, ipAdEntNetMask, ipNetToMediaPhysAddress, ipNetToMediaNetAddress |
 | **LLDP-MIB** | IEEE 802.1AB | `1.0.8802.1.1.2` | lldpRemSysName, lldpRemPortId, lldpRemChassisId, lldpRemSysDesc, lldpLocChassisId, lldpLocPortId, lldpLocPortDesc |
 | **CDP-MIB** | Cisco proprietary | `1.3.6.1.4.1.9.9.23` | cdpCacheDeviceId, cdpCachePlatform, cdpCacheDevicePort, cdpCacheAddress |
-| **ENTITY-MIB** | RFC 6933 | `1.3.6.1.2.1.47` | entPhysicalMfgName, entPhysicalModelName, entPhysicalSerialNum |
+| **ENTITY-MIB** | RFC 6933 | `1.3.6.1.2.1.47` | entPhysicalMfgName, entPhysicalModelName, entPhysicalSerialNum, entPhysicalFirmwareRev (firmware revision), entPhysicalSoftwareRev (software revision — a separate value on devices that report both, such as a bootloader and an OS version) |
 | **BRIDGE-MIB / Q-BRIDGE-MIB** | RFC 4188, RFC 4363 | `1.3.6.1.2.1.17` | dot1dBaseNumPorts, dot1dTpFdbAddress (MAC learning), dot1qVlanStaticName (VLAN names), dot1qPvid (per-port native VLAN), dot1qVlanCurrentEgressPorts, dot1qVlanCurrentUntaggedPorts (VLAN membership) |
 
 ## Data collected
@@ -33,7 +33,7 @@ A successful SNMP run against a host populates the following entities in Scanopy
 
 | Entity | Fields populated from SNMP |
 | ------ | -------------------------- |
-| **Host** | hostname (from sysName when DNS lacks one), sysDescr, sysObjectID, sysLocation, sysContact, sysName, manufacturer, model, serial number, chassis ID |
+| **Host** | hostname (from sysName when DNS lacks one), sysDescr, sysObjectID, sysLocation, sysContact, sysName, manufacturer, model, serial number, chassis ID, firmware revision, software revision |
 | **Interface** | ifIndex, name / alias / description, type, speed, MTU, MAC, admin and oper status, native VLAN, tagged VLAN list, learned MACs, LLDP/CDP neighbor |
 | **Subnet** | CIDRs inferred from ipAddrTable entries |
 | **Host (remote)** | New hosts created from ARP entries on SNMP-discovered subnets |
