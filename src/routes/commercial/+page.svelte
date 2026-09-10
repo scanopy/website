@@ -52,7 +52,7 @@
 		},
 		{
 			question: 'How much does it cost?',
-			answer: `Self-Hosted Standard starts at ${annualPrice('SelfHostedStandard') || '$3,000'} per year and Self-Hosted Plus is ${annualPrice('SelfHostedPlus') || '$6,000'} per year, both billed annually with no per-host fees. Larger or custom deployments are priced individually. Tell us about your environment and we will size the right tier or put together a custom quote.`
+			answer: `Self-Hosted Standard starts at ${annualPrice('SelfHostedStandard') || '$4,000'} per year and Self-Hosted Plus is ${annualPrice('SelfHostedPlus') || '$6,000'} per year, both billed annually with no per-host fees. Larger or custom deployments are priced individually. Tell us about your environment and we will size the right tier or put together a custom quote.`
 		},
 		{
 			question: 'Can I run Scanopy in an air-gapped environment?',

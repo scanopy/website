@@ -783,7 +783,7 @@
     "icon": "server",
     "color": "Blue",
     "metadata": {
-      "base_cents": 300000,
+      "base_cents": 400000,
       "custom_price": null,
       "features": {
         "air_gapped_deployment": false,

@@ -239,7 +239,7 @@
 	// ============================================================================
 
 	// Self-hosted commercial tiers publish a real annual price (custom_price is null,
-	// rate is Year). They're shown annual-first ("$3,000/yr") with a monthly whisper,
+	// rate is Year). They're shown annual-first ("$4,000/yr") with a monthly whisper,
 	// unlike Cloud plans which stay monthly-first.
 	function isSelfHostedAnnual(plan: BillingPlan): boolean {
 		const metadata = billingPlanHelpers.getMetadata(plan.type);

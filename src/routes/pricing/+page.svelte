@@ -54,7 +54,7 @@
 		},
 		{
 			question: 'How much is a self-hosted commercial license?',
-			answer: `Self-hosted commercial licenses start at ${selfHostedFrom ?? '$3,000'}/yr for Self-Hosted Standard, with Self-Hosted Plus above it for larger teams that need multiple organizations, SAML, and offline (air-gapped) license keys. Both are billed annually with no per-host fees. The free <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> stays available for a single network and user.`
+			answer: `Self-hosted commercial licenses start at ${selfHostedFrom ?? '$4,000'}/yr for Self-Hosted Standard, with Self-Hosted Plus above it for larger teams that need multiple organizations, SAML, and offline (air-gapped) license keys. Both are billed annually with no per-host fees. The free <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> stays available for a single network and user.`
 		},
 		{
 			question: 'How does pricing work for MSPs?',
