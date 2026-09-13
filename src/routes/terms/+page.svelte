@@ -6,7 +6,7 @@
 	title="Terms of Service"
 	description="Scanopy Terms of Service - Read our terms and conditions for using Scanopy network documentation software."
 	slug="terms"
-	date="July 8, 2026"
+	date="September 13, 2026"
 	dateType="effective"
 >
 	<section>
@@ -489,7 +489,7 @@
 		</p>
 	</section>
 
-	<p class="mt-8 text-sm text-gray-500">Last Updated: July 8, 2026</p>
+	<p class="mt-8 text-sm text-gray-500">Last Updated: September 13, 2026</p>
 
 	<!-- Regulatory Compliance -->
 	<section class="mt-16 border-t border-gray-800 pt-8">
@@ -661,8 +661,8 @@
 						subject to certain exceptions.
 					</li>
 					<li>
-						<strong>Right to opt-out:</strong> You can opt out of the sale of your personal information,
-						if applicable.
+						<strong>Right to opt-out:</strong> You can opt out of the sale and sharing of your personal
+						information.
 					</li>
 					<li>
 						<strong>Right to non-discrimination:</strong> We will not discriminate against you for exercising
@@ -686,7 +686,10 @@
 				</h4>
 				<p class="mb-4 text-gray-300">
 					Under the CCPA, California residents have the right to opt-out of the sale of their
-					personal information. Scanopy does not sell personal information as defined by the CCPA.
+					personal information. Section 11.3 of our <a
+						href="/privacy#do-not-sell"
+						class="text-blue-400 hover:text-blue-300">Privacy Policy</a
+					> describes what we sell or share and how to opt out.
 				</p>
 			</div>
 

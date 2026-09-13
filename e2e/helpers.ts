@@ -33,7 +33,7 @@ export async function seedCookieConsent(context: BrowserContext): Promise<void> 
 		{
 			name: 'scanopy_gdpr',
 			value: encodeURIComponent(
-				JSON.stringify({ necessary: true, analytics: false, marketing: false })
+				JSON.stringify({ necessary: true, analytics: false, marketing: false, version: 2 })
 			),
 			domain: '.scanopy.net',
 			path: '/'

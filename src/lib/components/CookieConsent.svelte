@@ -1,7 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { type CookiePreferences, getGdprPreferences, saveGdprPreferences } from '$lib/cookies';
+	import {
+		type CookiePreferences,
+		getGdprPreferences,
+		saveGdprPreferences,
+		needsReconsent,
+		hasMarketingConsent,
+		hasGlobalPrivacyControl
+	} from '$lib/cookies';
 	import { optInAnalytics, optOutAnalytics, isPostHogLoaded, getPostHog } from '$lib/posthog';
+	import { loadApollo, clearApolloStorage, isApolloLoaded } from '$lib/apollo';
 	import { chrome } from '$lib/stores/chrome.svelte';
 
 	/**
@@ -24,17 +32,26 @@
 	let showSettings = $state(false);
 	let mounted = $state(false);
 	let hasConsented = $state(false);
+	let gpc = $state(false);
 
 	onMount(() => {
 		mounted = true;
+		gpc = hasGlobalPrivacyControl();
 		const saved = getGdprPreferences();
-		if (saved) {
+		if (saved && !needsReconsent(saved)) {
 			preferences = { ...preferences, ...saved };
 			hasConsented = true;
 			applyPreferences();
+		} else if (saved) {
+			// Keep the saved analytics choice; ask again about marketing.
+			preferences = { ...preferences, analytics: saved.analytics };
+			applyPreferences();
+			showBanner = true;
 		} else {
 			showBanner = true;
 		}
+		// The docs "Do Not Sell or Share" link lands on the privacy policy with this hash.
+		if (location.hash === '#do-not-sell') openSettings();
 	});
 
 	function applyPreferences() {
@@ -45,6 +62,14 @@
 			} else {
 				optOutAnalytics();
 			}
+		}
+		if (hasMarketingConsent()) {
+			loadApollo();
+		} else {
+			const wasLoaded = isApolloLoaded();
+			clearApolloStorage();
+			// The tracker can't be unloaded; reload so it stops sending page events.
+			if (wasLoaded) location.reload();
 		}
 		onAnalyticsChange?.(preferences.analytics);
 	}
@@ -58,7 +83,7 @@
 	}
 
 	function acceptAll() {
-		preferences = { necessary: true, analytics: true, marketing: true };
+		preferences = { necessary: true, analytics: true, marketing: !gpc };
 		savePreferences();
 	}
 
@@ -84,6 +109,14 @@
 	// and the settings modal.
 	$effect(() => {
 		chrome.cookieBannerOpen = showBanner;
+	});
+
+	// Opt-out links in the footer and privacy policy request the settings panel.
+	$effect(() => {
+		if (chrome.cookieSettingsRequested) {
+			chrome.cookieSettingsRequested = false;
+			openSettings();
+		}
 	});
 </script>
 
@@ -148,6 +181,24 @@
 								usage data.
 							</p>
 						</div>
+
+						<div class="cookie-option">
+							<div class="option-header">
+								<label class="option-label">
+									<input type="checkbox" bind:checked={preferences.marketing} disabled={gpc} />
+									<span class="checkbox" class:disabled={gpc}></span>
+									<span class="option-title">Marketing</span>
+								</label>
+							</div>
+							<p class="option-description">
+								Lets Apollo.io identify the company you're visiting from, based on your IP address.
+								We use it to follow up with businesses interested in Scanopy. Under California law,
+								this is a sale and share of your personal information.
+								{#if gpc}
+									Off because your browser sends Global Privacy Control.
+								{/if}
+							</p>
+						</div>
 					</div>
 
 					<div class="settings-buttons">
@@ -161,9 +212,8 @@
 					<div class="text-content">
 						<h3 class="title">Cookie Settings</h3>
 						<p class="description">
-							We use cookies to improve your experience and analyze site traffic. See our <a
-								href="/privacy">privacy policy</a
-							> for details.
+							We use cookies and similar storage to analyze site traffic and, with your permission,
+							identify the companies that visit. See our <a href="/privacy">privacy policy</a> for details.
 						</p>
 					</div>
 					<div class="buttons">

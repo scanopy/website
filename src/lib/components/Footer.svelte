@@ -5,6 +5,7 @@
 	import { isPostHogLoaded, getPostHog } from '$lib/posthog';
 	import { page } from '$app/state';
 	import { APP, appHref } from '$lib/config/urls';
+	import { requestCookieSettings } from '$lib/stores/chrome.svelte';
 
 	interface Props {
 		healthStatus?: 'loading' | 'healthy' | 'unhealthy';
@@ -209,6 +210,16 @@
 						</li>
 						<li>
 							<a href="/refund" class="text-sm text-gray-400 hover:text-white">Refund Policy</a>
+						</li>
+						<li>
+							<a
+								href="/privacy#do-not-sell"
+								class="text-sm text-gray-400 hover:text-white"
+								onclick={(e) => {
+									e.preventDefault();
+									requestCookieSettings();
+								}}>Do Not Sell or Share My Personal Information</a
+							>
 						</li>
 					</ul>
 				</div>

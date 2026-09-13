@@ -6,6 +6,12 @@ export const GDPR_COOKIE_NAME = 'scanopy_gdpr';
 export const GDPR_COOKIE_DAYS = 365;
 
 /**
+ * Banner version a saved choice was made on. Version 2 added the Marketing
+ * category; earlier saves could carry marketing: true without describing it.
+ */
+export const CONSENT_VERSION = 2;
+
+/**
  * Get the cookie domain based on hostname.
  * Returns '.scanopy.net' in production for cross-subdomain sharing.
  */
@@ -37,6 +43,7 @@ export interface CookiePreferences {
 	necessary: boolean;
 	analytics: boolean;
 	marketing: boolean;
+	version?: number;
 }
 
 /**
@@ -56,7 +63,30 @@ export function getGdprPreferences(): CookiePreferences | null {
  * Save GDPR cookie preferences.
  */
 export function saveGdprPreferences(prefs: CookiePreferences): void {
-	setCookie(GDPR_COOKIE_NAME, JSON.stringify(prefs), GDPR_COOKIE_DAYS, getCookieDomain());
+	setCookie(
+		GDPR_COOKIE_NAME,
+		JSON.stringify({ ...prefs, version: CONSENT_VERSION }),
+		GDPR_COOKIE_DAYS,
+		getCookieDomain()
+	);
+}
+
+/**
+ * Check if a saved marketing grant predates the Marketing category, so the
+ * visitor has to be asked again.
+ */
+export function needsReconsent(prefs: CookiePreferences): boolean {
+	return prefs.marketing && prefs.version !== CONSENT_VERSION;
+}
+
+/**
+ * Check if the browser sends a Global Privacy Control signal.
+ */
+export function hasGlobalPrivacyControl(): boolean {
+	if (typeof navigator === 'undefined') return false;
+	return (
+		(navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true
+	);
 }
 
 /**
@@ -79,5 +109,6 @@ export function hasGdprDecision(): boolean {
  */
 export function hasMarketingConsent(): boolean {
 	const prefs = getGdprPreferences();
-	return prefs?.marketing ?? false;
+	if (!prefs || needsReconsent(prefs) || hasGlobalPrivacyControl()) return false;
+	return prefs.marketing;
 }

@@ -1,8 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { type CookiePreferences, getGdprPreferences, saveGdprPreferences } from '$lib/cookies';
+import {
+	type CookiePreferences,
+	getGdprPreferences,
+	saveGdprPreferences,
+	needsReconsent,
+	hasMarketingConsent,
+	hasGlobalPrivacyControl
+} from '$lib/cookies';
 import { optInAnalytics, optOutAnalytics, isPostHogLoaded, getPostHog } from '$lib/posthog';
+import { loadApollo, clearApolloStorage, isApolloLoaded } from '$lib/apollo';
 
 export function CookieConsent() {
 	const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -14,14 +22,22 @@ export function CookieConsent() {
 	const [showSettings, setShowSettings] = useState(false);
 	const [mounted, setMounted] = useState(false);
 	const [hasConsented, setHasConsented] = useState(false);
+	const [gpc, setGpc] = useState(false);
 
 	useEffect(() => {
 		setMounted(true);
+		setGpc(hasGlobalPrivacyControl());
 		const saved = getGdprPreferences();
-		if (saved) {
+		if (saved && !needsReconsent(saved)) {
 			setPreferences({ ...preferences, ...saved });
 			setHasConsented(true);
 			applyPreferences(saved);
+		} else if (saved) {
+			// Keep the saved analytics choice; ask again about marketing.
+			const prefs = { ...preferences, analytics: saved.analytics };
+			setPreferences(prefs);
+			applyPreferences(prefs);
+			setShowBanner(true);
 		} else {
 			setShowBanner(true);
 		}
@@ -36,6 +52,14 @@ export function CookieConsent() {
 				optOutAnalytics();
 			}
 		}
+		if (hasMarketingConsent()) {
+			loadApollo();
+		} else {
+			const wasLoaded = isApolloLoaded();
+			clearApolloStorage();
+			// The tracker can't be unloaded; reload so it stops sending page events.
+			if (wasLoaded) location.reload();
+		}
 	}
 
 	function savePrefs() {
@@ -47,7 +71,7 @@ export function CookieConsent() {
 	}
 
 	function acceptAll() {
-		const prefs = { necessary: true, analytics: true, marketing: true };
+		const prefs = { necessary: true, analytics: true, marketing: !gpc };
 		setPreferences(prefs);
 		saveGdprPreferences(prefs);
 		setHasConsented(true);
@@ -194,6 +218,47 @@ export function CookieConsent() {
 											anonymous usage data.
 										</p>
 									</div>
+
+									<div className="rounded-md border border-[var(--color-fd-border)] bg-[var(--color-fd-muted)] p-4">
+										<div className="mb-2 flex items-center justify-between">
+											<label
+												className={`flex items-center gap-3 ${gpc ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+											>
+												<input
+													type="checkbox"
+													checked={preferences.marketing}
+													disabled={gpc}
+													onChange={(e) =>
+														setPreferences({
+															...preferences,
+															marketing: e.target.checked
+														})
+													}
+													className="sr-only"
+												/>
+												<span
+													className={`flex h-5 w-5 items-center justify-center rounded border transition-colors ${
+														preferences.marketing
+															? 'border-blue-600 bg-blue-600'
+															: 'border-[#4b5563] bg-[#374151] hover:border-[var(--color-fd-muted-foreground)]'
+													} ${gpc ? 'opacity-60' : ''}`}
+												>
+													{preferences.marketing && (
+														<span className="h-3 w-2 -translate-y-0.5 rotate-45 border-b-2 border-r-2 border-white" />
+													)}
+												</span>
+												<span className="text-[0.9375rem] font-medium text-[var(--color-fd-foreground)]">
+													Marketing
+												</span>
+											</label>
+										</div>
+										<p className="m-0 text-[0.8125rem] leading-relaxed text-[var(--color-fd-muted-foreground)]">
+											Lets Apollo.io identify the company you&apos;re visiting from, based on your
+											IP address. We use it to follow up with businesses interested in Scanopy.
+											Under California law, this is a sale and share of your personal information.
+											{gpc && ' Off because your browser sends Global Privacy Control.'}
+										</p>
+									</div>
 								</div>
 
 								<div className="flex flex-wrap justify-end gap-2 border-t border-[var(--color-fd-border)] pt-2">
@@ -224,7 +289,8 @@ export function CookieConsent() {
 										Cookie Settings
 									</h3>
 									<p className="m-0 text-sm text-[var(--color-fd-muted-foreground)]">
-										We use cookies to improve your experience and analyze site traffic. See our{' '}
+										We use cookies and similar storage to analyze site traffic and, with your
+										permission, identify the companies that visit. See our{' '}
 										<a
 											href="/privacy"
 											className="text-[var(--color-fd-primary)] underline hover:text-[var(--color-fd-primary)]"

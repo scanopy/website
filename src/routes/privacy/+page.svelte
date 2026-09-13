@@ -1,12 +1,13 @@
 <script lang="ts">
 	import LegalPage from '$lib/components/LegalPage.svelte';
+	import { requestCookieSettings } from '$lib/stores/chrome.svelte';
 </script>
 
 <LegalPage
 	title="Privacy Policy"
 	description="Scanopy Privacy Policy - How we collect, use, and protect your personal information."
 	slug="privacy"
-	date="June 18, 2026"
+	date="September 13, 2026"
 	dateType="effective"
 >
 	<section>
@@ -142,10 +143,16 @@
 				<strong class="text-white">Security Cookies:</strong> We use Security Cookies for security purposes.
 			</li>
 			<li>
-				<strong class="text-white">Advertising Cookies:</strong> Advertising Cookies are used to serve
-				you with advertisements that may be relevant to you and your interests.
+				<strong class="text-white">Marketing Storage:</strong> If you turn on Marketing in our cookie
+				settings, we load Apollo.io's website tracker, which stores a random visitor ID in your browser's
+				local storage and identifies the company you are visiting from. It does not load without that
+				consent. See section 8.4.
 			</li>
 		</ul>
+		<p class="mt-4 text-gray-300">
+			You can change or withdraw your choices at any time with the cookie settings button in the
+			bottom-right corner of every page.
+		</p>
 	</section>
 
 	<section>
@@ -338,6 +345,19 @@
 					class="text-blue-400 hover:text-blue-300">Privacy Policy</a
 				>
 			</li>
+			<li>
+				<strong class="text-white">Apollo.io</strong> (identifies the companies that visit our
+				website): if you turn on Marketing in our cookie settings, Apollo.io receives your IP
+				address, the pages you visit, the referring page, campaign (UTM) parameters, and a random
+				visitor ID. Under the CCPA this is a sale and a share of personal information (see section
+				11.3). Apollo.io uses this information under its own
+				<a
+					href="https://www.apollo.io/privacy-policy"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-blue-400 hover:text-blue-300">Privacy Policy</a
+				>.
+			</li>
 		</ul>
 	</section>
 
@@ -415,10 +435,7 @@
 				purposes, third parties we share with, and specific pieces of data
 			</li>
 			<li>To delete your personal information from our records</li>
-			<li>
-				To stop selling your personal information (we don't sell or rent your personal information
-				to any third parties)
-			</li>
+			<li>To stop selling or sharing your personal information (see section 11.3)</li>
 		</ul>
 		<p class="mb-4 text-gray-300">
 			We will respond to verified requests within 45 days as required by the CCPA. If we need more
@@ -430,6 +447,38 @@
 				class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
 			>
 		</p>
+
+		<h3 id="do-not-sell" class="mb-3 mt-6 text-xl font-semibold text-white">
+			11.3 Do Not Sell or Share My Personal Information
+		</h3>
+		<p class="mb-2 text-gray-300">
+			If you turn on Marketing in our cookie settings, we sell and share personal information with
+			Apollo.io, as the CCPA defines those terms. We sell or share these categories:
+		</p>
+		<ul class="mb-4 list-inside list-disc space-y-2 text-gray-300">
+			<li>
+				<strong class="text-white">Identifiers:</strong> your IP address and a random visitor ID
+			</li>
+			<li>
+				<strong class="text-white">Internet or other electronic network activity:</strong> the pages
+				you visit on our website, the referring page, and campaign (UTM) parameters
+			</li>
+		</ul>
+		<p class="mb-4 text-gray-300">
+			Apollo.io uses this information to identify the company you are visiting from, under its own
+			privacy policy. Without your Marketing consent, we do not sell or share it. We do not have
+			actual knowledge that we sell or share the personal information of consumers under 16.
+		</p>
+		<p class="text-gray-300">
+			To opt out,
+			<button
+				type="button"
+				class="text-blue-400 underline hover:text-blue-300"
+				onclick={requestCookieSettings}>open our cookie settings</button
+			>
+			and turn Marketing off. We treat a Global Privacy Control signal from your browser as an opt-out
+			request and keep Marketing off.
+		</p>
 	</section>
 
 	<section>
@@ -439,7 +488,8 @@
 			Providers"), to provide the Service on our behalf, to perform Service-related services or to
 			assist us in analyzing how our Service is used. These third parties have access to your
 			Personal Data only to perform these tasks on our behalf and are obligated not to disclose or
-			use it for any other purpose.
+			use it for any other purpose. Apollo.io (section 8.4) is not a Service Provider: we sell and
+			share personal information with it as described in section 11.3.
 		</p>
 	</section>
 
