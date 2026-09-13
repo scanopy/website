@@ -670,15 +670,12 @@
 					</li>
 				</ul>
 				<p class="mb-4 text-gray-300">
-					To exercise your rights, you can submit a verifiable consumer request by contacting us via
-					our <a
-						href="https://discord.gg/b7ffQr8AcZ"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-blue-400 hover:text-blue-300">Discord</a
-					> or through the methods described in our Privacy Policy. You may make a request up to twice
-					within a 12-month period. We will respond to your request within 45 days, with a possible extension
-					of up to 45 additional days when reasonably necessary.
+					To exercise your rights, you can submit a verifiable consumer request by emailing <a
+						href="mailto:legal@scanopy.net"
+						class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
+					>. You may make a request up to twice within a 12-month period. We will respond to your
+					request within 45 days, with a possible extension of up to 45 additional days when
+					reasonably necessary.
 				</p>
 
 				<h4 class="mb-2 text-lg font-semibold text-white">

@@ -193,6 +193,16 @@
 			security or to improve the functionality of our Service, or we are legally obligated to retain
 			this data for longer time periods.
 		</p>
+		<p class="mb-4 text-gray-300">
+			We do not store the information Apollo.io receives through its website tracker (section 8.4).
+			Apollo.io retains it under its own
+			<a
+				href="https://www.apollo.io/privacy-policy"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-blue-400 hover:text-blue-300">Privacy Policy</a
+			>.
+		</p>
 
 		<h3 class="mb-3 text-xl font-semibold text-white">5.1 Data Retention for Physical Goods</h3>
 		<p class="text-gray-300">
@@ -513,12 +523,11 @@
 			posting the new Privacy Policy on this page.
 		</p>
 		<p class="mb-4 text-gray-300">
-			We will let you know via email and/or a prominent notice on our Service, prior to the change
-			becoming effective and update the "effective date" at the top of this Privacy Policy.
+			When we change this Privacy Policy, we update the effective date at the top of this page.
+			Changes take effect when they are posted on this page.
 		</p>
 		<p class="text-gray-300">
-			You are advised to review this Privacy Policy periodically for any changes. Changes to this
-			Privacy Policy are effective when they are posted on this page.
+			You are advised to review this Privacy Policy periodically for any changes.
 		</p>
 	</section>
 
