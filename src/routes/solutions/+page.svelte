@@ -12,7 +12,7 @@
 			name: 'Compliance',
 			href: '/solutions/compliance',
 			blurb:
-				'NIS2, ISO 27001, and HIPAA all expect network documentation that is accurate today. Scanopy keeps the map and inventory current, so the evidence is ready before the auditor asks.'
+				'NIS2, ISO 27001, HIPAA, and CMMC all expect network documentation that is accurate today. Scanopy keeps the map and inventory current, so the evidence is ready before the auditor asks.'
 		}
 	];
 </script>

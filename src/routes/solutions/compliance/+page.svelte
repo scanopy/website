@@ -9,7 +9,7 @@
 
 	const title = 'Audit-Ready Network Documentation - Scanopy';
 	const description =
-		'NIS2, ISO 27001, and HIPAA all expect network documentation that is accurate today, not last year. Scanopy discovers your network and keeps the map and inventory current on a schedule, so the evidence is ready before the auditor asks.';
+		'NIS2, ISO 27001, HIPAA, and CMMC all expect network documentation that is accurate today, not last year. Scanopy discovers your network and keeps the map and inventory current on a schedule, so the evidence is ready before the auditor asks.';
 
 	// Each card leads with the control that drives the requirement, then what Scanopy produces
 	// for it, and links to the guide that maps the standard in full. PCI-DSS is intentionally
@@ -35,6 +35,13 @@
 			href: '/guides/network-documentation-hipaa',
 			blurb:
 				'The required risk analysis depends on knowing your systems and how data moves between them. Scanopy maps the hosts, services, and application dependencies that the analysis is built on, and keeps that map current.'
+		},
+		{
+			name: 'CMMC Level 2',
+			control: '32 CFR 170.19 / CM.L2-3.4.1',
+			href: '/guides/network-documentation-cmmc',
+			blurb:
+				'Level 2 scoping requires every in-scope asset, OT included, in an asset inventory and a network diagram of the assessment scope. Scanopy discovers both from the network and keeps them current between assessments.'
 		}
 	];
 
@@ -138,7 +145,7 @@
 				Audit-ready network documentation,<span class="block">without the effort.</span>
 			</h1>
 			<p class="mx-auto mt-6 max-w-2xl text-lg text-gray-300">
-				NIS2, ISO 27001, and HIPAA all expect network documentation that is accurate today, not last
+				NIS2, ISO 27001, HIPAA, and CMMC all expect network documentation that is accurate today, not last
 				year. Scanopy discovers your network and keeps the map and inventory current on a schedule,
 				so the evidence is ready before the auditor asks.
 			</p>
@@ -173,7 +180,7 @@
 		<div class="container mx-auto px-4">
 			<div class="mb-16 text-center">
 				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					What NIS2, ISO 27001, and HIPAA expect, and what Scanopy produces
+					What NIS2, ISO 27001, HIPAA, and CMMC expect, and what Scanopy produces
 				</h2>
 				<p class="mx-auto max-w-2xl text-gray-400">
 					Each one expects documentation that reflects the network as it is now, plus evidence that

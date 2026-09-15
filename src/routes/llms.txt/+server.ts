@@ -247,7 +247,7 @@ ${allComparisonLines}
 - Comparisons: https://scanopy.net/comparisons
 - Guides: https://scanopy.net/guides
 - Network documentation: https://scanopy.net/guides/network-documentation-software
-- Compliance (NIS2, ISO 27001, HIPAA): https://scanopy.net/solutions/compliance
+- Compliance (NIS2, ISO 27001, HIPAA, CMMC): https://scanopy.net/solutions/compliance
 - Community Edition (free, self-hosted): https://scanopy.net/community
 - Commercial Edition (paid, self-hosted): https://scanopy.net/commercial
 - Changelog: https://scanopy.net/changelog
