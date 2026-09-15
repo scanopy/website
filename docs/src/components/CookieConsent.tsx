@@ -6,8 +6,7 @@ import {
 	getGdprPreferences,
 	saveGdprPreferences,
 	needsReconsent,
-	hasMarketingConsent,
-	hasGlobalPrivacyControl
+	hasMarketingConsent
 } from '$lib/cookies';
 import { optInAnalytics, optOutAnalytics, isPostHogLoaded, getPostHog } from '$lib/posthog';
 import { loadApollo, clearApolloStorage, isApolloLoaded } from '$lib/apollo';
@@ -22,11 +21,9 @@ export function CookieConsent() {
 	const [showSettings, setShowSettings] = useState(false);
 	const [mounted, setMounted] = useState(false);
 	const [hasConsented, setHasConsented] = useState(false);
-	const [gpc, setGpc] = useState(false);
 
 	useEffect(() => {
 		setMounted(true);
-		setGpc(hasGlobalPrivacyControl());
 		const saved = getGdprPreferences();
 		if (saved && !needsReconsent(saved)) {
 			setPreferences({ ...preferences, ...saved });
@@ -71,7 +68,7 @@ export function CookieConsent() {
 	}
 
 	function acceptAll() {
-		const prefs = { necessary: true, analytics: true, marketing: !gpc };
+		const prefs = { necessary: true, analytics: true, marketing: true };
 		setPreferences(prefs);
 		saveGdprPreferences(prefs);
 		setHasConsented(true);
@@ -221,13 +218,10 @@ export function CookieConsent() {
 
 									<div className="rounded-md border border-[var(--color-fd-border)] bg-[var(--color-fd-muted)] p-4">
 										<div className="mb-2 flex items-center justify-between">
-											<label
-												className={`flex items-center gap-3 ${gpc ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-											>
+											<label className="flex cursor-pointer items-center gap-3">
 												<input
 													type="checkbox"
 													checked={preferences.marketing}
-													disabled={gpc}
 													onChange={(e) =>
 														setPreferences({
 															...preferences,
@@ -241,7 +235,7 @@ export function CookieConsent() {
 														preferences.marketing
 															? 'border-blue-600 bg-blue-600'
 															: 'border-[#4b5563] bg-[#374151] hover:border-[var(--color-fd-muted-foreground)]'
-													} ${gpc ? 'opacity-60' : ''}`}
+													}`}
 												>
 													{preferences.marketing && (
 														<span className="h-3 w-2 -translate-y-0.5 rotate-45 border-b-2 border-r-2 border-white" />
@@ -254,7 +248,6 @@ export function CookieConsent() {
 										</div>
 										<p className="m-0 text-[0.8125rem] leading-relaxed text-[var(--color-fd-muted-foreground)]">
 											Used for marketing and sales outreach.
-											{gpc && ' Off because your browser sends Global Privacy Control.'}
 										</p>
 									</div>
 								</div>

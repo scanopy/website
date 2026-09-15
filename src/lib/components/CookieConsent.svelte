@@ -5,8 +5,7 @@
 		getGdprPreferences,
 		saveGdprPreferences,
 		needsReconsent,
-		hasMarketingConsent,
-		hasGlobalPrivacyControl
+		hasMarketingConsent
 	} from '$lib/cookies';
 	import { optInAnalytics, optOutAnalytics, isPostHogLoaded, getPostHog } from '$lib/posthog';
 	import { loadApollo, clearApolloStorage, isApolloLoaded } from '$lib/apollo';
@@ -32,11 +31,9 @@
 	let showSettings = $state(false);
 	let mounted = $state(false);
 	let hasConsented = $state(false);
-	let gpc = $state(false);
 
 	onMount(() => {
 		mounted = true;
-		gpc = hasGlobalPrivacyControl();
 		const saved = getGdprPreferences();
 		if (saved && !needsReconsent(saved)) {
 			preferences = { ...preferences, ...saved };
@@ -83,7 +80,7 @@
 	}
 
 	function acceptAll() {
-		preferences = { necessary: true, analytics: true, marketing: !gpc };
+		preferences = { necessary: true, analytics: true, marketing: true };
 		savePreferences();
 	}
 
@@ -185,17 +182,12 @@
 						<div class="cookie-option">
 							<div class="option-header">
 								<label class="option-label">
-									<input type="checkbox" bind:checked={preferences.marketing} disabled={gpc} />
-									<span class="checkbox" class:disabled={gpc}></span>
+									<input type="checkbox" bind:checked={preferences.marketing} />
+									<span class="checkbox"></span>
 									<span class="option-title">Marketing</span>
 								</label>
 							</div>
-							<p class="option-description">
-								Used for marketing and sales outreach.
-								{#if gpc}
-									Off because your browser sends Global Privacy Control.
-								{/if}
-							</p>
+							<p class="option-description">Used for marketing and sales outreach.</p>
 						</div>
 					</div>
 

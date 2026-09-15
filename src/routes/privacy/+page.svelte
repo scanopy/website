@@ -510,8 +510,7 @@
 				class="text-blue-400 underline hover:text-blue-300"
 				onclick={requestCookieSettings}>open our cookie settings</button
 			>
-			and turn Marketing off. We treat a Global Privacy Control signal from your browser as an opt-out
-			request and keep Marketing off.
+			and turn Marketing off.
 		</p>
 	</section>
 

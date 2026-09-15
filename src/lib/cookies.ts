@@ -80,16 +80,6 @@ export function needsReconsent(prefs: CookiePreferences): boolean {
 }
 
 /**
- * Check if the browser sends a Global Privacy Control signal.
- */
-export function hasGlobalPrivacyControl(): boolean {
-	if (typeof navigator === 'undefined') return false;
-	return (
-		(navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true
-	);
-}
-
-/**
  * Check if user has consented to analytics.
  */
 export function hasAnalyticsConsent(): boolean {
@@ -109,6 +99,6 @@ export function hasGdprDecision(): boolean {
  */
 export function hasMarketingConsent(): boolean {
 	const prefs = getGdprPreferences();
-	if (!prefs || needsReconsent(prefs) || hasGlobalPrivacyControl()) return false;
+	if (!prefs || needsReconsent(prefs)) return false;
 	return prefs.marketing;
 }
