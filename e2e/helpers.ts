@@ -114,6 +114,59 @@ export async function submitAndExpectBrevoSuccess(
 }
 
 /**
+ * Click submit on the contact modal and assert the full happy path against our
+ * /api/contact function (functions/api/contact.ts), which creates the Apollo
+ * contact:
+ *   1. a POST to /api/contact actually fires (catches broken/unwired handlers),
+ *   2. it returns HTTP 2xx,
+ *   3. the JSON body says success:true.
+ *
+ * Armed before the click and matching any status, for the same reasons as
+ * submitAndExpectBrevoSuccess.
+ */
+export async function submitAndExpectContactSuccess(
+	page: Page,
+	submit: () => Promise<void>,
+	{ timeoutMs = 25_000 }: { timeoutMs?: number } = {}
+): Promise<void> {
+	const responsePromise = page.waitForResponse(
+		(r) => new URL(r.url()).pathname === '/api/contact' && r.request().method() === 'POST',
+		{ timeout: timeoutMs }
+	);
+
+	await submit();
+
+	let response;
+	try {
+		response = await responsePromise;
+	} catch {
+		throw new Error(
+			`FORM DID NOT SUBMIT: no POST to /api/contact within ${timeoutMs}ms of clicking ` +
+				`submit. This is the "click does nothing" failure mode (broken page JS or unwired ` +
+				`submit handler). Check the trace for console errors.`
+		);
+	}
+
+	const body = await response.text();
+	const slice = body.slice(0, 500);
+
+	let json: { success?: boolean; fieldErrors?: Record<string, string> };
+	try {
+		json = JSON.parse(body);
+	} catch {
+		throw new Error(`CONTACT API RESPONSE NOT JSON (status ${response.status()}): ${slice}`);
+	}
+
+	expect(
+		response.ok(),
+		`CONTACT API HTTP ERROR ${response.status()}: ${slice}. A 502 means Apollo rejected the ` +
+			`contact; check the function logs in Cloudflare Pages.`
+	).toBe(true);
+
+	expect(json.success, `CONTACT API REJECTED SUBMISSION: ${slice}`).toBe(true);
+}
+
+/**
  * Fill every visible field of the contact modal (ContactModal.svelte) with
  * sentinel data. Locators are scoped to the dialog. Field ids come from the
  * component; if a field is added there, add it here too.

@@ -18,7 +18,7 @@ The public lead-capture forms are the inbound channel for the highest-value deal
 
 ### Coverage
 
-Every form found on the site is listed here. Both forms submit to Brevo (`sibforms.com`) via `src/lib/brevo.ts` — there is no server-side form handling in this repo.
+Every form found on the site is listed here. The contact modal posts to `/api/contact`, a Cloudflare Pages Function (`functions/api/contact.ts`) that finds or creates the Apollo account, creates the contact on it, and assigns a follow-up task; it needs the `APOLLO_API_KEY` Pages secret. The newsletter submits to Brevo (`sibforms.com`) via `src/lib/brevo.ts`.
 
 | Form                                                      | Page tested   | Spec                        | Real submission? |
 | --------------------------------------------------------- | ------------- | --------------------------- | ---------------- |
@@ -29,7 +29,7 @@ Every form found on the site is listed here. Both forms submit to Brevo (`sibfor
 
 The contact modal is one component with three separate trigger wirings across two pages and two modal instances: `/commercial` renders its own `<ContactModal>` for the page-level "Request a Quote" buttons, and `PricingSection` renders another for the pricing widget, reached via two different CTA branches ("Request Information" on Enterprise, "Get a license" on the self-hosted tiers). A page- or branch-specific JS error can break one while the others keep working, so each path submits for real. The home page no longer carries a pricing widget or any contact CTA, so nothing is left unmonitored by not testing `/` here — its footer newsletter form is still covered by the newsletter row.
 
-Each weekly run creates **3 real Brevo contact inquiries and 1 newsletter subscription** (double that in the worst case, since CI retries a failed test once).
+Each weekly run creates **3 real Apollo contacts and 1 Brevo newsletter subscription** (double that in the worst case, since CI retries a failed test once).
 
 **reCAPTCHA history:** the forms originally attached reCAPTCHA v3 tokens, and the newsletter form enforced them in Brevo — which blocked this monitor, since automated browsers always score too low to pass v3. Enforcement was turned off in Brevo in July 2026 and the client-side integration was commented out in `src/lib/brevo.ts` (spam protection is now the honeypot field plus newsletter double opt-in). If the newsletter test ever fails with `BREVO REJECTED SUBMISSION` mentioning a captcha error, someone re-enabled enforcement in Brevo — either turn it back off, or accept that the newsletter form can only be monitored up to Brevo's bot-protection boundary (the pre-July-2026 version of `e2e/newsletter.spec.ts` in git history did exactly that).
 
@@ -43,10 +43,11 @@ Every submission the suite makes is marked so it can be filtered everywhere down
 
 Suggested filters:
 
+- **Apollo:** the contact function labels sentinel submissions `Form monitor` instead of `Website inquiry` and creates no owner task for them. Bulk-delete contacts with that label periodically, and keep the label out of any workflows or sequences.
 - **Brevo:** a segment or automation matching _EMAIL contains `formtest+`_ (or _FIRSTNAME equals `AUTOMATED TEST`_) → auto-blocklist or periodically bulk-delete. This also keeps test contacts out of any workflows/sequences.
 - **Gmail:** filter `to:(formtest+)` → skip inbox, archive. Newsletter double-opt-in confirmations go to wherever `formtest@scanopy.net` routes — make sure that alias exists (or accept the bounce).
 
-Brevo hosted forms have no test mode, so real submissions are intentional: the point is exercising the production code path end to end.
+Neither the contact function nor Brevo's hosted forms have a test mode, so real submissions are intentional: the point is exercising the production code path end to end.
 
 ### Running locally
 
@@ -55,7 +56,7 @@ npm run test:forms          # headless
 npm run test:forms:headed   # watch it happen
 ```
 
-**Warning:** local runs submit real (sentinel-marked) data to production Brevo, exactly like CI.
+**Warning:** local runs submit real (sentinel-marked) data to production Apollo and Brevo, exactly like CI.
 
 ### Adding a new form to the suite
 
