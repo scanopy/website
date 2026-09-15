@@ -32,6 +32,28 @@ http://your-server:60072
 
 **Solution**: Use `http://` to access Scanopy directly. For HTTPS, put a reverse proxy (Traefik, Nginx, Caddy) in front to handle TLS termination.
 
+### Web UI Doesn't Load, but the API Responds
+
+**Symptoms**: The server address returns a 404 in the browser, while `curl http://your-server:60072/api/health` succeeds. The startup log shows `Web UI: disabled (API-only)`, followed by a warning that names the cause.
+
+**Cause**: The server has no web UI to serve. The binary was compiled from source without the UI, and `SCANOPY_WEB_EXTERNAL_PATH` is either unset or points at a directory with no `index.html`. The release binary and the Docker image both include the UI.
+
+**Diagnosis**: Read the startup log:
+
+```bash
+journalctl -u scanopy-server | grep -A1 "Web UI"
+```
+
+To check whether a binary has the UI compiled in:
+
+```bash
+grep -a -c __sveltekit_ /path/to/scanopy-server
+```
+
+`0` means it has none.
+
+**Solution**: Replace the binary with the release build, as in [Upgrading a native install](/self-hosted-server/upgrading/#upgrading-a-native-install). It serves the UI with no extra configuration. To build from source instead, build the UI first, then compile the server with `cargo build --release --bin server --features embed-ui`.
+
 ### PostgreSQL "Could not create any Unix-domain sockets" (Proxmox)
 
 **Symptoms**: PostgreSQL container fails to start on Proxmox host with socket creation error
@@ -132,7 +154,7 @@ docker compose up -d    # Start fresh
 
 ## Reverse Proxy Setup
 
-Configure your reverse proxy (Nginx, Traefik, Caddy) to forward traffic to port 60072.
+Configure your reverse proxy (Nginx, Traefik, Caddy) to forward traffic to port 60072. Forward every path, not only `/api`: the server also serves the web UI and share links.
 
 For HTTPS, enable secure cookies in docker-compose.yml:
 
