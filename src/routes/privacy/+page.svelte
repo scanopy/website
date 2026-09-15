@@ -7,7 +7,7 @@
 	title="Privacy Policy"
 	description="Scanopy Privacy Policy - How we collect, use, and protect your personal information."
 	slug="privacy"
-	date="September 13, 2026"
+	date="September 15, 2026"
 	dateType="effective"
 >
 	<section>
@@ -322,6 +322,16 @@
 					class="text-blue-400 hover:text-blue-300">Privacy Policy</a
 				>
 			</li>
+			<li>
+				<strong class="text-white">Cloudflare</strong> (website hosting and contact form
+				processing):
+				<a
+					href="https://www.cloudflare.com/privacypolicy/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-blue-400 hover:text-blue-300">Privacy Policy</a
+				>
+			</li>
 		</ul>
 
 		<h3 class="mb-3 text-xl font-semibold text-white">8.3 Analytics</h3>
@@ -356,11 +366,13 @@
 				>
 			</li>
 			<li>
-				<strong class="text-white">Apollo.io</strong> (identifies the companies that visit our
-				website): if you turn on Marketing in our cookie settings, Apollo.io receives your IP
-				address, the pages you visit, the referring page, campaign (UTM) parameters, and a random
-				visitor ID. Under the CCPA this is a sale and a share of personal information (see section
-				11.3). Apollo.io uses this information under its own
+				<strong class="text-white">Apollo.io</strong> (manages our sales inquiries and identifies
+				the companies that visit our website): when you submit our contact form, Apollo.io receives
+				your name, email address, company, company size, timeline, number of networks or sites, use
+				case, and the plan you asked about. If you turn on Marketing in our cookie settings,
+				Apollo.io also receives your IP address, the pages you visit, the referring page, campaign
+				(UTM) parameters, and a random visitor ID. Under the CCPA both are a sale and a share of
+				personal information (see section 11.3). Apollo.io uses this information under its own
 				<a
 					href="https://www.apollo.io/privacy-policy"
 					target="_blank"
@@ -462,12 +474,22 @@
 			11.3 Do Not Sell or Share My Personal Information
 		</h3>
 		<p class="mb-2 text-gray-300">
-			If you turn on Marketing in our cookie settings, we sell and share personal information with
-			Apollo.io, as the CCPA defines those terms. We sell or share these categories:
+			We sell and share personal information with Apollo.io, as the CCPA defines those terms, when
+			you submit our contact form and when you turn on Marketing in our cookie settings. We sell or
+			share these categories:
 		</p>
 		<ul class="mb-4 list-inside list-disc space-y-2 text-gray-300">
 			<li>
-				<strong class="text-white">Identifiers:</strong> your IP address and a random visitor ID
+				<strong class="text-white">Identifiers:</strong> your name, email address, IP address, and a
+				random visitor ID
+			</li>
+			<li>
+				<strong class="text-white">Professional or employment-related information:</strong> your company
+				and company size
+			</li>
+			<li>
+				<strong class="text-white">Commercial information:</strong> the plan you asked about, your timeline,
+				number of networks or sites, and use case
 			</li>
 			<li>
 				<strong class="text-white">Internet or other electronic network activity:</strong> the pages
@@ -475,9 +497,11 @@
 			</li>
 		</ul>
 		<p class="mb-4 text-gray-300">
-			Apollo.io uses this information to identify the company you are visiting from, under its own
-			privacy policy. Without your Marketing consent, we do not sell or share it. We do not have
-			actual knowledge that we sell or share the personal information of consumers under 16.
+			Apollo.io uses this information to manage our sales inquiries and to identify the company you
+			are visiting from, under its own privacy policy. Website activity is sold or shared only with
+			your Marketing consent. The Marketing setting does not apply to the contact form: details you
+			submit there go to Apollo.io either way. We do not have actual knowledge that we sell or share
+			the personal information of consumers under 16.
 		</p>
 		<p class="text-gray-300">
 			To opt out,

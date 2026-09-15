@@ -4,11 +4,11 @@ import {
 	fillContactModal,
 	gotoHydrated,
 	seedCookieConsent,
-	submitAndExpectBrevoSuccess
+	submitAndExpectContactSuccess
 } from './helpers';
 
 /**
- * Contact/quote modal (Brevo) — ContactModal.svelte. One component, but three
+ * Contact/quote modal (Apollo, via /api/contact) — ContactModal.svelte. One component, but three
  * separate trigger wirings across two pages and two modal instances:
  * /commercial's own <ContactModal> (commercial/+page.svelte), and the one
  * PricingSection renders for itself, reached via two different CTA branches
@@ -17,14 +17,15 @@ import {
  * working (the June 2026 silent failure was on /commercial), so each trigger
  * path gets a full real submission.
  *
- * NOTE: each test submits a real (sentinel) inquiry to production Brevo.
+ * NOTE: each test submits a real (sentinel) inquiry. The function creates an
+ * Apollo contact labeled "Form monitor" and skips the owner task.
  */
 
 async function openFillAndSubmit(page: Page) {
 	const dialog = page.getByRole('dialog');
 	await expect(dialog, 'contact modal did not open').toBeVisible();
 	await fillContactModal(dialog);
-	await submitAndExpectBrevoSuccess(page, () =>
+	await submitAndExpectContactSuccess(page, () =>
 		dialog.getByRole('button', { name: 'Submit' }).click()
 	);
 	await expectContactSuccess(dialog);
@@ -34,7 +35,7 @@ test.beforeEach(async ({ context }) => {
 	await seedCookieConsent(context);
 });
 
-test('/commercial "Request a Quote" form submits to Brevo and shows success state', async ({
+test('/commercial "Request a Quote" form submits to Apollo and shows success state', async ({
 	page
 }) => {
 	// The exact form that silently failed in June 2026 (planType CommercialSelfHosted).
@@ -43,7 +44,7 @@ test('/commercial "Request a Quote" form submits to Brevo and shows success stat
 	await openFillAndSubmit(page);
 });
 
-test('/pricing Enterprise "Request Information" form submits to Brevo and shows success state', async ({
+test('/pricing Enterprise "Request Information" form submits to Apollo and shows success state', async ({
 	page
 }) => {
 	// Enterprise is on the default (Cloud) tab of the pricing widget.
@@ -52,7 +53,7 @@ test('/pricing Enterprise "Request Information" form submits to Brevo and shows 
 	await openFillAndSubmit(page);
 });
 
-test('/pricing Self-Hosted "Get a license" form submits to Brevo and shows success state', async ({
+test('/pricing Self-Hosted "Get a license" form submits to Apollo and shows success state', async ({
 	page
 }) => {
 	// The widget's contact-flow CTA (purchase_flow 'contact') — a different branch from

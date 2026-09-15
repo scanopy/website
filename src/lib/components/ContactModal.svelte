@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { X, Send, CheckCircle, AlertCircle } from 'lucide-svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { submitContactInquiry, type ContactSubmitResult } from '$lib/brevo';
-	import { PUBLIC_BREVO_CONTACT_FORM_URL } from '$env/static/public';
+	import { submitContactInquiry, teamSizeOptions, urgencyOptions } from '$lib/contact';
 
 	interface Props {
 		open: boolean;
@@ -21,6 +20,8 @@
 	let urgency = $state('');
 	let networkCount = $state<number | null>(null);
 	let useCase = $state('');
+	// Hidden from people; bots that fill every field set it and get dropped server-side.
+	let honeypot = $state('');
 	let loading = $state(false);
 	let status = $state<'idle' | 'success' | 'error'>('idle');
 	let errorMessage = $state('');
@@ -49,24 +50,6 @@
 		return `mailto:${LICENSING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
 	});
 
-	const teamSizeOptions = [
-		{ value: '1-10', label: '1-10 employees' },
-		{ value: '11-25', label: '11-25 employees' },
-		{ value: '26-50', label: '26-50 employees' },
-		{ value: '51-100', label: '51-100 employees' },
-		{ value: '101-250', label: '101-250 employees' },
-		{ value: '251-500', label: '251-500 employees' },
-		{ value: '501-1000', label: '501-1000 employees' },
-		{ value: '1001+', label: '1001+ employees' }
-	];
-
-	const urgencyOptions = [
-		{ value: 'immediately', label: 'Immediately' },
-		{ value: '1-3 months', label: '1-3 months' },
-		{ value: '3-6 months', label: '3-6 months' },
-		{ value: 'exploring', label: 'Just exploring' }
-	];
-
 	function validateEmail(email: string): boolean {
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 	}
@@ -80,6 +63,7 @@
 		urgency = '';
 		networkCount = null;
 		useCase = '';
+		honeypot = '';
 		status = 'idle';
 		errorMessage = '';
 		fieldErrors = {};
@@ -136,16 +120,17 @@
 			fieldErrors = {};
 			showEmailFallback = false;
 
-			const result = await submitContactInquiry(PUBLIC_BREVO_CONTACT_FORM_URL, {
+			const result = await submitContactInquiry({
 				email: email.trim(),
-				firstname: firstName.trim(),
-				lastname: lastName.trim(),
+				firstName: firstName.trim(),
+				lastName: lastName.trim(),
 				company: company.trim(),
-				numemployees: teamSize,
-				urgency: urgency || undefined,
-				networkCount: networkCount ?? undefined,
-				message: useCase.trim() || undefined,
-				planType
+				teamSize,
+				urgency,
+				networkCount: networkCount ?? 0,
+				useCase: useCase.trim(),
+				planType,
+				honeypot
 			});
 
 			if (result.success) {
@@ -399,6 +384,18 @@
 							</p>{/if}
 					</div>
 
+					<!-- Honeypot: off-screen, skipped by keyboard and screen readers. -->
+					<div class="absolute -left-[9999px]" aria-hidden="true">
+						<label for="contact-website">Website</label>
+						<input
+							id="contact-website"
+							type="text"
+							tabindex="-1"
+							autocomplete="off"
+							bind:value={honeypot}
+						/>
+					</div>
+
 					{#if status === 'error' && errorMessage}
 						<div class="space-y-2 text-sm text-red-400">
 							<div class="flex items-center gap-2">
@@ -447,6 +444,11 @@
 							</span>
 						{/if}
 					</button>
+
+					<p class="text-center text-xs text-gray-500">
+						See our <a href="/privacy" class="underline hover:text-gray-300">Privacy Policy</a> for how
+						we use and share your details.
+					</p>
 				</form>
 			{/if}
 		</div>
