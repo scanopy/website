@@ -1,5 +1,8 @@
 # Working in this repo
 
+Baseline writing-style and commit conventions live in `~/.claude/CLAUDE.md`. This file covers
+what's specific to this repo.
+
 The marketing site (SvelteKit, `src/`) and the docs sub-site (Next.js + Fumadocs, `docs/`) build
 together: `npm run build` builds both and copies the docs into `build/docs`. Deploys on push to
 `main`.
@@ -114,7 +117,7 @@ performance, credentials).
 
 ### Structure and prose
 
-- **Diátaxis placement**: how-to → `guides/`, concept → `using-scanopy/`, facts → `reference/`.
+- **Diátaxis placement** (framework defined in `~/.claude/CLAUDE.md`): how-to → `guides/`, concept → `using-scanopy/`, facts → `reference/`.
 - A page that outgrows itself becomes a folder with a `meta.json` and subpages. `topology/` and
   `discovery/` are the examples.
 - **A parallel list written as consecutive bold-label paragraphs should be a list or a table.**
@@ -216,7 +219,6 @@ regenerates it.
 ## Working conventions
 
 - **Small changes go straight to `main`.** No feature branches, no PRs.
-- **No AI attribution in commit messages** — no `Co-Authored-By` for assistants.
 - **Nothing is urgent.** Docs and fixtures reach users only when Maya cuts a release, so an
   uncommitted change or a fixture that will be regenerated is fine sitting as it is. Report
   state plainly and let her sequence it.
