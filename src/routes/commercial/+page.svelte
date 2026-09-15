@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { ContactModal, PricingSection } from '$lib/components';
+	import { PricingSection } from '$lib/components';
 	import FAQ from '$lib/components/FAQ.svelte';
 	import { analytics } from '$lib/analytics.svelte';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL, LICENSE_CTA_LABEL } from '$lib/config/cta';
+	import { startLicensePath } from '$lib/licensePath.svelte';
 	import { Shield, Server, Lock, FileCheck, ArrowRight } from 'lucide-svelte';
 	import billingPlansData from '$lib/fixtures/billing-plans.json';
 	import { getFAQPageSchema } from '$lib/schemas';
@@ -62,21 +64,14 @@
 		{
 			question: 'How do I get started?',
 			answer:
-				'Start with the free Community Edition to try self-hosting, then contact us for a Commercial license when you need commercial use, advanced features, or support. You can reach us any time at licensing@scanopy.net.'
+				'Book a demo for a walkthrough, or start with the free Community Edition and move to a Commercial license when you need commercial use, advanced features, or support. You can reach us any time at licensing@scanopy.net.'
 		}
 	];
 
 	const faqSchema = getFAQPageSchema(commercialFaqs);
 
-	let showContactModal = $state(false);
-
-	function openContact(location: string) {
-		analytics.ctaClicked({
-			location,
-			destination: 'contact_modal',
-			text: 'Request a Quote'
-		});
-		showContactModal = true;
+	function getLicense(location: string) {
+		startLicensePath({ planType: 'SelfHostedStandard', planName: 'Commercial Edition', location });
 	}
 </script>
 
@@ -134,7 +129,7 @@
 
 			<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
 				<a
-					href="https://cal.com/mferrandiz/scanopy-demo"
+					href={DEMO_BOOKING_URL}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary inline-flex items-center gap-2"
@@ -142,18 +137,18 @@
 						analytics.ctaClicked({
 							location: 'commercial_hero',
 							destination: 'talk_to_sales',
-							text: 'Book Demo'
+							text: DEMO_CTA_LABEL
 						})}
 				>
-					Book Demo
+					{DEMO_CTA_LABEL}
 					<ArrowRight class="h-4 w-4" />
 				</a>
 				<button
 					type="button"
 					class="btn-secondary inline-flex items-center gap-2"
-					onclick={() => openContact('commercial_hero')}
+					onclick={() => getLicense('commercial_hero')}
 				>
-					Request a Quote
+					{LICENSE_CTA_LABEL}
 				</button>
 			</div>
 		</div>
@@ -242,11 +237,12 @@
 	<div class="container mx-auto px-4 text-center">
 		<h2 class="mb-3 text-2xl font-bold text-white lg:text-3xl">Ready to self-host Scanopy?</h2>
 		<p class="mx-auto mb-6 max-w-xl text-gray-400">
-			Tell us about your environment and we'll put together a Commercial Edition quote.
+			Book a demo for a walkthrough, or tell us about your environment and we'll put together a
+			Commercial Edition quote.
 		</p>
 		<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
 			<a
-				href="https://cal.com/mferrandiz/scanopy-demo"
+				href={DEMO_BOOKING_URL}
 				target="_blank"
 				rel="noopener noreferrer"
 				class="btn-primary inline-flex items-center gap-2"
@@ -254,18 +250,18 @@
 					analytics.ctaClicked({
 						location: 'commercial_footer',
 						destination: 'talk_to_sales',
-						text: 'Book Demo'
+						text: DEMO_CTA_LABEL
 					})}
 			>
-				Book Demo
+				{DEMO_CTA_LABEL}
 				<ArrowRight class="h-4 w-4" />
 			</a>
 			<button
 				type="button"
 				class="btn-secondary inline-flex items-center gap-2"
-				onclick={() => openContact('commercial_footer')}
+				onclick={() => getLicense('commercial_footer')}
 			>
-				Request a Quote
+				{LICENSE_CTA_LABEL}
 			</button>
 		</div>
 		<p class="mt-4 text-sm text-gray-500">
@@ -276,10 +272,3 @@
 		</p>
 	</div>
 </section>
-
-<ContactModal
-	open={showContactModal}
-	onClose={() => (showContactModal = false)}
-	planType="SelfHostedStandard"
-	planName="Commercial Edition"
-/>

@@ -1,13 +1,39 @@
 ---
 title: Quick Start
-description: Get up and running with Scanopy in minutes.
+description: Install Scanopy on your own server, or start on Scanopy Cloud, and run your first scan.
+---
+
+## Self-Hosted
+
+### 1. Install the server
+
+Follow [Installing Scanopy (Self-Hosted)](/self-hosted-server/server-installation/). The Docker Compose install is the quickest path. On a commercial plan, follow [Deploying the Commercial Edition](/self-hosted-server/commercial-deployment/) instead, which adds your license key.
+
+### 2. Complete onboarding
+
+Open your server URL. The onboarding wizard walks you through initial setup.
+
+### 3. Wait for your first scan
+
+Docker Compose deployments include an **integrated daemon** that automatically begins scanning your network after onboarding. The first scan is a light scan that discovers hosts and open ports. A typical /24 subnet takes around 30 minutes depending on the number of active hosts. Watch progress in real-time on the **Discovery** page.
+
+### 4. Explore your network
+
+- **Topology**: interactive diagrams of your infrastructure in four views
+- **Assets > Hosts**: all discovered devices
+- **Assets > Services**: detected services across your network
+
+To scan additional networks, deploy daemons on other segments. See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
+
 ---
 
 ## Cloud
 
-### 1. Sign up
+Scanopy Cloud runs the server for you.
 
-Go to [scanopy.net](https://scanopy.net) and click **Get Started**. The onboarding wizard guides you through creating your organization and network.
+### 1. Create your account
+
+Open the Cloud tab on the [pricing page](https://scanopy.net/pricing) and pick a plan. The onboarding wizard guides you through creating your organization, your first network, and your account, then asks you to choose your plan.
 
 ### 2. Install a daemon
 
@@ -15,39 +41,15 @@ After onboarding, you'll be prompted to install a **daemon**. A daemon is a ligh
 
 ### 3. Run your first scan
 
-Once the daemon connects, navigate to **Discover > Scan > Scheduled** and click **Run** on the discovery. A typical /24 subnet takes around 30 minutes depending on the number of active hosts. You can watch progress in real-time on the **Discovery** page.
+Once the daemon connects, go to **Discover > Scan > Scheduled** and click **Run** on the discovery. A typical /24 subnet takes around 30 minutes depending on the number of active hosts. You can watch progress in real-time on the **Discovery** page.
 
 ### 4. Explore your network
 
-- **Topology** — Interactive visualization of your infrastructure from multiple perspectives
-- **Assets > Hosts** — All discovered devices
-- **Assets > Services** — Detected services across your network
+The same views as [Explore your network](#4-explore-your-network) in the self-hosted steps.
 
 <Callout type="info">
 The Getting Started checklist on the home page tracks your progress through these steps.
 </Callout>
-
----
-
-## Self-Hosted
-
-**Prerequisite:** A running Scanopy server. See [Installing Scanopy (Self-Hosted)](/self-hosted-server/server-installation/).
-
-### 1. Complete onboarding
-
-Open your server URL. The onboarding wizard walks you through initial setup.
-
-### 2. Wait for your first scan
-
-Docker Compose deployments include an **integrated daemon** that automatically begins scanning your network after onboarding. The first scan is a light scan that discovers hosts and open ports. A typical /24 subnet takes around 30 minutes depending on the number of active hosts. Watch progress in real-time on the **Discovery** page.
-
-### 3. Explore your network
-
-- **Topology** — Interactive visualization of your infrastructure from multiple perspectives
-- **Assets > Hosts** — All discovered devices
-- **Assets > Services** — Detected services across your network
-
-To scan additional networks, deploy daemons on other segments. See [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/).
 
 ---
 
@@ -56,7 +58,7 @@ To scan additional networks, deploy daemons on other segments. See [Planning Dae
 **Learn the features:**
 
 - [Discovery](/using-scanopy/discovery/) — How scanning works and how to configure it
-- [Topology](/using-scanopy/topology/) — Visualize your infrastructure from multiple perspectives
+- [Topology](/using-scanopy/topology/) — Visualize your infrastructure in four views
 - [Hosts & Subnets](/using-scanopy/network-data/) — Organize your discovered data
 - [Organization & Access](/using-scanopy/organization/) — Users, roles, API keys, and tags
 

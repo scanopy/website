@@ -20,14 +20,14 @@ The public lead-capture forms are the inbound channel for the highest-value deal
 
 Every form found on the site is listed here. The contact modal posts to `/api/contact`, a Cloudflare Pages Function (`functions/api/contact.ts`) that finds or creates the Apollo account, creates the contact on it, and assigns a follow-up task; it needs the `APOLLO_API_KEY` Pages secret. The newsletter submits to Brevo (`sibforms.com`) via `src/lib/brevo.ts`.
 
-| Form                                                      | Page tested   | Spec                        | Real submission? |
-| --------------------------------------------------------- | ------------- | --------------------------- | ---------------- |
-| Contact modal — "Request a Quote" (the June 2026 failure) | `/commercial` | `e2e/contact-modal.spec.ts` | yes              |
-| Contact modal — Enterprise "Request Information"          | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
-| Contact modal — Self-Hosted "Get a license"               | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
-| Newsletter signup (footer, sitewide)                      | `/` (home)    | `e2e/newsletter.spec.ts`    | yes              |
+| Form                                                        | Page tested   | Spec                        | Real submission? |
+| ----------------------------------------------------------- | ------------- | --------------------------- | ---------------- |
+| Contact modal: "Get a license" (the June 2026 failure page) | `/commercial` | `e2e/contact-modal.spec.ts` | yes              |
+| Contact modal: Enterprise "Request Information"             | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
+| Contact modal: Self-Hosted "Get a license"                  | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
+| Newsletter signup (footer, sitewide)                        | `/` (home)    | `e2e/newsletter.spec.ts`    | yes              |
 
-The contact modal is one component with three separate trigger wirings across two pages and two modal instances: `/commercial` renders its own `<ContactModal>` for the page-level "Request a Quote" buttons, and `PricingSection` renders another for the pricing widget, reached via two different CTA branches ("Request Information" on Enterprise, "Get a license" on the self-hosted tiers). A page- or branch-specific JS error can break one while the others keep working, so each path submits for real. The home page no longer carries a pricing widget or any contact CTA, so nothing is left unmonitored by not testing `/` here — its footer newsletter form is still covered by the newsletter row.
+The contact modal is one component, mounted once in the root layout, with three separate trigger wirings across two pages: `/commercial`'s "Get a license" buttons and the pricing widget's self-hosted "Get a license" cards both go through `startLicensePath` (`src/lib/licensePath.svelte.ts`), and the pricing widget's Enterprise "Request Information" opens the modal directly. A page- or branch-specific JS error can break one while the others keep working, so each path submits for real. The home page no longer carries a pricing widget or any contact CTA, so nothing is left unmonitored by not testing `/` here. Its footer newsletter form is still covered by the newsletter row.
 
 Each weekly run creates **3 real Apollo contacts and 1 Brevo newsletter subscription** (double that in the worst case, since CI retries a failed test once).
 
@@ -57,6 +57,14 @@ npm run test:forms:headed   # watch it happen
 ```
 
 **Warning:** local runs submit real (sentinel-marked) data to production Apollo and Brevo, exactly like CI.
+
+To run the contact-modal specs against a local build instead, serve the build and point `E2E_BASE_URL` at it. Off production, the helpers answer `/api/contact` locally, so no Apollo contacts are created. The newsletter spec still submits to the real Brevo from any base URL, so run only the contact spec:
+
+```sh
+npm run build
+npx vite preview --port 4173 --strictPort   # in a second terminal
+E2E_BASE_URL=http://localhost:4173 npx playwright test e2e/contact-modal.spec.ts
+```
 
 ### Adding a new form to the suite
 

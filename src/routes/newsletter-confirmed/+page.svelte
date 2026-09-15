@@ -1,6 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { APP, appHref } from '$lib/config/urls';
+	import { analytics } from '$lib/analytics.svelte';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 </script>
 
 <svelte:head>
@@ -36,9 +41,28 @@
 			and news straight to your inbox.
 		</p>
 		<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
-			<a href={appHref(APP.app, page.url.pathname, 'confirm-page')} class="btn-primary">Go to App</a
+			<a
+				href={DEMO_BOOKING_URL}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="btn-primary"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'newsletter_confirmed',
+						destination: 'talk_to_sales',
+						text: DEMO_CTA_LABEL
+					})}>{DEMO_CTA_LABEL}</a
 			>
-			<a href="/" class="btn-secondary">Back to Homepage</a>
+			<a
+				href={SELF_HOSTED_HREF}
+				class="btn-secondary"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'newsletter_confirmed',
+						destination: 'self_hosted',
+						text: SELF_HOSTED_CTA_LABEL
+					})}>{SELF_HOSTED_CTA_LABEL}</a
+			>
 		</div>
 	</div>
 </section>

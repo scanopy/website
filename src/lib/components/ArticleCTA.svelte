@@ -2,11 +2,17 @@
 	import { page } from '$app/state';
 	import { withUtm, utmFromPath } from '$lib/config/urls';
 	import { analytics } from '$lib/analytics.svelte';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 	import StickyCtaBar, { type StickyCta } from '$lib/components/StickyCtaBar.svelte';
 
-	// Research-intent readers get the demo first: a real topology map in one
-	// click, no signup. Pricing is the follow-on path. The two CTAs describe
-	// themselves, so there's no heading or prose, just the choice.
+	// Two commercial actions, book a demo or see the self-hosted plans, with the demo
+	// instance as a text link below them. The CTAs describe themselves, so there's no
+	// heading or prose.
 	const demoHref = $derived(
 		withUtm('https://demo.scanopy.net', {
 			...utmFromPath(page.url.pathname),
@@ -14,59 +20,71 @@
 		})
 	);
 
-	// The persistent bottom bar mirrors these CTAs and hides once this footer box
+	// The persistent bottom bar mirrors the two buttons and hides once this footer box
 	// scrolls into view.
 	let ctaBox = $state<HTMLDivElement>();
 
-	const barCtas: StickyCta[] = $derived([
+	const barCtas: StickyCta[] = [
 		{
-			label: 'Explore Live Demo',
-			href: demoHref,
+			label: DEMO_CTA_LABEL,
+			href: DEMO_BOOKING_URL,
 			variant: 'primary',
 			external: true,
 			onclick: () =>
 				analytics.ctaClicked({
 					location: 'article_bottom_bar',
-					destination: 'demo',
-					text: 'Explore Live Demo'
+					destination: 'talk_to_sales',
+					text: DEMO_CTA_LABEL
 				})
 		},
 		{
-			label: 'View Pricing',
-			href: '/pricing',
+			label: SELF_HOSTED_CTA_LABEL,
+			href: SELF_HOSTED_HREF,
 			variant: 'secondary',
 			onclick: () =>
 				analytics.ctaClicked({
 					location: 'article_bottom_bar',
-					destination: 'pricing',
-					text: 'View Pricing'
+					destination: 'self_hosted',
+					text: SELF_HOSTED_CTA_LABEL
 				})
 		}
-	]);
+	];
 </script>
 
 <div bind:this={ctaBox} class="cta-box mt-12 rounded-xl border border-gray-800 bg-gray-900/50 p-6">
 	<a
-		href={demoHref}
+		href={DEMO_BOOKING_URL}
 		target="_blank"
 		rel="noopener noreferrer"
 		class="btn-primary"
 		onclick={() =>
 			analytics.ctaClicked({
 				location: 'article_cta',
-				destination: 'demo',
-				text: 'Explore Live Demo'
-			})}>Explore Live Demo</a
+				destination: 'talk_to_sales',
+				text: DEMO_CTA_LABEL
+			})}>{DEMO_CTA_LABEL}</a
 	>
 	<a
-		href="/pricing"
+		href={SELF_HOSTED_HREF}
 		class="btn-secondary"
 		onclick={() =>
 			analytics.ctaClicked({
 				location: 'article_cta',
-				destination: 'pricing',
-				text: 'View Pricing'
-			})}>View Pricing</a
+				destination: 'self_hosted',
+				text: SELF_HOSTED_CTA_LABEL
+			})}>{SELF_HOSTED_CTA_LABEL}</a
+	>
+	<a
+		href={demoHref}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="demo-link text-sm text-gray-500 transition-colors hover:text-blue-400"
+		onclick={() =>
+			analytics.ctaClicked({
+				location: 'article_cta',
+				destination: 'demo',
+				text: 'Explore Live Demo'
+			})}>Explore Live Demo &rarr;</a
 	>
 </div>
 
@@ -74,7 +92,7 @@
 
 <style>
 	/* Footer CTA: two self-describing actions spanning the full width of the
-	   article's bottom. No heading, no prose. */
+	   article's bottom, with the demo-instance link centered under them. */
 	.cta-box {
 		display: flex;
 		flex-direction: column;
@@ -84,5 +102,9 @@
 	.cta-box :global(.btn-primary),
 	.cta-box :global(.btn-secondary) {
 		flex: 1;
+	}
+
+	.demo-link {
+		align-self: center;
 	}
 </style>

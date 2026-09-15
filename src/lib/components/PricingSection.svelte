@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BillingPlanForm, ContactModal } from '$lib/components';
+	import { BillingPlanForm } from '$lib/components';
 	import type {
 		BillingPlan,
 		BillingPlanType,
@@ -12,7 +12,9 @@
 	import featuresData from '$lib/fixtures/features.json';
 	import { page } from '$app/state';
 	import { APP, appHref } from '$lib/config/urls';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
 	import { analytics } from '$lib/analytics.svelte';
+	import { openContactModal, startLicensePath } from '$lib/licensePath.svelte';
 
 	interface Props {
 		showGithubStars?: boolean;
@@ -155,32 +157,52 @@
 	const featureHelpers = createMetadataHelpers<FeatureFixture, FeatureMetadata>(featureFixtures);
 
 	// ============================================================================
-	// Contact Modal State
+	// Card actions
 	// ============================================================================
 
-	let showContactModal = $state(false);
-	let selectedPlanType = $state('');
-	let selectedPlanName = $state('');
+	function trackPlanSelected(plan: BillingPlan) {
+		analytics.pricingPlanSelected({
+			plan: plan.type,
+			period: plan.rate === 'Year' ? 'yearly' : 'monthly',
+			price_cents: plan.base_cents,
+			is_trial: plan.trial_days > 0
+		});
+	}
 
+	// Contact-flow cards: the paid self-hosted tiers take the license path, and Enterprise
+	// opens the contact modal as an inquiry.
 	function handlePlanInquiry(plan: BillingPlan) {
-		selectedPlanType = plan.type;
-		selectedPlanName = billingPlanHelpers.getName(plan.type);
-		// Track the inquiry-modal OPEN (previously only the submit fired an event), so
-		// contact-sales intent is attributable to the pricing widget, not just conversions.
+		trackPlanSelected(plan);
+		const planName = billingPlanHelpers.getName(plan.type);
+		if (billingPlanHelpers.getMetadata(plan.type).hosting === 'SelfHosted') {
+			startLicensePath({ planType: plan.type, planName, location: 'pricing_widget' });
+			return;
+		}
 		analytics.ctaClicked({
 			location: 'pricing_widget',
 			destination: 'contact_modal',
-			text: billingPlanHelpers.getName(plan.type)
+			text: 'Request Information',
+			plan: plan.type
 		});
-		showContactModal = true;
+		openContactModal(plan.type, planName);
 	}
 
 	function handlePlanSelect(plan: BillingPlan) {
+		trackPlanSelected(plan);
 		window.open(
 			appHref(APP.billingPlan, page.url.pathname, 'pricing-plan'),
 			'_blank',
 			'noopener,noreferrer'
 		);
+	}
+
+	function handleBookDemo(plan: BillingPlan) {
+		analytics.ctaClicked({
+			location: 'pricing_widget',
+			destination: 'talk_to_sales',
+			text: DEMO_CTA_LABEL,
+			plan: plan.type
+		});
 	}
 </script>
 
@@ -193,11 +215,9 @@
 	{showGithubStars}
 	{showHosting}
 	showBillingPeriodToggle={!planIds}
-/>
-
-<ContactModal
-	open={showContactModal}
-	onClose={() => (showContactModal = false)}
-	planType={selectedPlanType}
-	planName={selectedPlanName}
+	demoUrl={DEMO_BOOKING_URL}
+	demoLabel={DEMO_CTA_LABEL}
+	onBookDemo={handleBookDemo}
+	onHostingChange={(filter) => analytics.pricingPlanFiltered({ filter })}
+	onPlanLinkClick={trackPlanSelected}
 />

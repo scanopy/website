@@ -1,19 +1,15 @@
 import type { PostHog } from 'posthog-js';
 import { browser } from '$app/environment';
 import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
+import { hasAnalyticsConsent } from './cookies';
+import { loadPosthogModule, optInAnalytics } from './posthog';
 
 let posthogInstance: PostHog | null = null;
 
-async function getPosthog(): Promise<PostHog> {
-	if (!posthogInstance) {
-		const mod = await import('posthog-js');
-		posthogInstance = mod.default;
-	}
-	return posthogInstance;
-}
-
 export async function loadPh() {
-	const posthog = await getPosthog();
+	// Loaded through the shared module so CookieConsent's opt-in and opt-out
+	// ($lib/posthog) act on this same instance.
+	const posthog = await loadPosthogModule();
 	posthog.init(PUBLIC_POSTHOG_KEY, {
 		api_host: 'https://ph.scanopy.net',
 		ui_host: 'https://us.posthog.com',
@@ -22,7 +18,10 @@ export async function loadPh() {
 		persistence: 'memory',
 		opt_out_capturing_by_default: true
 	});
-	initFeatureFlags();
+	posthogInstance = posthog;
+	// CookieConsent applies a saved choice on mount, before this idle-time init has run,
+	// so a saved analytics grant is applied here as well.
+	if (hasAnalyticsConsent()) optInAnalytics();
 }
 
 /**
@@ -35,57 +34,32 @@ function capture(event: string, properties?: Record<string, unknown>) {
 	}
 }
 
-const CTA_CACHE_KEY = 'scanopy_cta_variant';
-
-/**
- * Feature flag state for CTA text experiment.
- * Reads cached variant from localStorage to prevent flash on repeat visits.
- */
-export const featureFlags = $state({
-	mainCtaText: (browser && localStorage.getItem(CTA_CACHE_KEY)) || 'Start Free Trial'
-});
-
-export function initFeatureFlags() {
-	if (browser && posthogInstance && !posthogInstance.has_opted_out_capturing()) {
-		// Wait for feature flags to be loaded, then evaluate
-		posthogInstance.onFeatureFlags(() => {
-			evaluateCtaFlag();
-		});
-	}
-}
-
-/**
- * Evaluate the CTA feature flag and update the text.
- * This triggers the $feature_flag_called exposure event.
- */
-export function evaluateCtaFlag() {
-	if (browser && posthogInstance) {
-		const variant = posthogInstance.getFeatureFlag('website-main-cta');
-
-		let text: string;
-		if (variant === 'launch') {
-			text = 'Launch Scanopy';
-		} else if (variant === 'get-started') {
-			text = 'Get Started';
-		} else {
-			text = 'Start Free Trial';
-		}
-
-		featureFlags.mainCtaText = text;
-		try {
-			localStorage.setItem(CTA_CACHE_KEY, text);
-		} catch {
-			/* quota exceeded */
-		}
-	}
-}
+/** Where a CTA sends the visitor. */
+export type CtaDestination =
+	/** Demo booking (cal.com). */
+	| 'talk_to_sales'
+	/** The pricing page's Self-Hosted tab, or the license path (startLicensePath). */
+	| 'self_hosted'
+	/** Enterprise inquiry through the contact modal. */
+	| 'contact_modal'
+	/** The demo instance, demo.scanopy.net (navbar, hero, about, compliance). */
+	| 'live_demo'
+	/** The demo instance, demo.scanopy.net (article and alternatives CTAs). */
+	| 'demo'
+	/** The /commercial page. */
+	| 'commercial';
 
 export const analytics = {
 	/**
 	 * Track CTA button clicks that lead users toward conversion.
-	 * Note: Exposure event is triggered on page load via $effect, not here.
+	 * `plan` is set when the CTA belongs to a specific plan (pricing cards, license path).
 	 */
-	ctaClicked: (props: { location: string; destination: string; text: string }) => {
+	ctaClicked: (props: {
+		location: string;
+		destination: CtaDestination;
+		text: string;
+		plan?: string;
+	}) => {
 		capture('cta_clicked', props);
 	},
 

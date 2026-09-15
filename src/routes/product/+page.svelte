@@ -18,9 +18,13 @@
 		ArrowRight
 	} from 'lucide-svelte';
 	import { getProductFeatures, getServiceCountLabel, getFAQPageSchema } from '$lib/schemas';
-	import { analytics, featureFlags } from '$lib/analytics.svelte';
-	import { page } from '$app/state';
-	import { APP, appHref } from '$lib/config/urls';
+	import { analytics } from '$lib/analytics.svelte';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 
 	const serviceCount = getServiceCountLabel();
 
@@ -162,7 +166,7 @@
 		{
 			question: 'Is Scanopy free or open source?',
 			answer:
-				'Yes. The self-hosted <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is free and open-source under AGPL-3.0, with one network and one seat. Paid <a href="/pricing" class="text-blue-400 hover:text-blue-300">Cloud plans</a> and a <a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial self-hosted license</a> lift those caps and add features like exports, integrations, and more seats.'
+				'Yes. The self-hosted <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is free and open-source under AGPL-3.0, with one network and one seat. A <a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial self-hosted license</a> lifts those caps and adds features like exports, integrations, and more seats. Scanopy also offers hosted Cloud plans, and the <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing page</a> lists every plan.'
 		},
 		{
 			question: 'How often does Scanopy update the network diagram?',
@@ -373,53 +377,42 @@
 	<section class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-3xl text-center">
-				<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Your living network documentation is minutes away.
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
+					Run Scanopy on your own infrastructure.
 				</h2>
+				<p class="mb-8 text-gray-400">
+					Book a demo for a walkthrough, or compare the self-hosted plans, from the free Community
+					Edition to the commercial tiers.
+				</p>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
 					<a
-						href={appHref(APP.onboarding, page.url.pathname, 'bottom-cta')}
+						href={DEMO_BOOKING_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary px-8 py-3 text-lg"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'bottom_cta',
-								destination: 'app_onboarding',
-								text: featureFlags.mainCtaText
+								destination: 'talk_to_sales',
+								text: DEMO_CTA_LABEL
 							})}
 					>
-						{featureFlags.mainCtaText}
+						{DEMO_CTA_LABEL}
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
-						href="https://cal.com/mferrandiz/scanopy-demo"
-						target="_blank"
-						rel="noopener noreferrer"
+						href={SELF_HOSTED_HREF}
 						class="btn-secondary px-8 py-3 text-lg"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'bottom_cta',
-								destination: 'talk_to_sales',
-								text: 'Book Demo'
+								destination: 'self_hosted',
+								text: SELF_HOSTED_CTA_LABEL
 							})}
 					>
-						Book Demo
+						{SELF_HOSTED_CTA_LABEL}
 					</a>
 				</div>
-				<p class="mt-6 text-sm text-gray-400">
-					Prefer to self-host? Run the full stack in your own environment with the
-					<a
-						href="/commercial"
-						class="text-blue-400 hover:text-blue-300"
-						onclick={() =>
-							analytics.ctaClicked({
-								location: 'bottom_cta',
-								destination: 'commercial',
-								text: 'Commercial Edition'
-							})}>Commercial Edition</a
-					>.
-				</p>
 			</div>
 		</div>
 	</section>

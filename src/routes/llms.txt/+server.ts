@@ -1,6 +1,6 @@
 import billingPlansData from '$lib/fixtures/billing-plans.json';
 import servicesData from '$lib/fixtures/services.json';
-import { APP, withUtm } from '$lib/config/urls';
+import { DEMO_BOOKING_URL } from '$lib/config/cta';
 import { vendors } from '$lib/fixtures/network-diagram-vendors';
 import { VS_VENDOR_SLUGS, vsSlug, buildTitle, buildMetaDescription } from '$lib/compare/vs-pages';
 import {
@@ -58,10 +58,12 @@ export async function GET() {
 	// exposing the raw array length here (which drifted to a different number).
 	const serviceCountLabel = `${Math.floor(services.length / 10) * 10}+`;
 
-	// Get unique monthly plans for pricing section
-	const monthlyPlans = plans.filter((p) => p.metadata.rate === 'Month');
+	// One line per plan: its monthly row where one exists, otherwise its annual row (the
+	// self-hosted commercial tiers are annual-only).
+	const monthlyPlanIds = new Set(plans.filter((p) => p.metadata.rate === 'Month').map((p) => p.id));
 	const seenPlanIds = new Set<string>();
-	const uniquePlans = monthlyPlans.filter((p) => {
+	const uniquePlans = plans.filter((p) => {
+		if (p.metadata.rate !== 'Month' && monthlyPlanIds.has(p.id)) return false;
 		if (seenPlanIds.has(p.id)) return false;
 		seenPlanIds.add(p.id);
 		return true;
@@ -70,7 +72,10 @@ export async function GET() {
 	// Generate pricing lines
 	const pricingLines = uniquePlans.map((plan) => {
 		const price =
-			plan.metadata.custom_price || `$${(plan.metadata.base_cents / 100).toFixed(2)}/month`;
+			plan.metadata.custom_price ||
+			(plan.metadata.rate === 'Year'
+				? `$${(plan.metadata.base_cents / 100).toLocaleString('en-US')}/year`
+				: `$${(plan.metadata.base_cents / 100).toFixed(2)}/month`);
 		const networks = plan.metadata.included_networks
 			? `${plan.metadata.included_networks} network${plan.metadata.included_networks > 1 ? 's' : ''}`
 			: 'unlimited networks';
@@ -185,12 +190,6 @@ export async function GET() {
 		.map((g) => `- **${g.title}**: ${g.tldr}\n  URL: https://scanopy.net/guides/${g.slug}`)
 		.join('\n');
 
-	const onboardingUrl = withUtm(APP.onboarding, {
-		medium: 'llms',
-		campaign: 'llms-txt',
-		content: 'getting-started'
-	});
-
 	const content = `# Scanopy
 
 > Automated network diagram and documentation software. Deploy a scanner, get four views of your network and the infrastructure running on it: network architecture, service dependencies, workload placement, and physical topology. Kept accurate automatically.
@@ -259,10 +258,12 @@ ${allComparisonLines}
 
 ## Getting Started
 
-1. Sign up at ${onboardingUrl}
-2. Install the Scanopy agent on your network
-3. Run your first scan
-4. View your auto-generated network documentation and diagrams
+1. Install the Scanopy server on your own infrastructure: https://scanopy.net/docs/self-hosted-server/server-installation/
+2. Open your server URL and complete onboarding. Docker Compose installs include a daemon that starts scanning after onboarding.
+3. View your auto-generated network documentation and diagrams
+
+- Book a demo: ${DEMO_BOOKING_URL}
+- Self-hosted plans and pricing: https://scanopy.net/pricing (Scanopy Cloud plans are listed there too)
 
 ## Contact
 

@@ -2,22 +2,22 @@
 	import '../app.css';
 	import { browser, dev } from '$app/environment';
 	import { page } from '$app/state';
-	import { Footer } from '$lib/components';
+	import { ContactModal, Footer } from '$lib/components';
 	import { Menu, X } from 'lucide-svelte';
 	import { PUBLIC_BREVO_NEWSLETTER_FORM_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
-	import {
-		analytics,
-		featureFlags,
-		evaluateCtaFlag,
-		loadPh,
-		initFeatureFlags
-	} from '$lib/analytics.svelte';
+	import { analytics, loadPh } from '$lib/analytics.svelte';
 	import { getBreadcrumbListSchema } from '$lib/schemas';
 	import { initTheme } from '$lib/theme.svelte';
-	import { APP, appHref } from '$lib/config/urls';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
+	import { contactModal, closeContactModal } from '$lib/licensePath.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -66,11 +66,6 @@
 		}
 
 		return () => mql.removeEventListener('change', applySystemTheme);
-	});
-
-	// Evaluate feature flag on mount to trigger exposure event (PostHog best practice)
-	$effect(() => {
-		evaluateCtaFlag();
 	});
 
 	function toggleMobileMenu() {
@@ -243,32 +238,30 @@
 						Live Demo
 					</a>
 					<a
-						href="https://cal.com/mferrandiz/scanopy-demo"
-						target="_blank"
-						rel="noopener noreferrer"
+						href={SELF_HOSTED_HREF}
 						class="btn-secondary"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'navbar',
-								destination: 'talk_to_sales',
-								text: 'Book Demo'
+								destination: 'self_hosted',
+								text: SELF_HOSTED_CTA_LABEL
 							})}
 					>
-						Book Demo
+						{SELF_HOSTED_CTA_LABEL}
 					</a>
 					<a
-						href={appHref(APP.onboarding, page.url.pathname, 'navbar', 'nav')}
+						href={DEMO_BOOKING_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'navbar',
-								destination: 'app_onboarding',
-								text: featureFlags.mainCtaText
+								destination: 'talk_to_sales',
+								text: DEMO_CTA_LABEL
 							})}
 					>
-						{featureFlags.mainCtaText}
+						{DEMO_CTA_LABEL}
 					</a>
 				</div>
 
@@ -321,36 +314,34 @@
 						Live Demo
 					</a>
 					<a
-						href="https://cal.com/mferrandiz/scanopy-demo"
-						target="_blank"
-						rel="noopener noreferrer"
+						href={SELF_HOSTED_HREF}
 						class="btn-secondary text-center"
 						onclick={() => {
 							analytics.ctaClicked({
 								location: 'navbar_mobile',
-								destination: 'talk_to_sales',
-								text: 'Book Demo'
+								destination: 'self_hosted',
+								text: SELF_HOSTED_CTA_LABEL
 							});
 							closeMobileMenu();
 						}}
 					>
-						Book Demo
+						{SELF_HOSTED_CTA_LABEL}
 					</a>
 					<a
-						href={appHref(APP.onboarding, page.url.pathname, 'navbar-mobile', 'nav')}
+						href={DEMO_BOOKING_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary text-center"
 						onclick={() => {
 							analytics.ctaClicked({
 								location: 'navbar_mobile',
-								destination: 'app_onboarding',
-								text: featureFlags.mainCtaText
+								destination: 'talk_to_sales',
+								text: DEMO_CTA_LABEL
 							});
 							closeMobileMenu();
 						}}
 					>
-						{featureFlags.mainCtaText}
+						{DEMO_CTA_LABEL}
 					</a>
 				</div>
 			{/if}
@@ -365,4 +356,11 @@
 	<Footer {healthStatus} brevoNewsletterFormUrl={PUBLIC_BREVO_NEWSLETTER_FORM_URL} />
 </div>
 
-<CookieConsent onAnalyticsChange={(enabled) => enabled && initFeatureFlags()} />
+<ContactModal
+	open={contactModal.open}
+	onClose={closeContactModal}
+	planType={contactModal.planType}
+	planName={contactModal.planName}
+/>
+
+<CookieConsent />

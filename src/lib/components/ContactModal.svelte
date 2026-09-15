@@ -2,6 +2,7 @@
 	import { X, Send, CheckCircle, AlertCircle } from 'lucide-svelte';
 	import { analytics } from '$lib/analytics.svelte';
 	import { submitContactInquiry, teamSizeOptions, urgencyOptions } from '$lib/contact';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
 
 	interface Props {
 		open: boolean;
@@ -76,7 +77,8 @@
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape') {
+		// The modal is mounted on every page, so only a visible modal reacts to Escape.
+		if (open && e.key === 'Escape') {
 			handleClose();
 		}
 	}
@@ -207,7 +209,22 @@
 					<p class="mb-6 text-gray-400">
 						We've received your inquiry about the {planName} plan. We'll be in touch soon.
 					</p>
-					<button type="button" onclick={handleClose} class="btn-primary"> Close </button>
+					<div class="flex flex-col justify-center gap-3 sm:flex-row">
+						<a
+							href={DEMO_BOOKING_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="btn-primary"
+							onclick={() =>
+								analytics.ctaClicked({
+									location: 'contact_modal_success',
+									destination: 'talk_to_sales',
+									text: DEMO_CTA_LABEL,
+									plan: planType
+								})}>{DEMO_CTA_LABEL}</a
+						>
+						<button type="button" onclick={handleClose} class="btn-secondary">Close</button>
+					</div>
 				</div>
 			{:else}
 				<h2 id="modal-title" class="mb-2 text-xl font-semibold text-white">

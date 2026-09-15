@@ -8,6 +8,10 @@ import { expect, type BrowserContext, type Locator, type Page } from '@playwrigh
  * See README "Form Monitoring" before changing any of these values —
  * downstream filters key on them.
  */
+/** The site under test: production unless E2E_BASE_URL points elsewhere (e.g. a local preview). */
+export const BASE_URL = process.env.E2E_BASE_URL ?? 'https://scanopy.net';
+const IS_PRODUCTION = new URL(BASE_URL).hostname.endsWith('scanopy.net');
+
 export const SENTINEL_NAME = 'AUTOMATED TEST';
 export const SENTINEL_MESSAGE = 'AUTOMATED TEST - weekly production form monitor. Please ignore.';
 
@@ -26,18 +30,18 @@ export function sentinelEmail(): string {
  * Pre-seed the GDPR consent cookie so the cookie banner (fixed, z-index 9999,
  * bottom of viewport) never renders and can't intercept clicks on the footer
  * newsletter form. analytics:false also keeps PostHog from recording monitor
- * traffic. Cookie name/format must match src/lib/cookies.ts.
+ * traffic. Cookie name/format must match src/lib/cookies.ts. On production the
+ * cookie is set for .scanopy.net; on any other BASE_URL, for that host.
  */
 export async function seedCookieConsent(context: BrowserContext): Promise<void> {
+	const name = 'scanopy_gdpr';
+	const value = encodeURIComponent(
+		JSON.stringify({ necessary: true, analytics: false, marketing: false, version: 2 })
+	);
 	await context.addCookies([
-		{
-			name: 'scanopy_gdpr',
-			value: encodeURIComponent(
-				JSON.stringify({ necessary: true, analytics: false, marketing: false, version: 2 })
-			),
-			domain: '.scanopy.net',
-			path: '/'
-		}
+		IS_PRODUCTION
+			? { name, value, domain: '.scanopy.net', path: '/' }
+			: { name, value, url: BASE_URL }
 	]);
 }
 
@@ -129,6 +133,19 @@ export async function submitAndExpectContactSuccess(
 	submit: () => Promise<void>,
 	{ timeoutMs = 25_000 }: { timeoutMs?: number } = {}
 ): Promise<void> {
+	// A static build served locally has no Pages Function behind /api/contact, so runs
+	// off production answer it here with the function's success shape. Production
+	// runs always reach the real function.
+	if (!IS_PRODUCTION) {
+		await page.route('**/api/contact', (route) =>
+			route.fulfill({
+				status: 200,
+				contentType: 'application/json',
+				body: JSON.stringify({ success: true })
+			})
+		);
+	}
+
 	const responsePromise = page.waitForResponse(
 		(r) => new URL(r.url()).pathname === '/api/contact' && r.request().method() === 'POST',
 		{ timeout: timeoutMs }

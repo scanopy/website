@@ -1,6 +1,12 @@
 <script lang="ts">
 	import GithubStars from '$lib/components/GithubStars.svelte';
 	import { analytics } from '$lib/analytics.svelte';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 	import { ExternalLink } from 'lucide-svelte';
 
 	const communityLinks = [
@@ -156,19 +162,35 @@ docker compose up -d</code
 <!-- Soft Upsell -->
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto px-4 text-center">
-		<p class="mb-3 text-gray-400">Need more networks, team seats, or managed hosting?</p>
-		<a
-			href="/pricing"
-			class="text-blue-400 hover:text-blue-300"
-			onclick={() =>
-				analytics.ctaClicked({
-					location: 'community_upsell',
-					destination: 'pricing',
-					text: 'View Plans'
-				})}
-		>
-			View Plans &rarr;
-		</a>
+		<p class="mb-3 text-gray-400">Need more networks or team seats?</p>
+		<div class="flex flex-wrap items-center justify-center gap-6">
+			<a
+				href={SELF_HOSTED_HREF}
+				class="text-blue-400 hover:text-blue-300"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'community_upsell',
+						destination: 'self_hosted',
+						text: SELF_HOSTED_CTA_LABEL
+					})}
+			>
+				{SELF_HOSTED_CTA_LABEL} &rarr;
+			</a>
+			<a
+				href={DEMO_BOOKING_URL}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-blue-400 hover:text-blue-300"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'community_upsell',
+						destination: 'talk_to_sales',
+						text: DEMO_CTA_LABEL
+					})}
+			>
+				{DEMO_CTA_LABEL} &rarr;
+			</a>
+		</div>
 		<p class="mt-4 text-gray-400">
 			Need a commercial license to self-host in your business?
 			<a

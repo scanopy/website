@@ -345,6 +345,36 @@ export function getIntegrationsLabel(): string {
 }
 
 /**
+ * Published annual price of a self-hosted tier (e.g. "$4,000"), or '' when the fixture has none.
+ */
+export function getSelfHostedAnnualPrice(planId: string): string {
+	const plan = billingPlans.find(
+		(p) =>
+			p.id === planId &&
+			p.metadata.hosting === 'SelfHosted' &&
+			p.metadata.rate === 'Year' &&
+			p.metadata.base_cents > 0
+	);
+	return plan ? `$${(plan.metadata.base_cents / 100).toLocaleString('en-US')}` : '';
+}
+
+/**
+ * Cheapest published self-hosted annual price (e.g. "$4,000"), or '' when there is none.
+ */
+export function getSelfHostedStartingAnnualPrice(): string {
+	const paid = billingPlans.filter(
+		(p) =>
+			p.metadata.hosting === 'SelfHosted' &&
+			p.metadata.rate === 'Year' &&
+			p.metadata.base_cents > 0 &&
+			!p.metadata.custom_price
+	);
+	if (paid.length === 0) return '';
+	const min = Math.min(...paid.map((p) => p.metadata.base_cents));
+	return `$${(min / 100).toLocaleString('en-US')}`;
+}
+
+/**
  * Get the lowest cloud starting price (billed yearly, shown as monthly).
  */
 export function getStartingMonthlyPrice(): string {

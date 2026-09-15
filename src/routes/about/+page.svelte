@@ -3,9 +3,13 @@
 	import { ArrowRight, ExternalLink } from 'lucide-svelte';
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
-	import { analytics, featureFlags } from '$lib/analytics.svelte';
-	import { page } from '$app/state';
-	import { APP, appHref } from '$lib/config/urls';
+	import { analytics } from '$lib/analytics.svelte';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 
 	const pressMentions = pressMentionsData as PressMention[];
 </script>
@@ -218,35 +222,47 @@
 			<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl">See it for yourself</h2>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
-					href={appHref(APP.onboarding, page.url.pathname, 'about-cta')}
+					href={DEMO_BOOKING_URL}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
 					onclick={() =>
 						analytics.ctaClicked({
 							location: 'about_cta',
-							destination: 'app_onboarding',
-							text: featureFlags.mainCtaText
+							destination: 'talk_to_sales',
+							text: DEMO_CTA_LABEL
 						})}
 				>
-					{featureFlags.mainCtaText}
+					{DEMO_CTA_LABEL}
 					<ArrowRight class="h-5 w-5" />
 				</a>
 				<a
-					href="https://demo.scanopy.net"
-					target="_blank"
-					rel="noopener noreferrer"
+					href={SELF_HOSTED_HREF}
 					class="btn-secondary px-8 py-3 text-lg"
 					onclick={() =>
 						analytics.ctaClicked({
 							location: 'about_cta',
-							destination: 'live_demo',
-							text: 'View Live Demo'
+							destination: 'self_hosted',
+							text: SELF_HOSTED_CTA_LABEL
 						})}
 				>
-					View Live Demo
+					{SELF_HOSTED_CTA_LABEL}
 				</a>
 			</div>
+			<a
+				href="https://demo.scanopy.net"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="mt-6 inline-block text-sm text-gray-500 transition-colors hover:text-blue-400"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'about_cta',
+						destination: 'live_demo',
+						text: 'View Live Demo'
+					})}
+			>
+				View Live Demo &rarr;
+			</a>
 		</div>
 	</div>
 </section>

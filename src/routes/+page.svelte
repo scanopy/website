@@ -12,46 +12,54 @@
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { Activity, Shield, Briefcase, Monitor, ArrowRight } from 'lucide-svelte';
-	import { analytics, featureFlags } from '$lib/analytics.svelte';
-	import { page } from '$app/state';
-	import { APP, appHref } from '$lib/config/urls';
+	import { analytics } from '$lib/analytics.svelte';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 	import StickyCtaBar, { type StickyCta } from '$lib/components/StickyCtaBar.svelte';
-	import { getServiceCountLabel, getStartingMonthlyPrice } from '$lib/schemas';
+	import {
+		getServiceCountLabel,
+		getStartingMonthlyPrice,
+		getSelfHostedStartingAnnualPrice
+	} from '$lib/schemas';
 
 	const serviceCount = getServiceCountLabel();
 	const startingPrice = getStartingMonthlyPrice();
+	const selfHostedFrom = getSelfHostedStartingAnnualPrice();
 
 	// Mobile-only sticky bar mirroring the (collapsed) navbar CTAs, so the primary
 	// actions stay reachable while scrolling. Hides once the bottom CTA section is
 	// reached. Desktop already shows both CTAs in the persistent navbar.
 	let bottomCta = $state<HTMLElement>();
 
-	const homeCtas: StickyCta[] = $derived([
+	const homeCtas: StickyCta[] = [
 		{
-			label: featureFlags.mainCtaText,
-			href: appHref(APP.onboarding, page.url.pathname, 'sticky-bar'),
+			label: DEMO_CTA_LABEL,
+			href: DEMO_BOOKING_URL,
 			variant: 'primary',
 			external: true,
 			onclick: () =>
 				analytics.ctaClicked({
 					location: 'sticky_bar',
-					destination: 'app_onboarding',
-					text: featureFlags.mainCtaText
+					destination: 'talk_to_sales',
+					text: DEMO_CTA_LABEL
 				})
 		},
 		{
-			label: 'Book Demo',
-			href: 'https://cal.com/mferrandiz/scanopy-demo',
+			label: SELF_HOSTED_CTA_LABEL,
+			href: SELF_HOSTED_HREF,
 			variant: 'secondary',
-			external: true,
 			onclick: () =>
 				analytics.ctaClicked({
 					location: 'sticky_bar',
-					destination: 'talk_to_sales',
-					text: 'Book Demo'
+					destination: 'self_hosted',
+					text: SELF_HOSTED_CTA_LABEL
 				})
 		}
-	]);
+	];
 
 	interface PageData {
 		softwareApplicationSchema: Record<string, unknown>;
@@ -200,33 +208,31 @@
 
 					<div class="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
 						<a
-							href={appHref(APP.onboarding, page.url.pathname, 'hero')}
+							href={DEMO_BOOKING_URL}
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn-primary px-8 py-3 text-lg"
 							onclick={() =>
 								analytics.ctaClicked({
 									location: 'hero',
-									destination: 'app_onboarding',
-									text: featureFlags.mainCtaText
+									destination: 'talk_to_sales',
+									text: DEMO_CTA_LABEL
 								})}
 						>
-							{featureFlags.mainCtaText}
+							{DEMO_CTA_LABEL}
 							<ArrowRight class="h-5 w-5" />
 						</a>
 						<a
-							href="https://cal.com/mferrandiz/scanopy-demo"
-							target="_blank"
-							rel="noopener noreferrer"
+							href={SELF_HOSTED_HREF}
 							class="btn-secondary px-8 py-3 text-lg"
 							onclick={() =>
 								analytics.ctaClicked({
 									location: 'hero',
-									destination: 'talk_to_sales',
-									text: 'Book Demo'
+									destination: 'self_hosted',
+									text: SELF_HOSTED_CTA_LABEL
 								})}
 						>
-							Book Demo
+							{SELF_HOSTED_CTA_LABEL}
 						</a>
 					</div>
 				</div>
@@ -329,53 +335,42 @@
 	<section bind:this={bottomCta} class="border-t border-gray-800 py-20">
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-3xl text-center">
-				<h2 class="mb-6 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
-					Your living network documentation is minutes away.
+				<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl" style="text-wrap: balance;">
+					Run Scanopy on your own infrastructure.
 				</h2>
+				<p class="mb-8 text-gray-400">
+					Book a demo for a walkthrough, or compare the self-hosted plans, from the free Community
+					Edition to the commercial tiers.
+				</p>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
 					<a
-						href={appHref(APP.onboarding, page.url.pathname, 'bottom-cta')}
+						href={DEMO_BOOKING_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn-primary px-8 py-3 text-lg"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'bottom_cta',
-								destination: 'app_onboarding',
-								text: featureFlags.mainCtaText
+								destination: 'talk_to_sales',
+								text: DEMO_CTA_LABEL
 							})}
 					>
-						{featureFlags.mainCtaText}
+						{DEMO_CTA_LABEL}
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
-						href="https://cal.com/mferrandiz/scanopy-demo"
-						target="_blank"
-						rel="noopener noreferrer"
+						href={SELF_HOSTED_HREF}
 						class="btn-secondary px-8 py-3 text-lg"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'bottom_cta',
-								destination: 'talk_to_sales',
-								text: 'Book Demo'
+								destination: 'self_hosted',
+								text: SELF_HOSTED_CTA_LABEL
 							})}
 					>
-						Book Demo
+						{SELF_HOSTED_CTA_LABEL}
 					</a>
 				</div>
-				<p class="mt-6 text-sm text-gray-400">
-					Prefer to self-host? Run the full stack in your own environment with the
-					<a
-						href="/commercial"
-						class="text-blue-400 hover:text-blue-300"
-						onclick={() =>
-							analytics.ctaClicked({
-								location: 'bottom_cta',
-								destination: 'commercial',
-								text: 'Commercial Edition'
-							})}>Commercial Edition</a
-					>.
-				</p>
 			</div>
 		</div>
 	</section>
@@ -391,9 +386,9 @@
 				per host, documenting not just the network but the services, dependencies, and workloads running
 				on it, in four views from one scan and keeping them current on a schedule. The
 				<a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
-				is free and open-source (AGPL-3.0); a
+				is free and open-source (AGPL-3.0) for one network and one seat. A
 				<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial license</a>
-				lifts the self-host caps, and
+				lifts those caps for self-hosted deployments, starting at {selfHostedFrom}/year, and
 				<a href="/pricing" class="text-blue-400 hover:text-blue-300">cloud plans</a>
 				start at {startingPrice}/month. Read
 				<a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300"

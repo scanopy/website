@@ -10,6 +10,12 @@
 	import { page } from '$app/state';
 	import { withUtm, utmFromPath } from '$lib/config/urls';
 	import { analytics } from '$lib/analytics.svelte';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 	import type { Vendor, VendorFAQ, VendorSource } from '$lib/types';
 
 	interface AltCard {
@@ -46,8 +52,8 @@
 		return href.startsWith('http') ? href : `https://scanopy.net${href}`;
 	}
 
-	// The Scanopy card carries the same two CTAs as the footer box (ArticleCTA): demo
-	// first for research-intent readers, pricing second.
+	// The Scanopy card carries the same CTAs as the footer box (ArticleCTA): book a demo,
+	// the self-hosted plans, and the demo instance as a text link.
 	const demoHref = $derived(
 		withUtm('https://demo.scanopy.net', {
 			...utmFromPath(page.url.pathname),
@@ -184,26 +190,38 @@
 							{#if alt.isScanopy}
 								<div class="mt-4 flex flex-wrap items-center gap-4 text-sm">
 									<a
-										href={demoHref}
+										href={DEMO_BOOKING_URL}
 										target="_blank"
 										rel="noopener noreferrer"
 										class="btn-primary"
 										onclick={() =>
 											analytics.ctaClicked({
 												location: 'alternatives_card',
-												destination: 'demo',
-												text: 'Explore Live Demo'
-											})}>Explore Live Demo</a
+												destination: 'talk_to_sales',
+												text: DEMO_CTA_LABEL
+											})}>{DEMO_CTA_LABEL}</a
 									>
 									<a
-										href="/pricing"
+										href={SELF_HOSTED_HREF}
 										class="btn-secondary"
 										onclick={() =>
 											analytics.ctaClicked({
 												location: 'alternatives_card',
-												destination: 'pricing',
-												text: 'View Pricing'
-											})}>View Pricing</a
+												destination: 'self_hosted',
+												text: SELF_HOSTED_CTA_LABEL
+											})}>{SELF_HOSTED_CTA_LABEL}</a
+									>
+									<a
+										href={demoHref}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="text-gray-500 transition-colors hover:text-blue-400"
+										onclick={() =>
+											analytics.ctaClicked({
+												location: 'alternatives_card',
+												destination: 'demo',
+												text: 'Explore Live Demo'
+											})}>Explore Live Demo &rarr;</a
 									>
 								</div>
 							{:else if alt.vsHref}

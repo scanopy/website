@@ -46,6 +46,16 @@
 		recommendedPlan?: string | null;
 		/** If true, user is a returning customer and should not see trial offers */
 		isReturningCustomer?: boolean;
+		/** Hosting tab shown first when `showHosting` is on. */
+		defaultHostingFilter?: 'cloud' | 'selfhosted';
+		/** When set, paid self-hosted cards and Enterprise show a demo-booking link under their action. */
+		demoUrl?: string;
+		demoLabel?: string;
+		onBookDemo?: (plan: BillingPlan) => void;
+		/** Called when the visitor switches the hosting tab. */
+		onHostingChange?: (filter: 'cloud' | 'selfhosted') => void;
+		/** Called when the visitor follows a card's link (the Community card's GitHub link). */
+		onPlanLinkClick?: (plan: BillingPlan) => void;
 	}
 
 	// eslint-disable-next-line svelte/no-unused-props
@@ -60,7 +70,13 @@
 		showHosting = false,
 		showBillingPeriodToggle = true,
 		recommendedPlan = null,
-		isReturningCustomer = false
+		isReturningCustomer = false,
+		defaultHostingFilter = 'selfhosted',
+		demoUrl,
+		demoLabel = 'Book a demo',
+		onBookDemo,
+		onHostingChange,
+		onPlanLinkClick
 	}: Props = $props();
 
 	let loadingPlanType = $state<string | null>(null);
@@ -70,7 +86,7 @@
 	let billingPeriod = $state<BillingPeriod>('yearly');
 
 	type HostingFilter = 'cloud' | 'selfhosted';
-	let hostingFilter = $state<HostingFilter>('cloud');
+	let hostingFilter = $state<HostingFilter>(untrack(() => defaultHostingFilter));
 
 	const billingPeriodOptions = [
 		{ value: 'monthly', label: 'Monthly' },
@@ -345,6 +361,22 @@
 		return plan.type === 'Enterprise';
 	}
 
+	// Paid self-hosted tiers and Enterprise offer demo booking under their main action.
+	function showsDemo(plan: BillingPlan): boolean {
+		if (!demoUrl) return false;
+		if (isEnterprise(plan)) return true;
+		const metadata = billingPlanHelpers.getMetadata(plan.type);
+		return metadata?.hosting === 'SelfHosted' && metadata?.purchase_flow === 'contact';
+	}
+
+	let anyCardShowsDemo = $derived(filteredPlans.some(showsDemo));
+
+	function handleHostingChange(value: string) {
+		if (value === hostingFilter) return;
+		hostingFilter = value as HostingFilter;
+		onHostingChange?.(hostingFilter);
+	}
+
 	async function handlePlanSelect(plan: BillingPlan) {
 		loadingPlanType = plan.type;
 		try {
@@ -422,7 +454,7 @@
 				<ToggleGroup
 					options={hostingOptions}
 					selected={hostingFilter}
-					onchange={(value) => (hostingFilter = value as HostingFilter)}
+					onchange={handleHostingChange}
 				/>
 			{/if}
 		</div>
@@ -591,9 +623,26 @@
 								target="_blank"
 								rel="noopener noreferrer"
 								class="btn-secondary inline-block w-full text-center text-sm"
+								onclick={() => onPlanLinkClick?.(plan)}
 							>
 								View on GitHub
 							</a>
+						{/if}
+						{#if showsDemo(plan)}
+							<a
+								href={demoUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="btn-secondary mt-2 w-full text-sm"
+								onclick={() => onBookDemo?.(plan)}
+							>
+								{demoLabel}
+							</a>
+						{:else if anyCardShowsDemo && !(purchaseFlow === 'stripe' && trial)}
+							<!-- Same height as the demo link, so card rows line up across the grid. -->
+							<div class="btn-secondary invisible mt-2 w-full text-sm" aria-hidden="true">
+								{demoLabel}
+							</div>
 						{/if}
 					</div>
 

@@ -3,8 +3,12 @@
 	import EvidenceExports from '$lib/components/EvidenceExports.svelte';
 	import { theme } from '$lib/theme.svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { page } from '$app/state';
-	import { appHref, APP } from '$lib/config/urls';
+	import {
+		DEMO_BOOKING_URL,
+		DEMO_CTA_LABEL,
+		SELF_HOSTED_CTA_LABEL,
+		SELF_HOSTED_HREF
+	} from '$lib/config/cta';
 	import { ArrowRight } from 'lucide-svelte';
 
 	const title = 'Audit-Ready Network Documentation - Scanopy';
@@ -145,33 +149,53 @@
 				Audit-ready network documentation,<span class="block">without the effort.</span>
 			</h1>
 			<p class="mx-auto mt-6 max-w-2xl text-lg text-gray-300">
-				NIS2, ISO 27001, HIPAA, and CMMC all expect network documentation that is accurate today, not last
-				year. Scanopy discovers your network and keeps the map and inventory current on a schedule,
-				so the evidence is ready before the auditor asks.
+				NIS2, ISO 27001, HIPAA, and CMMC all expect network documentation that is accurate today,
+				not last year. Scanopy discovers your network and keeps the map and inventory current on a
+				schedule, so the evidence is ready before the auditor asks.
 			</p>
 			<div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
 				<a
-					href="https://demo.scanopy.net"
+					href={DEMO_BOOKING_URL}
 					target="_blank"
-					rel="noopener"
+					rel="noopener noreferrer"
 					class="btn-primary px-8 py-3 text-lg"
 					onclick={() =>
 						analytics.ctaClicked({
 							location: 'compliance_hero',
-							destination: 'live_demo',
-							text: 'View live demo'
+							destination: 'talk_to_sales',
+							text: DEMO_CTA_LABEL
 						})}
 				>
-					View live demo
+					{DEMO_CTA_LABEL}
 					<ArrowRight class="h-5 w-5" />
 				</a>
 				<a
-					href={appHref(APP.onboarding, page.url.pathname, 'compliance-hero')}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="btn-secondary px-8 py-3 text-lg">Start free</a
+					href={SELF_HOSTED_HREF}
+					class="btn-secondary px-8 py-3 text-lg"
+					onclick={() =>
+						analytics.ctaClicked({
+							location: 'compliance_hero',
+							destination: 'self_hosted',
+							text: SELF_HOSTED_CTA_LABEL
+						})}
 				>
+					{SELF_HOSTED_CTA_LABEL}
+				</a>
 			</div>
+			<a
+				href="https://demo.scanopy.net"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="mt-6 inline-block text-sm text-gray-500 transition-colors hover:text-blue-400"
+				onclick={() =>
+					analytics.ctaClicked({
+						location: 'compliance_hero',
+						destination: 'live_demo',
+						text: 'View live demo'
+					})}
+			>
+				View live demo &rarr;
+			</a>
 		</div>
 	</section>
 
@@ -264,32 +288,60 @@
 				</h2>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
 					<a
-						href="https://demo.scanopy.net"
+						href={DEMO_BOOKING_URL}
 						target="_blank"
-						rel="noopener"
+						rel="noopener noreferrer"
 						class="btn-primary px-8 py-3 text-lg"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'compliance_cta',
-								destination: 'live_demo',
-								text: 'View live demo'
+								destination: 'talk_to_sales',
+								text: DEMO_CTA_LABEL
 							})}
 					>
-						View live demo
+						{DEMO_CTA_LABEL}
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
-						href="https://cal.com/mferrandiz/scanopy-demo"
-						target="_blank"
-						rel="noopener"
-						class="btn-secondary px-8 py-3 text-lg">Book a demo</a
+						href={SELF_HOSTED_HREF}
+						class="btn-secondary px-8 py-3 text-lg"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'compliance_cta',
+								destination: 'self_hosted',
+								text: SELF_HOSTED_CTA_LABEL
+							})}
 					>
+						{SELF_HOSTED_CTA_LABEL}
+					</a>
 				</div>
+				<a
+					href="https://demo.scanopy.net"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="mt-6 inline-block text-sm text-gray-500 transition-colors hover:text-blue-400"
+					onclick={() =>
+						analytics.ctaClicked({
+							location: 'compliance_cta',
+							destination: 'live_demo',
+							text: 'View live demo'
+						})}
+				>
+					View live demo &rarr;
+				</a>
 				<p class="mt-6 text-sm text-gray-400">
-					Prefer to self-host? The
-					<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial editions</a>
-					run in your own environment with support, and
-					<a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing</a> covers the tiers.
+					The
+					<a
+						href="/commercial"
+						class="text-blue-400 hover:text-blue-300"
+						onclick={() =>
+							analytics.ctaClicked({
+								location: 'compliance_cta',
+								destination: 'commercial',
+								text: 'Commercial Edition'
+							})}>Commercial Edition</a
+					>
+					runs entirely in your own environment, with a commercial license and support.
 				</p>
 			</div>
 		</div>

@@ -8,7 +8,11 @@ import { hasAnalyticsConsent } from './cookies';
 let posthogInstance: PostHog | null = null;
 let initialized = false;
 
-async function loadPosthogModule(): Promise<PostHog> {
+/**
+ * Load the PostHog module and remember its instance. The main site's loadPh() uses this too,
+ * so optInAnalytics() and isPostHogLoaded() see the instance the site initialized.
+ */
+export async function loadPosthogModule(): Promise<PostHog> {
 	if (!posthogInstance) {
 		const mod = await import('posthog-js');
 		posthogInstance = mod.default;
