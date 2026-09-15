@@ -191,9 +191,7 @@
 								</label>
 							</div>
 							<p class="option-description">
-								Lets Apollo.io identify the company you're visiting from, based on your IP address.
-								We use it to follow up with businesses interested in Scanopy. Under California law,
-								this is a sale and share of your personal information.
+								Used for marketing and sales outreach.
 								{#if gpc}
 									Off because your browser sends Global Privacy Control.
 								{/if}

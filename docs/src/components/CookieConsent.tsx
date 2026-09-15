@@ -253,9 +253,7 @@ export function CookieConsent() {
 											</label>
 										</div>
 										<p className="m-0 text-[0.8125rem] leading-relaxed text-[var(--color-fd-muted-foreground)]">
-											Lets Apollo.io identify the company you&apos;re visiting from, based on your
-											IP address. We use it to follow up with businesses interested in Scanopy.
-											Under California law, this is a sale and share of your personal information.
+											Used for marketing and sales outreach.
 											{gpc && ' Off because your browser sends Global Privacy Control.'}
 										</p>
 									</div>
