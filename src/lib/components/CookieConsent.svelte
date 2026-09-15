@@ -47,8 +47,6 @@
 		} else {
 			showBanner = true;
 		}
-		// The docs "Do Not Sell or Share" link lands on the privacy policy with this hash.
-		if (location.hash === '#do-not-sell') openSettings();
 	});
 
 	function applyPreferences() {
@@ -106,14 +104,6 @@
 	// and the settings modal.
 	$effect(() => {
 		chrome.cookieBannerOpen = showBanner;
-	});
-
-	// Opt-out links in the footer and privacy policy request the settings panel.
-	$effect(() => {
-		if (chrome.cookieSettingsRequested) {
-			chrome.cookieSettingsRequested = false;
-			openSettings();
-		}
 	});
 </script>
 

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import LegalPage from '$lib/components/LegalPage.svelte';
-	import { requestCookieSettings } from '$lib/stores/chrome.svelte';
 </script>
 
 <LegalPage
@@ -143,10 +142,8 @@
 				<strong class="text-white">Security Cookies:</strong> We use Security Cookies for security purposes.
 			</li>
 			<li>
-				<strong class="text-white">Marketing Storage:</strong> If you turn on Marketing in our cookie
-				settings, we load Apollo.io's website tracker, which stores a random visitor ID in your browser's
-				local storage and identifies the company you are visiting from. It does not load without that
-				consent. See section 8.4.
+				<strong class="text-white">Marketing Cookies:</strong> With your consent, we use Marketing Cookies
+				for marketing and sales outreach.
 			</li>
 		</ul>
 		<p class="mt-4 text-gray-300">
@@ -192,16 +189,6 @@
 			retained for a shorter period of time, except when this data is used to strengthen the
 			security or to improve the functionality of our Service, or we are legally obligated to retain
 			this data for longer time periods.
-		</p>
-		<p class="mb-4 text-gray-300">
-			We do not store the information Apollo.io receives through its website tracker (section 8.4).
-			Apollo.io retains it under its own
-			<a
-				href="https://www.apollo.io/privacy-policy"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="text-blue-400 hover:text-blue-300">Privacy Policy</a
-			>.
 		</p>
 
 		<h3 class="mb-3 text-xl font-semibold text-white">5.1 Data Retention for Physical Goods</h3>
@@ -366,19 +353,13 @@
 				>
 			</li>
 			<li>
-				<strong class="text-white">Apollo.io</strong> (manages our sales inquiries and identifies
-				the companies that visit our website): when you submit our contact form, Apollo.io receives
-				your name, email address, company, company size, timeline, number of networks or sites, use
-				case, and the plan you asked about. If you turn on Marketing in our cookie settings,
-				Apollo.io also receives your IP address, the pages you visit, the referring page, campaign
-				(UTM) parameters, and a random visitor ID. Under the CCPA both are a sale and a share of
-				personal information (see section 11.3). Apollo.io uses this information under its own
+				<strong class="text-white">Apollo.io:</strong>
 				<a
 					href="https://www.apollo.io/privacy-policy"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="text-blue-400 hover:text-blue-300">Privacy Policy</a
-				>.
+				>
 			</li>
 		</ul>
 	</section>
@@ -457,7 +438,7 @@
 				purposes, third parties we share with, and specific pieces of data
 			</li>
 			<li>To delete your personal information from our records</li>
-			<li>To stop selling or sharing your personal information (see section 11.3)</li>
+			<li>To stop selling or sharing your personal information</li>
 		</ul>
 		<p class="mb-4 text-gray-300">
 			We will respond to verified requests within 45 days as required by the CCPA. If we need more
@@ -469,49 +450,6 @@
 				class="text-blue-400 hover:text-blue-300">legal@scanopy.net</a
 			>
 		</p>
-
-		<h3 id="do-not-sell" class="mb-3 mt-6 text-xl font-semibold text-white">
-			11.3 Do Not Sell or Share My Personal Information
-		</h3>
-		<p class="mb-2 text-gray-300">
-			We sell and share personal information with Apollo.io, as the CCPA defines those terms, when
-			you submit our contact form and when you turn on Marketing in our cookie settings. We sell or
-			share these categories:
-		</p>
-		<ul class="mb-4 list-inside list-disc space-y-2 text-gray-300">
-			<li>
-				<strong class="text-white">Identifiers:</strong> your name, email address, IP address, and a
-				random visitor ID
-			</li>
-			<li>
-				<strong class="text-white">Professional or employment-related information:</strong> your company
-				and company size
-			</li>
-			<li>
-				<strong class="text-white">Commercial information:</strong> the plan you asked about, your timeline,
-				number of networks or sites, and use case
-			</li>
-			<li>
-				<strong class="text-white">Internet or other electronic network activity:</strong> the pages
-				you visit on our website, the referring page, and campaign (UTM) parameters
-			</li>
-		</ul>
-		<p class="mb-4 text-gray-300">
-			Apollo.io uses this information to manage our sales inquiries and to identify the company you
-			are visiting from, under its own privacy policy. Website activity is sold or shared only with
-			your Marketing consent. The Marketing setting does not apply to the contact form: details you
-			submit there go to Apollo.io either way. We do not have actual knowledge that we sell or share
-			the personal information of consumers under 16.
-		</p>
-		<p class="text-gray-300">
-			To opt out,
-			<button
-				type="button"
-				class="text-blue-400 underline hover:text-blue-300"
-				onclick={requestCookieSettings}>open our cookie settings</button
-			>
-			and turn Marketing off.
-		</p>
 	</section>
 
 	<section>
@@ -521,8 +459,7 @@
 			Providers"), to provide the Service on our behalf, to perform Service-related services or to
 			assist us in analyzing how our Service is used. These third parties have access to your
 			Personal Data only to perform these tasks on our behalf and are obligated not to disclose or
-			use it for any other purpose. Apollo.io (section 8.4) is not a Service Provider: we sell and
-			share personal information with it as described in section 11.3.
+			use it for any other purpose.
 		</p>
 	</section>
 

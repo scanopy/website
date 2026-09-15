@@ -12,15 +12,6 @@ class ChromeState {
 	bottomBarVisible = $state(false);
 	/** Measured height (px) of the bottom bar, so the cookie toggle can clear it. */
 	bottomBarHeight = $state(0);
-	/** An opt-out link asked the cookie banner to open its settings panel. */
-	cookieSettingsRequested = $state(false);
 }
 
 export const chrome = new ChromeState();
-
-/**
- * Open the cookie settings panel (the "Do Not Sell or Share" opt-out).
- */
-export function requestCookieSettings(): void {
-	chrome.cookieSettingsRequested = true;
-}

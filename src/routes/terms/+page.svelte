@@ -683,10 +683,9 @@
 				</h4>
 				<p class="mb-4 text-gray-300">
 					Under the CCPA, California residents have the right to opt-out of the sale of their
-					personal information. Section 11.3 of our <a
-						href="/privacy#do-not-sell"
-						class="text-blue-400 hover:text-blue-300">Privacy Policy</a
-					> describes what we sell or share and how to opt out.
+					personal information. Our <a href="/privacy" class="text-blue-400 hover:text-blue-300"
+						>Privacy Policy</a
+					> describes how we handle it.
 				</p>
 			</div>
 
