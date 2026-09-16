@@ -13,8 +13,8 @@
 	import {
 		DEMO_BOOKING_URL,
 		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
+		PRICING_CTA_LABEL,
+		PRICING_HREF
 	} from '$lib/config/cta';
 	import type { Vendor, VendorFAQ, VendorSource } from '$lib/types';
 
@@ -202,14 +202,14 @@
 											})}>{DEMO_CTA_LABEL}</a
 									>
 									<a
-										href={SELF_HOSTED_HREF}
+										href={PRICING_HREF}
 										class="btn-secondary"
 										onclick={() =>
 											analytics.ctaClicked({
 												location: 'alternatives_card',
-												destination: 'self_hosted',
-												text: SELF_HOSTED_CTA_LABEL
-											})}>{SELF_HOSTED_CTA_LABEL}</a
+												destination: 'pricing',
+												text: PRICING_CTA_LABEL
+											})}>{PRICING_CTA_LABEL}</a
 									>
 									<a
 										href={demoHref}

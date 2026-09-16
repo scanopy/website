@@ -2,8 +2,8 @@
 	import { PricingSection } from '$lib/components';
 	import FAQ from '$lib/components/FAQ.svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL, LICENSE_CTA_LABEL } from '$lib/config/cta';
-	import { startLicensePath } from '$lib/licensePath.svelte';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
+	import LicenseCta from '$lib/components/LicenseCta.svelte';
 	import { Shield, Server, Lock, FileCheck, ArrowRight } from 'lucide-svelte';
 	import billingPlansData from '$lib/fixtures/billing-plans.json';
 	import { getFAQPageSchema } from '$lib/schemas';
@@ -69,10 +69,6 @@
 	];
 
 	const faqSchema = getFAQPageSchema(commercialFaqs);
-
-	function getLicense(location: string) {
-		startLicensePath({ planType: 'SelfHostedStandard', planName: 'Commercial Edition', location });
-	}
 </script>
 
 <svelte:head>
@@ -143,13 +139,10 @@
 					{DEMO_CTA_LABEL}
 					<ArrowRight class="h-4 w-4" />
 				</a>
-				<button
-					type="button"
+				<LicenseCta
+					location="commercial_hero"
 					class="btn-secondary inline-flex items-center gap-2"
-					onclick={() => getLicense('commercial_hero')}
-				>
-					{LICENSE_CTA_LABEL}
-				</button>
+				/>
 			</div>
 		</div>
 	</div>
@@ -237,8 +230,7 @@
 	<div class="container mx-auto px-4 text-center">
 		<h2 class="mb-3 text-2xl font-bold text-white lg:text-3xl">Ready to self-host Scanopy?</h2>
 		<p class="mx-auto mb-6 max-w-xl text-gray-400">
-			Book a demo for a walkthrough, or tell us about your environment and we'll put together a
-			Commercial Edition quote.
+			Book a demo for a walkthrough, or get a license from the Scanopy app.
 		</p>
 		<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
 			<a
@@ -256,13 +248,10 @@
 				{DEMO_CTA_LABEL}
 				<ArrowRight class="h-4 w-4" />
 			</a>
-			<button
-				type="button"
+			<LicenseCta
+				location="commercial_footer"
 				class="btn-secondary inline-flex items-center gap-2"
-				onclick={() => getLicense('commercial_footer')}
-			>
-				{LICENSE_CTA_LABEL}
-			</button>
+			/>
 		</div>
 		<p class="mt-4 text-sm text-gray-500">
 			Or email us directly at

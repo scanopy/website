@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { analytics } from '$lib/analytics.svelte';
-	import {
-		DEMO_BOOKING_URL,
-		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
-	} from '$lib/config/cta';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
+	import LicenseCta from '$lib/components/LicenseCta.svelte';
 </script>
 
 <svelte:head>
@@ -53,16 +49,7 @@
 						text: DEMO_CTA_LABEL
 					})}>{DEMO_CTA_LABEL}</a
 			>
-			<a
-				href={SELF_HOSTED_HREF}
-				class="btn-secondary"
-				onclick={() =>
-					analytics.ctaClicked({
-						location: 'newsletter_confirmed',
-						destination: 'self_hosted',
-						text: SELF_HOSTED_CTA_LABEL
-					})}>{SELF_HOSTED_CTA_LABEL}</a
-			>
+			<LicenseCta location="newsletter_confirmed" class="btn-secondary" />
 		</div>
 	</div>
 </section>

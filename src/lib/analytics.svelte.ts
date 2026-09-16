@@ -38,8 +38,10 @@ function capture(event: string, properties?: Record<string, unknown>) {
 export type CtaDestination =
 	/** Demo booking (cal.com). */
 	| 'talk_to_sales'
-	/** The pricing page's Self-Hosted tab, or the license path (startLicensePath). */
+	/** The license path: app signup for a self-hosted license (licenseHref in $lib/licensePath.svelte). */
 	| 'self_hosted'
+	/** The /pricing page. */
+	| 'pricing'
 	/** Enterprise inquiry through the contact modal. */
 	| 'contact_modal'
 	/** The demo instance, demo.scanopy.net (navbar, hero, about, compliance). */

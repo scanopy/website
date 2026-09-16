@@ -491,20 +491,18 @@
 						? neighborPrev
 						: backendPrevTier}
 				{@const prevTierVisible = prevTier ? filteredPlans.some((p) => p.type === prevTier) : false}
-				{@const prevTierFeatures =
-					prevTier && !prevTierVisible
-						? (billingPlanHelpers.getMetadata(prevTier)?.incremental_features ?? [])
-						: []}
 				{@const displayFeatures = sortFeaturesByCategory(
 					usesNeighbor
 						? enabledFeatureIds(plan.type).filter(
 								(f) => !enabledFeatureIds(neighborPrev).includes(f)
 							)
-						: prevTierFeatures.length > 0
-							? [...new Set([...prevTierFeatures, ...incrementalFeatures])]
-							: incrementalFeatures
+						: prevTierVisible
+							? incrementalFeatures
+							: enabledFeatureIds(plan.type)
 				)}
 
+				<!-- Feature list: a card with a lower tier to its left lists what it adds; the first
+				     card on a tab lists every feature its plan includes. -->
 				<div
 					class="plan-card card card-static flex flex-col {isRecommended
 						? 'plan-card-recommended'

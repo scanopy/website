@@ -14,7 +14,7 @@
 	import { APP, appHref } from '$lib/config/urls';
 	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
 	import { analytics } from '$lib/analytics.svelte';
-	import { openContactModal, startLicensePath } from '$lib/licensePath.svelte';
+	import { openContactModal, openLicenseSignup } from '$lib/licensePath.svelte';
 
 	interface Props {
 		showGithubStars?: boolean;
@@ -83,10 +83,10 @@
 	const billingPlanFixtures = billingPlansData as BillingPlanFixture[];
 	const featureFixtures = featuresData as FeatureFixture[];
 
-	// Build the full plan list, then filter out Free for the public pricing UI.
-	// The full fixture stays accessible via `billingPlanHelpers` below, so
-	// `previous_tier` lookups (e.g., the Starter plan referencing Free for its
-	// incremental feature list) still resolve correctly even though Free is hidden.
+	// Build the full plan list, then filter out the free tiers (cloud Free and self-hosted
+	// Community) for the public pricing UI. The full fixture stays accessible via
+	// `billingPlanHelpers` below, so `previous_tier` lookups (e.g., Self-Hosted Standard
+	// referencing Community) still resolve even though the free tiers are hidden.
 	const allPlans: BillingPlan[] = billingPlanFixtures.map((item) => ({
 		base_cents: item.metadata.base_cents,
 		seat_cents: item.metadata.seat_cents,
@@ -100,7 +100,8 @@
 		type: item.id
 	}));
 	const plans: BillingPlan[] = allPlans.filter(
-		(p) => p.type !== 'Free' && (planIds ? planIds.includes(p.type) : true)
+		(p) =>
+			p.type !== 'Free' && p.type !== 'Community' && (planIds ? planIds.includes(p.type) : true)
 	);
 
 	// ============================================================================
@@ -169,13 +170,16 @@
 		});
 	}
 
-	// Contact-flow cards: the paid self-hosted tiers take the license path, and Enterprise
-	// opens the contact modal as an inquiry.
+	// Contact-flow cards: the paid self-hosted tiers open license signup in the app, and
+	// Enterprise opens the contact modal as an inquiry.
 	function handlePlanInquiry(plan: BillingPlan) {
 		trackPlanSelected(plan);
-		const planName = billingPlanHelpers.getName(plan.type);
 		if (billingPlanHelpers.getMetadata(plan.type).hosting === 'SelfHosted') {
-			startLicensePath({ planType: plan.type, planName, location: 'pricing_widget' });
+			openLicenseSignup({
+				location: 'pricing_widget',
+				content: 'pricing-plan',
+				planType: plan.type
+			});
 			return;
 		}
 		analytics.ctaClicked({
@@ -184,7 +188,7 @@
 			text: 'Request Information',
 			plan: plan.type
 		});
-		openContactModal(plan.type, planName);
+		openContactModal(plan.type, billingPlanHelpers.getName(plan.type));
 	}
 
 	function handlePlanSelect(plan: BillingPlan) {

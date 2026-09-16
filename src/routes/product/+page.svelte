@@ -19,12 +19,8 @@
 	} from 'lucide-svelte';
 	import { getProductFeatures, getServiceCountLabel, getFAQPageSchema } from '$lib/schemas';
 	import { analytics } from '$lib/analytics.svelte';
-	import {
-		DEMO_BOOKING_URL,
-		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
-	} from '$lib/config/cta';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
+	import LicenseCta from '$lib/components/LicenseCta.svelte';
 
 	const serviceCount = getServiceCountLabel();
 
@@ -381,8 +377,7 @@
 					Run Scanopy on your own infrastructure.
 				</h2>
 				<p class="mb-8 text-gray-400">
-					Book a demo for a walkthrough, or compare the self-hosted plans, from the free Community
-					Edition to the commercial tiers.
+					Book a demo for a walkthrough, or get a license from the Scanopy app.
 				</p>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
 					<a
@@ -400,18 +395,7 @@
 						{DEMO_CTA_LABEL}
 						<ArrowRight class="h-5 w-5" />
 					</a>
-					<a
-						href={SELF_HOSTED_HREF}
-						class="btn-secondary px-8 py-3 text-lg"
-						onclick={() =>
-							analytics.ctaClicked({
-								location: 'bottom_cta',
-								destination: 'self_hosted',
-								text: SELF_HOSTED_CTA_LABEL
-							})}
-					>
-						{SELF_HOSTED_CTA_LABEL}
-					</a>
+					<LicenseCta location="bottom_cta" class="btn-secondary px-8 py-3 text-lg" />
 				</div>
 			</div>
 		</div>

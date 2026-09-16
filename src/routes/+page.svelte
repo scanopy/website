@@ -13,12 +13,15 @@
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { Activity, Shield, Briefcase, Monitor, ArrowRight } from 'lucide-svelte';
 	import { analytics } from '$lib/analytics.svelte';
+	import { page } from '$app/state';
 	import {
 		DEMO_BOOKING_URL,
 		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
+		LICENSE_CTA_LABEL,
+		PRICING_CTA_LABEL,
+		PRICING_HREF
 	} from '$lib/config/cta';
+	import { licenseHref, trackLicenseClick } from '$lib/licensePath.svelte';
 	import StickyCtaBar, { type StickyCta } from '$lib/components/StickyCtaBar.svelte';
 	import {
 		getServiceCountLabel,
@@ -49,15 +52,11 @@
 				})
 		},
 		{
-			label: SELF_HOSTED_CTA_LABEL,
-			href: SELF_HOSTED_HREF,
+			label: LICENSE_CTA_LABEL,
+			href: licenseHref(page.url.pathname, 'sticky-bar'),
 			variant: 'secondary',
-			onclick: () =>
-				analytics.ctaClicked({
-					location: 'sticky_bar',
-					destination: 'self_hosted',
-					text: SELF_HOSTED_CTA_LABEL
-				})
+			external: true,
+			onclick: () => trackLicenseClick('sticky_bar')
 		}
 	];
 
@@ -223,16 +222,16 @@
 							<ArrowRight class="h-5 w-5" />
 						</a>
 						<a
-							href={SELF_HOSTED_HREF}
+							href={PRICING_HREF}
 							class="btn-secondary px-8 py-3 text-lg"
 							onclick={() =>
 								analytics.ctaClicked({
 									location: 'hero',
-									destination: 'self_hosted',
-									text: SELF_HOSTED_CTA_LABEL
+									destination: 'pricing',
+									text: PRICING_CTA_LABEL
 								})}
 						>
-							{SELF_HOSTED_CTA_LABEL}
+							{PRICING_CTA_LABEL}
 						</a>
 					</div>
 				</div>
@@ -339,8 +338,7 @@
 					Run Scanopy on your own infrastructure.
 				</h2>
 				<p class="mb-8 text-gray-400">
-					Book a demo for a walkthrough, or compare the self-hosted plans, from the free Community
-					Edition to the commercial tiers.
+					Book a demo for a walkthrough, or see what each self-hosted plan costs.
 				</p>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
 					<a
@@ -359,16 +357,16 @@
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
-						href={SELF_HOSTED_HREF}
+						href={PRICING_HREF}
 						class="btn-secondary px-8 py-3 text-lg"
 						onclick={() =>
 							analytics.ctaClicked({
 								location: 'bottom_cta',
-								destination: 'self_hosted',
-								text: SELF_HOSTED_CTA_LABEL
+								destination: 'pricing',
+								text: PRICING_CTA_LABEL
 							})}
 					>
-						{SELF_HOSTED_CTA_LABEL}
+						{PRICING_CTA_LABEL}
 					</a>
 				</div>
 			</div>

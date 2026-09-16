@@ -11,13 +11,9 @@
 	import { analytics, loadPh } from '$lib/analytics.svelte';
 	import { getBreadcrumbListSchema } from '$lib/schemas';
 	import { initTheme } from '$lib/theme.svelte';
-	import {
-		DEMO_BOOKING_URL,
-		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
-	} from '$lib/config/cta';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
 	import { contactModal, closeContactModal } from '$lib/licensePath.svelte';
+	import LicenseCta from '$lib/components/LicenseCta.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -237,18 +233,7 @@
 					>
 						Live Demo
 					</a>
-					<a
-						href={SELF_HOSTED_HREF}
-						class="btn-secondary"
-						onclick={() =>
-							analytics.ctaClicked({
-								location: 'navbar',
-								destination: 'self_hosted',
-								text: SELF_HOSTED_CTA_LABEL
-							})}
-					>
-						{SELF_HOSTED_CTA_LABEL}
-					</a>
+					<LicenseCta location="navbar" medium="nav" class="btn-secondary" />
 					<a
 						href={DEMO_BOOKING_URL}
 						target="_blank"
@@ -313,20 +298,12 @@
 					>
 						Live Demo
 					</a>
-					<a
-						href={SELF_HOSTED_HREF}
+					<LicenseCta
+						location="navbar_mobile"
+						medium="nav"
 						class="btn-secondary text-center"
-						onclick={() => {
-							analytics.ctaClicked({
-								location: 'navbar_mobile',
-								destination: 'self_hosted',
-								text: SELF_HOSTED_CTA_LABEL
-							});
-							closeMobileMenu();
-						}}
-					>
-						{SELF_HOSTED_CTA_LABEL}
-					</a>
+						onclick={closeMobileMenu}
+					/>
 					<a
 						href={DEMO_BOOKING_URL}
 						target="_blank"

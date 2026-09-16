@@ -1,6 +1,7 @@
 import billingPlansData from '$lib/fixtures/billing-plans.json';
 import servicesData from '$lib/fixtures/services.json';
 import { DEMO_BOOKING_URL } from '$lib/config/cta';
+import { licenseHref } from '$lib/licensePath.svelte';
 import { vendors } from '$lib/fixtures/network-diagram-vendors';
 import { VS_VENDOR_SLUGS, vsSlug, buildTitle, buildMetaDescription } from '$lib/compare/vs-pages';
 import {
@@ -263,7 +264,8 @@ ${allComparisonLines}
 3. View your auto-generated network documentation and diagrams
 
 - Book a demo: ${DEMO_BOOKING_URL}
-- Self-hosted plans and pricing: https://scanopy.net/pricing (Scanopy Cloud plans are listed there too)
+- Get a license: ${licenseHref('/llms.txt', 'getting-started', 'llms')}
+- Pricing: https://scanopy.net/pricing (Scanopy Cloud plans are listed there too)
 
 ## Contact
 

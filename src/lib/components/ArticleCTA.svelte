@@ -5,13 +5,13 @@
 	import {
 		DEMO_BOOKING_URL,
 		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
+		PRICING_CTA_LABEL,
+		PRICING_HREF
 	} from '$lib/config/cta';
 	import StickyCtaBar, { type StickyCta } from '$lib/components/StickyCtaBar.svelte';
 
-	// Two commercial actions, book a demo or see the self-hosted plans, with the demo
-	// instance as a text link below them. The CTAs describe themselves, so there's no
+	// Two commercial actions, book a demo or see pricing, with the demo instance as a
+	// text link below them. The CTAs describe themselves, so there's no
 	// heading or prose.
 	const demoHref = $derived(
 		withUtm('https://demo.scanopy.net', {
@@ -38,14 +38,14 @@
 				})
 		},
 		{
-			label: SELF_HOSTED_CTA_LABEL,
-			href: SELF_HOSTED_HREF,
+			label: PRICING_CTA_LABEL,
+			href: PRICING_HREF,
 			variant: 'secondary',
 			onclick: () =>
 				analytics.ctaClicked({
 					location: 'article_bottom_bar',
-					destination: 'self_hosted',
-					text: SELF_HOSTED_CTA_LABEL
+					destination: 'pricing',
+					text: PRICING_CTA_LABEL
 				})
 		}
 	];
@@ -65,14 +65,14 @@
 			})}>{DEMO_CTA_LABEL}</a
 	>
 	<a
-		href={SELF_HOSTED_HREF}
+		href={PRICING_HREF}
 		class="btn-secondary"
 		onclick={() =>
 			analytics.ctaClicked({
 				location: 'article_cta',
-				destination: 'self_hosted',
-				text: SELF_HOSTED_CTA_LABEL
-			})}>{SELF_HOSTED_CTA_LABEL}</a
+				destination: 'pricing',
+				text: PRICING_CTA_LABEL
+			})}>{PRICING_CTA_LABEL}</a
 	>
 	<a
 		href={demoHref}

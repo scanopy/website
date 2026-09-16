@@ -4,12 +4,8 @@
 	import type { PressMention } from '$lib/types';
 	import pressMentionsData from '$lib/fixtures/press-mentions.json';
 	import { analytics } from '$lib/analytics.svelte';
-	import {
-		DEMO_BOOKING_URL,
-		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
-	} from '$lib/config/cta';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
+	import LicenseCta from '$lib/components/LicenseCta.svelte';
 
 	const pressMentions = pressMentionsData as PressMention[];
 </script>
@@ -236,18 +232,7 @@
 					{DEMO_CTA_LABEL}
 					<ArrowRight class="h-5 w-5" />
 				</a>
-				<a
-					href={SELF_HOSTED_HREF}
-					class="btn-secondary px-8 py-3 text-lg"
-					onclick={() =>
-						analytics.ctaClicked({
-							location: 'about_cta',
-							destination: 'self_hosted',
-							text: SELF_HOSTED_CTA_LABEL
-						})}
-				>
-					{SELF_HOSTED_CTA_LABEL}
-				</a>
+				<LicenseCta location="about_cta" class="btn-secondary px-8 py-3 text-lg" />
 			</div>
 			<a
 				href="https://demo.scanopy.net"

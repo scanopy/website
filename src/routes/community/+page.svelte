@@ -1,12 +1,8 @@
 <script lang="ts">
 	import GithubStars from '$lib/components/GithubStars.svelte';
 	import { analytics } from '$lib/analytics.svelte';
-	import {
-		DEMO_BOOKING_URL,
-		DEMO_CTA_LABEL,
-		SELF_HOSTED_CTA_LABEL,
-		SELF_HOSTED_HREF
-	} from '$lib/config/cta';
+	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
+	import LicenseCta from '$lib/components/LicenseCta.svelte';
 	import { ExternalLink } from 'lucide-svelte';
 
 	const communityLinks = [
@@ -164,18 +160,7 @@ docker compose up -d</code
 	<div class="container mx-auto px-4 text-center">
 		<p class="mb-3 text-gray-400">Need more networks or team seats?</p>
 		<div class="flex flex-wrap items-center justify-center gap-6">
-			<a
-				href={SELF_HOSTED_HREF}
-				class="text-blue-400 hover:text-blue-300"
-				onclick={() =>
-					analytics.ctaClicked({
-						location: 'community_upsell',
-						destination: 'self_hosted',
-						text: SELF_HOSTED_CTA_LABEL
-					})}
-			>
-				{SELF_HOSTED_CTA_LABEL} &rarr;
-			</a>
+			<LicenseCta location="community_upsell" class="text-blue-400 hover:text-blue-300" arrow />
 			<a
 				href={DEMO_BOOKING_URL}
 				target="_blank"

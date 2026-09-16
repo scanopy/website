@@ -1,9 +1,10 @@
 import { analytics } from '$lib/analytics.svelte';
 import { LICENSE_CTA_LABEL } from '$lib/config/cta';
+import { APP, appHref } from '$lib/config/urls';
 
 /**
- * State for the site's one contact modal, mounted in the root layout. Pages open it through
- * startLicensePath() (self-hosted licenses) or openContactModal() (Enterprise inquiries).
+ * State for the site's one contact modal, mounted in the root layout. The pricing widget's
+ * Enterprise "Request Information" opens it through openContactModal().
  */
 export const contactModal = $state({ open: false, planType: '', planName: '' });
 
@@ -17,35 +18,40 @@ export function closeContactModal() {
 	contactModal.open = false;
 }
 
+/** App signup, tagged as a self-hosted license signup. */
+const LICENSE_SIGNUP_URL = `${APP.onboarding}?hosting=self_hosted`;
+
 /**
- * The license path. Every "Get a license" action on the site calls this.
- *
- * LICENSE PORTAL SWITCH: when app.scanopy.net ships self-serve license keys and its
- * /onboarding reads `hosting=self_hosted`, replace the openContactModal() call below with:
- *
- *   window.open(
- *     appHref(`${APP.onboarding}?hosting=self_hosted`, window.location.pathname, location),
- *     '_blank',
- *     'noopener,noreferrer'
- *   );
- *
- * (`APP` and `appHref` come from $lib/config/urls; appHref keeps the query and adds the
- * utm_* tags.) Nothing else on the site needs to change.
+ * Where every "Get a license" CTA goes: app signup tagged `hosting=self_hosted`, plus UTM
+ * tags for the page (`pathname`) and the CTA position (`content`).
  */
-export function startLicensePath({
-	planType,
-	planName,
-	location
-}: {
-	planType: string;
-	planName: string;
-	location: string;
-}) {
+export function licenseHref(pathname: string, content: string, medium?: string): string {
+	return appHref(LICENSE_SIGNUP_URL, pathname, content, medium);
+}
+
+/** Record a "Get a license" click. */
+export function trackLicenseClick(location: string, planType?: string) {
 	analytics.ctaClicked({
 		location,
 		destination: 'self_hosted',
 		text: LICENSE_CTA_LABEL,
-		plan: planType
+		...(planType ? { plan: planType } : {})
 	});
-	openContactModal(planType, planName);
+}
+
+/**
+ * For license buttons that can't be links (the pricing widget's plan cards): record the
+ * click, then open app signup in a new tab.
+ */
+export function openLicenseSignup({
+	location,
+	content,
+	planType
+}: {
+	location: string;
+	content: string;
+	planType?: string;
+}) {
+	trackLicenseClick(location, planType);
+	window.open(licenseHref(window.location.pathname, content), '_blank', 'noopener,noreferrer');
 }

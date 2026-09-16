@@ -20,16 +20,14 @@ The public lead-capture forms are the inbound channel for the highest-value deal
 
 Every form found on the site is listed here. The contact modal posts to `/api/contact`, a Cloudflare Pages Function (`functions/api/contact.ts`) that finds or creates the Apollo account, creates the contact on it, and assigns a follow-up task; it needs the `APOLLO_API_KEY` Pages secret. The newsletter submits to Brevo (`sibforms.com`) via `src/lib/brevo.ts`.
 
-| Form                                                        | Page tested   | Spec                        | Real submission? |
-| ----------------------------------------------------------- | ------------- | --------------------------- | ---------------- |
-| Contact modal: "Get a license" (the June 2026 failure page) | `/commercial` | `e2e/contact-modal.spec.ts` | yes              |
-| Contact modal: Enterprise "Request Information"             | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
-| Contact modal: Self-Hosted "Get a license"                  | `/pricing`    | `e2e/contact-modal.spec.ts` | yes              |
-| Newsletter signup (footer, sitewide)                        | `/` (home)    | `e2e/newsletter.spec.ts`    | yes              |
+| Form                                            | Page tested | Spec                        | Real submission? |
+| ----------------------------------------------- | ----------- | --------------------------- | ---------------- |
+| Contact modal: Enterprise "Request Information" | `/pricing`  | `e2e/contact-modal.spec.ts` | yes              |
+| Newsletter signup (footer, sitewide)            | `/` (home)  | `e2e/newsletter.spec.ts`    | yes              |
 
-The contact modal is one component, mounted once in the root layout, with three separate trigger wirings across two pages: `/commercial`'s "Get a license" buttons and the pricing widget's self-hosted "Get a license" cards both go through `startLicensePath` (`src/lib/licensePath.svelte.ts`), and the pricing widget's Enterprise "Request Information" opens the modal directly. A page- or branch-specific JS error can break one while the others keep working, so each path submits for real. The home page no longer carries a pricing widget or any contact CTA, so nothing is left unmonitored by not testing `/` here. Its footer newsletter form is still covered by the newsletter row.
+The contact modal is one component, mounted once in the root layout. Its only trigger is the pricing widget's Enterprise "Request Information". Every "Get a license" CTA, including the ones on `/commercial` (where the June 2026 silent failure happened), links to app signup instead of opening a form. The home page carries no contact CTA, so nothing is left unmonitored by not testing `/` here. Its footer newsletter form is covered by the newsletter row.
 
-Each weekly run creates **3 real Apollo contacts and 1 Brevo newsletter subscription** (double that in the worst case, since CI retries a failed test once).
+Each weekly run creates **1 real Apollo contact and 1 Brevo newsletter subscription** (double that in the worst case, since CI retries a failed test once).
 
 **reCAPTCHA history:** the forms originally attached reCAPTCHA v3 tokens, and the newsletter form enforced them in Brevo — which blocked this monitor, since automated browsers always score too low to pass v3. Enforcement was turned off in Brevo in July 2026 and the client-side integration was commented out in `src/lib/brevo.ts` (spam protection is now the honeypot field plus newsletter double opt-in). If the newsletter test ever fails with `BREVO REJECTED SUBMISSION` mentioning a captcha error, someone re-enabled enforcement in Brevo — either turn it back off, or accept that the newsletter form can only be monitored up to Brevo's bot-protection boundary (the pre-July-2026 version of `e2e/newsletter.spec.ts` in git history did exactly that).
 
@@ -79,5 +77,6 @@ Adding a form to the site should always come with a spec here:
 
 - **`NewsletterCTA.svelte`** — dead component, rendered by zero routes (the footer is the only live newsletter instance). Nothing to test in production; if it ever gets wired into a page, add a spec.
 - **"Talk to Sales" / demo buttons** — external Cal.com scheduling links, not forms.
+- **"Get a license" CTAs**: links to app signup on app.scanopy.net, not forms.
 - **`mailto:` links** (licensing@, etc.) — no form pipeline to break.
 - **Cookie consent banner, service-catalog search box** — no network submission.
