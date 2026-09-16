@@ -566,5 +566,68 @@
         ]
       }
     ]
+  },
+  {
+    "id": "gNMI",
+    "name": "gNMI",
+    "category": "Network Monitoring",
+    "has_logo": false,
+    "logo_ext": "",
+    "logo_slug": "gnmi",
+    "logo_needs_white_background": false,
+    "discovers": "Discover a host's interfaces and LLDP neighbors over gNMI (OpenConfig).",
+    "docs_path": "/docs/guides/integrations/gnmi/",
+    "summary": "Discover a host's interfaces and LLDP neighbors over gNMI (OpenConfig). Supports gnmi.",
+    "transports": [
+      {
+        "id": "Gnmi",
+        "name": "gNMI",
+        "display_name": "gNMI",
+        "description": "Connects over gRPC; username and password travel as request metadata.",
+        "requires_config": true,
+        "single_endpoint_per_host": false,
+        "targets": [
+          "DaemonHost",
+          "Hosts",
+          "Network"
+        ],
+        "stability": "Beta",
+        "upstream_support": "Vendor",
+        "minimum_daemon_version": "0.17.16",
+        "fields": [
+          {
+            "id": "port",
+            "label": "gNMI Port",
+            "field_type": "port",
+            "placeholder": "9339",
+            "secret": false,
+            "optional": true,
+            "help_text": "9339 is the IANA gNMI port; some NOSes listen on 6030 or 57400 instead.",
+            "default_value": "9339",
+            "group": "Connection"
+          },
+          {
+            "id": "username",
+            "label": "Username",
+            "field_type": "string",
+            "placeholder": "gnmi-user",
+            "secret": false,
+            "optional": false,
+            "help_text": "Sent as gRPC `username` metadata (the OpenConfig convention).",
+            "group": "Authentication"
+          },
+          {
+            "id": "password",
+            "label": "Password",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Sent as gRPC `password` metadata.",
+            "inline_format": "plain",
+            "group": "Authentication"
+          }
+        ]
+      }
+    ]
   }
 ]
