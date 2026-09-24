@@ -554,6 +554,45 @@
     }
   },
   {
+    "id": "DcpSweepTimedOut",
+    "name": "PROFINET sweep timed out",
+    "description": "The PROFINET device sweep did not finish within {seconds}s, so devices that answer only to it are missing from this scan. If this repeats, the packet capture driver on the daemon's host is not honouring its read timeout.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "seconds"
+      ]
+    }
+  },
+  {
+    "id": "IcmpSweepTimedOut",
+    "name": "Ping sweep timed out",
+    "description": "The ping sweep did not finish within {seconds}s, so hosts that answer only to ping are missing from this scan.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "octagon-alert",
+    "color": "Red",
+    "metadata": {
+      "slots": [
+        "seconds"
+      ]
+    }
+  },
+  {
+    "id": "ReverseDnsTimedOut",
+    "name": "Reverse DNS lookups timed out",
+    "description": "{count} reverse DNS lookup(s) got no answer in time, so those hosts have no hostname from DNS in this scan. If this repeats, check the DNS resolver the daemon's host uses.",
+    "category": "ClearsOnTheNextScan",
+    "icon": "triangle-alert",
+    "color": "Amber",
+    "metadata": {
+      "slots": [
+        "count"
+      ]
+    }
+  },
+  {
     "id": "LldpNeighbourNotFound",
     "name": "Neighbour device not discovered",
     "description": "LLDP/CDP neighbours name devices this network has not discovered ({count} in total), so they draw no links. This is expected where the far end is an endpoint or unmanaged device; a device that should have been scanned means the identifier it advertises is not one this network holds.",

@@ -8,7 +8,7 @@
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Starter"
+      "minimum_plan": "Pro"
     }
   },
   {
@@ -56,7 +56,7 @@
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Starter"
+      "minimum_plan": "Pro"
     }
   },
   {
@@ -140,7 +140,7 @@
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Starter"
+      "minimum_plan": "Pro"
     }
   },
   {
@@ -212,7 +212,7 @@
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Starter"
+      "minimum_plan": "Pro"
     }
   },
   {
@@ -272,7 +272,7 @@
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Starter"
+      "minimum_plan": "Pro"
     }
   },
   {
@@ -308,7 +308,67 @@
     "color": "Gray",
     "metadata": {
       "is_coming_soon": false,
-      "minimum_plan": "Starter"
+      "minimum_plan": "Pro"
+    }
+  },
+  {
+    "id": "invoice_billing",
+    "name": "Invoice & PO Billing",
+    "description": "Pay by invoice against a purchase order instead of by card",
+    "category": "Enterprise",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Enterprise"
+    }
+  },
+  {
+    "id": "quarterly_billing",
+    "name": "Quarterly Payments",
+    "description": "Pay the annual license in four quarterly installments",
+    "category": "Enterprise",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": true,
+      "minimum_plan": null
+    }
+  },
+  {
+    "id": "procurement_documents",
+    "name": "Procurement Documents",
+    "description": "W-9, NDAA Section 889 attestation, and a data processing agreement for vendor onboarding",
+    "category": "Enterprise",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Enterprise"
+    }
+  },
+  {
+    "id": "deployment_assistance",
+    "name": "Deployment Assistance",
+    "description": "The Scanopy team helps you deploy and configure your self-hosted server",
+    "category": "Support",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Enterprise"
+    }
+  },
+  {
+    "id": "signed_sla",
+    "name": "Signed SLA",
+    "description": "A signed service level agreement with committed support response times",
+    "category": "Support",
+    "icon": "sparkle",
+    "color": "Gray",
+    "metadata": {
+      "is_coming_soon": false,
+      "minimum_plan": "Enterprise"
     }
   }
 ]
