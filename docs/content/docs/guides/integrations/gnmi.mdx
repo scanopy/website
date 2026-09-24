@@ -1,0 +1,96 @@
+---
+title: Set up gNMI discovery
+description: Configure a gNMI credential to read interfaces and LLDP neighbors from network devices over gRPC.
+integration: gNMI
+---
+
+gNMI reads a network device's interface table and LLDP neighbors over gRPC, using the OpenConfig data models.
+
+<IntegrationBeta id="gNMI" />
+
+<CredentialBasics id="gNMI" />
+
+## What gets discovered
+
+- **Interfaces**: every interface with its name, description, type, and admin and operational status, plus MAC address and port speed where the device serves them
+- **LLDP neighbors**: the directly connected devices each interface reports
+- **Chassis ID**: the device's own LLDP chassis ID, where the device serves it
+
+Neighbors become the links drawn in [L2 Physical](/using-scanopy/topology/l2-physical/). A host that answers gNMI also gets a **gNMI** service.
+
+## Prerequisites
+
+- A gNMI server enabled on the target devices, serving plaintext gRPC
+- The gNMI port reachable over TCP from the daemon host
+- A device account that can run the gNMI `Capabilities` and `Subscribe` RPCs
+- The `openconfig-interfaces` model on the device. Scanopy reads nothing from a device without it.
+- For neighbors: LLDP running on the device, and the `openconfig-lldp` model. DriveNets devices, which serve `dn-lldp` instead, are read through that model.
+
+<Callout type="warn">
+	Credentials created in Scanopy connect over plaintext gRPC, so the username and password cross the
+	network unencrypted. Use a dedicated account with read access only, and keep the gNMI port on a
+	management network.
+</Callout>
+
+## Choosing a credential type
+
+gNMI has one credential type.
+
+<IntegrationTransports id="gNMI" />
+
+SNMP and gNMI can both run against the same device. Scanopy merges the two interface tables, and the scan session carries an [informational warning](/reference/scan-warnings/) naming which integration supplied each shared port.
+
+## gNMI
+
+Username and password travel as gRPC request metadata. The port defaults to 9339, the IANA-registered gNMI port. Set it to whatever port the device's gNMI server listens on.
+
+<IntegrationFields id="gNMI" transport="Gnmi" />
+
+## Verifying it works
+
+1. Run a discovery from **Discover > Scan > Scheduled**, or wait for the next scheduled run
+2. Open the device's host and check for a **gNMI** service and the device's interfaces
+3. Open [L2 Physical](/using-scanopy/topology/l2-physical/) and confirm the device shows links to its LLDP neighbors
+
+You can confirm a network-wide assignment from **Assets > Credentials**. The credential's **Networks** column lists every network it applies to, and its **Hosts** column every host it has been assigned to individually.
+
+## Troubleshooting
+
+Test the device directly from the daemon's host with [gnmic](https://gnmic.openconfig.net/) to separate a credential problem from a device problem. `--insecure` selects plaintext gRPC, which matches how Scanopy connects.
+
+```bash
+# Authentication, and the models the device advertises
+gnmic -a DEVICE_IP:9339 -u USERNAME -p PASSWORD --insecure capabilities
+
+# The two reads Scanopy depends on
+gnmic -a DEVICE_IP:9339 -u USERNAME -p PASSWORD --insecure -e proto \
+  subscribe --mode once --path /interfaces/interface/state
+gnmic -a DEVICE_IP:9339 -u USERNAME -p PASSWORD --insecure -e proto \
+  subscribe --mode once --path /lldp/interfaces/interface
+```
+
+Connection and authentication failures also appear as a credential [warning](/reference/scan-warnings/) on the scan session.
+
+### Connection fails
+
+The device refused or ignored the connection on that port. Check the port against the device's gNMI server configuration, and confirm no firewall between the daemon host and the device blocks it.
+
+A device whose gNMI server requires TLS also fails here, because Scanopy connects in plaintext. Enable plaintext gRPC on the device's gNMI server.
+
+### Authentication fails
+
+`Capabilities` returns `UNAUTHENTICATED`. The username or password is wrong, or the account has no gNMI access on the device. A per-host credential overrides the network default, so check which credential reached this host.
+
+### No interfaces collected
+
+The device refused the `/interfaces/interface/state` read, and the error reads `openconfig-interfaces is required and was not served`. Confirm the `capabilities` output lists `openconfig-interfaces`, and enable that model on the device if your NOS makes it optional.
+
+### Interfaces appear but no neighbors
+
+Run the `/lldp/interfaces/interface` subscribe above. An empty answer means LLDP isn't running on the device or hasn't heard a neighbor yet. An error means the device doesn't serve `openconfig-lldp`: check whether the `capabilities` output lists it or `dn-lldp`.
+
+### Reading the daemon logs
+
+A successful collection logs `gNMI openconfig-interfaces/lldp collection complete` at info level, with the interface and neighbor counts and `lldp_model`, the LLDP model read. `none advertised` means the device named no LLDP model Scanopy reads, and Scanopy tried `openconfig-lldp` regardless.
+
+For credential loading problems, such as unreadable files and the per-session assignment summary, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).
