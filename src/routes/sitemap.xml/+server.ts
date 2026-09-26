@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import { allVsPageSlugs } from '$lib/compare/vs-pages';
 import { allAltPageSlugs } from '$lib/compare/alternatives-pages';
+import { allPairSlugs } from '$lib/compare/pair-pages';
 
 export const prerender = true;
 
@@ -180,8 +181,20 @@ export async function GET() {
 		)
 		.join('');
 
+	// Programmatic "<a> vs <b>" competitor-versus-competitor pages; same fixture-derived
+	// lastmod as the vs and alternatives pages. allPairSlugs() returns bare slugs.
+	const pairUrls = allPairSlugs()
+		.map(
+			(slug) => `
+  <url>
+    <loc>https://scanopy.net/comparisons/${slug}</loc>
+    <lastmod>${vsLastmod}</lastmod>
+  </url>`
+		)
+		.join('');
+
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${resourceUrls}${comparisonUrls}${vsUrls}${altUrls}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}${blogUrls}${resourceUrls}${comparisonUrls}${vsUrls}${altUrls}${pairUrls}
 </urlset>`;
 
 	return new Response(sitemap, {
