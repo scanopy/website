@@ -179,28 +179,25 @@
 </script>
 
 <svelte:head>
-	<title>Product: Automated Network Diagrams & Documentation | Scanopy</title>
+	<title>Automated Network Documentation and Diagrams | Scanopy</title>
 	<meta
 		name="description"
-		content="See how Scanopy documents your whole network: discover every host, map Layer 2 and Layer 3 topology, fingerprint services, and keep four living views current on a schedule."
+		content="Scanopy scans your network and builds the map: every host, Layer 2 and Layer 3 topology, 200+ service types, and four views it keeps current on a schedule."
 	/>
 	<link rel="canonical" href="https://scanopy.net/product" />
 
-	<meta property="og:title" content="Scanopy Product: Automated Network Diagrams & Documentation" />
+	<meta property="og:title" content="Automated Network Documentation and Diagrams | Scanopy" />
 	<meta
 		property="og:description"
-		content="Discover every host, map Layer 2 and Layer 3 topology, fingerprint services, and keep four living network views current on a schedule."
+		content="Scanopy scans your network and builds the map: every host, Layer 2 and Layer 3 topology, 200+ service types, and four views it keeps current on a schedule."
 	/>
 	<meta property="og:url" content="https://scanopy.net/product" />
 	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta
-		property="twitter:title"
-		content="Scanopy Product: Automated Network Diagrams & Documentation"
-	/>
+	<meta property="twitter:title" content="Automated Network Documentation and Diagrams | Scanopy" />
 	<meta
 		name="twitter:description"
-		content="Discover every host, map Layer 2 and Layer 3 topology, fingerprint services, and keep four living network views current on a schedule."
+		content="Scanopy scans your network and builds the map: every host, Layer 2 and Layer 3 topology, 200+ service types, and four views it keeps current on a schedule."
 	/>
 	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
