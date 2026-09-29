@@ -170,18 +170,9 @@
 		});
 	}
 
-	// Contact-flow cards: the paid self-hosted tiers open license signup in the app, and
-	// Enterprise opens the contact modal as an inquiry.
+	// Contact-flow cards: Enterprise opens the contact modal as an inquiry.
 	function handlePlanInquiry(plan: BillingPlan) {
 		trackPlanSelected(plan);
-		if (billingPlanHelpers.getMetadata(plan.type).hosting === 'SelfHosted') {
-			openLicenseSignup({
-				location: 'pricing_widget',
-				content: 'pricing-plan',
-				planType: plan.type
-			});
-			return;
-		}
 		analytics.ctaClicked({
 			location: 'pricing_widget',
 			destination: 'contact_modal',
@@ -191,8 +182,18 @@
 		openContactModal(plan.type, billingPlanHelpers.getName(plan.type));
 	}
 
+	// Self-serve cards: the paid self-hosted tiers open license signup in the app, and
+	// cloud plans open the plan picker.
 	function handlePlanSelect(plan: BillingPlan) {
 		trackPlanSelected(plan);
+		if (billingPlanHelpers.getMetadata(plan.type).hosting === 'SelfHosted') {
+			openLicenseSignup({
+				location: 'pricing_widget',
+				content: 'pricing-plan',
+				planType: plan.type
+			});
+			return;
+		}
 		window.open(
 			appHref(APP.billingPlan, page.url.pathname, 'pricing-plan'),
 			'_blank',
