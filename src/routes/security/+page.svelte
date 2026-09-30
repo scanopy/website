@@ -148,8 +148,8 @@
 			Scanopy supports email and password with email verification, and single sign-on via OpenID
 			Connect (OIDC). On Scanopy Cloud, Google and Microsoft identity providers are available. On
 			self-hosted and enterprise-managed deployments, any OIDC-compliant provider can be configured,
-			including Authentik, Keycloak, Auth0, and Okta. Bring-your-own OIDC (Custom SSO) and SAML are
-			part of the Enterprise and Commercial self-hosted feature set; see <a
+			including Authentik, Keycloak, Auth0, and Okta. Bring-your-own OIDC (Custom SSO) is available
+			on every self-hosted edition and on Enterprise, and SAML is coming soon; see <a
 				href="/pricing"
 				class="text-blue-400 hover:text-blue-300">pricing</a
 			> for how they are tiered. Anyone can create a Scanopy Cloud account, which creates a new organization.

@@ -13,7 +13,7 @@
 		{
 			name: 'Cloud or self-hosted',
 			blurb:
-				'Run it managed by us, or entirely on your own infrastructure, where the discovery data and credentials stay inside your perimeter with no outbound internet access at all.',
+				'Run it managed by us, or entirely on your own infrastructure, where the discovery data and credentials stay inside your perimeter, air-gapped on Self-Hosted Plus.',
 			href: '/security',
 			linkText: 'Security and subprocessors'
 		},

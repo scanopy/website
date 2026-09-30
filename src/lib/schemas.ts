@@ -19,6 +19,7 @@ interface BillingPlan {
 		included_networks: number | null;
 		included_seats: number | null;
 		hosting: string;
+		is_free: boolean;
 	};
 }
 
@@ -74,7 +75,9 @@ function generateOffers() {
 	futureDate.setFullYear(futureDate.getFullYear() + 1);
 	const priceValidUntil = futureDate.toISOString().split('T')[0];
 
+	// Cloud Free is not sold; the free offer is the self-hosted Community Edition.
 	return getUniqueMonthlyPlans()
+		.filter((plan) => !plan.metadata.is_free)
 		.filter((plan) => !plan.metadata.custom_price || plan.metadata.custom_price === 'Free')
 		.map((plan) => {
 			const priceCents = getYearlyMonthlyEquivalentCents(plan.id) ?? plan.metadata.base_cents;

@@ -274,7 +274,7 @@ export function buildScanopyAltFaqs(): VendorFAQ[] {
 				(openNames.length
 					? ` Among the alternatives, ${joinList(openNames)} are also open source; most commercial options are proprietary.`
 					: '') +
-				' Paid plans remove the caps (a commercial license for self-hosting, or managed cloud hosting) with more networks, seats, and support.'
+				' Paid plans raise the caps (a commercial license for self-hosting, or managed cloud hosting) with more networks, seats, and support.'
 		}
 	];
 }

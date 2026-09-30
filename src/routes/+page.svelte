@@ -122,7 +122,7 @@
 	<title>Automated Network Diagram & Documentation Software - Scanopy</title>
 	<meta
 		name="description"
-		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
+		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free self-hosted Community Edition, no per-device fees."
 	/>
 	<link rel="canonical" href="https://scanopy.net/" />
 
@@ -132,7 +132,7 @@
 	/>
 	<meta
 		property="og:description"
-		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
+		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free self-hosted Community Edition, no per-device fees."
 	/>
 	<meta property="og:url" content="https://scanopy.net/" />
 	<meta property="og:image" content="https://scanopy.net/og/social.webp" />
@@ -143,7 +143,7 @@
 	/>
 	<meta
 		name="twitter:description"
-		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free tier, self-hosted option, no per-device fees."
+		content="Scanopy discovers your network (SNMP, LLDP, ARP) and builds living network diagrams automatically. Free self-hosted Community Edition, no per-device fees."
 	/>
 	<meta name="twitter:image" content="https://scanopy.net/og/social.webp" />
 
@@ -386,7 +386,7 @@
 				<a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
 				is free and open-source (AGPL-3.0) for one network and one seat. A
 				<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial license</a>
-				lifts those caps for self-hosted deployments, starting at {selfHostedFrom}/year, and
+				raises those caps for self-hosted deployments, starting at {selfHostedFrom}/year, and
 				<a href="/pricing" class="text-blue-400 hover:text-blue-300">cloud plans</a>
 				start at {startingPrice}/month. Read
 				<a href="/blog/automated-network-documentation" class="text-blue-400 hover:text-blue-300"

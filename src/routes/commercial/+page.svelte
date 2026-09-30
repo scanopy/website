@@ -23,15 +23,15 @@
 		},
 		{
 			icon: Server,
-			title: 'Works in air-gapped and on-prem environments',
+			title: 'Runs on-prem, or air-gapped on Plus',
 			description:
-				'Deploy on isolated networks with no outbound internet access. Ideal for OT networks, regulated environments, and customers with strict egress policies.'
+				'Deploy on your own infrastructure. Self-Hosted Plus adds offline license keys for isolated networks with no outbound internet access, for OT networks, regulated environments, and strict egress policies.'
 		},
 		{
 			icon: FileCheck,
 			title: 'Supports your compliance posture',
 			description:
-				'Keep your network documentation under your own data-residency and retention controls, with audit logs and SSO to fit your internal review and access policies.'
+				'Keep your network documentation under your own data-residency and retention controls, with your own SSO provider to fit your internal review and access policies.'
 		},
 		{
 			icon: Shield,
@@ -45,12 +45,12 @@
 		{
 			question: 'What is the Commercial Edition?',
 			answer:
-				'The Commercial Edition is the full Scanopy stack, self-hosted on your own infrastructure with a commercial license and support. It comes in two published tiers, Self-Hosted Standard and Self-Hosted Plus, that add capabilities like audit logs, webhooks, Confluence export, SAML, and priority support on top of the free Community Edition.'
+				'The Commercial Edition is the full Scanopy stack, self-hosted on your own infrastructure with a commercial license and support. It comes in two published tiers, Self-Hosted Standard and Self-Hosted Plus, that add capabilities like Confluence export, invoice billing, procurement documents, and email support on top of the free Community Edition.'
 		},
 		{
 			question: 'How is it different from the free Community Edition?',
 			answer:
-				'The Community Edition is free and open source for self-hosting, limited to one network and one user seat. The Commercial Edition adds a commercial license for business use, higher network and seat limits, multiple organizations per instance, and advanced features (SAML, audit logs, Confluence export, webhooks), plus email and priority support.'
+				'The Community Edition is free and open source for self-hosting, limited to one network and one user seat. The Commercial Edition adds a commercial license for business use, higher network and seat limits, Confluence export, invoice billing, and email support. Self-Hosted Plus adds multiple organizations, offline license keys, and priority support.'
 		},
 		{
 			question: 'How much does it cost?',
@@ -59,7 +59,7 @@
 		{
 			question: 'Can I run Scanopy in an air-gapped environment?',
 			answer:
-				'Yes. The Commercial Edition is designed to run fully on your own infrastructure, including isolated networks with no outbound internet access.'
+				'Yes, on Self-Hosted Plus and Enterprise. Their offline license keys verify without contacting Scanopy, so the server runs on isolated networks with no outbound internet access.'
 		},
 		{
 			question: 'How do I get started?',
@@ -154,10 +154,10 @@
 		<p class="text-lg leading-relaxed text-gray-300">
 			The Commercial Edition is Scanopy's self-hosted edition for business. It runs the same
 			automatic discovery engine that powers our cloud plans, entirely on your own infrastructure.
-			It fits any organization that prefers to self-host, including regulated industries, air-gapped
-			and on-prem environments, and teams with strict data-residency requirements. You get a
-			commercial license, published pricing, advanced features, and support on top of everything in
-			the free Community Edition.
+			It fits any organization that prefers to self-host, including regulated industries, on-prem
+			environments, air-gapped networks on Self-Hosted Plus, and teams with strict data-residency
+			requirements. You get a commercial license, published pricing, advanced features, and support
+			on top of everything in the free Community Edition.
 		</p>
 	</div>
 </section>
@@ -210,9 +210,8 @@
 		</p>
 		<p class="text-lg leading-relaxed text-gray-300">
 			Step up to the Commercial Edition when you need a commercial license for business use, higher
-			network and seat limits, multiple organizations per instance, advanced features like SAML,
-			audit logs, Confluence export, and webhooks, or email and priority support backing your
-			deployment.
+			network and seat limits, multiple organizations per instance, advanced features like
+			Confluence export and invoice billing, or email and priority support backing your deployment.
 		</p>
 	</div>
 </section>

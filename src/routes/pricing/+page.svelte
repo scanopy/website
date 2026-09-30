@@ -38,7 +38,7 @@
 		},
 		{
 			question: 'How much is a self-hosted commercial license?',
-			answer: `Self-Hosted Standard is ${standardPrice}/year and Self-Hosted Plus is ${plusPrice}/year, both billed annually with no per-host fees. Plus adds multiple organizations, SAML, and offline (air-gapped) license keys. The free <a href="/community" class="${linkClass}">Community Edition</a> covers one network and one user.`
+			answer: `Self-Hosted Standard is ${standardPrice}/year and Self-Hosted Plus is ${plusPrice}/year, both billed annually with no per-host fees. Plus adds up to five organizations, offline (air-gapped) license keys, an onboarding call, and priority support. The free <a href="/community" class="${linkClass}">Community Edition</a> covers one network and one user.`
 		},
 		{
 			question: "What's the difference between Self-Hosted and Cloud?",
@@ -165,7 +165,7 @@
 			<a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial Edition</a>
 			adds two self-hosted tiers, Self-Hosted Standard and Plus, starting at {selfHostedFrom}/yr
 			with a commercial license, advanced features, and support. Enterprise adds a custom plan with
-			SSO, whitelabeling, and priority support, managed or self-hosted. Cloud plans start at
+			SSO, custom billing terms, and a signed SLA, managed or self-hosted. Cloud plans start at
 			{startingPrice}/month (billed annually) and include a free trial, scaling from a single
 			network up to the multi-network tiers built for consultants, MSPs, and IT teams.
 		</p>

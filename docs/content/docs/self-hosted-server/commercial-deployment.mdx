@@ -13,7 +13,7 @@ The commercial edition of Scanopy is the standard server, unlocked by a license 
 
 The commercial deployment is identical to the community deployment except for one thing: the server process reads a license key from the `SCANOPY_LICENSE_KEY` environment variable. Both editions run the same image, `ghcr.io/scanopy/scanopy/server:latest`; the key is what enables commercial mode at startup.
 
-There is no license file to create or place anywhere. The key is a signed token verified offline at startup — nothing to import, and no outbound call to a licensing server. Anywhere you can set an environment variable for the server process — Docker Compose, a systemd unit, your shell — is a valid place to put it.
+There is no license file to create or place anywhere. The key is a signed token, with nothing to import. Online keys, the default on every plan, check in with Scanopy every few hours to refresh the entitlement. Offline keys, available on Self-Hosted Plus and Enterprise, verify at startup with no outbound call to a licensing server. Anywhere you can set an environment variable for the server process — Docker Compose, a systemd unit, your shell — is a valid place to put it.
 
 A key that is expired or fails verification puts the server into a read-only locked state until it is replaced. The bundled `docker-compose.commercial.yml` fails fast if `SCANOPY_LICENSE_KEY` is unset, so a missing key gives you a clear error at startup rather than a server that quietly runs as the community edition.
 
