@@ -1,0 +1,127 @@
+---
+title: Set up Wake-on-LAN
+description: Wake hosts that sleep between scans with a magic packet, so discovery finds them.
+integration: Wake-on-LAN
+---
+
+A Wake-on-LAN credential makes the daemon send a magic packet to a sleeping host at the start of each discovery run, then wait for the host to come up before the scan looks for it.
+
+<IntegrationBeta id="Wake-on-LAN" />
+
+<CredentialBasics id="Wake-on-LAN" />
+
+## What gets discovered
+
+Wake-on-LAN collects no data itself. It powers the host on before the network sweep, so the sweep finds the host and every other credential assigned to it runs as it would on a host that was already awake.
+
+Each run with a Wake-on-LAN credential assigned goes through these steps before the sweep:
+
+1. The daemon sends 3 magic packets to each assigned host, 1 second apart, over UDP
+2. It checks each host every 5 seconds for up to **Wait (seconds)**, by connecting to TCP ports 22, 80, 443 and 445. Any answer counts as awake, including a refused connection.
+3. The sweep starts once every host answers or the longest wait among the assigned credentials runs out
+
+A host that is already awake answers the first check, so the run continues without waiting.
+
+How long the host stays awake afterwards is set on the host, by its operating system's sleep or power settings. Scanopy does not put it back to sleep or keep it awake.
+
+## Prerequisites
+
+### Wake-on-LAN turned on in the host
+
+A host wakes only when its firmware and its network card both accept magic packets:
+
+1. **Firmware.** In the BIOS or UEFI setup, turn on the option for waking from the network. Vendors name it Wake on LAN, Power On By PCI-E, or Resume by LAN.
+2. **Network card.** The operating system sets whether the card listens for magic packets while the host sleeps:
+   - **Linux**: `sudo ethtool -s eth0 wol g`, made persistent through your network manager (for NetworkManager, `nmcli connection modify CONNECTION 802-3-ethernet.wake-on-lan magic`)
+   - **Windows**: in Device Manager, open the network adapter's properties. On **Power Management**, select **Allow this device to wake the computer**. On **Advanced**, set **Wake on Magic Packet** to Enabled.
+   - **macOS**: turn on **Wake for network access** in System Settings, under Energy or Battery
+   - **NAS and appliances**: turn on the Wake-on-LAN setting in the vendor's power settings
+3. **Wired connection.** Most network cards wake only over Ethernet. A host on Wi-Fi needs a card and firmware that support Wake on Wireless LAN.
+
+Check the result on Linux with `sudo ethtool eth0 | grep Wake-on`. `Wake-on: g` means the card accepts magic packets.
+
+### A MAC address Scanopy has recorded
+
+A magic packet carries the target's MAC address, and Scanopy uses the MAC it holds for the host. Scan the host once while it is awake so Scanopy records its MAC, then assign the credential. The daemon learns a MAC by ARP when the host is on its own segment, or from the forwarding table of a router or switch that Scanopy reads over SNMP.
+
+A host with no recorded MAC gets no packet, and the run raises a [warning](/reference/scan-warnings/) for it.
+
+## Choosing a credential type
+
+Wake-on-LAN has one credential type.
+
+<IntegrationTransports id="Wake-on-LAN" />
+
+## Wake-on-LAN
+
+### Choose how the packet reaches the host
+
+A magic packet is a broadcast, and routers do not forward broadcasts by default. Pick the delivery that matches where the daemon sits relative to the host:
+
+| Where the daemon is | Broadcast Address | Port |
+| ------------------- | ----------------- | ---- |
+| On the host's network segment | Leave blank | Leave at 9 |
+| On another subnet, and the router forwards directed broadcasts to the host's subnet | Leave blank | Leave at 9 |
+| On another subnet, with a router relay rule or a Wake-on-LAN relay device on the host's segment | The relay's address | The port the relay listens on |
+
+With **Broadcast Address** blank, the daemon sends to the broadcast address of the host's subnet as Scanopy knows it, for example `192.168.20.255` for a host in `192.168.20.0/24`. That address reaches the host from the daemon's own segment, and from another subnet when the router forwards directed broadcasts to it. Directed-broadcast forwarding is off by default on most routers. Turn it on for the host's subnet only, because it lets anyone who can reach the router broadcast to that subnet.
+
+A host in no subnet Scanopy knows gets the packet at `255.255.255.255`, which reaches only the daemon's own segment.
+
+For a relay, enter the address the relay listens on in **Broadcast Address**: a router with a rule that rebroadcasts the packet on the host's segment, or a small device on that segment running a Wake-on-LAN relay. Set **UDP Port** to the port the rule listens on, commonly 7. Network cards accept the packet on any port, so the port matters only to the relay.
+
+### Fill in the credential
+
+<IntegrationFields id="Wake-on-LAN" transport="WakeOnLan" />
+
+Set **Wait (seconds)** to how long the host takes from power-off to answering on the network, plus a margin. A NAS that spins up several drives before its services start can need 180 seconds or more.
+
+**SecureOn Password** applies only to network cards configured to require one. Most cards are not.
+
+### Assign it to the host
+
+Wake-on-LAN credentials target individual hosts only. Open the host in Scanopy and assign the credential there. A credential assigned by IP before Scanopy has discovered the host has no MAC to send, so assign it after the first scan.
+
+### Schedule the discovery
+
+The packet goes out at the start of each run of the discovery that scans the host's network. Schedule that discovery for when the host is asleep and you want it scanned. The run takes up to **Wait (seconds)** longer while the host boots.
+
+## Verifying it works
+
+1. Put the host to sleep or shut it down
+2. Run the network's discovery from **Discover > Scans**
+3. Watch the host power on within a few seconds of the run starting
+4. Open the finished run under **Discover > Scans > Historical** and check its **Issues** tab has no Wake-on-LAN warning for the host
+5. Open the host and confirm the run updated it
+
+The daemon log shows `Sent Wake-on-LAN packets` with the host's IP, its MAC and the destination address, followed by `Woken host is answering` once the host comes up.
+
+## Troubleshooting
+
+A host that does not wake raises a credential [warning](/reference/scan-warnings/) on the run's **Issues** tab. The run continues and scans everything else.
+
+### No MAC address is known for this address
+
+Scanopy has no MAC recorded for the host, so the daemon sent nothing. Wake the host by hand, run a discovery while it is awake, and confirm its **Interfaces** tab shows a MAC address. A host on a different segment from the daemon needs a router or switch that reports it through SNMP for Scanopy to learn its MAC.
+
+### The host did not answer within the wait
+
+The daemon sent the packets and the host did not answer on ports 22, 80, 443 or 445 before **Wait (seconds)** ran out. Test delivery by sending a packet by hand from the daemon host, with the MAC from the warning:
+
+```bash
+# Linux (wakeonlan package); -i sets the broadcast address
+wakeonlan -i 192.168.20.255 3c:ec:ef:12:34:57
+```
+
+- **The host does not power on.** The packet does not reach its segment, or the host does not accept it. Run the same command from a machine on the host's own segment. A wake from there means routing blocks the packet: set up directed-broadcast forwarding or a relay as described in [Choose how the packet reaches the host](#choose-how-the-packet-reaches-the-host). No wake from there means Wake-on-LAN is off in the firmware or the network card, or the host is on Wi-Fi.
+- **The host powers on but the warning remains.** It takes longer to boot than **Wait (seconds)**, or a firewall on it drops connections on all four ports instead of refusing them. Raise the wait, or allow one of the ports from the daemon host. The sweep can still find a host that comes up after the wait.
+
+### The host wakes but sleeps again before the scan reaches it
+
+The host's sleep timer is shorter than the time between the packet and the scan of that host. Lengthen the idle time before sleep in the host's power settings.
+
+### Could not send the magic packet
+
+The daemon host's operating system refused the send, for example because no route exists to the broadcast or relay address. The warning names the destination. Check the **Broadcast Address** value and the daemon host's routes.
+
+For credential loading problems, such as unreadable files and the per-session assignment summary, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).

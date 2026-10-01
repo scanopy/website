@@ -1,0 +1,185 @@
+---
+title: Set up SSH script discovery
+description: Run your own script on a host over SSH and record the system details and interfaces it prints.
+integration: SSH
+---
+
+An SSH credential logs in to a host, runs a script you write, and records the JSON object the script prints as the host's system details and interfaces.
+
+<IntegrationBeta id="SSH" />
+
+<CredentialBasics id="SSH" />
+
+## What gets discovered
+
+Your script sets what Scanopy records. It prints one JSON object, and Scanopy applies each key in this table to the host or interface field it names:
+
+<SshScriptFieldsTable />
+
+Top-level keys describe the host. Interface keys sit in objects inside a top-level `interfaces` array. Scanopy matches each interface to one it already holds by name, then by MAC, and leaves interfaces the script does not print in place.
+
+Scanopy reports keys outside this table under **Not applied** on the run and does not store them. A blank string counts as no value.
+
+A value from the script outranks what SNMP, LLDP and the other discovery protocols report for the same field, and never replaces a value someone entered in Scanopy. Each value shows **SSH script** as its source.
+
+### Writing the script
+
+The SSH server runs the script text in the account's login shell, the same as `ssh scanopy@HOST 'script'`. A `#!/bin/sh` first line is a comment to that shell, so write the script in the login shell's language.
+
+This script reads OS and hardware details on a Linux host from `/etc/os-release` and DMI:
+
+```sh
+#!/bin/sh
+. /etc/os-release
+dmi() { cat "/sys/class/dmi/id/$1" 2>/dev/null; }
+printf '{"hostname":"%s","sys_descr":"%s %s","manufacturer":"%s","model":"%s","serial_number":"%s","firmware_revision":"%s","software_revision":"%s"}\n' \
+  "$(hostname -f)" "$PRETTY_NAME" "$(uname -r)" \
+  "$(dmi sys_vendor)" "$(dmi product_name)" "$(sudo -n cat /sys/class/dmi/id/product_serial)" \
+  "$(dmi bios_version)" "$VERSION_ID"
+```
+
+On a Debian 12 server it prints:
+
+```json
+{"hostname":"nas-01.example.lan","sys_descr":"Debian GNU/Linux 12 (bookworm) 6.1.0-18-amd64","manufacturer":"Supermicro","model":"X11SCL-F","serial_number":"ZM19AS012345","firmware_revision":"2.1","software_revision":"12"}
+```
+
+To report interfaces, add an `interfaces` array:
+
+```json
+{
+  "hostname": "nas-01.example.lan",
+  "interfaces": [
+    { "name": "eth0", "mac": "3c:ec:ef:12:34:57", "speed_bps": 1000000000, "oper_status": "Up" },
+    { "name": "eth1", "alias": "backup network", "oper_status": "Down" }
+  ]
+}
+```
+
+Rules the output follows:
+
+- Exactly one JSON object on standard output, at most 64 KiB. Write diagnostics to standard error, which the run shows when the script fails.
+- Exit status 0. Any other status discards the output.
+- Each key has the type the table gives it. `speed_bps` is a number, not a string, and the status values are case-sensitive (`Up`, not `up`). One wrong type rejects the whole document.
+- `printf '%s'` inserts a value as-is, so a value containing `"` or `\` produces invalid JSON. Build the object with `jq -n --arg` on hosts that have `jq`.
+
+Run the script yourself as the same account before you save the credential. `ssh` passes it to the login shell the same way the daemon does:
+
+```bash
+ssh scanopy@HOST "$(cat inventory.sh)" | jq .
+```
+
+## Prerequisites
+
+- **A dedicated account on each host.** The script runs with that account's permissions, so give it only what the script reads. The example script needs root for one file: `/sys/class/dmi/id/product_serial`. Grant that single command with `visudo -f /etc/sudoers.d/scanopy`:
+
+  ```
+  scanopy ALL=(root) NOPASSWD: /usr/bin/cat /sys/class/dmi/id/product_serial
+  ```
+
+  Without the rule, `sudo -n` fails, the serial prints as a blank string, and Scanopy skips it.
+
+- **A private key or a password for that account.** For a key, the public half goes in the account's `~/.ssh/authorized_keys`. For a password, the SSH server must allow password authentication.
+- **The SSH port reachable over TCP from the daemon host.** The default is 22.
+
+## Choosing a credential type
+
+<IntegrationTransports id="SSH" />
+
+Both types run the same script and apply the same output. **SSH Key** avoids storing a reusable password and works on servers that turn password login off.
+
+Assign the credential to the hosts the script is written for. Assign it to a whole network only when the account, its key or password, and the script's commands exist on every host there that answers SSH. Each host that refuses the login reports **Login refused** on every run.
+
+### Host key checking
+
+Scanopy checks the host key on every run, before it sends any credentials:
+
+- **Host Key Fingerprint left blank.** The first successful login pins the key the host presented, in the daemon's config file under `ssh_known_host_keys`, keyed by `ip:port`. A later run that sees a different key refuses the host and runs nothing.
+- **Host Key Fingerprint set.** Scanopy accepts only that key. Get it on the host with `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`. A fingerprint suits a credential assigned to one host, because every host has its own key.
+
+## SSH Key
+
+Create a key pair for Scanopy, without a passphrase or with one you enter in **Key Passphrase**:
+
+```bash
+ssh-keygen -t ed25519 -f scanopy_ed25519 -C scanopy
+```
+
+Append `scanopy_ed25519.pub` to the account's `~/.ssh/authorized_keys` on each host, and paste the contents of `scanopy_ed25519`, including its `BEGIN` and `END` lines, into **Private Key**. The field also takes a path to the key file on the daemon host. Scanopy reads OpenSSH keys, the format `ssh-keygen` writes by default, and PEM keys.
+
+<IntegrationFields id="SSH" transport="SshKey" />
+
+## SSH Password
+
+Enter the account's password in **Password**, or a path to a file on the daemon host that holds it.
+
+<IntegrationFields id="SSH" transport="SshPassword" />
+
+## Verifying it works
+
+1. Run the network's discovery from **Discover > Scans**, or wait for its next scheduled run
+2. Open the finished run under **Discover > Scans > Historical** and select the **Details** tab
+3. Find the host's address in the **SSH Scripts** section. **Applied** means the script ran and Scanopy stored its output. **Fields applied** lists the keys Scanopy stored, and **Not applied** lists keys it did not.
+4. Open the host. Its **Details** tab shows each value the script set with **SSH script** as the source, and its **Interfaces** tab shows the interfaces the script printed.
+
+## Troubleshooting
+
+Each failed run appears in the **SSH Scripts** section with its outcome and the end of the script's standard error or the error message, and raises a credential [warning](/reference/scan-warnings/) on the run's **Issues** tab. A failed run applies nothing, and the host keeps the values from its last successful run.
+
+### Login refused
+
+The host rejected the username, key or password, and the script did not run. Test the same login from the daemon host:
+
+```bash
+ssh -i scanopy_ed25519 -o IdentitiesOnly=yes scanopy@HOST true
+```
+
+For **SSH Password**, check that the server's `sshd_config` allows `PasswordAuthentication`. A per-host credential overrides the network default, so check which credential reached this host.
+
+### Host key changed
+
+The host presented a different key from the pinned key, or from the credential's **Host Key Fingerprint**, and Scanopy did not log in. The run's detail names the key the host presented.
+
+A reinstalled host or regenerated host keys produce this outcome. So does a different machine answering at that address. Confirm which it is before you trust the new key.
+
+To trust the new key on a pinned host:
+
+1. Stop the daemon
+2. Open its config file (locations are listed under [Configuration Methods](/reference/daemon-configuration/#configuration-methods)) and delete the host's `ip:port` entry from `ssh_known_host_keys`
+3. Start the daemon
+
+The next run pins the key the host presents. Stop the daemon before you edit the file, because a running daemon writes its config back and restores the entry.
+
+For a credential with **Host Key Fingerprint** set, update the fingerprint instead.
+
+### Connection failed
+
+The daemon reached the SSH port during the scan and then could not set up a session. The detail gives the reason. "could not read the private key" means the key is in a format Scanopy does not read, or it is encrypted and **Key Passphrase** is empty or wrong.
+
+### Timed out
+
+The script did not finish within **Timeout (seconds)**, 60 by default. Scanopy stops it and applies nothing. Raise the timeout, or check for a command waiting on input, such as `sudo` without `-n` asking for a password.
+
+### Exited with an error
+
+The script exited with a status other than 0, and Scanopy discarded its output. The run shows the exit code and the end of standard error. A command that fails under `set -e` produces this outcome, and so does a missing command.
+
+### Output not valid JSON
+
+The script exited 0, but its output is not one JSON object with the types the table above gives. The detail gives the parser's error with its line and column. Common causes:
+
+- A value containing an unescaped `"` or `\`
+- Extra text on standard output, such as a login banner or a message from `/etc/profile` or `~/.bashrc`
+- A number in quotes for `speed_bps`, or a status value in the wrong case
+
+Run the script with the `ssh ... | jq .` command from [Writing the script](#writing-the-script) to see the exact output.
+
+### Output too large
+
+The script printed more than 64 KiB. Scanopy stops reading at that limit and applies nothing. Print only the keys in the table, and limit `interfaces` to the interfaces you need.
+
+### Keys listed under Not applied
+
+The run applied every other key and skipped these. A key appears here when it is not in the table above, such as `interfaces[0].vlan`, or when an interface `mac` is not a valid MAC address. Rename the key to one from the table or remove it.
+
+For credential loading problems, such as unreadable files and the per-session assignment summary, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).

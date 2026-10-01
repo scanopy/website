@@ -1,0 +1,162 @@
+[
+  {
+    "key": "hostname",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "hostname",
+    "description": "The host's own hostname.",
+    "example": "nas-01"
+  },
+  {
+    "key": "sys_name",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "sys_name",
+    "description": "Administrative name, as SNMP sysName reports it.",
+    "example": "nas-01.example.lan"
+  },
+  {
+    "key": "sys_descr",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "sys_descr",
+    "description": "Free-text system description, typically OS and version.",
+    "example": "Debian GNU/Linux 12 (bookworm) 6.1.0-18-amd64"
+  },
+  {
+    "key": "sys_object_id",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "sys_object_id",
+    "description": "Vendor object identifier, as SNMP sysObjectID reports it.",
+    "example": "1.3.6.1.4.1.8072.3.2.10"
+  },
+  {
+    "key": "sys_location",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "sys_location",
+    "description": "Physical location.",
+    "example": "Rack 2, shelf 3"
+  },
+  {
+    "key": "sys_contact",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "sys_contact",
+    "description": "Contact person or team.",
+    "example": "ops@example.com"
+  },
+  {
+    "key": "chassis_id",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "chassis_id",
+    "description": "Chassis identifier, usually the base MAC address.",
+    "example": "3c:ec:ef:12:34:56"
+  },
+  {
+    "key": "manufacturer",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "manufacturer",
+    "description": "Hardware manufacturer.",
+    "example": "Supermicro"
+  },
+  {
+    "key": "model",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "model",
+    "description": "Hardware model.",
+    "example": "X11SCL-F"
+  },
+  {
+    "key": "serial_number",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "serial_number",
+    "description": "Hardware serial number.",
+    "example": "ZM19AS012345"
+  },
+  {
+    "key": "firmware_revision",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "firmware_revision",
+    "description": "Firmware or BIOS version.",
+    "example": "2.1"
+  },
+  {
+    "key": "software_revision",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "software_revision",
+    "description": "Operating system or software version.",
+    "example": "12.5"
+  },
+  {
+    "key": "management_url",
+    "scope": "Host",
+    "value_type": "string",
+    "target_field": "management_url",
+    "description": "URL of the host's management interface.",
+    "example": "https://nas-01.example.lan:5001"
+  },
+  {
+    "key": "interfaces[].name",
+    "scope": "Interface",
+    "value_type": "string",
+    "target_field": "if_name",
+    "description": "Interface name. Interfaces are matched to ones discovery already holds by name, then by MAC.",
+    "example": "eth0"
+  },
+  {
+    "key": "interfaces[].descr",
+    "scope": "Interface",
+    "value_type": "string",
+    "target_field": "if_descr",
+    "description": "Interface description, as SNMP ifDescr reports it.",
+    "example": "Intel Corporation I210 Gigabit"
+  },
+  {
+    "key": "interfaces[].alias",
+    "scope": "Interface",
+    "value_type": "string",
+    "target_field": "if_alias",
+    "description": "Operator-assigned interface label, as SNMP ifAlias reports it.",
+    "example": "uplink to core-sw-01"
+  },
+  {
+    "key": "interfaces[].mac",
+    "scope": "Interface",
+    "value_type": "string",
+    "target_field": "mac_address",
+    "description": "Interface MAC address.",
+    "example": "3c:ec:ef:12:34:57"
+  },
+  {
+    "key": "interfaces[].speed_bps",
+    "scope": "Interface",
+    "value_type": "integer",
+    "target_field": "speed_bps",
+    "description": "Link speed in bits per second.",
+    "example": 1000000000
+  },
+  {
+    "key": "interfaces[].admin_status",
+    "scope": "Interface",
+    "value_type": "string (enum)",
+    "target_field": "admin_status",
+    "description": "Configured state: Up, Down or Testing.",
+    "example": "Up"
+  },
+  {
+    "key": "interfaces[].oper_status",
+    "scope": "Interface",
+    "value_type": "string (enum)",
+    "target_field": "oper_status",
+    "description": "Operational state: Up, Down, Testing, Unknown, Dormant, NotPresent or LowerLayerDown.",
+    "example": "Up"
+  }
+]

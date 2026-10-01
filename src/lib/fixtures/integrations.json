@@ -447,6 +447,186 @@
     ]
   },
   {
+    "id": "SSH",
+    "name": "SSH",
+    "category": "Host Management",
+    "has_logo": false,
+    "logo_ext": "",
+    "logo_slug": "ssh",
+    "logo_needs_white_background": false,
+    "discovers": "Run your own script on a host and record the system details and interfaces it reports.",
+    "docs_path": "/docs/guides/integrations/ssh/",
+    "summary": "Run your own script on a host and record the system details and interfaces it reports. Supports key and password.",
+    "transports": [
+      {
+        "id": "SshKey",
+        "name": "Key",
+        "display_name": "SSH Key",
+        "description": "Connects over SSH with a private key.",
+        "requires_config": true,
+        "single_endpoint_per_host": false,
+        "targets": [
+          "Hosts",
+          "Network"
+        ],
+        "stability": "Beta",
+        "upstream_support": "Vendor",
+        "minimum_daemon_version": "0.17.19",
+        "fields": [
+          {
+            "id": "port",
+            "label": "SSH Port",
+            "field_type": "port",
+            "placeholder": "22",
+            "secret": false,
+            "optional": true,
+            "default_value": "22",
+            "group": "Connection"
+          },
+          {
+            "id": "username",
+            "label": "Username",
+            "field_type": "string",
+            "placeholder": "scanopy",
+            "secret": false,
+            "optional": false,
+            "help_text": "Account the script runs as. Use a dedicated account with only the access the script needs.",
+            "group": "Authentication"
+          },
+          {
+            "id": "private_key",
+            "label": "Private Key",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "OpenSSH (ssh-keygen's default) or PEM private key whose public key is in the account's authorized_keys.",
+            "inline_format": "sshprivatekey",
+            "group": "Authentication"
+          },
+          {
+            "id": "passphrase",
+            "label": "Key Passphrase",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": true,
+            "help_text": "Only if the private key is encrypted.",
+            "inline_format": "plain",
+            "group": "Authentication"
+          },
+          {
+            "id": "script",
+            "label": "Script",
+            "field_type": "text",
+            "placeholder": "#!/bin/sh\nprintf '{\"model\": \"%s\"}' \"$(cat /sys/class/dmi/id/product_name)\"",
+            "secret": false,
+            "optional": false,
+            "help_text": "Runs on the host at each scan. It must print one JSON object whose keys are host fields, such as hostname, model or serial_number, and optionally an interfaces list. See the SSH integration guide for every key.",
+            "group": "Script"
+          },
+          {
+            "id": "timeout_seconds",
+            "label": "Timeout (seconds)",
+            "field_type": "number",
+            "placeholder": "60",
+            "secret": false,
+            "optional": true,
+            "help_text": "The script is stopped and the run reports a failure after this long.",
+            "default_value": "60",
+            "group": "Script"
+          },
+          {
+            "id": "host_key_fingerprint",
+            "label": "Host Key Fingerprint",
+            "field_type": "string",
+            "placeholder": "SHA256:…",
+            "secret": false,
+            "optional": true,
+            "help_text": "Leave blank to trust the key each host presents the first time and refuse it if it later changes. Enter a fingerprint (ssh-keygen -lf) to require that key instead.",
+            "group": "Script"
+          }
+        ]
+      },
+      {
+        "id": "SshPassword",
+        "name": "Password",
+        "display_name": "SSH Password",
+        "description": "Connects over SSH with a username and password.",
+        "requires_config": true,
+        "single_endpoint_per_host": false,
+        "targets": [
+          "Hosts",
+          "Network"
+        ],
+        "stability": "Beta",
+        "upstream_support": "Vendor",
+        "minimum_daemon_version": "0.17.19",
+        "fields": [
+          {
+            "id": "port",
+            "label": "SSH Port",
+            "field_type": "port",
+            "placeholder": "22",
+            "secret": false,
+            "optional": true,
+            "default_value": "22",
+            "group": "Connection"
+          },
+          {
+            "id": "username",
+            "label": "Username",
+            "field_type": "string",
+            "placeholder": "scanopy",
+            "secret": false,
+            "optional": false,
+            "help_text": "Account the script runs as. Use a dedicated account with only the access the script needs.",
+            "group": "Authentication"
+          },
+          {
+            "id": "password",
+            "label": "Password",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Password for that account. The server must allow password authentication.",
+            "inline_format": "plain",
+            "group": "Authentication"
+          },
+          {
+            "id": "script",
+            "label": "Script",
+            "field_type": "text",
+            "placeholder": "#!/bin/sh\nprintf '{\"model\": \"%s\"}' \"$(cat /sys/class/dmi/id/product_name)\"",
+            "secret": false,
+            "optional": false,
+            "help_text": "Runs on the host at each scan. It must print one JSON object whose keys are host fields, such as hostname, model or serial_number, and optionally an interfaces list. See the SSH integration guide for every key.",
+            "group": "Script"
+          },
+          {
+            "id": "timeout_seconds",
+            "label": "Timeout (seconds)",
+            "field_type": "number",
+            "placeholder": "60",
+            "secret": false,
+            "optional": true,
+            "help_text": "The script is stopped and the run reports a failure after this long.",
+            "default_value": "60",
+            "group": "Script"
+          },
+          {
+            "id": "host_key_fingerprint",
+            "label": "Host Key Fingerprint",
+            "field_type": "string",
+            "placeholder": "SHA256:…",
+            "secret": false,
+            "optional": true,
+            "help_text": "Leave blank to trust the key each host presents the first time and refuse it if it later changes. Enter a fingerprint (ssh-keygen -lf) to require that key instead.",
+            "group": "Script"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "UniFi Controller",
     "name": "UniFi Controller",
     "category": "Network Controllers",
@@ -562,6 +742,79 @@
             "help_text": "Password for the local admin account.",
             "inline_format": "plain",
             "group": "Authentication"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Wake-on-LAN",
+    "name": "Wake-on-LAN",
+    "category": "Host Management",
+    "has_logo": false,
+    "logo_ext": "",
+    "logo_slug": "wake-on-lan",
+    "logo_needs_white_background": false,
+    "discovers": "Wake sleeping hosts before a scan so they are discovered.",
+    "docs_path": "/docs/guides/integrations/wake-on-lan/",
+    "summary": "Wake sleeping hosts before a scan so they are discovered. Supports magic packet.",
+    "transports": [
+      {
+        "id": "WakeOnLan",
+        "name": "Magic Packet",
+        "display_name": "Wake-on-LAN",
+        "description": "Sends a magic packet over UDP. The daemon must be on the host's network segment, or the router must forward directed broadcasts or relay the packet.",
+        "requires_config": true,
+        "single_endpoint_per_host": false,
+        "targets": [
+          "Hosts"
+        ],
+        "stability": "Beta",
+        "upstream_support": "Vendor",
+        "minimum_daemon_version": "0.17.19",
+        "fields": [
+          {
+            "id": "port",
+            "label": "UDP Port",
+            "field_type": "port",
+            "placeholder": "9",
+            "secret": false,
+            "optional": true,
+            "help_text": "Most network cards accept the packet on any port. Change it only if a router relay rule listens on another port, commonly 7.",
+            "default_value": "9",
+            "group": "Delivery"
+          },
+          {
+            "id": "broadcast_address",
+            "label": "Broadcast Address",
+            "field_type": "string",
+            "placeholder": "(host's subnet broadcast)",
+            "secret": false,
+            "optional": true,
+            "help_text": "Leave blank to send to the broadcast address of each host's subnet, which reaches it when the daemon is on the same network segment or the router forwards directed broadcasts. Otherwise enter where to send it instead: a router address with a relay rule, a Wake-on-LAN relay device, or 255.255.255.255.",
+            "group": "Delivery"
+          },
+          {
+            "id": "wait_seconds",
+            "label": "Wait (seconds)",
+            "field_type": "number",
+            "placeholder": "90",
+            "secret": false,
+            "optional": true,
+            "help_text": "How long to wait for the hosts to come up before the scan starts. Allow for disks spinning up and services starting.",
+            "default_value": "90",
+            "group": "Delivery"
+          },
+          {
+            "id": "secure_on_password",
+            "label": "SecureOn Password",
+            "field_type": "secretpathorinline",
+            "placeholder": "01:23:45:67:89:ab",
+            "secret": true,
+            "optional": true,
+            "help_text": "Only for network cards configured to require one. Six bytes written as a MAC address.",
+            "inline_format": "macaddress",
+            "group": "Delivery"
           }
         ]
       }

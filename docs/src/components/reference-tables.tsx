@@ -1,6 +1,7 @@
 import elementRuleTypes from '$lib/fixtures/element-rule-types.json';
 import permissions from '$lib/fixtures/permissions.json';
 import scanSettings from '$lib/fixtures/scan-settings.json';
+import sshScriptFields from '$lib/fixtures/ssh-script-fields.json';
 import views from '$lib/fixtures/views.json';
 import warningCodes from '$lib/fixtures/warning-codes.json';
 import warningRemedies from '$lib/fixtures/warning-remedies.json';
@@ -199,6 +200,58 @@ export function ScanSettingsTable() {
 		group: f.category
 	}));
 	return <FieldsTable fields={fields} label="Setting" />;
+}
+
+/** One row of `ssh-script-fields.json`: a key an SSH credential's script may print. */
+interface SshScriptField {
+	/** Path as the run summary shows it: `model`, or `interfaces[].mac` for an interface key. */
+	key: string;
+	scope: string;
+	value_type: string;
+	/** The host or interface field the key writes. */
+	target_field: string;
+	description: string;
+	example: unknown;
+}
+
+/**
+ * Every key an SSH credential's script may print, generated from the parser's own contract
+ * (`backend/src/server/credentials/impl/types/ssh_script.rs`). Each example is one the parser
+ * accepts, because the same values feed its round-trip test.
+ */
+export function SshScriptFieldsTable() {
+	return (
+		<div className="overflow-x-auto">
+			<table>
+				<thead>
+					<tr>
+						<th>Key</th>
+						<th>Type</th>
+						<th>Fills</th>
+						<th>Description</th>
+						<th>Example</th>
+					</tr>
+				</thead>
+				<tbody>
+					{(sshScriptFields as SshScriptField[]).map((field) => (
+						<tr key={field.key}>
+							<td className="whitespace-nowrap">
+								<code>{field.key}</code>
+							</td>
+							<td className="whitespace-nowrap">{field.value_type}</td>
+							<td className="whitespace-nowrap">
+								<code>{field.target_field}</code>
+							</td>
+							<td>{field.description}</td>
+							<td>
+								<code>{JSON.stringify(field.example)}</code>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+	);
 }
 
 /** `octagon-alert` → the `OctagonAlert` component `lucide-react` exports. */

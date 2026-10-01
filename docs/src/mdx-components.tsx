@@ -19,7 +19,8 @@ import {
 	IntegrationGuideLinks,
 	RolesTable,
 	ScanSettingsTable,
-	ScanWarningsTable
+	ScanWarningsTable,
+	SshScriptFieldsTable
 } from '@/components/reference-tables';
 import { SchemaERDiagram, SchemaFullDiagram } from '@/components/schema-diagrams';
 import { SectionCards } from '@/components/section-cards';
@@ -49,6 +50,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		SchemaERDiagram,
 		SchemaFullDiagram,
 		SectionCards,
+		SshScriptFieldsTable,
 		StaleTag,
 		StatusTag,
 		...components
