@@ -14,7 +14,7 @@
   {
     "id": "onboarding_call",
     "name": "Onboarding Call",
-    "description": "30 minute onboarding call to ensure you're getting the most out of Scanopy",
+    "description": "A call with the Scanopy team to get Scanopy set up, deployed and mapping your first network",
     "category": "Support",
     "icon": "sparkle",
     "color": "Gray",
@@ -324,21 +324,9 @@
     }
   },
   {
-    "id": "quarterly_billing",
-    "name": "Quarterly Payments",
-    "description": "Pay the annual license in four quarterly installments",
-    "category": "Enterprise",
-    "icon": "sparkle",
-    "color": "Gray",
-    "metadata": {
-      "is_coming_soon": true,
-      "minimum_plan": null
-    }
-  },
-  {
-    "id": "procurement_documents",
-    "name": "Procurement Documents",
-    "description": "W-9, NDAA Section 889 attestation, and a data processing agreement for vendor onboarding",
+    "id": "custom_billing",
+    "name": "Custom Billing",
+    "description": "Billing schedule and payment terms negotiated to fit your procurement process",
     "category": "Enterprise",
     "icon": "sparkle",
     "color": "Gray",
@@ -348,10 +336,10 @@
     }
   },
   {
-    "id": "deployment_assistance",
-    "name": "Deployment Assistance",
-    "description": "The Scanopy team helps you deploy and configure your self-hosted server",
-    "category": "Support",
+    "id": "procurement_documents",
+    "name": "Procurement Documents",
+    "description": "W-9 and NDAA Section 889 attestation for vendor onboarding",
+    "category": "Enterprise",
     "icon": "sparkle",
     "color": "Gray",
     "metadata": {
