@@ -74,6 +74,9 @@ Not every setting has a CLI flag — `SCANOPY_LICENSE_KEY` and `SCANOPY_WEB_EXTE
 | **Prometheus Allowed IPs**| N/A                            | `SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS` | -            | Comma-separated IPs/CIDRs allowed to access metrics endpoint       |
 | **Snapshot Retention**    | N/A                            | `SCANOPY_SNAPSHOT_RETENTION_DAYS_OVERRIDE` | `90`                | Days to retain topology [snapshots](/using-scanopy/topology/snapshots/) before automatic pruning |
 | **License Key**           | N/A                            | `SCANOPY_LICENSE_KEY`                | -                         | Signed key that enables the [commercial edition](/self-hosted-server/commercial-deployment/). Omit for the free community edition |
+| **Trusted CA Bundle**     | `--trusted-ca-bundle`          | `SCANOPY_TRUSTED_CA_BUNDLE`          | -                         | PEM file of extra CA certificates to trust for outbound TLS. See [Trusted CA Certificates](#trusted-ca-certificates) |
+
+Any variable in this table can also be read from a file. See [Secrets from Files](#secrets-from-files).
 
 ## Integrated Daemon URL
 
@@ -139,6 +142,58 @@ See [Microsoft's SMTP AUTH documentation](https://learn.microsoft.com/en-us/exch
 <Callout type="info">
 When a message cannot be sent, the mail server's reply is recorded in the server log. It names the specific reason — a rejected password, a tenant policy, or a sender the account may not send as — which the failure alone does not tell you.
 </Callout>
+
+## Trusted CA Certificates
+
+By default the server trusts only the public root certificates built into it. `SCANOPY_TRUSTED_CA_BUNDLE` points to a PEM file of additional CA certificates, which are trusted alongside the built-in roots. Use it when a service the server connects to has a certificate from a private or internal CA.
+
+The bundle applies to the server's connections to:
+
+- OIDC identity providers (discovery, keys and token exchange)
+- the SMTP relay
+- daemons, for the integrated daemon and daemons in ServerPoll mode
+- the license server, for commercial check-ins
+
+```yaml
+environment:
+  - SCANOPY_TRUSTED_CA_BUNDLE=/etc/scanopy/ca-bundle.pem
+volumes:
+  - /etc/ssl/certs/ca-certificates.crt:/etc/scanopy/ca-bundle.pem:ro
+```
+
+The file can hold several certificates, and other PEM sections such as keys or comments are ignored. The server reads it once at startup. If the file is missing, unreadable, contains no certificates, or holds a certificate that cannot act as a CA, the server does not start, and the error names the path. Leaving the variable unset changes nothing.
+
+## Secrets from Files
+
+Any `SCANOPY_` variable can be read from a file instead: set `SCANOPY_<NAME>_FILE` to the file's path. This is the convention Docker secrets, Kubernetes and Portainer use for mounted secrets.
+
+- A trailing newline in the file is trimmed. Other whitespace is kept.
+- Setting both `SCANOPY_<NAME>` and `SCANOPY_<NAME>_FILE` stops the server at startup with an error naming the variable. Entries in a `.env` file count.
+- A `_FILE` path that is missing or unreadable stops the server, and the error names the variable and the path. The file's contents are never logged.
+
+With Docker secrets, Postgres's own image reads `POSTGRES_PASSWORD_FILE`. The database URL embeds that password, so put the full URL in a second secret:
+
+```yaml
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+  server:
+    environment:
+      SCANOPY_DATABASE_URL_FILE: /run/secrets/database_url
+    secrets:
+      - database_url
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password
+  database_url:
+    file: ./secrets/database_url
+```
+
+The published `docker-compose.yml` includes this example, commented out.
 
 ## UI Configuration
 

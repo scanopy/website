@@ -159,8 +159,10 @@ environment:
 ```
 
 **Requirements:**
-- [Npcap](https://npcap.com/) must be installed (free for personal use)
-- During Npcap installation, enable "WinPcap API-compatible Mode"
+- [Npcap](https://npcap.com/) must be installed (free for personal use). The default install options work.
+- If Npcap is missing or fails to load, the daemon logs a warning and falls back to SendARP. Scanning continues.
+
+Daemons before v0.17.18 load Npcap only when it was installed with "WinPcap API-compatible Mode" enabled. On those versions, a missing or non-compatible Npcap install can stop the daemon right after "Daemon ready", with nothing in the log. Update the daemon, or reinstall Npcap with that option checked.
 
 **When to use Npcap:**
 - Scanning large subnets where sequential SendARP is too slow

@@ -95,6 +95,14 @@ If you're using a Docker socket proxy and getting permission errors, see [Securi
 
 **Solution**: Install the daemon as a background service with `sudo scanopy-daemon install …` so it runs independently of your terminal session and survives reboots. See [Running as a Service](/setting-up-daemons/managing-daemons/#running-as-a-service).
 
+## Windows Service Stops Right After Starting
+
+**Symptoms**: The service starts and then stops. The log ends at `Polling the server for discovery work every 30s`, and running the daemon in the foreground ends with Windows' "scanopy-daemon has stopped" dialog.
+
+**Cause**: Daemons before v0.17.18 load Npcap's `packet.dll` on their first poll, and stop if Windows can't load it. That happens without Npcap, and with a default Npcap install that lacks "WinPcap API-compatible Mode".
+
+**Solution**: Update the daemon to v0.17.18 or later, which runs with or without Npcap. From v0.17.18, an unexpected stop writes a `Daemon crashed:` line to the log that names the cause. Include that line if you contact support.
+
 ## Podman Pulls Wrong Daemon Version (amd64)
 
 **Symptoms**: After pulling the daemon image by tag with Podman, the container runs an unexpected version or architecture

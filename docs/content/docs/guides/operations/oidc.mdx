@@ -380,6 +380,26 @@ Common mistakes:
 3. Restart with `docker compose restart scanopy-server`
 4. Check server logs: `docker logs scanopy-server`
 
+### "Signed by a CA this server doesn't trust" error
+
+```
+the issuer's TLS certificate is signed by a CA this server doesn't trust.
+If it's a private CA, set SCANOPY_TRUSTED_CA_BUNDLE to its PEM file
+```
+
+**Cause**: Your provider's certificate comes from a private or internal CA, and the server trusts only public roots. Mounting a CA file into the container is not enough on its own.
+
+**Solution**: Point `SCANOPY_TRUSTED_CA_BUNDLE` at a PEM file containing your CA certificate, and restart the server:
+
+```yaml
+environment:
+  - SCANOPY_TRUSTED_CA_BUNDLE=/etc/scanopy/ca-bundle.pem
+volumes:
+  - /etc/ssl/certs/ca-certificates.crt:/etc/scanopy/ca-bundle.pem:ro
+```
+
+See [Trusted CA Certificates](/reference/server-configuration/#trusted-ca-certificates). Servers before v0.17.18 reported this as "Request failed. Check that the issuer URL is reachable from the server" and have no way to trust a private CA.
+
 ### "Connection refused" when authenticating
 
 **Cause**: Scanopy server can't reach your OIDC provider.

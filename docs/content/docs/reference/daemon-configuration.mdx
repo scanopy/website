@@ -56,6 +56,22 @@ The config file stores runtime state (daemon ID, host ID) alongside your setting
 
 <DaemonConfigTable />
 
+## Secrets from Files
+
+Any `SCANOPY_` variable can be read from a file instead: set `SCANOPY_<NAME>_FILE` to the file's path, for example `SCANOPY_DAEMON_API_KEY_FILE=/run/secrets/daemon_api_key`. A trailing newline is trimmed. Setting both forms of the same variable, or pointing `_FILE` at a file that can't be read, stops the daemon at startup with an error naming the variable.
+
+`SCANOPY_LOG_FILE` is itself a setting (the log path), not a secret file. To read the log path from a file, use `SCANOPY_LOG_FILE_FILE`.
+
+## Trusted CA Certificates
+
+### `--trusted-ca-bundle` / `SCANOPY_TRUSTED_CA_BUNDLE`
+
+A PEM file of CA certificates the daemon trusts in addition to its built-in public roots. It applies to the daemon's connection to the Scanopy server and to the UniFi controller integration. Use it when either one has a certificate from a private CA, so certificate verification stays on.
+
+The path refers to a file on the daemon host. `install` saves it to the config file. If the file is missing or contains no usable CA certificate, the daemon does not start, and the error names the path.
+
+Network scanning does not use the bundle. Probes of scanned hosts follow **Accept Invalid Scan Certificates** (`SCANOPY_ACCEPT_INVALID_SCAN_CERTS`).
+
 ## Seeding Credentials at Registration
 
 ### `--credential-id` / `SCANOPY_CREDENTIAL_IDS`

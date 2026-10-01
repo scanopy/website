@@ -115,6 +115,8 @@ Check the log from startup as well. A partial SMTP configuration, or a relay the
 
 3. **Confirm the settings reach the container**: the published `docker-compose.yml` passes a `.env` beside it through to the server. In a compose file of your own, the `server` service needs its own `env_file` entry, or the variables set under `environment`.
 
+4. **Trust a relay with a private certificate**: if the log says the relay's certificate is signed by a CA the server doesn't trust, set `SCANOPY_TRUSTED_CA_BUNDLE` to a PEM file containing that CA. Encryption can't be turned off, so this is the only way to send through such a relay. See [Trusted CA Certificates](/reference/server-configuration/#trusted-ca-certificates).
+
 ## Database Issues
 
 ### How to Backup Data
