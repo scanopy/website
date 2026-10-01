@@ -23,7 +23,7 @@ Discovery is local to one host: the daemon sees the containers on its own machin
 ## Prerequisites
 
 - Docker running on the host whose containers you want to discover
-- For direct socket access, the daemon can read `/var/run/docker.sock` on its own host
+- For direct socket access, the daemon can read `/var/run/docker.sock` on its own host, or the `\\.\pipe\docker_engine` named pipe on a Windows host
 - For proxied access, a socket proxy deployed and reachable from the daemon — see [Docker Proxy](#docker-proxy) below for supported proxies and the operations they must allow
 
 ## Choosing a credential type
@@ -45,7 +45,7 @@ To discover containers on a machine with no daemon: deploy a proxy there, create
 
 <IntegrationFields id="Docker" transport="DockerProxy" />
 
-The TLS fields apply to HTTPS proxies only. Each can be entered inline or as a file path readable by the daemon.
+The TLS fields apply to HTTPS proxies only. Each takes the PEM text with **Enter value**, or a path with **File on daemon host**. A path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
 
 ### Supported proxies
 
@@ -118,11 +118,21 @@ Whatever proxy you use, allow these endpoints:
 
 ## Docker Socket
 
-The daemon connects directly to `/var/run/docker.sock` on its own host. This needs no credential and no toggle — the daemon uses the socket whenever it's accessible.
+The daemon connects directly to the Docker API on its own host whenever it's accessible, with no credential:
 
-Create a **Docker Socket** credential only to point the daemon at a socket somewhere other than the default path.
+- **Linux, macOS, BSD:** the socket `DOCKER_HOST` names, or `/var/run/docker.sock`
+- **Windows:** the `\\.\pipe\docker_engine` named pipe
+
+Create a **Docker Socket** credential only to point the daemon at a different socket or pipe. A blank **Socket Path** keeps the detection above.
 
 <IntegrationFields id="Docker" transport="DockerSocket" />
+
+**Socket Path** takes the form the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked) uses. The form shows **Daemon OS** once **Socket Path** is set, and a daemon on another OS skips the credential.
+
+| Daemon OS         | Socket Path                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------- |
+| Linux, macOS, BSD | An absolute socket path, such as `/var/run/docker.sock`, with or without `unix://`                   |
+| Windows           | A named pipe, such as `\\.\pipe\docker_engine`, or the same pipe as `npipe:////./pipe/docker_engine` |
 
 Because the socket is reachable only over the daemon's own loopback, this credential type can be assigned to a daemon host and nowhere else.
 

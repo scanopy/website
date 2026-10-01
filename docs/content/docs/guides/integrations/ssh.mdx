@@ -22,9 +22,22 @@ Scanopy reports keys outside this table under **Not applied** on the run and doe
 
 A value from the script outranks what SNMP, LLDP and the other discovery protocols report for the same field, and never replaces a value someone entered in Scanopy. Each value shows **SSH script** as its source.
 
-### Writing the script
+### Scanned Host OS sets the shell the script runs in
 
-The SSH server runs the script text in the account's login shell, the same as `ssh scanopy@HOST 'script'`. A `#!/bin/sh` first line is a comment to that shell, so write the script in the login shell's language.
+Set **Scanned Host OS** to the OS of the hosts the credential is assigned to. The daemon sends one of these commands over SSH:
+
+| Scanned Host OS   | Script source                       | Command the daemon sends                                                                                 |
+| ----------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Linux, macOS, BSD | File on scanned host                | The path in single quotes, which the login shell runs as a program                                       |
+| Linux, macOS, BSD | File on daemon host, or Enter value | The script text, which the login shell runs                                                              |
+| Windows           | File on scanned host                | `powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "<path>"`                           |
+| Windows           | File on daemon host, or Enter value | `powershell -NoProfile -NonInteractive -EncodedCommand <text>`, with the text base64-encoded as UTF-16LE |
+
+The Windows commands run under either default shell of the Windows OpenSSH server, `cmd.exe` or PowerShell. A credential covers hosts of one OS. Create a second credential for hosts of the other.
+
+### Writing the script for Linux, macOS and BSD
+
+A **File on scanned host** script runs as a program, so it needs a `#!/bin/sh` first line and the execute bit (`chmod 755`). Text from the other two sources runs in the account's login shell, the same as `ssh scanopy@HOST 'script'`. A `#!` first line is a comment to that shell, so write the text in the login shell's language.
 
 This script reads OS and hardware details on a Linux host from `/etc/os-release` and DMI:
 
@@ -56,22 +69,64 @@ To report interfaces, add an `interfaces` array:
 }
 ```
 
-Rules the output follows:
+`printf '%s'` inserts a value as-is, so a value containing `"` or `\` produces invalid JSON. Build the object with `jq -n --arg` on hosts that have `jq`.
+
+### Writing the script for Windows
+
+PowerShell runs the script with `-NoProfile`, so profile scripts add nothing to its output. This script reads the same details from CIM and the network adapter list, and prints them with `ConvertTo-Json -Compress`, which escapes quotes and backslashes in values:
+
+```powershell
+$os   = Get-CimInstance Win32_OperatingSystem
+$cs   = Get-CimInstance Win32_ComputerSystem
+$bios = Get-CimInstance Win32_BIOS
+$interfaces = @(Get-NetAdapter -Physical | ForEach-Object {
+    $nic = [ordered]@{
+        name        = $_.Name
+        descr       = $_.InterfaceDescription
+        mac         = $_.MacAddress -replace '-', ':'
+        oper_status = if ($_.Status -eq 'Up') { 'Up' } else { 'Down' }
+    }
+    if ($_.Status -eq 'Up') { $nic.speed_bps = [int64]$_.Speed }
+    $nic
+})
+[ordered]@{
+    hostname          = [System.Net.Dns]::GetHostName()
+    sys_descr         = "$($os.Caption) $($os.Version)"
+    manufacturer      = $cs.Manufacturer
+    model             = $cs.Model
+    serial_number     = $bios.SerialNumber
+    firmware_revision = $bios.SMBIOSBIOSVersion
+    software_revision = $os.Version
+    interfaces        = $interfaces
+} | ConvertTo-Json -Compress -Depth 3
+```
+
+`Get-NetAdapter` writes MAC addresses with dashes, and the script converts them to colons. `Speed` is the link speed in bits per second, the number behind the `LinkSpeed` text such as `1 Gbps`. The script reports it only for adapters that are up.
+
+### Output rules
 
 - Exactly one JSON object on standard output, at most 64 KiB. Write diagnostics to standard error, which the run shows when the script fails.
 - Exit status 0. Any other status discards the output.
 - Each key has the type the table gives it. `speed_bps` is a number, not a string, and the status values are case-sensitive (`Up`, not `up`). One wrong type rejects the whole document.
-- `printf '%s'` inserts a value as-is, so a value containing `"` or `\` produces invalid JSON. Build the object with `jq -n --arg` on hosts that have `jq`.
 
-Run the script yourself as the same account before you save the credential. `ssh` passes it to the login shell the same way the daemon does:
+### Testing the script
+
+Run the script yourself as the same account before you save the credential. These commands send it the way the daemon does:
 
 ```bash
+# File on scanned host, Linux, macOS, BSD
+ssh scanopy@HOST /usr/local/bin/scanopy-inventory | jq .
+
+# File on daemon host or Enter value, Linux, macOS, BSD
 ssh scanopy@HOST "$(cat inventory.sh)" | jq .
+
+# File on scanned host, Windows
+ssh scanopy@HOST 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "C:\Scanopy\inventory.ps1"' | jq .
 ```
 
 ## Prerequisites
 
-- **A dedicated account on each host.** The script runs with that account's permissions, so give it only what the script reads. The example script needs root for one file: `/sys/class/dmi/id/product_serial`. Grant that single command with `visudo -f /etc/sudoers.d/scanopy`:
+- **A dedicated account on each host.** The script runs with that account's permissions, so give it only what the script reads. The Linux example script needs root for one file: `/sys/class/dmi/id/product_serial`. Grant that single command with `visudo -f /etc/sudoers.d/scanopy`:
 
   ```
   scanopy ALL=(root) NOPASSWD: /usr/bin/cat /sys/class/dmi/id/product_serial
@@ -79,7 +134,8 @@ ssh scanopy@HOST "$(cat inventory.sh)" | jq .
 
   Without the rule, `sudo -n` fails, the serial prints as a blank string, and Scanopy skips it.
 
-- **A private key or a password for that account.** For a key, the public half goes in the account's `~/.ssh/authorized_keys`. For a password, the SSH server must allow password authentication.
+- **A private key or a password for that account.** For a key, the public half goes in the account's `~/.ssh/authorized_keys`. On Windows, a key for an account in the Administrators group goes in `C:\ProgramData\ssh\administrators_authorized_keys` instead. For a password, the SSH server must allow password authentication.
+- **On Windows hosts, OpenSSH Server installed and running.** It is an optional Windows feature.
 - **The SSH port reachable over TCP from the daemon host.** The default is 22.
 
 ## Choosing a credential type
@@ -90,12 +146,26 @@ Both types run the same script and apply the same output. **SSH Key** avoids sto
 
 Assign the credential to the hosts the script is written for. Assign it to a whole network only when the account, its key or password, and the script's commands exist on every host there that answers SSH. Each host that refuses the login reports **Login refused** on every run.
 
+### Deploy the script to each scanned host
+
+**Script** takes one of three sources:
+
+| Source                         | What Scanopy stores | Where the script lives                                                  |
+| ------------------------------ | ------------------- | ----------------------------------------------------------------------- |
+| File on scanned host (default) | The path            | On each scanned host                                                    |
+| File on daemon host            | The path            | On the daemon host. The daemon reads it at each scan and sends its text |
+| Enter value                    | The script text     | In the credential                                                       |
+
+Use **File on scanned host**. Deploy the script to each host with your configuration management tool, such as Ansible, Puppet or Group Policy, and enter its path, for example `/usr/local/bin/scanopy-inventory` or `C:\Scanopy\inventory.ps1`. Scanopy stores only the path, and a script update goes out with the rest of the host's configuration. The path must be absolute for the **Scanned Host OS**, and a Windows path cannot contain `"`.
+
+A **File on daemon host** path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
+
 ### Host key checking
 
 Scanopy checks the host key on every run, before it sends any credentials:
 
 - **Host Key Fingerprint left blank.** The first successful login pins the key the host presented, in the daemon's config file under `ssh_known_host_keys`, keyed by `ip:port`. A later run that sees a different key refuses the host and runs nothing.
-- **Host Key Fingerprint set.** Scanopy accepts only that key. Get it on the host with `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`. A fingerprint suits a credential assigned to one host, because every host has its own key.
+- **Host Key Fingerprint set.** Scanopy accepts only that key. Get it on the host with `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`, or on Windows with `ssh-keygen -lf C:\ProgramData\ssh\ssh_host_ed25519_key.pub`. A fingerprint suits a credential assigned to one host, because every host has its own key.
 
 ## SSH Key
 
@@ -105,26 +175,27 @@ Create a key pair for Scanopy, without a passphrase or with one you enter in **K
 ssh-keygen -t ed25519 -f scanopy_ed25519 -C scanopy
 ```
 
-Append `scanopy_ed25519.pub` to the account's `~/.ssh/authorized_keys` on each host, and paste the contents of `scanopy_ed25519`, including its `BEGIN` and `END` lines, into **Private Key**. The field also takes a path to the key file on the daemon host. Scanopy reads OpenSSH keys, the format `ssh-keygen` writes by default, and PEM keys.
+Append `scanopy_ed25519.pub` to the account's authorized keys file on each host, and paste the contents of `scanopy_ed25519`, including its `BEGIN` and `END` lines, into **Private Key**. To keep the key out of Scanopy, choose **File on daemon host** and enter the key file's path. The path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded. Scanopy reads OpenSSH keys, the format `ssh-keygen` writes by default, and PEM keys.
 
 <IntegrationFields id="SSH" transport="SshKey" />
 
 ## SSH Password
 
-Enter the account's password in **Password**, or a path to a file on the daemon host that holds it.
+Enter the account's password in **Password**, or choose **File on daemon host** and enter the path of a file on the daemon host that holds it. The path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
 
 <IntegrationFields id="SSH" transport="SshPassword" />
 
 ## Verifying it works
 
 1. Run the network's discovery from **Discover > Scans**, or wait for its next scheduled run
-2. Open the finished run under **Discover > Scans > Historical** and select the **Details** tab
-3. Find the host's address in the **SSH Scripts** section. **Applied** means the script ran and Scanopy stored its output. **Fields applied** lists the keys Scanopy stored, and **Not applied** lists keys it did not.
-4. Open the host. Its **Details** tab shows each value the script set with **SSH script** as the source, and its **Interfaces** tab shows the interfaces the script printed.
+2. Open the finished run under **Discover > Scans > Historical** and select the **Credentials** tab
+3. Find the SSH credential's row. It lists each host the script ran on with its outcome. **Applied** means the script ran and Scanopy stored its output. **Fields applied** lists the keys Scanopy stored, and **Not applied** lists keys it did not.
+4. Check the row's warning count. Any warning appears on the run's **Issues** tab.
+5. Open the host. Its **Details** tab shows each value the script set with **SSH script** as the source, and its **Interfaces** tab shows the interfaces the script printed.
 
 ## Troubleshooting
 
-Each failed run appears in the **SSH Scripts** section with its outcome and the end of the script's standard error or the error message, and raises a credential [warning](/reference/scan-warnings/) on the run's **Issues** tab. A failed run applies nothing, and the host keeps the values from its last successful run.
+Each failed run appears in the SSH credential's row on the run's **Credentials** tab, with its outcome and the end of the script's standard error or the error message. It also raises a credential [warning](/reference/scan-warnings/) on the run's **Issues** tab. A failed run applies nothing, and the host keeps the values from its last successful run.
 
 ### Login refused
 
@@ -162,7 +233,7 @@ The script did not finish within **Timeout (seconds)**, 60 by default. Scanopy s
 
 ### Exited with an error
 
-The script exited with a status other than 0, and Scanopy discarded its output. The run shows the exit code and the end of standard error. A command that fails under `set -e` produces this outcome, and so does a missing command.
+The script exited with a status other than 0, and Scanopy discarded its output. The run shows the exit code and the end of standard error. A command that fails under `set -e` produces this outcome, and so does a missing command or a **File on scanned host** path that does not exist. A Linux, macOS or BSD script file without the execute bit also fails here. Check that **Scanned Host OS** matches the host.
 
 ### Output not valid JSON
 
@@ -172,7 +243,7 @@ The script exited 0, but its output is not one JSON object with the types the ta
 - Extra text on standard output, such as a login banner or a message from `/etc/profile` or `~/.bashrc`
 - A number in quotes for `speed_bps`, or a status value in the wrong case
 
-Run the script with the `ssh ... | jq .` command from [Writing the script](#writing-the-script) to see the exact output.
+Run the script with a command from [Testing the script](#testing-the-script) to see the exact output.
 
 ### Output too large
 
@@ -181,5 +252,9 @@ The script printed more than 64 KiB. Scanopy stops reading at that limit and app
 ### Keys listed under Not applied
 
 The run applied every other key and skipped these. A key appears here when it is not in the table above, such as `interfaces[0].vlan`, or when an interface `mac` is not a valid MAC address. Rename the key to one from the table or remove it.
+
+### Credential set up for another OS
+
+The credential reads its key, password or script from a file on the daemon host, and the daemon runs a different OS from the credential's **Daemon OS**, so the daemon skipped the credential. Set [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked) to the daemon's OS, or scan with a daemon on the OS the credential names.
 
 For credential loading problems, such as unreadable files and the per-session assignment summary, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).

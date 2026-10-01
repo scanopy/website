@@ -33,6 +33,7 @@ Discovery is local to one host: the daemon sees the containers on its own machin
   sudo systemctl start podman.socket
   ```
 
+- On Windows, the Podman machine running (`podman machine start`), which serves the `\\.\pipe\podman-machine-default` named pipe
 - For proxied access, a TCP endpoint in front of that socket, reachable from the daemon
 
 <Callout type="info">
@@ -58,7 +59,7 @@ Any reverse proxy that forwards to the socket works — for example an nginx pro
 
 <IntegrationFields id="Podman" transport="PodmanProxy" />
 
-The TLS fields apply to HTTPS endpoints only. Each can be entered inline or as a file path readable by the daemon.
+The TLS fields apply to HTTPS endpoints only. Each takes the PEM text with **Enter value**, or a path with **File on daemon host**. A path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
 
 ### Required API operations
 
@@ -77,15 +78,24 @@ Podman exposes a Docker-compatible API, and Scanopy uses that compatibility laye
 
 ## Podman Socket
 
-The daemon connects directly to the Podman socket on its own host, automatically, whenever it's accessible. It looks in this order:
+The daemon connects directly to the Podman socket on its own host, automatically, whenever it's accessible. It uses the first of these that exists:
 
-1. The `CONTAINER_HOST` environment variable, when it points at a `unix://` socket path
-2. The rootful socket: `/run/podman/podman.sock`
-3. The rootless socket: `$XDG_RUNTIME_DIR/podman/podman.sock`
+1. The socket or pipe the `CONTAINER_HOST` environment variable names with `unix://` or `npipe://`
+2. On Linux, macOS and BSD, the rootful socket `/run/podman/podman.sock`, then the rootless socket `$XDG_RUNTIME_DIR/podman/podman.sock`
+3. On Windows, the Podman machine's named pipe `\\.\pipe\podman-machine-default`
 
-Create a **Podman Socket** credential only when your socket is somewhere else — its path overrides the auto-detection above.
+On Windows the daemon does not try `\\.\pipe\docker_engine` for Podman. If your Podman machine serves that pipe, enter it in **Socket Path**.
+
+Create a **Podman Socket** credential only when your socket or pipe is somewhere else. Its path overrides the detection above, and a blank **Socket Path** keeps it.
 
 <IntegrationFields id="Podman" transport="PodmanSocket" />
+
+**Socket Path** takes the form the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked) uses. The form shows **Daemon OS** once **Socket Path** is set, and a daemon on another OS skips the credential.
+
+| Daemon OS         | Socket Path                                                                                                            |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Linux, macOS, BSD | An absolute socket path, such as `/run/podman/podman.sock`, with or without `unix://`                                  |
+| Windows           | A named pipe, such as `\\.\pipe\podman-machine-default`, or the same pipe as `npipe:////./pipe/podman-machine-default` |
 
 Because the socket is reachable only over the daemon's own loopback, this credential type can be assigned to a daemon host and nowhere else.
 
@@ -103,6 +113,7 @@ Because the socket is reachable only over the daemon's own loopback, this creden
 1. Confirm the API socket is running: `systemctl --user status podman.socket` (rootless) or `sudo systemctl status podman.socket` (rootful)
 2. Confirm the daemon can see the socket path — check `CONTAINER_HOST`, `/run/podman/podman.sock`, and `$XDG_RUNTIME_DIR/podman/podman.sock`
 3. If the daemon and the containers run under different users, the rootless socket won't expose them — run both as the same user, or use the rootful socket
+4. On Windows, confirm `podman machine list` shows the machine running
 
 ### "Connection refused" to a proxy
 
