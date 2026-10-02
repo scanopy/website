@@ -16,9 +16,11 @@ On Linux, macOS, Windows, and FreeBSD the daemon installs as a native background
 
 Go to **Discover > Scan > Daemons** and click **Create Daemon**. The wizard walks you through:
 
-1. **Setup** — network, polling mode, and daemon name
-2. **Integrations** — optionally add [credentials](/using-scanopy/credentials/#attaching-a-credential), targeting all hosts or specific ones. They're [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan.
-3. **Install** — pick your platform and install method; the wizard builds the matching artifact for you
+1. **Setup**: operating system, network, polling mode, and daemon name
+2. **Integrations**: optionally add [credentials](/using-scanopy/credentials/#attaching-a-credential), targeting all hosts or specific ones. They're [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan.
+3. **Install**: pick the install method for that operating system; the wizard builds the matching artifact for you
+
+The operating system chosen on **Setup** becomes the [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked) of every credential created on **Integrations**: Linux, macOS and FreeBSD set it to Linux, macOS, BSD, and Windows sets it to Windows. Once you create a credential, the operating system on **Setup** is locked. Remove the wizard's credentials to change it.
 
 Finishing the wizard [provisions](/reference/daemon-identity/) the daemon: the server creates its record and mints an API key bound to it. You don't create a key yourself.
 

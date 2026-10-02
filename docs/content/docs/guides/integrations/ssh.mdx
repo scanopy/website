@@ -6,6 +6,8 @@ integration: SSH
 
 An SSH credential logs in to a host, runs a script you write, and records the JSON object the script prints as the host's system details and interfaces.
 
+The script runs as an ordinary SSH session, so it can do any work the account is allowed to do on each scan, such as clearing a cache or restarting a service, as well as reporting details. A script that reports nothing prints `{}`.
+
 <IntegrationBeta id="SSH" />
 
 <CredentialBasics id="SSH" />
@@ -15,29 +17,6 @@ An SSH credential logs in to a host, runs a script you write, and records the JS
 Your script sets what Scanopy records. It prints one JSON object, and Scanopy applies each key in this table to the host or interface field it names:
 
 <SshScriptFieldsTable />
-
-Top-level keys describe the host. Interface keys sit in objects inside a top-level `interfaces` array. Scanopy matches each interface to one it already holds by name, then by MAC, and leaves interfaces the script does not print in place.
-
-Scanopy reports keys outside this table under **Not applied** on the run and does not store them. A blank string counts as no value.
-
-A value from the script outranks what SNMP, LLDP and the other discovery protocols report for the same field, and never replaces a value someone entered in Scanopy. Each value shows **SSH script** as its source.
-
-### Scanned Host OS sets the shell the script runs in
-
-Set **Scanned Host OS** to the OS of the hosts the credential is assigned to. The daemon sends one of these commands over SSH:
-
-| Scanned Host OS   | Script source                       | Command the daemon sends                                                                                 |
-| ----------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Linux, macOS, BSD | File on scanned host                | The path in single quotes, which the login shell runs as a program                                       |
-| Linux, macOS, BSD | File on daemon host, or Enter value | The script text, which the login shell runs                                                              |
-| Windows           | File on scanned host                | `powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "<path>"`                           |
-| Windows           | File on daemon host, or Enter value | `powershell -NoProfile -NonInteractive -EncodedCommand <text>`, with the text base64-encoded as UTF-16LE |
-
-The Windows commands run under either default shell of the Windows OpenSSH server, `cmd.exe` or PowerShell. A credential covers hosts of one OS. Create a second credential for hosts of the other.
-
-### Writing the script for Linux, macOS and BSD
-
-A **File on scanned host** script runs as a program, so it needs a `#!/bin/sh` first line and the execute bit (`chmod 755`). Text from the other two sources runs in the account's login shell, the same as `ssh scanopy@HOST 'script'`. A `#!` first line is a comment to that shell, so write the text in the login shell's language.
 
 This script reads OS and hardware details on a Linux host from `/etc/os-release` and DMI:
 
@@ -69,11 +48,78 @@ To report interfaces, add an `interfaces` array:
 }
 ```
 
+Top-level keys describe the host. Interface keys sit in objects inside the top-level `interfaces` array. Scanopy matches each interface to one it already holds by name, then by MAC, and leaves interfaces the script does not print in place.
+
+Scanopy reports keys outside the table under **Not applied** on the run and does not store them. A blank string counts as no value.
+
+A value from the script outranks what SNMP, LLDP and the other discovery protocols report for the same field, and never replaces a value someone entered in Scanopy. Each value shows **SSH script** as its source.
+
+### Output rules
+
+- Exactly one JSON object on standard output, at most 64 KiB. Write diagnostics to standard error, which the run shows when the script fails.
+- Exit status 0. Any other status discards the output.
+- Each key has the type the table gives it. `speed_bps` is a number, not a string, and the status values are case-sensitive (`Up`, not `up`). One wrong type rejects the whole document.
+
+## Prerequisites
+
+- **A dedicated account on each host.** The script runs with that account's permissions, so give it only what the script needs. The Linux example script needs root for one file: `/sys/class/dmi/id/product_serial`. Grant that single command with `visudo -f /etc/sudoers.d/scanopy`:
+
+  ```
+  scanopy ALL=(root) NOPASSWD: /usr/bin/cat /sys/class/dmi/id/product_serial
+  ```
+
+  Without the rule, `sudo -n` fails, the serial prints as a blank string, and Scanopy skips it.
+
+- **A private key or a password for that account.** For a key, the public half goes in the account's `~/.ssh/authorized_keys`. On Windows, a key for an account in the Administrators group goes in `C:\ProgramData\ssh\administrators_authorized_keys` instead. For a password, the SSH server must allow password authentication.
+- **On Windows hosts, OpenSSH Server installed and running.** It is an optional Windows feature.
+- **The SSH port reachable over TCP from the daemon host.** The default is 22.
+
+## Choosing a credential type
+
+<IntegrationTransports id="SSH" />
+
+Both types run the same script and apply the same output. **SSH Key** avoids storing a reusable password and works on servers that turn password login off.
+
+Assign the credential to the hosts the script is written for. Assign it to a whole network only when the account, its key or password, and the script's commands exist on every host there that answers SSH. Each host that refuses the login reports **Login refused** on every run.
+
+## Writing and deploying the script
+
+### Deploy the script to each scanned host
+
+**Script** takes one of three sources:
+
+| Source                         | What Scanopy stores | Where the script lives                                                  |
+| ------------------------------ | ------------------- | ----------------------------------------------------------------------- |
+| File on scanned host (default) | The path            | On each scanned host                                                    |
+| File on daemon host            | The path            | On the daemon host. The daemon reads it at each scan and sends its text |
+| Enter value                    | The script text     | In the credential                                                       |
+
+Use **File on scanned host**. Deploy the script to each host with your configuration management tool, such as Ansible, Puppet or Group Policy, and enter its path, for example `/usr/local/bin/scanopy-inventory` or `C:\Scanopy\inventory.ps1`. Scanopy stores only the path, and a script update goes out with the rest of the host's configuration. The path must be absolute for the **Scanned Host OS**, and a Windows path cannot contain `"`.
+
+A **File on daemon host** path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
+
+### Scanned Host OS sets the shell the script runs in
+
+Set **Scanned Host OS** to the OS of the hosts the credential is assigned to. The daemon sends one of these commands over SSH:
+
+| Scanned Host OS   | Script source                       | Command the daemon sends                                                                                 |
+| ----------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Linux, macOS, BSD | File on scanned host                | The path in single quotes, which the login shell runs as a program                                       |
+| Linux, macOS, BSD | File on daemon host, or Enter value | The script text, which the login shell runs                                                              |
+| Windows           | File on scanned host                | `powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "<path>"`                           |
+| Windows           | File on daemon host, or Enter value | `powershell -NoProfile -NonInteractive -EncodedCommand <text>`, with the text base64-encoded as UTF-16LE |
+
+The Windows commands run under either default shell of the Windows OpenSSH server, `cmd.exe` or PowerShell. A credential covers hosts of one OS. Create a second credential for hosts of the other.
+
+### Writing the script for Linux, macOS and BSD
+
+A **File on scanned host** script runs as a program, so it needs a `#!/bin/sh` first line, like the [example above](#what-gets-discovered), and the execute bit (`chmod 755`). Text from the other two sources runs in the account's login shell, the same as `ssh scanopy@HOST 'script'`. A `#!` first line is a comment to that shell, so write the text in the login shell's language.
+
 `printf '%s'` inserts a value as-is, so a value containing `"` or `\` produces invalid JSON. Build the object with `jq -n --arg` on hosts that have `jq`.
 
 ### Writing the script for Windows
 
-PowerShell runs the script with `-NoProfile`, so profile scripts add nothing to its output. This script reads the same details from CIM and the network adapter list, and prints them with `ConvertTo-Json -Compress`, which escapes quotes and backslashes in values:
+PowerShell runs the script with `-NoProfile`, so profile scripts add nothing to its output. This script reads the same details as the Linux example from CIM and the network adapter list, and prints them with `ConvertTo-Json -Compress`, which escapes quotes and backslashes in values:
 
 ```powershell
 $os   = Get-CimInstance Win32_OperatingSystem
@@ -103,12 +149,6 @@ $interfaces = @(Get-NetAdapter -Physical | ForEach-Object {
 
 `Get-NetAdapter` writes MAC addresses with dashes, and the script converts them to colons. `Speed` is the link speed in bits per second, the number behind the `LinkSpeed` text such as `1 Gbps`. The script reports it only for adapters that are up.
 
-### Output rules
-
-- Exactly one JSON object on standard output, at most 64 KiB. Write diagnostics to standard error, which the run shows when the script fails.
-- Exit status 0. Any other status discards the output.
-- Each key has the type the table gives it. `speed_bps` is a number, not a string, and the status values are case-sensitive (`Up`, not `up`). One wrong type rejects the whole document.
-
 ### Testing the script
 
 Run the script yourself as the same account before you save the credential. These commands send it the way the daemon does:
@@ -124,43 +164,7 @@ ssh scanopy@HOST "$(cat inventory.sh)" | jq .
 ssh scanopy@HOST 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "C:\Scanopy\inventory.ps1"' | jq .
 ```
 
-## Prerequisites
-
-- **A dedicated account on each host.** The script runs with that account's permissions, so give it only what the script reads. The Linux example script needs root for one file: `/sys/class/dmi/id/product_serial`. Grant that single command with `visudo -f /etc/sudoers.d/scanopy`:
-
-  ```
-  scanopy ALL=(root) NOPASSWD: /usr/bin/cat /sys/class/dmi/id/product_serial
-  ```
-
-  Without the rule, `sudo -n` fails, the serial prints as a blank string, and Scanopy skips it.
-
-- **A private key or a password for that account.** For a key, the public half goes in the account's `~/.ssh/authorized_keys`. On Windows, a key for an account in the Administrators group goes in `C:\ProgramData\ssh\administrators_authorized_keys` instead. For a password, the SSH server must allow password authentication.
-- **On Windows hosts, OpenSSH Server installed and running.** It is an optional Windows feature.
-- **The SSH port reachable over TCP from the daemon host.** The default is 22.
-
-## Choosing a credential type
-
-<IntegrationTransports id="SSH" />
-
-Both types run the same script and apply the same output. **SSH Key** avoids storing a reusable password and works on servers that turn password login off.
-
-Assign the credential to the hosts the script is written for. Assign it to a whole network only when the account, its key or password, and the script's commands exist on every host there that answers SSH. Each host that refuses the login reports **Login refused** on every run.
-
-### Deploy the script to each scanned host
-
-**Script** takes one of three sources:
-
-| Source                         | What Scanopy stores | Where the script lives                                                  |
-| ------------------------------ | ------------------- | ----------------------------------------------------------------------- |
-| File on scanned host (default) | The path            | On each scanned host                                                    |
-| File on daemon host            | The path            | On the daemon host. The daemon reads it at each scan and sends its text |
-| Enter value                    | The script text     | In the credential                                                       |
-
-Use **File on scanned host**. Deploy the script to each host with your configuration management tool, such as Ansible, Puppet or Group Policy, and enter its path, for example `/usr/local/bin/scanopy-inventory` or `C:\Scanopy\inventory.ps1`. Scanopy stores only the path, and a script update goes out with the rest of the host's configuration. The path must be absolute for the **Scanned Host OS**, and a Windows path cannot contain `"`.
-
-A **File on daemon host** path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
-
-### Host key checking
+## Host key checking
 
 Scanopy checks the host key on every run, before it sends any credentials:
 
@@ -242,6 +246,7 @@ The script exited 0, but its output is not one JSON object with the types the ta
 - A value containing an unescaped `"` or `\`
 - Extra text on standard output, such as a login banner or a message from `/etc/profile` or `~/.bashrc`
 - A number in quotes for `speed_bps`, or a status value in the wrong case
+- No output at all, from a script that does other work and reports nothing. Print `{}`
 
 Run the script with a command from [Testing the script](#testing-the-script) to see the exact output.
 
