@@ -18,23 +18,25 @@ Your script sets what Scanopy records. It prints one JSON object, and Scanopy ap
 
 <SshScriptFieldsTable />
 
-This script reads OS and hardware details on a Linux host from `/etc/os-release` and DMI:
+This script reads OS and hardware details on a Linux host from `/etc/os-release`, `uname` and DMI:
 
 ```sh
 #!/bin/sh
 . /etc/os-release
 dmi() { cat "/sys/class/dmi/id/$1" 2>/dev/null; }
-printf '{"hostname":"%s","sys_descr":"%s %s","manufacturer":"%s","model":"%s","serial_number":"%s","firmware_revision":"%s","software_revision":"%s"}\n' \
-  "$(hostname -f)" "$PRETTY_NAME" "$(uname -r)" \
+printf '{"hostname":"%s","os":{"family":"Linux","name":"%s","version":"%s","codename":"%s","kernel_version":"%s"},"manufacturer":"%s","model":"%s","serial_number":"%s","firmware_revision":"%s"}\n' \
+  "$(hostname -f)" "$NAME" "$VERSION_ID" "$VERSION_CODENAME" "$(uname -r)" \
   "$(dmi sys_vendor)" "$(dmi product_name)" "$(sudo -n cat /sys/class/dmi/id/product_serial)" \
-  "$(dmi bios_version)" "$VERSION_ID"
+  "$(dmi bios_version)"
 ```
 
 On a Debian 12 server it prints:
 
 ```json
-{"hostname":"nas-01.example.lan","sys_descr":"Debian GNU/Linux 12 (bookworm) 6.1.0-18-amd64","manufacturer":"Supermicro","model":"X11SCL-F","serial_number":"ZM19AS012345","firmware_revision":"2.1","software_revision":"12"}
+{"hostname":"nas-01.example.lan","os":{"family":"Linux","name":"Debian GNU/Linux","version":"12","codename":"bookworm","kernel_version":"6.1.0-18-amd64"},"manufacturer":"Supermicro","model":"X11SCL-F","serial_number":"ZM19AS012345","firmware_revision":"2.1"}
 ```
+
+`os` is an object rather than a string. `family` is required and is one of Scanopy's OS families, such as `Linux`, `Windows`, `MacOs` or `FreeBsd`. `name`, `version`, `edition`, `codename` and `kernel_version` are optional. An `os` whose `family` Scanopy does not recognize is reported as invalid on the run, and the script's other keys are still applied. Daemons older than v0.17.20 do not read `os` and list it under **Not applied**.
 
 To report interfaces, add an `interfaces` array:
 
@@ -137,12 +139,15 @@ $interfaces = @(Get-NetAdapter -Physical | ForEach-Object {
 })
 [ordered]@{
     hostname          = [System.Net.Dns]::GetHostName()
-    sys_descr         = "$($os.Caption) $($os.Version)"
+    os                = [ordered]@{
+        family  = 'Windows'
+        name    = $os.Caption
+        version = $os.Version
+    }
     manufacturer      = $cs.Manufacturer
     model             = $cs.Model
     serial_number     = $bios.SerialNumber
     firmware_revision = $bios.SMBIOSBIOSVersion
-    software_revision = $os.Version
     interfaces        = $interfaces
 } | ConvertTo-Json -Compress -Depth 3
 ```
