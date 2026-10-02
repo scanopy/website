@@ -56,7 +56,8 @@
             "optional": true,
             "help_text": "PEM-encoded client certificate. All three TLS fields (cert, key, CA chain) must be provided together.",
             "inline_format": "pemcertificate",
-            "group": "TLS"
+            "group": "TLS",
+            "file_name": "cert.pem"
           },
           {
             "id": "ssl_key",
@@ -66,7 +67,8 @@
             "optional": true,
             "help_text": "PEM private key. All three TLS fields must be provided together.",
             "inline_format": "pemprivatekey",
-            "group": "TLS"
+            "group": "TLS",
+            "file_name": "key.pem"
           },
           {
             "id": "ssl_chain",
@@ -77,7 +79,8 @@
             "optional": true,
             "help_text": "PEM-encoded CA certificate chain. All three TLS fields must be provided together.",
             "inline_format": "pemcertificate",
-            "group": "TLS"
+            "group": "TLS",
+            "file_name": "ca.pem"
           }
         ]
       },
@@ -100,9 +103,16 @@
             "label": "Socket Path",
             "field_type": "string",
             "placeholder": "/var/run/docker.sock",
+            "placeholder_by": [
+              {
+                "depends_on": "daemon_os",
+                "value": "Windows",
+                "placeholder": "\\\\.\\pipe\\docker_engine"
+              }
+            ],
             "secret": false,
             "optional": true,
-            "help_text": "Path to the Docker Unix socket. Leave blank to auto-detect (DOCKER_HOST or /var/run/docker.sock).",
+            "help_text": "The Docker socket on Unix, or its named pipe on Windows. Leave blank to auto-detect (DOCKER_HOST or /var/run/docker.sock on Unix, the docker_engine pipe on Windows).",
             "group": "Connection"
           }
         ]
@@ -153,7 +163,8 @@
             "optional": false,
             "help_text": "Password for that portal account.",
             "inline_format": "plain",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "instant-on-password"
           },
           {
             "id": "site",
@@ -226,7 +237,8 @@
             "optional": true,
             "help_text": "PEM-encoded client certificate. All three TLS fields (cert, key, CA chain) must be provided together.",
             "inline_format": "pemcertificate",
-            "group": "TLS"
+            "group": "TLS",
+            "file_name": "cert.pem"
           },
           {
             "id": "ssl_key",
@@ -236,7 +248,8 @@
             "optional": true,
             "help_text": "PEM private key. All three TLS fields must be provided together.",
             "inline_format": "pemprivatekey",
-            "group": "TLS"
+            "group": "TLS",
+            "file_name": "key.pem"
           },
           {
             "id": "ssl_chain",
@@ -247,7 +260,8 @@
             "optional": true,
             "help_text": "PEM-encoded CA certificate chain. All three TLS fields must be provided together.",
             "inline_format": "pemcertificate",
-            "group": "TLS"
+            "group": "TLS",
+            "file_name": "ca.pem"
           }
         ]
       },
@@ -270,9 +284,16 @@
             "label": "Socket Path",
             "field_type": "string",
             "placeholder": "/run/podman/podman.sock",
+            "placeholder_by": [
+              {
+                "depends_on": "daemon_os",
+                "value": "Windows",
+                "placeholder": "\\\\.\\pipe\\podman-machine-default"
+              }
+            ],
             "secret": false,
             "optional": true,
-            "help_text": "Path to the Podman Unix socket. Leave blank to auto-detect (rootful /run/podman/podman.sock or the rootless $XDG_RUNTIME_DIR/podman/podman.sock).",
+            "help_text": "The Podman socket on Unix, or Podman machine's named pipe on Windows. Leave blank to auto-detect (CONTAINER_HOST, then the rootful and rootless sockets on Unix or the podman-machine-default pipe on Windows).",
             "group": "Connection"
           }
         ]
@@ -315,7 +336,8 @@
             "secret": true,
             "optional": false,
             "help_text": "Custom SNMP community string. The default 'public' community is always tried automatically during scans. On Cisco switches, append '@' and a VLAN id — for example 'readonly@20' — to read that VLAN's MAC-address table, which the plain community does not return.",
-            "inline_format": "plain"
+            "inline_format": "plain",
+            "file_name": "snmp-community"
           }
         ]
       },
@@ -343,7 +365,8 @@
             "secret": true,
             "optional": false,
             "help_text": "Custom SNMP community string. The default 'public' community is always tried automatically during scans. On Cisco switches, append '@' and a VLAN id — for example 'readonly@20' — to read that VLAN's MAC-address table, which the plain community does not return.",
-            "inline_format": "plain"
+            "inline_format": "plain",
+            "file_name": "snmp-community"
           }
         ]
       },
@@ -401,7 +424,8 @@
             "optional": false,
             "help_text": "Authentication password (minimum 8 characters).",
             "inline_format": "plain",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "snmpv3-auth-password"
           },
           {
             "id": "priv_protocol",
@@ -431,7 +455,8 @@
             "optional": false,
             "help_text": "Privacy (encryption) password (minimum 8 characters).",
             "inline_format": "plain",
-            "group": "Privacy"
+            "group": "Privacy",
+            "file_name": "snmpv3-priv-password"
           },
           {
             "id": "context_name",
@@ -501,7 +526,8 @@
             "optional": false,
             "help_text": "OpenSSH (ssh-keygen's default) or PEM private key whose public key is in the account's authorized_keys.",
             "inline_format": "sshprivatekey",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "ssh-key"
           },
           {
             "id": "passphrase",
@@ -511,17 +537,46 @@
             "optional": true,
             "help_text": "Only if the private key is encrypted.",
             "inline_format": "plain",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "ssh-key-passphrase"
+          },
+          {
+            "id": "target_os",
+            "label": "Scanned Host OS",
+            "field_type": "radio",
+            "secret": false,
+            "optional": false,
+            "help_text": "Sets how the script runs, in the login shell on Linux, macOS and BSD or in PowerShell on Windows, and the path format for a file on the scanned host.",
+            "options": [
+              {
+                "value": "Unix",
+                "label": "Linux, macOS, BSD"
+              },
+              {
+                "value": "Windows",
+                "label": "Windows"
+              }
+            ],
+            "default_value": "Unix",
+            "group": "Script"
           },
           {
             "id": "script",
             "label": "Script",
-            "field_type": "text",
-            "placeholder": "#!/bin/sh\nprintf '{\"model\": \"%s\"}' \"$(cat /sys/class/dmi/id/product_name)\"",
+            "field_type": "scriptsource",
+            "placeholder": "/usr/local/bin/scanopy-inventory.sh",
+            "placeholder_by": [
+              {
+                "depends_on": "target_os",
+                "value": "Windows",
+                "placeholder": "C:\\Scanopy\\scanopy-inventory.ps1"
+              }
+            ],
             "secret": false,
             "optional": false,
-            "help_text": "Runs on the host at each scan. It must print one JSON object whose keys are host fields, such as hostname, model or serial_number, and optionally an interfaces list. See the SSH integration guide for every key.",
-            "group": "Script"
+            "help_text": "Runs at each scan. Must print one JSON object of host fields.",
+            "group": "Script",
+            "file_name": "scanopy-inventory.sh"
           },
           {
             "id": "timeout_seconds",
@@ -589,17 +644,46 @@
             "optional": false,
             "help_text": "Password for that account. The server must allow password authentication.",
             "inline_format": "plain",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "ssh-password"
+          },
+          {
+            "id": "target_os",
+            "label": "Scanned Host OS",
+            "field_type": "radio",
+            "secret": false,
+            "optional": false,
+            "help_text": "Sets how the script runs, in the login shell on Linux, macOS and BSD or in PowerShell on Windows, and the path format for a file on the scanned host.",
+            "options": [
+              {
+                "value": "Unix",
+                "label": "Linux, macOS, BSD"
+              },
+              {
+                "value": "Windows",
+                "label": "Windows"
+              }
+            ],
+            "default_value": "Unix",
+            "group": "Script"
           },
           {
             "id": "script",
             "label": "Script",
-            "field_type": "text",
-            "placeholder": "#!/bin/sh\nprintf '{\"model\": \"%s\"}' \"$(cat /sys/class/dmi/id/product_name)\"",
+            "field_type": "scriptsource",
+            "placeholder": "/usr/local/bin/scanopy-inventory.sh",
+            "placeholder_by": [
+              {
+                "depends_on": "target_os",
+                "value": "Windows",
+                "placeholder": "C:\\Scanopy\\scanopy-inventory.ps1"
+              }
+            ],
             "secret": false,
             "optional": false,
-            "help_text": "Runs on the host at each scan. It must print one JSON object whose keys are host fields, such as hostname, model or serial_number, and optionally an interfaces list. See the SSH integration guide for every key.",
-            "group": "Script"
+            "help_text": "Runs at each scan. Must print one JSON object of host fields.",
+            "group": "Script",
+            "file_name": "scanopy-inventory.sh"
           },
           {
             "id": "timeout_seconds",
@@ -683,7 +767,8 @@
             "optional": false,
             "help_text": "Network Application API key (Settings → Control Plane → Integrations → Create API Key). Requires UniFi OS; the legacy self-hosted Network Application on 8443 has no API keys — use a UniFi Local Admin credential there instead.",
             "inline_format": "plain",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "unifi-api-key"
           }
         ]
       },
@@ -741,7 +826,8 @@
             "optional": false,
             "help_text": "Password for the local admin account.",
             "inline_format": "plain",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "unifi-password"
           }
         ]
       }
@@ -801,7 +887,7 @@
             "placeholder": "90",
             "secret": false,
             "optional": true,
-            "help_text": "How long to wait for the hosts to come up before the scan starts. Allow for disks spinning up and services starting.",
+            "help_text": "How long the daemon waits after sending the packets before the scan starts. Hosts the scan finds count as woken. Allow for disks spinning up and services starting.",
             "default_value": "90",
             "group": "Delivery"
           },
@@ -814,7 +900,8 @@
             "optional": true,
             "help_text": "Only for network cards configured to require one. Six bytes written as a MAC address.",
             "inline_format": "macaddress",
-            "group": "Delivery"
+            "group": "Delivery",
+            "file_name": "secureon-password"
           }
         ]
       }
@@ -877,7 +964,8 @@
             "optional": false,
             "help_text": "Sent as gRPC `password` metadata.",
             "inline_format": "plain",
-            "group": "Authentication"
+            "group": "Authentication",
+            "file_name": "gnmi-password"
           }
         ]
       }
