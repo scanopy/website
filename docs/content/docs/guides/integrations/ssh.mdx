@@ -92,7 +92,7 @@ Assign the credential to the hosts the script is written for. Assign it to a who
 | ------------------------------ | ------------------- | ----------------------------------------------------------------------- |
 | File on scanned host (default) | The path            | On each scanned host                                                    |
 | File on daemon host            | The path            | On the daemon host. The daemon reads it at each scan and sends its text |
-| Enter value                    | The script text     | In the credential                                                       |
+| Enter value                    | The script text     | In the Scanopy server database                                          |
 
 Use **File on scanned host**. Deploy the script to each host with your configuration management tool, such as Ansible, Puppet or Group Policy, and enter its path, for example `/usr/local/bin/scanopy-inventory` or `C:\Scanopy\inventory.ps1`. Scanopy stores only the path, and a script update goes out with the rest of the host's configuration. The path must be absolute for the **Scanned Host OS**, and a Windows path cannot contain `"`.
 
