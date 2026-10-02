@@ -94,7 +94,7 @@ Assign the credential to the hosts the script is written for. Assign it to a who
 | File on daemon host            | The path            | On the daemon host. The daemon reads it at each scan and sends its text |
 | Enter value                    | The script text     | In the Scanopy server database                                          |
 
-Use **File on scanned host**. Deploy the script to each host with your configuration management tool, such as Ansible, Puppet or Group Policy, and enter its path, for example `/usr/local/bin/scanopy-inventory` or `C:\Scanopy\inventory.ps1`. Scanopy stores only the path, and a script update goes out with the rest of the host's configuration. The path must be absolute for the **Scanned Host OS**, and a Windows path cannot contain `"`.
+Use **File on scanned host**. Deploy the script to each host with your configuration management tool, such as Ansible, Puppet or Group Policy, and enter its path, for example `/usr/local/bin/scanopy-inventory.sh` or `C:\Scanopy\scanopy-inventory.ps1`. Scanopy stores only the path, and a script update goes out with the rest of the host's configuration. The path must be absolute for the **Scanned Host OS**, and a Windows path cannot contain `"`.
 
 A **File on daemon host** path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
 
@@ -155,13 +155,13 @@ Run the script yourself as the same account before you save the credential. Thes
 
 ```bash
 # File on scanned host, Linux, macOS, BSD
-ssh scanopy@HOST /usr/local/bin/scanopy-inventory | jq .
+ssh scanopy@HOST /usr/local/bin/scanopy-inventory.sh | jq .
 
 # File on daemon host or Enter value, Linux, macOS, BSD
-ssh scanopy@HOST "$(cat inventory.sh)" | jq .
+ssh scanopy@HOST "$(cat scanopy-inventory.sh)" | jq .
 
 # File on scanned host, Windows
-ssh scanopy@HOST 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "C:\Scanopy\inventory.ps1"' | jq .
+ssh scanopy@HOST 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "C:\Scanopy\scanopy-inventory.ps1"' | jq .
 ```
 
 ## Host key checking
