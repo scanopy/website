@@ -82,9 +82,9 @@ Both types run the same script and apply the same output. **SSH Key** avoids sto
 
 Assign the credential to the hosts the script is written for. Assign it to a whole network only when the account, its key or password, and the script's commands exist on every host there that answers SSH. Each host that refuses the login reports **Login refused** on every run.
 
-## Writing and deploying the script
+### Writing and deploying the script
 
-### Deploy the script to each scanned host
+#### Deploy the script to each scanned host
 
 **Script** takes one of three sources:
 
@@ -98,7 +98,7 @@ Use **File on scanned host**. Deploy the script to each host with your configura
 
 A **File on daemon host** path must be absolute for the credential's [Daemon OS](/using-scanopy/credentials/#daemon-os-sets-how-file-paths-are-checked), and `~` is not expanded.
 
-### Scanned Host OS sets the shell the script runs in
+#### Scanned Host OS sets the shell the script runs in
 
 Set **Scanned Host OS** to the OS of the hosts the credential is assigned to. The daemon sends one of these commands over SSH:
 
@@ -111,13 +111,13 @@ Set **Scanned Host OS** to the OS of the hosts the credential is assigned to. Th
 
 The Windows commands run under either default shell of the Windows OpenSSH server, `cmd.exe` or PowerShell. A credential covers hosts of one OS. Create a second credential for hosts of the other.
 
-### Writing the script for Linux, macOS and BSD
+#### Writing the script for Linux, macOS and BSD
 
 A **File on scanned host** script runs as a program, so it needs a `#!/bin/sh` first line, like the [example above](#what-gets-discovered), and the execute bit (`chmod 755`). Text from the other two sources runs in the account's login shell, the same as `ssh scanopy@HOST 'script'`. A `#!` first line is a comment to that shell, so write the text in the login shell's language.
 
 `printf '%s'` inserts a value as-is, so a value containing `"` or `\` produces invalid JSON. Build the object with `jq -n --arg` on hosts that have `jq`.
 
-### Writing the script for Windows
+#### Writing the script for Windows
 
 PowerShell runs the script with `-NoProfile`, so profile scripts add nothing to its output. This script reads the same details as the Linux example from CIM and the network adapter list, and prints them with `ConvertTo-Json -Compress`, which escapes quotes and backslashes in values:
 
@@ -149,7 +149,7 @@ $interfaces = @(Get-NetAdapter -Physical | ForEach-Object {
 
 `Get-NetAdapter` writes MAC addresses with dashes, and the script converts them to colons. `Speed` is the link speed in bits per second, the number behind the `LinkSpeed` text such as `1 Gbps`. The script reports it only for adapters that are up.
 
-### Testing the script
+#### Testing the script
 
 Run the script yourself as the same account before you save the credential. These commands send it the way the daemon does:
 
@@ -164,7 +164,7 @@ ssh scanopy@HOST "$(cat scanopy-inventory.sh)" | jq .
 ssh scanopy@HOST 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "C:\Scanopy\scanopy-inventory.ps1"' | jq .
 ```
 
-## Host key checking
+### Host key checking
 
 Scanopy checks the host key on every run, before it sends any credentials:
 
