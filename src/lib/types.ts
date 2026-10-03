@@ -60,6 +60,8 @@ export interface ServiceDefinition {
 	logo_url: string;
 	color: string;
 	logo_needs_white_background?: boolean;
+	/** Lucide icon name (kebab-case) the app shows when there is no logo. */
+	icon?: string;
 }
 
 /**
@@ -117,6 +119,12 @@ export interface Integration {
 	logo_ext: string;
 	logo_slug: string;
 	logo_needs_white_background: boolean;
+	/** A protocol (SNMP, SSH) rather than a vendor's product. The fixture lists these last. */
+	is_generic: boolean;
+	/** Lucide icon name (kebab-case) the app shows when there is no logo. */
+	icon: string;
+	/** App colour for the fallback icon ("Yellow"). */
+	color: string;
 	discovers: string;
 	/** Guide for this integration, root-relative and trailing-slashed. */
 	docs_path: string;

@@ -25,4 +25,5 @@ yarn-error.log*
 .vercel
 next-env.d.ts
 openapi-processed.json
+public/logos/
 content/docs/api/

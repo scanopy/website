@@ -2,6 +2,7 @@
 	import type { Integration, IntegrationTransport } from '$lib/types';
 	import { Tag } from '$lib/components';
 	import { analytics } from '$lib/analytics.svelte';
+	import { createColorHelper, createIconComponent } from '$lib/utils/styling';
 
 	let { data } = $props();
 	const integrations: Integration[] = data.integrations;
@@ -42,14 +43,12 @@
 		return integration.transports.every(isBeta);
 	}
 
-	const categories = [...new Set(integrations.map((i) => i.category))].sort((a, b) =>
-		a.localeCompare(b)
-	);
+	// Fixture order: vendor integrations before generic ones, so a category holding only
+	// generic integrations sorts last.
+	const categories = [...new Set(integrations.map((i) => i.category))];
 
 	function byCategory(category: string): Integration[] {
-		return integrations
-			.filter((i) => i.category === category)
-			.sort((a, b) => a.name.localeCompare(b.name));
+		return integrations.filter((i) => i.category === category);
 	}
 
 	const description = `Scanopy integrates with ${integrations
@@ -133,9 +132,8 @@
 												height="28"
 											/>
 										{:else}
-											<span class="text-xl font-bold text-gray-400">
-												{integration.name.charAt(0)}
-											</span>
+											{@const Icon = createIconComponent(integration.icon ?? null)}
+											<Icon class="h-7 w-7 {createColorHelper(integration.color ?? null).icon}" />
 										{/if}
 									</div>
 

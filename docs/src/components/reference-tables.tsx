@@ -6,12 +6,12 @@ import views from '$lib/fixtures/views.json';
 import warningCodes from '$lib/fixtures/warning-codes.json';
 import warningRemedies from '$lib/fixtures/warning-remedies.json';
 import type { TypeMetadata } from '$lib/types';
-import * as LucideIcons from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { FieldsTable } from '@/components/field-table';
+import { IntegrationIcon } from '@/components/integration-icon';
 import { Tag, type TagColor } from '@/components/tag';
-import { allIntegrations, type FieldDefinition } from '@/lib/integrations';
+import { iconFor } from '@/lib/icons';
+import { allIntegrations, type FieldDefinition, type Integration } from '@/lib/integrations';
 import { source } from '@/lib/source';
 
 /**
@@ -149,6 +149,7 @@ export function DiscoverySources() {
 								const url = urls.get(integration.id);
 								return (
 									<li key={integration.id}>
+										<IntegrationIcon integration={integration} size={16} className="mr-1.5" />
 										{url ? <Link href={url}>{integration.name}</Link> : integration.name} —{' '}
 										{integration.discovers}
 									</li>
@@ -162,28 +163,27 @@ export function DiscoverySources() {
 }
 
 /**
- * Inline, comma-separated links to every integration guide.
+ * A bulleted list of links to every integration guide.
  *
- * For sentences that would otherwise carry a hand-kept list of integration
- * names. Resolved the same way as `DiscoverySources` — from each guide's
- * `integration` frontmatter — so adding an integration extends the sentence and
- * removing one can't leave a dead link behind.
+ * Replaces a hand-kept list of integration names. Resolved the same way as
+ * `DiscoverySources` — from each guide's `integration` frontmatter — so adding an
+ * integration extends the list and removing one can't leave a dead link behind.
  */
 export function IntegrationGuideLinks() {
 	const urls = guideUrls();
 	const links = allIntegrations
-		.map((i) => ({ name: i.name, url: urls.get(i.id) }))
-		.filter((l): l is { name: string; url: string } => Boolean(l.url));
+		.map((integration) => ({ integration, url: urls.get(integration.id) }))
+		.filter((l): l is { integration: Integration; url: string } => Boolean(l.url));
 
 	return (
-		<>
-			{links.map((l, i) => (
-				<span key={l.url}>
-					{i > 0 && (i === links.length - 1 ? ', and ' : ', ')}
-					<Link href={l.url}>{l.name}</Link>
-				</span>
+		<ul>
+			{links.map((l) => (
+				<li key={l.url}>
+					<IntegrationIcon integration={l.integration} size={16} className="mr-1.5" />
+					<Link href={l.url}>{l.integration.name}</Link>
+				</li>
 			))}
-		</>
+		</ul>
 	);
 }
 
@@ -252,16 +252,6 @@ export function SshScriptFieldsTable() {
 			</table>
 		</div>
 	);
-}
-
-/** `octagon-alert` → the `OctagonAlert` component `lucide-react` exports. */
-function iconFor(name: string | null): LucideIcon | undefined {
-	if (!name) return undefined;
-	const componentName = name
-		.split('-')
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join('');
-	return (LucideIcons as unknown as Record<string, LucideIcon>)[componentName];
 }
 
 /**

@@ -42,7 +42,7 @@ Components that render them (`docs/src/components/`, registered in `docs/src/mdx
 | Component                                                                                   | Renders                                                         |
 | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | `<DiscoverySources />`                                                                      | Every integration grouped by category, with what each discovers |
-| `<IntegrationGuideLinks />`                                                                 | Inline links to every integration guide                         |
+| `<IntegrationGuideLinks />`                                                                 | A bulleted list of links to every integration guide             |
 | `<IntegrationTransports id="…" />`                                                          | An integration's credential types, targets, daemon floor        |
 | `<IntegrationFields id="…" transport="…" />`                                                | A credential type's fields, defaults, help text                 |
 | `<IntegrationBeta id="…" />`                                                                | Beta notice — renders only if a transport is Beta               |

@@ -7,6 +7,9 @@
     "logo_ext": "svg",
     "logo_slug": "docker",
     "logo_needs_white_background": false,
+    "is_generic": false,
+    "icon": "box",
+    "color": "Blue",
     "discovers": "Discover Docker containers and the services they expose.",
     "docs_path": "/docs/guides/integrations/docker/",
     "summary": "Discover Docker containers and the services they expose. Supports proxy and socket.",
@@ -127,6 +130,9 @@
     "logo_ext": "svg",
     "logo_slug": "instant-on",
     "logo_needs_white_background": false,
+    "is_generic": false,
+    "icon": "cable",
+    "color": "Green",
     "discovers": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port.",
     "docs_path": "/docs/guides/integrations/instant-on/",
     "summary": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port. Supports portal account.",
@@ -188,6 +194,9 @@
     "logo_ext": "svg",
     "logo_slug": "podman",
     "logo_needs_white_background": false,
+    "is_generic": false,
+    "icon": "box",
+    "color": "Blue",
     "discovers": "Discover Podman containers and the services they expose.",
     "docs_path": "/docs/guides/integrations/podman/",
     "summary": "Discover Podman containers and the services they expose. Supports proxy and socket.",
@@ -301,6 +310,209 @@
     ]
   },
   {
+    "id": "UniFi Controller",
+    "name": "UniFi Controller",
+    "category": "Network Controllers",
+    "has_logo": true,
+    "logo_ext": "svg",
+    "logo_slug": "unifi-controller",
+    "logo_needs_white_background": false,
+    "is_generic": false,
+    "icon": "cable",
+    "color": "Green",
+    "discovers": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees.",
+    "docs_path": "/docs/guides/integrations/unifi/",
+    "summary": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees. Supports api key and local admin.",
+    "transports": [
+      {
+        "id": "UnifiApiKey",
+        "name": "API Key",
+        "display_name": "UniFi API Key",
+        "description": "Connects with a controller API key. Requires UniFi OS; the legacy self-hosted Network Application does not support API keys.",
+        "requires_config": true,
+        "single_endpoint_per_host": true,
+        "targets": [
+          "DaemonHost",
+          "Hosts"
+        ],
+        "stability": "Stable",
+        "upstream_support": "Undocumented",
+        "minimum_daemon_version": "0.17.7",
+        "fields": [
+          {
+            "id": "port",
+            "label": "Controller Port",
+            "field_type": "port",
+            "placeholder": "443",
+            "secret": false,
+            "optional": true,
+            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
+            "default_value": "443",
+            "group": "Connection"
+          },
+          {
+            "id": "site",
+            "label": "Site",
+            "field_type": "string",
+            "placeholder": "default",
+            "secret": false,
+            "optional": true,
+            "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
+            "default_value": "default",
+            "group": "Connection"
+          },
+          {
+            "id": "api_key",
+            "label": "API Key",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Network Application API key (Settings → Control Plane → Integrations → Create API Key). Requires UniFi OS; the legacy self-hosted Network Application on 8443 has no API keys — use a UniFi Local Admin credential there instead.",
+            "inline_format": "plain",
+            "group": "Authentication",
+            "file_name": "unifi-api-key"
+          }
+        ]
+      },
+      {
+        "id": "UnifiLocalAdmin",
+        "name": "Local Admin",
+        "display_name": "UniFi Local Admin",
+        "description": "Connects with a local admin account. Works with every controller, including the legacy self-hosted Network Application.",
+        "requires_config": true,
+        "single_endpoint_per_host": true,
+        "targets": [
+          "DaemonHost",
+          "Hosts"
+        ],
+        "stability": "Stable",
+        "upstream_support": "Undocumented",
+        "minimum_daemon_version": "0.17.7",
+        "fields": [
+          {
+            "id": "port",
+            "label": "Controller Port",
+            "field_type": "port",
+            "placeholder": "443",
+            "secret": false,
+            "optional": true,
+            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
+            "default_value": "443",
+            "group": "Connection"
+          },
+          {
+            "id": "site",
+            "label": "Site",
+            "field_type": "string",
+            "placeholder": "default",
+            "secret": false,
+            "optional": true,
+            "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
+            "default_value": "default",
+            "group": "Connection"
+          },
+          {
+            "id": "username",
+            "label": "Username",
+            "field_type": "string",
+            "secret": false,
+            "optional": false,
+            "help_text": "Controller admin username. Use a local-only admin account so multi-factor authentication does not block the login.",
+            "group": "Authentication"
+          },
+          {
+            "id": "password",
+            "label": "Password",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "Password for the local admin account.",
+            "inline_format": "plain",
+            "group": "Authentication",
+            "file_name": "unifi-password"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Wake-on-LAN",
+    "name": "Wake-on-LAN",
+    "category": "Host Management",
+    "has_logo": false,
+    "logo_ext": "",
+    "logo_slug": "wake-on-lan",
+    "logo_needs_white_background": false,
+    "is_generic": false,
+    "icon": "power",
+    "color": "Amber",
+    "discovers": "Wake sleeping hosts before a scan so they are discovered.",
+    "docs_path": "/docs/guides/integrations/wake-on-lan/",
+    "summary": "Wake sleeping hosts before a scan so they are discovered. Supports magic packet.",
+    "transports": [
+      {
+        "id": "WakeOnLan",
+        "name": "Magic Packet",
+        "display_name": "Wake-on-LAN",
+        "description": "Sends a magic packet over UDP. The daemon must be on the host's network segment, or the router must forward directed broadcasts or relay the packet.",
+        "requires_config": true,
+        "single_endpoint_per_host": false,
+        "targets": [
+          "Hosts"
+        ],
+        "stability": "Beta",
+        "upstream_support": "Vendor",
+        "minimum_daemon_version": "0.17.19",
+        "fields": [
+          {
+            "id": "port",
+            "label": "UDP Port",
+            "field_type": "port",
+            "placeholder": "9",
+            "secret": false,
+            "optional": true,
+            "help_text": "Most network cards accept the packet on any port. Change it only if a router relay rule listens on another port, commonly 7.",
+            "default_value": "9",
+            "group": "Delivery"
+          },
+          {
+            "id": "broadcast_address",
+            "label": "Broadcast Address",
+            "field_type": "string",
+            "placeholder": "(host's subnet broadcast)",
+            "secret": false,
+            "optional": true,
+            "help_text": "Leave blank to send to the broadcast address of each host's subnet, which reaches it when the daemon is on the same network segment or the router forwards directed broadcasts. Otherwise enter where to send it instead: a router address with a relay rule, a Wake-on-LAN relay device, or 255.255.255.255.",
+            "group": "Delivery"
+          },
+          {
+            "id": "wait_seconds",
+            "label": "Wait (seconds)",
+            "field_type": "number",
+            "placeholder": "90",
+            "secret": false,
+            "optional": true,
+            "help_text": "How long the daemon waits after sending the packets before the scan starts. Hosts the scan finds count as woken. Allow for disks spinning up and services starting.",
+            "default_value": "90",
+            "group": "Delivery"
+          },
+          {
+            "id": "secure_on_password",
+            "label": "SecureOn Password",
+            "field_type": "secretpathorinline",
+            "placeholder": "01:23:45:67:89:ab",
+            "secret": true,
+            "optional": true,
+            "help_text": "Only for network cards configured to require one. Six bytes written as a MAC address.",
+            "inline_format": "macaddress",
+            "group": "Delivery",
+            "file_name": "secureon-password"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "SNMP",
     "name": "SNMP",
     "category": "Network Monitoring",
@@ -308,6 +520,9 @@
     "logo_ext": "",
     "logo_slug": "snmp",
     "logo_needs_white_background": false,
+    "is_generic": true,
+    "icon": "activity",
+    "color": "Yellow",
     "discovers": "Discover a host's interfaces, system details, and CDP/LLDP neighbors.",
     "docs_path": "/docs/guides/integrations/snmp/",
     "summary": "Discover a host's interfaces, system details, and CDP/LLDP neighbors. Supports v1, v2c, and v3.",
@@ -479,6 +694,9 @@
     "logo_ext": "",
     "logo_slug": "ssh",
     "logo_needs_white_background": false,
+    "is_generic": true,
+    "icon": "square-terminal",
+    "color": "Amber",
     "discovers": "Run your own script on a host and record the system details and interfaces it reports.",
     "docs_path": "/docs/guides/integrations/ssh/",
     "summary": "Run your own script on a host and record the system details and interfaces it reports. Supports key and password.",
@@ -711,203 +929,6 @@
     ]
   },
   {
-    "id": "UniFi Controller",
-    "name": "UniFi Controller",
-    "category": "Network Controllers",
-    "has_logo": true,
-    "logo_ext": "svg",
-    "logo_slug": "unifi-controller",
-    "logo_needs_white_background": false,
-    "discovers": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees.",
-    "docs_path": "/docs/guides/integrations/unifi/",
-    "summary": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees. Supports api key and local admin.",
-    "transports": [
-      {
-        "id": "UnifiApiKey",
-        "name": "API Key",
-        "display_name": "UniFi API Key",
-        "description": "Connects with a controller API key. Requires UniFi OS; the legacy self-hosted Network Application does not support API keys.",
-        "requires_config": true,
-        "single_endpoint_per_host": true,
-        "targets": [
-          "DaemonHost",
-          "Hosts"
-        ],
-        "stability": "Stable",
-        "upstream_support": "Undocumented",
-        "minimum_daemon_version": "0.17.7",
-        "fields": [
-          {
-            "id": "port",
-            "label": "Controller Port",
-            "field_type": "port",
-            "placeholder": "443",
-            "secret": false,
-            "optional": true,
-            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
-            "default_value": "443",
-            "group": "Connection"
-          },
-          {
-            "id": "site",
-            "label": "Site",
-            "field_type": "string",
-            "placeholder": "default",
-            "secret": false,
-            "optional": true,
-            "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
-            "default_value": "default",
-            "group": "Connection"
-          },
-          {
-            "id": "api_key",
-            "label": "API Key",
-            "field_type": "secretpathorinline",
-            "secret": true,
-            "optional": false,
-            "help_text": "Network Application API key (Settings → Control Plane → Integrations → Create API Key). Requires UniFi OS; the legacy self-hosted Network Application on 8443 has no API keys — use a UniFi Local Admin credential there instead.",
-            "inline_format": "plain",
-            "group": "Authentication",
-            "file_name": "unifi-api-key"
-          }
-        ]
-      },
-      {
-        "id": "UnifiLocalAdmin",
-        "name": "Local Admin",
-        "display_name": "UniFi Local Admin",
-        "description": "Connects with a local admin account. Works with every controller, including the legacy self-hosted Network Application.",
-        "requires_config": true,
-        "single_endpoint_per_host": true,
-        "targets": [
-          "DaemonHost",
-          "Hosts"
-        ],
-        "stability": "Stable",
-        "upstream_support": "Undocumented",
-        "minimum_daemon_version": "0.17.7",
-        "fields": [
-          {
-            "id": "port",
-            "label": "Controller Port",
-            "field_type": "port",
-            "placeholder": "443",
-            "secret": false,
-            "optional": true,
-            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
-            "default_value": "443",
-            "group": "Connection"
-          },
-          {
-            "id": "site",
-            "label": "Site",
-            "field_type": "string",
-            "placeholder": "default",
-            "secret": false,
-            "optional": true,
-            "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
-            "default_value": "default",
-            "group": "Connection"
-          },
-          {
-            "id": "username",
-            "label": "Username",
-            "field_type": "string",
-            "secret": false,
-            "optional": false,
-            "help_text": "Controller admin username. Use a local-only admin account so multi-factor authentication does not block the login.",
-            "group": "Authentication"
-          },
-          {
-            "id": "password",
-            "label": "Password",
-            "field_type": "secretpathorinline",
-            "secret": true,
-            "optional": false,
-            "help_text": "Password for the local admin account.",
-            "inline_format": "plain",
-            "group": "Authentication",
-            "file_name": "unifi-password"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "Wake-on-LAN",
-    "name": "Wake-on-LAN",
-    "category": "Host Management",
-    "has_logo": false,
-    "logo_ext": "",
-    "logo_slug": "wake-on-lan",
-    "logo_needs_white_background": false,
-    "discovers": "Wake sleeping hosts before a scan so they are discovered.",
-    "docs_path": "/docs/guides/integrations/wake-on-lan/",
-    "summary": "Wake sleeping hosts before a scan so they are discovered. Supports magic packet.",
-    "transports": [
-      {
-        "id": "WakeOnLan",
-        "name": "Magic Packet",
-        "display_name": "Wake-on-LAN",
-        "description": "Sends a magic packet over UDP. The daemon must be on the host's network segment, or the router must forward directed broadcasts or relay the packet.",
-        "requires_config": true,
-        "single_endpoint_per_host": false,
-        "targets": [
-          "Hosts"
-        ],
-        "stability": "Beta",
-        "upstream_support": "Vendor",
-        "minimum_daemon_version": "0.17.19",
-        "fields": [
-          {
-            "id": "port",
-            "label": "UDP Port",
-            "field_type": "port",
-            "placeholder": "9",
-            "secret": false,
-            "optional": true,
-            "help_text": "Most network cards accept the packet on any port. Change it only if a router relay rule listens on another port, commonly 7.",
-            "default_value": "9",
-            "group": "Delivery"
-          },
-          {
-            "id": "broadcast_address",
-            "label": "Broadcast Address",
-            "field_type": "string",
-            "placeholder": "(host's subnet broadcast)",
-            "secret": false,
-            "optional": true,
-            "help_text": "Leave blank to send to the broadcast address of each host's subnet, which reaches it when the daemon is on the same network segment or the router forwards directed broadcasts. Otherwise enter where to send it instead: a router address with a relay rule, a Wake-on-LAN relay device, or 255.255.255.255.",
-            "group": "Delivery"
-          },
-          {
-            "id": "wait_seconds",
-            "label": "Wait (seconds)",
-            "field_type": "number",
-            "placeholder": "90",
-            "secret": false,
-            "optional": true,
-            "help_text": "How long the daemon waits after sending the packets before the scan starts. Hosts the scan finds count as woken. Allow for disks spinning up and services starting.",
-            "default_value": "90",
-            "group": "Delivery"
-          },
-          {
-            "id": "secure_on_password",
-            "label": "SecureOn Password",
-            "field_type": "secretpathorinline",
-            "placeholder": "01:23:45:67:89:ab",
-            "secret": true,
-            "optional": true,
-            "help_text": "Only for network cards configured to require one. Six bytes written as a MAC address.",
-            "inline_format": "macaddress",
-            "group": "Delivery",
-            "file_name": "secureon-password"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "gNMI",
     "name": "gNMI",
     "category": "Network Monitoring",
@@ -915,6 +936,9 @@
     "logo_ext": "",
     "logo_slug": "gnmi",
     "logo_needs_white_background": false,
+    "is_generic": true,
+    "icon": "cable",
+    "color": "Yellow",
     "discovers": "Discover a host's interfaces and LLDP neighbors over gNMI (OpenConfig).",
     "docs_path": "/docs/guides/integrations/gnmi/",
     "summary": "Discover a host's interfaces and LLDP neighbors over gNMI (OpenConfig). Supports gnmi.",

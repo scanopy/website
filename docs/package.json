@@ -3,8 +3,9 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"prebuild": "cp ../src/lib/fixtures/openapi.json ./openapi.json && node scripts/generate-api-docs.mjs && node scripts/check-integration-guides.mjs",
+		"prebuild": "cp ../src/lib/fixtures/openapi.json ./openapi.json && node scripts/generate-api-docs.mjs && node scripts/check-integration-guides.mjs && node scripts/copy-integration-logos.mjs",
 		"build": "next build",
+		"predev": "node scripts/copy-integration-logos.mjs",
 		"dev": "next dev",
 		"start": "next start",
 		"types:check": "fumadocs-mdx && next typegen && tsc --noEmit",

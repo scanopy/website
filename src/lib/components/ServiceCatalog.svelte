@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Search, ChevronDown, ChevronRight } from 'lucide-svelte';
 	import type { ServiceDefinition } from '$lib/types';
-	import { createColorHelper } from '$lib/utils/styling';
+	import { createColorHelper, createIconComponent } from '$lib/utils/styling';
 	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
 	import { analytics } from '$lib/analytics.svelte';
 
@@ -211,9 +211,8 @@
 											}}
 										/>
 									{:else}
-										<span class="text-lg font-bold text-gray-500">
-											{service.name.charAt(0)}
-										</span>
+										{@const Icon = createIconComponent(service.icon ?? null)}
+										<Icon class="h-6 w-6 {createColorHelper(service.color || null).icon}" />
 									{/if}
 								</div>
 

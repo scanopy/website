@@ -1,5 +1,5 @@
 import { CredentialScopes } from '@/components/credential-scopes';
-import { StabilityTag, UnofficialApiTag } from '@/components/integration-tables';
+import { IntegrationIcon } from '@/components/integration-icon';
 import { allIntegrations } from '@/lib/integrations';
 
 /**
@@ -25,6 +25,7 @@ export function CredentialTypesTable() {
 							<tr key={transport.id}>
 								{i === 0 && (
 									<td rowSpan={integration.transports.length} className="whitespace-nowrap">
+										<IntegrationIcon integration={integration} className="mr-2" />
 										<strong>{integration.name}</strong>
 									</td>
 								)}
@@ -32,11 +33,7 @@ export function CredentialTypesTable() {
 								    `${integration.name} ${transport.name}` used to name a type
 								    that does not exist: the service is "UniFi Controller" but
 								    the credential is "UniFi API Key". */}
-								<td className="whitespace-nowrap">
-									{transport.display_name}
-									<StabilityTag stability={transport.stability} />
-									<UnofficialApiTag upstreamSupport={transport.upstream_support} />
-								</td>
+								<td className="whitespace-nowrap">{transport.display_name}</td>
 								{i === 0 && (
 									<td rowSpan={integration.transports.length}>{integration.discovers}</td>
 								)}

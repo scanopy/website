@@ -1,5 +1,6 @@
 import { getPageImage, source } from '@/lib/source';
 import { DocsBody, DocsPage, DocsTitle } from 'fumadocs-ui/layouts/docs/page';
+import { IntegrationIcon } from '@/components/integration-icon';
 import { MarkdownDescription } from '@/components/markdown-description';
 import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
@@ -15,7 +16,14 @@ export default async function Page(props: PageProps<'/[[...slug]]'>) {
 
 	return (
 		<DocsPage toc={page.data.toc} full={page.data.full}>
-			<DocsTitle>{page.data.title}</DocsTitle>
+			{page.data.integration ? (
+				<DocsTitle className="flex items-center gap-3">
+					<IntegrationIcon id={page.data.integration} size={32} />
+					{page.data.title}
+				</DocsTitle>
+			) : (
+				<DocsTitle>{page.data.title}</DocsTitle>
+			)}
 			<MarkdownDescription>{page.data.description}</MarkdownDescription>
 			<DocsBody>
 				<MDX
