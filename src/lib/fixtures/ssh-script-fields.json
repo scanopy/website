@@ -92,8 +92,22 @@
     "scope": "Host",
     "value_type": "string",
     "target_field": "software_revision",
-    "description": "Operating system or software version.",
-    "example": "12.5"
+    "description": "Software version, as ENTITY-MIB entPhysicalSoftwareRev reports it.",
+    "example": "4.2.1"
+  },
+  {
+    "key": "os",
+    "scope": "Host",
+    "value_type": "object",
+    "target_field": "os",
+    "description": "The operating system: an object with family (required, such as Linux, Windows or MacOs) and optional name, version, edition, codename and kernel_version.",
+    "example": {
+      "codename": "bookworm",
+      "family": "Linux",
+      "kernel_version": "6.1.0-18-amd64",
+      "name": "Debian GNU/Linux",
+      "version": "12"
+    }
   },
   {
     "key": "management_url",
