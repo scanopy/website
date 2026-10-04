@@ -1,10 +1,10 @@
 ---
 title: Set up Docker discovery
-description: How Scanopy discovers Docker containers — the default local socket, plus using a socket proxy for restricted access or remote hosts.
+description: How Scanopy discovers Docker containers through the local socket with a Docker Socket credential, or through a socket proxy for restricted access or remote hosts.
 integration: Docker
 ---
 
-Scanopy daemons discover Docker containers by connecting to the Docker API. On the daemon's own host that happens automatically; reaching a restricted API, or one on another machine, needs a proxy.
+Scanopy daemons discover Docker containers by connecting to the Docker API. On the daemon's own host, a **Docker Socket** credential connects it to the local socket. Reaching a restricted API, or one on another machine, needs a **Docker Proxy** credential.
 
 <IntegrationBeta id="Docker" />
 
@@ -36,8 +36,8 @@ Discovery is local to one host: the daemon sees the containers on its own machin
 
 | Situation | Use |
 | --------- | --- |
-| Daemon runs on the Docker host and may hold full API access | Nothing — the local socket is used automatically |
-| Daemon runs on the Docker host, but the socket is at a non-default path | **Docker Socket** |
+| Daemon runs on the Docker host and may hold full API access | **Docker Socket**, with **Socket Path** left blank |
+| Daemon runs on the Docker host, but the socket is at a non-default path | **Docker Socket**, with that path in **Socket Path** |
 | You want to restrict which API operations the daemon can call | **Docker Proxy**, with the proxy on the same host |
 | Docker runs on a machine with no daemon | **Docker Proxy**, with the proxy on that machine |
 
@@ -122,12 +122,14 @@ Whatever proxy you use, allow these endpoints:
 
 ## Docker Socket
 
-The daemon connects directly to the Docker API on its own host whenever it's accessible, with no credential:
+A **Docker Socket** credential connects the daemon directly to the Docker API on its own host. Add it on the **Integration Setup** step when you create the daemon, or to a scan in the Discovery modal. The daemon doesn't read the local socket without one.
+
+With **Socket Path** left blank, the daemon uses:
 
 - **Linux, macOS, BSD:** the socket `DOCKER_HOST` names, or `/var/run/docker.sock`
 - **Windows:** the `\\.\pipe\docker_engine` named pipe
 
-Create a **Docker Socket** credential only to point the daemon at a different socket or pipe. A blank **Socket Path** keeps the detection above.
+Enter a **Socket Path** only when the socket or pipe is somewhere else. It replaces the defaults above.
 
 <IntegrationFields id="Docker" transport="DockerSocket" />
 

@@ -1,10 +1,10 @@
 ---
 title: Set up Podman discovery
-description: How Scanopy discovers Podman containers and pods, via the local socket or a remote Podman API proxy.
+description: How Scanopy discovers Podman containers and pods through the local socket with a Podman Socket credential, or through a remote Podman API proxy.
 integration: Podman
 ---
 
-Scanopy daemons discover Podman containers by connecting to the Podman API. On the daemon's own host that happens automatically; reaching a restricted API, or one on another machine, needs a proxy.
+Scanopy daemons discover Podman containers by connecting to the Podman API. On the daemon's own host, a **Podman Socket** credential connects it to the local socket. Reaching a restricted API, or one on another machine, needs a **Podman Proxy** credential.
 
 <IntegrationBeta id="Podman" />
 
@@ -50,8 +50,8 @@ Discovery is local to one host: the daemon sees the containers on its own machin
 
 | Situation | Use |
 | --------- | --- |
-| Daemon runs on the Podman host and the socket is in a standard location | Nothing — the socket is auto-detected |
-| Daemon runs on the Podman host, but the socket is elsewhere | **Podman Socket** |
+| Daemon runs on the Podman host and the socket is in a standard location | **Podman Socket**, with **Socket Path** left blank |
+| Daemon runs on the Podman host, but the socket is elsewhere | **Podman Socket**, with that path in **Socket Path** |
 | You want to restrict which API operations the daemon can call | **Podman Proxy**, with the proxy on the same host |
 | Podman runs on a machine with no daemon | **Podman Proxy**, with the proxy on that machine |
 
@@ -82,7 +82,9 @@ Podman exposes a Docker-compatible API, and Scanopy uses that compatibility laye
 
 ## Podman Socket
 
-The daemon connects directly to the Podman socket on its own host, automatically, whenever it's accessible. It uses the first of these that exists:
+A **Podman Socket** credential connects the daemon directly to the Podman socket on its own host. Add it on the **Integration Setup** step when you create the daemon, or to a scan in the Discovery modal. The daemon doesn't read the local socket without one.
+
+With **Socket Path** left blank, the daemon uses the first of these that exists:
 
 1. The socket or pipe the `CONTAINER_HOST` environment variable names with `unix://` or `npipe://`
 2. On Linux, macOS and BSD, the rootful socket `/run/podman/podman.sock`, then the rootless socket `$XDG_RUNTIME_DIR/podman/podman.sock`
@@ -90,7 +92,7 @@ The daemon connects directly to the Podman socket on its own host, automatically
 
 On Windows the daemon does not try `\\.\pipe\docker_engine` for Podman. If your Podman machine serves that pipe, enter it in **Socket Path**.
 
-Create a **Podman Socket** credential only when your socket or pipe is somewhere else. Its path overrides the detection above, and a blank **Socket Path** keeps it.
+Enter a **Socket Path** only when your socket or pipe is somewhere else. It replaces the detection above.
 
 <IntegrationFields id="Podman" transport="PodmanSocket" />
 
