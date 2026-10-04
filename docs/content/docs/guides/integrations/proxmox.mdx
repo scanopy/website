@@ -1,0 +1,137 @@
+---
+title: Set up Proxmox VE discovery
+description: Connect a Proxmox VE cluster so Scanopy discovers its nodes and the VMs and LXC containers on each, with their addresses and the node they run on.
+integration: Proxmox VE
+---
+
+A Proxmox VE cluster keeps a list of every node and every guest it runs. Scanopy reads that list through the Proxmox VE API and records each node and guest as a host, with each guest linked to the node that runs it.
+
+<IntegrationBeta id="Proxmox VE" />
+
+<CredentialBasics id="Proxmox VE" />
+
+Any node's API answers for the whole cluster, so the credential goes on one Proxmox VE node, or on the daemon host when the daemon runs on a node. Assigning it to more than one node does no harm. Each node reports the same cluster, and the results land on the same hosts.
+
+## What gets discovered
+
+On each scan, the daemon reads the cluster's node and guest lists:
+
+| From the cluster | Becomes |
+| ---------------- | ------- |
+| Each node | A host named after the node, with a **Proxmox VE** service |
+| Each QEMU VM and LXC container | A host, linked to the **Proxmox VE** service of the node it runs on |
+| VM addresses from the QEMU guest agent | The VM host's IP addresses, with each NIC's MAC |
+| LXC container interfaces, or the static `ip=` in its config | The container host's IP addresses, with each NIC's MAC |
+| The guest name set in Proxmox VE | The host's name, shown as authored by Proxmox VE. See [Host Naming](/using-scanopy/discovery/naming-and-deduplication/#host-naming) |
+| Interfaces the guest agent reports beyond the VM's configured NICs, each with its own MAC and a LAN address (macvlan links, virtual IPs) | A host per interface, tagged **Network identity** and linked to a **Network Identities** service on the guest. See [Network Identities](/using-scanopy/network-data/#network-identities) |
+
+Guests appear grouped under their node in the [Workloads perspective](/using-scanopy/topology/workloads).
+
+Templates are skipped. Every other guest is recorded, with whatever addresses the API reports for it:
+
+| Guest | Address source |
+| ----- | -------------- |
+| Running VM with `qemu-guest-agent` installed and the **QEMU Guest Agent** option on | The guest agent |
+| Running LXC container | The container's interfaces |
+| VM with a cloud-init static address, or LXC container with a static `ip=` | The guest's config |
+| Stopped VM, or a VM without the guest agent and with DHCP | None. The guest is recorded by its NIC's MAC |
+
+The guest host records only addresses on the guest's own NICs. Container bridges such as `docker0`, tunnels such as WireGuard, and loopback are left out. An interface with its own MAC and a LAN address becomes a network identity host instead. A guest recorded by its MAC alone gains its address when a network scan finds it, and stays one host.
+
+## Prerequisites
+
+- Proxmox VE 8.x or 9.x
+- A daemon running version 0.17.21 or later
+- TCP port 8006 open from the daemon host to the node the credential is assigned to
+- A dedicated Proxmox VE user and API token with read access to the cluster (see below)
+- The daemon accepts the node's certificate (see below)
+
+### Create the user and token
+
+Run these as root on any node:
+
+```bash
+pveum user add scanopy@pve --comment "Scanopy discovery"
+pveum role add ScanopyGuestAgent --privs "VM.GuestAgent.Audit"
+pveum acl modify / --users scanopy@pve --roles PVEAuditor
+pveum acl modify / --users scanopy@pve --roles ScanopyGuestAgent
+pveum user token add scanopy@pve discovery --privsep 0
+```
+
+On Proxmox VE 8.x, create the role with `--privs "VM.Monitor"` instead. `VM.GuestAgent.Audit` exists only on 9.x.
+
+The last command prints the token secret once. Copy it before closing the terminal.
+
+To do the same in the web interface, go to **Datacenter → Permissions**. Add the user under **Users**, the role under **Roles**, the token under **API Tokens**, and both role assignments on `/` under **Permissions**.
+
+With privilege separation on (`--privsep 1`, or **Privilege Separation** checked in the web interface), the token holds its own permissions. Grant both ACLs to the token instead of the user:
+
+```bash
+pveum acl modify / --tokens 'scanopy@pve!discovery' --roles PVEAuditor
+pveum acl modify / --tokens 'scanopy@pve!discovery' --roles ScanopyGuestAgent
+```
+
+| Privilege | Comes from | Used for |
+| --------- | ---------- | -------- |
+| `Sys.Audit` | PVEAuditor on `/` | Node addresses from `/cluster/status` |
+| `VM.Audit` | PVEAuditor on `/` | Guest configs and the cluster resource list |
+| `VM.GuestAgent.Audit` (9.x) or `VM.Monitor` (8.x) | The custom role | VM addresses from the guest agent |
+
+### Certificates
+
+Each node serves a self-signed certificate issued by the cluster's own CA. The daemon accepts it in either of two ways:
+
+| Option | Setting |
+| ------ | ------- |
+| Accept any certificate | **Accept Invalid Scan Certificates** (`SCANOPY_ACCEPT_INVALID_SCAN_CERTS`), on by default |
+| Keep verification on and trust the cluster CA | Copy `/etc/pve/pve-root-ca.pem` from a node to the daemon host and point [`SCANOPY_TRUSTED_CA_BUNDLE`](/reference/daemon-configuration/#trusted-ca-certificates) at it |
+
+## Choosing a credential type
+
+Proxmox VE has one credential type.
+
+<IntegrationTransports id="Proxmox VE" />
+
+## Proxmox VE API Token
+
+The daemon connects to the node's API over HTTPS and sends the token with each request. Tokens hold no session, and they expire only if you set an expiry when creating them.
+
+<IntegrationFields id="Proxmox VE" transport="ProxmoxApiToken" />
+
+**Token ID** is the full ID in the form `user@realm!tokenname`, such as `scanopy@pve!discovery`. **Token Secret** is the UUID Proxmox VE shows once at creation. It takes the value with **Enter value**, or a path to a file holding it with **File on daemon host**.
+
+## Verifying it works
+
+1. Run a discovery from **Discover > Scan > Scheduled**
+2. Open the scan session. The credential appears in the session's credential summary
+3. Check **Assets > Hosts** for a host per node, each with a **Proxmox VE** service
+4. Check **Assets > Hosts** for the running VMs and containers, named as in Proxmox VE
+5. Open the [Workloads perspective](/using-scanopy/topology/workloads) and confirm the guests appear under their node
+
+## Troubleshooting
+
+### The token is rejected
+
+The node returns 401 when the token ID or secret is wrong, or the token has expired. Check the **Token ID** includes both the user and the token name (`scanopy@pve!discovery`, not `scanopy@pve`). Check the token's expiry under **Datacenter → Permissions → API Tokens**. A lost secret cannot be shown again. Remove the token and create a new one.
+
+### Guests appear without a link to their node
+
+The scan reports a partial result for **Proxmox VE nodes**. The token lacks `Sys.Audit`, so the daemon cannot read node addresses from `/cluster/status`, and guests on a multi-node cluster are recorded without their node. Grant PVEAuditor on `/` to the user, or to the token when privilege separation is on.
+
+### VMs have no addresses
+
+A running VM's address comes from the QEMU guest agent, or from a cloud-init static address. Without either, the VM is recorded by its MAC until a network scan finds its address. For the agent, check each of these:
+
+1. `qemu-guest-agent` is installed and running inside the VM
+2. The VM's **Options → QEMU Guest Agent** is on, and the VM was restarted after turning it on
+3. The token has `VM.GuestAgent.Audit` on Proxmox VE 9.x, or `VM.Monitor` on 8.x
+
+### Certificate errors
+
+The node's self-signed certificate fails verification. Turn on **Accept Invalid Scan Certificates** for the daemon, or add `/etc/pve/pve-root-ca.pem` to its `SCANOPY_TRUSTED_CA_BUNDLE`. See [Certificates](#certificates).
+
+### Other nodes are missing, or their guests are not linked
+
+The daemon records the node it queries at the address it scanned. It records every other node at the cluster address `/cluster/status` reports. When that address sits on a dedicated corosync network outside any subnet Scanopy knows, the node is not recorded, its guests lose their link to it, and the scan reports a partial result for **Proxmox VE nodes**. Assign the credential to each node, so each one is recorded at its scanned address, or make the corosync network reachable from the daemon.
+
+For diagnosing credential loading and file read errors from daemon logs, see [Credential troubleshooting](/setting-up-daemons/troubleshooting-scans/credentials/).

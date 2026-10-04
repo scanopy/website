@@ -58,8 +58,10 @@ Two consequences worth stating outright:
   There is no link table to maintain, and a guide missing that field renders as plain text
   rather than linking somewhere wrong.
 
-Known gap: `using-scanopy/network-data.mdx` still hardcodes the virtualization list
-(Proxmox / vCenter / Docker / Podman) because scanopy has no fixture for it yet.
+- **Which integrations report which virtualization relationship comes from the fixture's
+  `host_virtualizations`** (`IntegrationsReporting`, `VirtualizationRelationships`). Scanopy
+  checks every host an integration submits against that declaration, so a list built from it
+  follows the product.
 
 ### One fact, one home
 

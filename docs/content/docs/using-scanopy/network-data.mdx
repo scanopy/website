@@ -33,14 +33,30 @@ Ports discovered without a matching service definition are assigned to an "Uncla
 
 Useful when Scanopy detects an open port but can't identify the service running on it.
 
+### Network Identities
+
+A host can present addresses and MACs on the network from its own interfaces, beyond its configured NICs. Common sources:
+
+- macvlan shim interfaces on Docker hosts
+- keepalived virtual IPs
+- a service given its own LAN address
+- network or SNMP simulators that answer as separate devices
+
+Scanopy records each identity as its own host, linked to a "Network Identities" service on the host that presents it and to the interface it sits on. Like "Unclaimed Open Ports", this service is a placeholder, not a running service. It holds the link between the host and the addresses it presents.
+
+Each identity host carries a **Network identity** tag and appears nested under the host that presents it in the [Workloads perspective](/using-scanopy/topology/workloads). Scanopy does not classify what an identity is. An emulated device, a virtual IP and a second address of the host all look the same from the host's interface list. The identity's own data, such as an SNMP sysName, shows what it presents itself as.
+
+These integrations report network identities. Each guide lists what the integration needs to see them:
+
+<IntegrationsReporting virtualization="NetworkIdentity" />
+
 ### Virtualization Relationships
 
-Scanopy tracks which VMs and containers run on which hosts:
+Scanopy tracks which VMs and containers run on which hosts. These integrations record the relationships:
 
-- **Proxmox**: Links VMs and LXC containers to their Proxmox host
-- **vCenter / ESXi**: Links virtual machines to their VMware vCenter or ESXi hypervisor
-- **Docker**: Links containers to their Docker host
-- **Podman**: Links containers to their Podman host
+<VirtualizationRelationships />
+
+You can also assign a host to any hypervisor or container runtime service by hand, from the host's Virtualization settings.
 
 These relationships appear in the topology and host details, showing your virtualization hierarchy. The [Workloads perspective](/using-scanopy/topology/workloads) provides a dedicated view of this hierarchy.
 

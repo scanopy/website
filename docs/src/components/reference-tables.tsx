@@ -170,10 +170,7 @@ export function DiscoverySources() {
  * integration extends the list and removing one can't leave a dead link behind.
  */
 export function IntegrationGuideLinks() {
-	const urls = guideUrls();
-	const links = allIntegrations
-		.map((integration) => ({ integration, url: urls.get(integration.id) }))
-		.filter((l): l is { integration: Integration; url: string } => Boolean(l.url));
+	const links = integrationsWithGuides();
 
 	return (
 		<ul>
@@ -184,6 +181,72 @@ export function IntegrationGuideLinks() {
 				</li>
 			))}
 		</ul>
+	);
+}
+
+/** Integrations with a guide, each paired with its guide's URL. */
+function integrationsWithGuides(): { integration: Integration; url: string }[] {
+	const urls = guideUrls();
+	return allIntegrations
+		.map((integration) => ({ integration, url: urls.get(integration.id) }))
+		.filter((l): l is { integration: Integration; url: string } => Boolean(l.url));
+}
+
+/**
+ * The integrations that report one kind of host virtualization (`"NetworkIdentity"`,
+ * `"Docker"`), as links to their guides.
+ *
+ * Read from each integration's `host_virtualizations`, which Scanopy declares per integration and
+ * checks against every host the integration submits, so the list follows the product.
+ */
+export function IntegrationsReporting({ virtualization }: { virtualization: string }) {
+	const links = integrationsWithGuides().filter((l) =>
+		l.integration.host_virtualizations.some((v) => v.id === virtualization)
+	);
+	if (links.length === 0) {
+		throw new Error(`No integration reports the "${virtualization}" virtualization.`);
+	}
+
+	return (
+		<ul>
+			{links.map((l) => (
+				<li key={l.url}>
+					<IntegrationIcon integration={l.integration} size={16} className="mr-1.5" />
+					<Link href={l.url}>{l.integration.name}</Link>
+				</li>
+			))}
+		</ul>
+	);
+}
+
+/** Every integration that reports a virtualization relationship, and the kinds it reports. */
+export function VirtualizationRelationships() {
+	const rows = integrationsWithGuides().filter(
+		(l) => l.integration.host_virtualizations.length > 0
+	);
+
+	return (
+		<div className="overflow-x-auto">
+			<table>
+				<thead>
+					<tr>
+						<th>Integration</th>
+						<th>Relationships it records</th>
+					</tr>
+				</thead>
+				<tbody>
+					{rows.map((l) => (
+						<tr key={l.url}>
+							<td>
+								<IntegrationIcon integration={l.integration} size={16} className="mr-1.5" />
+								<Link href={l.url}>{l.integration.name}</Link>
+							</td>
+							<td>{l.integration.host_virtualizations.map((v) => v.name).join(', ')}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
 	);
 }
 

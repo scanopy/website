@@ -17,10 +17,12 @@ import {
 	DiscoverySources,
 	ElementRulesTable,
 	IntegrationGuideLinks,
+	IntegrationsReporting,
 	RolesTable,
 	ScanSettingsTable,
 	ScanWarningsTable,
-	SshScriptFieldsTable
+	SshScriptFieldsTable,
+	VirtualizationRelationships
 } from '@/components/reference-tables';
 import { SchemaERDiagram, SchemaFullDiagram } from '@/components/schema-diagrams';
 import { SectionCards } from '@/components/section-cards';
@@ -42,6 +44,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		IntegrationFields,
 		IntegrationUnofficialApi,
 		IntegrationGuideLinks,
+		IntegrationsReporting,
 		IntegrationTransports,
 		Mermaid,
 		RolesTable,
@@ -53,6 +56,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		SshScriptFieldsTable,
 		StaleTag,
 		StatusTag,
+		VirtualizationRelationships,
 		...components
 	};
 }

@@ -12,6 +12,12 @@
     "color": "Blue",
     "discovers": "Discover Docker containers and the services they expose.",
     "docs_path": "/docs/guides/integrations/docker/",
+    "host_virtualizations": [
+      {
+        "id": "Docker",
+        "name": "Docker"
+      }
+    ],
     "summary": "Discover Docker containers and the services they expose. Supports proxy and socket.",
     "transports": [
       {
@@ -135,6 +141,7 @@
     "color": "Green",
     "discovers": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port.",
     "docs_path": "/docs/guides/integrations/instant-on/",
+    "host_virtualizations": [],
     "summary": "Discover Instant On switches, access points and gateways, their ports, the uplinks between them, and the MACs attached to each port. Supports portal account.",
     "transports": [
       {
@@ -199,6 +206,12 @@
     "color": "Blue",
     "discovers": "Discover Podman containers and the services they expose.",
     "docs_path": "/docs/guides/integrations/podman/",
+    "host_virtualizations": [
+      {
+        "id": "Podman",
+        "name": "Podman"
+      }
+    ],
     "summary": "Discover Podman containers and the services they expose. Supports proxy and socket.",
     "transports": [
       {
@@ -310,6 +323,83 @@
     ]
   },
   {
+    "id": "Proxmox VE",
+    "name": "Proxmox VE",
+    "category": "Container & Virtualization",
+    "has_logo": true,
+    "logo_ext": "svg",
+    "logo_slug": "proxmox-ve",
+    "logo_needs_white_background": false,
+    "is_generic": false,
+    "icon": "monitor-cog",
+    "color": "Amber",
+    "discovers": "Discover Proxmox VE nodes and the VMs and LXC containers on each, with their addresses.",
+    "docs_path": "/docs/guides/integrations/proxmox/",
+    "host_virtualizations": [
+      {
+        "id": "Proxmox",
+        "name": "Proxmox"
+      },
+      {
+        "id": "NetworkIdentity",
+        "name": "Network identity"
+      }
+    ],
+    "summary": "Discover Proxmox VE nodes and the VMs and LXC containers on each, with their addresses. Supports api token.",
+    "transports": [
+      {
+        "id": "ProxmoxApiToken",
+        "name": "API Token",
+        "display_name": "Proxmox VE API Token",
+        "description": "Connects to a node's API over HTTPS with an API token.",
+        "requires_config": true,
+        "single_endpoint_per_host": true,
+        "targets": [
+          "DaemonHost",
+          "Hosts"
+        ],
+        "stability": "Beta",
+        "upstream_support": "Vendor",
+        "minimum_daemon_version": "0.17.21",
+        "fields": [
+          {
+            "id": "port",
+            "label": "API Port",
+            "field_type": "port",
+            "placeholder": "8006",
+            "secret": false,
+            "optional": true,
+            "help_text": "The port the Proxmox VE web interface and API listen on. 8006 unless a reverse proxy sits in front of it.",
+            "default_value": "8006",
+            "group": "Connection"
+          },
+          {
+            "id": "token_id",
+            "label": "Token ID",
+            "field_type": "string",
+            "placeholder": "scanopy@pve!discovery",
+            "secret": false,
+            "optional": false,
+            "help_text": "The full token ID, user@realm!tokenname (Datacenter → Permissions → API Tokens). Give the token the PVEAuditor role on / and, for VM addresses from the guest agent, VM.GuestAgent.Audit on Proxmox VE 9 or VM.Monitor on 8. Assign the credential to one node: its API answers for the whole cluster.",
+            "inline_format": "proxmoxtokenid",
+            "group": "Authentication"
+          },
+          {
+            "id": "token_secret",
+            "label": "Token Secret",
+            "field_type": "secretpathorinline",
+            "secret": true,
+            "optional": false,
+            "help_text": "The secret shown once when the token is created, a UUID.",
+            "inline_format": "plain",
+            "group": "Authentication",
+            "file_name": "proxmox-token-secret"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "UniFi Controller",
     "name": "UniFi Controller",
     "category": "Network Controllers",
@@ -322,6 +412,7 @@
     "color": "Green",
     "discovers": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees.",
     "docs_path": "/docs/guides/integrations/unifi/",
+    "host_virtualizations": [],
     "summary": "Discover UniFi-managed switches, access points and gateways, their ports, and the LLDP neighbors and uplinks the controller sees. Supports api key and local admin.",
     "transports": [
       {
@@ -448,6 +539,7 @@
     "color": "Amber",
     "discovers": "Wake sleeping hosts before a scan so they are discovered.",
     "docs_path": "/docs/guides/integrations/wake-on-lan/",
+    "host_virtualizations": [],
     "summary": "Wake sleeping hosts before a scan so they are discovered. Supports magic packet.",
     "transports": [
       {
@@ -525,6 +617,7 @@
     "color": "Yellow",
     "discovers": "Discover a host's interfaces, system details, and CDP/LLDP neighbors.",
     "docs_path": "/docs/guides/integrations/snmp/",
+    "host_virtualizations": [],
     "summary": "Discover a host's interfaces, system details, and CDP/LLDP neighbors. Supports v1, v2c, and v3.",
     "transports": [
       {
@@ -699,6 +792,7 @@
     "color": "Amber",
     "discovers": "Run your own script on a host and record the system details and interfaces it reports.",
     "docs_path": "/docs/guides/integrations/ssh/",
+    "host_virtualizations": [],
     "summary": "Run your own script on a host and record the system details and interfaces it reports. Supports key and password.",
     "transports": [
       {
@@ -941,6 +1035,7 @@
     "color": "Yellow",
     "discovers": "Discover a host's interfaces and LLDP neighbors over gNMI (OpenConfig).",
     "docs_path": "/docs/guides/integrations/gnmi/",
+    "host_virtualizations": [],
     "summary": "Discover a host's interfaces and LLDP neighbors over gNMI (OpenConfig). Supports gnmi.",
     "transports": [
       {

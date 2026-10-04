@@ -17,7 +17,7 @@ See [Networks](/using-scanopy/organization/#networks) for where this fits among 
 
 ## What can go stale
 
-Only what discovery manages: hosts, services, and subnets it found and keeps re-observing, along with the physical links between interfaces. Anything you created by hand never goes stale, since there's no scan timestamp to judge it against.
+Only what discovery manages: hosts, services, subnets, and IP addresses it found and keeps re-observing, along with the physical links between interfaces. Anything you created by hand never goes stale, since there's no scan timestamp to judge it against.
 
 Every entity is judged on **its own** last-seen time, independently of its parent. A service on a host that's gone quiet is stale only if that service hasn't been seen within the window — a recently observed service on an otherwise-dark host reads as current, and vice versa.
 
@@ -27,4 +27,5 @@ A physical link is judged on when the neighbor report behind it last arrived, no
 
 - **Lists** — hosts, services, and subnets carry a <StaleTag /> badge past their window, with a **Stale only** filter and sorting by last-seen.
 - **Topology** — stale nodes carry a <StaleTag /> tag and a "last seen" detail. A **By staleness** filter (Current / Stale) fades everything else. See [Customizing Views](/using-scanopy/topology/customizing-views/).
+- **Host addresses** — each address in a host's editor and in the topology inspector carries its own <StaleTag /> tag. An address the host no longer answers on shows Stale while the host stays current.
 - **Physical links** — a stale link carries a <StaleTag /> tag beside its label in [L2 Physical](/using-scanopy/topology/l2-physical/). Selecting it shows a **Neighbor report** detail with how long ago that report last arrived.

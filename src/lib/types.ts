@@ -128,6 +128,11 @@ export interface Integration {
 	discovers: string;
 	/** Guide for this integration, root-relative and trailing-slashed. */
 	docs_path: string;
+	/**
+	 * The kinds of host virtualization this integration reports (VMs, containers, network
+	 * identities), declared per integration in Scanopy and checked against what it submits.
+	 */
+	host_virtualizations: { id: string; name: string }[];
 	summary: string;
 	transports: IntegrationTransport[];
 }

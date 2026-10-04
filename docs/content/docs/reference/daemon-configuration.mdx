@@ -66,7 +66,7 @@ Any `SCANOPY_` variable can be read from a file instead: set `SCANOPY_<NAME>_FIL
 
 ### `--trusted-ca-bundle` / `SCANOPY_TRUSTED_CA_BUNDLE`
 
-A PEM file of CA certificates the daemon trusts in addition to its built-in public roots. It applies to the daemon's connection to the Scanopy server and to the UniFi controller integration. Use it when either one has a certificate from a private CA, so certificate verification stays on.
+A PEM file of CA certificates the daemon trusts in addition to its built-in public roots. It applies to the daemon's connection to the Scanopy server and to the UniFi controller and Proxmox VE integrations. Use it when any of them has a certificate from a private CA, such as a Proxmox VE cluster's own CA, so certificate verification stays on.
 
 The path refers to a file on the daemon host. `install` saves it to the config file. If the file is missing or contains no usable CA certificate, the daemon does not start, and the error names the path.
 
