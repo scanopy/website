@@ -39,7 +39,7 @@ All of these cost nothing to run. What differs is the license, which matters if 
 
 ## Self-hosting is free on license and costs you the operations
 
-Running one of these yourself means no license cost. It also means you run the database, apply the updates, and own the backups. The trade is operational: you spend engineering time instead of license money. For a homelab or a team that already runs its own stack, that is a fair trade. If you would rather not run the stack yourself, [Scanopy Cloud](/pricing) is hosted and managed. If you want to stay self-hosted but past the Community Edition's single-network limit, the [commercial license](/commercial) raises them to 50 networks on Standard and 100 on Plus.
+Running one of these yourself means no license cost. It also means you run the database, apply the updates, and own the backups. The trade is operational: you spend engineering time instead of license money. For a homelab or a team that already runs its own stack, that is a fair trade. If you would rather not run the stack yourself, [Scanopy Cloud](/pricing) is hosted and managed. If you want to stay self-hosted but past the Community Edition's single-site limit, the [commercial license](/commercial) raises them to 50 sites on Standard and 100 on Plus.
 
 ## NetBox is open source but does not draw a map
 

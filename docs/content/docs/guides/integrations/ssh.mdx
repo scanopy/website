@@ -82,7 +82,7 @@ A value from the script outranks what SNMP, LLDP and the other discovery protoco
 
 Both types run the same script and apply the same output. **SSH Key** avoids storing a reusable password and works on servers that turn password login off.
 
-Assign the credential to the hosts the script is written for. Assign it to a whole network only when the account, its key or password, and the script's commands exist on every host there that answers SSH. Each host that refuses the login reports **Login refused** on every run.
+Assign the credential to the hosts the script is written for. Assign it to a whole site only when the account, its key or password, and the script's commands exist on every host there that answers SSH. Each host that refuses the login reports **Login refused** on every run.
 
 ### Writing and deploying the script
 
@@ -196,7 +196,7 @@ Enter the account's password in **Password**, or choose **File on daemon host** 
 
 ## Verifying it works
 
-1. Run the network's discovery from **Discover > Scans**, or wait for its next scheduled run
+1. Run the site's discovery from **Discover > Scans**, or wait for its next scheduled run
 2. Open the finished run under **Discover > Scans > Historical** and select the **Credentials** tab
 3. Find the SSH credential's row. It lists each host the script ran on with its outcome. **Applied** means the script ran and Scanopy stored its output. **Fields applied** lists the keys Scanopy stored, and **Not applied** lists keys it did not.
 4. Check the row's warning count. Any warning appears on the run's **Issues** tab.
@@ -214,7 +214,7 @@ The host rejected the username, key or password, and the script did not run. Tes
 ssh -i scanopy_ed25519 -o IdentitiesOnly=yes scanopy@HOST true
 ```
 
-For **SSH Password**, check that the server's `sshd_config` allows `PasswordAuthentication`. A per-host credential overrides the network default, so check which credential reached this host.
+For **SSH Password**, check that the server's `sshd_config` allows `PasswordAuthentication`. A per-host credential overrides the site default, so check which credential reached this host.
 
 ### Host key changed
 

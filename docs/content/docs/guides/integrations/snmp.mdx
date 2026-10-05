@@ -91,7 +91,7 @@ The context applies to the bridge and VLAN queries only. Interfaces, LLDP neighb
    - **Interfaces** in the ifEntry tab — names, speeds, and IP assignments
    - **Neighbors** in the [L2 Physical](/using-scanopy/topology/l2-physical/) topology
 
-You can confirm a network-wide assignment from **Assets > Credentials** — the credential's **Networks** column lists every network it applies to, and its **Hosts** column every host it has been assigned to individually.
+You can confirm a site-wide assignment from **Assets > Credentials** — the credential's **Sites** column lists every site it applies to, and its **Hosts** column every host it has been assigned to individually.
 
 ## Troubleshooting
 
@@ -116,7 +116,7 @@ snmpwalk -v3 -l authPriv -u SECURITY_NAME \
   DEVICE_IP 1.3.6.1.2.1.2.2.1.2
 ```
 
-If `public` works but your own string doesn't, the credential is wrong or isn't reaching this host — a per-host credential overrides the network default. If neither works, SNMP isn't enabled on the device or it refuses that version.
+If `public` works but your own string doesn't, the credential is wrong or isn't reaching this host — a per-host credential overrides the site default. If neither works, SNMP isn't enabled on the device or it refuses that version.
 
 A device that enforces v3 will not answer a community string at all. Note that Scanopy's v3 is AuthPriv only, so a device configured for AuthNoPriv won't connect either.
 

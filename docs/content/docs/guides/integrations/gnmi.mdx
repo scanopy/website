@@ -52,7 +52,7 @@ Username and password travel as gRPC request metadata. The port defaults to 9339
 2. Open the device's host and check for a **gNMI** service and the device's interfaces
 3. Open [L2 Physical](/using-scanopy/topology/l2-physical/) and confirm the device shows links to its LLDP neighbors
 
-You can confirm a network-wide assignment from **Assets > Credentials**. The credential's **Networks** column lists every network it applies to, and its **Hosts** column every host it has been assigned to individually.
+You can confirm a site-wide assignment from **Assets > Credentials**. The credential's **Sites** column lists every site it applies to, and its **Hosts** column every host it has been assigned to individually.
 
 ## Troubleshooting
 
@@ -79,7 +79,7 @@ A device whose gNMI server requires TLS also fails here, because Scanopy connect
 
 ### Authentication fails
 
-`Capabilities` returns `UNAUTHENTICATED`. The username or password is wrong, or the account has no gNMI access on the device. A per-host credential overrides the network default, so check which credential reached this host.
+`Capabilities` returns `UNAUTHENTICATED`. The username or password is wrong, or the account has no gNMI access on the device. A per-host credential overrides the site default, so check which credential reached this host.
 
 ### No interfaces collected
 

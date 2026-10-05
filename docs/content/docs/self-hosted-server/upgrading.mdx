@@ -23,7 +23,7 @@ This upgrades both the server and any daemons defined in your compose file. Volu
 
 <Callout type="warn">
 	If you use the integrated daemon, do not delete the `daemon-config` volume during upgrades — it
-	stores the daemon's identity (ID, API key, and network assignment). That identity is [provisioned
+	stores the daemon's identity (ID, API key, and site assignment). That identity is [provisioned
 	once at server setup](/reference/daemon-identity/) and cannot be re-derived, so deleting the
 	volume means provisioning the daemon again from scratch.
 </Callout>

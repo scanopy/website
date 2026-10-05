@@ -37,7 +37,7 @@ A provisioned key belongs to exactly one daemon, and a daemon has exactly one ke
 | Key type                | Identity comes from | `X-Daemon-ID` header                                                                              |
 | ----------------------- | ------------------- | ------------------------------------------------------------------------------------------------- |
 | Bound (1:1)             | The key itself      | Optional. If present and it doesn't match the key's daemon, the request is rejected as key reuse. |
-| Legacy (network-shared) | The header          | Required. Without it the daemon is unidentifiable and the request is rejected.                    |
+| Legacy (site-shared)    | The header          | Required. Without it the daemon is unidentifiable and the request is rejected.                    |
 
 ## Version floor
 
@@ -45,14 +45,14 @@ Server-provisioned identity requires **daemon version 0.17.5 or later**. A 0.17.
 with no identity of its own and learns which daemon it is from the key during its first handshake
 with the server.
 
-Daemons below 0.17.5 self-register against a network-shared key and identify themselves with the
+Daemons below 0.17.5 self-register against a site-shared key and identify themselves with the
 `X-Daemon-ID` header. Both models are accepted concurrently — which one applies is determined by
 the shape of the key presented, not by the daemon's version.
 
-## Legacy network-shared keys
+## Legacy site-shared keys
 
 Keys minted before 1:1 provisioning are not bound to any daemon. A single such key is shared by
-every daemon on its network.
+every daemon on its site.
 
 - They continue to authenticate. Nothing expires them.
 - They cannot be created anymore.
@@ -68,7 +68,7 @@ daemon record afterwards.
 
 | Property             |                                                                                          |
 | -------------------- | ---------------------------------------------------------------------------------------- |
-| Network              | Fixed at provision time                                                                  |
+| Site                 | Fixed at provision time                                                                  |
 | Polling mode         | Fixed at provision time                                                                  |
 | Name                 | Fixed at provision time                                                                  |
 | Host                 | Created at provision time                                                                |

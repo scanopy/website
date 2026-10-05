@@ -1,11 +1,11 @@
 ---
 title: Organization & Access
-description: Users, roles, networks, and API keys.
+description: Users, roles, sites, and API keys.
 ---
 
 ## Organizations
 
-Organizations are the top-level container in Scanopy. Every user belongs to exactly one organization, and all networks, hosts, and services exist within that organization.
+Organizations are the top-level container in Scanopy. Every user belongs to exactly one organization, and all sites, hosts, and services exist within that organization.
 
 Organizations are automatically created during registration and cannot be manually created or transferred.
 
@@ -13,36 +13,36 @@ Organizations are automatically created during registration and cannot be manual
 
 <RolesTable />
 
-Account creation is invite-only — there is no self-registration. Invite users via **Platform > Users** — generate an invite link, select the invitee's role and which networks they may access, and share the link or send it by email.
+Account creation is invite-only — there is no self-registration. Invite users via **Platform > Users** — generate an invite link, select the invitee's role and which sites they may access, and share the link or send it by email.
 
-Removing a user revokes all of their API keys, pending invitations, and network access grants.
+Removing a user revokes all of their API keys, pending invitations, and site access grants.
 
-## Networks
+## Sites
 
-Networks are the primary organizational unit. Each network represents a distinct environment with its own hosts, services, and topology.
+Sites are the primary organizational unit. Each site represents a distinct environment with its own hosts, services, and topology.
 
 **Common patterns:**
 
-- Separate networks for production vs. development
-- One network per physical location
-- Distinct networks for different security zones
+- Separate sites for production vs. development
+- One site per physical location
+- Distinct sites for different security zones
 
-### Network Settings
+### Site Settings
 
-Open a network from **Assets > Networks** to edit its name, type, and its **Consider entities stale after** window — see [Staleness](/using-scanopy/staleness/#the-staleness-window).
+Open a site from **Assets > Sites** to edit its name, type, and its **Consider entities stale after** window — see [Staleness](/using-scanopy/staleness/#the-staleness-window).
 
-### Network Access
+### Site Access
 
-Users can be restricted to specific networks within an organization. When inviting a user, select which networks they may access — all data queries are filtered to those networks. This allows granting a contractor or external partner visibility into only the networks relevant to them while keeping other environments hidden.
+Users can be restricted to specific sites within an organization. When inviting a user, select which sites they may access — all data queries are filtered to those sites. This allows granting a contractor or external partner visibility into only the sites relevant to them while keeping other environments hidden.
 
 ## Credentials
 
-Credentials are organization-scoped: managed under **Assets > Credentials**, and assignable to any network or host in the organization. See [Credentials](/using-scanopy/credentials/) for types, targets, and assignment.
+Credentials are organization-scoped: managed under **Assets > Credentials**, and assignable to any site or host in the organization. See [Credentials](/using-scanopy/credentials/) for types, targets, and assignment.
 
 ## API Keys
 
 Each daemon gets its own API key, minted and bound to it automatically when you create the daemon. You don't create daemon keys by hand.
 
-**Platform > API Keys** lists them. Any key marked legacy predates 1:1 binding and is shared across a network's daemons; see [Daemon Identity](/reference/daemon-identity/) for how those behave and how to give a daemon a key of its own.
+**Platform > API Keys** lists them. Any key marked legacy predates 1:1 binding and is shared across a site's daemons; see [Daemon Identity](/reference/daemon-identity/) for how those behave and how to give a daemon a key of its own.
 
 User API keys, for programmatic access to the API, are created here too — see the [API reference](/api/).

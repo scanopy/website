@@ -20,13 +20,13 @@
     "docsOnly": true
   },
   {
-    "id": "network_id",
-    "label": "Network ID",
-    "cliFlag": "--network-id",
-    "envVar": "SCANOPY_NETWORK_ID",
-    "configFileKey": "network_id",
+    "id": "site_id",
+    "label": "Site ID",
+    "cliFlag": "--site-id",
+    "envVar": "SCANOPY_SITE_ID",
+    "configFileKey": "site_id",
     "default": null,
-    "description": "UUID of the network to scan",
+    "description": "UUID of the site to scan",
     "docsOnly": true
   },
   {

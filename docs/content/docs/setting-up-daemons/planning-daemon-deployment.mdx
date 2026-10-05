@@ -111,7 +111,7 @@ sudo scanopy-daemon install --interfaces eth1
   Set `--bind-address` only to pin a daemon's listener to one interface, and `--daemon-port` only when you need a specific port (for a ServerPoll daemon it's already in the install command). See [Ports and bind addresses](/guides/networking/multiple-daemons/#ports-and-bind-addresses) for details.
 </Callout>
 
-Create a separate daemon entry in **Discover > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different Scanopy networks.
+Create a separate daemon entry in **Discover > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different Scanopy sites.
 
 This gives you Layer 2 discovery on each segment without needing a separate physical host per VLAN. See [Scanning Isolated Networks from One Host](/guides/networking/multiple-daemons/) for the full setup guide, including how slots work, systemd templates, and Docker configuration.
 

@@ -158,7 +158,7 @@ docker compose up -d</code
 <!-- Soft Upsell -->
 <section class="border-t border-gray-800 py-12">
 	<div class="container mx-auto px-4 text-center">
-		<p class="mb-3 text-gray-400">Need more networks or team seats?</p>
+		<p class="mb-3 text-gray-400">Need more sites or team seats?</p>
 		<div class="flex flex-wrap items-center justify-center gap-6">
 			<LicenseCta location="community_upsell" class="text-blue-400 hover:text-blue-300" arrow />
 			<a

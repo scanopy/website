@@ -27,6 +27,6 @@ Rescan is refused with the specific reason, when:
 | ------ | ---------- |
 | The host has never been scanned, or the scan that found it is no longer on record | Run a discovery first |
 | The daemon that last scanned it no longer exists | Run a discovery from another daemon to refresh the host |
-| That daemon has moved to a different network | Scan the host from a daemon on its network |
+| That daemon has moved to a different site | Scan the host from a daemon on its site |
 | That daemon is older than 0.17.7 | [Upgrade the daemon](/setting-up-daemons/managing-daemons/) |
 | That daemon has no interface on a subnet holding any of the host's scannable addresses | Deploy a daemon that does — see [Planning Daemon Deployment](/setting-up-daemons/planning-daemon-deployment/) |

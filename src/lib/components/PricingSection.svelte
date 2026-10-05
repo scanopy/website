@@ -49,8 +49,8 @@
 			base_cents: number;
 			seat_cents: number | null;
 			included_seats: number | null;
-			network_cents: number | null;
-			included_networks: number | null;
+			site_cents: number | null;
+			included_sites: number | null;
 			host_cents: number | null;
 			included_hosts: number | null;
 			rate: string;
@@ -91,8 +91,8 @@
 		base_cents: item.metadata.base_cents,
 		seat_cents: item.metadata.seat_cents,
 		included_seats: item.metadata.included_seats,
-		network_cents: item.metadata.network_cents,
-		included_networks: item.metadata.included_networks,
+		site_cents: item.metadata.site_cents,
+		included_sites: item.metadata.included_sites,
 		host_cents: item.metadata.host_cents,
 		included_hosts: item.metadata.included_hosts,
 		rate: item.metadata.rate,

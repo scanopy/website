@@ -26,7 +26,7 @@ export function StatusTag({ status }: { status: string }) {
 
 /**
  * The badge an entity carries once discovery hasn't observed it within its
- * network's staleness window, drawn as the app draws it: amber with a clock, per
+ * site's staleness window, drawn as the app draws it: amber with a clock, per
  * `getFreshnessTag` in `ui/src/lib/shared/utils/freshness.ts`.
  *
  * No tooltip — the app's is the entity's own "last seen 12d ago", which only

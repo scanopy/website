@@ -3,17 +3,17 @@ title: Staleness
 description: How Scanopy flags hosts, services, and subnets that discovery hasn't seen recently.
 ---
 
-Scanopy marks an entity <StaleTag /> when discovery hasn't observed it within its network's staleness window — a device powered off, a container removed, a host that moved. Nothing is deleted.
+Scanopy marks an entity <StaleTag /> when discovery hasn't observed it within its site's staleness window — a device powered off, a container removed, a host that moved. Nothing is deleted.
 
 Stale does not mean gone. A stale host might be switched off, on the road, or briefly unreachable during a scan. Scanopy reports only how long it's been since discovery last saw it.
 
 ## The staleness window
 
-Each network has its own window, because staleness is only meaningful relative to how often that network is scanned — a segment swept every 15 minutes and one swept monthly need very different thresholds.
+Each site has its own window, because staleness is only meaningful relative to how often that site is scanned — a segment swept every 15 minutes and one swept monthly need very different thresholds.
 
-The default is **28 days**. Set a network's own in the network edit modal (**Assets > Networks** → select the network → **Consider entities stale after**), as days and hours; leave it blank for the default. Set it comfortably above the network's scan interval so a normal gap between scans never trips it.
+The default is **28 days**. Set a site's own in the site edit modal (**Assets > Sites** → select the site → **Consider entities stale after**), as days and hours; leave it blank for the default. Set it comfortably above the site's scan interval so a normal gap between scans never trips it.
 
-See [Networks](/using-scanopy/organization/#networks) for where this fits among a network's settings.
+See [Sites](/using-scanopy/organization/#sites) for where this fits among a site's settings.
 
 ## What can go stale
 

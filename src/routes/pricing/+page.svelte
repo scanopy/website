@@ -72,7 +72,7 @@
 		{
 			question: 'What happens to my data if I cancel?',
 			answer:
-				'A cancelled Cloud plan is auto-downgraded to Free, and the Free caps on hosts, networks, and seats apply to your data. A self-hosted server keeps its data on your infrastructure. When a license expires, the server goes read-only until the key is replaced.'
+				'A cancelled Cloud plan is auto-downgraded to Free, and the Free caps on hosts, sites, and seats apply to your data. A self-hosted server keeps its data on your infrastructure. When a license expires, the server goes read-only until the key is replaced.'
 		}
 	];
 

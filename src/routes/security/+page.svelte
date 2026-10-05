@@ -160,10 +160,10 @@
 
 		<h3 class="mb-3 text-xl font-semibold text-white">Tenant isolation</h3>
 		<p class="mb-4 text-gray-300">
-			The organization is the top-level tenant boundary. Within an organization, each network holds
+			The organization is the top-level tenant boundary. Within an organization, each site holds
 			its own hosts, services, subnets, and topology, and users can be restricted to specific
-			networks. Every API query is scoped to the authenticated user's organization and permitted
-			networks. This is logical multi-tenancy with application-enforced boundaries.
+			sites. Every API query is scoped to the authenticated user's organization and permitted
+			sites. This is logical multi-tenancy with application-enforced boundaries.
 		</p>
 
 		<h3 class="mb-3 text-xl font-semibold text-white">Least privilege</h3>

@@ -43,7 +43,7 @@
 			`Company: ${company}`,
 			`Company size: ${teamSize}`,
 			`Timeline: ${urgency}`,
-			`Networks/sites: ${networkCount ?? ''}`,
+			`Sites: ${networkCount ?? ''}`,
 			'',
 			'Use case:',
 			useCase
@@ -98,7 +98,7 @@
 		if (!teamSize) return 'Please select your company size';
 		if (!urgency) return 'Please select a timeline';
 		if (networkCount === null || networkCount === undefined)
-			return 'Please enter the number of networks/sites';
+			return 'Please enter the number of sites';
 		if (!useCase.trim()) return 'Please describe your use case';
 		return null;
 	}
@@ -362,13 +362,13 @@
 
 					<div>
 						<label for="contact-network-count" class="mb-1 block text-sm font-medium text-gray-300">
-							How many networks/sites? <span class="text-red-400">*</span>
+							How many sites? <span class="text-red-400">*</span>
 						</label>
 						<input
 							id="contact-network-count"
 							type="number"
 							min="0"
-							placeholder="Number of networks"
+							placeholder="Number of sites"
 							bind:value={networkCount}
 							oninput={() => clearError('networkCount')}
 							disabled={loading}

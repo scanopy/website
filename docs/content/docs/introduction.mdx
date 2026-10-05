@@ -10,7 +10,7 @@ Scanopy is a network discovery and visualization tool that automatically discove
 - **Network Discovery** — Automatically find hosts and services on your network
 - **Service Detection** — Identify 200+ services including databases, web servers, and home automation
 - **Topology Visualization** — View your infrastructure from multiple perspectives — network segmentation, service dependencies, workload placement, and physical wiring
-- **Distributed Scanning** — Deploy daemons across multiple networks
+- **Distributed Scanning** — Deploy daemons across multiple sites
 
 ## Cloud vs Self-Hosted
 
@@ -43,15 +43,15 @@ flowchart TB
     server --> net3
 
     subgraph net1[" "]
-        d1["Network 1<br/>Daemon"]
+        d1["Site 1<br/>Daemon"]
     end
 
     subgraph net2[" "]
-        d2["Network 2<br/>Daemon"]
+        d2["Site 2<br/>Daemon"]
     end
 
     subgraph net3[" "]
-        d3["Network 3<br/>Daemon"]
+        d3["Site 3<br/>Daemon"]
     end
 `} />
 

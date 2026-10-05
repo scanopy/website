@@ -93,9 +93,9 @@ sequenceDiagram
     participant S as Server
 
     Note over D: Daemon starts with API key
-    D->>S: POST /api/daemons/register<br/>{network_id, name}
+    D->>S: POST /api/daemons/register<br/>{site_id, name}
     S->>S: Create/update daemon record
-    S-->>D: {daemon_id, network_id}
+    S-->>D: {daemon_id, site_id}
     Note over D: Store daemon_id for future requests
 `} />
 
@@ -167,7 +167,7 @@ sequenceDiagram
     participant D as Daemon
 
     Note over A,S: Admin provisions daemon in UI
-    A->>S: POST /api/daemons/provision<br/>{name, network_id, url}
+    A->>S: POST /api/daemons/provision<br/>{name, site_id, url}
     S->>S: Create daemon record + API key
     S-->>A: {daemon_id, api_key}
     Note over A: Configure daemon with API key

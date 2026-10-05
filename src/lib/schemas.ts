@@ -16,7 +16,7 @@ interface BillingPlan {
 		base_cents: number;
 		rate: string;
 		custom_price: string | null;
-		included_networks: number | null;
+		included_sites: number | null;
 		included_seats: number | null;
 		hosting: string;
 		is_free: boolean;

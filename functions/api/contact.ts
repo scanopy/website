@@ -102,7 +102,7 @@ function validate(body: Record<string, unknown>) {
 	if (!TEAM_SIZES.has(inquiry.teamSize)) errors.teamSize = 'Please select your company size';
 	if (!TIMELINES.has(inquiry.urgency)) errors.urgency = 'Please select a timeline';
 	if (!Number.isInteger(inquiry.networkCount) || inquiry.networkCount < 0) {
-		errors.networkCount = 'Please enter the number of networks/sites';
+		errors.networkCount = 'Please enter the number of sites';
 	}
 	if (!inquiry.useCase) errors.useCase = 'Please describe your use case';
 	// Set by the button the visitor clicked, not typed; never reject a lead over it.
@@ -219,7 +219,7 @@ export const onRequestPost = async ({
 				title: `Website inquiry: ${inquiry.planType}`,
 				note:
 					`${inquiry.firstName} ${inquiry.lastName} (${inquiry.company}), ` +
-					`${inquiry.teamSize} employees, ${inquiry.networkCount} networks/sites, ` +
+					`${inquiry.teamSize} employees, ${inquiry.networkCount} sites,` +
 					`timeline: ${inquiry.urgency}\n\n${inquiry.useCase}`
 			});
 		} catch (err) {

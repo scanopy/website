@@ -27,18 +27,18 @@ The discovery pipeline creates this hierarchy:
 
 This structure allows a single service to be accessible on multiple interfaces (e.g., a database listening on both LAN and Docker bridge networks).
 
-### Network Isolation
+### Site Isolation
 
-All discovery data is scoped to a network:
-- Hosts, subnets, services, interfaces, ports, and bindings all have a `network_id` foreign key
-- Networks belong to organizations
-- Users are granted access to specific networks via `user_network_access`
+All discovery data is scoped to a site:
+- Hosts, subnets, services, interfaces, ports, and bindings all have a `site_id` foreign key
+- Sites belong to organizations
+- Users are granted access to specific sites via `user_site_access`
 
 ### Cascade Deletes
 
 Most foreign keys use `ON DELETE CASCADE`:
-- Deleting an organization removes all its networks, users, and tags
-- Deleting a network removes all hosts, services, subnets, and discovery data
+- Deleting an organization removes all its sites, users, and tags
+- Deleting a site removes all hosts, services, subnets, and discovery data
 - Deleting a host removes all its interfaces, ports, and services
 
 ## Full Schema Reference

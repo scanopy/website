@@ -10,7 +10,7 @@ import { Tag, type TagColor } from '@/components/tag';
  * Each scope names a real entity and borrows that entity's colour and icon, as
  * the app does: `getTargetTagProps` in
  * `ui/src/lib/features/credentials/types/base.ts` reads them from the entity
- * metadata in `ui/src/lib/data/entities.json` — Network → Blue `land-plot`,
+ * metadata in `ui/src/lib/data/entities.json` — Site → Blue `land-plot`,
  * Daemon → Green `satellite-dish`, Host → Amber `server`. Scanopy has no fixture
  * for entity colours and icons yet, so this table is transcribed rather than
  * generated; keep it matched to those two files.
@@ -19,9 +19,9 @@ import { Tag, type TagColor } from '@/components/tag';
  */
 const SCOPES: Record<string, { label: string; title: string; icon: LucideIcon; color: TagColor }> =
 	{
-		Network: {
-			label: 'Network',
-			title: 'Can be assigned to a network to target to all hosts.',
+		Site: {
+			label: 'Site',
+			title: 'Can be assigned to a site to target to all hosts.',
 			icon: LandPlot,
 			color: 'Blue'
 		},
@@ -40,7 +40,7 @@ const SCOPES: Record<string, { label: string; title: string; icon: LucideIcon; c
 	};
 
 /** Broad → narrow, so every row lists scopes in the same order. */
-export const SCOPE_ORDER = ['Network', 'DaemonHost', 'Hosts'];
+export const SCOPE_ORDER = ['Site', 'DaemonHost', 'Hosts'];
 
 /** One scope chip, named by its fixture target key. */
 export function CredentialScope({ id }: { id: string }) {

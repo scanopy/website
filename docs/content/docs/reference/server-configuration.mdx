@@ -80,7 +80,7 @@ Any variable in this table can also be read from a file. See [Secrets from Files
 
 ## Integrated Daemon URL
 
-The server calls this URL once, when the first user registers, to hand the integrated daemon its network and API key. The integrated daemon runs in its own container with host networking, so the default compose points the server at the Docker host:
+The server calls this URL once, when the first user registers, to hand the integrated daemon its site and API key. The integrated daemon runs in its own container with host networking, so the default compose points the server at the Docker host:
 
 ```yaml
 services:

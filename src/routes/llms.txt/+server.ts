@@ -23,7 +23,7 @@ interface BillingPlan {
 		base_cents: number;
 		rate: string;
 		custom_price: string | null;
-		included_networks: number | null;
+		included_sites: number | null;
 		included_seats: number | null;
 		hosting: string;
 		is_free: boolean;
@@ -80,15 +80,15 @@ export async function GET() {
 			(plan.metadata.rate === 'Year'
 				? `$${(plan.metadata.base_cents / 100).toLocaleString('en-US')}/year`
 				: `$${(plan.metadata.base_cents / 100).toFixed(2)}/month`);
-		const networks = plan.metadata.included_networks
-			? `${plan.metadata.included_networks} network${plan.metadata.included_networks > 1 ? 's' : ''}`
-			: 'unlimited networks';
+		const sites = plan.metadata.included_sites
+			? `${plan.metadata.included_sites} site${plan.metadata.included_sites > 1 ? 's' : ''}`
+			: 'unlimited sites';
 		const seats = plan.metadata.included_seats
 			? `${plan.metadata.included_seats} seat${plan.metadata.included_seats > 1 ? 's' : ''}`
 			: '';
 		const hosting = plan.metadata.hosting.toLowerCase();
 
-		const details = [networks, seats, hosting].filter(Boolean).join(', ');
+		const details = [sites, seats, hosting].filter(Boolean).join(', ');
 		return `- **${plan.name}**: ${price} - ${details}`;
 	});
 

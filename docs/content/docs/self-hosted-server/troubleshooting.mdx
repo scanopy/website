@@ -94,10 +94,10 @@ docker exec scanopy-server curl http://host.docker.internal:60073/api/health
 **Symptoms**: After `docker compose pull && docker compose up -d`, or any other container recreate, the daemon log shows:
 
 ```
-Missing network ID — waiting for server to hit /api/initialize...
+Missing site ID — waiting for server to hit /api/initialize...
 ```
 
-A daemon that authenticates with a shared network key instead logs `403` errors on every startup attempt, while its container still reports healthy.
+A daemon that authenticates with a shared site key instead logs `403` errors on every startup attempt, while its container still reports healthy.
 
 **Cause**: Daemon images from v0.16.1 through v0.17.21 wrote `config.json` outside the `daemon-config` volume, so a recreate discarded the daemon's API key and identity. v0.17.22 and later write to the volume at either mount path, `/root/.config/scanopy/daemon` or `/root/.config/daemon`. The server provisions the integrated daemon only once, when the first user registers, so it never sends the key again.
 
@@ -113,7 +113,7 @@ docker compose up -d
 
 - **Integrated daemon**: In **Discover > Scan > Daemons**, click **Edit** on the daemon, open the **API Key** tab and click **Rotate Key**. Add the new key to the daemon's `environment` in `docker-compose.yml` as `SCANOPY_DAEMON_API_KEY=<key>`, then run `docker compose up -d`. The daemon reconnects as the same daemon, with its host and history.
 - **Daemon installed from the UI's compose file**: Its compose file already sets `SCANOPY_DAEMON_API_KEY`, so it reconnects on its own. If the key is missing from the compose file, rotate it as above.
-- **Daemon on a shared network key** (installed before v0.17.5): Click **Edit**, open the **API Key** tab and click **Bind a Key**, then use the compose file it generates. The daemon keeps its record, host and history.
+- **Daemon on a shared site key** (installed before v0.17.5): Click **Edit**, open the **API Key** tab and click **Bind a Key**, then use the compose file it generates. The daemon keeps its record, host and history.
 
   To keep the shared key instead, add `SCANOPY_ID=<daemon id>` to the daemon's `environment`. The daemon id is the `id` field in the metadata section at the bottom of the Edit dialog. A `config.json` on the volume overrides `SCANOPY_ID`, so delete it as you recreate the container:
 

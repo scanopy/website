@@ -264,17 +264,17 @@ export function buildScanopyAltFaqs(): VendorFAQ[] {
 			answer:
 				'Yes. Scanopy runs as a single daemon (no per-device agents and no inbound firewall rules), so you ' +
 				'can self-host it on your own infrastructure or run the managed cloud. Commercial self-hosted ' +
-				'licensing is available for teams that need on-prem deployment across multiple networks and seats.'
+				'licensing is available for teams that need on-prem deployment across multiple sites and seats.'
 		},
 		{
 			question: 'Is Scanopy open source, and is there a free version?',
 			answer:
 				'Yes to both. The Scanopy Community edition is open source under the AGPL-3.0 license and free to ' +
-				'self-host, limited to one network and one seat.' +
+				'self-host, limited to one site and one seat.' +
 				(openNames.length
 					? ` Among the alternatives, ${joinList(openNames)} are also open source; most commercial options are proprietary.`
 					: '') +
-				' Paid plans raise the caps (a commercial license for self-hosting, or managed cloud hosting) with more networks, seats, and support.'
+				' Paid plans raise the caps (a commercial license for self-hosting, or managed cloud hosting) with more sites, seats, and support.'
 		}
 	];
 }
