@@ -79,21 +79,48 @@ See [issue #87](https://github.com/scanopy/scanopy/issues/87) for details.
 # Check daemon logs
 docker logs scanopy-daemon
 
-# Check if daemon can reach server
-docker exec scanopy-daemon curl http://scanopy-server:60072/api/health
+# Check that the server can reach the daemon
+docker exec scanopy-server curl http://host.docker.internal:60073/api/health
 ```
 
 **Solutions**:
 
-1. **Verify bridge network**: Check your Docker bridge IP
+1. **Check the server's route to the daemon**: The daemon runs with host networking, and the server reaches it at `http://host.docker.internal:60073`. The server service needs `extra_hosts: ["host.docker.internal:host-gateway"]` for that name to resolve, as in the shipped `docker-compose.yml`. If you changed the daemon's port or network mode, update `SCANOPY_INTEGRATED_DAEMON_URL` to match.
 
-   ```bash
-   docker network inspect bridge | grep Gateway
-   ```
+2. **Check the daemon record**: Server setup [provisions](/reference/daemon-identity/) the integrated daemon and its API key. Confirm the daemon appears in **Discover > Scan > Daemons** and that its `daemon-config` volume still holds the key — a wiped volume leaves the daemon with no identity to present.
 
-2. **Update compose file**: If gateway isn't `172.17.0.1`, update `SCANOPY_INTEGRATED_DAEMON_URL`
+### Daemon Waits for /api/initialize After a Restart or Recreate
 
-3. **Check the daemon record**: Server setup [provisions](/reference/daemon-identity/) the integrated daemon and its API key. Confirm the daemon appears in **Discover > Scan > Daemons** and that its `daemon-config` volume still holds the key — a wiped volume leaves the daemon with no identity to present.
+**Symptoms**: After `docker compose pull && docker compose up -d`, or any other container recreate, the daemon log shows:
+
+```
+Missing network ID — waiting for server to hit /api/initialize...
+```
+
+A daemon that authenticates with a shared network key instead logs `403` errors on every startup attempt, while its container still reports healthy.
+
+**Cause**: Daemon images from v0.16.1 through v0.17.21 wrote `config.json` outside the `daemon-config` volume, so a recreate discarded the daemon's API key and identity. v0.17.22 and later write to the volume at either mount path, `/root/.config/scanopy/daemon` or `/root/.config/daemon`. The server provisions the integrated daemon only once, when the first user registers, so it never sends the key again.
+
+**Before upgrading from v0.17.21 or earlier**, copy the config onto the volume while the old container is still running, then pull and recreate:
+
+```bash
+docker compose exec daemon sh -c 'mkdir -p /root/.config/scanopy/daemon && cp -rn /root/.config/daemon/. /root/.config/scanopy/daemon/'
+docker compose pull
+docker compose up -d
+```
+
+**If the daemon already lost its config**, upgrade to v0.17.22 or later first, then:
+
+- **Integrated daemon**: In **Discover > Scan > Daemons**, click **Edit** on the daemon, open the **API Key** tab and click **Rotate Key**. Add the new key to the daemon's `environment` in `docker-compose.yml` as `SCANOPY_DAEMON_API_KEY=<key>`, then run `docker compose up -d`. The daemon reconnects as the same daemon, with its host and history.
+- **Daemon installed from the UI's compose file**: Its compose file already sets `SCANOPY_DAEMON_API_KEY`, so it reconnects on its own. If the key is missing from the compose file, rotate it as above.
+- **Daemon on a shared network key** (installed before v0.17.5): Click **Edit**, open the **API Key** tab and click **Bind a Key**, then use the compose file it generates. The daemon keeps its record, host and history.
+
+  To keep the shared key instead, add `SCANOPY_ID=<daemon id>` to the daemon's `environment`. The daemon id is the `id` field in the metadata section at the bottom of the Edit dialog. A `config.json` on the volume overrides `SCANOPY_ID`, so delete it as you recreate the container:
+
+  ```bash
+  docker compose exec daemon rm -f /root/.config/scanopy/daemon/config.json
+  docker compose up -d
+  ```
 
 ### Emails Aren't Being Sent
 

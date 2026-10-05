@@ -206,7 +206,8 @@ sudo launchctl bootout system /Library/LaunchDaemons/com.scanopy.daemon.plist
 
 # Remove binary and configuration
 sudo rm /usr/local/bin/scanopy-daemon
-rm -rf ~/.config/scanopy/                                    # Linux
+sudo rm -rf /etc/scanopy/daemon/                             # Linux service install
+rm -rf ~/.config/daemon/                                     # Linux, run by hand
 rm -rf ~/Library/Application\ Support/com.scanopy.daemon/    # macOS
 ```
 

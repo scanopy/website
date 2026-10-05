@@ -40,15 +40,23 @@ environment:
 
 **Configuration file**:
 
-A daemon you run yourself creates its config file under your user profile:
+Where `config.json` lives depends on how the daemon runs. `<name>` is the daemon's install slot, `scanopy-daemon` for the first daemon on a host.
 
-- **Linux**: `~/.config/scanopy/daemon/config.json`
-- **macOS**: `~/Library/Application Support/com.scanopy.daemon/config.json`
-- **Windows**: `%APPDATA%\scanopy\daemon\config.json`
+| How it runs | Path |
+|---|---|
+| Linux service (`scanopy-daemon install`) | `/etc/scanopy/daemon/<name>/config.json` |
+| Linux, run yourself (`install --no-service` or a plain `scanopy-daemon`) | `~/.config/daemon/config.json`, or `~/.config/daemon/<name>/config.json` for a second daemon |
+| macOS service | `/Library/Application Support/Scanopy/daemon/<name>/config.json` |
+| macOS, run yourself | `~/Library/Application Support/com.scanopy.daemon/config.json` |
+| Windows service | `%ProgramData%\Scanopy\daemon\<name>\config.json` |
+| Windows, run yourself | `%APPDATA%\scanopy\daemon\config\config.json` |
+| Docker | `/root/.config/scanopy/daemon/config.json`, on the `daemon-config` volume |
 
-A daemon installed as a service uses a system directory instead. A background service runs under a different profile than whoever installed it, so `install` writes the config to a system location and points the service at it explicitly. The install command prints the config and log paths it settled on — read them off the output rather than guessing.
+A background service runs under a different profile than whoever installed it, so `install` writes the config to a system directory and points the service at it with `--config-dir`. The install command prints the config and log paths it used.
 
-Use `--config-dir` / `SCANOPY_CONFIG_DIR` to override the directory holding `config.json`.
+In Docker, keep the `daemon-config` volume mounted at `/root/.config/scanopy/daemon`. Without it, the daemon loses its identity every time the container is recreated.
+
+Use `--config-dir` to override the directory holding `config.json`.
 
 The config file stores runtime state (daemon ID, host ID) alongside your settings. Command-line and environment variables take priority over the file.
 

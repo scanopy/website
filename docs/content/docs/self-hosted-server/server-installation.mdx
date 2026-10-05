@@ -39,9 +39,9 @@ The default `docker-compose.yml` includes:
 - PostgreSQL database
 - Integrated daemon for immediate network scanning
 
-You don't need to configure anything for the integrated daemon to work; the server will auto-initialize it when the container is started and it will immediately begin scanning. If you don't want to run a daemon in the same container as the server, remove the daemon service and clear the `SCANOPY_INTEGRATED_DAEMON_URL` env var.
+The integrated daemon needs no configuration. When you register the first user, the server provisions the integrated daemon once, giving it a network and an API key, and the daemon starts scanning. The daemon stores that identity in the `daemon-config` volume, so keep the volume when you recreate containers. The server reaches the daemon at `http://host.docker.internal:60073`, which the compose file maps to the Docker host with `host-gateway`. To run without the integrated daemon, remove the `daemon` service and clear `SCANOPY_INTEGRATED_DAEMON_URL`.
 
-**Important**: The integrated daemon assumes your Docker bridge network is `172.17.0.1`. If your Docker bridge uses a different address, edit the `SCANOPY_INTEGRATED_DAEMON_URL` environment variable in the compose file.
+**Docker Desktop on macOS and Windows** can't run the integrated daemon, because the daemon needs host networking to see your network. Run the server in Docker, remove the `daemon` service, and install the daemon natively on the host. See [Limitations](/reference/limitations/#docker-on-macoswindows).
 
 ### 3. Start Scanopy
 

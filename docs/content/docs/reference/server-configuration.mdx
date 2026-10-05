@@ -62,7 +62,7 @@ Not every setting has a CLI flag — `SCANOPY_LICENSE_KEY` and `SCANOPY_WEB_EXTE
 | **Web External Path**     | N/A                            | `SCANOPY_WEB_EXTERNAL_PATH`          | _Embedded UI_             | Serve the web UI from this directory instead of the copy compiled into the binary. Set to `/app/static` in the Docker image; unset elsewhere unless you are replacing the bundled UI. If the directory has no readable `index.html`, the server logs a warning and serves the compiled-in UI |
 | **Log Level**             | `--log-level`                  | `SCANOPY_LOG_LEVEL`                  | `info`                    | Logging verbosity: `trace`, `debug`, `info`, `warn`, `error`       |
 | **Secure Cookies**        | `--use-secure-session-cookies` | `SCANOPY_USE_SECURE_SESSION_COOKIES` | `false`                   | Enable HTTPS-only cookies                                          |
-| **Integrated Daemon URL** | `--integrated-daemon-url`      | `SCANOPY_INTEGRATED_DAEMON_URL`      | `http://172.17.0.1:60073` | URL to reach daemon in default docker compose                      |
+| **Integrated Daemon URL** | `--integrated-daemon-url`      | `SCANOPY_INTEGRATED_DAEMON_URL`      | -                         | URL the server uses to reach the integrated daemon. The default compose sets `http://host.docker.internal:60073` |
 | **Disable Registration**  | `--disable-registration`       | `SCANOPY_DISABLE_REGISTRATION`       | `false`                   | Disable new user registration                                      |
 | **SMTP Username**         | `--smtp-username`              | `SCANOPY_SMTP_USERNAME`              | -                         | SMTP username for email features                                   |
 | **SMTP Password**         | `--smtp-password`              | `SCANOPY_SMTP_PASSWORD`              | -                         | SMTP password for email authentication                             |
@@ -80,20 +80,18 @@ Any variable in this table can also be read from a file. See [Secrets from Files
 
 ## Integrated Daemon URL
 
-The integrated daemon runs in a separate container and needs to reach the server. The default assumes Docker's bridge network gateway is `172.17.0.1`.
-
-**Check your bridge gateway**:
-
-```bash
-docker network inspect bridge | grep Gateway
-```
-
-**If different**, update in docker-compose.yml:
+The server calls this URL once, when the first user registers, to hand the integrated daemon its network and API key. The integrated daemon runs in its own container with host networking, so the default compose points the server at the Docker host:
 
 ```yaml
-environment:
-  - SCANOPY_INTEGRATED_DAEMON_URL=http://YOUR_GATEWAY_IP:60073
+services:
+  server:
+    environment:
+      SCANOPY_INTEGRATED_DAEMON_URL: http://host.docker.internal:60073
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 ```
+
+If you change the daemon's port, update the URL to match. Leave the variable unset to run without an integrated daemon.
 
 ## SMTP Configuration
 
@@ -276,7 +274,7 @@ SCANOPY_SMTP_EMAIL=scanopy@yourdomain.com
 SCANOPY_SMTP_PORT=587
 
 # Daemon
-SCANOPY_INTEGRATED_DAEMON_URL=http://172.17.0.1:60073
+SCANOPY_INTEGRATED_DAEMON_URL=http://host.docker.internal:60073
 
 # Metrics (optional - for Prometheus scraping)
 SCANOPY_METRICS_TOKEN=your-secure-metrics-token
