@@ -60,6 +60,15 @@ You can also assign a host to any hypervisor or container runtime service by han
 
 These relationships appear in the topology and host details, showing your virtualization hierarchy. The [Workloads perspective](/using-scanopy/topology/workloads) provides a dedicated view of this hierarchy.
 
+### Asset Tags
+
+A host's **Asset Tag** holds the label your organization tracks the device by, such as `IT-00412`. It comes from two places:
+
+- **SNMP**: the device's ENTITY-MIB `entPhysicalAssetID`, when an administrator has set one on it. See [SNMP](/reference/snmp/).
+- **The host form**: type it under the host's details. A typed value stays through later scans. Clear the field to let discovery fill it again.
+
+The host details show the asset tag with its source. The host list has an **Asset Tag** column, hidden by default, and [search](/using-scanopy/search/) matches asset tags and serial numbers.
+
 ### Service Detection
 
 Scanopy automatically detects 200+ services. See [Service Detection](/reference/service-detection/) for how detection works, confidence levels, and what to do when a service isn't found.
@@ -90,6 +99,27 @@ The button turns blue when a host is hidden. Use the **Hidden** column filter to
 Subnets represent network segments. Scanopy automatically detects subnets during discovery, but you can also create them manually. Assign a type (LAN, WiFi, DMZ, etc.) to label your subnets for filtering and organization.
 
 Like hosts and services, subnets can go [stale](/using-scanopy/staleness/) — carrying a <StaleTag /> badge and a **Stale only** filter when discovery hasn't seen them within their site's window.
+
+### Utilization
+
+The **Utilization** column shows how many of a subnet's usable addresses hold a discovered IP, as `used / usable` with a bar. The bar turns amber at 80% and red at 95%. Sort by the column to find the fullest subnets.
+
+Usable addresses for IPv4 exclude the network and broadcast addresses, except on a `/31` (2 usable) and a `/32` (1 usable). An address held by more than one host, such as a shared virtual IP, counts once.
+
+The subnet's details in the topology inspector show the same figure.
+
+### Nested ranges
+
+A subnet that sits inside a larger one on the same site is nested in it. Recording `10.0.0.0/16` for a building whose VLANs are discovered as `/24`s nests each `/24` in the `/16`. The **Range** column labels both ends:
+
+- **Within &lt;cidr&gt;** on a subnet, naming the most specific range that contains it.
+- **Contains &lt;count&gt;** on a range, counting the subnets directly inside it.
+
+A range's utilization counts the addresses in every subnet nested inside it as well as its own.
+
+Group the subnet list by **Range** to see each top-level range with everything inside it, indented as a tree. Subnets that nest with nothing fall in the ungrouped bucket.
+
+Nesting ignores the [organizational subnets](#organizational-subnets) and container bridge networks, which belong to a single host. A range marked **Range assumed** shows no nesting label. Use **Resolve assumed range** on it to confirm the range, correct it, or merge it into a range that contains it.
 
 ### Organizational Subnets
 
