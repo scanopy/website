@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Scanopy API",
-    "description": "\nNetwork topology discovery and visualization API.\n\n## Authentication\n\nTwo authentication methods are supported:\n\n| Method | Header | Use Case |\n|--------|--------|----------|\n| User API key | `Authorization: Bearer scp_u_...` | Programmatic access, integrations |\n| Session cookie | `Cookie: session_id=...` | Web UI (via `/api/auth/login`) |\n\nUser API keys require your organization to have API access enabled. Create keys at **Platform > API Keys**.\n\n## Rate Limiting\n\nLimit: 300 requests/minute\n\nBurst: 150\n\nResponse headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`\n\nWhen rate limited, you'll receive HTTP `429 Too Many Requests` with a `Retry-After` header.\n\n## Pagination\n\nList endpoints support pagination via query parameters:\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `limit` | integer | 50 | Maximum results to return (1-1000). Use 0 for no limit. |\n| `offset` | integer | 0 | Number of results to skip |\n\nExample: `GET /api/v1/hosts?limit=10&offset=20`\n\n## Response Format\n\nAll responses use a standard envelope:\n\n```json\n{\n  \"success\": true,\n  \"data\": { ... },\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.17.19\"\n  }\n}\n```\n\n**Paginated list responses** include pagination metadata:\n\n```json\n{\n  \"success\": true,\n  \"data\": [ ... ],\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.17.19\",\n    \"pagination\": {\n      \"total_count\": 142,\n      \"limit\": 50,\n      \"offset\": 0,\n      \"has_more\": true\n    }\n  }\n}\n```\n\n| Field | Description |\n|-------|-------------|\n| `total_count` | Total items matching your query (ignoring pagination) |\n| `limit` | Applied limit (your request or default) |\n| `offset` | Applied offset |\n| `has_more` | `true` if more results exist beyond this page |\n\n**Error responses** include an `error` field instead of `data`:\n\n```json\n{\n  \"success\": false,\n  \"error\": \"Resource not found\",\n  \"meta\": { ... }\n}\n```\n\n**Common status codes:** `400` validation error, `401` unauthorized, `403` forbidden, `404` not found, `409` conflict, `429` rate limited.\n\n## Versioning\n\nEndpoints are prefixed with `/api/v1/`. The API version is an integer (`api_version: 1`) returned in every response, versioned independently from the application. Check `GET /api/version` for current versions.\n\n**While Scanopy is pre-v1.0 (current: 0.17.19)**, the API should be considered unstable. Breaking changes may be introduced in any release without incrementing the API version. We recommend pinning to a specific Scanopy release if you depend on API stability, and reviewing the [changelog](/changelog) before upgrading. After Scanopy reaches v1.0, breaking API changes will only occur with an API version increment.\n\n## Multi-Tenancy\n\nResources are scoped to your **organization** and **network(s)**:\n\n- You can only access entities within your organization\n- Network-level entities (hosts, services, etc.) are filtered to networks you have access to\n- Use `?network_id=<UUID>` to filter list endpoints to a specific network\n- API keys can be scoped to a subset of your accessible networks\n",
+    "description": "\nNetwork topology discovery and visualization API.\n\n## Authentication\n\nTwo authentication methods are supported:\n\n| Method | Header | Use Case |\n|--------|--------|----------|\n| User API key | `Authorization: Bearer scp_u_...` | Programmatic access, integrations |\n| Session cookie | `Cookie: session_id=...` | Web UI (via `/api/auth/login`) |\n\nUser API keys require your organization to have API access enabled. Create keys at **Platform > API Keys**.\n\n## Rate Limiting\n\nLimit: 300 requests/minute\n\nBurst: 150\n\nResponse headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`\n\nWhen rate limited, you'll receive HTTP `429 Too Many Requests` with a `Retry-After` header.\n\n## Pagination\n\nList endpoints support pagination via query parameters:\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `limit` | integer | 50 | Maximum results to return (1-1000). Use 0 for no limit. |\n| `offset` | integer | 0 | Number of results to skip |\n\nExample: `GET /api/v1/hosts?limit=10&offset=20`\n\n## Response Format\n\nAll responses use a standard envelope:\n\n```json\n{\n  \"success\": true,\n  \"data\": { ... },\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.17.21\"\n  }\n}\n```\n\n**Paginated list responses** include pagination metadata:\n\n```json\n{\n  \"success\": true,\n  \"data\": [ ... ],\n  \"meta\": {\n    \"api_version\": 1,\n    \"server_version\": \"0.17.21\",\n    \"pagination\": {\n      \"total_count\": 142,\n      \"limit\": 50,\n      \"offset\": 0,\n      \"has_more\": true\n    }\n  }\n}\n```\n\n| Field | Description |\n|-------|-------------|\n| `total_count` | Total items matching your query (ignoring pagination) |\n| `limit` | Applied limit (your request or default) |\n| `offset` | Applied offset |\n| `has_more` | `true` if more results exist beyond this page |\n\n**Error responses** include an `error` field instead of `data`:\n\n```json\n{\n  \"success\": false,\n  \"error\": \"Resource not found\",\n  \"meta\": { ... }\n}\n```\n\n**Common status codes:** `400` validation error, `401` unauthorized, `403` forbidden, `404` not found, `409` conflict, `429` rate limited.\n\n## Versioning\n\nEndpoints are prefixed with `/api/v1/`. The API version is an integer (`api_version: 1`) returned in every response, versioned independently from the application. Check `GET /api/version` for current versions.\n\n**While Scanopy is pre-v1.0 (current: 0.17.21)**, the API should be considered unstable. Breaking changes may be introduced in any release without incrementing the API version. We recommend pinning to a specific Scanopy release if you depend on API stability, and reviewing the [changelog](/changelog) before upgrading. After Scanopy reaches v1.0, breaking API changes will only occur with an API version increment.\n\n## Multi-Tenancy\n\nResources are scoped to your **organization** and **network(s)**:\n\n- You can only access entities within your organization\n- Network-level entities (hosts, services, etc.) are filtered to networks you have access to\n- Use `?network_id=<UUID>` to filter list endpoints to a specific network\n- API keys can be scoped to a subset of your accessible networks\n",
     "license": {
       "name": "Dual (AGPL3.0, Commercial License Available)"
     },
@@ -2881,7 +2881,7 @@
           "Daemons"
         ],
         "summary": "Generate daemon install command",
-        "description": "A pure, idempotent builder — it never mints or persists anything. The api key in an `install`\ncommand is a placeholder (`<API_KEY>`) the caller substitutes from the plaintext it holds; a\n`reconfigure` command carries no key at all. Minting is a separate mutation\n(`POST /provision`), so regenerating a command here (advanced-setting change, OS switch, the\nDetails reconfigure view) never rotates the daemon's key.\n\nThe server derives the exact command shape from the record: DaemonPoll vs ServerPoll for the\nflags, and — for `install` — whether the daemon has checked in (`last_seen`) to decide between\na first-install and a minimal re-key command.",
+        "description": "A pure, idempotent builder — it never mints or persists anything. The api key in an `install`\nor `rekey` command is a placeholder (`<API_KEY>`) the caller substitutes from the plaintext it holds; a\n`reconfigure` command carries no key at all. Minting is a separate mutation\n(`POST /provision`), so regenerating a command here (advanced-setting change, OS switch, the\nDetails reconfigure view) never rotates the daemon's key.\n\nThe server derives the exact command shape from the record: DaemonPoll vs ServerPoll for the\nflags, and — for `rekey` — whether the daemon has checked in (`last_seen`) to decide whether\nthe command names the existing install it re-keys. An `install` command reads the same before\nand after the daemon's first handshake.",
         "operationId": "get_daemon_install_command",
         "parameters": [
           {
@@ -2897,7 +2897,7 @@
           {
             "name": "purpose",
             "in": "query",
-            "description": "`install` (with the api-key placeholder) or `reconfigure` (credential-free).",
+            "description": "`install` or `rekey` (with the api-key placeholder), or `reconfigure` (credential-free).",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/InstallCommandType"
@@ -3699,6 +3699,21 @@
             }
           },
           {
+            "name": "virtualization_service_names",
+            "in": "query",
+            "description": "Filter by the name of the service virtualizing the host, the value \"Virtualized By\"\ngroups on. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
             "name": "include_unvirtualized",
             "in": "query",
             "description": "`true` also returns hosts nothing virtualizes. Set on its own it returns\nonly those — the \"Not Virtualized\" choice in the UI's filter.",
@@ -3737,6 +3752,82 @@
               ],
               "items": {
                 "$ref": "#/components/schemas/EntitySourceDiscriminants"
+              }
+            }
+          },
+          {
+            "name": "manufacturers",
+            "in": "query",
+            "description": "Filter by hardware manufacturer. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "models",
+            "in": "query",
+            "description": "Filter by hardware model. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sys_locations",
+            "in": "query",
+            "description": "Filter by SNMP sysLocation. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "os_families",
+            "in": "query",
+            "description": "Filter by operating system family. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/HostOsFamily"
+              }
+            }
+          },
+          {
+            "name": "credential_ids",
+            "in": "query",
+            "description": "Filter to hosts assigned one of these credentials. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
               }
             }
           },
@@ -4094,6 +4185,21 @@
             }
           },
           {
+            "name": "virtualization_service_names",
+            "in": "query",
+            "description": "Filter by the name of the service virtualizing the host, the value \"Virtualized By\"\ngroups on. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
             "name": "include_unvirtualized",
             "in": "query",
             "description": "`true` also returns hosts nothing virtualizes. Set on its own it returns\nonly those — the \"Not Virtualized\" choice in the UI's filter.",
@@ -4132,6 +4238,82 @@
               ],
               "items": {
                 "$ref": "#/components/schemas/EntitySourceDiscriminants"
+              }
+            }
+          },
+          {
+            "name": "manufacturers",
+            "in": "query",
+            "description": "Filter by hardware manufacturer. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "models",
+            "in": "query",
+            "description": "Filter by hardware model. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sys_locations",
+            "in": "query",
+            "description": "Filter by SNMP sysLocation. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "os_families",
+            "in": "query",
+            "description": "Filter by operating system family. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/HostOsFamily"
+              }
+            }
+          },
+          {
+            "name": "credential_ids",
+            "in": "query",
+            "description": "Filter to hosts assigned one of these credentials. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
               }
             }
           },
@@ -4373,6 +4555,21 @@
             }
           },
           {
+            "name": "virtualization_service_names",
+            "in": "query",
+            "description": "Filter by the name of the service virtualizing the host, the value \"Virtualized By\"\ngroups on. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
             "name": "include_unvirtualized",
             "in": "query",
             "description": "`true` also returns hosts nothing virtualizes. Set on its own it returns\nonly those — the \"Not Virtualized\" choice in the UI's filter.",
@@ -4411,6 +4608,82 @@
               ],
               "items": {
                 "$ref": "#/components/schemas/EntitySourceDiscriminants"
+              }
+            }
+          },
+          {
+            "name": "manufacturers",
+            "in": "query",
+            "description": "Filter by hardware manufacturer. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "models",
+            "in": "query",
+            "description": "Filter by hardware model. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sys_locations",
+            "in": "query",
+            "description": "Filter by SNMP sysLocation. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "os_families",
+            "in": "query",
+            "description": "Filter by operating system family. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/HostOsFamily"
+              }
+            }
+          },
+          {
+            "name": "credential_ids",
+            "in": "query",
+            "description": "Filter to hosts assigned one of these credentials. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
               }
             }
           },
@@ -4564,6 +4837,395 @@
               "application/zip": {
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "user_api_key": []
+          },
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/api/v1/hosts/field-values/{field}": {
+      "get": {
+        "tags": [
+          "Hosts"
+        ],
+        "summary": "List the values of a Host field",
+        "description": "Every distinct value of one Host field across the Hosts the caller can list, with how many hold each. Takes the list's filters; ignores pagination, search and ordering.",
+        "operationId": "get_host_field_values",
+        "parameters": [
+          {
+            "name": "field",
+            "in": "path",
+            "description": "The field whose values to count",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/HostOrderField"
+            }
+          },
+          {
+            "name": "network_ids",
+            "in": "query",
+            "description": "Filter by network ID. Repeat the parameter to pass several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Filter by specific entity IDs (for selective loading)",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "hidden",
+            "in": "query",
+            "description": "Filter by the `hidden` flag. Repeat the parameter to accept both values;\nomit it for no constraint.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "name": "virtualization_service_ids",
+            "in": "query",
+            "description": "Filter by the service virtualizing the host. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "virtualization_service_names",
+            "in": "query",
+            "description": "Filter by the name of the service virtualizing the host, the value \"Virtualized By\"\ngroups on. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "include_unvirtualized",
+            "in": "query",
+            "description": "`true` also returns hosts nothing virtualizes. Set on its own it returns\nonly those — the \"Not Virtualized\" choice in the UI's filter.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "service_names",
+            "in": "query",
+            "description": "Filter to hosts running a service with one of these names.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "Filter by how the host came to exist (`source.type`). Repeat for several;\n`Inferred` alone lists the hosts only a neighbour advertised.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/EntitySourceDiscriminants"
+              }
+            }
+          },
+          {
+            "name": "manufacturers",
+            "in": "query",
+            "description": "Filter by hardware manufacturer. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "models",
+            "in": "query",
+            "description": "Filter by hardware model. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sys_locations",
+            "in": "query",
+            "description": "Filter by SNMP sysLocation. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "os_families",
+            "in": "query",
+            "description": "Filter by operating system family. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/HostOsFamily"
+              }
+            }
+          },
+          {
+            "name": "credential_ids",
+            "in": "query",
+            "description": "Filter to hosts assigned one of these credentials. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "tag_ids",
+            "in": "query",
+            "description": "Filter by tag IDs (returns hosts that have ANY of the specified tags)",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Free-text search. Case-insensitive substring match against the host's\nname, hostname, sysName, chassis id and description, and against its IP\naddresses and the names of services running on it.\n\nsysName and chassis id are in there because they are rungs of the title\nladder: a host with no name of its own is *shown* under one of them, and\na title you can read but cannot search for is a dead end.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "group_by",
+            "in": "query",
+            "description": "Primary ordering field (used for grouping). Always sorts ASC to keep groups together.",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/components/schemas/HostOrderField"
+                }
+              ]
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "Secondary ordering field (sorting within groups or standalone sort).",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/components/schemas/HostOrderField"
+                }
+              ]
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "query",
+            "description": "Direction for order_by field (group_by always uses ASC).",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/components/schemas/OrderDirection"
+                }
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results to return (1-1000, default: 50). Use 0 for no limit.",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int32",
+              "maximum": 1000,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of results to skip. Default: 0.",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "at",
+            "in": "query",
+            "description": "As-of timestamp (ISO 8601). When set, returns SCD2 state as of this\ninstant (snapshot view) instead of live state.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "stale",
+            "in": "query",
+            "description": "`true` returns only hosts discovery hasn't observed within their\nnetwork's staleness window; `false` returns only those it has. Omit for\nboth. Evaluated per row against the host's own network's window.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "include_children",
+            "in": "query",
+            "description": "`false` returns hosts with empty `ports`/`services`/`interfaces`.\n`ip_addresses` is always populated: the host's title can come from its\naddress. The children dominate the payload, so callers that only need\nhost identity — name pickers, id→name lookups, counts — should pass\n`false`. Defaults to `true`, so existing callers are unaffected.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Distinct values and their Host counts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Vec_GroupCount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown field",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
                 }
               }
             }
@@ -7486,6 +8148,21 @@
             }
           },
           {
+            "name": "virtualization_service_names",
+            "in": "query",
+            "description": "Filter by the name of the service containerizing this one, the value \"Containerized\"\ngroups on. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
             "name": "include_uncontainerized",
             "in": "query",
             "description": "`true` also returns services nothing containerizes. Set on its own it\nreturns only those — the \"Not Containerized\" choice in the UI's filter.",
@@ -7495,6 +8172,36 @@
                 "boolean",
                 "null"
               ]
+            }
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "Filter by how the service came to exist (`source.type`). Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/EntitySourceDiscriminants"
+              }
+            }
+          },
+          {
+            "name": "match_confidences",
+            "in": "query",
+            "description": "Filter by match confidence (`source.details.confidence`). Repeat for several. Only\nservices discovery matched to a definition carry one.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/MatchConfidence"
+              }
             }
           },
           {
@@ -7863,6 +8570,21 @@
             }
           },
           {
+            "name": "virtualization_service_names",
+            "in": "query",
+            "description": "Filter by the name of the service containerizing this one, the value \"Containerized\"\ngroups on. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
             "name": "include_uncontainerized",
             "in": "query",
             "description": "`true` also returns services nothing containerizes. Set on its own it\nreturns only those — the \"Not Containerized\" choice in the UI's filter.",
@@ -7872,6 +8594,36 @@
                 "boolean",
                 "null"
               ]
+            }
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "Filter by how the service came to exist (`source.type`). Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/EntitySourceDiscriminants"
+              }
+            }
+          },
+          {
+            "name": "match_confidences",
+            "in": "query",
+            "description": "Filter by match confidence (`source.details.confidence`). Repeat for several. Only\nservices discovery matched to a definition carry one.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/MatchConfidence"
+              }
             }
           },
           {
@@ -8044,6 +8796,355 @@
               "text/csv": {
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "user_api_key": []
+          },
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/api/v1/services/field-values/{field}": {
+      "get": {
+        "tags": [
+          "Services"
+        ],
+        "summary": "List the values of a Service field",
+        "description": "Every distinct value of one Service field across the Services the caller can list, with how many hold each. Takes the list's filters; ignores pagination, search and ordering.",
+        "operationId": "get_service_field_values",
+        "parameters": [
+          {
+            "name": "field",
+            "in": "path",
+            "description": "The field whose values to count",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ServiceOrderField"
+            }
+          },
+          {
+            "name": "network_ids",
+            "in": "query",
+            "description": "Filter by network ID. Repeat the parameter to pass several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "host_ids",
+            "in": "query",
+            "description": "Filter by host ID. Repeat the parameter to pass several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Filter by specific entity IDs (for selective loading)",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "service_definitions",
+            "in": "query",
+            "description": "Only services with one of these definitions.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "virtualization_service_ids",
+            "in": "query",
+            "description": "Filter by the service containerizing this one. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "virtualization_service_names",
+            "in": "query",
+            "description": "Filter by the name of the service containerizing this one, the value \"Containerized\"\ngroups on. Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "include_uncontainerized",
+            "in": "query",
+            "description": "`true` also returns services nothing containerizes. Set on its own it\nreturns only those — the \"Not Containerized\" choice in the UI's filter.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "Filter by how the service came to exist (`source.type`). Repeat for several.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/EntitySourceDiscriminants"
+              }
+            }
+          },
+          {
+            "name": "match_confidences",
+            "in": "query",
+            "description": "Filter by match confidence (`source.details.confidence`). Repeat for several. Only\nservices discovery matched to a definition carry one.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/MatchConfidence"
+              }
+            }
+          },
+          {
+            "name": "tag_ids",
+            "in": "query",
+            "description": "Filter by tag IDs (returns services that have ANY of the specified tags)",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Free-text search. Case-insensitive substring match against the service's\nname and definition, and against the name of the host it runs on.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "name": "group_by",
+            "in": "query",
+            "description": "Primary ordering field (used for grouping). Always sorts ASC to keep groups together.",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/components/schemas/ServiceOrderField"
+                }
+              ]
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "Secondary ordering field (sorting within groups or standalone sort).",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/components/schemas/ServiceOrderField"
+                }
+              ]
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "query",
+            "description": "Direction for order_by field (group_by always uses ASC).",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/components/schemas/OrderDirection"
+                }
+              ]
+            }
+          },
+          {
+            "name": "ports",
+            "in": "query",
+            "description": "Only services exposed on one of these port numbers, over either protocol.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "integer",
+                "format": "int32",
+                "minimum": 0
+              }
+            }
+          },
+          {
+            "name": "exclude_categories",
+            "in": "query",
+            "description": "Exclude services belonging to these categories.",
+            "required": false,
+            "schema": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/ServiceCategory"
+              }
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results to return (1-1000, default: 50). Use 0 for no limit.",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int32",
+              "maximum": 1000,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of results to skip. Default: 0.",
+            "required": false,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "at",
+            "in": "query",
+            "description": "As-of timestamp (ISO 8601). When set, returns SCD2 state as of this\ninstant (snapshot view) instead of live state.",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "stale",
+            "in": "query",
+            "description": "`true` returns only services discovery hasn't observed within their\nnetwork's staleness window; `false` returns only those it has. Omit for\nboth. Evaluated per row against the service's own network's window.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Distinct values and their Service counts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Vec_GroupCount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown field",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
                 }
               }
             }
@@ -11778,12 +12879,12 @@
           "server_version": {
             "type": "string",
             "description": "Server version (semver)",
-            "example": "0.17.19"
+            "example": "0.17.21"
           }
         },
         "example": {
           "api_version": 1,
-          "server_version": "0.17.19"
+          "server_version": "0.17.21"
         }
       },
       "ApiResponse": {
@@ -11923,19 +13024,19 @@
             ],
             "description": "Association between a service and a port / interface that the service is listening on",
             "example": {
-              "created_at": "2026-10-02T12:58:48.621633Z",
+              "created_at": "2026-10-05T01:43:16.085729Z",
               "first_discovery_id": null,
-              "id": "f6a24c3b-d9dd-45b3-b7ae-ddc6dacfeeb2",
+              "id": "1c61e615-106d-4cbd-9c8c-aded636d67d5",
               "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
               "last_discovery_id": null,
-              "last_seen_at": "2026-10-02T12:58:48.621633Z",
+              "last_seen_at": "2026-10-05T01:43:16.085729Z",
               "lineage_id": null,
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "port_id": "550e8400-e29b-41d4-a716-446655440006",
               "service_id": "550e8400-e29b-41d4-a716-446655440007",
               "type": "Port",
-              "updated_at": "2026-10-02T12:58:48.621633Z",
-              "valid_from": "2026-10-02T12:58:48.621633Z",
+              "updated_at": "2026-10-05T01:43:16.085729Z",
+              "valid_from": "2026-10-05T01:43:16.085729Z",
               "valid_to": null
             }
           },
@@ -13102,6 +14203,7 @@
               "tags",
               "firmware_revision",
               "software_revision",
+              "os",
               "ip_addresses",
               "ports",
               "services",
@@ -13147,7 +14249,7 @@
               "last_seen_at": {
                 "type": "string",
                 "format": "date-time",
-                "description": "Last time discovery observed this host. User-facing (drives the \"Last\nseen\" column and the stale badge), which is why it is carried here while\nthe rest of the SCD2/audit columns are not."
+                "description": "Last time discovery observed this host. User-facing (drives the \"Last\nseen\" column and the stale badge), which is why it is carried here while\nthe version-history columns are not."
               },
               "name": {
                 "type": "string",
@@ -13157,6 +14259,17 @@
                 "type": "string",
                 "format": "uuid",
                 "description": "The network this entity belongs to."
+              },
+              "os": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/components/schemas/HostOs",
+                    "description": "The host's operating system. Read-only: written by whichever source read or matched it.\nLenient, so a daemon tolerates a family added on a newer server."
+                  }
+                ]
               },
               "ports": {
                 "type": "array",
@@ -13245,6 +14358,15 @@
                 "$ref": "#/components/schemas/AttributeSource",
                 "description": "What produced the firmware revision. Read-only: decided by whichever source read it."
               },
+              "first_discovery_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uuid",
+                "description": "The discovery run that first observed this host. Drives the \"First found by\" column.",
+                "readOnly": true
+              },
               "hostname": {
                 "type": [
                   "string",
@@ -13255,6 +14377,15 @@
               "hostname_source": {
                 "$ref": "#/components/schemas/AttributeSource",
                 "description": "What produced `hostname`: a PTR lookup, the host's own OS, a controller, mDNS, or a person.\nRead-only: decided by whichever source read it."
+              },
+              "last_discovery_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uuid",
+                "description": "The discovery run that last observed this host. Drives the \"Last found by\" column.",
+                "readOnly": true
               },
               "management_url": {
                 "type": [
@@ -13301,6 +14432,10 @@
               "name_source": {
                 "$ref": "#/components/schemas/AttributeSource",
                 "description": "What produced `name`. Read-only: it is decided by whoever supplied the name, not by the\ncaller."
+              },
+              "os_source": {
+                "$ref": "#/components/schemas/AttributeSource",
+                "description": "What produced the OS. Read-only, as above. A source whose method is `Inferred` matched the OS\nin a string the host emitted rather than reading it off the host."
               },
               "serial_number": {
                 "type": [
@@ -13374,6 +14509,14 @@
                 "$ref": "#/components/schemas/AttributeSource",
                 "description": "What produced SNMP sysObjectID. Read-only: decided by whichever source read it."
               },
+              "virtualization_interface_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uuid",
+                "description": "The interface on the virtualizing host that presents this host, for a network identity."
+              },
               "virtualization_metadata": {
                 "oneOf": [
                   {
@@ -13403,6 +14546,7 @@
               "display_name_rung": "Name",
               "firmware_revision": null,
               "firmware_revision_source": "Unspecified",
+              "first_discovery_id": null,
               "hidden": false,
               "hostname": "web-server-01.local",
               "hostname_source": "Manual",
@@ -13457,6 +14601,7 @@
                   "valid_to": null
                 }
               ],
+              "last_discovery_id": null,
               "last_seen_at": "2026-01-15T10:30:00Z",
               "management_url_source": "Unspecified",
               "manufacturer_source": "Unspecified",
@@ -13491,6 +14636,8 @@
               ],
               "name_source": "Manual",
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
+              "os": null,
+              "os_source": "Unspecified",
               "ports": [
                 {
                   "created_at": "2026-01-15T10:30:00Z",
@@ -13514,19 +14661,19 @@
                 {
                   "bindings": [
                     {
-                      "created_at": "2026-10-02T12:58:48.606911Z",
+                      "created_at": "2026-10-05T01:43:16.070454Z",
                       "first_discovery_id": null,
-                      "id": "38a87ce3-dfa2-40f7-8d52-eb068e0bf635",
+                      "id": "a352331a-9c94-49c2-aaf1-d1f72fb4cfda",
                       "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
                       "last_discovery_id": null,
-                      "last_seen_at": "2026-10-02T12:58:48.606911Z",
+                      "last_seen_at": "2026-10-05T01:43:16.070454Z",
                       "lineage_id": null,
                       "network_id": "550e8400-e29b-41d4-a716-446655440002",
                       "port_id": "550e8400-e29b-41d4-a716-446655440006",
                       "service_id": "550e8400-e29b-41d4-a716-446655440007",
                       "type": "Port",
-                      "updated_at": "2026-10-02T12:58:48.606911Z",
-                      "valid_from": "2026-10-02T12:58:48.606911Z",
+                      "updated_at": "2026-10-05T01:43:16.070454Z",
+                      "valid_from": "2026-10-05T01:43:16.070454Z",
                       "valid_to": null
                     }
                   ],
@@ -13540,7 +14687,7 @@
                   "name": "nginx",
                   "network_id": "550e8400-e29b-41d4-a716-446655440002",
                   "position": 0,
-                  "service_definition": "Tuya Smart",
+                  "service_definition": "CheckMK Agent",
                   "source": {
                     "type": "Manual"
                   },
@@ -13564,6 +14711,7 @@
               "sys_object_id_source": "Unspecified",
               "tags": [],
               "updated_at": "2026-01-15T10:30:00Z",
+              "virtualization_interface_id": null,
               "virtualization_metadata": null,
               "virtualization_service_id": null
             }
@@ -13820,7 +14968,7 @@
                       "string",
                       "null"
                     ],
-                    "description": "What to call this interface when it has no `if_alias`/`if_descr`: the MAC it was\nidentified by, or \"Interface\" when it has neither.\n\nRead-only and computed from [`Interface::display_name`] — the same ladder topology port\nlabels an interface with, so it cannot be called one thing in a list and another on the\nmap. Only set on outbound responses nested under a host (`HostResponse::interfaces`);\nabsent on a daemon's own submission and on the standalone `/interfaces` CRUD endpoints,\nwhich return `Interface` directly without this computation.",
+                    "description": "What to call this interface when it has no `if_alias`/`if_descr`: the MAC it was\nidentified by, or \"Interface\" when it has neither.\n\nRead-only and computed from [`Interface::display_name`] — the same ladder topology port\nlabels an interface with, so it cannot be called one thing in a list and another on the\nmap. Set on every interface read from storage, so every endpoint that returns one carries\nit; absent on a daemon's own submission, and ignored on write.",
                     "readOnly": true
                   },
                   "first_discovery_id": {
@@ -14938,19 +16086,19 @@
             "example": {
               "bindings": [
                 {
-                  "created_at": "2026-10-02T12:58:48.618146Z",
+                  "created_at": "2026-10-05T01:43:16.082076Z",
                   "first_discovery_id": null,
-                  "id": "e628f85d-2b75-4299-9855-b04a697cddaf",
+                  "id": "33207511-4396-495c-ae4d-7561d2ea6cf5",
                   "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
                   "last_discovery_id": null,
-                  "last_seen_at": "2026-10-02T12:58:48.618146Z",
+                  "last_seen_at": "2026-10-05T01:43:16.082076Z",
                   "lineage_id": null,
                   "network_id": "550e8400-e29b-41d4-a716-446655440002",
                   "port_id": "550e8400-e29b-41d4-a716-446655440006",
                   "service_id": "550e8400-e29b-41d4-a716-446655440007",
                   "type": "Port",
-                  "updated_at": "2026-10-02T12:58:48.618146Z",
-                  "valid_from": "2026-10-02T12:58:48.618146Z",
+                  "updated_at": "2026-10-05T01:43:16.082076Z",
+                  "valid_from": "2026-10-05T01:43:16.082076Z",
                   "valid_to": null
                 }
               ],
@@ -14964,7 +16112,7 @@
               "name": "nginx",
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "position": 0,
-              "service_definition": "Tuya Smart",
+              "service_definition": "CheckMK Agent",
               "source": {
                 "type": "Manual"
               },
@@ -15042,14 +16190,14 @@
           "data": {
             "type": "object",
             "description": "Response from setup endpoint",
-            "required": [
-              "network_id"
-            ],
             "properties": {
               "network_id": {
-                "type": "string",
+                "type": [
+                  "string",
+                  "null"
+                ],
                 "format": "uuid",
-                "description": "The network this entity belongs to."
+                "description": "Pre-assigned id of the network created at registration, if one was requested."
               }
             }
           },
@@ -15804,7 +16952,8 @@
                       "Category",
                       "Virtualization",
                       "LinkState",
-                      "Staleness"
+                      "Staleness",
+                      "OperStatus"
                     ]
                   }
                 },
@@ -16553,6 +17702,57 @@
           }
         }
       },
+      "ApiResponse_Vec_GroupCount": {
+        "type": "object",
+        "description": "Envelope for a successful response. Failures are sent with a non-2xx status\nand an `ApiErrorResponse` body instead.",
+        "required": [
+          "success",
+          "meta"
+        ],
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ApiMeta",
+            "description": "API and server version metadata."
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Always `true` on a successful response."
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Size of one group in a grouped list, across every page.",
+              "required": [
+                "count"
+              ],
+              "properties": {
+                "count": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "How many rows fall in this group in total, not just on this page.",
+                  "minimum": 0
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The group's value, rendered as text. `null` for rows whose group key is\nNULL (the \"ungrouped\" bucket)."
+                }
+              }
+            },
+            "description": "The result payload. Omitted on failure."
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Not sent on a successful response. Failure messages arrive in an\n`ApiErrorResponse`."
+          }
+        }
+      },
       "ApiResponse_Vec_Invite": {
         "type": "object",
         "description": "Envelope for a successful response. Failures are sent with a non-2xx status\nand an `ApiErrorResponse` body instead.",
@@ -16890,6 +18090,55 @@
           },
           {
             "type": "string",
+            "description": "An operating system matched in SNMP `sysDescr` against a Recog fingerprint. The text is the\ndevice's own, but the OS is our reading of it, so it ranks below anything read off the host.",
+            "enum": [
+              "SysDescrMatch"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "An operating system implied by an SNMP `sysObjectID` a Recog fingerprint names. Inferred for\nthe same reason as [`Self::SysDescrMatch`].",
+            "enum": [
+              "SysObjectIdMatch"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "An operating system matched in the system description an LLDP neighbour advertised for itself\n(`lldpRemSysDesc`). Inferred for the same reason as [`Self::SysDescrMatch`].",
+            "enum": [
+              "LldpSysDescMatch"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "An operating system matched in an SSH server's identification string, such as the\n`Ubuntu-3ubuntu13` a distribution's OpenSSH package appends.",
+            "enum": [
+              "SshBannerMatch"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "An operating system matched in an HTTP `Server` header, such as `Microsoft-IIS/10.0`.",
+            "enum": [
+              "HttpServerMatch"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "An operating system matched in an mDNS `_device-info._tcp` record, such as a Mac's\n`model=MacBookPro18,3`.",
+            "enum": [
+              "DnsSdDeviceInfoMatch"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "An operating system matched in the `model` an mDNS `_airplay._tcp` record carries, such as a\nMac's `model=Mac17,2`. Macs that share nothing still advertise AirPlay.",
+            "enum": [
+              "DnsSdAirPlayMatch"
+            ]
+          },
+          {
+            "type": "string",
             "description": "A DNS-SD instance label — the Chromecast `fn=Living Room TV`, typed by a person during\ndevice setup.",
             "enum": [
               "DnsSdInstanceName"
@@ -16942,6 +18191,27 @@
             "description": "A PROFINET DCP Identify exchange: we sent the request and the transport correlated the\nreply to the station that sent it. `Native`, not merely `Queried` — like [`Self::Probe`]\nover [`ClientProbe::ModbusTcp`]/`EtherNetIp`/`OpcUa`, the protocol is the device's own\nrather than a generic MIB approximating it. A bare variant rather than `Probe(ClientProbe)`\non purpose: [`ClientProbe`] is scoped to application probes reached over an already-open\nTCP/UDP port (`every_client_probe_variant_has_a_producer` enforces that every variant has an\n`AppProbe` producer), and DCP is raw Ethernet with no port at all.",
             "enum": [
               "ProfinetDcp"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "A container engine (Docker, Podman) reporting the machine it runs on, from its `info`\nendpoint: the host OS, its release and kernel. `Native` for the reason [`Self::ProfinetDcp`]\nis: the engine reads its own host, and that is what the answer means. A bare variant rather\nthan `Probe(Docker)`, which is the container listing; this is a different exchange.",
+            "enum": [
+              "ContainerRuntimeInfo"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "The configuration of the hypervisor or container runtime that runs the guest, read\nthrough its API: the MAC of a Proxmox guest's virtual NIC or of a container's macvlan\nendpoint, and the hostname and distribution a Proxmox LXC container's config sets. `Native` for the reason [`Self::ContainerRuntimeInfo`] is: the hypervisor or\nruntime assigned that MAC, keeps it for the guest's or container's life and puts it on the\nwire for it, so its record is the NIC's own identity, not a third party's report of it.\nThat is what lets a guest with no address still be identified by its NIC. A bare variant\nrather than `Probe(Proxmox)` or `Probe(Docker)`, which cover everything else those APIs\nreport and stay `Reported`.",
+            "enum": [
+              "HypervisorConfig"
+            ]
+          },
+          {
+            "type": "string",
+            "description": "Software inside a guest read this from the guest's own operating system and answered the\nhypervisor's API: the QEMU guest agent behind Proxmox, and the same role VMware Tools and\nHyper-V integration services fill. `Native` for the reason [`Self::ContainerRuntimeInfo`]\nis: the guest describes itself, over a channel the hypervisor binds to that one guest, so\nit is first-hand, not the hypervisor's report of the guest (`Probe(Proxmox)`).",
+            "enum": [
+              "GuestAgent"
             ]
           },
           {
@@ -17245,19 +18515,19 @@
       "Binding": {
         "description": "Association between a service and a port / interface that the service is listening on",
         "example": {
-          "created_at": "2026-10-02T12:58:48.607253Z",
+          "created_at": "2026-10-05T01:43:16.070876Z",
           "first_discovery_id": null,
-          "id": "04f32d9e-cffa-4aef-912c-44426a5a9848",
+          "id": "eee32cbd-50df-49ef-b41a-fd2297c51b11",
           "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
           "last_discovery_id": null,
-          "last_seen_at": "2026-10-02T12:58:48.607253Z",
+          "last_seen_at": "2026-10-05T01:43:16.070876Z",
           "lineage_id": null,
           "network_id": "550e8400-e29b-41d4-a716-446655440002",
           "port_id": "550e8400-e29b-41d4-a716-446655440006",
           "service_id": "550e8400-e29b-41d4-a716-446655440007",
           "type": "Port",
-          "updated_at": "2026-10-02T12:58:48.607253Z",
-          "valid_from": "2026-10-02T12:58:48.607253Z",
+          "updated_at": "2026-10-05T01:43:16.070876Z",
+          "valid_from": "2026-10-05T01:43:16.070876Z",
           "valid_to": null
         },
         "oneOf": [
@@ -17904,6 +19174,7 @@
           "Snmp",
           "UnifiController",
           "InstantOn",
+          "Proxmox",
           "ModbusTcp",
           "OpcUa",
           "EtherNetIp",
@@ -17970,6 +19241,48 @@
           "Gray",
           "Lime",
           "Yellow"
+        ]
+      },
+      "ContainerHostVirtualization": {
+        "type": "object",
+        "description": "A container with its own identity on the LAN: a macvlan or ipvlan endpoint gives it a MAC and\nan IP of its own, so it is a host under its runtime rather than a service on the runtime's\nhost. Containers on bridge networks stay services (`ServiceVirtualization`).",
+        "required": [
+          "network_type"
+        ],
+        "properties": {
+          "network_type": {
+            "$ref": "#/components/schemas/ContainerNetworkType",
+            "description": "The network driver that gives the container its own LAN address."
+          },
+          "compose_project": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Compose project the container belongs to, when it was started by Compose."
+          },
+          "container_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Container ID as reported by the runtime."
+          },
+          "container_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Container name as reported by the runtime."
+          }
+        }
+      },
+      "ContainerNetworkType": {
+        "type": "string",
+        "description": "The container network drivers that put a container directly on the LAN.",
+        "enum": [
+          "MacVlan",
+          "IpVlan"
         ]
       },
       "ContainerType": {
@@ -18186,6 +19499,14 @@
             ],
             "description": "SNMP sysObjectID — the vendor's identifier for the device model."
           },
+          "virtualization_interface_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The interface on the virtualizing host that presents this host, for a network identity."
+          },
           "virtualization_metadata": {
             "oneOf": [
               {
@@ -18244,13 +19565,14 @@
               "id": "550e8400-e29b-41d4-a716-446655440007",
               "name": "nginx",
               "position": 0,
-              "service_definition": "Tuya Smart",
+              "service_definition": "CheckMK Agent",
               "tags": [],
               "virtualization_metadata": null,
               "virtualization_service_id": null
             }
           ],
           "tags": [],
+          "virtualization_interface_id": null,
           "virtualization_metadata": null,
           "virtualization_service_id": null
         }
@@ -18647,7 +19969,8 @@
           "UnifiController",
           "InstantOn",
           "Ssh",
-          "WakeOnLan"
+          "WakeOnLan",
+          "Proxmox"
         ]
       },
       "CredentialOrderField": {
@@ -18687,6 +20010,7 @@
           "Gnmi",
           "Ssh",
           "WakeOnLan",
+          "Proxmox",
           "Unknown"
         ]
       },
@@ -19377,6 +20701,38 @@
                 "minimum": 0
               }
             }
+          },
+          {
+            "type": "object",
+            "title": "ProxmoxApiToken",
+            "description": "Proxmox VE API token. Any node's API answers for its whole cluster, so one credential on\none node reports every node, VM and LXC container. Use a read-only token: the PVEAuditor\nrole on `/`, plus guest-agent read access for VM addresses.",
+            "required": [
+              "token_id",
+              "token_secret",
+              "type"
+            ],
+            "properties": {
+              "token_id": {
+                "type": "string",
+                "description": "Token ID in `user@realm!tokenname` form, e.g. `scanopy@pve!discovery`."
+              },
+              "token_secret": {
+                "$ref": "#/components/schemas/SecretValue",
+                "description": "The token's secret (a UUID), shown once when the token is created."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ProxmoxApiToken"
+                ]
+              },
+              "port": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Proxmox VE API port (default 8006).",
+                "minimum": 0
+              }
+            }
           }
         ],
         "description": "Universal credential type — tagged enum stored as JSONB.\nEach variant represents a different credential protocol/method."
@@ -19397,7 +20753,8 @@
           "InstantOnAccount",
           "SshPassword",
           "SshKey",
-          "WakeOnLan"
+          "WakeOnLan",
+          "ProxmoxApiToken"
         ]
       },
       "Daemon": {
@@ -19440,7 +20797,7 @@
               },
               {
                 "$ref": "#/components/schemas/DaemonOs",
-                "description": "The operating system chosen when the daemon was created. Credentials set up for another\nOS's file paths cannot be used by it. `None` for daemons created before this was recorded."
+                "description": "The operating system the daemon runs on. Picked when the daemon is created, then checked\nagainst what the daemon reports on every handshake once it is new enough to report (see\n`version_status.supports_os_reporting`); a daemon on another OS is refused. Credentials\nset up for another OS's file paths cannot be used by it. `None` for a daemon created\nbefore this was recorded that has not yet reported."
               }
             ]
           },
@@ -19734,7 +21091,7 @@
               },
               {
                 "$ref": "#/components/schemas/DaemonOs",
-                "description": "The operating system chosen when the daemon was created. Credentials set up for another\nOS's file paths cannot be used by it. `None` for daemons created before this was recorded."
+                "description": "The operating system the daemon runs on. Picked when the daemon is created, then checked\nagainst what the daemon reports on every handshake once it is new enough to report (see\n`version_status.supports_os_reporting`); a daemon on another OS is refused. Credentials\nset up for another OS's file paths cannot be used by it. `None` for a daemon created\nbefore this was recorded that has not yet reported."
               }
             ]
           },
@@ -19919,6 +21276,17 @@
             },
             "description": "Per-daemon integration targeting from the init command (credentialed cred↔IP and\ncredential-less local sockets). Written to this daemon's Discovery at registration so\nit's present before the first session dispatches. Registration assumes new-daemon →\nnew-server, so there is no legacy bare-`credential_ids` field — bare-uuid env back-compat\nis handled in the daemon's env parser, never on the wire."
           },
+          "os": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DaemonOs",
+                "description": "The OS this daemon binary runs on. Absent from daemons up to 0.17.19."
+              }
+            ]
+          },
           "url": {
             "type": [
               "string",
@@ -20017,7 +21385,7 @@
               },
               {
                 "$ref": "#/components/schemas/DaemonOs",
-                "description": "The operating system chosen when the daemon was created. Credentials set up for another\nOS's file paths cannot be used by it. `None` for daemons created before this was recorded."
+                "description": "The operating system the daemon runs on. Picked when the daemon is created, then checked\nagainst what the daemon reports on every handshake once it is new enough to report (see\n`version_status.supports_os_reporting`); a daemon on another OS is refused. Credentials\nset up for another OS's file paths cannot be used by it. `None` for a daemon created\nbefore this was recorded that has not yet reported."
               }
             ]
           },
@@ -20124,6 +21492,17 @@
           "daemon_version": {
             "type": "string",
             "description": "Daemon software version (semver format)"
+          },
+          "os": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DaemonOs",
+                "description": "The OS this daemon binary runs on. Absent from daemons up to 0.17.19."
+              }
+            ]
           }
         }
       },
@@ -20153,6 +21532,17 @@
               "$ref": "#/components/schemas/Subnet"
             },
             "description": "Subnets detected from daemon's network ip_addresses. Server resolves these\nvia SubnetService::create (create-or-match by CIDR) to get real IDs.\nv0.15.0+ daemons populate this; pre-v0.15.0 daemons leave it empty."
+          },
+          "os": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/DaemonOs",
+                "description": "The OS this daemon binary runs on. Absent from daemons up to 0.17.19."
+              }
+            ]
           },
           "ready_for_work": {
             "type": "boolean",
@@ -20195,6 +21585,10 @@
               "null"
             ],
             "description": "The date this daemon's version stops being supported, if a sunset is\nscheduled for it. Surfaced top-level (not only inside `warnings`) so the\nUI can render a countdown from the same value the email uses."
+          },
+          "supports_os_reporting": {
+            "type": "boolean",
+            "description": "Whether this daemon reports its OS on every handshake. When it does, the daemon's `os` is\nwhat it runs on; when it does not, `os` is the OS picked at creation, or absent."
           },
           "supports_targeted_rescan": {
             "type": "boolean",
@@ -20855,7 +22249,12 @@
           "updated_at",
           "daemon_id",
           "network_id",
-          "discovery_type"
+          "discovery_type",
+          "phase",
+          "started_at",
+          "finished_at",
+          "duration",
+          "warnings"
         ]
       },
       "DiscoveryPhase": {
@@ -22693,7 +24092,7 @@
       },
       "DisplaySettings": {
         "type": "object",
-        "description": "Per-user display preferences for dates and times in the UI.\n\nStored as a JSONB blob with `#[serde(default)]` on the struct, so a stored\nobject missing a key (including the `{}` every existing row starts with)\nreads as that field's default. Every default reproduces the UI's\nbehaviour from before the setting existed.",
+        "description": "Per-user display preferences for dates and times in the UI.\n\nStored as a JSONB blob with `#[serde(default)]` on the struct, so a stored\nobject missing a key (including the `{}` every existing row starts with)\nreads as that field's default. Every default reproduces the UI's\nbehaviour from before the setting existed, except `table_density`, which\ndefaults to the tighter of its two layouts.",
         "properties": {
           "clock": {
             "oneOf": [
@@ -22712,6 +24111,15 @@
               }
             ],
             "default": "browser_default"
+          },
+          "table_density": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TableDensity",
+                "description": "Cell padding and row height in entity tables."
+              }
+            ],
+            "default": "compact"
           },
           "time_zone": {
             "type": [
@@ -22942,6 +24350,81 @@
           },
           {
             "type": "object",
+            "title": "NetworkIdentity",
+            "description": "A guest's own address to one of its network identities on the same subnet: an address\nand MAC the guest presents from an interface of its own beyond its configured NICs.",
+            "required": [
+              "id",
+              "source",
+              "target",
+              "label",
+              "source_handle",
+              "target_handle",
+              "is_multi_hop",
+              "relation_key",
+              "identities_service_id",
+              "edge_type"
+            ],
+            "properties": {
+              "edge_type": {
+                "type": "string",
+                "enum": [
+                  "NetworkIdentity"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Server-assigned unique identifier."
+              },
+              "identities_service_id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The guest's Network Identities service, which owns the identity host."
+              },
+              "is_multi_hop": {
+                "type": "boolean",
+                "description": "Whether the edge stands in for a path that crosses intermediate nodes."
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Text drawn on the edge."
+              },
+              "relation_key": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Identity of the relation this edge stands for — see [`EdgeType::relation_key`]. Stamped\ncentrally from `edge_type` once the graph is built, so no construction site can forget\nit. `None` marks an edge as interchangeable with its like."
+              },
+              "source": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Node the edge starts at."
+              },
+              "source_handle": {
+                "$ref": "#/components/schemas/EdgeHandle",
+                "description": "Which side of the source node the edge leaves from."
+              },
+              "target": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Node the edge ends at."
+              },
+              "target_handle": {
+                "$ref": "#/components/schemas/EdgeHandle",
+                "description": "Which side of the target node the edge arrives at."
+              },
+              "view_config": {
+                "$ref": "#/components/schemas/EdgeViewConfig",
+                "description": "Per-view overrides for how this edge is drawn."
+              }
+            }
+          },
+          {
+            "type": "object",
             "title": "ContainerRuntime",
             "required": [
               "id",
@@ -22965,7 +24448,7 @@
                   "type": "string",
                   "format": "uuid"
                 },
-                "description": "The containerized services this edge stands for — the ones on those subnets."
+                "description": "The containerized services this edge stands for — the ones on those subnets. Empty on\nan edge to a container host."
               },
               "edge_type": {
                 "type": "string",
@@ -23021,7 +24504,7 @@
                   "type": "string",
                   "format": "uuid"
                 },
-                "description": "The bridge subnet(s) this edge reaches: one when they render as their own boxes,\nall of them when merged into a single box. Resolved here rather than in the\ninspector, which cannot tell which subnet an elevated edge landed on."
+                "description": "The bridge subnet(s) this edge reaches: one when they render as their own boxes,\nall of them when merged into a single box. Resolved here rather than in the\ninspector, which cannot tell which subnet an elevated edge landed on. For an edge to a\ncontainer host (macvlan, ipvlan), the subnet holding the address it ends on."
               },
               "target": {
                 "type": "string",
@@ -23548,6 +25031,28 @@
           },
           {
             "type": "object",
+            "title": "NetworkIdentity",
+            "description": "A guest's own address to one of its network identities on the same subnet: an address\nand MAC the guest presents from an interface of its own beyond its configured NICs.",
+            "required": [
+              "identities_service_id",
+              "edge_type"
+            ],
+            "properties": {
+              "edge_type": {
+                "type": "string",
+                "enum": [
+                  "NetworkIdentity"
+                ]
+              },
+              "identities_service_id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The guest's Network Identities service, which owns the identity host."
+              }
+            }
+          },
+          {
+            "type": "object",
             "title": "ContainerRuntime",
             "required": [
               "host_id",
@@ -23563,7 +25068,7 @@
                   "type": "string",
                   "format": "uuid"
                 },
-                "description": "The containerized services this edge stands for — the ones on those subnets."
+                "description": "The containerized services this edge stands for — the ones on those subnets. Empty on\nan edge to a container host."
               },
               "edge_type": {
                 "type": "string",
@@ -23587,7 +25092,7 @@
                   "type": "string",
                   "format": "uuid"
                 },
-                "description": "The bridge subnet(s) this edge reaches: one when they render as their own boxes,\nall of them when merged into a single box. Resolved here rather than in the\ninspector, which cannot tell which subnet an elevated edge landed on."
+                "description": "The bridge subnet(s) this edge reaches: one when they render as their own boxes,\nall of them when merged into a single box. Resolved here rather than in the\ninspector, which cannot tell which subnet an elevated edge landed on. For an edge to a\ncontainer host (macvlan, ipvlan), the subnet holding the address it ends on."
               }
             }
           },
@@ -23752,6 +25257,7 @@
         "enum": [
           "SameHost",
           "Hypervisor",
+          "NetworkIdentity",
           "ContainerRuntime",
           "SameContainer",
           "RequestPath",
@@ -23910,6 +25416,32 @@
             }
           }
         ]
+      },
+      "ElementMark": {
+        "type": "object",
+        "description": "A colour a view paints on its element cards, named by the filter value that decodes it.\n\nThe colour is that value's `FilterValue::color`; the mark carries none of its own, so the card\nand the chip cannot disagree. A card is marked when its own entity, or its host, carries\n`value` under `filter_type`, judged by the extractor the filter's hover uses.",
+        "required": [
+          "channel",
+          "entity",
+          "filter_type",
+          "value"
+        ],
+        "properties": {
+          "channel": {
+            "$ref": "#/components/schemas/MarkChannel"
+          },
+          "entity": {
+            "$ref": "#/components/schemas/EntityDiscriminants",
+            "description": "The entity whose filter value is read: the card's own, or `Host` for the card's host."
+          },
+          "filter_type": {
+            "$ref": "#/components/schemas/MetadataFilterType"
+          },
+          "value": {
+            "type": "string",
+            "description": "The `FilterValue::id` that paints."
+          }
+        }
       },
       "ElementSort": {
         "type": "string",
@@ -24420,6 +25952,44 @@
         ],
         "description": "Non-secret value that can be inline content or a file path on daemon host."
       },
+      "FilterApplication": {
+        "type": "string",
+        "description": "Where a filter is applied — and therefore what toggling it costs.\n\nFiltering on the client makes a toggle instant, because the entities are already there. Filtering\non the server makes it a round trip, but keeps the hidden entities out of the response entirely.\nThat is a good trade only when the hidden set is large: L2 ships 19,095 interfaces to render\n2,872, and a customer's browser runs out of memory holding the difference.\n\n**A filter may only be `Server` if its value is computable from the topology the backend is\nalready building.** `Staleness` fails that test — it depends on the current time, so an identical\nrequest would return different results as time passes, and a cached response would be wrong. It\nstays `Client` permanently; this is a property of the filter, not a migration left half-done.",
+        "enum": [
+          "Client",
+          "Server"
+        ]
+      },
+      "FilterValue": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "color",
+          "icon"
+        ],
+        "properties": {
+          "color": {
+            "$ref": "#/components/schemas/Color",
+            "description": "Colour shown on the filter chip."
+          },
+          "icon": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Icon shown on the filter chip."
+          },
+          "id": {
+            "type": "string",
+            "description": "Server-assigned unique identifier."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-facing label for this choice."
+          }
+        }
+      },
       "FinalizePaymentMethodRequest": {
         "type": "object",
         "description": "Request to finalize a client-confirmed SetupIntent (set the collected card\nas the customer's default payment method).",
@@ -24491,6 +26061,7 @@
           "updated_at": "2026-01-15T10:30:00Z",
           "valid_from": "2026-01-15T10:30:00Z",
           "valid_to": null,
+          "virtualization_interface_id": null,
           "virtualization_metadata": null,
           "virtualization_service_id": null
         },
@@ -24552,6 +26123,14 @@
             "format": "date-time",
             "description": "When this record was last modified.",
             "readOnly": true
+          },
+          "virtualization_interface_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The interface on the virtualizing host that presents this one, for a host whose\nvirtualizer presents it from an interface of its own (a network identity). Its own column\nwith a foreign key for the same reason as `virtualization_service_id`; `ON DELETE SET NULL`\nclears it when the interface goes away."
           },
           "virtualization_metadata": {
             "oneOf": [
@@ -24650,6 +26229,57 @@
           "name_source": {
             "$ref": "#/components/schemas/AttributeSource"
           },
+          "os": {
+            "type": "object",
+            "description": "Operating system of a host, as one source read or inferred it.",
+            "required": [
+              "family"
+            ],
+            "properties": {
+              "family": {
+                "$ref": "#/components/schemas/HostOsFamily",
+                "description": "The operating system family."
+              },
+              "codename": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release codename, such as \"noble\"."
+              },
+              "edition": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Edition, such as \"LTS\" or \"Datacenter\"."
+              },
+              "kernel_version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Kernel release, such as \"6.8.0-45-generic\"."
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Product or distribution, such as \"Ubuntu\", \"Windows Server 2022\" or \"IOS-XE\"."
+              },
+              "version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release, such as \"24.04\", \"10.0.20348\" or \"15.2(4)M\"."
+              }
+            }
+          },
+          "os_source": {
+            "$ref": "#/components/schemas/AttributeSource"
+          },
           "serial_number": {
             "type": "string",
             "description": "ENTITY-MIB entPhysicalSerialNum - hardware serial number"
@@ -24722,6 +26352,7 @@
           "source",
           "virtualization_metadata",
           "virtualization_service_id",
+          "virtualization_interface_id",
           "hidden",
           "tags",
           "credential_assignments",
@@ -24772,6 +26403,14 @@
               "format": "uuid"
             },
             "description": "Tags assigned to this entity."
+          },
+          "virtualization_interface_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The interface on the virtualizing host that presents this one, for a host whose\nvirtualizer presents it from an interface of its own (a network identity). Its own column\nwith a foreign key for the same reason as `virtualization_service_id`; `ON DELETE SET NULL`\nclears it when the interface goes away."
           },
           "virtualization_metadata": {
             "oneOf": [
@@ -24837,6 +26476,57 @@
           "name_source": {
             "$ref": "#/components/schemas/AttributeSource"
           },
+          "os": {
+            "type": "object",
+            "description": "Operating system of a host, as one source read or inferred it.",
+            "required": [
+              "family"
+            ],
+            "properties": {
+              "family": {
+                "$ref": "#/components/schemas/HostOsFamily",
+                "description": "The operating system family."
+              },
+              "codename": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release codename, such as \"noble\"."
+              },
+              "edition": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Edition, such as \"LTS\" or \"Datacenter\"."
+              },
+              "kernel_version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Kernel release, such as \"6.8.0-45-generic\"."
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Product or distribution, such as \"Ubuntu\", \"Windows Server 2022\" or \"IOS-XE\"."
+              },
+              "version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release, such as \"24.04\", \"10.0.20348\" or \"15.2(4)M\"."
+              }
+            }
+          },
+          "os_source": {
+            "$ref": "#/components/schemas/AttributeSource"
+          },
           "serial_number": {
             "type": "string",
             "description": "ENTITY-MIB entPhysicalSerialNum - hardware serial number"
@@ -24894,6 +26584,7 @@
           "source",
           "virtualization_metadata",
           "virtualization_service_id",
+          "virtualization_interface_id",
           "hidden",
           "tags",
           "credential_assignments"
@@ -25036,6 +26727,62 @@
           "BestService"
         ]
       },
+      "HostOperatingSystem": {
+        "type": "object",
+        "properties": {
+          "os": {
+            "type": "object",
+            "description": "Operating system of a host, as one source read or inferred it.",
+            "required": [
+              "family"
+            ],
+            "properties": {
+              "family": {
+                "$ref": "#/components/schemas/HostOsFamily",
+                "description": "The operating system family."
+              },
+              "codename": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release codename, such as \"noble\"."
+              },
+              "edition": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Edition, such as \"LTS\" or \"Datacenter\"."
+              },
+              "kernel_version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Kernel release, such as \"6.8.0-45-generic\"."
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Product or distribution, such as \"Ubuntu\", \"Windows Server 2022\" or \"IOS-XE\"."
+              },
+              "version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release, such as \"24.04\", \"10.0.20348\" or \"15.2(4)M\"."
+              }
+            }
+          },
+          "os_source": {
+            "$ref": "#/components/schemas/AttributeSource"
+          }
+        }
+      },
       "HostOrderField": {
         "type": "string",
         "description": "Fields that hosts can be ordered/grouped by.",
@@ -25048,7 +26795,114 @@
           "network_id",
           "interface_ip",
           "last_seen_at",
-          "mac_address"
+          "mac_address",
+          "source",
+          "manufacturer",
+          "model",
+          "sys_location",
+          "os_family",
+          "hidden"
+        ]
+      },
+      "HostOs": {
+        "type": "object",
+        "description": "Operating system of a host, as one source read or inferred it.",
+        "required": [
+          "family"
+        ],
+        "properties": {
+          "family": {
+            "$ref": "#/components/schemas/HostOsFamily",
+            "description": "The operating system family."
+          },
+          "codename": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Release codename, such as \"noble\"."
+          },
+          "edition": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Edition, such as \"LTS\" or \"Datacenter\"."
+          },
+          "kernel_version": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Kernel release, such as \"6.8.0-45-generic\"."
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Product or distribution, such as \"Ubuntu\", \"Windows Server 2022\" or \"IOS-XE\"."
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Release, such as \"24.04\", \"10.0.20348\" or \"15.2(4)M\"."
+          }
+        }
+      },
+      "HostOsFamily": {
+        "type": "string",
+        "description": "Operating system family of a host.\n\nNo catch-all variant. A source that names something outside this list writes no OS at all, so\nnothing downstream has to handle a family that says nothing. The list covers every OS family the\nvendored Recog fingerprints name (`recog::tests::every_vendored_family_is_classified` keeps it\nthat way), plus every OS a daemon can report about its own host. Linux distributions are `Linux`\nwith the distribution as the name; variants exist for families, not distributions.",
+        "enum": [
+          "Linux",
+          "Windows",
+          "MacOs",
+          "Ios",
+          "TvOs",
+          "AudioOs",
+          "FreeBsd",
+          "OpenBsd",
+          "NetBsd",
+          "Solaris",
+          "Aix",
+          "HpUx",
+          "Irix",
+          "Tru64",
+          "OpenVms",
+          "ZOs",
+          "IbmI",
+          "UnixWare",
+          "OpenServer",
+          "NetWare",
+          "PalmOs",
+          "Esxi",
+          "CiscoIos",
+          "CiscoIosXe",
+          "CiscoIosXr",
+          "CiscoNxOs",
+          "CiscoCatOs",
+          "CiscoAsa",
+          "CiscoFtd",
+          "Junos",
+          "ScreenOs",
+          "ArubaOs",
+          "Comware",
+          "ProCurve",
+          "AristaEos",
+          "RouterOs",
+          "HuaweiVrp",
+          "IronWare",
+          "BrocadeNetworkOs",
+          "BayRs",
+          "PanOs",
+          "FortiOs",
+          "SonicOs",
+          "GaiaOs",
+          "Ipso",
+          "DataOntap",
+          "Ecos"
         ]
       },
       "HostPath": {
@@ -25070,6 +26924,7 @@
           "tags",
           "firmware_revision",
           "software_revision",
+          "os",
           "ip_addresses",
           "ports",
           "services",
@@ -25115,7 +26970,7 @@
           "last_seen_at": {
             "type": "string",
             "format": "date-time",
-            "description": "Last time discovery observed this host. User-facing (drives the \"Last\nseen\" column and the stale badge), which is why it is carried here while\nthe rest of the SCD2/audit columns are not."
+            "description": "Last time discovery observed this host. User-facing (drives the \"Last\nseen\" column and the stale badge), which is why it is carried here while\nthe version-history columns are not."
           },
           "name": {
             "type": "string",
@@ -25125,6 +26980,17 @@
             "type": "string",
             "format": "uuid",
             "description": "The network this entity belongs to."
+          },
+          "os": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/HostOs",
+                "description": "The host's operating system. Read-only: written by whichever source read or matched it.\nLenient, so a daemon tolerates a family added on a newer server."
+              }
+            ]
           },
           "ports": {
             "type": "array",
@@ -25213,6 +27079,15 @@
             "$ref": "#/components/schemas/AttributeSource",
             "description": "What produced the firmware revision. Read-only: decided by whichever source read it."
           },
+          "first_discovery_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The discovery run that first observed this host. Drives the \"First found by\" column.",
+            "readOnly": true
+          },
           "hostname": {
             "type": [
               "string",
@@ -25223,6 +27098,15 @@
           "hostname_source": {
             "$ref": "#/components/schemas/AttributeSource",
             "description": "What produced `hostname`: a PTR lookup, the host's own OS, a controller, mDNS, or a person.\nRead-only: decided by whichever source read it."
+          },
+          "last_discovery_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The discovery run that last observed this host. Drives the \"Last found by\" column.",
+            "readOnly": true
           },
           "management_url": {
             "type": [
@@ -25269,6 +27153,10 @@
           "name_source": {
             "$ref": "#/components/schemas/AttributeSource",
             "description": "What produced `name`. Read-only: it is decided by whoever supplied the name, not by the\ncaller."
+          },
+          "os_source": {
+            "$ref": "#/components/schemas/AttributeSource",
+            "description": "What produced the OS. Read-only, as above. A source whose method is `Inferred` matched the OS\nin a string the host emitted rather than reading it off the host."
           },
           "serial_number": {
             "type": [
@@ -25342,6 +27230,14 @@
             "$ref": "#/components/schemas/AttributeSource",
             "description": "What produced SNMP sysObjectID. Read-only: decided by whichever source read it."
           },
+          "virtualization_interface_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The interface on the virtualizing host that presents this host, for a network identity."
+          },
           "virtualization_metadata": {
             "oneOf": [
               {
@@ -25371,6 +27267,7 @@
           "display_name_rung": "Name",
           "firmware_revision": null,
           "firmware_revision_source": "Unspecified",
+          "first_discovery_id": null,
           "hidden": false,
           "hostname": "web-server-01.local",
           "hostname_source": "Manual",
@@ -25425,6 +27322,7 @@
               "valid_to": null
             }
           ],
+          "last_discovery_id": null,
           "last_seen_at": "2026-01-15T10:30:00Z",
           "management_url_source": "Unspecified",
           "manufacturer_source": "Unspecified",
@@ -25459,6 +27357,8 @@
           ],
           "name_source": "Manual",
           "network_id": "550e8400-e29b-41d4-a716-446655440002",
+          "os": null,
+          "os_source": "Unspecified",
           "ports": [
             {
               "created_at": "2026-01-15T10:30:00Z",
@@ -25482,19 +27382,19 @@
             {
               "bindings": [
                 {
-                  "created_at": "2026-10-02T12:58:48.606534Z",
+                  "created_at": "2026-10-05T01:43:16.069987Z",
                   "first_discovery_id": null,
-                  "id": "2f963f7e-b557-4c8a-8649-2928f804172b",
+                  "id": "6f7bd12d-d216-4a34-9942-64ccc5d628a5",
                   "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
                   "last_discovery_id": null,
-                  "last_seen_at": "2026-10-02T12:58:48.606534Z",
+                  "last_seen_at": "2026-10-05T01:43:16.069987Z",
                   "lineage_id": null,
                   "network_id": "550e8400-e29b-41d4-a716-446655440002",
                   "port_id": "550e8400-e29b-41d4-a716-446655440006",
                   "service_id": "550e8400-e29b-41d4-a716-446655440007",
                   "type": "Port",
-                  "updated_at": "2026-10-02T12:58:48.606534Z",
-                  "valid_from": "2026-10-02T12:58:48.606534Z",
+                  "updated_at": "2026-10-05T01:43:16.069987Z",
+                  "valid_from": "2026-10-05T01:43:16.069987Z",
                   "valid_to": null
                 }
               ],
@@ -25508,7 +27408,7 @@
               "name": "nginx",
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "position": 0,
-              "service_definition": "Tuya Smart",
+              "service_definition": "CheckMK Agent",
               "source": {
                 "type": "Manual"
               },
@@ -25532,6 +27432,7 @@
           "sys_object_id_source": "Unspecified",
           "tags": [],
           "updated_at": "2026-01-15T10:30:00Z",
+          "virtualization_interface_id": null,
           "virtualization_metadata": null,
           "virtualization_service_id": null
         }
@@ -25678,9 +27579,76 @@
                 ]
               }
             }
+          },
+          {
+            "type": "object",
+            "title": "Docker",
+            "required": [
+              "details",
+              "type"
+            ],
+            "properties": {
+              "details": {
+                "$ref": "#/components/schemas/ContainerHostVirtualization"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Docker"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "Podman",
+            "required": [
+              "details",
+              "type"
+            ],
+            "properties": {
+              "details": {
+                "$ref": "#/components/schemas/ContainerHostVirtualization"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Podman"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "NetworkIdentity",
+            "required": [
+              "details",
+              "type"
+            ],
+            "properties": {
+              "details": {
+                "$ref": "#/components/schemas/NetworkIdentityVirtualization"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "NetworkIdentity"
+                ]
+              }
+            }
           }
         ],
         "title": "HostVirtualization"
+      },
+      "HostVirtualizationState": {
+        "type": "string",
+        "description": "Coarse virtualization state used by the `Virtualization` metadata filter on Host. Each host\nresolves to exactly one variant via `HasFilterValues`, from the type of its\n`virtualization_metadata` ([`HostVirtualizationDiscriminants::state`]).\n\nA container host and a network identity get states of their own rather than `Virtualized`:\nthe filter's colour marks Workloads cards, and an identity is an interface its owner presents,\nnot a guest it runs. The ids are persisted in hide-sets, so existing ones keep their spelling.",
+        "enum": [
+          "Virtualized",
+          "Containerized",
+          "NetworkIdentity",
+          "BareMetal"
+        ]
       },
       "IPAddress": {
         "example": {
@@ -26159,7 +28127,8 @@
           "pemprivatekey",
           "pemcertificate",
           "sshprivatekey",
-          "macaddress"
+          "macaddress",
+          "proxmoxtokenid"
         ]
       },
       "InlineGroup": {
@@ -26167,6 +28136,7 @@
         "description": "Visual grouping metadata for inlined entities.\nEntities sharing the same `group_id` are rendered together in the element card.",
         "required": [
           "entity_id",
+          "entity_type",
           "group_id",
           "role"
         ],
@@ -26175,6 +28145,10 @@
             "type": "string",
             "format": "uuid",
             "description": "The inlined entity's ID (e.g., service ID)."
+          },
+          "entity_type": {
+            "$ref": "#/components/schemas/EntityDiscriminants",
+            "description": "Which entity `entity_id` names: a service, or a host (a guest's network identity)."
           },
           "group_id": {
             "type": "string",
@@ -26245,9 +28219,10 @@
       },
       "InstallCommandType": {
         "type": "string",
-        "description": "What the caller wants the command to do — the one axis that actually varies.\n\n`install` brings a daemon up (or re-keys a legacy one): it carries the api-key placeholder,\nfetches the binary, and spells out the connectivity + advanced config. `reconfigure` adjusts\nan already-installed daemon in place: no key, no fetch, just the server-held connectivity —\n`scanopy-daemon install` layers it over the existing `config.json`. There is no third case:\nre-asserting the record's (correct) values on an installed daemon is harmless, so a first\ninstall and a re-key are the same command.",
+        "description": "What the caller wants the command to do — the one axis that actually varies.\n\n`install` brings a new daemon up: it carries the api-key placeholder, fetches the binary, and\nspells out the connectivity + advanced config, and nothing else. `rekey` is the same command\nfor a daemon that already exists on a host (a legacy daemon getting its first bound key), so\nonce that daemon has connected it also names the install to act on. `reconfigure` adjusts an\nalready-installed daemon in place: no key, no fetch, just the server-held connectivity —\n`scanopy-daemon install` layers it over the existing `config.json`.\n\n`install` and `rekey` are separate because the record can't tell them apart: a daemon created\nin the wizard has `last_seen` set as soon as it connects, and the wizard refetches its command\nafter that, which must not change shape.",
         "enum": [
           "install",
+          "rekey",
           "reconfigure"
         ]
       },
@@ -26377,7 +28352,7 @@
               "string",
               "null"
             ],
-            "description": "What to call this interface when it has no `if_alias`/`if_descr`: the MAC it was\nidentified by, or \"Interface\" when it has neither.\n\nRead-only and computed from [`Interface::display_name`] — the same ladder topology port\nlabels an interface with, so it cannot be called one thing in a list and another on the\nmap. Only set on outbound responses nested under a host (`HostResponse::interfaces`);\nabsent on a daemon's own submission and on the standalone `/interfaces` CRUD endpoints,\nwhich return `Interface` directly without this computation.",
+            "description": "What to call this interface when it has no `if_alias`/`if_descr`: the MAC it was\nidentified by, or \"Interface\" when it has neither.\n\nRead-only and computed from [`Interface::display_name`] — the same ladder topology port\nlabels an interface with, so it cannot be called one thing in a list and another on the\nmap. Set on every interface read from storage, so every endpoint that returns one carries\nit; absent on a daemon's own submission, and ignored on write.",
             "readOnly": true
           },
           "fdb_macs": {
@@ -27775,6 +29750,15 @@
           }
         }
       },
+      "MarkChannel": {
+        "type": "string",
+        "description": "Where on an element card a mark paints.",
+        "enum": [
+          "Title",
+          "StatusDot",
+          "StateFill"
+        ]
+      },
       "MatchConfidence": {
         "type": "string",
         "enum": [
@@ -27861,6 +29845,56 @@
             "description": "The subnet to merge into. Must contain the range being merged."
           }
         }
+      },
+      "MetadataFilter": {
+        "type": "object",
+        "description": "A declared metadata filter on an element entity inside a view.\n\n`FilterValue::id` is the **stable identifier** — it's what each entity\nemits via `HasFilterValues`, what the hide-set in request options stores,\nand what matches entities on toggle. Changing an `id` silently clears\nusers' persisted hide entries for that value; `label` is display-only\nand can change freely.",
+        "required": [
+          "filter_type",
+          "entities",
+          "label",
+          "values",
+          "applies"
+        ],
+        "properties": {
+          "applies": {
+            "$ref": "#/components/schemas/FilterApplication",
+            "description": "Where this filter runs. Deliberately not defaulted: a new filter has to state which side it\nbelongs on, and the compiler is a better place to force that decision than a review comment.\nSee `FilterApplication` for when `Server` is permissible."
+          },
+          "entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityDiscriminants"
+            },
+            "description": "The entities this filter reads and hides. Hovering a value rings every listed entity\ncarrying it; hiding one writes it into the hide-set under each listed entity."
+          },
+          "filter_type": {
+            "$ref": "#/components/schemas/MetadataFilterType",
+            "description": "What the filter narrows by."
+          },
+          "label": {
+            "type": "string",
+            "description": "User-facing sub-section label (e.g. \"By Category\", \"By Virtualization\")."
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterValue"
+            },
+            "description": "The choices offered for this filter."
+          }
+        }
+      },
+      "MetadataFilterType": {
+        "type": "string",
+        "description": "The type of metadata filter. One variant per conceptually-distinct filter\nacross the app — Category (on Service), Virtualization (on Host), and so\non. Kept narrow on purpose: adding a new filter means adding a variant\nhere + a `HasFilterValues` impl on the relevant entity.",
+        "enum": [
+          "Category",
+          "Virtualization",
+          "LinkState",
+          "Staleness",
+          "OperStatus"
+        ]
       },
       "MsiInstall": {
         "type": "object",
@@ -28059,6 +30093,10 @@
             "description": "Tags assigned to this entity."
           }
         }
+      },
+      "NetworkIdentityVirtualization": {
+        "type": "object",
+        "description": "An address and MAC that a host presents from an interface of its own beyond its configured\nNICs: a macvlan shim, a virtual IP, a service given its own LAN address, an emulated device.\nThe reporting source proves only that the interface lives inside that host, not what it is,\nso nothing here classifies it. The owner is the host's Network Identities service\n(`HostBase::virtualization_service_id`), and the interface it sits on is\n`HostBase::virtualization_interface_id`, both real columns with foreign keys. A stored row from\nbefore the interface became a column still carries an `interface` name here, which is ignored."
       },
       "NetworkSetup": {
         "type": "object",
@@ -28950,7 +30988,7 @@
           "server_version": {
             "type": "string",
             "description": "Server version (semver)",
-            "example": "0.17.19"
+            "example": "0.17.21"
           }
         },
         "example": {
@@ -28961,7 +30999,7 @@
             "offset": 0,
             "total_count": 142
           },
-          "server_version": "0.17.19"
+          "server_version": "0.17.21"
         }
       },
       "PaginatedApiResponse_Credential": {
@@ -29327,6 +31365,7 @@
                 "tags",
                 "firmware_revision",
                 "software_revision",
+                "os",
                 "ip_addresses",
                 "ports",
                 "services",
@@ -29372,7 +31411,7 @@
                 "last_seen_at": {
                   "type": "string",
                   "format": "date-time",
-                  "description": "Last time discovery observed this host. User-facing (drives the \"Last\nseen\" column and the stale badge), which is why it is carried here while\nthe rest of the SCD2/audit columns are not."
+                  "description": "Last time discovery observed this host. User-facing (drives the \"Last\nseen\" column and the stale badge), which is why it is carried here while\nthe version-history columns are not."
                 },
                 "name": {
                   "type": "string",
@@ -29382,6 +31421,17 @@
                   "type": "string",
                   "format": "uuid",
                   "description": "The network this entity belongs to."
+                },
+                "os": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HostOs",
+                      "description": "The host's operating system. Read-only: written by whichever source read or matched it.\nLenient, so a daemon tolerates a family added on a newer server."
+                    }
+                  ]
                 },
                 "ports": {
                   "type": "array",
@@ -29470,6 +31520,15 @@
                   "$ref": "#/components/schemas/AttributeSource",
                   "description": "What produced the firmware revision. Read-only: decided by whichever source read it."
                 },
+                "first_discovery_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid",
+                  "description": "The discovery run that first observed this host. Drives the \"First found by\" column.",
+                  "readOnly": true
+                },
                 "hostname": {
                   "type": [
                     "string",
@@ -29480,6 +31539,15 @@
                 "hostname_source": {
                   "$ref": "#/components/schemas/AttributeSource",
                   "description": "What produced `hostname`: a PTR lookup, the host's own OS, a controller, mDNS, or a person.\nRead-only: decided by whichever source read it."
+                },
+                "last_discovery_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid",
+                  "description": "The discovery run that last observed this host. Drives the \"Last found by\" column.",
+                  "readOnly": true
                 },
                 "management_url": {
                   "type": [
@@ -29526,6 +31594,10 @@
                 "name_source": {
                   "$ref": "#/components/schemas/AttributeSource",
                   "description": "What produced `name`. Read-only: it is decided by whoever supplied the name, not by the\ncaller."
+                },
+                "os_source": {
+                  "$ref": "#/components/schemas/AttributeSource",
+                  "description": "What produced the OS. Read-only, as above. A source whose method is `Inferred` matched the OS\nin a string the host emitted rather than reading it off the host."
                 },
                 "serial_number": {
                   "type": [
@@ -29599,6 +31671,14 @@
                   "$ref": "#/components/schemas/AttributeSource",
                   "description": "What produced SNMP sysObjectID. Read-only: decided by whichever source read it."
                 },
+                "virtualization_interface_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid",
+                  "description": "The interface on the virtualizing host that presents this host, for a network identity."
+                },
                 "virtualization_metadata": {
                   "oneOf": [
                     {
@@ -29628,6 +31708,7 @@
                 "display_name_rung": "Name",
                 "firmware_revision": null,
                 "firmware_revision_source": "Unspecified",
+                "first_discovery_id": null,
                 "hidden": false,
                 "hostname": "web-server-01.local",
                 "hostname_source": "Manual",
@@ -29682,6 +31763,7 @@
                     "valid_to": null
                   }
                 ],
+                "last_discovery_id": null,
                 "last_seen_at": "2026-01-15T10:30:00Z",
                 "management_url_source": "Unspecified",
                 "manufacturer_source": "Unspecified",
@@ -29716,6 +31798,8 @@
                 ],
                 "name_source": "Manual",
                 "network_id": "550e8400-e29b-41d4-a716-446655440002",
+                "os": null,
+                "os_source": "Unspecified",
                 "ports": [
                   {
                     "created_at": "2026-01-15T10:30:00Z",
@@ -29739,19 +31823,19 @@
                   {
                     "bindings": [
                       {
-                        "created_at": "2026-10-02T12:58:48.600947Z",
+                        "created_at": "2026-10-05T01:43:16.063253Z",
                         "first_discovery_id": null,
-                        "id": "76cfc58c-b994-4256-967f-86b4e1d044cb",
+                        "id": "398aac62-4222-413c-81ec-9278177829d7",
                         "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
                         "last_discovery_id": null,
-                        "last_seen_at": "2026-10-02T12:58:48.600947Z",
+                        "last_seen_at": "2026-10-05T01:43:16.063253Z",
                         "lineage_id": null,
                         "network_id": "550e8400-e29b-41d4-a716-446655440002",
                         "port_id": "550e8400-e29b-41d4-a716-446655440006",
                         "service_id": "550e8400-e29b-41d4-a716-446655440007",
                         "type": "Port",
-                        "updated_at": "2026-10-02T12:58:48.600947Z",
-                        "valid_from": "2026-10-02T12:58:48.600947Z",
+                        "updated_at": "2026-10-05T01:43:16.063253Z",
+                        "valid_from": "2026-10-05T01:43:16.063253Z",
                         "valid_to": null
                       }
                     ],
@@ -29765,7 +31849,7 @@
                     "name": "nginx",
                     "network_id": "550e8400-e29b-41d4-a716-446655440002",
                     "position": 0,
-                    "service_definition": "Tuya Smart",
+                    "service_definition": "CheckMK Agent",
                     "source": {
                       "type": "Manual"
                     },
@@ -29789,6 +31873,7 @@
                 "sys_object_id_source": "Unspecified",
                 "tags": [],
                 "updated_at": "2026-01-15T10:30:00Z",
+                "virtualization_interface_id": null,
                 "virtualization_metadata": null,
                 "virtualization_service_id": null
               }
@@ -29908,19 +31993,19 @@
               "example": {
                 "bindings": [
                   {
-                    "created_at": "2026-10-02T12:58:48.617490Z",
+                    "created_at": "2026-10-05T01:43:16.081412Z",
                     "first_discovery_id": null,
-                    "id": "413d83aa-6880-4218-8801-201800400655",
+                    "id": "9a746311-519c-4f99-b16b-361f167ed122",
                     "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
                     "last_discovery_id": null,
-                    "last_seen_at": "2026-10-02T12:58:48.617490Z",
+                    "last_seen_at": "2026-10-05T01:43:16.081412Z",
                     "lineage_id": null,
                     "network_id": "550e8400-e29b-41d4-a716-446655440002",
                     "port_id": "550e8400-e29b-41d4-a716-446655440006",
                     "service_id": "550e8400-e29b-41d4-a716-446655440007",
                     "type": "Port",
-                    "updated_at": "2026-10-02T12:58:48.617490Z",
-                    "valid_from": "2026-10-02T12:58:48.617490Z",
+                    "updated_at": "2026-10-05T01:43:16.081412Z",
+                    "valid_from": "2026-10-05T01:43:16.081412Z",
                     "valid_to": null
                   }
                 ],
@@ -29934,7 +32019,7 @@
                 "name": "nginx",
                 "network_id": "550e8400-e29b-41d4-a716-446655440002",
                 "position": 0,
-                "service_definition": "Tuya Smart",
+                "service_definition": "CheckMK Agent",
                 "source": {
                   "type": "Manual"
                 },
@@ -31365,9 +33450,28 @@
           }
         }
       },
+      "ProxmoxGuestType": {
+        "type": "string",
+        "description": "The two kinds of guest a Proxmox VE node runs. Both are hosts with their own addresses, so\nboth hang off the node's Proxmox VE service the same way.",
+        "enum": [
+          "Qemu",
+          "Lxc"
+        ]
+      },
       "ProxmoxVirtualization": {
         "type": "object",
         "properties": {
+          "guest_type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ProxmoxGuestType",
+                "description": "Whether the guest is a QEMU virtual machine or an LXC container. `None` when the guest was\nassigned by hand or recorded before the Proxmox integration reported it."
+              }
+            ]
+          },
           "vm_id": {
             "type": [
               "string",
@@ -32008,6 +34112,14 @@
             },
             "description": "Service bindings touched by this discovery."
           },
+          "found_subnet_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Subnets this discovery found without sweeping: ranges riding in a host request, ranges the\nserver inferred or placed addresses into, and ranges holding an address the scan saw.\n\nFilled by the server, never by a daemon. Kept apart from `subnet_ids` because the digest\nreads that list as the ranges the scan *swept*, and counting a range it only found evidence\nin would report every unobserved host there as stale. The discovery FKs take both."
+          },
           "host_ids": {
             "type": "array",
             "items": {
@@ -32224,19 +34336,19 @@
         "example": {
           "bindings": [
             {
-              "created_at": "2026-10-02T12:58:48.607150Z",
+              "created_at": "2026-10-05T01:43:16.070753Z",
               "first_discovery_id": null,
-              "id": "33616bbf-8225-4480-86d9-72fc3d5de4b7",
+              "id": "95ca0b05-5692-48c3-b40d-b2a9aafdc03f",
               "ip_address_id": "550e8400-e29b-41d4-a716-446655440005",
               "last_discovery_id": null,
-              "last_seen_at": "2026-10-02T12:58:48.607150Z",
+              "last_seen_at": "2026-10-05T01:43:16.070753Z",
               "lineage_id": null,
               "network_id": "550e8400-e29b-41d4-a716-446655440002",
               "port_id": "550e8400-e29b-41d4-a716-446655440006",
               "service_id": "550e8400-e29b-41d4-a716-446655440007",
               "type": "Port",
-              "updated_at": "2026-10-02T12:58:48.607150Z",
-              "valid_from": "2026-10-02T12:58:48.607150Z",
+              "updated_at": "2026-10-05T01:43:16.070753Z",
+              "valid_from": "2026-10-05T01:43:16.070753Z",
               "valid_to": null
             }
           ],
@@ -32250,7 +34362,7 @@
           "name": "nginx",
           "network_id": "550e8400-e29b-41d4-a716-446655440002",
           "position": 0,
-          "service_definition": "Tuya Smart",
+          "service_definition": "CheckMK Agent",
           "source": {
             "type": "Manual"
           },
@@ -32524,7 +34636,8 @@
           "Unknown",
           "Custom",
           "Scanopy",
-          "OpenPorts"
+          "OpenPorts",
+          "NetworkIdentities"
         ]
       },
       "ServiceInput": {
@@ -32604,7 +34717,10 @@
           "network_id",
           "position",
           "service_definition",
-          "last_seen_at"
+          "last_seen_at",
+          "containerized_by",
+          "match_confidence",
+          "source"
         ]
       },
       "ServiceVirtualization": {
@@ -32695,31 +34811,37 @@
         "type": "object",
         "description": "Setup request for pre-registration org/network configuration",
         "required": [
-          "organization_name",
-          "network"
+          "organization_name"
         ],
         "properties": {
-          "network": {
-            "$ref": "#/components/schemas/NetworkSetup",
-            "description": "The first network to create alongside the organization."
-          },
           "organization_name": {
             "type": "string",
             "description": "Name for the organization created during setup."
+          },
+          "network": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/NetworkSetup",
+                "description": "The first network to create alongside the organization. `None` for a\nself-hosted license buyer, whose cloud org gets its network only if it\nlater moves to a cloud plan."
+              }
+            ]
           }
         }
       },
       "SetupResponse": {
         "type": "object",
         "description": "Response from setup endpoint",
-        "required": [
-          "network_id"
-        ],
         "properties": {
           "network_id": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "uuid",
-            "description": "The network this entity belongs to."
+            "description": "Pre-assigned id of the network created at registration, if one was requested."
           }
         }
       },
@@ -33448,6 +35570,13 @@
           "Unknown"
         ]
       },
+      "TableDensity": {
+        "type": "string",
+        "enum": [
+          "comfortable",
+          "compact"
+        ]
+      },
       "Tag": {
         "example": {
           "color": "Green",
@@ -33843,7 +35972,8 @@
                   "Category",
                   "Virtualization",
                   "LinkState",
-                  "Staleness"
+                  "Staleness",
+                  "OperStatus"
                 ]
               }
             },
@@ -33966,6 +36096,14 @@
             "description": "When this record was last modified.",
             "readOnly": true
           },
+          "virtualization_interface_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The interface on the virtualizing host that presents this one, for a host whose\nvirtualizer presents it from an interface of its own (a network identity). Its own column\nwith a foreign key for the same reason as `virtualization_service_id`; `ON DELETE SET NULL`\nclears it when the interface goes away."
+          },
           "virtualization_metadata": {
             "oneOf": [
               {
@@ -34071,6 +36209,57 @@
           "name_source": {
             "$ref": "#/components/schemas/AttributeSource"
           },
+          "os": {
+            "type": "object",
+            "description": "Operating system of a host, as one source read or inferred it.",
+            "required": [
+              "family"
+            ],
+            "properties": {
+              "family": {
+                "$ref": "#/components/schemas/HostOsFamily",
+                "description": "The operating system family."
+              },
+              "codename": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release codename, such as \"noble\"."
+              },
+              "edition": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Edition, such as \"LTS\" or \"Datacenter\"."
+              },
+              "kernel_version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Kernel release, such as \"6.8.0-45-generic\"."
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Product or distribution, such as \"Ubuntu\", \"Windows Server 2022\" or \"IOS-XE\"."
+              },
+              "version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Release, such as \"24.04\", \"10.0.20348\" or \"15.2(4)M\"."
+              }
+            }
+          },
+          "os_source": {
+            "$ref": "#/components/schemas/AttributeSource"
+          },
           "serial_number": {
             "type": "string",
             "description": "ENTITY-MIB entPhysicalSerialNum - hardware serial number"
@@ -34143,6 +36332,7 @@
           "source",
           "virtualization_metadata",
           "virtualization_service_id",
+          "virtualization_interface_id",
           "hidden",
           "tags",
           "credential_assignments",
@@ -34164,7 +36354,7 @@
             "items": {
               "$ref": "#/components/schemas/EdgeTypeDiscriminants"
             },
-            "description": "Edge types to leave out of the drawing.",
+            "description": "Edge types to leave out of the drawing. Unknown values are dropped on read rather than\nfailing the topology — see [`deserialize_known_edge_types`](crate::server::topology::types::edges::deserialize_known_edge_types).",
             "default": [
               "Hypervisor"
             ]
@@ -34220,7 +36410,7 @@
             "default": {
               "Application": [
                 {
-                  "id": "b796c809-394a-4d87-8eb7-7b4ea0519c09",
+                  "id": "d85fe3d2-36d5-4804-a5fd-8edc471226d7",
                   "rule": {
                     "ByApplication": {
                       "tag_ids": []
@@ -34230,23 +36420,23 @@
               ],
               "L2Physical": [
                 {
-                  "id": "0ae8dd98-a5cb-4301-9691-f9010f395b5d",
+                  "id": "92238fef-8d6c-4350-bbcf-1d1030eea8e0",
                   "rule": "ByHost"
                 }
               ],
               "L3Logical": [
                 {
-                  "id": "25bd4e58-85eb-47c3-8a7e-83e1543a8bd0",
+                  "id": "305dcd11-1d61-405b-bb67-e6cd751325a0",
                   "rule": "BySubnet"
                 },
                 {
-                  "id": "7fd49195-168f-4dd8-b2d5-f57a47c15e1c",
+                  "id": "d9cdef87-42b5-4f93-a1bd-ff8502f1d85b",
                   "rule": "MergeContainerBridges"
                 }
               ],
               "Workloads": [
                 {
-                  "id": "0ae8dd98-a5cb-4301-9691-f9010f395b5d",
+                  "id": "92238fef-8d6c-4350-bbcf-1d1030eea8e0",
                   "rule": "ByHost"
                 }
               ]
@@ -34276,19 +36466,19 @@
             "description": "Rules deciding how entities are placed and inlined within containers.",
             "default": [
               {
-                "id": "59c26293-6e93-4165-951a-fa22641348ce",
+                "id": "caf5a9f3-1f0d-4c9b-9ab1-5a8d48cede38",
                 "rule": "ByTrunkPort"
               },
               {
-                "id": "3637cde1-74bb-495a-af0b-e83e7266d545",
+                "id": "51632554-8f9f-4664-a476-1eb645ffb224",
                 "rule": "ByVLAN"
               },
               {
-                "id": "a3530de5-c657-4684-aa31-6810b29ccf49",
+                "id": "2900f069-0329-453b-9f2a-5a036a0879ed",
                 "rule": "ByPortOpStatus"
               },
               {
-                "id": "43e42f80-0c52-45fe-8981-58d1c5ecf575",
+                "id": "c7e02374-3ed5-4344-bc13-ebf8f3f2ef86",
                 "rule": {
                   "ByServiceCategory": {
                     "categories": [
@@ -34298,7 +36488,8 @@
                       "Workstation",
                       "Mobile",
                       "Printer",
-                      "OpenPorts"
+                      "OpenPorts",
+                      "NetworkIdentities"
                     ],
                     "is_infra_rule": true,
                     "title": "Infrastructure"
@@ -34306,7 +36497,7 @@
                 }
               },
               {
-                "id": "11a2e2ae-c496-4e50-8fe8-15ff719fbf78",
+                "id": "f57d6fc6-12e0-4275-a4be-eac60042ff2a",
                 "rule": {
                   "ByTag": {
                     "tag_ids": [],
@@ -34315,15 +36506,15 @@
                 }
               },
               {
-                "id": "ba93ee9c-ace7-4864-aa63-604f5d9b8e09",
+                "id": "3c3d9bcf-0b86-4603-a8c0-559006f50b7b",
                 "rule": "ByHypervisor"
               },
               {
-                "id": "ee1ac771-eb54-4f95-90de-4ca40d6460a3",
+                "id": "33061cbb-9cf0-459c-86b1-7f46ecc08c4b",
                 "rule": "ByContainerRuntime"
               },
               {
-                "id": "fd648d6a-8aa5-4637-bad7-c4cb27145be8",
+                "id": "54ddbb40-095a-4ed8-b14c-8c2ee51ac9cc",
                 "rule": "ByStack"
               }
             ]
@@ -34422,7 +36613,8 @@
                     "Category",
                     "Virtualization",
                     "LinkState",
-                    "Staleness"
+                    "Staleness",
+                    "OperStatus"
                   ]
                 }
               },
@@ -34702,6 +36894,14 @@
               "$ref": "#/components/schemas/ServiceInput"
             },
             "description": "Services to sync with this host.\nIf Some, server will create/update/delete to match this list.\nIf None, existing services are preserved."
+          },
+          "virtualization_interface_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The interface on the virtualizing host that presents this host, for a network identity."
           },
           "virtualization_metadata": {
             "oneOf": [
@@ -35230,6 +37430,127 @@
               "null"
             ],
             "description": "Minimum client version that can use this API (optional, for future use)"
+          }
+        }
+      },
+      "ViewElementConfig": {
+        "type": "object",
+        "description": "Defines the entity hierarchy for a topology view:\ncontainer (grouping box) → element (rendered as nodes) → inline (shown inside nodes)",
+        "required": [
+          "element_entities"
+        ],
+        "properties": {
+          "element_entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ViewElementEntityConfig"
+            },
+            "description": "Per-element-entity config: the entity types rendered as element nodes and\n(for each) which other entity types are shown *inside* those cards.\nReplaces the old flat `inline_entities` so views like Workloads — where\nHost elements inline services but Service elements inline nothing — can\nbe expressed correctly."
+          },
+          "collective_noun": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Single noun spanning all element entities. Used in summaries when the\nper-entity breakdown would be confusing (e.g. mixed Host+Service in\nWorkloads, where everything is conceptually a \"workload\"). Singular;\nthe UI pluralizes as needed."
+          },
+          "container_entity": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/EntityDiscriminants",
+                "description": "Entity rendered as the container/grouping box (e.g. Subnet in L3, Host in L2/Workloads)"
+              }
+            ]
+          },
+          "default_hidden_values": {
+            "type": "object",
+            "description": "Filter values this view hides out of the box, keyed the same way as the\nhide-set in request options.\n\nThese are product defaults rather than user filters: they keep a view\nlegible before anyone has touched it, so \"clear all filters\" preserves\nthem and the \"filters applied\" count ignores them. Declared here so the\nbackend's initial hide-set and the frontend's notion of what counts as a\ndefault are the same list — they were separately hardcoded before, in\n`default_hide_metadata_values` and again in the options panel.",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "propertyNames": {
+                "type": "string",
+                "description": "The type of metadata filter. One variant per conceptually-distinct filter\nacross the app — Category (on Service), Virtualization (on Host), and so\non. Kept narrow on purpose: adding a new filter means adding a variant\nhere + a `HasFilterValues` impl on the relevant entity.",
+                "enum": [
+                  "Category",
+                  "Virtualization",
+                  "LinkState",
+                  "Staleness",
+                  "OperStatus"
+                ]
+              }
+            },
+            "propertyNames": {
+              "type": "string",
+              "enum": [
+                "Organization",
+                "Invite",
+                "Share",
+                "Network",
+                "DaemonApiKey",
+                "UserApiKey",
+                "User",
+                "Tag",
+                "Discovery",
+                "Daemon",
+                "Host",
+                "Service",
+                "Port",
+                "Binding",
+                "IPAddress",
+                "Interface",
+                "Credential",
+                "Subnet",
+                "Vlan",
+                "Dependency",
+                "Topology",
+                "Snapshot",
+                "Unknown"
+              ]
+            }
+          },
+          "element_marks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ElementMark"
+            },
+            "description": "The colours this view paints on its element cards, each tied to the filter value that\nexplains it. A card shows a classification colour only through one of these, so every\ncolour has a chip in the filter panel whose hover rings the same cards. Per channel, earlier\nmarks win."
+          },
+          "metadata_filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetadataFilter"
+            },
+            "description": "The metadata filters this view offers, each naming the entities it reads and hides.\nApplied regardless of an entity's role (container/element/inline): a Service filter\nrenders under the Services section whether Service is an element entity\n(Workloads/Application) or an inline entity (L3). A filter naming several entities renders\nin a section of its own."
+          }
+        }
+      },
+      "ViewElementEntityConfig": {
+        "type": "object",
+        "description": "An element-entity slot inside a view, plus the set of entity types that\nrender inline on that element's card. Card rendering (what services/ports\nshow up inside an element) and layout re-trigger fingerprinting both read\nfrom this list.",
+        "required": [
+          "entity_type",
+          "inline_entities"
+        ],
+        "properties": {
+          "entity_type": {
+            "$ref": "#/components/schemas/EntityDiscriminants",
+            "description": "Entity type drawn as an element in this view."
+          },
+          "inline_entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityDiscriminants"
+            },
+            "description": "Entity types folded into that element rather than drawn separately."
           }
         }
       },
