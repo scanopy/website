@@ -1,6 +1,6 @@
 ---
 title: Tags
-description: Organization-wide labels for categorizing and filtering entities, exclusive sets that hold one tag per entity, and the Application set that drives the Application perspective.
+description: Organization-wide labels for categorizing and filtering entities, tag groups that hold one tag per entity, the default Status group, and the Application group that drives the Application perspective.
 ---
 
 Tags are organization-wide labels you apply to hosts, services, subnets, sites, groups, and daemons. They're defined once for the organization, shared by every user, and usable across all sites. Deleting one removes it from every entity that carried it.
@@ -17,29 +17,42 @@ Common schemes:
 
 Combining two axes is usually more useful than one long list. `production` + `critical` identifies core infrastructure in a way that neither tag does alone.
 
-## Exclusive sets hold one tag per entity
+## Tag groups hold one tag per entity
 
-A tag can belong to one exclusive set, and an entity holds at most one tag from each set:
+A tag can belong to one tag group, and an entity can be assigned only one tag from a given group:
 
-- Adding a tag from a set replaces the tag from that set the entity already holds.
-- Moving a tag into a set is refused while any entity holds two tags of that set. The error names how many entities to fix first.
+- Adding a tag from a group replaces the tag from that group the entity already holds.
+- Moving a tag into a group is refused while any entity holds two tags of that group. The error names how many entities to fix first.
 
-Use a set for any scheme where each entity has exactly one value. Two examples:
+Leave a tag's group empty and assignment is unrestricted. Use a group for any scheme where each entity has exactly one value. Two examples:
 
-| Set         | Tags                             |
-| ----------- | -------------------------------- |
-| Lifecycle   | Planned, Active, Decommissioned  |
-| Environment | Production, Staging, Development |
+| Tag group   | Tags                                             |
+| ----------- | ------------------------------------------------ |
+| Status      | Planned, Active, Decommissioning, Decommissioned |
+| Environment | Production, Staging, Development                 |
 
-With these sets, tagging a host **Decommissioned** removes its **Active** tag, and a host can't be both **Production** and **Staging**. Filter the host list by a tag to see every host in that state.
+With these groups, tagging a host **Decommissioned** removes its **Active** tag, and a host can't be both **Production** and **Staging**. Filter the host list by a tag to see every host in that state.
 
-A set exists while at least one tag belongs to it.
+A tag group exists while at least one tag belongs to it.
+
+### New organizations start with a Status group
+
+A new organization starts with four tags in a **Status** group, covering an asset's life from order to retirement:
+
+| Tag             | Meaning                                   |
+| --------------- | ----------------------------------------- |
+| Planned         | Ordered or scheduled, not yet in service  |
+| Active          | In service                                |
+| Decommissioning | Being retired; still on the network       |
+| Decommissioned  | Retired from service; kept for the record |
+
+Rename, recolor, or delete them like any other tag. Resetting an organization recreates any that are missing and leaves the rest as they are.
 
 ## Application tags
 
-**Application** is a built-in exclusive set. An application tag answers "what is this part of?" rather than "what is this like":
+**Application** is a built-in tag group. An application tag answers "what is this part of?" rather than "what is this like":
 
-- A host or service carries **at most one**, as with any exclusive set.
+- A host or service carries **at most one**, as with any tag group.
 - A service **inherits its host's** application tag. A host tagged `billing` lends that to every service on it, without tagging each one.
 - Tagging a service directly **overrides** what it inherited. Use this for the service on a shared host that belongs to something else.
 
@@ -51,6 +64,6 @@ A tag can carry an icon from the [Lucide](https://lucide.dev/icons/) set. The ic
 
 ## Managing tags
 
-Tags live under **Platform > Tags**, and can also be created inline while editing any entity. Renaming one updates it everywhere it's applied.
+Tags live under **Platform > Tags**, and can also be created inline while editing any entity. Renaming one updates it everywhere it's applied. The tag list shows each tag as it appears on entities, with its icon and color. The **Color** and **Icon** columns are hidden by default; show them to group or filter the list by either.
 
-The **Exclusive set** field on a tag picks its set: **Application**, an existing set, or a new one. To start a new set, type its name and choose **Create "&lt;name&gt;"**. Leave the field empty for a standard tag.
+The **Tag Group** field on a tag picks its group: **Application**, an existing group, or a new one. To start a new group, type its name and choose **Create "&lt;name&gt;"**. Leave the field empty for a standard tag.
