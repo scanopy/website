@@ -64,10 +64,7 @@ Group the host list by **Virtualized By** to see each hierarchy as a tree. Each 
 
 ### Asset Tags
 
-A host's **Asset Tag** holds the label your organization tracks the device by, such as `IT-00412`. It comes from two places:
-
-- **SNMP**: the device's ENTITY-MIB `entPhysicalAssetID`, when an administrator has set one on it. See [SNMP](/reference/snmp/).
-- **The host form**: type it under the host's details. A typed value stays through later scans. Clear the field to let discovery fill it again.
+A host's **Asset Tag** is the label the device itself carries, such as `IT-00412`: its ENTITY-MIB `entPhysicalAssetID`, read over SNMP when an administrator has set one on the device. See [SNMP](/reference/snmp/). Scanopy reads it on every scan and doesn't let you type it, so it always shows what the device reports. To change it, set the asset tag on the device and the next scan picks it up. Use it to match a device against your asset register.
 
 The host details show the asset tag with its source. The host list has an **Asset Tag** column, hidden by default, and [search](/using-scanopy/search/) matches asset tags and serial numbers.
 
