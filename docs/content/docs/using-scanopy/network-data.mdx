@@ -60,7 +60,7 @@ You can also assign a host to any hypervisor or container runtime service by han
 
 These relationships appear in the topology and host details, showing your virtualization hierarchy. The [Workloads perspective](/using-scanopy/topology/workloads) provides a dedicated view of this hierarchy.
 
-Group the host list by **Virtualized By** to see each hierarchy as a tree. Each group is named after the host at the top of a chain, such as a Proxmox node, and lists that host first with its guests under it. A guest that runs others, such as a VM running containers, heads a collapsible section of its own holding the VM and then its containers. A line down the left edge of each section joins the rows inside it. Hosts that neither run under nor run anything fall in **Not Virtualized**. The **Virtualized By** column and its filter still show the service a host runs under directly.
+The host list opens grouped by **Virtualized By**, which shows each hierarchy as a tree. Each group is named after the host at the top of a chain, such as a Proxmox node, and lists that host first with its guests under it. A guest that runs others, such as a VM running containers, heads a collapsible section of its own holding the VM and then its containers. A line down the left edge of each section joins the rows inside it. Hosts that neither run under nor run anything fall in **Not Virtualized**. The **Virtualized By** column and its filter still show the service a host runs under directly.
 
 ### Asset Tags
 
@@ -83,7 +83,7 @@ Mark hosts as hidden to flag them for exclusion from the topology. Hidden hosts 
 To toggle visibility:
 
 1. Go to **Assets > Hosts**
-2. Click the **Hide** button (eye icon) on the host card
+2. Click the **Hide** button (eye icon) in the host's row
 
 The button turns blue when a host is hidden. Use the **Hidden** column filter to find hidden hosts.
 
@@ -111,7 +111,7 @@ Select a subnet in the topology and the inspector's **Contents** box shows the s
 
 A subnet that sits inside a larger one on the same site is nested in it. Recording `10.0.0.0/16` for a building whose VLANs are discovered as `/24`s nests each `/24` in the `/16`. A range's utilization counts the addresses in every subnet nested inside it as well as its own.
 
-Open the **CIDR** column's menu and choose **Group by CIDR** to see each top-level range with everything inside it. The group is named after the top-level range and lists that range first. A range inside it that holds further ranges heads a collapsible section of its own, and a line down the left edge of each section joins the rows inside it. Subnets that nest with nothing fall in **Ungrouped**. In card view, pick **CIDR** in the group-by list.
+The subnet list opens grouped by CIDR, which shows each top-level range with everything inside it. The group is named after the top-level range and lists that range first. A range inside it that holds further ranges heads a collapsible section of its own, and a line down the left edge of each section joins the rows inside it. Subnets that nest with nothing fall in **Ungrouped**. To list subnets ungrouped, open the **CIDR** column's menu and choose **Clear grouping**.
 
 In the topology inspector, a subnet's **This Subnet** box labels both ends of the nesting:
 
