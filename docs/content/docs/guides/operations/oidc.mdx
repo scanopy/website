@@ -31,6 +31,7 @@ logo = "https://..."             # Optional: logo URL for UI
 issuer_url = "https://..."       # Provider's OIDC issuer URL
 client_id = "your-client-id"
 client_secret = "your-client-secret"
+trusted_audiences = ["..."]     # Optional: extra ID token audiences to accept (see Zitadel)
 ```
 
 You can configure multiple providers by adding multiple [[oidc_providers]] sections.
@@ -100,6 +101,7 @@ Each provider object supports these fields:
 | `client_id` | Yes | OAuth2 client ID |
 | `client_secret` | Yes | OAuth2 client secret |
 | `logo` | No | Logo URL for UI display |
+| `trusted_audiences` | No | Audiences besides `client_id` to accept in ID tokens, e.g. `trusted_audiences=["123456789"]` |
 
 ### Docker Compose Example
 
@@ -276,6 +278,31 @@ client_id = "your-client-id"
 client_secret = "your-client-secret"
 ```
 
+### Zitadel
+
+Zitadel adds the project ID to the `aud` claim of every ID token, next to the client ID, and has no setting to turn this off. Put the project ID in `trusted_audiences`, or every login fails with "`<project id>` is not a trusted audience".
+
+1. **Create Application** in your Zitadel project → New → Web:
+   - Name: `Scanopy`
+   - Authentication method: `Code`
+   - Redirect URIs: `http://your-scanopy:60072/api/auth/oidc/zitadel/callback`
+   - Copy the Client ID and Client Secret
+
+2. **Find the project ID** on the project's overview page (Resource ID).
+
+3. **Configure oidc.toml**:
+
+```toml
+[[oidc_providers]]
+name = "Zitadel"
+slug = "zitadel"
+logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/zitadel.svg"
+issuer_url = "https://your-instance.zitadel.cloud"
+client_id = "your-client-id"
+client_secret = "your-client-secret"
+trusted_audiences = ["your-project-id"]
+```
+
 ### Authelia
 
 ```yaml
@@ -346,6 +373,22 @@ To check what your provider expects:
 ```bash
 curl https://your-provider/.well-known/openid-configuration | jq .issuer
 ```
+
+### "is not a trusted audience" error
+
+```
+Failed to login via OIDC: Invalid audiences: `123456789` is not a trusted audience
+```
+
+**Cause**: Your provider puts an audience besides the client ID in its ID tokens. Scanopy rejects unknown audiences by default. Zitadel does this with its project ID.
+
+**Solution**: Add the audience named in the error to that provider's `trusted_audiences` and restart the server. The server log names the audience and the provider.
+
+```toml
+trusted_audiences = ["123456789"]
+```
+
+The token must still list your `client_id` in `aud` and in `azp`. Servers before v0.17.23 have no `trusted_audiences` setting.
 
 ### "Invalid redirect URI" error
 
