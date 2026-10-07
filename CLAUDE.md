@@ -148,6 +148,37 @@ performance, credentials).
   be discovered before its credential could be assigned. Credentials can be seeded and targeted
   to an IP first, so the guide invented a step. Verify against the code, or leave it out.
 
+### A fact needs a reason to be in the docs
+
+Workers kept adding true but useless material: a section for one host field, a search page with a
+per-entity table of matched fields, a "Common schemes" list of example tags, a section on the
+default tags a new org gets, a note on which list columns are hidden by default. Before adding a
+sentence, ask what the reader does differently for having read it. If nothing, leave it out.
+
+- **Skip self-explanatory features.** A search box, a column picker or an icon picker needs no
+  page. Document what a user can't work out from the UI.
+- **One field or setting doesn't get its own section.** It goes in a sentence on the page for its
+  entity, or nowhere.
+- **No tables that restate code.** A list of every entity and the fields it matches, or every
+  default value, goes stale the next time the code changes. Render it from a fixture (see the
+  components above) or don't publish it.
+- **No UI minutiae.** Default column visibility, tree indent lines, which icon set a picker uses:
+  the UI shows these.
+- **No invented examples or "common patterns".** Examples must fit the product's model. Sites are
+  physical locations, not environments or security zones. A single-valued scheme such as
+  criticality or environment is a tag group, not a list of free tags.
+- **Describe how it works now.** Don't explain current behavior by contrast with an old design
+  ("each daemon now gets its own key; legacy keys were shared"). Old behavior belongs on a page
+  only when a user still running it has to do something different, and then on the reference
+  page that owns it (`reference/daemon-identity.mdx` for legacy keys), not in an overview.
+- **Troubleshooting covers failures users actually hit.** Don't write an entry for a failure you
+  imagined, and don't put product-specific fixes on a general page. A Docker socket fix goes in
+  the Docker guide, not daemon setup, since not every daemon runs Docker.
+- **Menu paths match the current sidebar.** Groups are Assets, Discover and Platform, in that
+  order (`EntityCategory` in `scanopy/backend/src/server/shared/entities.rs`); items and sub-tabs
+  come from `TAB_LABELS` in `scanopy/ui/src/lib/shared/entity-ui-config.ts`. Check a path there
+  before writing it, for example **Discover > Daemons** and **Discover > Scans > Historical**.
+
 ### An integration guide documents the integration
 
 Its job is getting that integration set up. That scopes it tightly:

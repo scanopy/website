@@ -74,21 +74,6 @@ Test-NetConnection -ComputerName your-server-hostname -Port 443
 2. **Check the API key**: Confirm the daemon's `config.json` holds the key from its install artifact. A daemon rejected with `daemon_not_provisioned` was installed by hand against a record that doesn't exist — create it in the UI and use the artifact that produces. See [Daemon Identity](/reference/daemon-identity/).
 3. **Firewall rules**: Ensure outbound HTTPS (port 443) is allowed from the daemon host. On Windows, verify the daemon executable is allowed through **Windows Defender Firewall > Allow an app through firewall**.
 
-## Permission Denied Errors (Linux)
-
-**Symptoms**: "Permission denied" when accessing Docker socket
-
-**Solution**: Add user to docker group:
-
-```bash
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-Log out and back in for changes to take effect.
-
-If you're using a Docker socket proxy and getting permission errors, see [Securing Docker Discovery with a Socket Proxy — Troubleshooting](/guides/integrations/docker/#troubleshooting).
-
 ## Daemon Stops When Terminal Closes
 
 **Symptoms**: Daemon runs in foreground and stops when SSH session or terminal window ends

@@ -87,7 +87,7 @@ docker exec scanopy-server curl http://host.docker.internal:60073/api/health
 
 1. **Check the server's route to the daemon**: The daemon runs with host networking, and the server reaches it at `http://host.docker.internal:60073`. The server service needs `extra_hosts: ["host.docker.internal:host-gateway"]` for that name to resolve, as in the shipped `docker-compose.yml`. If you changed the daemon's port or network mode, update `SCANOPY_INTEGRATED_DAEMON_URL` to match.
 
-2. **Check the daemon record**: Server setup [provisions](/reference/daemon-identity/) the integrated daemon and its API key. Confirm the daemon appears in **Discover > Scan > Daemons** and that its `daemon-config` volume still holds the key — a wiped volume leaves the daemon with no identity to present.
+2. **Check the daemon record**: Server setup [provisions](/reference/daemon-identity/) the integrated daemon and its API key. Confirm the daemon appears in **Discover > Daemons** and that its `daemon-config` volume still holds the key — a wiped volume leaves the daemon with no identity to present.
 
 ### Daemon Waits for /api/initialize After a Restart or Recreate
 
@@ -111,7 +111,7 @@ docker compose up -d
 
 **If the daemon already lost its config**, upgrade to v0.17.22 or later first, then:
 
-- **Integrated daemon**: In **Discover > Scan > Daemons**, click **Edit** on the daemon, open the **API Key** tab and click **Rotate Key**. Add the new key to the daemon's `environment` in `docker-compose.yml` as `SCANOPY_DAEMON_API_KEY=<key>`, then run `docker compose up -d`. The daemon reconnects as the same daemon, with its host and history.
+- **Integrated daemon**: In **Discover > Daemons**, click **Edit** on the daemon, open the **API Key** tab and click **Rotate Key**. Add the new key to the daemon's `environment` in `docker-compose.yml` as `SCANOPY_DAEMON_API_KEY=<key>`, then run `docker compose up -d`. The daemon reconnects as the same daemon, with its host and history.
 - **Daemon installed from the UI's compose file**: Its compose file already sets `SCANOPY_DAEMON_API_KEY`, so it reconnects on its own. If the key is missing from the compose file, rotate it as above.
 - **Daemon on a shared site key** (installed before v0.17.5): Click **Edit**, open the **API Key** tab and click **Bind a Key**, then use the compose file it generates. The daemon keeps its record, host and history.
 

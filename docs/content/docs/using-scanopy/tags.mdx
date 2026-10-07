@@ -1,52 +1,13 @@
 ---
 title: Tags
-description: Organization-wide labels for categorizing and filtering entities, tag groups that hold one tag per entity, the default Status group, and the Application group that drives the Application perspective.
+description: Organization-wide labels for filtering entities, tag groups that allow one tag per entity, and the application tags behind the Application perspective.
 ---
 
-Tags are organization-wide labels you apply to hosts, services, subnets, sites, groups, and daemons. They're defined once for the organization, shared by every user, and usable across all sites. Deleting one removes it from every entity that carried it.
+Tags are organization-wide labels you apply to hosts, services, subnets, sites and daemons, then use to filter entity lists and the topology. Deleting a tag removes it from every entity that carried it.
 
-## Standard tags
+## Tag groups allow one tag per entity
 
-Free-form labels. An entity can carry as many as you like, and they're used for filtering: in entity lists, and in the topology, where filtered elements fade rather than disappear so the layout stays stable.
-
-Common schemes:
-
-- **Criticality**: critical, high, medium, low
-- **Ownership**: which team runs it
-- **Compliance**: pci-scope, hipaa, gdpr, internal-only
-
-Combining two axes is usually more useful than one long list. `production` + `critical` identifies core infrastructure in a way that neither tag does alone.
-
-## Tag groups hold one tag per entity
-
-A tag can belong to one tag group, and an entity can be assigned only one tag from a given group:
-
-- Adding a tag from a group replaces the tag from that group the entity already holds.
-- Moving a tag into a group is refused while any entity holds two tags of that group. The error names how many entities to fix first.
-
-Leave a tag's group empty and assignment is unrestricted. Use a group for any scheme where each entity has exactly one value. Two examples:
-
-| Tag group   | Tags                                             |
-| ----------- | ------------------------------------------------ |
-| Status      | Planned, Active, Decommissioning, Decommissioned |
-| Environment | Production, Staging, Development                 |
-
-With these groups, tagging a host **Decommissioned** removes its **Active** tag, and a host can't be both **Production** and **Staging**. Filter the host list by a tag to see every host in that state.
-
-A tag group exists while at least one tag belongs to it. The tag list opens grouped by tag group.
-
-### New organizations start with a Status group
-
-A new organization starts with four tags in a **Status** group, covering an asset's life from order to retirement:
-
-| Tag             | Meaning                                   |
-| --------------- | ----------------------------------------- |
-| Planned         | Ordered or scheduled, not yet in service  |
-| Active          | In service                                |
-| Decommissioning | Being retired; still on the network       |
-| Decommissioned  | Retired from service; kept for the record |
-
-Rename, recolor, or delete them like any other tag. Resetting an organization recreates any that are missing and leaves the rest as they are.
+A tag can belong to a tag group, and an entity holds at most one tag from each group. Adding a tag from a group replaces the one the entity already had from that group. Use a group for anything with exactly one value per entity, such as an environment: Production, Staging, Development. A tag with no group has no limit.
 
 ## Application tags
 
@@ -58,12 +19,6 @@ Rename, recolor, or delete them like any other tag. Resetting an organization re
 
 This inheritance is what the [Application perspective](/using-scanopy/topology/application/) groups on. Each application tag becomes a container, and services fall into it by their own tag or their host's. A host running one thing needs a single tag; only the exceptions need tagging individually.
 
-## Icons
-
-A tag can carry an icon from the [Lucide](https://lucide.dev/icons/) set. The icon shows on the tag in entity lists, tag pickers, and the topology tag filter. Application tags always use the application icon.
-
 ## Managing tags
 
-Tags live under **Platform > Tags**, and can also be created inline while editing any entity. Renaming one updates it everywhere it's applied. The tag list shows each tag as it appears on entities, with its icon and color. The **Color** and **Icon** columns are hidden by default; show them to group or filter the list by either.
-
-The **Tag Group** field on a tag picks its group: **Application**, an existing group, or a new one. To start a new group, type its name and choose **Create "&lt;name&gt;"**. Leave the field empty for a standard tag.
+Tags live under **Platform > Tags**, and you can also create one while editing any entity. A tag's **Tag Group** field sets its group: **Application**, an existing group, or a new one.

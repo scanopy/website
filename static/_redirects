@@ -264,3 +264,5 @@
 /docs/guides/operations/unified-discovery-migration* /docs/using-scanopy/discovery/ 301
 /docs/reference/daemon-support-lifecycle* /docs/reference/daemon-status/ 301
 /docs/setting-up-daemons/troubleshooting-scans/snmp* /docs/guides/integrations/snmp/ 301
+/docs/using-scanopy/search /docs/using-scanopy/ 301
+/docs/using-scanopy/search/ /docs/using-scanopy/ 301

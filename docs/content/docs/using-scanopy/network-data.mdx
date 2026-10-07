@@ -62,12 +62,6 @@ These relationships appear in the topology and host details, showing your virtua
 
 The host list opens grouped by **Virtualized By**, which shows each hierarchy as a tree. Each group is named after the host at the top of a chain, such as a Proxmox node, and lists that host first with its guests under it. A guest that runs others, such as a VM running containers, heads a collapsible section of its own holding the VM and then its containers. A line down the left edge of each section joins the rows inside it. Hosts that neither run under nor run anything fall in **Not Virtualized**. The **Virtualized By** column and its filter still show the service a host runs under directly.
 
-### Asset Tags
-
-A host's **Asset Tag** is the label the device itself carries, such as `IT-00412`: its ENTITY-MIB `entPhysicalAssetID`, read over SNMP when an administrator has set one on the device. See [SNMP](/reference/snmp/). Scanopy reads it on every scan and doesn't let you type it, so it always shows what the device reports. To change it, set the asset tag on the device and the next scan picks it up. Use it to match a device against your asset register.
-
-The host details show the asset tag with its source. The host list has an **Asset Tag** column, hidden by default, and [search](/using-scanopy/search/) matches asset tags and serial numbers.
-
 ### Service Detection
 
 Scanopy automatically detects 200+ services. See [Service Detection](/reference/service-detection/) for how detection works, confidence levels, and what to do when a service isn't found.

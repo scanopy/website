@@ -144,7 +144,7 @@ Because the socket is reachable only over the daemon's own loopback, this creden
 
 ## Verifying it works
 
-1. Go to **Discover > Scan > Scheduled** and run a discovery, or wait for the next scheduled run
+1. Go to **Discover > Scans** and run a discovery, or wait for the next scheduled run
 2. Open the host running Docker and go to its **Services** tab
 3. Look for **Docker Container** services, each with its published ports
 4. Open the [Workloads perspective](/using-scanopy/topology/workloads) and confirm the containers appear nested under their host
@@ -156,6 +156,14 @@ Because the socket is reachable only over the daemon's own loopback, this creden
 1. Verify the proxy is running: `docker ps | grep proxy`
 2. Check the proxy is listening: `curl http://docker-proxy:2375/version`
 3. Ensure the daemon can reach it — same Docker network, or an exposed port
+
+### "Permission denied" on the Docker socket (Linux)
+
+The user the daemon runs as can't read the socket. Add it to the `docker` group, then restart the daemon:
+
+```bash
+sudo usermod -aG docker <daemon user>
+```
 
 ### "Permission denied" from proxy
 

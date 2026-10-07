@@ -14,7 +14,7 @@ On Linux, macOS, Windows, and FreeBSD the daemon installs as a native background
 
 ## Creating a Daemon
 
-Go to **Discover > Scan > Daemons** and click **Create Daemon**. The wizard walks you through:
+Go to **Discover > Daemons** and click **Create Daemon**. The wizard walks you through:
 
 1. **Setup**: operating system, site, polling mode, and daemon name
 2. **Integrations**: optionally add [credentials](/using-scanopy/credentials/#attaching-a-credential), targeting all hosts or specific ones. They're [auto-assigned](/using-scanopy/credentials/#auto-assignment) to discovered hosts after the first scan.
@@ -119,7 +119,7 @@ Self-hosted Docker Compose deployments include an **integrated daemon** managed 
 
 ## Upgrading
 
-When an update is available, the daemon's row in **Discover > Scan > Daemons** shows an **Update** button, with the steps for your platform: download the latest binary, then restart the service. Configuration is preserved.
+When an update is available, the daemon's row in **Discover > Daemons** shows an **Update** button, with the steps for your platform: download the latest binary, then restart the service. Configuration is preserved.
 
 A **Deprecated** daemon has a scheduled sunset date, shown in the upgrade dialog with a countdown. Past that date it becomes **Unsupported** and is rejected until updated — see [Daemon Status](/reference/daemon-status).
 
@@ -127,7 +127,7 @@ For upgrading self-hosted server and integrated daemon together, see [Upgrading]
 
 ## Updating Daemon Properties
 
-Click the edit icon in a daemon's row in **Discover > Scan > Daemons** to open its management modal, which has two tabs: **Details** for the daemon record, and **API Key** for its key.
+Click the edit icon in a daemon's row in **Discover > Daemons** to open its management modal, which has two tabs: **Details** for the daemon record, and **API Key** for its key.
 
 The **Details** tab edits the maintainer, tags, and — for ServerPoll daemons — the URL the server dials. Site, polling mode, and name are read-only: they're set at [provisioning](/reference/daemon-identity/) and define what the daemon is. A DaemonPoll daemon has no URL to edit, since the server never dials it.
 
@@ -165,7 +165,7 @@ Scanopy asks you to confirm before a ServerPoll cutover. See [Daemon Identity](/
 
 To fully remove a daemon, delete it from the UI and uninstall it from the host.
 
-**Delete from the UI**: Go to **Discover > Scan > Daemons** and click the delete icon in the daemon's row.
+**Delete from the UI**: Go to **Discover > Daemons** and click the delete icon in the daemon's row.
 
 <Callout type="warn">
 Deleting or uninstalling a daemon does not delete discovered data. Hosts, services, subnets, and topology remain on the server until you explicitly delete them.

@@ -19,13 +19,7 @@ Removing a user revokes all of their API keys, pending invitations, and site acc
 
 ## Sites
 
-Sites are the primary organizational unit. Each site represents a distinct environment with its own hosts, services, and topology.
-
-**Common patterns:**
-
-- Separate sites for production vs. development
-- One site per physical location
-- Distinct sites for different security zones
+Sites are the locations your network runs in, such as an office or a data center. Each site holds its own hosts, services and topology.
 
 ### Site Settings
 
@@ -37,12 +31,8 @@ Users can be restricted to specific sites within an organization. When inviting 
 
 ## Credentials
 
-Credentials are organization-scoped: managed under **Assets > Credentials**, and assignable to any site or host in the organization. See [Credentials](/using-scanopy/credentials/) for types, targets, and assignment.
+Credentials are organization-scoped: managed under **Platform > Credentials**, and assignable to any site or host in the organization. See [Credentials](/using-scanopy/credentials/) for types, targets, and assignment.
 
 ## API Keys
 
-Each daemon gets its own API key, minted and bound to it automatically when you create the daemon. You don't create daemon keys by hand.
-
-**Platform > API Keys** lists them. Any key marked legacy predates 1:1 binding and is shared across a site's daemons; see [Daemon Identity](/reference/daemon-identity/) for how those behave and how to give a daemon a key of its own.
-
-User API keys, for programmatic access to the API, are created here too — see the [API reference](/api/).
+Create API keys for programmatic access in **Platform > API Keys**. See the [API reference](/api/).

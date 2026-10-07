@@ -84,14 +84,14 @@ The context applies to the bridge and VLAN queries only. Interfaces, LLDP neighb
 
 ## Verifying it works
 
-1. Go to **Discover > Scan > Scheduled** and run a discovery, or wait for the next scheduled run
+1. Go to **Discover > Scans** and run a discovery, or wait for the next scheduled run
 2. Open a host that should have SNMP data
 3. Check for:
    - **sysName** and **sysDescr** in the host's SNMP tab
    - **Interfaces** in the ifEntry tab — names, speeds, and IP assignments
    - **Neighbors** in the [L2 Physical](/using-scanopy/topology/l2-physical/) topology
 
-You can confirm a site-wide assignment from **Assets > Credentials** — the credential's **Sites** column lists every site it applies to, and its **Hosts** column every host it has been assigned to individually.
+You can confirm a site-wide assignment from **Platform > Credentials** — the credential's **Sites** column lists every site it applies to, and its **Hosts** column every host it has been assigned to individually.
 
 ## Troubleshooting
 

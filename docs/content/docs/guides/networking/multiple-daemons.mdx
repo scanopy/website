@@ -81,7 +81,7 @@ SCANOPY_DAEMON_PORT=60073
 
 ## Setting up multiple daemons
 
-Create a separate daemon entry in **Discover > Scan > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different sites. During setup, use the **Advanced** tab to set that instance's interface restrictions, bind address, and port under Network Discovery — they're baked into the install artifact the wizard gives you, so you don't have to add them by hand.
+Create a separate daemon entry in **Discover > Daemons** for each instance. Each is provisioned with its own API key and can target the same or different sites. During setup, use the **Advanced** tab to set that instance's interface restrictions, bind address, and port under Network Discovery — they're baked into the install artifact the wizard gives you, so you don't have to add them by hand.
 
 Run each daemon's own install artifact on the host. Each run takes a fresh slot, so you can install several without them overwriting each other — no per-instance flags to remember:
 
