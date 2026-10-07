@@ -17,17 +17,19 @@ Press <kbd>/</kbd> from any page, or click **Search all** at the top of the side
 
 | Entity       | Matches on                                                                                                           |
 | ------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Site         | name                                                                                                                 |
+| VLAN         | VLAN number, name, description                                                                                       |
+| Subnet       | name, CIDR, description                                                                                              |
 | Host         | name, hostname, sysName, chassis ID, serial number, [asset tag](/using-scanopy/network-data/#asset-tags), description, IP addresses, MAC addresses, names of its services |
 | Service      | name, service type, name of its host                                                                                 |
-| Subnet       | name, CIDR, description                                                                                              |
-| VLAN         | VLAN number, name, description                                                                                       |
-| Site         | name                                                                                                                 |
-| Daemon       | name, URL                                                                                                            |
 | Discovery    | name, name of its daemon                                                                                             |
-| Credential   | name, description                                                                                                    |
+| Daemon       | name, URL                                                                                                            |
 | Tag          | name, description                                                                                                    |
 | User         | email; admins and owners only, and only the users the **Users** page shows them                                      |
 | User API key | name; only your own keys                                                                                             |
+| Credential   | name, description                                                                                                    |
+
+Sections appear in this order: assets first, then discovery, then platform-wide entities, the same order as the sidebar.
 
 A host's IP addresses, interfaces, ports and bindings have no results of their own: search for the address or MAC and the host comes up.
 
