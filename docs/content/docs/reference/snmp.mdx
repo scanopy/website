@@ -7,25 +7,15 @@ Technical reference for Scanopy's SNMP implementation. For setup instructions, s
 
 ## Protocol support
 
-| Property | Value |
-| -------- | ----- |
-| **SNMPv1** | Supported (community string) |
-| **SNMPv2c** | Supported (community string) |
-| **SNMPv3** | Supported — AuthPriv only (SHA-1/SHA-256 auth, AES-128/AES-256 privacy) |
-| **Transport** | UDP |
-| **Port** | 161, 1161 (fallback) |
+<SnmpProtocolTable />
+
+SNMPv3 runs at the AuthPriv security level only: every SNMPv3 credential needs both an authentication and a privacy protocol.
 
 ## Queried MIBs
 
-| MIB | RFC | OID prefix | Collected fields |
-| --- | --- | ---------- | ---------------- |
-| **System MIB** | RFC 3418 | `1.3.6.1.2.1.1` | sysDescr, sysObjectID, sysUpTime, sysContact, sysName, sysLocation, sysServices |
-| **IF-MIB** | RFC 2863 | `1.3.6.1.2.1.2`, `1.3.6.1.2.1.31.1.1` | ifNumber, ifDescr, ifType, ifSpeed, ifPhysAddress, ifAdminStatus, ifOperStatus, ifName, ifAlias, ifHighSpeed, ifMtu |
-| **IP-MIB** | RFC 4293 | `1.3.6.1.2.1.4` | ipAdEntAddr, ipAdEntIfIndex, ipAdEntNetMask, ipNetToMediaPhysAddress, ipNetToMediaNetAddress |
-| **LLDP-MIB** | IEEE 802.1AB | `1.0.8802.1.1.2` | lldpRemSysName, lldpRemPortId, lldpRemChassisId, lldpRemSysDesc, lldpLocChassisId, lldpLocPortId, lldpLocPortDesc |
-| **CDP-MIB** | Cisco proprietary | `1.3.6.1.4.1.9.9.23` | cdpCacheDeviceId, cdpCachePlatform, cdpCacheDevicePort, cdpCacheAddress |
-| **ENTITY-MIB** | RFC 6933 | `1.3.6.1.2.1.47` | entPhysicalMfgName, entPhysicalModelName, entPhysicalSerialNum, entPhysicalAssetID, entPhysicalFirmwareRev (firmware revision), entPhysicalSoftwareRev (software revision — a separate value on devices that report both, such as a bootloader and an OS version) |
-| **BRIDGE-MIB / Q-BRIDGE-MIB** | RFC 4188, RFC 4363 | `1.3.6.1.2.1.17` | dot1dBaseNumPorts, dot1dTpFdbAddress (MAC learning), dot1qVlanStaticName (VLAN names), dot1qPvid (per-port native VLAN), dot1qVlanCurrentEgressPorts, dot1qVlanCurrentUntaggedPorts (VLAN membership) |
+<SnmpMibsTable />
+
+LLDP-V2-MIB is read only when a complete read of the LLDP-MIB neighbor table finds no rows, and its local chassis objects only when the LLDP-MIB ones return nothing. CISCO-VTP-MIB is read only when Q-BRIDGE-MIB returns no VLAN names.
 
 ## Data collected
 
@@ -40,23 +30,16 @@ A successful SNMP run against a host populates the following entities in Scanopy
 
 ## Timeouts and limits
 
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| **Probe timeout** | 2s | Liveness probe per credential, used to pick a working credential before collection |
-| **Request timeout** | 5s | Timeout for a single SNMP request |
-| **Session timeout** | 5s | Timeout for establishing the UDP session |
-| **Query timeout** | 30s | Ceiling on any single query, including a full walk of a MIB table |
-| **Max entries** | 10,000 | Maximum rows returned from a single table walk |
-| **Integration timeout** | 5m | Wall-clock budget for a full SNMP integration run against a single host (probe + all queries) |
+<SnmpLimitsTable />
 
 Candidate credentials are probed concurrently, so a host with several assigned credentials doesn't pay for each one in sequence.
 
-Every query is individually bounded, so a device that stops responding mid-collection costs 30 seconds rather than the whole 5-minute integration budget.
+Every query has its own timeout, so a device that stops responding mid-collection costs one query timeout rather than the whole integration timeout.
 
 ## Credential behavior
 
 Which credential a host is queried with follows the standard [resolution order](/using-scanopy/credentials/#credential-resolution), with one SNMP-specific addition: `public` is tried as a last resort, so a device left on the default needs no credential.
 
-If every credential fails on both UDP 161 and 1161, the host is discovered without SNMP data. A query that fails inside an otherwise working session is logged and skipped rather than aborting the rest.
+If every credential fails on every port, the host is discovered without SNMP data. A query that fails inside an otherwise working session is logged and skipped rather than aborting the rest.
 
 Partial results are kept: interfaces are saved as soon as the interface table is read, before the neighbor, forwarding-table and VLAN queries run.

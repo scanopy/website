@@ -49,6 +49,9 @@ Components that render them (`docs/src/components/`, registered in `docs/src/mdx
 | `<CredentialBasics id="…" />`                                                               | The shared "credentials work the same everywhere" block         |
 | `<CredentialTypesTable />`                                                                  | Every credential type across every integration                  |
 | `<RolesTable />`, `<ElementRulesTable />`, `<ScanSettingsTable />`, `<DaemonConfigTable />` | Roles, topology grouping rules, scan settings, daemon config    |
+| `<ContainerRulesTable />`                                                                   | Topology container rules and the perspectives each applies to   |
+| `<ServerConfigTable />`                                                                     | Every server setting: env var, CLI flag, default, description   |
+| `<SnmpProtocolTable />`, `<SnmpMibsTable />`, `<SnmpLimitsTable />`                         | SNMP versions and ports, every MIB object read, SNMP timeouts   |
 
 Two consequences worth stating outright:
 

@@ -1,0 +1,478 @@
+{
+  "versions": [
+    "SNMPv1",
+    "SNMPv2c",
+    "SNMPv3"
+  ],
+  "v3_auth_protocols": [
+    "SHA-1",
+    "SHA-256"
+  ],
+  "v3_privacy_protocols": [
+    "AES-128",
+    "AES-256"
+  ],
+  "ports": [
+    161,
+    1161
+  ],
+  "limits": [
+    {
+      "name": "Probe timeout",
+      "value": "2s",
+      "description": "Liveness probe per credential and port, used to pick a working credential before collection"
+    },
+    {
+      "name": "Request timeout",
+      "value": "5s",
+      "description": "A single SNMP request"
+    },
+    {
+      "name": "Session timeout",
+      "value": "5s",
+      "description": "Establishing the UDP session"
+    },
+    {
+      "name": "Query timeout",
+      "value": "1m",
+      "description": "Any single query, including a full walk of a table"
+    },
+    {
+      "name": "Max entries",
+      "value": "10000",
+      "description": "Rows read from a single table walk"
+    },
+    {
+      "name": "Integration timeout",
+      "value": "15m",
+      "description": "A full SNMP run against one host, probe and all queries"
+    }
+  ],
+  "mibs": [
+    {
+      "name": "SNMPv2-MIB",
+      "standard": "RFC 3418",
+      "objects": [
+        {
+          "name": "sysDescr",
+          "oid": "1.3.6.1.2.1.1.1.0",
+          "request": "get"
+        },
+        {
+          "name": "sysObjectID",
+          "oid": "1.3.6.1.2.1.1.2.0",
+          "request": "get"
+        },
+        {
+          "name": "sysUpTime",
+          "oid": "1.3.6.1.2.1.1.3.0",
+          "request": "get"
+        },
+        {
+          "name": "sysContact",
+          "oid": "1.3.6.1.2.1.1.4.0",
+          "request": "get"
+        },
+        {
+          "name": "sysName",
+          "oid": "1.3.6.1.2.1.1.5.0",
+          "request": "get"
+        },
+        {
+          "name": "sysLocation",
+          "oid": "1.3.6.1.2.1.1.6.0",
+          "request": "get"
+        },
+        {
+          "name": "sysServices",
+          "oid": "1.3.6.1.2.1.1.7.0",
+          "request": "get"
+        }
+      ]
+    },
+    {
+      "name": "IF-MIB",
+      "standard": "RFC 2863",
+      "objects": [
+        {
+          "name": "ifNumber",
+          "oid": "1.3.6.1.2.1.2.1.0",
+          "request": "get"
+        },
+        {
+          "name": "ifIndex",
+          "oid": "1.3.6.1.2.1.2.2.1.1",
+          "request": "walk"
+        },
+        {
+          "name": "ifDescr",
+          "oid": "1.3.6.1.2.1.2.2.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "ifType",
+          "oid": "1.3.6.1.2.1.2.2.1.3",
+          "request": "walk"
+        },
+        {
+          "name": "ifMtu",
+          "oid": "1.3.6.1.2.1.2.2.1.4",
+          "request": "walk"
+        },
+        {
+          "name": "ifSpeed",
+          "oid": "1.3.6.1.2.1.2.2.1.5",
+          "request": "walk"
+        },
+        {
+          "name": "ifPhysAddress",
+          "oid": "1.3.6.1.2.1.2.2.1.6",
+          "request": "walk"
+        },
+        {
+          "name": "ifAdminStatus",
+          "oid": "1.3.6.1.2.1.2.2.1.7",
+          "request": "walk"
+        },
+        {
+          "name": "ifOperStatus",
+          "oid": "1.3.6.1.2.1.2.2.1.8",
+          "request": "walk"
+        },
+        {
+          "name": "ifName",
+          "oid": "1.3.6.1.2.1.31.1.1.1.1",
+          "request": "walk"
+        },
+        {
+          "name": "ifHighSpeed",
+          "oid": "1.3.6.1.2.1.31.1.1.1.15",
+          "request": "walk"
+        },
+        {
+          "name": "ifAlias",
+          "oid": "1.3.6.1.2.1.31.1.1.1.18",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "IP-MIB",
+      "standard": "RFC 4293",
+      "objects": [
+        {
+          "name": "ipAdEntIfIndex",
+          "oid": "1.3.6.1.2.1.4.20.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "ipAdEntNetMask",
+          "oid": "1.3.6.1.2.1.4.20.1.3",
+          "request": "walk"
+        },
+        {
+          "name": "ipNetToMediaIfIndex",
+          "oid": "1.3.6.1.2.1.4.22.1.1",
+          "request": "walk"
+        },
+        {
+          "name": "ipNetToMediaPhysAddress",
+          "oid": "1.3.6.1.2.1.4.22.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "ipNetToMediaNetAddress",
+          "oid": "1.3.6.1.2.1.4.22.1.3",
+          "request": "walk"
+        },
+        {
+          "name": "ipNetToMediaType",
+          "oid": "1.3.6.1.2.1.4.22.1.4",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "LLDP-MIB",
+      "standard": "IEEE 802.1AB-2005",
+      "objects": [
+        {
+          "name": "lldpLocChassisIdSubtype",
+          "oid": "1.0.8802.1.1.2.1.3.1.0",
+          "request": "get"
+        },
+        {
+          "name": "lldpLocChassisId",
+          "oid": "1.0.8802.1.1.2.1.3.2.0",
+          "request": "get"
+        },
+        {
+          "name": "lldpLocPortIdSubtype",
+          "oid": "1.0.8802.1.1.2.1.3.7.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "lldpLocPortId",
+          "oid": "1.0.8802.1.1.2.1.3.7.1.3",
+          "request": "walk"
+        },
+        {
+          "name": "lldpLocPortDesc",
+          "oid": "1.0.8802.1.1.2.1.3.7.1.4",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemChassisIdSubtype",
+          "oid": "1.0.8802.1.1.2.1.4.1.1.4",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemChassisId",
+          "oid": "1.0.8802.1.1.2.1.4.1.1.5",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemPortIdSubtype",
+          "oid": "1.0.8802.1.1.2.1.4.1.1.6",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemPortId",
+          "oid": "1.0.8802.1.1.2.1.4.1.1.7",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemPortDesc",
+          "oid": "1.0.8802.1.1.2.1.4.1.1.8",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemSysName",
+          "oid": "1.0.8802.1.1.2.1.4.1.1.9",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemSysDesc",
+          "oid": "1.0.8802.1.1.2.1.4.1.1.10",
+          "request": "walk"
+        },
+        {
+          "name": "lldpRemManAddrIfSubtype",
+          "oid": "1.0.8802.1.1.2.1.4.2.1.3",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "LLDP-V2-MIB",
+      "standard": "IEEE 802.1AB-2009",
+      "objects": [
+        {
+          "name": "lldpV2LocChassisIdSubtype",
+          "oid": "1.3.111.2.802.1.1.13.1.3.1.0",
+          "request": "get"
+        },
+        {
+          "name": "lldpV2LocChassisId",
+          "oid": "1.3.111.2.802.1.1.13.1.3.2.0",
+          "request": "get"
+        },
+        {
+          "name": "lldpV2RemChassisIdSubtype",
+          "oid": "1.3.111.2.802.1.1.13.1.4.1.1.5",
+          "request": "walk"
+        },
+        {
+          "name": "lldpV2RemChassisId",
+          "oid": "1.3.111.2.802.1.1.13.1.4.1.1.6",
+          "request": "walk"
+        },
+        {
+          "name": "lldpV2RemPortIdSubtype",
+          "oid": "1.3.111.2.802.1.1.13.1.4.1.1.7",
+          "request": "walk"
+        },
+        {
+          "name": "lldpV2RemPortId",
+          "oid": "1.3.111.2.802.1.1.13.1.4.1.1.8",
+          "request": "walk"
+        },
+        {
+          "name": "lldpV2RemPortDesc",
+          "oid": "1.3.111.2.802.1.1.13.1.4.1.1.9",
+          "request": "walk"
+        },
+        {
+          "name": "lldpV2RemSysName",
+          "oid": "1.3.111.2.802.1.1.13.1.4.1.1.10",
+          "request": "walk"
+        },
+        {
+          "name": "lldpV2RemSysDesc",
+          "oid": "1.3.111.2.802.1.1.13.1.4.1.1.11",
+          "request": "walk"
+        },
+        {
+          "name": "lldpV2RemManAddrIfSubtype",
+          "oid": "1.3.111.2.802.1.1.13.1.4.2.1.3",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "CISCO-CDP-MIB",
+      "standard": "Cisco",
+      "objects": [
+        {
+          "name": "cdpCacheDeviceId",
+          "oid": "1.3.6.1.4.1.9.9.23.1.2.1.1.6",
+          "request": "walk"
+        },
+        {
+          "name": "cdpCacheDevicePort",
+          "oid": "1.3.6.1.4.1.9.9.23.1.2.1.1.7",
+          "request": "walk"
+        },
+        {
+          "name": "cdpCachePlatform",
+          "oid": "1.3.6.1.4.1.9.9.23.1.2.1.1.8",
+          "request": "walk"
+        },
+        {
+          "name": "cdpCacheAddress",
+          "oid": "1.3.6.1.4.1.9.9.23.1.2.1.1.4",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "ENTITY-MIB",
+      "standard": "RFC 6933",
+      "objects": [
+        {
+          "name": "entPhysicalDescr",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalClass",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.5",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalName",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.7",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalFirmwareRev",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.9",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalSoftwareRev",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.10",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalSerialNum",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.11",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalMfgName",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.12",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalModelName",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.13",
+          "request": "walk"
+        },
+        {
+          "name": "entPhysicalAssetID",
+          "oid": "1.3.6.1.2.1.47.1.1.1.1.15",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "BRIDGE-MIB",
+      "standard": "RFC 4188",
+      "objects": [
+        {
+          "name": "dot1dBaseNumPorts",
+          "oid": "1.3.6.1.2.1.17.1.2.0",
+          "request": "get"
+        },
+        {
+          "name": "dot1dBasePortIfIndex",
+          "oid": "1.3.6.1.2.1.17.1.4.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "dot1dTpFdbAddress",
+          "oid": "1.3.6.1.2.1.17.4.3.1.1",
+          "request": "walk"
+        },
+        {
+          "name": "dot1dTpFdbPort",
+          "oid": "1.3.6.1.2.1.17.4.3.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "dot1dTpFdbStatus",
+          "oid": "1.3.6.1.2.1.17.4.3.1.3",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "Q-BRIDGE-MIB",
+      "standard": "RFC 4363",
+      "objects": [
+        {
+          "name": "dot1qTpFdbPort",
+          "oid": "1.3.6.1.2.1.17.7.1.2.2.1.2",
+          "request": "walk"
+        },
+        {
+          "name": "dot1qTpFdbStatus",
+          "oid": "1.3.6.1.2.1.17.7.1.2.2.1.3",
+          "request": "walk"
+        },
+        {
+          "name": "dot1qVlanStaticName",
+          "oid": "1.3.6.1.2.1.17.7.1.4.3.1.1",
+          "request": "walk"
+        },
+        {
+          "name": "dot1qPvid",
+          "oid": "1.3.6.1.2.1.17.7.1.4.5.1.1",
+          "request": "walk"
+        },
+        {
+          "name": "dot1qVlanCurrentEgressPorts",
+          "oid": "1.3.6.1.2.1.17.7.1.4.2.1.4",
+          "request": "walk"
+        },
+        {
+          "name": "dot1qVlanCurrentUntaggedPorts",
+          "oid": "1.3.6.1.2.1.17.7.1.4.2.1.5",
+          "request": "walk"
+        }
+      ]
+    },
+    {
+      "name": "CISCO-VTP-MIB",
+      "standard": "Cisco",
+      "objects": [
+        {
+          "name": "vtpVlanName",
+          "oid": "1.3.6.1.4.1.9.9.46.1.3.1.1.4",
+          "request": "walk"
+        }
+      ]
+    }
+  ]
+}

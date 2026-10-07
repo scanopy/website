@@ -1,0 +1,156 @@
+[
+  {
+    "id": "server_port",
+    "cli_flag": "--server-port",
+    "env_var": "SCANOPY_SERVER_PORT",
+    "default": "60072",
+    "description": "Port the server listens on"
+  },
+  {
+    "id": "log_level",
+    "cli_flag": "--log-level",
+    "env_var": "SCANOPY_LOG_LEVEL",
+    "default": "info",
+    "description": "Logging verbosity: trace, debug, info, warn or error"
+  },
+  {
+    "id": "rust_log",
+    "cli_flag": "--rust-log",
+    "env_var": "SCANOPY_RUST_LOG",
+    "default": null,
+    "description": "Log filter for dependencies, in RUST_LOG syntax. Empty uses the log level for everything"
+  },
+  {
+    "id": "database_url",
+    "cli_flag": "--database-url",
+    "env_var": "SCANOPY_DATABASE_URL",
+    "default": "postgresql://postgres:password@localhost:5432/scanopy",
+    "description": "PostgreSQL connection string"
+  },
+  {
+    "id": "integrated_daemon_url",
+    "cli_flag": "--integrated-daemon-url",
+    "env_var": "SCANOPY_INTEGRATED_DAEMON_URL",
+    "default": null,
+    "description": "URL the server uses to reach the integrated daemon. The published Docker Compose file sets it to http://host.docker.internal:60073"
+  },
+  {
+    "id": "use_secure_session_cookies",
+    "cli_flag": "--use-secure-session-cookies",
+    "env_var": "SCANOPY_USE_SECURE_SESSION_COOKIES",
+    "default": "false",
+    "description": "Mark session cookies Secure, so browsers send them over HTTPS only. Set it when the UI is served over HTTPS"
+  },
+  {
+    "id": "disable_registration",
+    "cli_flag": "--disable-registration",
+    "env_var": "SCANOPY_DISABLE_REGISTRATION",
+    "default": "false",
+    "description": "Turn off sign-up for new users"
+  },
+  {
+    "id": "disable_password_login",
+    "cli_flag": "--disable-password-login",
+    "env_var": "SCANOPY_DISABLE_PASSWORD_LOGIN",
+    "default": "false",
+    "description": "Turn off email and password login, leaving OIDC as the only way to sign in"
+  },
+  {
+    "id": "smtp_username",
+    "cli_flag": "--smtp-username",
+    "env_var": "SCANOPY_SMTP_USERNAME",
+    "default": null,
+    "description": "Username for the SMTP relay"
+  },
+  {
+    "id": "smtp_password",
+    "cli_flag": "--smtp-password",
+    "env_var": "SCANOPY_SMTP_PASSWORD",
+    "default": null,
+    "description": "Password for the SMTP relay"
+  },
+  {
+    "id": "smtp_email",
+    "cli_flag": "--smtp-email",
+    "env_var": "SCANOPY_SMTP_EMAIL",
+    "default": null,
+    "description": "Sender address for email Scanopy sends over SMTP"
+  },
+  {
+    "id": "smtp_relay",
+    "cli_flag": "--smtp-relay",
+    "env_var": "SCANOPY_SMTP_RELAY",
+    "default": null,
+    "description": "SMTP relay host, for example smtp.gmail.com"
+  },
+  {
+    "id": "smtp_port",
+    "cli_flag": "--smtp-port",
+    "env_var": "SCANOPY_SMTP_PORT",
+    "default": "465",
+    "description": "SMTP relay port. 465 uses implicit TLS; any other port uses STARTTLS"
+  },
+  {
+    "id": "public_url",
+    "cli_flag": "--public-url",
+    "env_var": "SCANOPY_PUBLIC_URL",
+    "default": "http://localhost:60072",
+    "description": "URL users reach the server at. Used in password reset links, invite links and webhooks"
+  },
+  {
+    "id": "client_ip_source",
+    "cli_flag": "--client-ip-source",
+    "env_var": "SCANOPY_CLIENT_IP_SOURCE",
+    "default": null,
+    "description": "Where the server reads the client IP from when it sits behind a reverse proxy, for accurate IPs in auth event logs. Unset uses the connecting address"
+  },
+  {
+    "id": "oidc_providers",
+    "cli_flag": "--oidc-providers",
+    "env_var": "SCANOPY_OIDC_PROVIDERS",
+    "default": null,
+    "description": "OIDC providers users can sign in with"
+  },
+  {
+    "id": "metrics_token",
+    "cli_flag": "--metrics-token",
+    "env_var": "SCANOPY_METRICS_TOKEN",
+    "default": null,
+    "description": "Bearer token the Prometheus metrics endpoint requires"
+  },
+  {
+    "id": "trusted_ca_bundle",
+    "cli_flag": "--trusted-ca-bundle",
+    "env_var": "SCANOPY_TRUSTED_CA_BUNDLE",
+    "default": null,
+    "description": "PEM file of extra CA certificates to trust for outbound TLS, in addition to the bundled roots"
+  },
+  {
+    "id": "web_external_path",
+    "cli_flag": "--web-external-path",
+    "env_var": "SCANOPY_WEB_EXTERNAL_PATH",
+    "default": null,
+    "description": "Serve the web UI from this directory instead of the copy compiled into the binary. The Docker image sets it to /app/static. If the directory has no readable index.html, the server logs a warning and serves the compiled-in UI"
+  },
+  {
+    "id": "license_key",
+    "cli_flag": "--license-key",
+    "env_var": "SCANOPY_LICENSE_KEY",
+    "default": null,
+    "description": "License key for the commercial edition. Omit it for the community edition"
+  },
+  {
+    "id": "server_admin_contact_email",
+    "cli_flag": "--server-admin-contact-email",
+    "env_var": "SCANOPY_SERVER_ADMIN_CONTACT_EMAIL",
+    "default": null,
+    "description": "Email address shown to users who can't create an organization because the server has reached its organization limit"
+  },
+  {
+    "id": "snapshot_retention_days_override",
+    "cli_flag": "--snapshot-retention-days-override",
+    "env_var": "SCANOPY_SNAPSHOT_RETENTION_DAYS_OVERRIDE",
+    "default": null,
+    "description": "Days to keep topology snapshots before pruning them. Unset uses the plan's retention window"
+  }
+]

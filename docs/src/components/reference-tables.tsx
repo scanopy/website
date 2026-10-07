@@ -1,3 +1,4 @@
+import containerRuleTypes from '$lib/fixtures/container-rule-types.json';
 import elementRuleTypes from '$lib/fixtures/element-rule-types.json';
 import permissions from '$lib/fixtures/permissions.json';
 import scanSettings from '$lib/fixtures/scan-settings.json';
@@ -83,27 +84,58 @@ export function ElementRulesTable() {
 					</tr>
 				</thead>
 				<tbody>
-					{(elementRuleTypes as MetadataEntry[]).map((rule) => {
-						const ruleViews = (rule.metadata?.views as string[] | undefined) ?? [];
-						const everywhere = ALL_VIEW_IDS.every((v) => ruleViews.includes(v));
-						return (
-							<tr key={rule.id}>
-								<td className="whitespace-nowrap">
-									<strong>{rule.name}</strong>
-								</td>
-								<td>{rule.description}</td>
-								<td>
-									{everywhere
-										? 'All perspectives'
-										: ruleViews.map((v) => VIEW_NAMES[v] ?? v).join(', ')}
-								</td>
-							</tr>
-						);
-					})}
+					{(elementRuleTypes as MetadataEntry[]).map((rule) => (
+						<tr key={rule.id}>
+							<td className="whitespace-nowrap">
+								<strong>{rule.name}</strong>
+							</td>
+							<td>{rule.description}</td>
+							<td>{ruleViewNames(rule)}</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 		</div>
 	);
+}
+
+/**
+ * Container (top-level grouping) rules and the perspectives each applies to.
+ * A rule the user can remove from its perspective is marked optional.
+ */
+export function ContainerRulesTable() {
+	return (
+		<div className="overflow-x-auto">
+			<table>
+				<thead>
+					<tr>
+						<th>Rule</th>
+						<th>What it groups</th>
+						<th>Applies to</th>
+					</tr>
+				</thead>
+				<tbody>
+					{(containerRuleTypes as MetadataEntry[]).map((rule) => (
+						<tr key={rule.id}>
+							<td className="whitespace-nowrap">
+								<strong>{rule.name}</strong>
+								{rule.metadata?.is_removable ? ' (optional)' : null}
+							</td>
+							<td>{rule.description}</td>
+							<td>{ruleViewNames(rule)}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+	);
+}
+
+/** A grouping rule's perspectives, or "All perspectives" when it applies to every one. */
+function ruleViewNames(rule: MetadataEntry): string {
+	const ruleViews = (rule.metadata?.views as string[] | undefined) ?? [];
+	const everywhere = ALL_VIEW_IDS.every((v) => ruleViews.includes(v));
+	return everywhere ? 'All perspectives' : ruleViews.map((v) => VIEW_NAMES[v] ?? v).join(', ');
 }
 
 /**

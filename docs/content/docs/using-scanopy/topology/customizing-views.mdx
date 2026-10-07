@@ -7,14 +7,11 @@ Each topology perspective can be customized with grouping rules, sort order, and
 
 ## Grouping Rules
 
-Grouping rules change how things are organized in your topology. Set them in the **Layout** tab of the options panel. Each perspective has a fixed top-level container rule and a customizable set of element rules that organize nodes within those containers.
+Grouping rules change how things are organized in your topology. Set them in the **Layout** tab of the options panel. Each perspective has container rules, which define its top-level containers, and a customizable set of element rules that organize nodes within those containers.
 
-**Container rules** define what the main containers are:
+**Container rules** define what the main containers are. Rules marked optional can be removed:
 
-- **Subnet** — L3 Logical's container rule
-- **Application** — Application's container rule
-- **Host** — L2 Physical and Workloads' container rule
-- **Container Bridges** — On L3 Logical, collapses container bridge subnets into their host
+<ContainerRulesTable />
 
 **Element rules** organize nodes within each container into sub-groups. Each rule applies to specific perspectives:
 

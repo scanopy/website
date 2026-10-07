@@ -7,7 +7,7 @@ Configuration reference for self-hosted Scanopy server deployments.
 
 ## Configuration Methods
 
-Every setting is an environment variable prefixed with `SCANOPY_`. That is the primary interface, and it works the same however you run the server. Some settings also accept a command-line flag; the flag wins when both are set.
+Every setting is an environment variable prefixed with `SCANOPY_`. That is the primary interface, and it works the same however you run the server. Each setting in the [parameter reference](#parameter-reference) also has a command-line flag; the flag wins when both are set.
 
 Sources are layered, later ones overriding earlier:
 
@@ -47,34 +47,17 @@ Reload after editing: `sudo systemctl restart scanopy-server`.
 ./scanopy-server --server-port 60072 --database-url postgresql://...
 ```
 
-<Callout type="info">
-Not every setting has a CLI flag — `SCANOPY_LICENSE_KEY` and `SCANOPY_WEB_EXTERNAL_PATH`, among others, are environment-only. The table below lists `N/A` where no flag exists.
-</Callout>
-
-
 ## Parameter Reference
 
-| Parameter                 | CLI Flag                       | Environment Variable                 | Default                   | Description                                                        |
-| ------------------------- | ------------------------------ | ------------------------------------ | ------------------------- | ------------------------------------------------------------------ |
-| **Server Public URL**     | `--public-url`                 | `SCANOPY_PUBLIC_URL`                 | `http://localhost:60072`  | Public URL for webhooks, email links, etc                          |
-| **Server Port**           | `--server-port`                | `SCANOPY_SERVER_PORT`                | `60072`                   | Port for server to listen on                                       |
-| **Database URL**          | `--database-url`               | `SCANOPY_DATABASE_URL`               | _Required_                | PostgreSQL connection string                                       |
-| **Web External Path**     | N/A                            | `SCANOPY_WEB_EXTERNAL_PATH`          | _Embedded UI_             | Serve the web UI from this directory instead of the copy compiled into the binary. Set to `/app/static` in the Docker image; unset elsewhere unless you are replacing the bundled UI. If the directory has no readable `index.html`, the server logs a warning and serves the compiled-in UI |
-| **Log Level**             | `--log-level`                  | `SCANOPY_LOG_LEVEL`                  | `info`                    | Logging verbosity: `trace`, `debug`, `info`, `warn`, `error`       |
-| **Secure Cookies**        | `--use-secure-session-cookies` | `SCANOPY_USE_SECURE_SESSION_COOKIES` | `false`                   | Enable HTTPS-only cookies                                          |
-| **Integrated Daemon URL** | `--integrated-daemon-url`      | `SCANOPY_INTEGRATED_DAEMON_URL`      | -                         | URL the server uses to reach the integrated daemon. The default compose sets `http://host.docker.internal:60073` |
-| **Disable Registration**  | `--disable-registration`       | `SCANOPY_DISABLE_REGISTRATION`       | `false`                   | Disable new user registration                                      |
-| **SMTP Username**         | `--smtp-username`              | `SCANOPY_SMTP_USERNAME`              | -                         | SMTP username for email features                                   |
-| **SMTP Password**         | `--smtp-password`              | `SCANOPY_SMTP_PASSWORD`              | -                         | SMTP password for email authentication                             |
-| **SMTP Relay**            | `--smtp-relay`                 | `SCANOPY_SMTP_RELAY`                 | -                         | SMTP server address (e.g., `smtp.gmail.com`)                       |
-| **SMTP Email**            | `--smtp-email`                 | `SCANOPY_SMTP_EMAIL`                 | -                         | Sender email address for outgoing emails                           |
-| **SMTP Port**             | `--smtp-port`                  | `SCANOPY_SMTP_PORT`                  | `465`                     | Port for the SMTP relay. Selects the encryption mode: `465` is implicit TLS, any other port uses STARTTLS |
-| **Client IP Source**      | `--client-ip-source`           | `SCANOPY_CLIENT_IP_SOURCE`           | -                         | Source of IP address from request headers for reverse proxy setups |
-| **Metrics Token**         | `--metrics-token`              | `SCANOPY_METRICS_TOKEN`              | -                         | Bearer token for Prometheus metrics endpoint authentication        |
-| **Prometheus Allowed IPs**| N/A                            | `SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS` | -            | Comma-separated IPs/CIDRs allowed to access metrics endpoint       |
-| **Snapshot Retention**    | N/A                            | `SCANOPY_SNAPSHOT_RETENTION_DAYS_OVERRIDE` | `90`                | Days to retain topology [snapshots](/using-scanopy/topology/snapshots/) before automatic pruning |
-| **License Key**           | N/A                            | `SCANOPY_LICENSE_KEY`                | -                         | Signed key that enables the [commercial edition](/self-hosted-server/commercial-deployment/). Omit for the free community edition |
-| **Trusted CA Bundle**     | `--trusted-ca-bundle`          | `SCANOPY_TRUSTED_CA_BUNDLE`          | -                         | PEM file of extra CA certificates to trust for outbound TLS. See [Trusted CA Certificates](#trusted-ca-certificates) |
+<ServerConfigTable />
+
+Related settings documented on their own pages:
+
+- `SCANOPY_EXTERNAL_SERVICE_PROMETHEUS_ALLOWED_IPS` limits the metrics endpoint to a comma-separated list of IPs and CIDRs. See [Prometheus setup](/guides/operations/prometheus-setup/).
+- OIDC providers are configured in `oidc.toml`. See [OIDC](/guides/operations/oidc/).
+- `SCANOPY_LICENSE_KEY` enables the [commercial edition](/self-hosted-server/commercial-deployment/).
+- `SCANOPY_SNAPSHOT_RETENTION_DAYS_OVERRIDE` sets how long topology [snapshots](/using-scanopy/topology/snapshots/) are kept.
+- `SCANOPY_TRUSTED_CA_BUNDLE` is covered in [Trusted CA Certificates](#trusted-ca-certificates).
 
 Any variable in this table can also be read from a file. See [Secrets from Files](#secrets-from-files).
 

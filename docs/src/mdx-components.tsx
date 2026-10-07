@@ -14,6 +14,7 @@ import {
 } from '@/components/integration-tables';
 import { Mermaid } from '@/components/mermaid';
 import {
+	ContainerRulesTable,
 	DiscoverySources,
 	ElementRulesTable,
 	IntegrationGuideLinks,
@@ -26,6 +27,8 @@ import {
 } from '@/components/reference-tables';
 import { SchemaERDiagram, SchemaFullDiagram } from '@/components/schema-diagrams';
 import { SectionCards } from '@/components/section-cards';
+import { ServerConfigTable } from '@/components/server-config-table';
+import { SnmpLimitsTable, SnmpMibsTable, SnmpProtocolTable } from '@/components/snmp-tables';
 import { StaleTag, StatusTag } from '@/components/status-tag';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -35,6 +38,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		CredentialBasics,
 		CredentialScope,
 		CredentialScopes,
+		ContainerRulesTable,
 		CredentialTypesTable,
 		DaemonConfigTable,
 		DiscoverySources,
@@ -53,6 +57,10 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		SchemaERDiagram,
 		SchemaFullDiagram,
 		SectionCards,
+		ServerConfigTable,
+		SnmpLimitsTable,
+		SnmpMibsTable,
+		SnmpProtocolTable,
 		SshScriptFieldsTable,
 		StaleTag,
 		StatusTag,
