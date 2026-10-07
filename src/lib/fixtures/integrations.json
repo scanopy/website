@@ -44,7 +44,8 @@
             "optional": true,
             "help_text": "Docker API port. Use 2375 for non-TLS proxies (Tecnativa, HAProxy) or 2376 for TLS.",
             "default_value": "2375",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "path",
@@ -54,7 +55,8 @@
             "secret": false,
             "optional": true,
             "help_text": "Optional URL path prefix appended after the port",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "ssl_cert",
@@ -66,7 +68,8 @@
             "help_text": "PEM-encoded client certificate. All three TLS fields (cert, key, CA chain) must be provided together.",
             "inline_format": "pemcertificate",
             "group": "TLS",
-            "file_name": "cert.pem"
+            "file_name": "cert.pem",
+            "half_width": false
           },
           {
             "id": "ssl_key",
@@ -77,7 +80,8 @@
             "help_text": "PEM private key. All three TLS fields must be provided together.",
             "inline_format": "pemprivatekey",
             "group": "TLS",
-            "file_name": "key.pem"
+            "file_name": "key.pem",
+            "half_width": false
           },
           {
             "id": "ssl_chain",
@@ -89,7 +93,8 @@
             "help_text": "PEM-encoded CA certificate chain. All three TLS fields must be provided together.",
             "inline_format": "pemcertificate",
             "group": "TLS",
-            "file_name": "ca.pem"
+            "file_name": "ca.pem",
+            "half_width": false
           }
         ]
       },
@@ -122,7 +127,8 @@
             "secret": false,
             "optional": true,
             "help_text": "The Docker socket on Unix, or its named pipe on Windows. Leave blank to auto-detect (DOCKER_HOST or /var/run/docker.sock on Unix, the docker_engine pipe on Windows).",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": false
           }
         ]
       }
@@ -166,7 +172,8 @@
             "secret": false,
             "optional": false,
             "help_text": "Email address of an Instant On portal account with access to the site. Add a dedicated account with the read-only Viewer role (Site management → Accounts managing this site) rather than using your own administrator login, and make sure multi-factor authentication is disabled on it — the sign-in cannot answer an MFA prompt.",
-            "group": "Authentication"
+            "group": "Authentication",
+            "half_width": false
           },
           {
             "id": "password",
@@ -177,7 +184,8 @@
             "help_text": "Password for that portal account.",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "instant-on-password"
+            "file_name": "instant-on-password",
+            "half_width": false
           },
           {
             "id": "site",
@@ -187,7 +195,8 @@
             "secret": false,
             "optional": true,
             "help_text": "Limit the fetch to one Instant On site by name. Leave blank to read every site this account can see. Assign this credential to a single switch — each host it is assigned to fetches the whole site again.",
-            "group": "Scope"
+            "group": "Scope",
+            "half_width": false
           }
         ]
       }
@@ -238,7 +247,8 @@
             "optional": true,
             "help_text": "Podman API port. Point at a TCP-exposed Podman service (e.g. `podman system service tcp:`) directly or behind a TLS proxy.",
             "default_value": "2375",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "path",
@@ -248,7 +258,8 @@
             "secret": false,
             "optional": true,
             "help_text": "Optional URL path prefix appended after the port",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "ssl_cert",
@@ -260,7 +271,8 @@
             "help_text": "PEM-encoded client certificate. All three TLS fields (cert, key, CA chain) must be provided together.",
             "inline_format": "pemcertificate",
             "group": "TLS",
-            "file_name": "cert.pem"
+            "file_name": "cert.pem",
+            "half_width": false
           },
           {
             "id": "ssl_key",
@@ -271,7 +283,8 @@
             "help_text": "PEM private key. All three TLS fields must be provided together.",
             "inline_format": "pemprivatekey",
             "group": "TLS",
-            "file_name": "key.pem"
+            "file_name": "key.pem",
+            "half_width": false
           },
           {
             "id": "ssl_chain",
@@ -283,7 +296,8 @@
             "help_text": "PEM-encoded CA certificate chain. All three TLS fields must be provided together.",
             "inline_format": "pemcertificate",
             "group": "TLS",
-            "file_name": "ca.pem"
+            "file_name": "ca.pem",
+            "half_width": false
           }
         ]
       },
@@ -316,7 +330,8 @@
             "secret": false,
             "optional": true,
             "help_text": "The Podman socket on Unix, or Podman machine's named pipe on Windows. Leave blank to auto-detect (CONTAINER_HOST, then the rootful and rootless sockets on Unix or the podman-machine-default pipe on Windows).",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": false
           }
         ]
       }
@@ -363,17 +378,6 @@
         "minimum_daemon_version": "0.17.21",
         "fields": [
           {
-            "id": "port",
-            "label": "API Port",
-            "field_type": "port",
-            "placeholder": "8006",
-            "secret": false,
-            "optional": true,
-            "help_text": "The port the Proxmox VE web interface and API listen on. 8006 unless a reverse proxy sits in front of it.",
-            "default_value": "8006",
-            "group": "Connection"
-          },
-          {
             "id": "token_id",
             "label": "Token ID",
             "field_type": "string",
@@ -382,7 +386,20 @@
             "optional": false,
             "help_text": "The full token ID, user@realm!tokenname (Datacenter → Permissions → API Tokens). Give the token the PVEAuditor role on / and, for VM addresses from the guest agent, VM.GuestAgent.Audit on Proxmox VE 9 or VM.Monitor on 8. Assign the credential to one node: its API answers for the whole cluster.",
             "inline_format": "proxmoxtokenid",
-            "group": "Authentication"
+            "group": "Connection",
+            "half_width": true
+          },
+          {
+            "id": "port",
+            "label": "API Port",
+            "field_type": "port",
+            "placeholder": "8006",
+            "secret": false,
+            "optional": true,
+            "help_text": "The port the Proxmox VE web interface and API listen on. 8006 unless a reverse proxy sits in front of it.",
+            "default_value": "8006",
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "token_secret",
@@ -393,7 +410,8 @@
             "help_text": "The secret shown once when the token is created, a UUID.",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "proxmox-token-secret"
+            "file_name": "proxmox-token-secret",
+            "half_width": false
           }
         ]
       }
@@ -431,17 +449,6 @@
         "minimum_daemon_version": "0.17.7",
         "fields": [
           {
-            "id": "port",
-            "label": "Controller Port",
-            "field_type": "port",
-            "placeholder": "443",
-            "secret": false,
-            "optional": true,
-            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
-            "default_value": "443",
-            "group": "Connection"
-          },
-          {
             "id": "site",
             "label": "Site",
             "field_type": "string",
@@ -450,7 +457,20 @@
             "optional": true,
             "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
             "default_value": "default",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": true
+          },
+          {
+            "id": "port",
+            "label": "Controller Port",
+            "field_type": "port",
+            "placeholder": "443",
+            "secret": false,
+            "optional": true,
+            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
+            "default_value": "443",
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "api_key",
@@ -461,7 +481,8 @@
             "help_text": "Network Application API key (Settings → Control Plane → Integrations → Create API Key). Requires UniFi OS; the legacy self-hosted Network Application on 8443 has no API keys — use a UniFi Local Admin credential there instead.",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "unifi-api-key"
+            "file_name": "unifi-api-key",
+            "half_width": false
           }
         ]
       },
@@ -481,17 +502,6 @@
         "minimum_daemon_version": "0.17.7",
         "fields": [
           {
-            "id": "port",
-            "label": "Controller Port",
-            "field_type": "port",
-            "placeholder": "443",
-            "secret": false,
-            "optional": true,
-            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
-            "default_value": "443",
-            "group": "Connection"
-          },
-          {
             "id": "site",
             "label": "Site",
             "field_type": "string",
@@ -500,7 +510,20 @@
             "optional": true,
             "help_text": "Internal site name, taken from the controller URL (/manage/site/<name>) — not the site's display name. Most installations use 'default'.",
             "default_value": "default",
-            "group": "Connection"
+            "group": "Connection",
+            "half_width": true
+          },
+          {
+            "id": "port",
+            "label": "Controller Port",
+            "field_type": "port",
+            "placeholder": "443",
+            "secret": false,
+            "optional": true,
+            "help_text": "443 for a UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway), 11443 for a self-hosted UniFi OS Server, or 8443 for the legacy self-hosted Network Application. Check the port in your controller's URL — the wrong port fails to connect.",
+            "default_value": "443",
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "username",
@@ -509,7 +532,8 @@
             "secret": false,
             "optional": false,
             "help_text": "Controller admin username. Use a local-only admin account so multi-factor authentication does not block the login.",
-            "group": "Authentication"
+            "group": "Authentication",
+            "half_width": false
           },
           {
             "id": "password",
@@ -520,7 +544,8 @@
             "help_text": "Password for the local admin account.",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "unifi-password"
+            "file_name": "unifi-password",
+            "half_width": false
           }
         ]
       }
@@ -557,6 +582,17 @@
         "minimum_daemon_version": "0.17.19",
         "fields": [
           {
+            "id": "broadcast_address",
+            "label": "Broadcast Address",
+            "field_type": "string",
+            "placeholder": "(host's subnet broadcast)",
+            "secret": false,
+            "optional": true,
+            "help_text": "Leave blank to send to the broadcast address of each host's subnet, which reaches it when the daemon is on the same network segment or the router forwards directed broadcasts. Otherwise enter where to send it instead: a router address with a relay rule, a Wake-on-LAN relay device, or 255.255.255.255.",
+            "group": "Delivery",
+            "half_width": true
+          },
+          {
             "id": "port",
             "label": "UDP Port",
             "field_type": "port",
@@ -565,17 +601,8 @@
             "optional": true,
             "help_text": "Most network cards accept the packet on any port. Change it only if a router relay rule listens on another port, commonly 7.",
             "default_value": "9",
-            "group": "Delivery"
-          },
-          {
-            "id": "broadcast_address",
-            "label": "Broadcast Address",
-            "field_type": "string",
-            "placeholder": "(host's subnet broadcast)",
-            "secret": false,
-            "optional": true,
-            "help_text": "Leave blank to send to the broadcast address of each host's subnet, which reaches it when the daemon is on the same network segment or the router forwards directed broadcasts. Otherwise enter where to send it instead: a router address with a relay rule, a Wake-on-LAN relay device, or 255.255.255.255.",
-            "group": "Delivery"
+            "group": "Delivery",
+            "half_width": true
           },
           {
             "id": "wait_seconds",
@@ -586,7 +613,8 @@
             "optional": true,
             "help_text": "How long the daemon waits after sending the packets before the scan starts. Hosts the scan finds count as woken. Allow for disks spinning up and services starting.",
             "default_value": "90",
-            "group": "Delivery"
+            "group": "Delivery",
+            "half_width": false
           },
           {
             "id": "secure_on_password",
@@ -598,7 +626,8 @@
             "help_text": "Only for network cards configured to require one. Six bytes written as a MAC address.",
             "inline_format": "macaddress",
             "group": "Delivery",
-            "file_name": "secureon-password"
+            "file_name": "secureon-password",
+            "half_width": false
           }
         ]
       }
@@ -645,7 +674,8 @@
             "optional": false,
             "help_text": "Custom SNMP community string. The default 'public' community is always tried automatically during scans. On Cisco switches, append '@' and a VLAN id — for example 'readonly@20' — to read that VLAN's MAC-address table, which the plain community does not return.",
             "inline_format": "plain",
-            "file_name": "snmp-community"
+            "file_name": "snmp-community",
+            "half_width": false
           }
         ]
       },
@@ -674,7 +704,8 @@
             "optional": false,
             "help_text": "Custom SNMP community string. The default 'public' community is always tried automatically during scans. On Cisco switches, append '@' and a VLAN id — for example 'readonly@20' — to read that VLAN's MAC-address table, which the plain community does not return.",
             "inline_format": "plain",
-            "file_name": "snmp-community"
+            "file_name": "snmp-community",
+            "half_width": false
           }
         ]
       },
@@ -702,7 +733,8 @@
             "secret": false,
             "optional": false,
             "help_text": "SNMPv3 USM user name (security name).",
-            "group": "Authentication"
+            "group": "Authentication",
+            "half_width": true
           },
           {
             "id": "auth_protocol",
@@ -722,7 +754,8 @@
               }
             ],
             "default_value": "Sha256",
-            "group": "Authentication"
+            "group": "Authentication",
+            "half_width": true
           },
           {
             "id": "auth_password",
@@ -733,7 +766,8 @@
             "help_text": "Authentication password (minimum 8 characters).",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "snmpv3-auth-password"
+            "file_name": "snmpv3-auth-password",
+            "half_width": false
           },
           {
             "id": "priv_protocol",
@@ -753,7 +787,8 @@
               }
             ],
             "default_value": "Aes128",
-            "group": "Privacy"
+            "group": "Privacy",
+            "half_width": false
           },
           {
             "id": "priv_password",
@@ -764,7 +799,8 @@
             "help_text": "Privacy (encryption) password (minimum 8 characters).",
             "inline_format": "plain",
             "group": "Privacy",
-            "file_name": "snmpv3-priv-password"
+            "file_name": "snmpv3-priv-password",
+            "half_width": false
           },
           {
             "id": "context_name",
@@ -773,7 +809,8 @@
             "placeholder": "(default)",
             "secret": false,
             "optional": true,
-            "help_text": "Optional SNMPv3 context name, applied to bridge and VLAN queries only. Cisco and some other vendors keep a separate MAC-address table per VLAN in a named context; naming it here reads that table instead of the near-empty default one. Interface, LLDP and ARP data always come from the default context."
+            "help_text": "Optional SNMPv3 context name, applied to bridge and VLAN queries only. Cisco and some other vendors keep a separate MAC-address table per VLAN in a named context; naming it here reads that table instead of the near-empty default one. Interface, LLDP and ARP data always come from the default context.",
+            "half_width": false
           }
         ]
       }
@@ -811,16 +848,6 @@
         "minimum_daemon_version": "0.17.19",
         "fields": [
           {
-            "id": "port",
-            "label": "SSH Port",
-            "field_type": "port",
-            "placeholder": "22",
-            "secret": false,
-            "optional": true,
-            "default_value": "22",
-            "group": "Connection"
-          },
-          {
             "id": "username",
             "label": "Username",
             "field_type": "string",
@@ -828,7 +855,19 @@
             "secret": false,
             "optional": false,
             "help_text": "Account the script runs as. Use a dedicated account with only the access the script needs.",
-            "group": "Authentication"
+            "group": "Connection",
+            "half_width": true
+          },
+          {
+            "id": "port",
+            "label": "SSH Port",
+            "field_type": "port",
+            "placeholder": "22",
+            "secret": false,
+            "optional": true,
+            "default_value": "22",
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "private_key",
@@ -839,7 +878,8 @@
             "help_text": "OpenSSH (ssh-keygen's default) or PEM private key whose public key is in the account's authorized_keys.",
             "inline_format": "sshprivatekey",
             "group": "Authentication",
-            "file_name": "ssh-key"
+            "file_name": "ssh-key",
+            "half_width": false
           },
           {
             "id": "passphrase",
@@ -850,7 +890,8 @@
             "help_text": "Only if the private key is encrypted.",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "ssh-key-passphrase"
+            "file_name": "ssh-key-passphrase",
+            "half_width": false
           },
           {
             "id": "target_os",
@@ -870,7 +911,8 @@
               }
             ],
             "default_value": "Unix",
-            "group": "Script"
+            "group": "Script",
+            "half_width": false
           },
           {
             "id": "script",
@@ -888,7 +930,8 @@
             "optional": false,
             "help_text": "Runs at each scan. Must print one JSON object of host fields.",
             "group": "Script",
-            "file_name": "scanopy-inventory.sh"
+            "file_name": "scanopy-inventory.sh",
+            "half_width": false
           },
           {
             "id": "timeout_seconds",
@@ -899,7 +942,8 @@
             "optional": true,
             "help_text": "The script is stopped and the run reports a failure after this long.",
             "default_value": "60",
-            "group": "Script"
+            "group": "Script",
+            "half_width": false
           },
           {
             "id": "host_key_fingerprint",
@@ -909,7 +953,8 @@
             "secret": false,
             "optional": true,
             "help_text": "Leave blank to trust the key each host presents the first time and refuse it if it later changes. Enter a fingerprint (ssh-keygen -lf) to require that key instead.",
-            "group": "Script"
+            "group": "Script",
+            "half_width": false
           }
         ]
       },
@@ -929,16 +974,6 @@
         "minimum_daemon_version": "0.17.19",
         "fields": [
           {
-            "id": "port",
-            "label": "SSH Port",
-            "field_type": "port",
-            "placeholder": "22",
-            "secret": false,
-            "optional": true,
-            "default_value": "22",
-            "group": "Connection"
-          },
-          {
             "id": "username",
             "label": "Username",
             "field_type": "string",
@@ -946,7 +981,19 @@
             "secret": false,
             "optional": false,
             "help_text": "Account the script runs as. Use a dedicated account with only the access the script needs.",
-            "group": "Authentication"
+            "group": "Connection",
+            "half_width": true
+          },
+          {
+            "id": "port",
+            "label": "SSH Port",
+            "field_type": "port",
+            "placeholder": "22",
+            "secret": false,
+            "optional": true,
+            "default_value": "22",
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "password",
@@ -957,7 +1004,8 @@
             "help_text": "Password for that account. The server must allow password authentication.",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "ssh-password"
+            "file_name": "ssh-password",
+            "half_width": false
           },
           {
             "id": "target_os",
@@ -977,7 +1025,8 @@
               }
             ],
             "default_value": "Unix",
-            "group": "Script"
+            "group": "Script",
+            "half_width": false
           },
           {
             "id": "script",
@@ -995,7 +1044,8 @@
             "optional": false,
             "help_text": "Runs at each scan. Must print one JSON object of host fields.",
             "group": "Script",
-            "file_name": "scanopy-inventory.sh"
+            "file_name": "scanopy-inventory.sh",
+            "half_width": false
           },
           {
             "id": "timeout_seconds",
@@ -1006,7 +1056,8 @@
             "optional": true,
             "help_text": "The script is stopped and the run reports a failure after this long.",
             "default_value": "60",
-            "group": "Script"
+            "group": "Script",
+            "half_width": false
           },
           {
             "id": "host_key_fingerprint",
@@ -1016,7 +1067,8 @@
             "secret": false,
             "optional": true,
             "help_text": "Leave blank to trust the key each host presents the first time and refuse it if it later changes. Enter a fingerprint (ssh-keygen -lf) to require that key instead.",
-            "group": "Script"
+            "group": "Script",
+            "half_width": false
           }
         ]
       }
@@ -1055,6 +1107,17 @@
         "minimum_daemon_version": "0.17.16",
         "fields": [
           {
+            "id": "username",
+            "label": "Username",
+            "field_type": "string",
+            "placeholder": "gnmi-user",
+            "secret": false,
+            "optional": false,
+            "help_text": "Sent as gRPC `username` metadata (the OpenConfig convention).",
+            "group": "Connection",
+            "half_width": true
+          },
+          {
             "id": "port",
             "label": "gNMI Port",
             "field_type": "port",
@@ -1063,17 +1126,8 @@
             "optional": true,
             "help_text": "9339 is the IANA gNMI port; some NOSes listen on 6030 or 57400 instead.",
             "default_value": "9339",
-            "group": "Connection"
-          },
-          {
-            "id": "username",
-            "label": "Username",
-            "field_type": "string",
-            "placeholder": "gnmi-user",
-            "secret": false,
-            "optional": false,
-            "help_text": "Sent as gRPC `username` metadata (the OpenConfig convention).",
-            "group": "Authentication"
+            "group": "Connection",
+            "half_width": true
           },
           {
             "id": "password",
@@ -1084,7 +1138,8 @@
             "help_text": "Sent as gRPC `password` metadata.",
             "inline_format": "plain",
             "group": "Authentication",
-            "file_name": "gnmi-password"
+            "file_name": "gnmi-password",
+            "half_width": false
           }
         ]
       }

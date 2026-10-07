@@ -653,7 +653,7 @@
   {
     "id": "LldpNeighbourNotFound",
     "name": "Neighbour device not discovered",
-    "description": "LLDP/CDP neighbours name devices this network has not discovered ({count} in total), so they draw no links. This is expected where the far end is an endpoint or unmanaged device; a device that should have been scanned means the identifier it advertises is not one this network holds.",
+    "description": "LLDP/CDP neighbours name devices this site has not discovered ({count} in total), so they draw no links. This is expected where the far end is an endpoint or unmanaged device; a device that should have been scanned means the identifier it advertises is not one this site holds.",
     "category": "NothingToDo",
     "icon": "triangle-alert",
     "color": "Amber",
@@ -667,7 +667,7 @@
   {
     "id": "LldpNeighbourAmbiguous",
     "name": "Neighbour device identifier not unique",
-    "description": "LLDP/CDP neighbours advertise an identifier that several hosts on this network hold ({count} in total), so none of them can be picked and no link is drawn. This is usually duplicate records for one device rather than a device that was missed — consolidate the duplicates and the link resolves.",
+    "description": "LLDP/CDP neighbours advertise an identifier that several hosts on this site hold ({count} in total), so none of them can be picked and no link is drawn. This is usually duplicate records for one device rather than a device that was missed — consolidate the duplicates and the link resolves.",
     "category": "FixInScanopy",
     "icon": "triangle-alert",
     "color": "Amber",
@@ -723,7 +723,7 @@
   {
     "id": "ProvisionalSubnetInferred",
     "name": "Address range assumed, please confirm",
-    "description": "{count} subnet(s) on this network have a range Scanopy assumed rather than read, because devices reported addresses in them that nothing scanned holds. Nothing advertises a netmask, so the range around an address is a convention — confirm or correct it on the subnet. No daemon has an interface on these ranges, and they are reported on every scan until confirmed.",
+    "description": "{count} subnet(s) on this site have a range Scanopy assumed rather than read, because devices reported addresses in them that nothing scanned holds. Nothing advertises a netmask, so the range around an address is a convention — confirm or correct it on the subnet. No daemon has an interface on these ranges, and they are reported on every scan until confirmed.",
     "category": "FixInScanopy",
     "icon": "info",
     "color": "Gray",
@@ -737,7 +737,7 @@
   {
     "id": "NeighbourResolutionIncomplete",
     "name": "Link resolution did not finish",
-    "description": "Matching LLDP/CDP neighbours to the devices and ports they name was stopped after {budget_seconds}s, with {neighbours} interface(s) advertising a neighbour on this network. Physical Topology is missing links this scan would otherwise have drawn; the next scan retries from scratch. Narrow what the scan covers, or split the network across daemons, if it keeps happening.",
+    "description": "Matching LLDP/CDP neighbours to the devices and ports they name was stopped after {budget_seconds}s, with {neighbours} interface(s) advertising a neighbour on this site. Physical Topology is missing links this scan would otherwise have drawn; the next scan retries from scratch. Narrow what the scan covers, or split the network across daemons, if it keeps happening.",
     "category": "FixInScanopy",
     "icon": "triangle-alert",
     "color": "Amber",

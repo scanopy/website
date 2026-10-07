@@ -45,7 +45,7 @@
   {
     "id": "Member",
     "name": "Member",
-    "description": "Create and modify entities for specific networks",
+    "description": "Create and modify entities for specific sites",
     "category": null,
     "icon": "user",
     "color": "Blue",
