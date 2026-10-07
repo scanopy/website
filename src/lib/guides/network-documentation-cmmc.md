@@ -1,13 +1,13 @@
 ---
 title: Network Documentation for CMMC Level 2
-description: "What CMMC Level 2 expects for network documentation: the asset inventory and scoping network diagram, and how automated discovery keeps them current."
+description: 'What CMMC Level 2 expects for network documentation: the asset inventory and scoping network diagram, and how automated discovery keeps them current.'
 keyword: network documentation for CMMC
 slug: network-documentation-cmmc
 date: 2026-09-15
 dateModified: 2026-09-15
-tldr: "CMMC Level 2 requires a network diagram, though not among its 110 security requirements. The scoping rule (32 CFR 170.19) requires every in-scope asset, OT included, to appear in an asset inventory and a network diagram of the assessment scope. Automated discovery builds both from the network and keeps them current."
+tldr: 'CMMC Level 2 requires a network diagram, though not among its 110 security requirements. The scoping rule (32 CFR 170.19) requires every in-scope asset, OT included, to appear in an asset inventory and a network diagram of the assessment scope. Automated discovery builds both from the network and keeps them current.'
 ctaHeading: A scoping diagram that matches the network
-ctaDescription: "Scanopy discovers your hosts, services, topology, and industrial devices, then keeps the inventory and map current on a schedule. Self-hosted, so the data stays inside your boundary."
+ctaDescription: 'Scanopy discovers your hosts, services, topology, and industrial devices, then keeps the inventory and map current on a schedule. Self-hosted, so the data stays inside your boundary.'
 faq:
   - question: Does CMMC Level 2 require a network diagram?
     answer: Yes, through the scoping rule rather than the 110 security requirements. 32 CFR 170.19(c)(1) requires every in-scope asset category (CUI Assets, Security Protection Assets, Contractor Risk Managed Assets, and Specialized Assets) to be documented in the asset inventory and in the network diagram of the CMMC Assessment Scope. The rule applies before a Level 2 self-assessment as well as a C3PAO certification assessment.
@@ -41,14 +41,14 @@ The security requirements themselves come from [NIST SP 800-171 Rev 2](https://c
 
 Scoping and five of the Level 2 requirements depend on the same current picture of the network. Each maps to something Scanopy produces:
 
-| CMMC requirement                                  | Evidence it needs                                                                                                               | What Scanopy produces                                                                                         |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Scoping (32 CFR 170.19(c)(1))                     | Every in-scope asset in the asset inventory and in a network diagram of the assessment scope                                    | The host and service inventory with CSV export, plus Physical (L2) and Logical (L3) topology                   |
-| CM.L2-3.4.1 inventory                             | An inventory of hardware, software, and firmware, with machine names and network addresses, maintained over time                | Hostnames, IP and MAC addresses, vendor, model, serial number, and firmware revision, refreshed on a schedule  |
-| CM.L2-3.4.1 baseline                              | A baseline that includes network topology and the logical placement of components, reviewed and updated                         | Physical (L2) and Logical (L3) topology, and snapshots as a dated baseline you compare over time               |
-| CA.L2-3.12.4 system security plan                 | The system boundary and connections to other systems, described in the SSP                                                      | The Logical (L3) view of subnets and the hosts on each, and the Physical (L2) view of links between devices    |
-| CM.L2-3.4.7 nonessential services                 | A security-based decision about which ports, protocols, and services to restrict                                                | The per-host service inventory (200+ service types, with ports), the list you review against                   |
-| SC.L2-3.13.5 subnetworks for public components    | Publicly accessible components on subnetworks separated from internal networks                                                  | The Logical (L3) view, showing which subnet each host sits on                                                  |
+| CMMC requirement                               | Evidence it needs                                                                                                | What Scanopy produces                                                                                         |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Scoping (32 CFR 170.19(c)(1))                  | Every in-scope asset in the asset inventory and in a network diagram of the assessment scope                     | The host and service inventory with CSV export, plus Physical (L2) and Logical (L3) topology                  |
+| CM.L2-3.4.1 inventory                          | An inventory of hardware, software, and firmware, with machine names and network addresses, maintained over time | Hostnames, IP and MAC addresses, vendor, model, serial number, and firmware revision, refreshed on a schedule |
+| CM.L2-3.4.1 baseline                           | A baseline that includes network topology and the logical placement of components, reviewed and updated          | Physical (L2) and Logical (L3) topology, and snapshots as a dated baseline you compare over time              |
+| CA.L2-3.12.4 system security plan              | The system boundary and connections to other systems, described in the SSP                                       | The Logical (L3) view of subnets and the hosts on each, and the Physical (L2) view of links between devices   |
+| CM.L2-3.4.7 nonessential services              | A security-based decision about which ports, protocols, and services to restrict                                 | The per-host service inventory (200+ service types, with ports), the list you review against                  |
+| SC.L2-3.13.5 subnetworks for public components | Publicly accessible components on subnetworks separated from internal networks                                   | The Logical (L3) view, showing which subnet each host sits on                                                 |
 
 None of these can be met with a diagram drawn once. The NIST assessment objectives for 3.4.1 ([SP 800-171A](https://csrc.nist.gov/pubs/sp/800/171/a/final)) require the baseline and the inventory to be "maintained (reviewed and updated) throughout the system development life cycle."
 

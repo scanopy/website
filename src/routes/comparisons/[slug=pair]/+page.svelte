@@ -156,7 +156,8 @@
 						and <a href={vsSlug(data.bSlug)}>Scanopy vs {data.bName}</a>.
 						{#if aAltHref || bAltHref}
 							Looking more broadly:
-							{#if aAltHref}<a href={aAltHref}>{data.aName} alternatives</a>{/if}{#if aAltHref && bAltHref},
+							{#if aAltHref}<a href={aAltHref}>{data.aName} alternatives</a
+								>{/if}{#if aAltHref && bAltHref},
 							{/if}{#if bAltHref}<a href={bAltHref}>{data.bName} alternatives</a>{/if}.
 						{/if}
 						For every tool side by side, see the

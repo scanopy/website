@@ -33,25 +33,25 @@ An annual audit asks for the network in writing, and the request usually lands o
 
 The specific wording varies by framework and by assessor. The substance does not.
 
-| What the auditor asks for | Why they ask | What Scanopy produces |
-| --- | --- | --- |
-| A current network topology diagram, physical and logical | Segmentation, scope boundaries and risk analysis are all argued from structure | Physical (L2) and Logical (L3) views, refreshed on a schedule |
-| A complete asset inventory of hosts, devices and services | Controls apply to assets, so an incomplete inventory means unassessed assets | Discovered host, service and device inventory, exportable as CSV |
-| Evidence the documentation is maintained | A document with no history cannot be distinguished from one written last week | Snapshots, which record the discovered state as a dated series |
-| Which services run where | Service exposure drives most of the technical findings | 200+ service types detected per host, shown across the views |
-| How systems depend on each other | Continuity and impact analysis need dependencies, not just links | The applications view, where you define the dependencies you care about |
+| What the auditor asks for                                 | Why they ask                                                                   | What Scanopy produces                                                   |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| A current network topology diagram, physical and logical  | Segmentation, scope boundaries and risk analysis are all argued from structure | Physical (L2) and Logical (L3) views, refreshed on a schedule           |
+| A complete asset inventory of hosts, devices and services | Controls apply to assets, so an incomplete inventory means unassessed assets   | Discovered host, service and device inventory, exportable as CSV        |
+| Evidence the documentation is maintained                  | A document with no history cannot be distinguished from one written last week  | Snapshots, which record the discovered state as a dated series          |
+| Which services run where                                  | Service exposure drives most of the technical findings                         | 200+ service types detected per host, shown across the views            |
+| How systems depend on each other                          | Continuity and impact analysis need dependencies, not just links               | The applications view, where you define the dependencies you care about |
 
 ## Almost no standard says "network diagram"
 
 The obligation usually arrives one level down from the certifiable clause, which is why teams disagree about whether they need a diagram at all.
 
-| Standard | Where the documentation obligation sits |
-| --- | --- |
-| [ISO 27001](/guides/network-documentation-iso27001) | A.8.20 is outcome-based; ISO 27002 guidance names current, version-controlled LAN and WAN diagrams |
-| PCI-DSS | Requirement 1.2.3 names a current diagram directly, with no inference needed |
-| [CMMC Level 2](/guides/network-documentation-cmmc) | 32 CFR 170.19 requires every in-scope asset in an inventory and in a diagram of the assessment scope |
-| [NIS2](/guides/network-documentation-nis2) | Article 21 names no diagram; three of its ten risk-management measures cannot be evidenced without one |
-| [HIPAA](/guides/network-documentation-hipaa) | The Security Rule risk analysis presumes you know where ePHI lives and what it traverses |
+| Standard                                            | Where the documentation obligation sits                                                                |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [ISO 27001](/guides/network-documentation-iso27001) | A.8.20 is outcome-based; ISO 27002 guidance names current, version-controlled LAN and WAN diagrams     |
+| PCI-DSS                                             | Requirement 1.2.3 names a current diagram directly, with no inference needed                           |
+| [CMMC Level 2](/guides/network-documentation-cmmc)  | 32 CFR 170.19 requires every in-scope asset in an inventory and in a diagram of the assessment scope   |
+| [NIS2](/guides/network-documentation-nis2)          | Article 21 names no diagram; three of its ten risk-management measures cannot be evidenced without one |
+| [HIPAA](/guides/network-documentation-hipaa)        | The Security Rule risk analysis presumes you know where ePHI lives and what it traverses               |
 
 Internal audit functions and parent-company reviews often cite none of these. They ask for a consolidated map of every site and a full inventory of addresses, subnets and devices, which is the same pair of artifacts arrived at from a different direction.
 

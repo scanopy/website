@@ -100,10 +100,7 @@ export function buildPairIntro(a: Vendor, b: Vendor): string {
  * than written per pair. Returns null for a vendor with no `whereItFits`, so the section
  * renders only when both halves have something factual to say.
  */
-export function buildPairFit(
-	a: Vendor,
-	b: Vendor
-): { a: string; b: string } | null {
+export function buildPairFit(a: Vendor, b: Vendor): { a: string; b: string } | null {
 	if (!a.whereItFits || !b.whereItFits) return null;
 	return {
 		a: trimSentence(a.whereItFits) + '.',
