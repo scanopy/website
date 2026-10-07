@@ -34,7 +34,7 @@ After the discovery completes, check **Assets > Subnets**. The VPN subnet should
 
 ## What to expect
 
-Since the daemon has a network interface on the VPN, it gets **Layer 2 access** — full ARP discovery, MAC addresses, and the ability to find hosts even without open ports. This is the same quality of discovery as a local network.
+A VPN tunnel interface has no MAC address, so the daemon scans it at Layer 3, as it does a routed subnet. It finds hosts by TCP probe, so it misses hosts with no open ports and collects no MAC addresses.
 
 ## Multiple VPN networks
 

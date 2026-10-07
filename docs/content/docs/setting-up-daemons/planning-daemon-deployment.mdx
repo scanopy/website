@@ -46,7 +46,7 @@ flowchart TB
 **Extending what a single daemon scans:**
 
 - **Remote subnets**: The daemon can scan subnets it can route to but doesn't have an interface on (Layer 3 only). See [Managing Scan Targets](/guides/networking/scanning-remote-subnets/).
-- **VPN networks**: If the daemon's host is connected to a VPN, it can scan that network with full Layer 2 access. See [Scanning VPN Networks](/guides/networking/scanning-vpn-networks/).
+- **VPN networks**: If the daemon's host is connected to a VPN, it scans that network at Layer 3, as it does a routed subnet. See [Scanning VPN Networks](/guides/networking/scanning-vpn-networks/).
 
 **Best for:** Getting started quickly. For subnets the daemon can only route to, plan to deploy additional daemons for full Layer 2 coverage when you can.
 

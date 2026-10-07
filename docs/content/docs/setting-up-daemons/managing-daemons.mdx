@@ -63,56 +63,6 @@ Prefer to run the daemon in the foreground (e.g. for a quick test)? Run `scanopy
 
 Running several daemons on one host? Each `install` takes its own numbered **slot** (`scanopy-daemon`, `scanopy-daemon-2`, …) automatically, so installs don't overwrite each other. Run `scanopy-daemon list` to see what's installed. See [Scanning Isolated Networks from One Host](/guides/networking/multiple-daemons/) for the full workflow.
 
-### Manually installed or older daemons
-
-Daemons that predate the `scanopy-daemon install` subcommand, or that you set up by hand, are managed with the platform's native service tools directly. Use these instructions if `scanopy-daemon install` isn't available in your daemon version. (For current versions, prefer `install`/`uninstall` above.)
-
-**Linux (systemd, manual)** — download the [systemd unit](https://github.com/scanopy/scanopy/blob/main/scanopy-daemon.service), set your flags in `ExecStart` (or rely on `config.json`), then enable it:
-
-```bash
-sudo curl -o /etc/systemd/system/scanopy-daemon.service \
-  https://raw.githubusercontent.com/scanopy/scanopy/main/scanopy-daemon.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now scanopy-daemon
-```
-
-**macOS (launchd, manual)** — create a launch daemon plist and load it:
-
-```bash
-sudo tee /Library/LaunchDaemons/com.scanopy.daemon.plist > /dev/null <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.scanopy.daemon</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/usr/local/bin/scanopy-daemon</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <true/>
-    <key>StandardOutPath</key>
-    <string>/var/log/scanopy/scanopy-daemon.out.log</string>
-    <key>StandardErrorPath</key>
-    <string>/var/log/scanopy/scanopy-daemon.out.log</string>
-</dict>
-</plist>
-EOF
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.scanopy.daemon.plist
-```
-
-**Windows (NSSM, manual)** — older setups used [NSSM](https://nssm.cc/) to run the executable as a service:
-
-```powershell
-nssm install ScanopyDaemon "C:\Path\To\scanopy-daemon.exe"
-nssm set ScanopyDaemon AppStdout "C:\ProgramData\scanopy\daemon.log"
-nssm set ScanopyDaemon AppStderr "C:\ProgramData\scanopy\daemon.log"
-nssm start ScanopyDaemon
-```
-
 ## Integrated Daemon (Self-Hosted)
 
 Self-hosted Docker Compose deployments include an **integrated daemon** managed as part of the stack: server setup provisions it and its API key, and it upgrades with the server. Nothing to install or configure — see [Upgrading a Self-Hosted Server](/self-hosted-server/upgrading/).
@@ -173,34 +123,6 @@ Docker:
 docker stop scanopy-daemon
 docker rm scanopy-daemon
 ```
-
-<Callout type="info">
-**Manually installed or older daemons** — if the daemon was set up by hand or predates the `uninstall` subcommand, remove the service and files manually.
-
-Linux / macOS:
-
-```bash
-# systemd (Linux)
-sudo systemctl stop scanopy-daemon && sudo systemctl disable scanopy-daemon
-sudo rm /etc/systemd/system/scanopy-daemon.service && sudo systemctl daemon-reload
-
-# launchd (macOS)
-sudo launchctl bootout system /Library/LaunchDaemons/com.scanopy.daemon.plist
-# (older setups: launchctl unload ~/Library/LaunchAgents/com.scanopy.daemon.plist)
-
-# Remove binary and configuration
-sudo rm /usr/local/bin/scanopy-daemon
-sudo rm -rf /etc/scanopy/daemon/                             # Linux service install
-rm -rf ~/.config/daemon/                                     # Linux, run by hand
-rm -rf ~/Library/Application\ Support/com.scanopy.daemon/    # macOS
-```
-
-Windows (NSSM or manual):
-
-1. Stop and remove the service: `nssm stop ScanopyDaemon && nssm remove ScanopyDaemon confirm` (or stop the process)
-2. Delete the executable
-3. Remove configuration from `%APPDATA%\scanopy\daemon\`
-</Callout>
 
 ### Can I migrate a daemon?
 

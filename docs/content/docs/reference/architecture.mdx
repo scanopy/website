@@ -82,7 +82,7 @@ sequenceDiagram
     participant S as Server
 
     loop Every 30 seconds
-        D->>S: POST /api/daemons/work<br/>{daemon_id, status, interfaces}
+        D->>S: POST /api/daemons/{id}/request-work<br/>{status}
         alt Has pending work
             S-->>D: {work: DiscoverySession}
             D->>D: Execute discovery
@@ -114,7 +114,7 @@ sequenceDiagram
     S->>S: Create session (Pending)
 
     Note over D: Next 30s poll cycle
-    D->>S: POST /api/daemons/work
+    D->>S: POST /api/daemons/{id}/request-work
     S->>S: Transition to Starting
     S-->>D: {work: DiscoverySession}
 
