@@ -19,8 +19,8 @@ Creating a daemon in **Discover > Daemons** provisions it:
 The key's plaintext is available only at the moment it is minted. It appears in the install
 artifact the wizard shows you and is not retrievable afterwards.
 
-You do not create daemon API keys yourself — provisioning mints them. The daemon tab under
-**Platform > API Keys** is an inventory of the keys that exist, with no way to add one.
+You do not create daemon API keys yourself — provisioning mints them. **Discover > Daemons > API
+Keys** lists the keys that exist, with no way to add one.
 
 ## Key binding
 
@@ -56,10 +56,20 @@ every daemon on its site.
 
 - They continue to authenticate. Nothing expires them.
 - They cannot be created anymore.
-- They are marked as legacy in **Platform > API Keys**.
+- They are marked as legacy in **Discover > Daemons > API Keys**.
 - A daemon using one can be given a key of its own without losing its host, discovery jobs, or
-  history — see
-  [Binding a key to a legacy daemon](/setting-up-daemons/managing-daemons/#binding-a-key-to-a-legacy-daemon).
+  history.
+
+### Binding a key to a legacy daemon
+
+Open the daemon's management modal, go to the **API Key** tab, and click **Bind a Key**. What
+happens next depends on the polling mode:
+
+- **DaemonPoll**: the daemon keeps running on its shared key. You get a command to run on the
+  daemon host to switch it over, and can do that whenever it suits you.
+- **ServerPoll**: a hard cutover. The server starts using the new key to connect immediately, so
+  the daemon stops responding until you reconfigure it. Only do this when you can get to the host
+  right away. Scanopy asks you to confirm first.
 
 ## Fixed and editable properties
 

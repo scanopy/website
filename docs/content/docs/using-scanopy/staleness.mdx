@@ -13,8 +13,6 @@ Each site has its own window, because staleness is only meaningful relative to h
 
 The default is **28 days**. Set a site's own in the site edit modal (**Assets > Sites** → select the site → **Consider entities stale after**), as days and hours; leave it blank for the default. Set it comfortably above the site's scan interval so a normal gap between scans never trips it.
 
-See [Sites](/using-scanopy/organization/#sites) for where this fits among a site's settings.
-
 ## What can go stale
 
 Only what discovery manages: hosts, services, subnets, and IP addresses it found and keeps re-observing, along with the physical links between interfaces. Anything you created by hand never goes stale, since there's no scan timestamp to judge it against.

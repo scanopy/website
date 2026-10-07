@@ -69,17 +69,7 @@ Retries are targeted — each round narrows to the addresses that haven't answer
 4. **Repeat**: Continue for the configured number of retry rounds
 5. **Final wait**: Extra collection period for late-arriving responses
 
-This approach minimizes total packets sent (only non-responders are retried) while giving slow or rate-limited hosts multiple chances to be discovered.
-
-**Example with `arp_retries=2` (default) scanning a /24:**
-
-| Round | Target IPs | Packets Sent | Cumulative |
-|-------|-----------|--------------|------------|
-| 1 | 256 (all) | 256 | 256 |
-| 2 | ~50 (no response) | ~50 | ~306 |
-| 3 | ~10 (still no response) | ~10 | ~316 |
-
-If rate limiting caused packet loss in round 1, rounds 2 and 3 retry only those hosts—often successfully since the burst is smaller.
+If rate limiting caused packet loss in round 1, later rounds retry only those hosts, in a smaller burst.
 
 ### Diagnosis
 
@@ -161,17 +151,6 @@ environment:
 **Requirements:**
 - [Npcap](https://npcap.com/) must be installed (free for personal use). The default install options work.
 - If Npcap is missing or fails to load, the daemon logs a warning and falls back to SendARP. Scanning continues.
-
-Daemons before v0.17.18 load Npcap only when it was installed with "WinPcap API-compatible Mode" enabled. On those versions, a missing or non-compatible Npcap install can stop the daemon right after "Daemon ready", with nothing in the log. Update the daemon, or reinstall Npcap with that option checked.
-
-**When to use Npcap:**
-- Scanning large subnets where sequential SendARP is too slow
-- You need the same broadcast ARP behavior as Linux/macOS
-
-**When to stick with SendARP (default):**
-- Npcap is not installed or cannot be installed
-- Scanning small networks where speed doesn't matter
-- You want zero additional dependencies
 
 ### Tuning for Your Network
 

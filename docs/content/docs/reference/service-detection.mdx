@@ -41,25 +41,6 @@ Each service has a **detection pattern** that specifies what to look for. Patter
 Patterns can be combined with **AllOf** (all must match) or **AnyOf** (any can match).
 
 **Managed Device** is the one check that doesn't come from probing the device. When a daemon reads a [network controller's inventory](/using-scanopy/discovery/#what-credentials-add), the controller states what each adopted device is, and that statement is matched like any other evidence — which is how **UniFi Switch** and **UniFi Gateway** are identified.
-
-### Example: Pi-hole
-
-Pi-hole's pattern requires:
-
-- DNS port open (53/tcp OR 53/udp) **AND**
-- HTTP response from `/admin` contains "pi-hole"
-
-Both conditions must be true for Pi-hole to be detected.
-
-### Example: Plex
-
-Plex's pattern accepts either:
-
-- HTTP response from port 32400 `/web/index.html` contains "Plex" **OR**
-- HTTP response has `X-Plex-Protocol` header
-
-Either condition is sufficient.
-
 ## Confidence Levels
 
 Each detected service has a confidence level indicating match strength.

@@ -3,7 +3,7 @@ title: Planning Daemon Deployment
 description: Decide how many daemons you need and where to place them.
 ---
 
-Daemons are lightweight agents that scan your network and report findings to the server. Most networks need at least one, and many need several. This guide helps you decide how many daemons to deploy and where to place them based on your network topology.
+Daemons are lightweight agents that scan your network and report findings to the server.
 
 ## Layer 2 vs Layer 3 discovery
 
@@ -79,7 +79,7 @@ Each daemon runs on a host within its segment and reports full Layer 2 data. Ins
 
 When a device appears on multiple VLANs, it may show up as separate hosts. Use [host consolidation](/using-scanopy/network-data/#consolidating-duplicate-hosts) to merge them.
 
-**Best for:** Any multi-segment network. This is the ideal deployment — every segment gets full discovery. Required for isolated networks with no routing between segments.
+**Best for:** Any multi-segment network. Required for isolated networks with no routing between segments.
 
 ### Multiple daemons on one host
 
@@ -119,7 +119,7 @@ This gives you Layer 2 discovery on each segment without needing a separate phys
 
 ### Hybrid
 
-Use a central daemon for routable subnets and add dedicated daemons only where you need Layer 2 access or where networks are truly isolated. Most real-world deployments end up here — one daemon covers the majority of the network, with one or two more for specific segments.
+Use a central daemon for routable subnets and add dedicated daemons only where you need Layer 2 access or where networks are truly isolated.
 
 <Mermaid chart={`
 flowchart TB

@@ -27,8 +27,6 @@ On each scan, the daemon reads the controller's device inventory for the configu
 | The name given to each device | The host's name — see [Host Naming](/using-scanopy/discovery/naming-and-deduplication/#host-naming) |
 | Connected clients | Hosts, matched against existing hosts by IP and MAC |
 
-A link the controller reports and the same link reported by the device at its other end describe one cable rather than two.
-
 A client is only created as a host when its address falls inside a subnet Scanopy knows, so clients on subnets no daemon scans do not appear. If the controller does not return its client list, its adopted devices are still discovered.
 
 ## Prerequisites

@@ -59,7 +59,7 @@ See [Daemon Troubleshooting](/setting-up-daemons/troubleshooting-setup) for deta
 
 ## Deprecated
 
-<StatusTag status="Deprecated" /> The daemon is running a version with a **scheduled sunset date**. It still connects and runs discovery normally until that date, after which it becomes [Unsupported](#unsupported). The upgrade dialog shows the exact date and a countdown, and a banner appears on the Daemons view while any daemon needs updating.
+<StatusTag status="Deprecated" /> The daemon is running a version with a **scheduled sunset date**. It still connects and runs discovery normally until that date, after which it becomes [Unsupported](#unsupported). The upgrade dialog shows the exact date.
 
 When a sunset is announced, the organization owner and each affected daemon's maintainer receive **one** email listing every affected daemon and the date. You are not emailed again about the same sunset.
 
@@ -100,9 +100,6 @@ When a sunset is announced, the organization owner and each affected daemon's ma
 When multiple conditions apply, the UI shows the highest-priority one:
 
 <StatusTag status="Unsupported" /> > <StatusTag status="Unreachable" /> > <StatusTag status="Standby" /> > <StatusTag status="Awaiting Connection" /> > <StatusTag status="Deprecated" /> > <StatusTag status="Outdated" /> > <StatusTag status="Unknown" /> > <StatusTag status="Healthy" />
-
-The Home tab shows all active statuses across your daemons.
-
 ## Troubleshooting
 
 If a daemon shows an unexpected status:

@@ -18,10 +18,7 @@ When a device appears on multiple VLANs or through different discovery methods, 
 
 The primary host gains all interfaces, services, and properties from the merged hosts. Use this to unify a server that has interfaces on multiple VLANs into a single logical host.
 
-#### Restrictions
-
-- Cannot consolidate a host with itself.
-- Cannot consolidate a host that has a daemon - consolidate into it instead.
+A host that runs a daemon can't be merged into another host. Consolidate into it instead.
 
 ### Unclaimed Open Ports
 
@@ -60,8 +57,6 @@ You can also assign a host to any hypervisor or container runtime service by han
 
 These relationships appear in the topology and host details, showing your virtualization hierarchy. The [Workloads perspective](/using-scanopy/topology/workloads) provides a dedicated view of this hierarchy.
 
-The host list opens grouped by **Virtualized By**, which shows each hierarchy as a tree. Each group is named after the host at the top of a chain, such as a Proxmox node, and lists that host first with its guests under it. A guest that runs others, such as a VM running containers, heads a collapsible section of its own holding the VM and then its containers. A line down the left edge of each section joins the rows inside it. Hosts that neither run under nor run anything fall in **Not Virtualized**. The **Virtualized By** column and its filter still show the service a host runs under directly.
-
 ### Service Detection
 
 Scanopy automatically detects 200+ services. See [Service Detection](/reference/service-detection/) for how detection works, confidence levels, and what to do when a service isn't found.
@@ -79,13 +74,7 @@ To toggle visibility:
 1. Go to **Assets > Hosts**
 2. Click the **Hide** button (eye icon) in the host's row
 
-The button turns blue when a host is hidden. Use the **Hidden** column filter to find hidden hosts.
-
-**When to use:**
-
-- Flag decommissioned devices that shouldn't appear in diagrams
-- Mark infrastructure hosts that clutter the visualization (PDUs, UPS units, management interfaces)
-- Identify test or development hosts to exclude from production views
+Use the **Hidden** column filter to find hidden hosts.
 
 ## Subnets
 
@@ -93,40 +82,15 @@ Subnets represent network segments. Scanopy automatically detects subnets during
 
 Like hosts and services, subnets can go [stale](/using-scanopy/staleness/) — carrying a <StaleTag /> badge and a **Stale only** filter when discovery hasn't seen them within their site's window.
 
-### Utilization
-
-The **Utilization** column shows how many of a subnet's usable addresses hold a discovered IP, as `used / usable` with a bar. The bar turns amber at 80% and red at 95%. Sort by the column to find the fullest subnets.
-
-Usable addresses for IPv4 exclude the network and broadcast addresses, except on a `/31` (2 usable) and a `/32` (1 usable). An address held by more than one host, such as a shared virtual IP, counts once.
-
-Select a subnet in the topology and the inspector's **Contents** box shows the same figure under **Utilization**.
+A subnet's **Utilization** counts the usable addresses that hold a discovered IP. For IPv4, usable addresses exclude the network and broadcast addresses, except on a `/31` (2 usable) and a `/32` (1 usable). An address held by more than one host, such as a shared virtual IP, counts once.
 
 ### Nested ranges
 
 A subnet that sits inside a larger one on the same site is nested in it. Recording `10.0.0.0/16` for a building whose VLANs are discovered as `/24`s nests each `/24` in the `/16`. A range's utilization counts the addresses in every subnet nested inside it as well as its own.
 
-The subnet list opens grouped by CIDR, which shows each top-level range with everything inside it. The group is named after the top-level range and lists that range first. A range inside it that holds further ranges heads a collapsible section of its own, and a line down the left edge of each section joins the rows inside it. Subnets that nest with nothing fall in **Ungrouped**. To list subnets ungrouped, open the **CIDR** column's menu and choose **Clear grouping**.
-
-In the topology inspector, a subnet's **This Subnet** box labels both ends of the nesting:
-
-- **Within &lt;cidr&gt;** on a subnet, naming the most specific range that contains it.
-- **Contains &lt;count&gt;** on a range, counting the subnets directly inside it.
-
-Nesting ignores the [organizational subnets](#organizational-subnets) and container bridge networks, which belong to a single host. A range marked **Range assumed** shows no nesting label. Use **Resolve assumed range** on it to confirm the range, correct it, or merge it into a range that contains it.
+Nesting ignores the [organizational subnets](#organizational-subnets) and container bridge networks, which belong to a single host. Use **Resolve assumed range** on a range marked **Range assumed** to confirm the range, correct it, or merge it into a range that contains it.
 
 ### Organizational Subnets
 
-Two special subnet types use CIDR `0.0.0.0/0` and serve as organizational containers rather than real network segments:
-
-**Internet** — For public/external services:
-
-- Public DNS servers (1.1.1.1, 8.8.8.8)
-- Cloud services your network connects to
-- External APIs
-
-**Remote** — For hosts not on your local network:
-
-- Mobile devices connecting via VPN
-- Remote office machines
-- Friend's servers you want to track
+Two special subnet types use CIDR `0.0.0.0/0` and serve as organizational containers rather than real network segments. **Internet** holds public and external services. **Remote** holds hosts that aren't on your local network.
 

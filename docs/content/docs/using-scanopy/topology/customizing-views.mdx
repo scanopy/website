@@ -1,9 +1,9 @@
 ---
 title: Customizing Views
-description: Tailor your topology with grouping rules, sort order, edge filters, and manual layout.
+description: Tailor your topology with grouping rules, sort order, and filters.
 ---
 
-Each topology perspective can be customized with grouping rules, sort order, edge filters, and manual positioning to show exactly what you need.
+Each topology perspective can be customized with grouping rules, sort order, and filters.
 
 ## Grouping Rules
 
@@ -14,7 +14,7 @@ Grouping rules change how things are organized in your topology. Set them in the
 - **Subnet** — L3 Logical's container rule
 - **Application** — Application's container rule
 - **Host** — L2 Physical and Workloads' container rule
-- **Docker Bridges** — On L3 Logical, collapses Docker bridge subnets into their host
+- **Container Bridges** — On L3 Logical, collapses container bridge subnets into their host
 
 **Element rules** organize nodes within each container into sub-groups. Each rule applies to specific perspectives:
 
@@ -22,40 +22,16 @@ Grouping rules change how things are organized in your topology. Set them in the
 
 ## Sort Order
 
-**Sort by**, at the top of the **Layout** tab, sets the order of the items inside each top-level container, including the groups within it. The top-level containers themselves keep their placement. Each perspective remembers its own choice.
+**Sort by**, at the top of the **Layout** tab, sets the order of the items inside each top-level container, including the groups within it. The top-level containers themselves keep their placement.
 
-| Sort | Order | Perspectives |
-| ---- | ----- | ------------ |
-| **Automatic** (default) | Arranged to fit each container compactly | All |
-| **IP address** | Lowest address first, IPv4 before IPv6 | L3 Logical |
-| **Port number** | In the order the device numbers its ports | L2 Physical |
-| **Name** | Alphabetical, with numbers in numeric order | All |
-| **Category** | Grouped by service category, then by name | Workloads, Application |
-
-Every sort except Automatic reads left to right, top to bottom. A group sorts by the lowest value among its members, so on L3 Logical a group sits where its lowest address would, whether it is expanded or collapsed. Items with nothing to sort by, such as a node with no address, go last.
+Every sort except **Automatic** reads left to right, top to bottom. A group sorts by the lowest value among its members, so on L3 Logical a group sits where its lowest address would, whether it is expanded or collapsed. Items with nothing to sort by, such as a node with no address, go last.
 
 Under a sort other than Automatic, connected items inside a container are no longer pulled next to each other, since the container keeps the reading order instead.
 
 ## Edge Filtering
 
 Each perspective shows its own connection types, some by default and some as overlays you toggle on when you need the detail. On L3 Logical, for example, **Same Container** links the addresses of a container attached to several bridge subnets, and **Container Runtime** connects each bridge subnet to its host.
-
-Clicking a connection highlights what it relates. A relationship edge such as Same Host lights up every node it ties together; a point-to-point edge highlights only its own segment.
-
 ## Metadata Filtering
 
 Beyond tags, some perspectives offer metadata filter groups that fade everything except the elements you're interested in. The **By staleness** group (Current / Stale) narrows the view to entities discovery hasn't seen within their site's window — see [Staleness](/using-scanopy/staleness/). Other groups include service category and, on Workloads, virtualization type. A filter group only appears when the entities in view actually differ on that dimension.
-
-## Tag-Based Filtering
-
-Filter your topology by tags to focus on what matters. Filtered elements fade to reduced opacity instead of disappearing, so the overall layout stays stable while your focus area stands out.
-
-## Large topologies
-
-Above a few hundred elements, a perspective changes how it opens so it stays usable:
-
-- **Containers start collapsed**, and you expand the ones you're interested in. A container you expand stays expanded — the view never re-collapses it behind you.
-- **Off-screen nodes aren't drawn while you pan.** Only what's in the viewport is rendered, which is what keeps panning smooth at that size.
-
-Neither affects the diagram itself. Layout and export both work from the whole graph, so an exported image is never cropped to what happened to be on screen. Below those sizes nothing changes — small topologies open exactly as they always have.
 

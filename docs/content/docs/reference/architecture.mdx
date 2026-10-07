@@ -21,14 +21,6 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Handle organization and user management
 - Provide real-time updates via Server-Sent Events
 
-**Implementation**:
-
-- Language: Rust
-- Framework: Axum (async web framework)
-- Database: PostgreSQL 17 with sqlx
-- Authentication: tower-sessions + OIDC (openidconnect crate)
-- Frontend bundling: Integrated Svelte build in Docker image
-
 **Runs as**: Docker container (recommended) or standalone binary
 
 ### Daemon
@@ -45,14 +37,6 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Maintain server connection via periodic polling (each poll implicitly updates the daemon's health status)
 - Execute scheduled discovery tasks
 
-**Implementation**:
-
-- Language: Rust
-- Network scanning: Custom async TCP scanner with tokio
-- Docker API: bollard crate for Docker socket communication
-- Service detection: Pattern matching engine with 200+ definitions
-- Configuration: JSON file + environment variables + CLI args
-
 **Runs as**: Docker container (Linux only), or a native background service on Linux, macOS, Windows, and FreeBSD (installed via `scanopy-daemon install`)
 
 ### UI
@@ -67,15 +51,6 @@ Technical overview of Scanopy's system design, components, and data flows.
 - Manage users and organizations
 - Configure discovery schedules
 - Export topology visualizations
-
-**Implementation**:
-
-- Framework: Svelte 5 + SvelteKit
-- State management: Svelte stores with derived reactivity
-- Visualization: @xyflow/svelte for topology rendering
-- Forms: svelte-forms with custom validation
-- Styling: Tailwind CSS
-- Real-time: Native EventSource for SSE
 
 **Runs as**: Static files served by the server (bundled in Docker image)
 
@@ -244,7 +219,6 @@ flowchart TD
 | Aspect | DaemonPoll | ServerPoll |
 |--------|------------|------------|
 | Connection direction | Daemon → Server | Server → Daemon |
-| Setup | Daemon self-registers | Admin provisions in UI |
 | Firewall requirements | Outbound only from daemon | Inbound to daemon (port 60073) |
 | Best for | NAT/firewall environments | DMZ deployments |
 | Entity handling | Immediate processing | Buffered with confirmation |
@@ -260,7 +234,7 @@ Network scanning runs in three phases:
    - TCP and UDP port scanning on configurable port lists
    - DNS reverse lookup for hostname resolution
    - SNMP queries for system information (if credentials are configured)
-   - Service detection by matching open ports against 235 service definitions
+   - Service detection by matching open ports against service definitions
 3. **Grace Period** — A brief window after deep scanning completes to catch any late ARP responses. Newly discovered hosts receive a full deep scan before the session completes.
 
 The UI displays real-time progress across all three phases via Server-Sent Events.
@@ -276,7 +250,7 @@ flowchart TD
         s1["TCP/UDP port scanning"]
         s2["DNS reverse lookup"]
         s3["SNMP queries (if configured)"]
-        s4["Service pattern matching (235 definitions)"]
+        s4["Service pattern matching"]
         s5["Host assembly + subnet association"]
     end
 

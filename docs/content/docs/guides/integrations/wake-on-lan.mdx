@@ -74,7 +74,7 @@ For a relay, enter the address the relay listens on in **Broadcast Address**: a 
 
 <IntegrationFields id="Wake-on-LAN" transport="WakeOnLan" />
 
-Set **Wait (seconds)** to how long the host takes from power-off to answering on the network, plus a margin. A wait shorter than the boot time means the sweep looks for the host before it is up. A NAS that spins up several drives before its services start can need 180 seconds or more.
+Set **Wait (seconds)** to how long the host takes from power-off to answering on the network, plus a margin. A wait shorter than the boot time means the sweep looks for the host before it is up.
 
 **SecureOn Password** applies only to network cards configured to require one. Most cards are not.
 
@@ -115,10 +115,6 @@ wakeonlan -i 192.168.20.255 3c:ec:ef:12:34:57
 
 - **The host does not power on.** The packet does not reach its segment, or the host does not accept it. Run the same command from a machine on the host's own segment. A wake from there means routing blocks the packet: set up directed-broadcast forwarding or a relay as described in [Choose how the packet reaches the host](#choose-how-the-packet-reaches-the-host). No wake from there means Wake-on-LAN is off in the firmware or the network card, or the host is on Wi-Fi.
 - **The host powers on but the warning remains.** It takes longer to boot than **Wait (seconds)**, so the sweep reached its address before it was up, or a firewall on it drops ping and every scanned port. Raise the wait, or allow ping from the daemon host. A host on another segment from the daemon needs to answer ping or a scanned port, because ARP reaches only the daemon's own segment.
-
-### The host wakes but sleeps again before the scan reaches it
-
-The host's sleep timer is shorter than the time between the packet and the scan of that host. Lengthen the idle time before sleep in the host's power settings.
 
 ### Could not send the magic packet
 

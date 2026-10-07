@@ -23,8 +23,6 @@ No Rust or Node toolchain is needed — the server binary is prebuilt and self-c
 
 ## Docker Installation (Recommended)
 
-This is the easiest way to get started with self-hosted Scanopy.
-
 ### 1. Download the Docker Compose File
 
 ```bash
@@ -73,22 +71,11 @@ You'll see the registration page on first load.
 
 You can use this [helper script](https://community-scripts.github.io/ProxmoxVE/scripts?id=scanopy) to create a Scanopy LXC on your Proxmox host.
 
+If running in an LXC, you may need to change `SCANOPY_INTEGRATED_DAEMON_URL` to `172.31.0.1`. See [issue #87](https://github.com/scanopy/scanopy/issues/87). Running directly on a Proxmox host can also fail with `could not create any Unix-domain sockets`. See [Troubleshooting](/self-hosted-server/troubleshooting/#postgresql-could-not-create-any-unix-domain-sockets-proxmox).
+
 ### Unraid
 
 Scanopy is available as an Unraid community app.
-
-**Common Issues:**
-
-If running Scanopy directly on a Proxmox host and encountering `could not create any Unix-domain sockets`, add this to both the PostgreSQL and Scanopy services in your docker-compose:
-
-```yaml
-security_opt:
-  - apparmor:unconfined
-```
-
-If running in an LXC, you may need to change `SCANOPY_INTEGRATED_DAEMON_URL` to `172.31.0.1`.
-
-See [issue #87](https://github.com/scanopy/scanopy/issues/87) for more details.
 
 ## Running Without Docker
 

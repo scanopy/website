@@ -127,9 +127,7 @@ For upgrading self-hosted server and integrated daemon together, see [Upgrading]
 
 ## Updating Daemon Properties
 
-Click the edit icon in a daemon's row in **Discover > Daemons** to open its management modal, which has two tabs: **Details** for the daemon record, and **API Key** for its key.
-
-The **Details** tab edits the maintainer, tags, and — for ServerPoll daemons — the URL the server dials. Site, polling mode, and name are read-only: they're set at [provisioning](/reference/daemon-identity/) and define what the daemon is. A DaemonPoll daemon has no URL to edit, since the server never dials it.
+Click the edit icon in a daemon's row in **Discover > Daemons** to open its management modal. Its **Details** tab edits the maintainer, tags, and — for ServerPoll daemons — the URL the server dials. Site, polling mode, and name are read-only: they're set at [provisioning](/reference/daemon-identity/) and define what the daemon is. A DaemonPoll daemon has no URL to edit, since the server never dials it.
 
 Daemon-local settings — interfaces, ports, log level, scan tuning — live in the [daemon config file](/reference/daemon-configuration/) on the host, not on the server record. Change them by [reconfiguring the daemon](#reconfiguring-a-daemon) from the modal, or by editing `config.json` and restarting the service:
 
@@ -150,17 +148,6 @@ A reconfigure differs from an install: it carries no API key and doesn't re-fetc
 
 Run the artifact on the daemon host, then restart the service.
 
-## Binding a Key to a Legacy Daemon
-
-Daemons set up before 1:1 provisioning authenticate with a key shared across every daemon on their site. They keep working indefinitely, but a shared key can't be rotated or revoked for one daemon without affecting the rest. Binding gives the daemon a key of its own, keeping its host, discovery jobs, and history.
-
-Open the daemon's management modal, go to the **API Key** tab, and click **Bind a Key**. What happens next depends on the polling mode:
-
-- **DaemonPoll** — the daemon keeps running on its shared key. You get a command to run on the daemon host to switch it over, and can do that whenever it suits you.
-- **ServerPoll** — a hard cutover. The server starts using the new key to connect immediately, so the daemon stops responding until you reconfigure it. Only do this when you can get to the host right away.
-
-Scanopy asks you to confirm before a ServerPoll cutover. See [Daemon Identity](/reference/daemon-identity/) for how the two key models coexist.
-
 ## Removing a Daemon
 
 To fully remove a daemon, delete it from the UI and uninstall it from the host.
@@ -180,9 +167,6 @@ sudo scanopy-daemon uninstall
 This stops and deregisters the service and deletes its `config.json`. Add `--purge` to also delete the binary and log files. On Windows, run it from an elevated PowerShell.
 
 On a host running several daemons, target one with `--name <selector>` — its name, slot, or service id, all shown by `scanopy-daemon list` — or remove all of them with `--all`.
-
-`uninstall` reports what it did with every item it touched, and is idempotent: uninstalling something that was never installed succeeds and says so.
-
 Docker:
 
 ```bash

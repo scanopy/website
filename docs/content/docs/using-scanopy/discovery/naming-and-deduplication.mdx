@@ -71,7 +71,7 @@ Ports, interfaces, and services discovered on the duplicate will be reconciled a
 
 - **Ports**: Must have same number and protocol to be considered a duplicate
 - **Interfaces**: As described above, must have same IP + subnet OR same MAC address to be considered a duplicate
-- **Services**: Follow complex deduplication logic that depends on the type of service detected. Refer to `backend/src/server/services/impl/base.rs -> impl PartialEq` if you are curious.
+- **Services**: Matched by rules that depend on the type of service detected
 
 **Fields merged (only if not already set):**
 
@@ -88,8 +88,6 @@ Ports, interfaces, and services discovered on the duplicate will be reconciled a
 
 - **Discovery metadata** — Each discovery source is recorded, so you can see which daemons and discovery methods found the host
 - **Credential assignments** — When hosts are consolidated, credential assignments are preserved using broadest-scope-wins merging
-
-This means discovery enriches existing hosts without overwriting user customizations.
 
 ### Manual Consolidation
 

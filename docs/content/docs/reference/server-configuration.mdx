@@ -233,18 +233,6 @@ environment:
   - SCANOPY_USE_SECURE_SESSION_COOKIES=true
 ```
 
-**When to enable**:
-
-- Behind a reverse proxy with TLS (Nginx, Traefik, Caddy)
-- Using a domain with HTTPS
-- Production deployments
-
-**When to disable** (default):
-
-- Internal networks without HTTPS
-- Development environments
-- Accessing via IP address without TLS
-
 **Effect**:
 
 - `true`: Cookies marked as Secure, only sent over HTTPS
@@ -262,7 +250,7 @@ SCANOPY_DATABASE_URL=postgresql://postgres:password@db:5432/scanopy
 
 # Server
 SCANOPY_SERVER_PORT=60072
-SCANOPY_SERVER_PUBLIC_URL=http://your-domain.com:60072
+SCANOPY_PUBLIC_URL=http://your-domain.com:60072
 SCANOPY_LOG_LEVEL=info
 SCANOPY_USE_SECURE_SESSION_COOKIES=false
 
