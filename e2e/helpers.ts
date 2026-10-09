@@ -3,8 +3,8 @@ import { expect, type BrowserContext, type Locator, type Page } from '@playwrigh
 /**
  * Sentinel convention for production form monitoring.
  *
- * Every submission this suite makes is marked so Brevo segments, Gmail
- * filters, and humans reading the lead list can identify and discard it.
+ * Every submission this suite makes is marked so Gmail filters and humans
+ * reading the lead list can identify and discard it.
  * See README "Form Monitoring" before changing any of these values —
  * downstream filters key on them.
  */
@@ -28,8 +28,8 @@ export function sentinelEmail(): string {
 
 /**
  * Pre-seed the GDPR consent cookie so the cookie banner (fixed, z-index 9999,
- * bottom of viewport) never renders and can't intercept clicks on the footer
- * newsletter form. analytics:false also keeps PostHog from recording monitor
+ * bottom of viewport) never renders and can't intercept clicks on the form
+ * under test. analytics:false also keeps PostHog from recording monitor
  * traffic. Cookie name/format must match src/lib/cookies.ts. On production the
  * cookie is set for .scanopy.net; on any other BASE_URL, for that host.
  */
@@ -60,9 +60,11 @@ export async function gotoHydrated(page: Page, path: string): Promise<void> {
 }
 
 /**
- * Click submit and assert the full happy path against Brevo:
- *   1. a POST to sibforms.com/serve actually fires (the June 2026 failure was
- *      "click does nothing" — this catches broken/unwired submit handlers),
+ * Click submit on the contact modal and assert the full happy path against our
+ * /api/contact function (functions/api/contact.ts), which creates the Apollo
+ * contact:
+ *   1. a POST to /api/contact actually fires (the June 2026 failure was
+ *      "click does nothing"; this catches broken/unwired submit handlers),
  *   2. it returns HTTP 2xx,
  *   3. the JSON body says success:true.
  *
@@ -70,63 +72,6 @@ export async function gotoHydrated(page: Page, path: string): Promise<void> {
  * missed, and matches ANY status so a 4xx/5xx produces a status assertion
  * instead of an opaque timeout. Each failure mode gets a distinct message so
  * a red CI run is diagnosable from the assertion text alone.
- */
-export async function submitAndExpectBrevoSuccess(
-	page: Page,
-	submit: () => Promise<void>,
-	{ timeoutMs = 25_000 }: { timeoutMs?: number } = {}
-): Promise<void> {
-	const responsePromise = page.waitForResponse(
-		(r) => r.url().includes('sibforms.com/serve') && r.request().method() === 'POST',
-		{ timeout: timeoutMs }
-	);
-
-	await submit();
-
-	let response;
-	try {
-		response = await responsePromise;
-	} catch {
-		throw new Error(
-			`FORM DID NOT SUBMIT: no POST to sibforms.com/serve within ${timeoutMs}ms of clicking ` +
-				`submit. This is the "click does nothing" failure mode (broken page JS or unwired ` +
-				`submit handler). Check the trace for console errors.`
-		);
-	}
-
-	const body = await response.text();
-	const slice = body.slice(0, 500);
-
-	let json: { success?: boolean; errors?: Record<string, string> };
-	try {
-		json = JSON.parse(body);
-	} catch {
-		throw new Error(`BREVO RESPONSE NOT JSON (status ${response.status()}): ${slice}`);
-	}
-
-	expect(
-		response.ok(),
-		`BREVO HTTP ERROR ${response.status()} from ${response.url()}. Body: ${slice}`
-	).toBe(true);
-
-	expect(
-		json.success,
-		`BREVO REJECTED SUBMISSION: ${slice} — a captcha error here means reCAPTCHA enforcement ` +
-			`was re-enabled in Brevo, which automated browsers cannot pass; see the README ` +
-			`"Form Monitoring" section.`
-	).toBe(true);
-}
-
-/**
- * Click submit on the contact modal and assert the full happy path against our
- * /api/contact function (functions/api/contact.ts), which creates the Apollo
- * contact:
- *   1. a POST to /api/contact actually fires (catches broken/unwired handlers),
- *   2. it returns HTTP 2xx,
- *   3. the JSON body says success:true.
- *
- * Armed before the click and matching any status, for the same reasons as
- * submitAndExpectBrevoSuccess.
  */
 export async function submitAndExpectContactSuccess(
 	page: Page,

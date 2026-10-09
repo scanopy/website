@@ -7,6 +7,10 @@
 /solutions/network-documentation /guides/network-documentation-software 301
 /solutions/network-documentation/ /guides/network-documentation-software 301
 
+# Newsletter retired (2026-10): the subscription-confirmation page is gone.
+/newsletter-confirmed / 301
+/newsletter-confirmed/ / 301
+
 # Docs restructure redirects (Jan 2026)
 /docs/getting-started/quick-start /docs/quick-start/ 301
 /docs/getting-started/quick-start/ /docs/quick-start/ 301

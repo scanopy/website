@@ -319,6 +319,16 @@
 					class="text-blue-400 hover:text-blue-300">Privacy Policy</a
 				>
 			</li>
+			<li>
+				<strong class="text-white">Amazon Web Services</strong> (Amazon SES, transactional email
+				delivery):
+				<a
+					href="https://aws.amazon.com/privacy/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-blue-400 hover:text-blue-300">Privacy Notice</a
+				>
+			</li>
 		</ul>
 
 		<h3 class="mb-3 text-xl font-semibold text-white">8.3 Analytics</h3>
@@ -343,15 +353,6 @@
 			We use marketing tools to manage customer relationships and improve our outreach.
 		</p>
 		<ul class="list-inside list-disc space-y-1 text-gray-300">
-			<li>
-				<strong class="text-white">Brevo:</strong>
-				<a
-					href="https://www.brevo.com/legal/privacypolicy/"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="text-blue-400 hover:text-blue-300">Privacy Policy</a
-				>
-			</li>
 			<li>
 				<strong class="text-white">Apollo.io:</strong>
 				<a

@@ -18,4 +18,3 @@ Analytics: PostHog
 
 /* COMPONENTS */
 Icons: Lucide, Iconify
-Newsletter: Brevo

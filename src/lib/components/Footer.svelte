@@ -1,6 +1,5 @@
 <script lang="ts">
 	import GithubStars from '$lib/components/GithubStars.svelte';
-	import NewsletterSignup from '$lib/components/NewsletterSignup.svelte';
 
 	import { isPostHogLoaded, getPostHog } from '$lib/posthog';
 	import { page } from '$app/state';
@@ -8,10 +7,9 @@
 
 	interface Props {
 		healthStatus?: 'loading' | 'healthy' | 'unhealthy';
-		brevoNewsletterFormUrl?: string;
 	}
 
-	let { healthStatus = 'loading', brevoNewsletterFormUrl = '' }: Props = $props();
+	let { healthStatus = 'loading' }: Props = $props();
 
 	function trackExternalLink(destination: string, url: string) {
 		if (isPostHogLoaded()) {
@@ -24,7 +22,7 @@
 	}
 
 	// Social platforms where Scanopy can be found, rendered as an icon row below the
-	// newsletter. Each brand mark is a single 24×24 path.
+	// brand block. Each brand mark is a single 24×24 path.
 	const socialLinks = [
 		{
 			label: 'GitHub',
@@ -74,7 +72,7 @@
 <footer class="border-t border-gray-800 bg-gray-900/30">
 	<div class="container mx-auto px-4 py-12">
 		<div class="flex flex-col gap-12">
-			<!-- Brand + newsletter (centered), with a social icon row beneath -->
+			<!-- Brand (centered), with a social icon row beneath -->
 			<div class="order-last flex flex-col items-center gap-8">
 				<div
 					class="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-center md:gap-16"
@@ -93,14 +91,6 @@
 						</div>
 						<p class="text-sm text-gray-400">Network discovery and documentation on autopilot.</p>
 						<GithubStars />
-					</div>
-
-					<!-- Newsletter -->
-					<div class="w-full max-w-md">
-						<span class="mb-4 block font-semibold text-white">Stay Updated</span>
-						{#if brevoNewsletterFormUrl}
-							<NewsletterSignup formUrl={brevoNewsletterFormUrl} compact={true} />
-						{/if}
 					</div>
 				</div>
 

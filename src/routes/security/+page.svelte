@@ -225,7 +225,9 @@
 				your topology and account data.
 			</li>
 			<li><strong class="text-white">Stripe:</strong> payment processing.</li>
-			<li><strong class="text-white">Brevo:</strong> transactional and marketing email.</li>
+			<li>
+				<strong class="text-white">Amazon Web Services (SES):</strong> transactional email delivery.
+			</li>
 			<li>
 				<strong class="text-white">PostHog:</strong> product analytics.
 			</li>

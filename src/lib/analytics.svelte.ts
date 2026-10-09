@@ -106,13 +106,6 @@ export const analytics = {
 	},
 
 	/**
-	 * Track newsletter form submissions
-	 */
-	newsletterSubmitted: (props: { success: boolean; error?: string }) => {
-		capture('newsletter_submitted', props);
-	},
-
-	/**
 	 * Track service catalog searches
 	 */
 	servicesSearched: (props: {

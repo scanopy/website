@@ -4,7 +4,6 @@
 	import { page } from '$app/state';
 	import { ContactModal, Footer } from '$lib/components';
 	import { Menu, X } from 'lucide-svelte';
-	import { PUBLIC_BREVO_NEWSLETTER_FORM_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
@@ -330,7 +329,7 @@
 		{@render children()}
 	</main>
 
-	<Footer {healthStatus} brevoNewsletterFormUrl={PUBLIC_BREVO_NEWSLETTER_FORM_URL} />
+	<Footer {healthStatus} />
 </div>
 
 <ContactModal
