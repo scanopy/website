@@ -11,7 +11,7 @@ const bespokeSolutions: ListedPage[] = [
 		slug: 'compliance',
 		navLabel: 'Compliance',
 		navBlurb: 'Audit evidence for NIS2, ISO 27001, HIPAA, and CMMC',
-		related: ['device-inventory', 'change-history']
+		related: ['device-inventory', 'snapshots', 'sharing-and-exports']
 	}
 ];
 
@@ -41,6 +41,15 @@ export const productNav: NavLink[] = [
 ];
 
 const allSolutions: ListedPage[] = [...bespokeSolutions, ...solutionPages];
+
+// Fail the build on a related slug that names no product page, instead of dropping the link.
+for (const p of [...allSolutions, ...productPages]) {
+	for (const slug of p.related) {
+		if (!productPages.some((pp) => pp.slug === slug)) {
+			throw new Error(`"${p.slug}" lists unknown product page "${slug}" in related`);
+		}
+	}
+}
 
 export const solutionNav: NavLink[] = allSolutions.map((s) => ({
 	href: `/solutions/${s.slug}`,

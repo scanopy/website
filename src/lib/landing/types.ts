@@ -42,6 +42,8 @@ export interface LandingPage {
 	sections: LandingSection[];
 	/** Testimonial id from fixtures/testimonials.json. Approved quotes only. */
 	quoteId?: string;
+	/** Show the customer logo band. Logos are identification only: no detail beyond the name. */
+	showLogos?: boolean;
 	faqs: { question: string; answer: string }[];
 	/** Product page slugs this page builds on. Solutions list these; product pages get backlinks. */
 	related: string[];

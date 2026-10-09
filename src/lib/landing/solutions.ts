@@ -170,5 +170,165 @@ export const solutionPages: LandingPage[] = [
 			}
 		],
 		related: ['device-inventory', 'snapshots', 'vlan-mapping']
+	},
+	{
+		// Scan controls: server/discovery/impl/scan_settings.rs:10-75, light vs full port runs
+		// daemon/discovery/service/network/scan.rs:1542-1553; subnets per discovery types.rs:93-98;
+		// --interfaces daemon/shared/config.rs:344-347. Industrial definitions:
+		// services/definitions/{modbus_tcp,ethernet_ip,opc_ua,bacnet}.rs. PROFINET DCP:
+		// scan.rs:224-268 (dcp/mod.rs:22-27 notes it is untested on real devices). Westermo LLDP:
+		// server/lldp/resolver.rs:280. Offline licenses: server/license/crypto.rs:3-14, mint.rs:199.
+		slug: 'plant-ot-networks',
+		navLabel: 'Plant & OT networks',
+		navBlurb: 'Document plant-floor networks, with the data kept on site',
+		title: 'OT and Plant Network Documentation | Scanopy',
+		description:
+			'Document plant and OT networks with scans you rate-limit and scope, industrial device identification, and a self-hosted server that keeps the data on site.',
+		heading: 'Document the plant network without sending the data off site.',
+		subhead:
+			'Scanopy runs on your own server, scans at the rate and scope you set, and identifies industrial devices alongside the IT gear, so the plant network gets the same current map as the office.',
+		heroView: 'l2',
+		sections: [
+			{
+				heading: 'Scans you set the pace and scope of',
+				points: [
+					{
+						title: 'Rate limits',
+						body: 'Set the ARP and port-scan packet rates for each discovery, and a maximum run time.'
+					},
+					{
+						title: 'Light scans by default',
+						body: 'Most runs probe a common port set, and a full port sweep runs only every few scans. Printer raw ports are skipped unless you turn them on.'
+					},
+					{
+						title: 'Scoped to what you choose',
+						body: 'Pick the subnets each discovery covers and the interfaces the daemon uses, and schedule scans for a maintenance window.'
+					}
+				]
+			},
+			{
+				heading: 'Industrial devices identified next to IT gear',
+				points: [
+					{
+						title: 'Industrial protocols',
+						body: 'Modbus TCP, EtherNet/IP, OPC UA, and BACnet devices are identified as industrial services.'
+					},
+					{
+						title: 'Industrial switches',
+						body: 'Port links from industrial switches, Westermo included, come from LLDP like any other switch.'
+					},
+					{
+						title: 'Devices without an IP',
+						body: 'Devices found only by MAC address, such as PROFINET devices that answer DCP, still appear on the physical (L2) map.'
+					}
+				],
+				figure: { kind: 'view', view: 'l2' }
+			},
+			{
+				heading: 'The data stays on your network',
+				points: [
+					{
+						title: 'Self-hosted',
+						body: `Run the Scanopy server on your own infrastructure with the ${link('/commercial', 'Commercial Edition')}.`
+					},
+					{
+						title: 'Air-gapped',
+						body: 'On plans with air-gapped deployment, an offline license key validates without contacting Scanopy.'
+					},
+					{
+						title: 'Evidence for CMMC',
+						body: `Level 2 scoping needs every in-scope asset, OT included, in an inventory and a diagram. See the ${link('/guides/network-documentation-cmmc', 'CMMC guide')}.`
+					}
+				]
+			}
+		],
+		showLogos: true,
+		faqs: [
+			{
+				question: 'Does Scanopy scan actively?',
+				answer:
+					'Yes. The daemon sends ARP and port probes, and identifies industrial devices with protocol requests such as Modbus device identification. You set the rate, the subnets, and the schedule, so you can test on one cell and run scans in a maintenance window.'
+			},
+			{
+				question: 'Can I run it with no internet connection?',
+				answer: `Yes, self-hosted with an offline license key, on plans that include air-gapped deployment. The ${link('/pricing', 'pricing page')} lists which.`
+			}
+		],
+		related: ['network-topology', 'device-inventory', 'vlan-mapping']
+	},
+	{
+		// Host fields: hosts/impl/base.rs:60-169 (description, management URL, location, contact).
+		// Status tags: server/tags/impl/base.rs:23-43. Viewer role: users/impl/permissions.rs:30-35.
+		slug: 'network-handover',
+		navLabel: 'Handover & onboarding',
+		navBlurb: 'Network documentation that doesn’t leave when someone does',
+		title: 'Network Documentation for Handover and Onboarding | Scanopy',
+		description:
+			'When the person who knew the network leaves, the documentation stays. Scanopy rebuilds the map and inventory from the network on a schedule, so a new hire starts from what is actually there.',
+		heading: 'Documentation that doesn’t leave when someone does.',
+		subhead:
+			'Scanopy rebuilds the network map and inventory from the network itself on a schedule. A new hire, a contractor, or the next MSP starts from what is actually running, not from a diagram someone stopped updating.',
+		heroView: 'l3',
+		sections: [
+			{
+				heading: 'Day one starts from the network, not from memory',
+				points: [
+					{
+						title: 'Four views from one scan',
+						body: `${link('/product/network-topology', 'Physical and logical topology')}, ${link('/product/workload-mapping', 'workloads')}, and ${link('/product/application-mapping', 'applications')}, rebuilt on every scheduled scan.`
+					},
+					{
+						title: 'A searchable inventory',
+						body: `Every host with its addresses, services, and hardware facts in the ${link('/product/device-inventory', 'device inventory')}. Press / to search all of it.`
+					},
+					{
+						title: 'Nothing to redraw',
+						body: 'The map comes from discovery, so nobody has to remember to update it before they go.'
+					}
+				]
+			},
+			{
+				heading: 'The context discovery can’t find, kept next to the host',
+				points: [
+					{
+						title: 'Descriptions and links',
+						body: 'Add a description and a management URL to each host, so the admin page is one click from the map.'
+					},
+					{
+						title: 'Location and contact',
+						body: 'Record where a device sits and who to call. SNMP devices fill these in from their own settings.'
+					},
+					{
+						title: 'Lifecycle status',
+						body: 'Tag hosts from planned to decommissioned, so the next person knows what is meant to be there.'
+					}
+				]
+			},
+			{
+				heading: 'Hand over access, not a folder of PDFs',
+				points: [
+					{
+						title: 'Viewer accounts',
+						body: 'Give a new hire or an auditor a read-only seat on the sites you choose. They can see everything there and change nothing.'
+					},
+					{
+						title: 'Links and embeds',
+						body: `Send a read-only link with a password and expiry, or embed the live map in the team wiki. See ${link('/product/sharing-and-exports', 'sharing, embeds & exports')}.`
+					},
+					{
+						title: 'Exports for the handover pack',
+						body: 'Export the map as PDF, Visio, draw.io, or Confluence markup, and the inventory as CSV.'
+					}
+				]
+			}
+		],
+		faqs: [
+			{
+				question: 'Does Scanopy store passwords for devices?',
+				answer:
+					'Only the credentials the daemon scans with, such as SNMP, SSH, or Docker access, and they are redacted in the API. It is not a password manager.'
+			}
+		],
+		related: ['network-topology', 'device-inventory', 'sharing-and-exports']
 	}
 ];

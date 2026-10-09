@@ -11,6 +11,243 @@ const link = (href: string, text: string) =>
 
 export const productPages: LandingPage[] = [
 	{
+		// L2 links: server/topology/service/l2_builder.rs:40-100 (LLDP/CDP), FDB fallback
+		// server/hosts/service/topology/mod.rs:1117-1170. Port speed/status: ElementNode.svelte:703-708.
+		// Default port grouping: topology/types/grouping.rs:394-400. L3: subnet_graph_builder.rs:456,
+		// l3_builder.rs:22-28. Rules/filters: grouping.rs:114-131, types/views.rs:309-334.
+		// Schedules: discovery/impl/types.rs:198-212.
+		slug: 'network-topology',
+		navLabel: 'Network topology',
+		navBlurb: 'Physical (L2) and logical (L3) maps, drawn from the network itself',
+		title: 'Physical and Logical Network Topology Maps | Scanopy',
+		description:
+			'Scanopy draws your physical (L2) topology port to port from LLDP, CDP, and switch forwarding tables, and your logical (L3) topology subnet by subnet. Rebuilt on every scheduled scan.',
+		heading: 'A network diagram that redraws itself after every scan.',
+		subhead:
+			'Scanopy draws the physical topology port to port from LLDP, CDP, and switch forwarding tables, and the logical topology subnet by subnet. Each scheduled scan rebuilds both from what it finds.',
+		heroView: 'l2',
+		sections: [
+			{
+				heading: 'Physical (L2): every switch port and what plugs into it',
+				points: [
+					{
+						title: 'Links from LLDP and CDP',
+						body: 'Port-to-port links come from the neighbor tables on your switches, read over SNMP or gNMI, or from UniFi and HPE Aruba Instant On controllers.'
+					},
+					{
+						title: 'Forwarding tables fill the gaps',
+						body: 'Where a port has no LLDP neighbor but its forwarding table shows one device, Scanopy links the port to that device.'
+					},
+					{
+						title: 'Port status and speed',
+						body: 'Each port shows its speed and operational status. Trunk ports, access ports by VLAN, and ports by status are grouped by default.'
+					}
+				],
+				figure: { kind: 'view', view: 'l2' }
+			},
+			{
+				heading: 'Logical (L3): every subnet and the addresses in it',
+				points: [
+					{
+						title: 'Subnets as containers',
+						body: `Each subnet holds the IP addresses discovery found in it, typed as LAN, WiFi, IoT, Guest, DMZ, and more. See ${link('/product/vlan-mapping', 'VLANs & subnets')}.`
+					},
+					{
+						title: 'Multi-homed hosts, connected',
+						body: 'A host with addresses in several subnets shows a link between them, so you can see which machines bridge segments.'
+					},
+					{
+						title: 'Click for the details',
+						body: 'Select any address to see its host, the services on it, and the host’s other addresses.'
+					}
+				],
+				figure: { kind: 'view', view: 'l3' }
+			},
+			{
+				heading: 'Laid out by rules you set, not by dragging boxes',
+				points: [
+					{
+						title: 'Automatic layout',
+						body: 'Scanopy lays out every view automatically, so a rescan never leaves you with a diagram to tidy.'
+					},
+					{
+						title: 'Group and filter',
+						body: 'Group by subnet, host, service category, or tag. Filter by tag, link state, or how recently a device was seen.'
+					},
+					{
+						title: 'On your schedule',
+						body: 'Set each discovery to rescan on a day and time, or with a cron expression.'
+					}
+				]
+			}
+		],
+		quoteId: 'motala-kommun',
+		faqs: [
+			{
+				question: 'What does Scanopy need to map physical topology?',
+				answer:
+					'SNMP read access to your switches (v1, v2c, or v3), or gNMI on switches that support it. UniFi and HPE Aruba Instant On networks can use their controller instead. Devices that don’t advertise LLDP or CDP are linked from switch forwarding tables where possible.'
+			},
+			{
+				question: 'Is this a monitoring tool?',
+				answer:
+					'No. Scanopy documents what is on the network and how it connects, and rebuilds that on a schedule. It runs alongside your monitoring tools, which track health, bandwidth, and alerts.'
+			},
+			{
+				question: 'Can I get the diagram into Visio or draw.io?',
+				answer: `Yes, on plans that include those formats. The map also exports as PNG, SVG, PDF, HTML, Mermaid, or Confluence markup, embeds live in a wiki, or shares by read-only link. See ${link('/product/sharing-and-exports', 'sharing, embeds & exports')}.`
+			}
+		],
+		related: ['vlan-mapping', 'device-inventory', 'sharing-and-exports']
+	},
+	{
+		// workloads_builder.rs:50-77. Proxmox: daemon/discovery/integration/proxmox/mod.rs:1-4.
+		// Containers: services/impl/virtualization.rs:39-57, compose project container/scanner.rs:1302-1308.
+		// Docker access: integration/docker/mod.rs:4-6.
+		slug: 'workload-mapping',
+		navLabel: 'Workload mapping',
+		navBlurb: 'Hypervisors, VMs, and containers, nested the way they actually run',
+		title: 'Map VMs and Containers: Proxmox, Docker, and Podman | Scanopy',
+		description:
+			'Scanopy maps what runs where: Proxmox nodes, VMs, and LXC containers, Docker and Podman containers grouped by Compose stack, and the services on each.',
+		heading: 'See what runs where, from the hypervisor down to the container.',
+		subhead:
+			'Scanopy reads Proxmox, Docker, and Podman directly and nests every VM and container inside the host that runs it, with the services each one exposes.',
+		heroView: 'workloads',
+		sections: [
+			{
+				heading: 'Hypervisors, VMs, and containers in one tree',
+				points: [
+					{
+						title: 'Proxmox',
+						body: 'Nodes, QEMU virtual machines, and LXC containers, read from the Proxmox API.'
+					},
+					{
+						title: 'Docker and Podman',
+						body: 'Containers from the local socket, or from a remote host through a Docker or Podman API proxy.'
+					},
+					{
+						title: 'Nested inside their host',
+						body: 'VMs and LXC containers sit inside their Proxmox node, and Docker containers sit inside the host or VM that runs them.'
+					}
+				],
+				figure: { kind: 'view', view: 'workloads' }
+			},
+			{
+				heading: 'Containers grouped by the stack they belong to',
+				points: [
+					{
+						title: 'Compose stacks',
+						body: 'Containers from the same Docker Compose project are grouped together.'
+					},
+					{
+						title: 'Ports and services',
+						body: `Each container lists its open ports and the services Scanopy recognizes on them, from ${services} definitions.`
+					},
+					{
+						title: 'Guides for each runtime',
+						body: `Step by step: ${link('/guides/visualize-docker-containers-network', 'map Docker containers')} or ${link('/guides/visualize-podman-containers-network', 'map Podman containers')}.`
+					}
+				]
+			},
+			{
+				heading: 'The same workloads in every other view',
+				points: [
+					{
+						title: 'On the subnet map',
+						body: `VMs and containers appear in the ${link('/product/network-topology', 'logical (L3) view')} with links back to the hypervisor or runtime that hosts them.`
+					},
+					{
+						title: 'In the inventory',
+						body: `Every VM is a host in the ${link('/product/device-inventory', 'device inventory')}, filterable by the hypervisor it runs on.`
+					},
+					{
+						title: 'In applications',
+						body: `Tag containers with the application they serve and they appear in the ${link('/product/application-mapping', 'application map')}.`
+					}
+				]
+			}
+		],
+		faqs: [
+			{
+				question: 'Does the daemon need access to the Docker socket?',
+				answer:
+					'For local containers, yes. For remote hosts, point Scanopy at a Docker or Podman API proxy instead.'
+			},
+			{
+				question: 'Does Scanopy support VMware?',
+				answer:
+					'Scanopy recognizes vCenter and ESXi as services on the network. It does not read VMs from the vSphere API.'
+			}
+		],
+		related: ['network-topology', 'application-mapping', 'device-inventory']
+	},
+	{
+		// Application tags: server/tags/impl/base.rs:30-43, application_builder.rs:44-63; UI
+		// TagPickerInline.svelte:209-210, DefineGroupsStep.svelte:74,96. Dependencies:
+		// dependencies/impl/types.rs:27-31, InspectorMultiSelect.svelte:424,600, views.rs:1070-1111.
+		// No automatic dependency inference anywhere.
+		slug: 'application-mapping',
+		navLabel: 'Application mapping',
+		navBlurb: 'Services grouped by the application they serve, on hosts kept current',
+		title: 'Application Map: Services Grouped by Application | Scanopy',
+		description:
+			'Group discovered services into the applications they serve and draw the request paths between them. Scanopy keeps the hosts, addresses, and ports underneath current.',
+		heading: 'An application map that stays accurate when the servers change.',
+		subhead:
+			'You name each application and the services in it. Discovery keeps the hosts, addresses, and ports underneath current, so the map doesn’t drift when a service moves.',
+		heroView: 'application',
+		sections: [
+			{
+				heading: 'You name the application, discovery fills it in',
+				points: [
+					{
+						title: 'Application tags',
+						body: 'Tag a service, or a whole host, with the application it belongs to. Services inherit their host’s application unless you tag them directly.'
+					},
+					{
+						title: 'A setup wizard',
+						body: 'A guided setup suggests applications to create and walks you through assigning services.'
+					},
+					{
+						title: 'Built on discovered services',
+						body: `Every service in an application is one Scanopy found on the network, from ${link('/services', `${services} definitions`)}, not a box someone drew.`
+					}
+				],
+				figure: { kind: 'view', view: 'application' }
+			},
+			{
+				heading: 'Draw the request path once',
+				points: [
+					{
+						title: 'Request paths',
+						body: 'Select services in order, such as load balancer, app server, database, and save them as a request path.'
+					},
+					{
+						title: 'Hub and spoke',
+						body: 'Link one shared service, such as a database or an identity provider, to everything that calls it.'
+					},
+					{
+						title: 'Visible across views',
+						body: 'Dependencies show in the application, logical (L3), and workload views.'
+					}
+				]
+			}
+		],
+		faqs: [
+			{
+				question: 'Does Scanopy discover application dependencies automatically?',
+				answer: `No. Scanopy discovers hosts, services, and ports. You define which services form an application and the request paths between them. For dependencies inferred from network traffic, see ${link('/comparisons/vs/faddom', 'Scanopy vs Faddom')}.`
+			},
+			{
+				question: 'What is the application view for?',
+				answer:
+					'Seeing which hosts and services an application depends on before a migration, a change, or a risk analysis.'
+			}
+		],
+		related: ['workload-mapping', 'network-topology', 'device-inventory']
+	},
+	{
 		// Host fields: backend/src/server/hosts/impl/base.rs:38-173. Columns and filters:
 		// ui/src/lib/features/hosts/components/HostTab.svelte:354-407, 517-872. Export:
 		// HostExportModal.svelte, hosts/handlers.rs ~1539-1560.
@@ -271,5 +508,73 @@ export const productPages: LandingPage[] = [
 			}
 		],
 		related: ['device-inventory', 'vlan-mapping']
+	},
+	{
+		// Formats: ui/src/lib/features/topology/components/ExportModal.svelte:186-265; gating
+		// billing/types/base/plans.rs:631-1000. Share options: server/shares/impl/base.rs:31-96;
+		// password handlers.rs:144-165,320-374; allowed domains service.rs:122-150; embed code
+		// features/shares/queries.ts:231-252. Plan gates: auth/middleware/features.rs:166,
+		// shares/handlers.rs:416-423.
+		slug: 'sharing-and-exports',
+		navLabel: 'Sharing, embeds & exports',
+		navBlurb: 'Export the map, embed it live, or share a read-only link',
+		title: 'Share, Embed, and Export Network Diagrams | Scanopy',
+		description:
+			'Export the network map to PNG, SVG, PDF, HTML, draw.io, Visio, Mermaid, Confluence, or CSV. Embed the live map in a wiki, or share a read-only link with a password and expiry.',
+		heading: 'Put the current network map wherever your team already looks.',
+		subhead:
+			'Export a static copy in the format the document needs, embed the live map in a wiki or dashboard, or send a read-only link that stays current as the network rescans.',
+		sections: [
+			{
+				heading: 'Three ways to get the map out, plus a dated snapshot',
+				points: [],
+				figure: { kind: 'exports' }
+			},
+			{
+				heading: 'Share links you control',
+				points: [
+					{
+						title: 'Password and expiry',
+						body: 'Protect a link with a password, set a date it stops working, or switch it off at any time.'
+					},
+					{
+						title: 'Choose what they see',
+						body: 'Pick which views the link opens, and whether viewers get the inspector, zoom controls, export button, and minimap.'
+					},
+					{
+						title: 'No account needed',
+						body: 'An auditor, contractor, or client opens the live map in a browser without a Scanopy login.'
+					}
+				]
+			},
+			{
+				heading: 'Embed the live map in the page people already open',
+				points: [
+					{
+						title: 'One iframe',
+						body: 'Paste the embed code into Confluence, a wiki, an intranet page, or a dashboard, with your choice of size and theme.'
+					},
+					{
+						title: 'Restricted to your sites',
+						body: 'List the domains allowed to embed the map, and every other site is refused.'
+					},
+					{
+						title: 'Current without anyone updating it',
+						body: 'The embedded map is the live one, so the page shows the network as of the last scan.'
+					}
+				]
+			}
+		],
+		faqs: [
+			{
+				question: 'Which export formats does Scanopy support?',
+				answer: `PNG, SVG, PDF, and self-contained HTML; editable draw.io and Visio diagrams; Mermaid and Confluence markup; and CSV of the underlying host and service data. Some formats are on higher plans; the ${link('/pricing', 'pricing page')} lists which.`
+			},
+			{
+				question: 'Does a shared link show a snapshot or the live network?',
+				answer: `The live network. To record the network on a date, take a ${link('/product/snapshots', 'snapshot')} and export it, and the export carries the capture time.`
+			}
+		],
+		related: ['network-topology', 'snapshots', 'device-inventory']
 	}
 ];

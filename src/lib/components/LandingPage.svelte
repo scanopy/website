@@ -4,6 +4,7 @@
 	import { ArrowRight } from 'lucide-svelte';
 	import ViewSwitcher from '$lib/components/ViewSwitcher.svelte';
 	import CustomerQuote from '$lib/components/CustomerQuote.svelte';
+	import CustomerLogos from '$lib/components/CustomerLogos.svelte';
 	import EvidenceExports from '$lib/components/EvidenceExports.svelte';
 	import FAQ from '$lib/components/FAQ.svelte';
 	import LicenseCta from '$lib/components/LicenseCta.svelte';
@@ -240,6 +241,10 @@
 			</div>
 		</section>
 	{/each}
+
+	{#if page.showLogos}
+		<CustomerLogos title="Used by" />
+	{/if}
 
 	{#if page.quoteId}
 		<section class="border-t border-gray-800 py-20">
