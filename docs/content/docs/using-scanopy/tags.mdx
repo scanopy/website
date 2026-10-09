@@ -1,6 +1,6 @@
 ---
 title: Tags
-description: Organization-wide labels for filtering entities, tag groups that allow one tag per entity, and the application tags behind the Application perspective.
+description: Organization-wide labels for filtering entities, tag groups that allow one tag per entity, the built-in Status group, and the application tags behind the Application perspective.
 ---
 
 Tags are organization-wide labels you apply to hosts, services, subnets, sites and daemons, then use to filter entity lists and the topology. Deleting a tag removes it from every entity that carried it.
@@ -8,6 +8,12 @@ Tags are organization-wide labels you apply to hosts, services, subnets, sites a
 ## Tag groups allow one tag per entity
 
 A tag can belong to a tag group, and an entity holds at most one tag from each group. Adding a tag from a group replaces the one the entity already had from that group. Use a group for anything with exactly one value per entity, such as an environment: Production, Staging, Development. A tag with no group has no limit.
+
+Besides Status (below), new organizations start with Environment, Criticality and Management groups. They work like any group you create, so you can rename them, change their tags or delete them.
+
+## Status is a built-in group for an asset's lifecycle
+
+**Status** is a built-in tag group, like Application. It starts with four tags: Planned, Active, Decommissioning and Decommissioned. You can rename, recolor or delete those tags, and add your own to the group. The group itself always exists, and no other group can be named Status.
 
 ## Application tags
 
@@ -21,4 +27,4 @@ This inheritance is what the [Application perspective](/using-scanopy/topology/a
 
 ## Managing tags
 
-Tags live under **Platform > Tags**, and you can also create one while editing any entity. A tag's **Tag Group** field sets its group: **Application**, an existing group, or a new one.
+Tags live under **Platform > Tags**, and you can also create one while editing any entity. A tag's **Tag Group** field sets its group: **Application**, **Status**, an existing group, or a new one.
