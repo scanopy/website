@@ -58,7 +58,7 @@
 				audit:
 					'Show what the network looked like on a date and what changed since: the record that the documentation is maintained, not reconstructed for the assessment.',
 				product:
-					'Compare the network before and after a change, and see what moved between two dates.'
+					'Open the network as it was before a change, read-only, and export it with the capture date in the header.'
 			},
 			overTime: true
 		}

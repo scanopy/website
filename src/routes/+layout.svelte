@@ -3,7 +3,8 @@
 	import { browser, dev } from '$app/environment';
 	import { page } from '$app/state';
 	import { ContactModal, Footer } from '$lib/components';
-	import { Menu, X } from 'lucide-svelte';
+	import { ChevronDown, Menu, X } from 'lucide-svelte';
+	import { productNav, solutionNav } from '$lib/landing';
 	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import CookieConsent from '$lib/components/CookieConsent.svelte';
@@ -71,6 +72,11 @@
 		mobileMenuOpen = false;
 	}
 
+	const navMenus = [
+		{ label: 'Product', href: '/product', overview: 'Product overview', items: productNav },
+		{ label: 'Solutions', href: '/solutions', overview: 'All solutions', items: solutionNav }
+	];
+
 	const breadcrumbNameMap: Record<string, string> = {
 		pricing: 'Pricing',
 		about: 'About',
@@ -90,7 +96,7 @@
 	// Routes that emit their own page-level BreadcrumbList (with a richer hand-built
 	// trail). Skip the auto-breadcrumb there so a URL never carries two conflicting
 	// trails, and so we don't synthesize a crumb for a non-page segment like `vs`.
-	const SELF_BREADCRUMB_PREFIXES = ['/comparisons/vs/'];
+	const SELF_BREADCRUMB_PREFIXES = ['/comparisons/vs/', '/product/', '/solutions/'];
 
 	// The "/comparisons/<vendor>-alternatives" listicle pages also emit their own
 	// BreadcrumbList; match them by suffix (they share the /comparisons/ prefix with the
@@ -216,7 +222,37 @@
 
 				<!-- Desktop navigation -->
 				<div class="hidden items-center gap-6 md:flex">
-					<a href="/product" class="text-gray-400 transition-colors hover:text-white">Product</a>
+					{#each navMenus as menu (menu.label)}
+						<div class="group relative">
+							<a
+								href={menu.href}
+								class="flex items-center gap-1 text-gray-400 transition-colors hover:text-white"
+								aria-haspopup="true"
+							>
+								{menu.label}
+								<ChevronDown class="h-4 w-4 transition-transform group-hover:rotate-180" />
+							</a>
+							<!-- pt-3 bridges the gap so the menu stays open while the pointer moves into it -->
+							<div
+								class="invisible absolute left-1/2 top-full z-50 w-80 -translate-x-1/2 pt-3 opacity-0 transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
+							>
+								<div class="rounded-xl border border-gray-800 bg-gray-900 p-2 shadow-xl">
+									{#each menu.items as item (item.href)}
+										<a href={item.href} class="block rounded-lg px-3 py-2 hover:bg-gray-800">
+											<span class="block text-sm font-semibold text-white">{item.label}</span>
+											<span class="block text-xs text-gray-400">{item.blurb}</span>
+										</a>
+									{/each}
+									<a
+										href={menu.href}
+										class="mt-1 block border-t border-gray-800 px-3 pb-1 pt-3 text-sm font-semibold text-blue-400 hover:text-blue-300"
+									>
+										{menu.overview} &rarr;
+									</a>
+								</div>
+							</div>
+						</div>
+					{/each}
 					<a href="/pricing" class="text-gray-400 transition-colors hover:text-white">Pricing</a>
 					<a
 						href="https://demo.scanopy.net"
@@ -267,13 +303,28 @@
 			<!-- Mobile navigation -->
 			{#if mobileMenuOpen}
 				<div class="mt-4 flex flex-col gap-4 border-t border-gray-800 pt-4 md:hidden">
-					<a
-						href="/product"
-						class="text-gray-400 transition-colors hover:text-white"
-						onclick={closeMobileMenu}
-					>
-						Product
-					</a>
+					{#each navMenus as menu (menu.label)}
+						<div>
+							<a
+								href={menu.href}
+								class="text-gray-400 transition-colors hover:text-white"
+								onclick={closeMobileMenu}
+							>
+								{menu.label}
+							</a>
+							<div class="mt-2 flex flex-col gap-2 border-l border-gray-800 pl-4">
+								{#each menu.items as item (item.href)}
+									<a
+										href={item.href}
+										class="text-sm text-gray-500 transition-colors hover:text-white"
+										onclick={closeMobileMenu}
+									>
+										{item.label}
+									</a>
+								{/each}
+							</div>
+						</div>
+					{/each}
 					<a
 						href="/pricing"
 						class="text-gray-400 transition-colors hover:text-white"

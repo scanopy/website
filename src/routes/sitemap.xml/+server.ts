@@ -2,6 +2,7 @@ import { execSync } from 'node:child_process';
 import { allVsPageSlugs } from '$lib/compare/vs-pages';
 import { allAltPageSlugs } from '$lib/compare/alternatives-pages';
 import { allPairSlugs } from '$lib/compare/pair-pages';
+import { productPages, solutionPages } from '$lib/landing';
 
 export const prerender = true;
 
@@ -58,7 +59,15 @@ export async function GET() {
 		{ loc: '/security', src: 'src/routes/security/+page.svelte' },
 		{ loc: '/privacy', src: 'src/routes/privacy/+page.svelte' },
 		{ loc: '/terms', src: 'src/routes/terms/+page.svelte' },
-		{ loc: '/refund', src: 'src/routes/refund/+page.svelte' }
+		{ loc: '/refund', src: 'src/routes/refund/+page.svelte' },
+		...productPages.map((p) => ({
+			loc: `/product/${p.slug}`,
+			src: 'src/lib/landing/product-pages.ts'
+		})),
+		...solutionPages.map((p) => ({
+			loc: `/solutions/${p.slug}`,
+			src: 'src/lib/landing/solutions.ts'
+		}))
 	];
 
 	// Load blog posts for dynamic URLs

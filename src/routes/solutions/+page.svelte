@@ -1,20 +1,14 @@
 <script lang="ts">
 	import { ArrowRight } from 'lucide-svelte';
+	import { solutionNav } from '$lib/landing';
 
 	const title = 'Solutions - Scanopy';
 	const description =
 		'How teams that manage infrastructure use Scanopy. Each solution starts from the same network map and inventory, kept current on a schedule, and puts it to work for a specific job.';
 
-	// The hub grows as solution pages ship. Each entry is a job the network map does,
-	// not a feature.
-	const solutions = [
-		{
-			name: 'Compliance',
-			href: '/solutions/compliance',
-			blurb:
-				'NIS2, ISO 27001, HIPAA, and CMMC all expect network documentation that is accurate today. Scanopy keeps the map and inventory current, so the evidence is ready before the auditor asks.'
-		}
-	];
+	// Each entry is a job the network map does, not a feature. The list lives in $lib/landing
+	// so the nav, footer, and this hub stay in step.
+	const solutions = solutionNav.map((s) => ({ name: s.label, href: s.href, blurb: s.blurb }));
 </script>
 
 <svelte:head>

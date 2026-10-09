@@ -4,6 +4,7 @@
 	import { isPostHogLoaded, getPostHog } from '$lib/posthog';
 	import { page } from '$app/state';
 	import { APP, appHref } from '$lib/config/urls';
+	import { productPages, solutionNav } from '$lib/landing';
 
 	interface Props {
 		healthStatus?: 'loading' | 'healthy' | 'unhealthy';
@@ -121,6 +122,14 @@
 				<div>
 					<span class="mb-4 block font-semibold text-white">Product</span>
 					<ul class="space-y-2">
+						<li><a href="/product" class="text-sm text-gray-400 hover:text-white">Overview</a></li>
+						{#each productPages as p (p.slug)}
+							<li>
+								<a href={`/product/${p.slug}`} class="text-sm text-gray-400 hover:text-white"
+									>{p.navLabel}</a
+								>
+							</li>
+						{/each}
 						<li><a href="/pricing" class="text-sm text-gray-400 hover:text-white">Pricing</a></li>
 						<li>
 							<a href="/community" class="text-sm text-gray-400 hover:text-white"
@@ -162,11 +171,16 @@
 						<li>
 							<a href="/comparisons" class="text-sm text-gray-400 hover:text-white">Comparisons</a>
 						</li>
-						<li>
-							<a href="/solutions/compliance" class="text-sm text-gray-400 hover:text-white"
-								>Compliance</a
-							>
-						</li>
+					</ul>
+				</div>
+
+				<!-- Solutions -->
+				<div>
+					<span class="mb-4 block font-semibold text-white">Solutions</span>
+					<ul class="space-y-2">
+						{#each solutionNav as s (s.href)}
+							<li><a href={s.href} class="text-sm text-gray-400 hover:text-white">{s.label}</a></li>
+						{/each}
 					</ul>
 				</div>
 

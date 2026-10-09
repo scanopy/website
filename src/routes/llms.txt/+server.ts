@@ -1,6 +1,7 @@
 import billingPlansData from '$lib/fixtures/billing-plans.json';
 import servicesData from '$lib/fixtures/services.json';
 import { DEMO_BOOKING_URL } from '$lib/config/cta';
+import { productPages, solutionPages } from '$lib/landing';
 import { licenseHref } from '$lib/licensePath.svelte';
 import { vendors } from '$lib/fixtures/network-diagram-vendors';
 import { VS_VENDOR_SLUGS, vsSlug, buildTitle, buildMetaDescription } from '$lib/compare/vs-pages';
@@ -207,9 +208,19 @@ Scanopy is automated network diagram and documentation software that automatical
 - **Automatic Discovery**: Scans any network and discovers every host, service, subnet, and workload automatically
 - **Four Topology Views**: Network architecture, service dependencies, workload placement, and physical topology
 - **Service Detection**: Auto-detects ${serviceCountLabel} services across categories: ${topCategories}
-- **Versioning**: Create branches, lock versions, and compare network state over time
-- **Security Visibility**: See which services are exposed and flag misconfigurations
+- **Snapshots and scan digests**: Save a dated snapshot of the network, and get an email after each scheduled scan listing hosts and VLANs added, gone stale, or changed
+- **Device Inventory**: IPs, MACs, interfaces, services, and SNMP hardware facts for every host, exportable to CSV
+- **VLAN Discovery**: VLANs read from switches over SNMP, per port, linked to their subnets
 - **Sharing**: Export diagrams, send live view links, or create embeds
+
+## Product Pages
+
+${productPages.map((p) => `- [${p.navLabel}](https://scanopy.net/product/${p.slug}): ${p.navBlurb}`).join('\n')}
+
+## Solutions
+
+- [Compliance](https://scanopy.net/solutions/compliance): Audit evidence for NIS2, ISO 27001, HIPAA, and CMMC
+${solutionPages.map((p) => `- [${p.navLabel}](https://scanopy.net/solutions/${p.slug}): ${p.navBlurb}`).join('\n')}
 
 ## Detected Services
 

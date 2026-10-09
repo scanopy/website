@@ -61,7 +61,7 @@
 		{
 			icon: GitBranch,
 			title: 'Simplify post-mortems',
-			description: 'Versionable network state shows what changed before something broke.'
+			description: 'Snapshots and scan digests show what changed before something broke.'
 		},
 		{
 			icon: Shield,

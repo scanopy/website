@@ -49,10 +49,10 @@
 	},
 	{
 		"id": "versioning",
-		"title": "Version history",
-		"description": "Create branches, lock versions, and compare network state over time.",
+		"title": "Snapshots and scan digests",
+		"description": "Save dated snapshots of the network, and get a digest of what changed after each scheduled scan.",
 		"icon": "GitBranch",
-		"schemaLabel": "Network versioning and branching",
+		"schemaLabel": "Network snapshots and change digests",
 		"group": "what_you_get"
 	},
 	{
