@@ -80,7 +80,7 @@ Here's what that looks like in practice; this is a live Scanopy map you can inte
 
 <!-- scanopy-demo -->
 
-That embed isn't a screenshot. It's a live, interactive map. Scanopy maps are embeddable anywhere that supports iframes: your wiki, your internal docs, your runbooks. You can also hand someone a read-only share link to the live map, or take a frozen export (PNG, SVG, PDF, HTML, Mermaid, Confluence, CSV) when you need a snapshot. Embed the map once, and every place that references your network topology stays current automatically. No re-exporting PNGs, no copy-pasting updated diagrams into twelve different Confluence pages. The embed always reflects the latest scan.
+That embed isn't a screenshot. It's a live, interactive map. Scanopy maps are embeddable anywhere that supports iframes: your wiki, your internal docs, your runbooks. You can also hand someone a read-only share link to the live map, or take a frozen export (PNG, SVG, PDF, HTML, draw.io, Visio, Mermaid, Confluence, CSV) when you need a snapshot. Embed the map once, and every place that references your network topology stays current automatically. No re-exporting PNGs, no copy-pasting updated diagrams into twelve different Confluence pages. The embed always reflects the latest scan.
 
 Compare that to a Visio file saved to SharePoint six months ago.
 

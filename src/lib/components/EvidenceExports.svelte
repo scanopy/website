@@ -29,7 +29,7 @@
 	const methods: Method[] = [
 		{
 			title: 'Export the map',
-			what: 'A static copy: an image (PNG, SVG, PDF), a self-contained HTML page, wiki markup (Mermaid, Confluence), or CSV of the underlying host and service data.',
+			what: 'A static copy: an image (PNG, SVG, PDF), a self-contained HTML page, an editable diagram (draw.io, Visio), wiki markup (Mermaid, Confluence), or CSV of the underlying host and service data.',
 			use: {
 				audit: 'Drop the current diagram straight into a compliance document or evidence pack.',
 				product: 'Paste the current diagram into a runbook, a ticket, or a handover document.'
