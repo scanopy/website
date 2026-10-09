@@ -176,7 +176,7 @@ export const solutionPages: LandingPage[] = [
 		// daemon/discovery/service/network/scan.rs:1542-1553; subnets per discovery types.rs:93-98;
 		// --interfaces daemon/shared/config.rs:344-347. Industrial definitions:
 		// services/definitions/{modbus_tcp,ethernet_ip,opc_ua,bacnet}.rs. PROFINET DCP:
-		// scan.rs:224-268 (dcp/mod.rs:22-27 notes it is untested on real devices). Westermo LLDP:
+		// scan.rs:224-268 (tested on real devices per founder, 2026-10-09; dcp/mod.rs:22-27 says otherwise and is stale). Westermo LLDP:
 		// server/lldp/resolver.rs:280. Offline licenses: server/license/crypto.rs:3-14, mint.rs:199.
 		slug: 'plant-ot-networks',
 		navLabel: 'Plant & OT networks',
