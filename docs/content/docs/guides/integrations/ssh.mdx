@@ -199,12 +199,12 @@ Enter the account's password in **Password**, or choose **File on daemon host** 
 1. Run the site's discovery from **Discover > Scans**, or wait for its next scheduled run
 2. Open the finished run under **Discover > Scans > Historical** and select the **Credentials** tab
 3. Find the SSH credential's row. It lists each host the script ran on with its outcome. **Applied** means the script ran and Scanopy stored its output. **Fields applied** lists the keys Scanopy stored, and **Not applied** lists keys it did not.
-4. Check the row's warning count. Any warning appears on the run's **Issues** tab.
+4. Check the row's warning count. Its warnings appear with the credential's results on the same tab.
 5. Open the host. Its **Details** tab shows each value the script set with **SSH script** as the source, and its **Interfaces** tab shows the interfaces the script printed.
 
 ## Troubleshooting
 
-Each failed run appears in the SSH credential's row on the run's **Credentials** tab, with its outcome and the end of the script's standard error or the error message. It also raises a credential [warning](/reference/scan-warnings/) on the run's **Issues** tab. A failed run applies nothing, and the host keeps the values from its last successful run.
+Each failed run appears in the SSH credential's row on the run's **Credentials** tab, with its outcome and the end of the script's standard error or the error message. It also raises a credential [warning](/reference/scan-warnings/) in that row. A failed run applies nothing, and the host keeps the values from its last successful run.
 
 ### Login refused
 

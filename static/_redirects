@@ -214,6 +214,15 @@
 # - daemon support lifecycle merged into daemon status
 # - SNMP scan troubleshooting moved into the SNMP integration guide
 
+# Daemon standby emails link here (scanopy links.rs); the page never existed.
+# Literal pair, not /x*: a splat would also catch troubleshooting-scans and -setup.
+/docs/setting-up-daemons/troubleshooting /docs/reference/daemon-status/ 301
+/docs/setting-up-daemons/troubleshooting/ /docs/reference/daemon-status/ 301
+
+# Guides section index removed (2026-10): it listed nothing, since Guides holds only subfolders.
+/docs/guides /docs/ 301
+/docs/guides/ /docs/ 301
+
 # 404 for unmatched paths (prevents Cloudflare Pages index.html fallback)
 
 # REDIRECT LIMIT (verified against production 2026-09-03)
@@ -270,3 +279,11 @@
 /docs/setting-up-daemons/troubleshooting-scans/snmp* /docs/guides/integrations/snmp/ 301
 /docs/using-scanopy/search /docs/using-scanopy/ 301
 /docs/using-scanopy/search/ /docs/using-scanopy/ 301
+# Topology subpages and dependencies merged into the topology page (2026-10)
+/docs/using-scanopy/topology/l2-physical* /docs/using-scanopy/topology/ 301
+/docs/using-scanopy/topology/l3-logical* /docs/using-scanopy/topology/ 301
+/docs/using-scanopy/topology/workloads* /docs/using-scanopy/topology/ 301
+/docs/using-scanopy/topology/application* /docs/using-scanopy/topology/ 301
+/docs/using-scanopy/topology/customizing-views* /docs/using-scanopy/topology/ 301
+/docs/using-scanopy/topology/snapshots* /docs/using-scanopy/topology/ 301
+/docs/using-scanopy/dependencies* /docs/using-scanopy/topology/ 301

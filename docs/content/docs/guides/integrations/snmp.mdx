@@ -16,7 +16,7 @@ Without SNMP, a discovered host has only what port scanning and DNS provide — 
 - **Interface table** — every interface with its name, speed, MAC address, IP assignments, and operational status
 - **LLDP/CDP neighbors** — the directly connected devices the host itself reports
 
-Neighbor data is what makes accurate physical topology possible: it's the source for the links drawn in [L2 Physical](/using-scanopy/topology/l2-physical/). Interface and IP data also improve host deduplication, since a MAC address gives Scanopy a second way to recognize a device whose address has changed.
+Neighbor data is what makes accurate physical topology possible: it's the source for the links drawn in [L2 Physical](/using-scanopy/topology/#l2-physical). Interface and IP data also improve host deduplication, since a MAC address gives Scanopy a second way to recognize a device whose address has changed.
 
 For the full list of queried MIBs and OIDs, see the [SNMP reference](/reference/snmp/).
 
@@ -89,7 +89,7 @@ The context applies to the bridge and VLAN queries only. Interfaces, LLDP neighb
 3. Check for:
    - **sysName** and **sysDescr** in the host's SNMP tab
    - **Interfaces** in the ifEntry tab — names, speeds, and IP assignments
-   - **Neighbors** in the [L2 Physical](/using-scanopy/topology/l2-physical/) topology
+   - **Neighbors** in the [L2 Physical](/using-scanopy/topology/#l2-physical) topology
 
 You can confirm a site-wide assignment from **Platform > Credentials** — the credential's **Sites** column lists every site it applies to, and its **Hosts** column every host it has been assigned to individually.
 

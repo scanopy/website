@@ -26,6 +26,7 @@ import {
 	VirtualizationRelationships
 } from '@/components/reference-tables';
 import { SchemaERDiagram, SchemaFullDiagram } from '@/components/schema-diagrams';
+import { Screenshot } from '@/components/screenshot';
 import { SectionCards } from '@/components/section-cards';
 import { ServerConfigTable } from '@/components/server-config-table';
 import { SnmpLimitsTable, SnmpMibsTable, SnmpProtocolTable } from '@/components/snmp-tables';
@@ -56,6 +57,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		ScanWarningsTable,
 		SchemaERDiagram,
 		SchemaFullDiagram,
+		Screenshot,
 		SectionCards,
 		ServerConfigTable,
 		SnmpLimitsTable,

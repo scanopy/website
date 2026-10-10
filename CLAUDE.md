@@ -123,8 +123,10 @@ performance, credentials).
 ### Structure and prose
 
 - **Diátaxis placement** (framework defined in `~/.claude/CLAUDE.md`): how-to → `guides/`, concept → `using-scanopy/`, facts → `reference/`.
-- A page that outgrows itself becomes a folder with a `meta.json` and subpages. `topology/` and
-  `discovery/` are the examples.
+- A page that outgrows itself becomes a folder with a `meta.json` and subpages. `discovery/` is
+  the example. Split only when each subpage has its own entry point (see below): the six topology
+  subpages got 1 to 19 visitors each in 180 days against 25 for their index, and were merged back
+  into one page in 2026-10.
 - **A parallel list written as consecutive bold-label paragraphs should be a list or a table.**
   Exception: the `Symptoms` / `Cause` / `How to resolve` convention on troubleshooting pages and
   `daemon-status.mdx` is deliberate and consistent — leave it.
@@ -160,6 +162,12 @@ sentence, ask what the reader does differently for having read it. If nothing, l
 
 - **Skip self-explanatory features.** A search box, a column picker or an icon picker needs no
   page. Document what a user can't work out from the UI.
+- **A page needs an entry point.** Before writing a page, name the app screen, error, or decision
+  that sends a reader to it. If there is none, the content is a section of an existing page.
+  Traffic for 2026-04 to 2026-10 showed every page above 80 visitors is linked from the scanopy
+  README or the app, while feature-description pages with no such link got under 15.
+- **A page that explains non-obvious behavior ships with a proposed in-app link.** Name the
+  screen and the anchor, and propose the scanopy change (per _Working conventions_, don't make it).
 - **One field or setting doesn't get its own section.** It goes in a sentence on the page for its
   entity, or nowhere.
 - **No tables that restate code.** A list of every entity and the fields it matches, or every

@@ -26,6 +26,11 @@ Finishing the wizard [provisions](/reference/daemon-identity/) the daemon: the s
 
 Choose an install method on the final step:
 
+<Screenshot
+  src="daemons/install-command"
+  alt="The Install step of the Create Daemon wizard, showing the generated install command"
+/>
+
 | Method | What you get |
 | ------ | ------------ |
 | **Linux / macOS / FreeBSD** | A command that fetches the daemon binary and installs it as a native service |
@@ -78,6 +83,11 @@ For upgrading self-hosted server and integrated daemon together, see [Upgrading]
 ## Updating Daemon Properties
 
 Click the edit icon in a daemon's row in **Discover > Daemons** to open its management modal. Its **Details** tab edits the maintainer, tags, and — for ServerPoll daemons — the URL the server dials. Site, polling mode, and name are read-only: they're set at [provisioning](/reference/daemon-identity/) and define what the daemon is. A DaemonPoll daemon has no URL to edit, since the server never dials it.
+
+<Screenshot
+  src="daemons/edit"
+  alt="The Details tab of a daemon's management modal, with read-only name and mode, and editable maintainer and tags"
+/>
 
 Daemon-local settings — interfaces, ports, log level, scan tuning — live in the [daemon config file](/reference/daemon-configuration/) on the host, not on the server record. Change them by [reconfiguring the daemon](#reconfiguring-a-daemon) from the modal, or by editing `config.json` and restarting the service:
 

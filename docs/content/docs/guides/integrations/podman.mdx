@@ -18,7 +18,7 @@ Scanopy daemons discover Podman containers by connecting to the Podman API. On t
 - Containers on macvlan or ipvlan networks, each as its own host
 - The container serving the Podman API on a proxy credential's port, as a **Podman API Proxy** service under Podman
 
-Bridge-networked containers appear as **Podman Container** services on their host. A container on a macvlan or ipvlan network has its own address on the LAN, so it becomes its own host, tagged **macvlan** or **ipvlan** and linked to the Podman service on the Podman host. Pods are modeled as generic containers with each container in the pod attributed individually. The container-to-host relationship shows up in the [Workloads perspective](/using-scanopy/topology/workloads).
+Bridge-networked containers appear as **Podman Container** services on their host. A container on a macvlan or ipvlan network has its own address on the LAN, so it becomes its own host, tagged **macvlan** or **ipvlan** and linked to the Podman service on the Podman host. Pods are modeled as generic containers with each container in the pod attributed individually. The container-to-host relationship shows up in the [Workloads perspective](/using-scanopy/topology/#workloads).
 
 With a proxy credential, the container that publishes the credential's port is the proxy in front of Podman. It is recorded as a **Podman API Proxy** service under the Podman service and holds that port, whatever port you set. A proxy running with host networking is identified only when its image declares the port as exposed.
 
@@ -110,7 +110,7 @@ Because the socket is reachable only over the daemon's own loopback, this creden
 1. Go to **Discover > Scans** and run a discovery, or wait for the next scheduled run
 2. Open the host running Podman and go to its **Services** tab
 3. Look for **Podman Container** services, each with its published ports
-4. Open the [Workloads perspective](/using-scanopy/topology/workloads) and confirm the containers appear nested under their host
+4. Open the [Workloads perspective](/using-scanopy/topology/#workloads) and confirm the containers appear nested under their host
 
 ## Troubleshooting
 

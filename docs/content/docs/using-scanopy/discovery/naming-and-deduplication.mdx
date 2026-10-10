@@ -12,7 +12,7 @@ A host takes its name from the strongest source Scanopy has for it. Sources rank
 | **IP address** | The host's own address, used when nothing better is known |
 | **Detected service** | The first named service found on the host |
 | **Hostname** | Reverse DNS, a hostname the host reported, or SNMP sysName |
-| **Controller name** | A name assigned in a device's controller, where an [integration](/guides/) reads that controller |
+| **Controller name** | A name assigned in a device's controller, where an [integration](/using-scanopy/credentials/#credential-types) reads that controller |
 | **Your own name** | A name you type into Scanopy. Nothing outranks it |
 
 A stronger source replaces a weaker one, so a host first named for its IP address takes its controller's name once that integration runs. Each source also refreshes its own rank: rename a device in its controller and the new name reaches Scanopy on the next sync. A name you typed is replaced only by another name you type.

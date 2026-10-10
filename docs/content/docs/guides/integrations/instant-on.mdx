@@ -22,7 +22,7 @@ On each scan, the daemon reads the site's inventory and client list:
 | --------------- | ------- |
 | Site inventory (switches, access points, gateways) | Hosts, matched against existing hosts by IP |
 | Each device's ports | Interfaces, with names, speeds and link state |
-| Uplinks between devices | Physical links in [L2 Physical](/using-scanopy/topology/l2-physical/) |
+| Uplinks between devices | Physical links in [L2 Physical](/using-scanopy/topology/#l2-physical) |
 | Device class (`SWITCH`, `ACCESS_POINT`, …) | An **Instant On Switch** or **Instant On Access Point** service |
 | The name given to each device | The host's name — see [Host Naming](/using-scanopy/discovery/naming-and-deduplication/#host-naming) |
 | Wired clients | The MAC on the port it is connected to, and a host carrying the name the portal holds for it |
@@ -62,7 +62,7 @@ Leave **Site** blank to read every site the account can see. Setting it restrict
 1. Run a discovery from **Discover > Scans**
 2. Open the scan session — the credential appears in the session's credential summary
 3. Check **Assets > Hosts** for the site's other devices, each carrying its model, serial and firmware
-4. Open [L2 Physical](/using-scanopy/topology/l2-physical/) and confirm the switches now show what they connect to
+4. Open [L2 Physical](/using-scanopy/topology/#l2-physical) and confirm the switches now show what they connect to
 
 ## Troubleshooting
 

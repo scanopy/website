@@ -22,7 +22,7 @@ On each scan, the daemon reads the controller's device inventory for the configu
 | ------------------- | ------- |
 | Adopted devices (switches, APs, gateways) | Hosts, matched against existing hosts by IP |
 | Each device's port table | Interfaces, with names, speeds and MAC addresses |
-| LLDP neighbor and uplink tables | Physical links in [L2 Physical](/using-scanopy/topology/l2-physical/) |
+| LLDP neighbor and uplink tables | Physical links in [L2 Physical](/using-scanopy/topology/#l2-physical) |
 | Device class (`usw`, `uap`, …) | A **UniFi Switch** or **UniFi Gateway** service |
 | The name given to each device | The host's name — see [Host Naming](/using-scanopy/discovery/naming-and-deduplication/#host-naming) |
 | Connected clients | Hosts, matched against existing hosts by IP and MAC |
@@ -78,7 +78,7 @@ Use a **local-only** admin account. A cloud-linked Ubiquiti SSO account with mul
 1. Run a discovery from **Discover > Scans**
 2. Open the scan session — the credential appears in the session's credential summary
 3. Check **Assets > Hosts** for the controller's adopted devices
-4. Open [L2 Physical](/using-scanopy/topology/l2-physical/) and confirm the switches now show their neighbors
+4. Open [L2 Physical](/using-scanopy/topology/#l2-physical) and confirm the switches now show their neighbors
 
 ## Troubleshooting
 

@@ -25,7 +25,12 @@ On each scan, the daemon reads the cluster's node and guest lists:
 | The guest name set in Proxmox VE | The host's name, shown as authored by Proxmox VE. See [Host Naming](/using-scanopy/discovery/naming-and-deduplication/#host-naming) |
 | Interfaces the guest agent reports beyond the VM's configured NICs, each with its own MAC and a LAN address (macvlan links, virtual IPs) | A host per interface, tagged **Network identity** and linked to a **Network Identities** service on the guest. See [Network Identities](/using-scanopy/network-data/#network-identities) |
 
-Guests appear grouped under their node in the [Workloads perspective](/using-scanopy/topology/workloads).
+Guests appear grouped under their node in the [Workloads perspective](/using-scanopy/topology/#workloads).
+
+<Screenshot
+  src="topology/workloads"
+  alt="The Workloads perspective, with VMs nested under the Proxmox VE service on node proxmox-hv01"
+/>
 
 Templates are skipped. Every other guest is recorded, with whatever addresses the API reports for it:
 
@@ -106,7 +111,7 @@ The daemon connects to the node's API over HTTPS and sends the token with each r
 2. Open the scan session. The credential appears in the session's credential summary
 3. Check **Assets > Hosts** for a host per node, each with a **Proxmox VE** service
 4. Check **Assets > Hosts** for the running VMs and containers, named as in Proxmox VE
-5. Open the [Workloads perspective](/using-scanopy/topology/workloads) and confirm the guests appear under their node
+5. Open the [Workloads perspective](/using-scanopy/topology/#workloads) and confirm the guests appear under their node
 
 ## Troubleshooting
 

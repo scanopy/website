@@ -16,7 +16,7 @@ gNMI reads a network device's interface table and LLDP neighbors over gRPC, usin
 - **LLDP neighbors**: the directly connected devices each interface reports
 - **Chassis ID**: the device's own LLDP chassis ID, where the device serves it
 
-Neighbors become the links drawn in [L2 Physical](/using-scanopy/topology/l2-physical/). A host that answers gNMI also gets a **gNMI** service.
+Neighbors become the links drawn in [L2 Physical](/using-scanopy/topology/#l2-physical). A host that answers gNMI also gets a **gNMI** service.
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ Username and password travel as gRPC request metadata. The port defaults to 9339
 
 1. Run a discovery from **Discover > Scans**, or wait for the next scheduled run
 2. Open the device's host and check for a **gNMI** service and the device's interfaces
-3. Open [L2 Physical](/using-scanopy/topology/l2-physical/) and confirm the device shows links to its LLDP neighbors
+3. Open [L2 Physical](/using-scanopy/topology/#l2-physical) and confirm the device shows links to its LLDP neighbors
 
 You can confirm a site-wide assignment from **Platform > Credentials**. The credential's **Sites** column lists every site it applies to, and its **Hosts** column every host it has been assigned to individually.
 
