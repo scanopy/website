@@ -587,11 +587,11 @@ On Layer 2 the two land in the same place: switch, port, MAC, IP. The choice is 
 		diagrams:
 			'Interactive topology map with service and interface detail. Shareable by read-only link, embeddable via iframe, and exportable as PNG, SVG, PDF, HTML, Mermaid, and CSV.',
 		pricingNotes:
-			'Free to [self-host](/community), capped at one network and one seat. A [commercial license](/commercial) raises those caps for business self-hosting; [managed cloud plans](/pricing) are available too.',
+			'Free to [self-host](/community), capped at one site and one seat. A [commercial license](/commercial) raises those caps for business self-hosting; [managed cloud plans](/pricing) are available too.',
 		whereItFits:
-			'Teams that want automated network documentation on their own infrastructure with no SaaS dependency. The free Community edition is AGPL-3.0 and limited to a single network and a single seat; teams that need more take a [commercial self-host license](/commercial) or move to the [managed cloud plans](/pricing).',
+			'Teams that want automated network documentation on their own infrastructure with no SaaS dependency. The free Community edition is AGPL-3.0 and limited to a single site and a single seat; teams that need more take a [commercial self-host license](/commercial) or move to the [managed cloud plans](/pricing).',
 		tradeOff:
-			'Self-hosted, so you manage updates and the host it runs on. The Community edition is AGPL-3.0 and capped at one network and one seat; a [commercial license](/commercial) raises those caps for business self-hosting, with [managed cloud hosting](/pricing) as a separate option.',
+			'Self-hosted, so you manage updates and the host it runs on. The Community edition is AGPL-3.0 and capped at one site and one seat; a [commercial license](/commercial) raises those caps for business self-hosting, with [managed cloud hosting](/pricing) as a separate option.',
 		deployment: ['Self-hosted'],
 		deploymentNotes:
 			'Self-hosted via [Docker, Proxmox, or Unraid](https://scanopy.net/community). One daemon, no external dependencies beyond PostgreSQL. Same discovery engine as Scanopy SaaS.',

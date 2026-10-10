@@ -162,7 +162,7 @@
 		{
 			question: 'Is Scanopy free or open source?',
 			answer:
-				'Yes. The self-hosted <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is free and open-source under AGPL-3.0, with one network and one seat. A <a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial self-hosted license</a> raises those caps and adds Confluence export, email support, and more seats. Scanopy also offers hosted Cloud plans, and the <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing page</a> lists every plan.'
+				'Yes. The self-hosted <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a> is free and open-source under AGPL-3.0, with one site and one seat. A <a href="/commercial" class="text-blue-400 hover:text-blue-300">Commercial self-hosted license</a> raises those caps and adds Confluence export, email support, and more seats. Scanopy also offers hosted Cloud plans, and the <a href="/pricing" class="text-blue-400 hover:text-blue-300">pricing page</a> lists every plan.'
 		},
 		{
 			question: 'How often does Scanopy update the network diagram?',

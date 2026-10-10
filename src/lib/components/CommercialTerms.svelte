@@ -34,7 +34,7 @@
 		{
 			name: 'Open source core',
 			blurb:
-				'Community Edition is AGPL-3.0, so you can read the code before you run it on your network. Free, capped at one seat and one network.',
+				'Community Edition is AGPL-3.0, so you can read the code before you run it on your network. Free, capped at one seat and one site.',
 			href: '/community',
 			linkText: 'Community Edition'
 		}

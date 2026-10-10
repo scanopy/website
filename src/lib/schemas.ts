@@ -362,6 +362,17 @@ export function getSelfHostedAnnualPrice(planId: string): string {
 }
 
 /**
+ * Site and seat allowance of a self-hosted plan (e.g. Community), `null` when unlimited.
+ */
+export function getSelfHostedLimits(planId: string): {
+	sites: number | null;
+	seats: number | null;
+} | null {
+	const plan = billingPlans.find((p) => p.id === planId && p.metadata.hosting === 'SelfHosted');
+	return plan ? { sites: plan.metadata.included_sites, seats: plan.metadata.included_seats } : null;
+}
+
+/**
  * Cheapest published self-hosted annual price (e.g. "$4,000"), or '' when there is none.
  */
 export function getSelfHostedStartingAnnualPrice(): string {

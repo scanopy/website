@@ -34,11 +34,11 @@
 	const pricingFaqs = [
 		{
 			question: 'Is there a free plan?',
-			answer: `Yes. The self-hosted <a href="/community" class="${linkClass}">Community Edition</a> is free and open source, with one network and one user seat. Cloud plans include a 14-day free trial, no credit card required.`
+			answer: `Yes. The self-hosted <a href="/community" class="${linkClass}">Community Edition</a> is free and open source, with one site and one user seat. Cloud plans include a 14-day free trial, no credit card required.`
 		},
 		{
 			question: 'How much is a self-hosted commercial license?',
-			answer: `Self-Hosted Standard is ${standardPrice}/year and Self-Hosted Plus is ${plusPrice}/year, both billed annually with no per-host fees. Plus adds up to five organizations, offline (air-gapped) license keys, an onboarding call, and priority support. The free <a href="/community" class="${linkClass}">Community Edition</a> covers one network and one user.`
+			answer: `Self-Hosted Standard is ${standardPrice}/year and Self-Hosted Plus is ${plusPrice}/year, both billed annually with no per-host fees. Plus adds up to five organizations, offline (air-gapped) license keys, an onboarding call, and priority support. The free <a href="/community" class="${linkClass}">Community Edition</a> covers one site and one user.`
 		},
 		{
 			question: "What's the difference between Self-Hosted and Cloud?",
@@ -62,7 +62,7 @@
 		{
 			question: 'How does pricing work for MSPs?',
 			answer:
-				"Each 'network' in Scanopy maps to one client site, VLAN group, or isolated environment, so your plan scales with the number of clients whose infrastructure you document. Shareable views let you give each client a current map of their own environment without needing a Scanopy account."
+				"Plans include a set number of sites, the physical locations you document, such as a client's office or data center. Cloud plans bill each site beyond that allowance, and the plans above list both. Self-Hosted Plus adds up to five organizations. Shareable views let you give each client a current map of their own environment without needing a Scanopy account."
 		},
 		{
 			question: 'Can I upgrade or downgrade later?',
@@ -132,18 +132,6 @@
 
 <CustomerLogos />
 
-<!-- For MSPs: one network = one client site -->
-<section class="border-t border-gray-800 py-8">
-	<div class="container mx-auto max-w-3xl px-4">
-		<h3 class="mb-2 text-lg font-semibold text-white">For MSPs: one network = one client site</h3>
-		<p class="text-sm leading-relaxed text-gray-400">
-			Each network in Scanopy maps to one client site, VLAN group, or isolated environment. Your
-			plan scales with the number of clients whose infrastructure you document. Shareable views let
-			you give each client a current map of their own environment, no logins required.
-		</p>
-	</div>
-</section>
-
 <FeaturedIn mentions={pressMentions} />
 
 <!-- FAQ -->
@@ -166,8 +154,8 @@
 			adds two self-hosted tiers, Self-Hosted Standard and Plus, starting at {selfHostedFrom}/yr
 			with a commercial license, advanced features, and support. Enterprise adds a custom plan with
 			SSO, custom billing terms, and a signed SLA, managed or self-hosted. Cloud plans start at
-			{startingPrice}/month (billed annually) and include a free trial, scaling from a single
-			network up to the multi-network tiers built for consultants, MSPs, and IT teams.
+			{startingPrice}/month (billed annually) and include a free trial, scaling from a single site
+			up to the multi-site tiers built for consultants, MSPs, and IT teams.
 		</p>
 	</div>
 </section>

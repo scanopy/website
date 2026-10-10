@@ -50,7 +50,7 @@
 		{
 			question: 'How is it different from the free Community Edition?',
 			answer:
-				'The Community Edition is free and open source for self-hosting, limited to one network and one user seat. The Commercial Edition adds a commercial license for business use, higher network and seat limits, Confluence export, invoice billing, and email support. Self-Hosted Plus adds multiple organizations, offline license keys, and priority support.'
+				'The Community Edition is free and open source for self-hosting, limited to one site and one user seat. The Commercial Edition adds a commercial license for business use, higher site and seat limits, Confluence export, invoice billing, and email support. Self-Hosted Plus adds multiple organizations, offline license keys, and priority support.'
 		},
 		{
 			question: 'How much does it cost?',
@@ -182,7 +182,7 @@
 </section>
 
 <!-- Commercial plans -->
-<section class="border-t border-gray-800 py-20">
+<section id="plans" class="scroll-mt-20 border-t border-gray-800 py-20">
 	<div class="container mx-auto px-4">
 		<div class="mb-10 text-center">
 			<h2 class="mb-3 text-3xl font-bold text-rose-400 lg:text-4xl">Commercial plans</h2>
@@ -205,13 +205,13 @@
 		<h2 class="mb-4 text-3xl font-bold text-rose-400 lg:text-4xl">Community or Commercial?</h2>
 		<p class="mb-4 text-lg leading-relaxed text-gray-300">
 			The free <a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
-			is the best place to start, free to self-host for a single network and user, ideal for homelabs,
-			evaluation, and small teams.
+			is the best place to start, free to self-host for a single site and user, ideal for homelabs, evaluation,
+			and small teams.
 		</p>
 		<p class="text-lg leading-relaxed text-gray-300">
 			Step up to the Commercial Edition when you need a commercial license for business use, higher
-			network and seat limits, multiple organizations per instance, advanced features like
-			Confluence export and invoice billing, or email and priority support backing your deployment.
+			site and seat limits, multiple organizations per instance, advanced features like Confluence
+			export and invoice billing, or email and priority support backing your deployment.
 		</p>
 	</div>
 </section>

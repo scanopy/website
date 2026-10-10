@@ -384,7 +384,7 @@
 				per host, documenting not just the network but the services, dependencies, and workloads running
 				on it, in four views from one scan and keeping them current on a schedule. The
 				<a href="/community" class="text-blue-400 hover:text-blue-300">Community Edition</a>
-				is free and open-source (AGPL-3.0) for one network and one seat. A
+				is free and open-source (AGPL-3.0) for one site and one seat. A
 				<a href="/commercial" class="text-blue-400 hover:text-blue-300">commercial license</a>
 				raises those caps for self-hosted deployments, starting at {selfHostedFrom}/year, and
 				<a href="/pricing" class="text-blue-400 hover:text-blue-300">cloud plans</a>

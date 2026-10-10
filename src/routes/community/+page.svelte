@@ -3,7 +3,16 @@
 	import { analytics } from '$lib/analytics.svelte';
 	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
 	import LicenseCta from '$lib/components/LicenseCta.svelte';
-	import { ExternalLink } from 'lucide-svelte';
+	import { ExternalLink, Info } from 'lucide-svelte';
+	import { getSelfHostedLimits } from '$lib/schemas';
+
+	const community = getSelfHostedLimits('Community');
+	const standard = getSelfHostedLimits('SelfHostedStandard');
+	const plus = getSelfHostedLimits('SelfHostedPlus');
+
+	const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+	const limitLabel = (l: { sites: number | null; seats: number | null } | null) =>
+		l?.sites && l?.seats ? `${plural(l.sites, 'site')} and ${plural(l.seats, 'seat')}` : '';
 
 	const communityLinks = [
 		{ name: 'GitHub', url: 'https://github.com/scanopy/scanopy', destination: 'github' },
@@ -88,6 +97,47 @@
 			your network, and get four views of your infrastructure in minutes. No account required, no
 			time restrictions.
 		</p>
+
+		{#if limitLabel(community)}
+			<aside
+				class="mt-8 flex items-start gap-3 rounded-md border border-l-4 border-gray-700 border-l-blue-500 bg-gray-800/50 px-4 py-4"
+				aria-label="Community Edition limits"
+			>
+				<Info class="mt-1 h-5 w-5 shrink-0 text-blue-400" aria-hidden="true" />
+				<div class="text-gray-300">
+					<p class="font-semibold text-white">
+						Community Edition is limited to {limitLabel(community)}.
+					</p>
+					<p class="mt-1 leading-relaxed">
+						A site is one location your network runs in, such as a home or an office. A seat is one
+						user account.
+						{#if limitLabel(standard) && limitLabel(plus)}
+							A license key raises both: Self-Hosted Standard covers {limitLabel(standard)}, and
+							Self-Hosted Plus covers {limitLabel(plus)}.
+						{/if}
+					</p>
+					<div class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+						<a
+							href="/commercial#plans"
+							class="text-blue-400 hover:text-blue-300"
+							onclick={() =>
+								analytics.ctaClicked({
+									location: 'community_limits',
+									destination: 'commercial',
+									text: 'Compare license options'
+								})}
+						>
+							Compare license options &rarr;
+						</a>
+						<LicenseCta
+							location="community_limits"
+							class="text-blue-400 hover:text-blue-300"
+							arrow
+						/>
+					</div>
+				</div>
+			</aside>
+		{/if}
 	</div>
 </section>
 
