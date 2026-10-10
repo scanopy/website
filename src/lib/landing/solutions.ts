@@ -127,7 +127,15 @@ export const solutionPages: LandingPage[] = [
 						title: 'Changed hosts',
 						body: 'A known host with new services or open ports shows up as changed, such as a workstation that starts serving a web app.'
 					}
-				]
+				],
+				// One capture, used for both themes: the email has no dark version.
+				figure: {
+					kind: 'screenshot',
+					name: 'scan-digest-email',
+					alt: 'Scanopy discovery scan summary email with counts of new, stale, and changed hosts, VLANs, and subnets scanned',
+					width: 1206,
+					height: 1160
+				}
 			},
 			{
 				heading: 'Know what a device is from what it runs',
@@ -281,11 +289,11 @@ export const solutionPages: LandingPage[] = [
 		// Status tags: server/tags/impl/base.rs:23-43. Viewer role: users/impl/permissions.rs:30-35.
 		slug: 'network-handover',
 		navLabel: 'Handover & onboarding',
-		navBlurb: 'Network documentation that doesn’t leave when someone does',
+		navBlurb: 'Keep the network documented through staff changes and handovers',
 		title: 'Network Documentation for Handover and Onboarding | Scanopy',
 		description:
 			'When the person who knew the network leaves, the documentation stays. Scanopy rebuilds the map and inventory from the network on a schedule, so a new hire starts from what is actually there.',
-		heading: 'Documentation that doesn’t leave when someone does.',
+		heading: 'Keep the network documented when the people who know it move on.',
 		subhead:
 			'Scanopy rebuilds the network map and inventory from the network itself on a schedule. A new hire, a contractor, or the next MSP starts from what is actually running, not from a diagram someone stopped updating.',
 		heroView: 'l3',

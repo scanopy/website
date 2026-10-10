@@ -503,7 +503,15 @@ export const productPages: LandingPage[] = [
 						title: 'Sent to the people on that site',
 						body: 'Everyone with access to the site gets it, and each person can turn it off in their email settings.'
 					}
-				]
+				],
+				// One capture, used for both themes: the email has no dark version.
+				figure: {
+					kind: 'screenshot',
+					name: 'scan-digest-email',
+					alt: 'Scanopy discovery scan summary email with counts of new, stale, and changed hosts, VLANs, and subnets scanned',
+					width: 1206,
+					height: 1160
+				}
 			},
 			{
 				heading: 'A snapshot records the network on a date',

@@ -50,8 +50,7 @@
 				One network map, put to work.
 			</h1>
 			<p class="mx-auto mt-6 max-w-2xl text-lg text-gray-300">
-				Scanopy discovers your network and keeps the map and inventory current on a schedule. These
-				are the jobs teams that manage infrastructure point it at.
+				Scanopy discovers your network and keeps the map and inventory current on a schedule.
 			</p>
 		</div>
 	</section>
