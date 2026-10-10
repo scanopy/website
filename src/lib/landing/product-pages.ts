@@ -103,13 +103,14 @@ export const productPages: LandingPage[] = [
 	{
 		// workloads_builder.rs:50-77. Proxmox: daemon/discovery/integration/proxmox/mod.rs:1-4.
 		// Containers: services/impl/virtualization.rs:39-57, compose project container/scanner.rs:1302-1308.
+		// Stack grouping applies to L3 and Application only, not Workloads: topology/types/grouping.rs:477.
 		// Docker access: integration/docker/mod.rs:4-6.
 		slug: 'workload-mapping',
 		navLabel: 'Workload mapping',
 		navBlurb: 'Hypervisors, VMs, and containers, nested the way they actually run',
 		title: 'Map VMs and Containers: Proxmox, Docker, and Podman | Scanopy',
 		description:
-			'Scanopy maps what runs where: Proxmox nodes, VMs, and LXC containers, Docker and Podman containers grouped by Compose stack, and the services on each.',
+			'Scanopy maps what runs where: Proxmox nodes, VMs, and LXC containers, Docker and Podman containers, and the services each one exposes.',
 		heading: 'See what runs where, from the hypervisor down to the container.',
 		subhead:
 			'Scanopy reads Proxmox, Docker, and Podman directly and nests every VM and container inside the host that runs it, with the services each one exposes.',
@@ -134,11 +135,11 @@ export const productPages: LandingPage[] = [
 				figure: { kind: 'view', view: 'workloads' }
 			},
 			{
-				heading: 'Containers grouped by the stack they belong to',
+				heading: 'Every container, with its ports and the stack it belongs to',
 				points: [
 					{
 						title: 'Compose stacks',
-						body: 'Containers from the same Docker Compose project are grouped together.'
+						body: 'In the L3 and application views, a Stack grouping rule groups containers from the same Docker or Podman Compose project.'
 					},
 					{
 						title: 'Ports and services',
