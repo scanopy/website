@@ -23,7 +23,7 @@ export const solutionPages: LandingPage[] = [
 		heading: 'One current map of every office, plant, and data center.',
 		subhead:
 			'Run a lightweight daemon at each site. Each one scans its own network on a schedule, and every site lands in the same Scanopy server, with one inventory and one search across all of them.',
-		heroView: 'l3',
+		heroViews: ['l3', 'l2', 'workloads', 'application'],
 		sections: [
 			{
 				heading: 'Each site scans itself',
@@ -202,32 +202,8 @@ export const solutionPages: LandingPage[] = [
 		heading: 'Document the plant network without sending the data off site.',
 		subhead:
 			'Scanopy runs on your own server, scans at the rate and scope you set, and identifies industrial devices alongside the IT gear, so the plant network gets the same current map as the office.',
-		heroView: 'l2',
+		heroViews: ['l2', 'l3', 'workloads', 'application'],
 		sections: [
-			{
-				heading: 'Scans you set the pace and scope of',
-				points: [
-					{
-						title: 'Rate limits',
-						body: 'Set the ARP and port-scan packet rates for each discovery, and a maximum run time.'
-					},
-					{
-						title: 'Light scans by default',
-						body: 'Most runs probe a common port set, and a full port sweep runs only every few scans. Printer raw ports are skipped unless you turn them on.'
-					},
-					{
-						title: 'Scoped to what you choose',
-						body: 'Pick the subnets each discovery covers and the interfaces the daemon uses, and schedule scans for a maintenance window.'
-					}
-				],
-				figure: {
-					kind: 'screenshot',
-					name: 'scan-perf',
-					alt: 'Scanopy discovery Performance tab with port scan rate, ARP scan rate, and maximum discovery duration',
-					width: 2400,
-					height: 1017
-				}
-			},
 			{
 				heading: 'Industrial devices identified next to IT gear',
 				points: [
@@ -250,6 +226,30 @@ export const solutionPages: LandingPage[] = [
 					alt: 'Scanopy inspector on a facility UPS identified by Modbus TCP on port 502, next to a BACnet HVAC controller',
 					width: 1560,
 					height: 1166
+				}
+			},
+			{
+				heading: 'Scans you set the pace and scope of',
+				points: [
+					{
+						title: 'Rate limits',
+						body: 'Set the ARP and port-scan packet rates for each discovery, and a maximum run time.'
+					},
+					{
+						title: 'Light scans by default',
+						body: 'Most runs probe a common port set, and a full port sweep runs only every few scans.'
+					},
+					{
+						title: 'Scoped to what you choose',
+						body: 'Pick the subnets each discovery covers and the interfaces the daemon uses, and schedule scans for a maintenance window.'
+					}
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'scan-perf',
+					alt: 'Scanopy discovery Performance tab with port scan rate, ARP scan rate, and maximum discovery duration',
+					width: 2400,
+					height: 1017
 				}
 			},
 			{
@@ -296,7 +296,7 @@ export const solutionPages: LandingPage[] = [
 		heading: 'Keep the network documented when the people who know it move on.',
 		subhead:
 			'Scanopy rebuilds the network map and inventory from the network itself on a schedule. A new hire, a contractor, or the next MSP starts from what is actually running, not from a diagram someone stopped updating.',
-		heroView: 'l3',
+		heroViews: ['l3', 'l2', 'workloads', 'application'],
 		sections: [
 			{
 				heading: 'Day one starts from the network, not from memory',

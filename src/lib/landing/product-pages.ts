@@ -25,7 +25,7 @@ export const productPages: LandingPage[] = [
 		heading: 'A network diagram that redraws itself after every scan.',
 		subhead:
 			'Scanopy draws the physical topology port to port from LLDP, CDP, and switch forwarding tables, and the logical topology subnet by subnet. Each scheduled scan rebuilds both from what it finds.',
-		heroView: 'l2',
+		heroViews: ['l2', 'l3'],
 		sections: [
 			{
 				heading: 'Physical (L2): every switch port and what plugs into it',
@@ -105,23 +105,25 @@ export const productPages: LandingPage[] = [
 		// Containers: services/impl/virtualization.rs:39-57, compose project container/scanner.rs:1302-1308.
 		// Stack grouping applies to L3 and Application only, not Workloads: topology/types/grouping.rs:477.
 		// Docker access: integration/docker/mod.rs:4-6.
+		// Hypervisor services: services/definitions/{proxmox,esxi,vcenter}.rs; manual VM assignment:
+		// hosts/components/HostEditModal/Virtualization/VmManagerConfigPanel.svelte.
 		slug: 'workload-mapping',
 		navLabel: 'Workload mapping',
 		navBlurb: 'Hypervisors, VMs, and containers, nested the way they actually run',
 		title: 'Map VMs and Containers: Proxmox, Docker, and Podman | Scanopy',
 		description:
-			'Scanopy maps what runs where: Proxmox nodes, VMs, and LXC containers, Docker and Podman containers, and the services each one exposes.',
+			'Scanopy maps what runs where: Proxmox and VMware hypervisors with their VMs, Docker and Podman containers, and the services each one exposes.',
 		heading: 'See what runs where, from the hypervisor down to the container.',
 		subhead:
 			'Scanopy reads Proxmox, Docker, and Podman directly and nests every VM and container inside the host that runs it, with the services each one exposes.',
-		heroView: 'workloads',
+		heroViews: ['workloads'],
 		sections: [
 			{
 				heading: 'Hypervisors, VMs, and containers in one tree',
 				points: [
 					{
-						title: 'Proxmox',
-						body: 'Nodes, QEMU virtual machines, and LXC containers, read from the Proxmox API.'
+						title: 'Hypervisors',
+						body: 'Proxmox VE, VMware ESXi, and vCenter, with the VMs on each. Proxmox VMs and LXC containers come from its API, and you assign VMware VMs to their hypervisor on the host.'
 					},
 					{
 						title: 'Docker and Podman',
@@ -129,7 +131,7 @@ export const productPages: LandingPage[] = [
 					},
 					{
 						title: 'Nested inside their host',
-						body: 'VMs and LXC containers sit inside their Proxmox node, and Docker containers sit inside the host or VM that runs them.'
+						body: 'VMs sit inside their hypervisor, and Docker and Podman containers sit inside the host or VM that runs them.'
 					}
 				],
 				figure: {
@@ -141,28 +143,11 @@ export const productPages: LandingPage[] = [
 				}
 			},
 			{
-				heading: 'Every container, with its ports and the stack it belongs to',
-				points: [
-					{
-						title: 'Compose stacks',
-						body: 'In the L3 and application views, a Stack grouping rule groups containers from the same Docker or Podman Compose project.'
-					},
-					{
-						title: 'Ports and services',
-						body: `Each container lists its open ports and the services Scanopy recognizes on them, from ${services} definitions.`
-					},
-					{
-						title: 'Guides for each runtime',
-						body: `Step by step: ${link('/guides/visualize-docker-containers-network', 'map Docker containers')} or ${link('/guides/visualize-podman-containers-network', 'map Podman containers')}.`
-					}
-				]
-			},
-			{
 				heading: 'The same workloads in every other view',
 				points: [
 					{
 						title: 'On the subnet map',
-						body: `VMs and containers appear in the ${link('/product/network-topology', 'logical (L3) view')} with links back to the hypervisor or runtime that hosts them.`
+						body: `VMs and containers appear in the ${link('/product/network-topology', 'logical (L3) view')} with links back to the hypervisor or runtime that hosts them, and containers from one Compose project can group as a stack.`
 					},
 					{
 						title: 'In the inventory',
@@ -184,7 +169,11 @@ export const productPages: LandingPage[] = [
 			{
 				question: 'Does Scanopy support VMware?',
 				answer:
-					'Scanopy recognizes vCenter and ESXi as services on the network. It does not read VMs from the vSphere API.'
+					'Yes. Scanopy recognizes ESXi and vCenter as hypervisors, and you assign VMs to them on the host so they nest in the Workloads view. It does not read VMs from the vSphere API.'
+			},
+			{
+				question: 'How do I set up Docker or Podman discovery?',
+				answer: `Step by step: ${link('/guides/visualize-docker-containers-network', 'map Docker containers')} or ${link('/guides/visualize-podman-containers-network', 'map Podman containers')}.`
 			}
 		],
 		related: ['network-topology', 'application-mapping', 'device-inventory']
@@ -203,7 +192,7 @@ export const productPages: LandingPage[] = [
 		heading: 'An application map that stays accurate when the servers change.',
 		subhead:
 			'You name each application and the services in it. Discovery keeps the hosts, addresses, and ports underneath current, so the map doesn’t drift when a service moves.',
-		heroView: 'application',
+		heroViews: ['application'],
 		sections: [
 			{
 				heading: 'You name the application, discovery fills it in',
@@ -211,10 +200,6 @@ export const productPages: LandingPage[] = [
 					{
 						title: 'Application tags',
 						body: 'Tag a service, or a whole host, with the application it belongs to. Services inherit their host’s application unless you tag them directly.'
-					},
-					{
-						title: 'A setup wizard',
-						body: 'A guided setup suggests applications to create and walks you through assigning services.'
 					},
 					{
 						title: 'Built on discovered services',
@@ -236,7 +221,7 @@ export const productPages: LandingPage[] = [
 					},
 					{
 						title: 'Visible across views',
-						body: 'Dependencies show in the application, logical (L3), and workload views.'
+						body: 'Dependencies show in the application and workload views, and in the logical (L3) view when they are mapped to specific ports.'
 					}
 				],
 				figure: {
@@ -289,6 +274,10 @@ export const productPages: LandingPage[] = [
 					{
 						title: 'Hardware facts over SNMP',
 						body: 'Manufacturer, model, serial number, asset tag, firmware and software revision, location, and contact, read from the device itself.'
+					},
+					{
+						title: 'Last seen on every row',
+						body: 'Each host shows when a scan last found it, and one filter lists the hosts that have gone stale.'
 					}
 				],
 				figure: {
@@ -324,15 +313,15 @@ export const productPages: LandingPage[] = [
 				}
 			},
 			{
-				heading: 'Stale hosts show as stale, not as current',
+				heading: 'One record per device, ready to export',
 				points: [
 					{
-						title: 'Last seen on every row',
-						body: 'Each host shows when a scan last found it, and one filter lists the hosts that have gone stale.'
+						title: 'Merge duplicates',
+						body: 'When one device shows up as two hosts, consolidate them. Its addresses, ports, and services move to the host you keep.'
 					},
 					{
-						title: 'Merge duplicates, hide noise',
-						body: 'Consolidate two records of the same device into one, and hide hosts you don’t want in the list.'
+						title: 'Hide hosts from the map',
+						body: 'A hidden host drops out of the topology views and stays in the inventory, where a filter shows it again.'
 					},
 					{
 						title: 'Export the inventory',
@@ -384,7 +373,7 @@ export const productPages: LandingPage[] = [
 		heading: 'See every VLAN, the ports that carry it, and the subnets behind it.',
 		subhead:
 			'Scanopy reads VLAN tables from your switches over SNMP (Q-BRIDGE-MIB and Cisco VTP) and links each VLAN to the subnets on it. VLAN membership comes from the switches, not from a host plugged into each VLAN.',
-		heroView: 'l2',
+		heroViews: ['l2', 'l3', 'workloads', 'application'],
 		sections: [
 			{
 				heading: 'VLANs come from the switch, port by port',
@@ -484,7 +473,8 @@ export const productPages: LandingPage[] = [
 		title: 'Network Change Tracking: Snapshots and Scan Digests | Scanopy',
 		description:
 			'After each scheduled scan, Scanopy emails which hosts and VLANs appeared, went stale, or changed. Snapshots record the network on a date for audits and change windows.',
-		heading: 'Know what changed since the last scan, and what the network looked like on audit day.',
+		heading:
+			'Know what changed since the last scan, and what the network looked like on audit day.',
 		subhead:
 			'After each scheduled scan, Scanopy emails a digest of the hosts and VLANs that appeared, went stale, or changed. Take a snapshot before an audit or a change window, and you can open the network as it was on that date.',
 		sections: [
@@ -538,9 +528,7 @@ export const productPages: LandingPage[] = [
 				}
 			},
 			{
-				heading: 'The current map goes wherever your team works',
-				standfirst:
-					'Snapshots are the dated record. The live map exports, embeds, and shares by link.',
+				heading: 'Export the live map or a snapshot, and embed or share the live one',
 				points: [],
 				figure: { kind: 'exports' }
 			}
@@ -557,8 +545,7 @@ export const productPages: LandingPage[] = [
 			},
 			{
 				question: 'Can I turn the digest off?',
-				answer:
-					'Yes. Each user can switch off the discovery scan summary in their email settings.'
+				answer: 'Yes. Each user can switch off the discovery scan summary in their email settings.'
 			}
 		],
 		related: ['device-inventory', 'vlan-mapping']

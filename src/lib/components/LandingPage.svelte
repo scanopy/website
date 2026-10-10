@@ -12,7 +12,7 @@
 	import { analytics } from '$lib/analytics.svelte';
 	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
 	import { getBreadcrumbListSchema, getFAQPageSchema } from '$lib/schemas';
-	import { VIEW_ORDER, screenshotImage, viewImage } from '$lib/landing/views';
+	import { screenshotImage, viewImage } from '$lib/landing/views';
 	import type { LandingPage } from '$lib/landing/types';
 
 	interface LinkCard {
@@ -37,13 +37,7 @@
 	const loc = $derived(`${kind}_${page.slug.replaceAll('-', '_')}`);
 	const light = $derived(theme.resolved === 'light');
 
-	const heroViews = $derived(
-		page.heroView
-			? [page.heroView, ...VIEW_ORDER.filter((v) => v !== page.heroView)].map((v) =>
-					viewImage(v, light)
-				)
-			: []
-	);
+	const heroViews = $derived((page.heroViews ?? []).map((v) => viewImage(v, light)));
 
 	const breadcrumb = $derived(
 		getBreadcrumbListSchema([
@@ -152,9 +146,32 @@
 				{@render ctas('hero')}
 			</div>
 		</div>
-		{#if heroViews.length}
+		{#if heroViews.length > 1}
 			<div class="container mx-auto mt-14 max-w-4xl px-4">
-				<ViewSwitcher views={heroViews} defaultTab={page.heroView} />
+				<ViewSwitcher views={heroViews} />
+			</div>
+		{:else if heroViews.length === 1}
+			{@const img = heroViews[0]}
+			<div class="container mx-auto mt-14 max-w-4xl px-4">
+				<div class="browser-frame">
+					<div class="browser-frame-bar">
+						<span class="browser-frame-dot bg-red-500/70"></span>
+						<span class="browser-frame-dot bg-yellow-500/70"></span>
+						<span class="browser-frame-dot bg-green-500/70"></span>
+						<span class="ml-3 text-xs text-gray-500">app.scanopy.net</span>
+					</div>
+					<div class="p-6" style="background-color: var(--topo-bg);">
+						<img
+							src={img.src}
+							srcset={img.srcset}
+							sizes="(max-width: 1024px) 100vw, 900px"
+							alt={img.alt}
+							width={img.width}
+							height={img.height}
+							class="block h-auto w-full"
+						/>
+					</div>
+				</div>
 			</div>
 		{/if}
 	</section>

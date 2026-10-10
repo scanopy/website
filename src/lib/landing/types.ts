@@ -41,7 +41,8 @@ export interface LandingPage {
 	heading: string;
 	/** The mechanism, one or two sentences. */
 	subhead: string;
-	heroView?: TopologyView;
+	/** Topology views in the hero, first one shown. One view renders as a still image, no tabs. */
+	heroViews?: TopologyView[];
 	sections: LandingSection[];
 	/** Testimonial id from fixtures/testimonials.json. Approved quotes only. */
 	quoteId?: string;
