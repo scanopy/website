@@ -44,3 +44,13 @@ export function viewImage(view: TopologyView, light: boolean) {
 		height: v.height
 	};
 }
+
+/** A product screenshot in static/screenshots, light or dark to match the page theme. */
+export function screenshotImage(name: string, width: number, light: boolean) {
+	const base = `/screenshots/${name}-${light ? 'light' : 'dark'}`;
+	const sizes = [800, 1200].filter((w) => w < width);
+	return {
+		src: `${base}.webp`,
+		srcset: [...sizes.map((w) => `${base}-${w}w.webp ${w}w`), `${base}.webp ${width}w`].join(', ')
+	};
+}

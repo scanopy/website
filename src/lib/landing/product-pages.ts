@@ -132,7 +132,13 @@ export const productPages: LandingPage[] = [
 						body: 'VMs and LXC containers sit inside their Proxmox node, and Docker containers sit inside the host or VM that runs them.'
 					}
 				],
-				figure: { kind: 'view', view: 'workloads' }
+				figure: {
+					kind: 'screenshot',
+					name: 'workload-virtualization',
+					alt: 'Scanopy Workloads view of a Proxmox host running two VMs, one with a Docker container inside it',
+					width: 2272,
+					height: 1210
+				}
 			},
 			{
 				heading: 'Every container, with its ports and the stack it belongs to',
@@ -232,7 +238,14 @@ export const productPages: LandingPage[] = [
 						title: 'Visible across views',
 						body: 'Dependencies show in the application, logical (L3), and workload views.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'dependency',
+					alt: 'Scanopy application view creating a request path from RabbitMQ through Graylog to Grafana',
+					width: 2400,
+					height: 1406
+				}
 			}
 		],
 		faqs: [
@@ -278,13 +291,12 @@ export const productPages: LandingPage[] = [
 						body: 'Manufacturer, model, serial number, asset tag, firmware and software revision, location, and contact, read from the device itself.'
 					}
 				],
-				// Pre-rename UI (shows "Network" grouping). Replace with a current Hosts tab capture.
 				figure: {
 					kind: 'screenshot',
-					name: 'hosts-catalog',
-					alt: 'Scanopy Hosts list showing each host with its services, interfaces, and tags',
-					width: 1200,
-					height: 795
+					name: 'host-inventory',
+					alt: 'Scanopy Hosts list with each host’s site, interfaces, IP and MAC addresses, services, manufacturer, model, and tags',
+					width: 2400,
+					height: 1036
 				}
 			},
 			{
@@ -302,7 +314,14 @@ export const productPages: LandingPage[] = [
 						title: 'Tag and describe hosts',
 						body: 'Add tags for owner, environment, or criticality, and a description for anything discovery can’t know.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'search',
+					alt: 'Scanopy search filtered by the Production tag, listing a matching VLAN, hosts, and services',
+					width: 1480,
+					height: 1300
+				}
 			},
 			{
 				heading: 'Stale hosts show as stale, not as current',
@@ -319,7 +338,14 @@ export const productPages: LandingPage[] = [
 						title: 'Export the inventory',
 						body: 'Download hosts as CSV, or a ZIP with separate CSVs for hosts, IP addresses, ports, services, and interfaces. The export keeps your current filters.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'consolidate',
+					alt: 'Scanopy Consolidate Hosts dialog merging one host record into another',
+					width: 1290,
+					height: 662
+				}
 			}
 		],
 		faqs: [
@@ -376,7 +402,13 @@ export const productPages: LandingPage[] = [
 						body: 'The Physical (L2) view marks trunk ports and groups access ports by native VLAN.'
 					}
 				],
-				figure: { kind: 'view', view: 'l2' }
+				figure: {
+					kind: 'screenshot',
+					name: 'port-inspector',
+					alt: 'Scanopy Physical (L2) view with a bonded interface selected, showing its native VLAN, speed, IP address, and LLDP neighbor on the switch',
+					width: 1888,
+					height: 1300
+				}
 			},
 			{
 				heading: 'Every subnet, with the VLANs behind it',
@@ -411,7 +443,14 @@ export const productPages: LandingPage[] = [
 						title: 'Searchable and exportable',
 						body: 'Filter VLANs by site or tag, search them with the rest of the inventory, and export the list to CSV.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'vlan-list',
+					alt: 'Scanopy VLAN list grouped by site, with each VLAN’s number, subnets, last seen time, and tags',
+					width: 2400,
+					height: 727
+				}
 			}
 		],
 		quoteId: 'motala-kommun',
@@ -482,7 +521,13 @@ export const productPages: LandingPage[] = [
 						body: 'A snapshot export carries its capture time in the header, so the evidence states when it was true.'
 					}
 				],
-				figure: { kind: 'view', view: 'l3' }
+				figure: {
+					kind: 'screenshot',
+					name: 'snapshot',
+					alt: 'Scanopy topology snapshot menu listing the current view and four monthly snapshots',
+					width: 916,
+					height: 788
+				}
 			},
 			{
 				heading: 'The current map goes wherever your team works',
@@ -563,7 +608,14 @@ export const productPages: LandingPage[] = [
 						title: 'Current without anyone updating it',
 						body: 'The embedded map is the live one, so the page shows the network as of the last scan.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'sharing',
+					alt: 'Scanopy share settings showing a share URL and the generated iframe embed code',
+					width: 2252,
+					height: 1358
+				}
 			}
 		],
 		faqs: [

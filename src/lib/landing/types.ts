@@ -9,7 +9,10 @@ export type TopologyView = 'l2' | 'l3' | 'workloads' | 'application';
 
 export type SectionFigure =
 	| { kind: 'view'; view: TopologyView }
-	/** A product screenshot in static/screenshots: `<name>-800w.webp`, `-1200w`, and the full size. */
+	/**
+	 * A product screenshot in static/screenshots: `<name>-dark.webp` and `<name>-light.webp`, each
+	 * with `-800w` and `-1200w` variants. Width and height are the dark full-size file.
+	 */
 	| { kind: 'screenshot'; name: string; alt: string; width: number; height: number }
 	/** The shared exports / embed / share / snapshot cards. */
 	| { kind: 'exports' };

@@ -12,7 +12,7 @@
 	import { analytics } from '$lib/analytics.svelte';
 	import { DEMO_BOOKING_URL, DEMO_CTA_LABEL } from '$lib/config/cta';
 	import { getBreadcrumbListSchema, getFAQPageSchema } from '$lib/schemas';
-	import { VIEW_ORDER, viewImage } from '$lib/landing/views';
+	import { VIEW_ORDER, screenshotImage, viewImage } from '$lib/landing/views';
 	import type { LandingPage } from '$lib/landing/types';
 
 	interface LinkCard {
@@ -204,9 +204,10 @@
 										/>
 									</div>
 								{:else if fig.kind === 'screenshot'}
+									{@const shot = screenshotImage(fig.name, fig.width, light)}
 									<img
-										src={`/screenshots/${fig.name}.webp`}
-										srcset={`/screenshots/${fig.name}-800w.webp 800w, /screenshots/${fig.name}-1200w.webp 1200w`}
+										src={shot.src}
+										srcset={shot.srcset}
 										sizes="(max-width: 1024px) 100vw, 60vw"
 										alt={fig.alt}
 										width={fig.width}

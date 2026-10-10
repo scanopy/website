@@ -57,7 +57,14 @@ export const solutionPages: LandingPage[] = [
 						title: 'Read-only links for auditors',
 						body: 'Share a live, read-only map with an auditor or a parent company without creating an account.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'invite',
+					alt: 'Scanopy Invite User form granting Member permissions on the Data Center site only',
+					width: 1752,
+					height: 1204
+				}
 			},
 			{
 				heading: 'Every site in one inventory',
@@ -204,7 +211,14 @@ export const solutionPages: LandingPage[] = [
 						title: 'Scoped to what you choose',
 						body: 'Pick the subnets each discovery covers and the interfaces the daemon uses, and schedule scans for a maintenance window.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'scan-perf',
+					alt: 'Scanopy discovery Performance tab with port scan rate, ARP scan rate, and maximum discovery duration',
+					width: 2400,
+					height: 1017
+				}
 			},
 			{
 				heading: 'Industrial devices identified next to IT gear',
@@ -222,7 +236,13 @@ export const solutionPages: LandingPage[] = [
 						body: 'Devices found only by MAC address, such as PROFINET devices that answer DCP, still appear on the physical (L2) map.'
 					}
 				],
-				figure: { kind: 'view', view: 'l2' }
+				figure: {
+					kind: 'screenshot',
+					name: 'industrial',
+					alt: 'Scanopy inspector on a facility UPS identified by Modbus TCP on port 502, next to a BACnet HVAC controller',
+					width: 1560,
+					height: 1166
+				}
 			},
 			{
 				heading: 'The data stays on your network',
@@ -302,7 +322,14 @@ export const solutionPages: LandingPage[] = [
 						title: 'Lifecycle status',
 						body: 'Tag hosts from planned to decommissioned, so the next person knows what is meant to be there.'
 					}
-				]
+				],
+				figure: {
+					kind: 'screenshot',
+					name: 'host-detail',
+					alt: 'Scanopy host details with a description, tags, SNMP hardware facts, location, and contact',
+					width: 2400,
+					height: 1150
+				}
 			},
 			{
 				heading: 'Hand over access, not a folder of PDFs',
